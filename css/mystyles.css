@@ -1,0 +1,659 @@
+.footer-global {
+    position: fixed;
+    bottom: 10px;
+    left: 60px;
+    font-size: 14px;
+    color: #666;
+}
+
+.magenta-text {
+    color: rgb(233, 30, 99);
+  }
+
+.icon-link {
+    position: relative;
+    /* oder absolute/fixed, je nach Layout */
+    z-index: 100000;
+    /* Ein hoher Wert, um das Icon nach vorne zu bringen */
+}
+
+/* Grundformatierung, damit die Leerzeichen erhalten bleiben */
+.hoverable {
+    display: inline-block;
+    white-space: pre;
+    /* Verhindert das Zusammenfassen von Leerzeichen */
+}
+
+/* Beim Hover über den Link */
+.topic-link:hover .hoverable::after {
+    color: #f92672;
+    content: " <<";
+    /* Fügt das ">>" hinzu */
+}
+
+.exam-box {
+    display: block;
+    border: 5px solid #AA3A39;
+    padding: 10px;
+    margin: 10px;
+    border-radius: 5px;
+    background-color: #dcb9b8;
+    box-shadow: 0 0 25px rgba(0, 0, 0, 0.3);
+    color: #000;
+    position: relative;
+    font-size: large;
+    font-weight: bold;
+    width: 90%;
+}
+
+.info-box {
+    display: block;
+    border: 5px solid #3d9f9f;
+    padding: 10px;
+    margin: 10px;
+    border-radius: 5px;
+    background-color: #c0fafa;
+    box-shadow: 0 0 25px rgba(0, 0, 0, 0.3);
+    color: #000;
+    position: relative;
+    font-size: large;
+    width: 90%;
+}
+
+.interactive-box {
+    display: block;
+    border: 5px solid #dcca05;
+    padding: 10px;
+    margin: 10px;
+    border-radius: 5px;
+    background-color: #fef69c;
+    box-shadow: 0 0 25px rgba(0, 0, 0, 0.3);
+    color: #000;
+    position: relative;
+    font-size: large;
+    width: 90%;
+}
+
+.container {
+    display: flex;
+    align-items: flex-start;
+    /* Elemente oben ausrichten */
+}
+
+.container img {
+    width: 50%;
+    /* Breite des Bildes auf 50% setzen */
+    margin-left: 20px;
+    /* Abstand zwischen Box und Bild */
+}
+
+@media print {
+    .slide-background {
+        background-color: white !important;
+        -webkit-print-color-adjust: exact;
+    }
+}
+
+
+.box {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    margin: 2px;
+}
+
+.blue {
+    background-color: rgb(0, 166, 255);
+}
+
+.red {
+    background-color: rgb(214, 90, 68);
+}
+
+.green {
+    background-color: rgb(0, 184, 52);
+}
+
+.yellow {
+    background-color: rgb(255, 221, 0);
+}
+
+.purple {
+    background-color: rgb(200, 37, 245);
+}
+
+.gray {
+    background-color: rgb(128, 128, 128);
+}
+
+.styled-point {
+    font-size: x-large;
+    position: relative;
+    margin-left: 25px;
+    text-align: left;
+    /* Platz für das Icon */
+}
+
+.styled-point::before {
+    content: "\f0c8";
+    /* Unicode für das Font Awesome square */
+    font-family: "Font Awesome 5 Free";
+    /* Font Awesome verwenden */
+    font-weight: 900;
+    /* für solid icons */
+    color: burlywood;
+    position: absolute;
+    font-size: medium;
+    left: -20px;
+    /* Icon links vom Text platzieren */
+    top: 0.75ex
+}
+
+.styled-point2 {
+    font-size: x-large;
+    position: relative;
+    margin-left: 25px;
+    text-align: left;
+    /* Platz für das Icon */
+}
+
+.styled-point2::before {
+    content: "\f101";
+    /* Unicode für das Font Awesome angles-right */
+    font-family: "Font Awesome 5 Free";
+    /* Font Awesome verwenden */
+    font-weight: 900;
+    /* für solid icons */
+    color: rgb(219, 93, 43);
+    position: absolute;
+    font-size: medium;
+    left: -20px;
+    /* Icon links vom Text platzieren */
+    top: 0.75ex
+}
+
+.styled-point3 {
+    font-size: x-large;
+    position: relative;
+    margin-left: 25px;
+    text-align: left;
+    /* Platz für das Icon */
+}
+
+.styled-point3::before {
+    content: "\f128"; /* Unicode für das Font Awesome question symbol */
+    /* Unicode für das Font Awesome angles-right */
+    font-family: "Font Awesome 5 Free";
+    /* Font Awesome verwenden */
+    font-weight: 900;
+    /* für solid icons */
+    color: rgb(13, 180, 74);
+    position: absolute;
+    font-size: medium;
+    left: -20px;
+    /* Icon links vom Text platzieren */
+    top: 0.75ex
+}
+
+.styled-point4 {
+    font-size: x-large;
+    position: relative;
+    margin-left: 25px;
+    text-align: left;
+    /* Platz für das Icon */
+}
+
+.styled-point4::before {
+    content: "\f292"; /* Unicode für das Font Awesome Squarespace symbol */
+    /* Unicode für das Font Awesome angles-right */
+    font-family: "Font Awesome 5 Free";
+    /* Font Awesome verwenden */
+    font-weight: 500;
+    /* für solid icons */
+    color: blue;
+    position: absolute;
+    font-size: medium;
+    left: -20px;
+    /* Icon links vom Text platzieren */
+    top: 0.75ex
+}
+
+.mainBullet {
+    font-size: x-large;
+    position: relative;
+    margin-left: 25px;
+    text-align: left;
+    /* Platz für das Icon */
+}
+
+.mainBullet::before {
+    content: "\f0c8";
+    /* Unicode für das Font Awesome square */
+    font-family: "Font Awesome 5 Free";
+    /* Font Awesome verwenden */
+    font-weight: 900;
+    /* für solid icons */
+    color: burlywood;
+    position: absolute;
+    font-size: medium;
+    left: -20px;
+    /* Icon links vom Text platzieren */
+    top: 0.75ex
+}
+
+.subBullet {
+    font-size: x-large;
+    position: relative;
+    margin-left: 25px;
+    text-align: left;
+    /* Platz für das Icon */
+}
+
+.subBullet::before {
+    content: "\f101";
+    /* Unicode für das Font Awesome angles-right */
+    font-family: "Font Awesome 5 Free";
+    /* Font Awesome verwenden */
+    font-weight: 900;
+    /* für solid icons */
+    color: rgb(219, 93, 43);
+    position: absolute;
+    font-size: medium;
+    left: -20px;
+    /* Icon links vom Text platzieren */
+    top: 0.75ex
+}
+
+.subSubBullet {
+    font-size: x-large;
+    position: relative;
+    margin-left: 25px;
+    text-align: left;
+    /* Platz für das Icon */
+}
+
+.subSubBullet::before {
+    content: "\f0eb";
+    /* Unicode für das Font Awesome angles-right */
+    font-family: "Font Awesome 5 Free";
+    /* Font Awesome verwenden */
+    font-weight: 900;
+    /* für solid icons */
+    color: rgb(219, 93, 43);
+    position: absolute;
+    font-size: medium;
+    left: -20px;
+    /* Icon links vom Text platzieren */
+    top: 0.75ex
+}
+
+.question {
+    font-size: x-large;
+    position: relative;
+    margin-left: 25px;
+    left: 25px;
+    text-align: left;
+    /* Platz für das Icon */
+}
+
+.question::before {
+    content: "\f059"; /* Unicode für das Font Awesome Squarespace symbol */
+    /* Unicode für das Font Awesome angles-right */
+    font-family: "Font Awesome 5 Free";
+    /* Font Awesome verwenden */
+    font-weight: 500;
+    /* für solid icons */
+    color: rgb(255, 0, 119);
+    position: absolute;
+    font-size: x-large;
+    left: -3ex;
+    /* Icon links vom Text platzieren */
+    top: 0.0ex
+}
+
+.task {
+    font-size: x-large;
+    position: relative;
+    margin-left: 25px;
+    left: 25px;
+    text-align: left;
+    /* Platz für das Icon */
+}
+
+.task::before {
+    content: "\f086"; /* Unicode für das Font Awesome Squarespace symbol */
+    /* Unicode für das Font Awesome angles-right */
+    font-family: "Font Awesome 5 Free";
+    /* Font Awesome verwenden */
+    font-weight: 500;
+    /* für solid icons */
+    color: rgb(0, 92, 251);
+    position: absolute;
+    font-size: x-large;
+    left: -3ex;
+    /* Icon links vom Text platzieren */
+    top: 0.0ex
+}
+
+.image-box {
+    display: block;
+    border: 5px solid #d4d4d4;
+    padding: 10px;
+    margin: 10px;
+    border-radius: 5px;
+    background-color: #ededed;
+    box-shadow: 0 0 25px rgba(0, 0, 0, 0.3);
+    color: #000;
+    position: relative;
+    font-size: large;
+    width: 90%;
+    text-align: center;
+}
+
+.styled-noPoint {
+    font-size: x-large;
+    position: relative;
+    margin-left: 25px;
+    text-align: left;
+    /* Platz für das Icon */
+}
+
+.styled-noPoint .katex .mord,
+.styled-noPoint .katex .mop {
+    color: #b8103b;
+    /* Deine gewünschte Farbe für LaTeX-Elemente */
+}
+
+
+.styled-point2 .katex .mord,
+.styled-point2 .katex .mop {
+    color: #b8103b;
+    /* Deine gewünschte Farbe für LaTeX-Elemente */
+}
+
+.styled-point .katex .mord,
+.styled-point .katex .mop {
+    color: #b8103b;
+    /* Deine gewünschte Farbe für LaTeX-Elemente */
+}
+
+
+/* Stil für Tabs */
+.tab {
+    display: inline-block;
+    padding: 5px 10px;
+    cursor: pointer;
+    background-color: lightgray;
+    border: 1px solid #c5c3c3;
+    margin-right: 10px;
+    font-size: medium;
+    height: 20px;
+}
+
+.tab.active {
+    background-color: #8bccf8;
+    border: 1px solid #59b2ee;
+}
+
+/* Stil für die Inhalte der Tabs */
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+.leftBox {
+    display: inline-block;
+    width: 40%;
+    text-align: left;
+    vertical-align: top;
+}
+
+.spacer {
+    display: inline-block;
+    width: 5%;
+    text-align: left;
+    vertical-align: middle;
+}
+
+.rightBox {
+    display: inline-block;
+    width: 50%;
+    text-align: left;
+    vertical-align: top;
+}
+
+/* .reveal {
+    background-image: url('../resources/bg2.png');
+    background-size: 3840px 2160px;/*906px 117px;*/
+    /* background-attachment: fixed; */
+    /* background-position: top;
+    background-position-y: -50px; /* Adjust the value as needed for the vertical offset */
+    /* background-repeat: no-repeat; */
+/* } */ 
+
+#clock {
+    position: fixed;
+    top: 10px;
+    right: 20px;
+    font-size: 2.5em;
+    font-family: 'Mabook', 'Noto Sans', Source Sans Pro, Helvetica, sans-serif;
+    color: #333;
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 5px 10px;
+    border-radius: 5px;
+    z-index: 1000;
+}
+
+/* xkcd-style font */
+@font-face {
+    font-family: 'Humor Sans';
+    src: url('../dist/theme/fonts/humor-sans/Humor-Sans.ttf') format('truetype'); /* Update with actual path */
+}
+
+body {
+    font-family: 'Humor Sans', sans-serif;
+}
+
+/* xkcd-style chart */
+.xkcd-line {
+    stroke-width: 4px;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.bar {
+    stroke: #343434;
+    stroke-width: 2px;
+}
+
+.line {
+    fill: none;
+    stroke: #000;
+    stroke-width: 2px;
+}
+
+/* Axis styling */
+.axis path,
+.axis line {
+    stroke: #333;
+    stroke-width: 1.5px;
+    shape-rendering: crispEdges;
+}
+
+/* Wiggle effect for hand-drawn lines */
+.wiggle {
+    filter: url(#wiggle-filter);
+}
+
+.grid-line {
+    stroke: rgb(238, 238, 238);
+    stroke-width: 1px;
+    stroke-dasharray: 0;
+}
+
+
+.node circle {
+    fill: #69b3a2;
+    stroke: #000;
+    stroke-width: 1.5px;
+}
+.node text {
+    font: 12px sans-serif;
+    text-anchor: start;
+}
+
+.post-it-strip {
+    position: relative;
+    min-height: 1.5em; /* Höhe des Streifens */
+    background-color: #fff395; /* Gelbe Farbe für Post-it */
+    border-radius: 5px;
+    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.25); /* Schatten */
+    transform: perspective(300px) rotateX(5deg) rotateZ(2deg) rotateY(-5deg); /* Perspektive und leichte Neigung */
+    padding: 0 10px; /* Polsterung für den Inhalt */
+    display: inline-block;
+    justify-content: flex-start;
+    align-items: center;
+    font-family: "Mabook", "Noto Sans", "Source Sans Pro", Helvetica, sans-serif;
+    color: #AA3A39;
+}
+
+.reveal .slides section {
+    background-color: rgb(0, 0, 0, 0.85);            /* Dunkler Hintergrund */
+    border-radius: 15px;                /* Abgerundete Ecken */
+    box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.5); /* Leichter Schlagschatten */
+    padding: 20px;                      /* Innenabstand für Inhalt */
+    margin: 20px;                       /* Abstand zwischen Abschnitten */
+}
+
+.reveal .slides section {
+  position: absolute;
+  /* dein bestehendes Styling hier… */
+  
+  /* neon-farbener Rahmen */
+  border: 2px solid #FF1177;
+  /* Außen-Glow */
+  box-shadow:
+    0 0 8px rgba(255,17,119,0.8),
+    0 0 16px rgba(255,17,119,0.6),
+    inset 0 0 6px rgba(255,17,119,0.4);
+}
+
+/* Optional: zweiter Farbton als leichter Über-Glow */
+.reveal .slides section::after {
+  content: "";
+  position: absolute;
+  top: -4px; left: -4px; right: -4px; bottom: -4px;
+  pointer-events: none;
+  border: 2px solid #fd29c8;
+  filter: blur(4px);
+  mix-blend-mode: screen;
+}
+
+
+/* Color texts ["#ef476f", "#ffd166", "#06d6a0", "#118ab2", "#073b4c"] */
+.color-text-1 {
+    color: #ef476f;
+}
+
+.color-text-2 {
+    color: #ffd166;
+}
+
+.color-text-3 {
+    color: #06d6a0;
+}
+
+.color-text-4 {
+    color: #118ab2;
+}
+
+.color-text-5 {
+    color: #073b4c;
+}
+
+
+
+.gallery {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+}
+
+.thumbnail {
+    width: 100%;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.thumbnail:hover {
+    transform: scale(1.2);
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    top: 5%;
+    left: 2.5%;
+    width: 95%;
+    height: 90%;
+    background-color: rgba(0, 0, 0, 0.8);
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    overflow: hidden;
+}
+
+.modal-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 100%;
+    max-height: 90%;
+    height: 100%; /* Nimmt die volle Modal-Höhe ein */
+    width: 100%; /* Nimmt die volle Modal-Breite ein */
+    margin: auto;
+    position: relative;
+}
+
+.modal-content img {
+    max-height: 100%; /* Bildhöhe passt sich an die Höhe des Modals an */
+    max-width: 100%; /* Verhindert, dass das Bild die Breite des Modals überschreitet */
+    object-fit: contain; /* Erhält das Seitenverhältnis des Bildes */
+}
+
+.popup-slide {
+    display: none;
+}
+
+.close {
+    position: absolute;
+    top: 20px;
+    left: 30px;
+    color: white;
+    font-size: 30px;
+    cursor: pointer;
+}
+
+.popup-prev,
+.popup-next {
+    cursor: pointer;
+    position: absolute;
+    top: 50%;
+    width: auto;
+    margin-top: -22px;
+    padding: 16px;
+    color: white;
+    font-size: 18px;
+    user-select: none;
+}
+
+.popup-prev {
+    left: 0;
+}
+
+.popup-next {
+    right: 0;
+}
