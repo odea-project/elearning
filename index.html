@@ -1,40 +1,114 @@
 <!doctype html>
 <html lang="en">
-	<head>
-		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-		<title>reveal.js</title>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-		<link rel="stylesheet" href="dist/reset.css">
-		<link rel="stylesheet" href="dist/reveal.css">
-		<link rel="stylesheet" href="dist/theme/black.css">
+	<title>Reveal.js mit Regen</title>
 
-		<!-- Theme used for syntax highlighted code -->
-		<link rel="stylesheet" href="plugin/highlight/monokai.css">
-	</head>
-	<body>
-		<div class="reveal">
-			<div class="slides">
-				<section>Slide 1</section>
-				<section>Slide 2</section>
-			</div>
+	<link rel="stylesheet" href="dist/reset.css">
+	<link rel="stylesheet" href="dist/reveal.css">
+	<link rel="stylesheet" href="dist/theme/black.css">
+
+	<style>
+		/* Hintergrund-Container relativ, damit Canvas darin absolut positioniert werden kann */
+		.reveal .backgrounds {
+			position: relative;
+		}
+
+		/* Regen-Canvas füllt den gesamten Hintergrund */
+		.reveal .backgrounds .rain-canvas {
+			position: absolute;
+			top: 0;
+			left: 0;
+			width: 100vw;
+			height: 100vh;
+			pointer-events: none;
+			z-index: 0;
+		}
+
+		/* Slides oben drüber */
+		.reveal .slides {
+			position: absolute;
+			z-index: 1;
+		}
+	</style>
+</head>
+
+<body>
+	<div class="reveal">
+		<div class="slides">
+			<section>Slide 1</section>
+			<section>Slide 2</section>
+			<!-- … -->
 		</div>
+	</div>
 
-		<script src="dist/reveal.js"></script>
-		<script src="plugin/notes/notes.js"></script>
-		<script src="plugin/markdown/markdown.js"></script>
-		<script src="plugin/highlight/highlight.js"></script>
-		<script>
-			// More info about initialization & config:
-			// - https://revealjs.com/initialization/
-			// - https://revealjs.com/config/
-			Reveal.initialize({
-				hash: true,
+	<script src="dist/reveal.js"></script>
+	<script src="plugin/notes/notes.js"></script>
+	<script src="plugin/markdown/markdown.js"></script>
+	<script src="plugin/highlight/highlight.js"></script>
+	<script>
+		// 1) Initialize Reveal
+		Reveal.initialize({
+			parallaxBackgroundImage: 'resources/bg2.jpg',
+			parallaxBackgroundSize: '6932px 1080px',
+			parallaxBackgroundHorizontal: 200,
+			hash: true,
+			plugins: [RevealMarkdown, RevealHighlight, RevealNotes]
+		});
 
-				// Learn about plugins: https://revealjs.com/plugins/
-				plugins: [ RevealMarkdown, RevealHighlight, RevealNotes ]
-			});
-		</script>
-	</body>
+		// 2) Sobald Reveal fertig ist, Canvas in den Hintergrund-Wrapper packen
+		Reveal.on('ready', () => {
+			const bgContainer = document.querySelector('.reveal .backgrounds');
+			if (!bgContainer) {
+				console.error('Hintergrund-Container nicht gefunden!');
+				return;
+			}
+
+			const canvas = document.createElement('canvas');
+			canvas.classList.add('rain-canvas');
+			bgContainer.appendChild(canvas);
+			const ctx = canvas.getContext('2d');
+
+			// Größe an Viewport koppeln
+			function resize() {
+				canvas.width = window.innerWidth;
+				canvas.height = window.innerHeight;
+			}
+			window.addEventListener('resize', resize);
+			resize();
+
+			// Partikel initialisieren
+			const drops = Array.from({ length: 1000 }, () => ({
+				x: Math.random() * canvas.width,
+				y: Math.random() * canvas.height,
+				xs: -1 + Math.random() * 2,
+				ys: 8 + Math.random() * 12
+			}));
+
+			// Animations-Loop
+			function draw() {
+				ctx.clearRect(0, 0, canvas.width, canvas.height);
+				ctx.strokeStyle = 'rgba(255,255,255,0.2)';
+				ctx.lineWidth = 2;
+				for (const d of drops) {
+					ctx.beginPath();
+					ctx.moveTo(d.x, d.y);
+					ctx.lineTo(d.x + d.xs, d.y + d.ys);
+					ctx.stroke();
+					d.x += d.xs; d.y += d.ys;
+					if (d.x < 0 || d.x > canvas.width || d.y > canvas.height) {
+						d.x = Math.random() * canvas.width;
+						d.y = -20;
+					}
+				}
+				requestAnimationFrame(draw);
+			}
+			draw();
+		});
+	</script>
+</body>
+
 </html>
