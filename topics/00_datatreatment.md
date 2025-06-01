@@ -1,11 +1,16 @@
-# Hello from example.md
+# Hello World
 
-1. Das ist eine Liste
-2. Mit mehreren Einträgen
+1. This is a list
+2. with multiple items
 
-> Ein Zitat hier.
+> This is a blockquote
 
-- Ein Bullet-Point
-- Noch einer
+- This is a list item
 
-**Viel Spaß beim Testen!**
+This is a paragraph with **bold text** and *italic text*.
+
+```python
+def hello_world():
+    print("Hello, World!")
+hello_world()
+```
