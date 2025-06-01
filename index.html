@@ -4,62 +4,66 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Reveal mit dynamischem Markdown</title>
 
-	<title>Reveal.js mit Regen</title>
-
+	<!-- Reveal‐CSS -->
 	<link rel="stylesheet" href="dist/reset.css">
 	<link rel="stylesheet" href="dist/reveal.css">
 	<link rel="stylesheet" href="dist/theme/iac.css">
+
+	<!-- Eigene Styles (u. a. Regen, Cursor, uvm.) -->
 	<link rel="stylesheet" href="css/mystyles.css">
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
-
-	<style>
-		/* Hintergrund-Container relativ, damit Canvas darin absolut positioniert werden kann */
-		.reveal .backgrounds {
-			position: relative;
-		}
-
-		/* Regen-Canvas füllt den gesamten Hintergrund */
-		.reveal .backgrounds .rain-canvas {
-			position: absolute;
-			top: 0;
-			left: 0;
-			width: 100vw;
-			height: 100vh;
-			pointer-events: none;
-			z-index: 0;
-		}
-
-		/* Slides oben drüber */
-		.reveal .slides {
-			position: absolute;
-			z-index: 1;
-		}
-	</style>
 </head>
 
 <body>
 	<div class="reveal">
 		<div class="slides">
+			<!-- Slide 0: Logo + Autoren -->
 			<section>
-				<img src="resources/odea_edu_logo_dark2.jpg" alt="ODEA Logo" style="width: 500px; height: auto;">
-				<img src="resources/pic_ricardo.jpg" alt="Ricardo Cunha" style="width: 200px; height: auto; float: right;">
-				<img src="resources/pic_gerrit.jpg" alt="Gerrit Renner" style="width: 200px; height: auto; float: right;">
-				<h2 style="font-size: medium; color: #ff05ff;">by Gerrit Renner & Ricardo Cunha</h2>
+				<img id="odea-logo" src="resources/odea_edu_logo_dark3.jpg" alt="ODEA Logo"
+					style="width: auto; height: 400px;">
+				<img src="resources/pic_ricardo.jpg" alt="Ricardo Cunha"
+					style="width: auto; height: 400px; float: right;">
+				<a href="https://www.uni-due.de/iac/gerrit_renner.php" target="_blank">
+					<img src="resources/pic_gerrit.jpg" alt="Gerrit Renner"
+						style="width: auto; height: 400px; float: right;">
+				</a>
+				<h2 style="font-size: medium; color: #ff05ff;">
+					by <a href="https://www.uni-due.de/iac/gerrit_renner.php" target="_blank">Gerrit Renner</a>
+					& Ricardo Cunha
+				</h2>
 			</section>
-			<section>Slide 2</section>
-			<section>Slide 2</section>
-			<section>Slide 2</section>
-			<!-- … -->
+
+			<!-- Slide 1: Themen-Auswahl -->
+			<section>
+				<h2>Load Tutorial</h2>
+				<pre style="font-size: large;">
+<code>Topics {  # click to select a topic</code>
+  <a href="#" class="topic-link" data-md="topics/00_datatreatment.md">
+    <code class="hoverable">	00. Data processing for large & diverse analytical data sets,</code>
+  </a>
+<code>};</code>
+        </pre>
+			</section>
+
+			<!-- Slide 2: Hier landet das dynamisch geladene Markdown -->
+			<section id="dynamic-tutorial" data-markdown="topics/00_datatreatment.md">		
+				<!-- hier wird das Markdown-Plugin den Inhalt einsetzen -->
+			</section>
+
+			<!-- Weitere Slides … -->
 		</div>
 	</div>
 
+	<div id="clock">--:--</div>
+
+	<!-- Reveal‐JS + Plugins -->
 	<script src="dist/reveal.js"></script>
 	<script src="plugin/notes/notes.js"></script>
 	<script src="plugin/markdown/markdown.js"></script>
 	<script src="plugin/highlight/highlight.js"></script>
 	<script>
-		// 1) Initialize Reveal
+		// 1) Reveal initialisieren
 		Reveal.initialize({
 			parallaxBackgroundImage: 'resources/bg2.jpg',
 			parallaxBackgroundSize: '6932px 1080px',
@@ -68,20 +72,18 @@
 			plugins: [RevealMarkdown, RevealHighlight, RevealNotes]
 		});
 
-		// 2) Sobald Reveal fertig ist, Canvas in den Hintergrund-Wrapper packen
+		// 2) Regen-Canvas in den Hintergrund packen (unverändert)
 		Reveal.on('ready', () => {
 			const bgContainer = document.querySelector('.reveal .backgrounds');
 			if (!bgContainer) {
 				console.error('Hintergrund-Container nicht gefunden!');
 				return;
 			}
-
 			const canvas = document.createElement('canvas');
 			canvas.classList.add('rain-canvas');
 			bgContainer.appendChild(canvas);
 			const ctx = canvas.getContext('2d');
 
-			// Größe an Viewport koppeln
 			function resize() {
 				canvas.width = window.innerWidth;
 				canvas.height = window.innerHeight;
@@ -89,15 +91,13 @@
 			window.addEventListener('resize', resize);
 			resize();
 
-			// Partikel initialisieren
-			const drops = Array.from({ length: 1000 }, () => ({
+			const drops = Array.from({ length: 500 }, () => ({
 				x: Math.random() * canvas.width,
 				y: Math.random() * canvas.height,
 				xs: -1 + Math.random() * 2,
 				ys: 8 + Math.random() * 12
 			}));
 
-			// Animations-Loop
 			function draw() {
 				ctx.clearRect(0, 0, canvas.width, canvas.height);
 				ctx.strokeStyle = 'rgba(255,255,255,0.2)';
@@ -116,6 +116,55 @@
 				requestAnimationFrame(draw);
 			}
 			draw();
+		});
+
+		// 3) Uhrzeit-Updater (unverändert)
+		function updateClock() {
+			const now = new Date();
+			const hh = String(now.getHours()).padStart(2, '0');
+			const mm = String(now.getMinutes()).padStart(2, '0');
+			document.getElementById('clock').textContent = `${hh}:${mm}`;
+		}
+		updateClock();
+		setInterval(updateClock, 1000);
+
+		// 4) ODEA-Logo ↔ QR-Code Toggle (unverändert)
+		document.addEventListener('DOMContentLoaded', () => {
+			const logo = document.getElementById('odea-logo');
+			if (!logo) return;
+			const logoSrc = 'resources/odea_edu_logo_dark3.jpg';
+			const qrSrc = 'resources/qr_home.jpg';
+
+			logo.addEventListener('click', () => {
+				logo.style.opacity = '0';
+				const onFadedOut = (e) => {
+					if (e.propertyName !== 'opacity') return;
+					logo.removeEventListener('transitionend', onFadedOut);
+
+					logo.src = logo.src.includes(logoSrc) ? qrSrc : logoSrc;
+					logo.style.opacity = '1';
+				};
+				logo.addEventListener('transitionend', onFadedOut);
+			});
+		});
+
+		// 5) Dynamisches Markdown nachladen (korrekt mit Reveal.sync())
+		document.querySelectorAll('.topic-link').forEach(a => {
+			a.addEventListener('click', e => {
+				e.preventDefault();
+				const mdUrl = a.getAttribute('data-md');
+				const slide = document.querySelector('#dynamic-tutorial');
+
+				// a) Attribut setzen
+				slide.setAttribute('data-markdown', mdUrl);
+
+				// b) Reveal.sync() ausführen, sodass das Markdown-Plugin lädt
+				Reveal.sync();
+
+				// c) Auf die dynamische Slide navigieren (hier Index 2)
+				//    Passe 2 ggf. an, wenn sich die Position verschiebt
+				Reveal.slide(1);
+			});
 		});
 	</script>
 </body>
