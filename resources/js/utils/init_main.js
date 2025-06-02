@@ -3,5 +3,5 @@ Reveal.initialize({
   parallaxBackgroundSize: '6932px 1080px',
   parallaxBackgroundHorizontal: 200,
   hash: true,
-  plugins: [RevealMarkdown, RevealHighlight, RevealNotes]
+  plugins: [RevealMarkdown, RevealHighlight, RevealNotes, RevealMath.KaTeX],
 });
