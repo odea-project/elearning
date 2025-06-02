@@ -23,12 +23,12 @@
 		<div class="slides">
 			<!-- Slide 0: Logo + Autoren -->
 			<section>
-				<img id="odea-logo" src="resources/odea_edu_logo_dark3.jpg" alt="ODEA Logo"
+				<img id="odea-logo" src="resources/misc/odea_edu_logo_dark3.jpg" alt="ODEA Logo"
 					style="width: auto; height: 400px;">
-				<img src="resources/pic_ricardo.jpg" alt="Ricardo Cunha"
+				<img src="resources/misc/pic_ricardo.jpg" alt="Ricardo Cunha"
 					style="width: auto; height: 400px; float: right;">
 				<a href="https://www.uni-due.de/iac/gerrit_renner.php" target="_blank">
-					<img src="resources/pic_gerrit.jpg" alt="Gerrit Renner"
+					<img src="resources/misc/pic_gerrit.jpg" alt="Gerrit Renner"
 						style="width: auto; height: 400px; float: right;">
 				</a>
 				<h2 style="font-size: medium; color: #ff05ff;">
@@ -42,7 +42,7 @@
 				<h2>Load Tutorial</h2>
 				<pre style="font-size: large;">
 <code>Topics {  # click to select a topic</code>
-  <a href="#" class="topic-link" data-md="topics/00_datatreatment.md">
+  <a href="#/dynamic-tutorial" class="topic-link" data-md="topics/00_datatreatment.md">
     <code class="hoverable">	00. Data processing for large & diverse analytical data sets,</code>
   </a>
 <code>};</code>
@@ -67,6 +67,19 @@ y: [10, 20, 30, 40, 50]</code>
 				</div>
 			</section>
 
+			<section data-markdown>
+				<script type="text/template">
+                        ## Demo 1
+                        Slide 1
+                        ---
+                        ## Demo 1
+                        Slide 2
+                        ---
+                        ## Demo 1
+                        Slide 3
+                    </script>
+			</section>
+
 			<!-- Slide 2: Hier landet das dynamisch geladene Markdown -->
 			<section id="dynamic-tutorial" data-markdown="topics/00_datatreatment.md">		
 				<!-- hier wird das Markdown-Plugin den Inhalt einsetzen -->
@@ -83,111 +96,11 @@ y: [10, 20, 30, 40, 50]</code>
 	<script src="plugin/notes/notes.js"></script>
 	<script src="plugin/markdown/markdown.js"></script>
 	<script src="plugin/highlight/highlight.js"></script>
-	<script>
-		// 1) Reveal initialisieren
-		Reveal.initialize({
-			parallaxBackgroundImage: 'resources/bg2.jpg',
-			parallaxBackgroundSize: '6932px 1080px',
-			parallaxBackgroundHorizontal: 200,
-			hash: true,
-			plugins: [RevealMarkdown, RevealHighlight, RevealNotes]
-		});
-
-		// 2) Regen-Canvas in den Hintergrund packen (unverändert)
-		Reveal.on('ready', () => {
-			const bgContainer = document.querySelector('.reveal .backgrounds');
-			if (!bgContainer) {
-				console.error('Hintergrund-Container nicht gefunden!');
-				return;
-			}
-			const canvas = document.createElement('canvas');
-			canvas.classList.add('rain-canvas');
-			bgContainer.appendChild(canvas);
-			const ctx = canvas.getContext('2d');
-
-			function resize() {
-				canvas.width = window.innerWidth;
-				canvas.height = window.innerHeight;
-			}
-			window.addEventListener('resize', resize);
-			resize();
-
-			const drops = Array.from({ length: 500 }, () => ({
-				x: Math.random() * canvas.width,
-				y: Math.random() * canvas.height,
-				xs: -1 + Math.random() * 2,
-				ys: 8 + Math.random() * 12
-			}));
-
-			function draw() {
-				ctx.clearRect(0, 0, canvas.width, canvas.height);
-				ctx.strokeStyle = 'rgba(255,255,255,0.2)';
-				ctx.lineWidth = 2;
-				for (const d of drops) {
-					ctx.beginPath();
-					ctx.moveTo(d.x, d.y);
-					ctx.lineTo(d.x + d.xs, d.y + d.ys);
-					ctx.stroke();
-					d.x += d.xs; d.y += d.ys;
-					if (d.x < 0 || d.x > canvas.width || d.y > canvas.height) {
-						d.x = Math.random() * canvas.width;
-						d.y = -20;
-					}
-				}
-				requestAnimationFrame(draw);
-			}
-			draw();
-		});
-
-		// 3) Uhrzeit-Updater (unverändert)
-		function updateClock() {
-			const now = new Date();
-			const hh = String(now.getHours()).padStart(2, '0');
-			const mm = String(now.getMinutes()).padStart(2, '0');
-			document.getElementById('clock').textContent = `${hh}:${mm}`;
-		}
-		updateClock();
-		setInterval(updateClock, 1000);
-
-		// 4) ODEA-Logo ↔ QR-Code Toggle (unverändert)
-		document.addEventListener('DOMContentLoaded', () => {
-			const logo = document.getElementById('odea-logo');
-			if (!logo) return;
-			const logoSrc = 'resources/odea_edu_logo_dark3.jpg';
-			const qrSrc = 'resources/qr_home.jpg';
-
-			logo.addEventListener('click', () => {
-				logo.style.opacity = '0';
-				const onFadedOut = (e) => {
-					if (e.propertyName !== 'opacity') return;
-					logo.removeEventListener('transitionend', onFadedOut);
-
-					logo.src = logo.src.includes(logoSrc) ? qrSrc : logoSrc;
-					logo.style.opacity = '1';
-				};
-				logo.addEventListener('transitionend', onFadedOut);
-			});
-		});
-
-		// 5) Dynamisches Markdown nachladen (korrekt mit Reveal.sync())
-		document.querySelectorAll('.topic-link').forEach(a => {
-			a.addEventListener('click', e => {
-				e.preventDefault();
-				const mdUrl = a.getAttribute('data-md');
-				const slide = document.querySelector('#dynamic-tutorial');
-
-				// a) Attribut setzen
-				slide.setAttribute('data-markdown', mdUrl);
-
-				// b) Reveal.sync() ausführen, sodass das Markdown-Plugin lädt
-				Reveal.sync();
-
-				// c) Auf die dynamische Slide navigieren (hier Index 2)
-				//    Passe 2 ggf. an, wenn sich die Position verschiebt
-				Reveal.slide(1);
-			});
-		});
-	</script>
+	<script src="resources/js/utils/init_main.js"></script>
+	<script src="resources/js/utils/rain_effect_background.js"></script>
+	<script src="resources/js/utils/clock.js"></script>
+	<script src="resources/js/utils/qr_code_home.js"></script>
+	<script src="resources/js/utils/load_content_into_main.js"></script>
 </body>
 
 </html>

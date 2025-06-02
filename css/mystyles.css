@@ -1,19 +1,19 @@
 body {
-  cursor: url("../resources/cursor.cur"), auto;
+  cursor: url("../resources/misc/cursor.cur"), auto;
 }
 
 .reveal a,
 .reveal a:visited,
 .reveal a:hover,
 .reveal a:active {
-  cursor: url("../resources/cursor2.cur"), auto !important;
+  cursor: url("../resources/misc/cursor2.cur"), auto !important;
 }
 
 /* 3) Buttons und Controls im Reveal sollen auch den Custom-Cursor */
 .reveal button,
 .reveal button:hover,
 .reveal button:focus {
-  cursor: url("../resources/cursor2.cur"), auto !important;
+  cursor: url("../resources/misc/cursor2.cur"), auto !important;
 }
 
 #odea-logo {
@@ -51,6 +51,13 @@ body {
     color: #f92672;
     content: " <<";
     /* Fügt das ">>" hinzu */
+}
+
+.reveal .slides strong,
+.reveal .slides b,
+.reveal .slides em,
+.reveal .slides i {
+  color: #00ffff;
 }
 
 .exam-box {
