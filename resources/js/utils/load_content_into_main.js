@@ -3,76 +3,64 @@ document.querySelectorAll('.topic-link').forEach(a => {
     e.preventDefault();
     const mdUrl = a.getAttribute('data-md');
 
-    // 1) alte dynamische Slides entfernen
-    const allSlidesContainer = document.querySelector('.reveal .slides');
-    const oldDynamics = allSlidesContainer.querySelectorAll('section.dynamic');
-    oldDynamics.forEach(s => s.remove());
+    // 1) Split mit ID-Erkennung:
+const parts = markdownText.split(
+  /^[ \t]*---(?:[ \t]*\(\s*id="([^"]+)"\s*\))?[ \t]*$/m
+);
 
-    // 2) Markdown laden
-    let markdownText;
-    try {
-      const response = await fetch(mdUrl);
-      if (!response.ok) throw new Error(`HTTP ${response.status}`);
-      markdownText = await response.text();
-    } catch (err) {
-      // …Fehler-Folie einfügen…
-      return;
-    }
+// 2) Array zum Sammeln der neuen Sections:
+const newSections = [];
 
-    // 3) Markdown in Blöcke splitten
-    const chunks = markdownText.split(/^[ \t]*---[ \t]*$/m);
+// 3) Wir iterieren stets in Schritten von 2:
+//    - parts[i] ist der Markdown-Block,
+//    - parts[i+1] ist (falls vorhanden) die ID für die folgende Section.
+for (let i = 0; i < parts.length; i += 2) {
+  const mdPart = parts[i].trim();
+  // Falls leer: überspringen:
+  if (!mdPart) {
+    continue;
+  }
 
-    // 4) Für jeden Block eine neue <section class="dynamic"> aus HTML machen
-    const newSections = [];
-    for (let chunk of chunks) {
-      const mdPart = chunk.trim();
-      if (!mdPart) continue;
-      const html = Reveal.getPlugin('markdown').marked(mdPart);
-      const section = document.createElement('section');
-      section.classList.add('dynamic');
-      section.innerHTML = html;
-      newSections.push(section);
-    }
+  // Die „nächste“ ID (falls der Trenner eine ID hatte):
+  // parts[i+1] ist entweder ein String wie "pixel-chart-slide"
+  // oder undefined, wenn kein (id="…") hinter diesem Trenner stand.
+  const forcedId = parts[i + 1];
 
-    // 5) Die neuen Sections ab Index 2 einfügen
-    for (let i = 0; i < newSections.length; i++) {
-      const insertBeforeNode = allSlidesContainer.children[2 + i];
-      if (insertBeforeNode) {
-        allSlidesContainer.insertBefore(newSections[i], insertBeforeNode);
-      } else {
-        allSlidesContainer.appendChild(newSections[i]);
-      }
-    }
+  // 4) Markdown → HTML wandeln
+  const html = markdownPlugin.marked(mdPart);
 
-    // 6) Reveal aktualisieren
-    Reveal.layout();
+  // 5) Wrapper‐Section anlegen – mit oder ohne ID
+  const section = document.createElement("section");
+  section.classList.add("dynamic");
+  if (forcedId) {
+    section.id = forcedId;
+  }
+  section.innerHTML = html;
+  newSections.push(section);
 
-    // **7) ganz wichtig**: Alle <script> innerhalb der neuen Sections „manuell“ ausführen
-    newSections.forEach(section => {
-      section.querySelectorAll('script').forEach(oldScript => {
-        const newScript = document.createElement('script');
-        // Falls src-Attribute vorhanden sind, übernehmen wir sie, 
-        // ansonsten den Inhalt aus innerHTML:
-        if (oldScript.src) {
-          newScript.src = oldScript.src;
-        } else {
-          newScript.textContent = oldScript.innerHTML;
-        }
-        // damit das Script tatsächlich ausgeführt wird, hängen wir
-        // das neue <script> an den <body> oder in die Sektion:
-        document.body.appendChild(newScript);
-        // (oder: section.appendChild(newScript); klappt in der Regel auch)
-        // Anschließend kann der Browser das Inline-Skript ausführen.
-        // Danach kann man das temporäre newScript wieder entfernen, 
-        // aber es schadet kaum, es drin zu lassen.
-      });
-    });
+  console.log(
+    `[DEBUG] Block Index ${(i/2)} gerendert` +
+    (forcedId ? ` (id="${forcedId}")` : "")
+  );
+}
 
-    // 8) Math-Rendering
-    renderMathInDynamicSlides(newSections);
+// 6) Die neuen Sections ab Index 2 einfügen (wie zuvor)
+const slidesContainer = document.querySelector(".reveal .slides");
+for (let j = 0; j < newSections.length; j++) {
+  const insertBeforeNode = slidesContainer.children[2 + j];
+  if (insertBeforeNode) {
+    slidesContainer.insertBefore(newSections[j], insertBeforeNode);
+  } else {
+    slidesContainer.appendChild(newSections[j]);
+  }
+}
+console.log("[DEBUG] Neue dynamische Slides eingefügt:", newSections.length);
 
-    // 9) direkt zur ersten dynamischen Folie (Index 2)
-    Reveal.slide(2);
+// 7) Layout und Math-Rendering wie gehabt
+Reveal.layout();
+renderMathInDynamicSlides(newSections);
+Reveal.slide(2);
+
   });
 });
 

@@ -54,11 +54,9 @@ y: [10, 20, 30, 40, 50]</code>
 	</div>
 </div>
 
----
-<div id="pixel-chart-slide">
-  <h1> Demo 7</h1>
-  <div id="pixel-chart"></div>
-
+--- (id="pixel-chart-slide")
+<h1>Demo 7</h1>
+<div id="pixel-chart"></div>
   <script>
     // Hinweis: Diese Funktion(en) müssen schon vorher global verfügbar sein:
     //   createFigure(), addAxes(), addLine()
@@ -115,4 +113,3 @@ y: [10, 20, 30, 40, 50]</code>
       }
     });
   </script>
-</div>
