@@ -1,119 +1,163 @@
-function createPixelLinePlot({
-  selector,     // z. B. "#pixel-chart"
-  data,         // Array von { x: <Zahl>, y: <Zahl> }
-  width = 800,
-  height = 400,
-  margin = { top: 50, right: 50, bottom: 50, left: 50 }
-}) {
-  // 1) Alten SVG-Container löschen, falls vorhanden
-  d3.select(selector).selectAll("svg").remove();
+/**
+ * Erzeugt eine leere SVG‐Figure im DIV mit ID=divId.
+ * Liefert ein Objekt zurück mit allen References, um später Plot(s) hinzuzufügen.
+ */
+function createFigure(divId, width = 800, height = 400, margin = { top: 50, right: 50, bottom: 50, left: 50 }) {
+  // 1) Leeres SVG im Container anlegen (alte SVGs entfernen)
+  d3.select(`#${divId}`).selectAll("svg").remove();
 
-  // 2) Inneren Bereich berechnen
+  // 2) Innenmaße berechnen
   const innerWidth  = width  - margin.left - margin.right;
   const innerHeight = height - margin.top  - margin.bottom;
 
-  // 3) SVG-Container anlegen
-  const svg = d3.select(selector)
+  // 3) SVG + <g> anlegen, mit Pixel-Rendering & dunklem Hintergrund
+  const svg = d3.select(`#${divId}`)
     .append("svg")
       .attr("width", width)
       .attr("height", height)
-      .style("image-rendering", "pixelated")
-      .style("shape-rendering", "crispEdges")
+      .style("background-color", "#111")            // dunkler Hintergrund
+      .style("image-rendering", "pixelated")        // Pixel-Look
+      .style("shape-rendering", "crispEdges")       // scharfe Kanten
     .append("g")
-      .attr("transform", `translate(${margin.left}, ${margin.top})`);
+      .attr("transform", `translate(${margin.left},${margin.top})`);
 
-  // 4) Skalen definieren (x linear, y linear)
+  // 4) Leere Gruppen für Achsen vorbereiten
+  const xAxisGroup = svg.append("g")
+    .attr("class", "x-axis")
+    .attr("transform", `translate(0, ${innerHeight})`);
+  const yAxisGroup = svg.append("g")
+    .attr("class", "y-axis");
+
+  // 5) Rückgabe eines Objekts, das du später an addLinePlot übergibst
+  return {
+    svg,
+    xAxisGroup,
+    yAxisGroup,
+    width: innerWidth,
+    height: innerHeight,
+    margin
+  };
+}
+
+/**
+ * Zeichnet x- und y-Achsen in eine existierende Figure. 
+ * 
+ * @param {object} fig       – Das von createFigure zurückgegebene Objekt
+ * @param {Array}  xDomain   – [xmin, xmax]; z. B. d3.extent(data, d=>d.x)
+ * @param {Array}  yDomain   – [ymin, ymax]; z. B. [0, d3.max(data, d=>d.y)]
+ * @param {number} xTicks    – Anzahl der xticks (default 5)
+ * @param {number} yTicks    – Anzahl der yticks (default 5)
+ */
+function addAxes(fig, xDomain, yDomain, xTicks = 5, yTicks = 5) {
+  // 1) Skalen definieren
   const xScale = d3.scaleLinear()
-    .domain(d3.extent(data, d => d.x))
-    .range([0, innerWidth]);
+    .domain(xDomain)
+    .range([0, fig.width]);
 
   const yScale = d3.scaleLinear()
-    .domain([0, d3.max(data, d => d.y)])
-    .nice()
-    .range([innerHeight, 0]);
+    .domain(yDomain).nice()
+    .range([fig.height, 0]);
 
-  // 5) Achsen zeichnen (fallen dadurch nicht blockig aus, 
-  //    aber wir lassen shape-rendering: crispEdges für die Achsen-Linien)
-  const xAxis = d3.axisBottom(xScale).ticks(5).tickSizeOuter(0);
-  const yAxis = d3.axisLeft(yScale).ticks(5).tickSizeOuter(0);
+  // 2) Achsen-Generatoren
+  const xAxis = d3.axisBottom(xScale)
+    .ticks(xTicks)
+    .tickSizeOuter(0);
+  const yAxis = d3.axisLeft(yScale)
+    .ticks(yTicks)
+    .tickSizeOuter(0);
 
-  svg.append("g")
-    .attr("class", "axis x-axis")
-    .attr("transform", `translate(0, ${innerHeight})`)
-    .call(xAxis);
+  // 3) Achsen einfügen
+  fig.xAxisGroup.call(xAxis);
+  fig.yAxisGroup.call(yAxis);
 
-  svg.append("g")
-    .attr("class", "axis y-axis")
-    .call(yAxis);
+  // 4) Inline-Styling: Neon-Cyan für Linien & „Press Start 2P“ für Texte
+  fig.xAxisGroup.selectAll("path, line")
+    .style("stroke", "#0ff")
+    .style("stroke-width", "2px")
+    .style("shape-rendering", "crispEdges");
+  fig.xAxisGroup.selectAll("text")
+    .style("fill", "#0ff")
+    .style("font-size", "14px")
+    .style("font-family", "'Press Start 2P', monospace")
+    .style("shape-rendering", "crispEdges");
 
-  // 6) Statt d3.line() verwenden wir einen d3.path() und bauen 
-  //    bei jedem Datenpunkt-Paar erst eine horizontale, dann eine vertikale Kante.
-  const path = d3.path();
+  fig.yAxisGroup.selectAll("path, line")
+    .style("stroke", "#0ff")
+    .style("stroke-width", "2px")
+    .style("shape-rendering", "crispEdges");
+  fig.yAxisGroup.selectAll("text")
+    .style("fill", "#0ff")
+    .style("font-size", "14px")
+    .style("font-family", "'Press Start 2P', monospace")
+    .style("shape-rendering", "crispEdges");
 
-  // 6a) Erstes Datenpaar: Start-Koordinate
-  const x0 = Math.round(xScale(data[0].x));
-  const y0 = Math.round(yScale(data[0].y));
-  path.moveTo(x0, y0);
+  // 5) Skalen im Figure-Objekt speichern, damit sie später beim Plotten verfügbar sind
+  fig.xScale = xScale;
+  fig.yScale = yScale;
+}
 
-  // 6b) Für jedes folgende Datenpaar: 
-  //     → horizontal vom (x_(i-1), y_(i-1)) nach (x_i, y_(i-1))
-  //     → dann vertikal nach (x_i, y_i)
-  for (let i = 1; i < data.length; i++) {
-    const prev = data[i - 1];
-    const curr = data[i];
+/**
+ * Fügt der Figure genau eine neue Linie (und Punkte) hinzu, ohne bestehende zu löschen.
+ * 
+ * @param {object} fig         – Das Figure-Objekt aus createFigure & addAxes
+ * @param {Array}  data        – Array von Punkten [{x:<Number>, y:<Number>}, …]
+ * @param {object} options     – Folgende Properties (mit Default-Werten):
+ *    {
+ *      curve     – d3.curveNatural oder d3.curveLinear, etc. (default: d3.curveLinear)
+ *      lineColor – Farbcode, z. B. "#f0f" (default)
+ *      lineWidth – Zahl in Pixel, z. B. 3 (default)
+ *      pointSize – Seitenlänge der Quadrate in Pixel, z. B. 6 (default)
+ *      pointColor– Farbcode, z. B. "#ff0" (default)
+ *    }
+ */
+function addLine(fig, data, options = {}) {
+  // 1) Optionen mit Defaults zusammenführen
+  const {
+    curve      = d3.curveLinear,
+    lineColor  = "#f0f",
+    lineWidth  = 3,
+    pointSize  = 6,
+    pointColor = "#ff0"
+  } = options;
 
-    const px = Math.round(xScale(prev.x));
-    const py = Math.round(yScale(prev.y));
-    const cx = Math.round(xScale(curr.x));
-    const cy = Math.round(yScale(curr.y));
+  // 2) Line-Generator, unter Verwendung der bereits in fig gespeicherten Skalen
+  const lineGenerator = d3.line()
+    .x(d => fig.xScale(d.x))
+    .y(d => fig.yScale(d.y))
+    .curve(curve);
 
-    // horizontal zum nächsten X auf gleicher Y-Höhe
-    path.lineTo(cx, py);
-    // dann vertikal zum neuen Y
-    path.lineTo(cx, cy);
-  }
+  // 3) Neuen <path> für die Linie einfügen
+  fig.svg.append("path")
+    .datum(data)
+    .attr("class", "line")          // optional: wenn du Linien später gezielt ansprechen willst
+    .attr("d", lineGenerator)
+    .attr("fill", "none")
+    .style("stroke", lineColor)     // Inline-Style hat Vorrang
+    .style("stroke-width", lineWidth)
+    .style("shape-rendering", "crispEdges");
 
-  // 7) Pfad als single <path> im SVG ablegen
-  svg.append("path")
-    .attr("class", "line")
-    .attr("d", path.toString());
-
-  // 8) Die Datenpunkte als kleine Pixel-Quadrate (6×6) zeichnen
-  svg.selectAll(".point")
+  // 4) Punkte (Quadrate) an jedem Datenpunkt hinzufügen
+  fig.svg.selectAll(null)          // Selektor „null“ erzwingt, dass wir keine bestehenden rects abgreifen
     .data(data)
     .enter()
     .append("rect")
       .attr("class", "point")
-      .attr("x", d => Math.round(xScale(d.x)) - 3)
-      .attr("y", d => Math.round(yScale(d.y)) - 3)
-      .attr("width", 6)
-      .attr("height", 6);
+      .attr("x", d => Math.round(fig.xScale(d.x)) - pointSize/2)
+      .attr("y", d => Math.round(fig.yScale(d.y)) - pointSize/2)
+      .attr("width", pointSize)
+      .attr("height", pointSize)
+      .attr("fill", pointColor)
+      .attr("stroke", pointColor)
+      .attr("stroke-width", 1)
+      .on("mouseover", function() {
+        d3.select(this)
+          .attr("stroke", "#fff")
+          .attr("stroke-width", 2);
+      })
+      .on("mouseout", function() {
+        d3.select(this)
+          .attr("stroke", pointColor)
+          .attr("stroke-width", 1);
+      });
 }
 
-
-
-
-Reveal.on('slidechanged', event => {
-  // event.currentSlide ist die <section> heute aktiv
-  const current = event.currentSlide;
-  if (current.id === 'pixel-chart-slide') {
-    // Beispiel-Daten (ihr könnt auch dynamisch generieren oder extern laden)
-    const sampleData = [
-      { x: 0, y:  5 },
-      { x: 1, y: 10 },
-      { x: 2, y:  8 },
-      { x: 3, y: 15 },
-      { x: 4, y: 12 },
-      { x: 5, y: 20 }
-    ];
-
-    // Chart erzeugen
-    createPixelLinePlot({
-      selector: "#pixel-chart",
-      data: sampleData,
-      width: 800,
-      height: 400,
-      margin: { top:50, right:50, bottom:50, left:50 }
-    });
-  }
-});

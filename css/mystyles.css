@@ -144,56 +144,31 @@ body {
   background-color: rgba(0, 255, 255, 0.3);
 }
 
-/* 1) Pixel-Rendering: Linien und Formen scharfkantig darstellen */
+/* Wenn du Pixel-Rendering wünschst: */
 #pixel-chart svg {
-  /* Pixel-art: keine Antialiasing-Glättung */
   image-rendering: pixelated;
   shape-rendering: crispEdges;
-  font-family: 'Press Start 2P', monospace; /* Retro-Pixel-Font */
-}
-
-/* 2) Neonfarbene Achsen-/Linienfarbpalette */
-.axis path,
-.axis line {
-  stroke: #0ff;         /* Cyan-Neon für Achsen */
-  stroke-width: 2px;
-  shape-rendering: crispEdges;
-}
-
-.line {
-  fill: #f0f;
-  stroke: #f0f;         /* Magenta-Neon für die Linie */
-  stroke-width: 3px;
-  shape-rendering: crispEdges;
-}
-
-/* 3) Punkte auf der Linie als kleine Pixel-Quadrate */
-.point {
-  fill: #ff0;           /* Gelb-Neon */
-  stroke: #ff0;         /* Schwarzer Rand – für Kontrast */
-  stroke-width: 1px;
-}
-
-/* 4) Background im Chart – ein dunkles Grau/Schwarz */
-#pixel-chart {
-  background-color: #111; /* sehr dunkles Grau */
-  border: none; /* kein Rahmen */
+  background-color: #111;  /* dunkler Hintergrund */
   border-radius: 8px;
 }
 
-/* 5) Text im Chart (Achsenbeschriftung, Titel) in Pixel-Font + Neon-Farben */
-.axis text {
+/* Neon-Farben für Achsen und Text (Anpassung je nach Bedarf) */
+#pixel-chart svg .axis path,
+#pixel-chart svg .axis line {
+  stroke: #0ff;
+  stroke-width: 2px;
+  shape-rendering: crispEdges;
+}
+
+#pixel-chart svg .axis text {
   fill: #0ff;
-  font-size: 14px;       /* recht groß für Pixel-Font */
+  font-size: 14px;
   font-family: 'Press Start 2P', monospace;
 }
 
-/* 6) Hover-Effekt (optional): auf Punkte zoomen */
-.point:hover {
-  stroke: #fff;
-  stroke-width: 2px;
-  cursor: url("../resources/misc/cursor2.cur"), auto; /* Cursor ändern beim Hover */
-}
+/* Falls du eine stärkere Pixel-Ästhetik möchtest, kannst du hier auch
+   width und height des SVG anders festlegen und dann via CSS hochskalieren. */
+
 
 
 .exam-box {
