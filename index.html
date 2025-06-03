@@ -38,57 +38,17 @@
 
 			<!-- Slide 1: Themen-Auswahl -->
 			<section>
-				<h2>Load Tutorial</h2>
+				<h1>Load Tutorial</h1>
+
+				click to select a topic
 				<pre style="font-size: large;">
-<code>Topics {  # click to select a topic</code>
-  <a href="#/dynamic-tutorial" class="topic-link" data-md="topics/00_datatreatment.md">
-    <code class="hoverable">	00. Data processing for large & diverse analytical data sets,</code>
+	<a href="#/dynamic-tutorial" class="topic-link" data-md="topics/00_demos.md">
+    <code class="hoverable">	00. Demo</code></a><a href="#/dynamic-tutorial" class="topic-link" data-md="topics/01_datatreatment.md">
+    <code class="hoverable">	01. Data processing for large 
+			& diverse analytical data sets</code>
   </a>
-<code>};</code>
-        </pre>
+	 </pre>
 			</section>
-
-			<section>
-				<h1>Test</h1>
-				<div>
-					<div class="leftBox">
-						<p class="mainBullet">This is a test slide</p>
-						<p class="subBullet">with some text</p>
-					</div>
-					<div class="spacer"></div>
-					<div class="rightBox">
-						and some data:
-						<pre style="font-size: large;">
-<code>x: [1, 2, 3, 4, 5]
-y: [10, 20, 30, 40, 50]</code>
-						</pre>
-					</div>
-				</div>
-			</section>
-
-			<section data-markdown>
-				<textarea data-template>
-					# Demo 1
-					Slide 1 **bold** text or *italic* text
-					---
-					# Demo 2
-					1. Numbered list item 1
-					2. Numbered list item 2
-
-					Das ist eine Bullet-Liste:
-					- Bullet 1
-					- Bullet 2
-
-					---
-					# Demo 3
-					This is a table:
-					| Header 1 | Header 2  |
-					|----------|-----------|
-					| Row 1    | Data 1    |
-					| Row 2    | Data 2    |
-				</textarea>
-			</section>
-
 			<!-- Slide 2: Hier landet das dynamisch geladene Markdown -->
 			<section id="dynamic-tutorial" data-markdown="topics/00_datatreatment.md">
 				<!-- hier wird das Markdown-Plugin den Inhalt einsetzen -->

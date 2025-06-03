@@ -254,12 +254,14 @@
 
 .reveal pre code {
   display: block;
+  font-family: "Press Start 2P";
   padding: 5px;
   overflow: auto;
   max-height: 400px;
   word-wrap: normal;
   background-color: rgb(0, 0, 0);
   color: rgb(0, 255, 13);
+  box-shadow: 0px 5px 15px rgba(0, 255, 242, 0.582);
 }
 
 .reveal .code-wrapper {
