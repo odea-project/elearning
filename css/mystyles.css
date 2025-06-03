@@ -144,6 +144,58 @@ body {
   background-color: rgba(0, 255, 255, 0.3);
 }
 
+/* 1) Pixel-Rendering: Linien und Formen scharfkantig darstellen */
+#pixel-chart svg {
+  /* Pixel-art: keine Antialiasing-Glättung */
+  image-rendering: pixelated;
+  shape-rendering: crispEdges;
+  font-family: 'Press Start 2P', monospace; /* Retro-Pixel-Font */
+}
+
+/* 2) Neonfarbene Achsen-/Linienfarbpalette */
+.axis path,
+.axis line {
+  stroke: #0ff;         /* Cyan-Neon für Achsen */
+  stroke-width: 2px;
+  shape-rendering: crispEdges;
+}
+
+.line {
+  fill: #f0f;
+  stroke: #f0f;         /* Magenta-Neon für die Linie */
+  stroke-width: 3px;
+  shape-rendering: crispEdges;
+}
+
+/* 3) Punkte auf der Linie als kleine Pixel-Quadrate */
+.point {
+  fill: #ff0;           /* Gelb-Neon */
+  stroke: #ff0;         /* Schwarzer Rand – für Kontrast */
+  stroke-width: 1px;
+}
+
+/* 4) Background im Chart – ein dunkles Grau/Schwarz */
+#pixel-chart {
+  background-color: #111; /* sehr dunkles Grau */
+  border: none; /* kein Rahmen */
+  border-radius: 8px;
+}
+
+/* 5) Text im Chart (Achsenbeschriftung, Titel) in Pixel-Font + Neon-Farben */
+.axis text {
+  fill: #0ff;
+  font-size: 14px;       /* recht groß für Pixel-Font */
+  font-family: 'Press Start 2P', monospace;
+}
+
+/* 6) Hover-Effekt (optional): auf Punkte zoomen */
+.point:hover {
+  stroke: #fff;
+  stroke-width: 2px;
+  cursor: url("../resources/misc/cursor2.cur"), auto; /* Cursor ändern beim Hover */
+}
+
+
 .exam-box {
     display: block;
     border: 5px solid #AA3A39;

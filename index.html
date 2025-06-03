@@ -51,10 +51,20 @@
 			</section>
 			<!-- Slide 2: Hier landet das dynamisch geladene Markdown -->
 			<section id="dynamic-tutorial">
-				<img src="resources/misc/rocketlunch.jpg" alt="Rocket Launch"
-					style="width: auto; height: 400px; float: left;">
+				<img src="resources/misc/rocketlunch.jpg" alt="Rocket Launch" style="width: auto; height: 400px; float: left;">
 				<p>Thanks for your attention!</p>
 			</section>
+
+			<section id="pixel-chart-slide">
+				<h2 style="font-family: 'Press Start 2P', monospace; color: #0ff;">
+					Line Plot (Pixel Retro)
+				</h2>
+				<!-- Hier kommt der SVG-Container für D3 rein -->
+				<div id="pixel-chart" style="width: 800px; height: 400px; margin: 0 auto; image-rendering: pixelated;">
+					<!-- D3 wird später hier ein SVG-Element einfügen -->
+				</div>
+			</section>
+
 		</div>
 	</div>
 
@@ -66,11 +76,16 @@
 	<script src="plugin/markdown/markdown.js"></script>
 	<script src="plugin/highlight/highlight.js"></script>
 	<script src="plugin/math/math.js"></script>
+	<!-- External 3rd Party Libraries -->
+	<script src="https://d3js.org/d3.v7.min.js"></script>
+	<!-- Custom Scripts -->
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 	<script src="resources/js/utils/init_main.js"></script>
 	<script src="resources/js/utils/rain_effect_background.js"></script>
 	<script src="resources/js/utils/clock.js"></script>
 	<script src="resources/js/utils/qr_code_home.js"></script>
 	<script src="resources/js/utils/load_content_into_main.js"></script>
+	<script src="resources/js/utils/plot_utils.js"></script>
 </body>
 
 </html>
