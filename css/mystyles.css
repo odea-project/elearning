@@ -1,23 +1,23 @@
 body {
-  cursor: url("../resources/misc/cursor.cur"), auto;
+    cursor: url("../resources/misc/cursor.cur"), auto;
 }
 
 .reveal a,
 .reveal a:visited,
 .reveal a:hover,
 .reveal a:active {
-  cursor: url("../resources/misc/cursor2.cur"), auto !important;
+    cursor: url("../resources/misc/cursor2.cur"), auto !important;
 }
 
 /* 3) Buttons und Controls im Reveal sollen auch den Custom-Cursor */
 .reveal button,
 .reveal button:hover,
 .reveal button:focus {
-  cursor: url("../resources/misc/cursor2.cur"), auto !important;
+    cursor: url("../resources/misc/cursor2.cur"), auto !important;
 }
 
 #odea-logo {
-  transition: opacity 0.5s ease-in-out;
+    transition: opacity 0.5s ease-in-out;
 }
 
 .footer-global {
@@ -30,7 +30,7 @@ body {
 
 .magenta-text {
     color: rgb(233, 30, 99);
-  }
+}
 
 .icon-link {
     position: relative;
@@ -57,8 +57,79 @@ body {
 .reveal .slides b,
 .reveal .slides em,
 .reveal .slides i {
-  color: #00ffff;
+    color: #00ffff;
 }
+
+.reveal .slides ul li::marker {
+    content: "» ";
+    color: #f92672;
+}
+.reveal .slides ol li::marker {
+    color: #f92672;
+}
+
+.reveal .slides ul {
+    color: #EFEFEF;
+}
+
+.reveal .slides ol {
+    color: #EFEFEF;
+}
+
+/* 1) Grundstile für alle Tabellen in Reveal-Slides */
+.reveal .slides table {
+  width: 80%;              /* Tabelle nimmt 80 % der Slide-Breite ein */
+  margin: 1em auto;        /* zentriert und etwas Abstand oben/unten */
+  border-collapse: collapse;
+  color: #ffffff;          /* Weißer Text per Default */
+}
+
+/* 2) Styling für Table-Header */
+.reveal .slides table thead th {
+  background-color: #00ffff; /* Cyan-Hintergrund für Header */
+  color: #000000;            /* Schwarzer Text im Header */
+  padding: 0.6em 1em;
+  text-transform: uppercase;
+  font-weight: bold;
+  border: 2px solid #00ffff; /* Rahmen um die Header-Zellen */
+}
+
+/* 3) Styling für Table-Body (Zeilen und Zellen) */
+.reveal .slides table tbody td {
+  background-color: rgba(0, 255, 255, 0.1); /* leicht transparentes Cyan */
+  padding: 0.5em 1em;
+  border: 1px solid rgba(0, 255, 255, 0.3);
+}
+
+/* 4) Zebra-Streifen (abwechselnd) */
+.reveal .slides table tbody tr:nth-child(odd) td {
+  background-color: rgba(0, 255, 255, 0.05);
+}
+
+.reveal .slides table tbody tr:nth-child(even) td {
+  background-color: rgba(0, 255, 255, 0.15);
+}
+
+/* 5) Rahmen um die gesamte Tabelle (optional) */
+.reveal .slides table {
+  box-shadow: 0 0 10px rgba(0, 255, 255, 0.4); /* leichter neon-artiger Glow */
+  border: 2px solid #00ffff;
+  border-radius: 8px;
+}
+
+/* 6) Textausrichtung (wenn du es nicht per Markdown-Syntax gesetzt hast) */
+.reveal .slides table th,
+.reveal .slides table td {
+  text-align: center; /* zentriert alle Zellen */
+}
+
+/* 7) Hover-Effekt für Zeilen (optional) */
+.reveal .slides table tbody tr:hover td {
+  background-color: rgba(0, 255, 255, 0.3);
+}
+
+
+
 
 .exam-box {
     display: block;
@@ -210,7 +281,8 @@ body {
 }
 
 .styled-point3::before {
-    content: "\f128"; /* Unicode für das Font Awesome question symbol */
+    content: "\f128";
+    /* Unicode für das Font Awesome question symbol */
     /* Unicode für das Font Awesome angles-right */
     font-family: "Font Awesome 5 Free";
     /* Font Awesome verwenden */
@@ -233,7 +305,8 @@ body {
 }
 
 .styled-point4::before {
-    content: "\f292"; /* Unicode für das Font Awesome Squarespace symbol */
+    content: "\f292";
+    /* Unicode für das Font Awesome Squarespace symbol */
     /* Unicode für das Font Awesome angles-right */
     font-family: "Font Awesome 5 Free";
     /* Font Awesome verwenden */
@@ -326,7 +399,8 @@ body {
 }
 
 .question::before {
-    content: "\f059"; /* Unicode für das Font Awesome Squarespace symbol */
+    content: "\f059";
+    /* Unicode für das Font Awesome Squarespace symbol */
     /* Unicode für das Font Awesome angles-right */
     font-family: "Font Awesome 5 Free";
     /* Font Awesome verwenden */
@@ -350,7 +424,8 @@ body {
 }
 
 .task::before {
-    content: "\f086"; /* Unicode für das Font Awesome Squarespace symbol */
+    content: "\f086";
+    /* Unicode für das Font Awesome Squarespace symbol */
     /* Unicode für das Font Awesome angles-right */
     font-family: "Font Awesome 5 Free";
     /* Font Awesome verwenden */
@@ -457,11 +532,11 @@ body {
 /* .reveal {
     background-image: url('../resources/bg2.png');
     background-size: 3840px 2160px;/*906px 117px;*/
-    /* background-attachment: fixed; */
-    /* background-position: top;
+/* background-attachment: fixed; */
+/* background-position: top;
     background-position-y: -50px; /* Adjust the value as needed for the vertical offset */
-    /* background-repeat: no-repeat; */
-/* } */ 
+/* background-repeat: no-repeat; */
+/* } */
 
 #clock {
     position: fixed;
@@ -479,7 +554,8 @@ body {
 /* xkcd-style font */
 @font-face {
     font-family: 'Humor Sans';
-    src: url('../dist/theme/fonts/humor-sans/Humor-Sans.ttf') format('truetype'); /* Update with actual path */
+    src: url('../dist/theme/fonts/humor-sans/Humor-Sans.ttf') format('truetype');
+    /* Update with actual path */
 }
 
 body {
@@ -529,6 +605,7 @@ body {
     stroke: #000;
     stroke-width: 1.5px;
 }
+
 .node text {
     font: 12px sans-serif;
     text-anchor: start;
@@ -536,12 +613,17 @@ body {
 
 .post-it-strip {
     position: relative;
-    min-height: 1.5em; /* Höhe des Streifens */
-    background-color: #fff395; /* Gelbe Farbe für Post-it */
+    min-height: 1.5em;
+    /* Höhe des Streifens */
+    background-color: #fff395;
+    /* Gelbe Farbe für Post-it */
     border-radius: 5px;
-    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.25); /* Schatten */
-    transform: perspective(300px) rotateX(5deg) rotateZ(2deg) rotateY(-5deg); /* Perspektive und leichte Neigung */
-    padding: 0 10px; /* Polsterung für den Inhalt */
+    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.25);
+    /* Schatten */
+    transform: perspective(300px) rotateX(5deg) rotateZ(2deg) rotateY(-5deg);
+    /* Perspektive und leichte Neigung */
+    padding: 0 10px;
+    /* Polsterung für den Inhalt */
     display: inline-block;
     justify-content: flex-start;
     align-items: center;
@@ -550,35 +632,43 @@ body {
 }
 
 .reveal .slides section {
-    background-color: rgb(0, 0, 0, 0.85);            /* Dunkler Hintergrund */
-    border-radius: 15px;                /* Abgerundete Ecken */
-    box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.5); /* Leichter Schlagschatten */
-    padding: 20px;                      /* Innenabstand für Inhalt */
-    margin: 20px;                       /* Abstand zwischen Abschnitten */
+    background-color: rgb(0, 0, 0, 0.85);
+    /* Dunkler Hintergrund */
+    border-radius: 15px;
+    /* Abgerundete Ecken */
+    box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.5);
+    /* Leichter Schlagschatten */
+    padding: 20px;
+    /* Innenabstand für Inhalt */
+    margin: 20px;
+    /* Abstand zwischen Abschnitten */
 }
 
 .reveal .slides section {
-  position: absolute;
-  /* dein bestehendes Styling hier… */
-  
-  /* neon-farbener Rahmen */
-  border: 2px solid #FF1177;
-  /* Außen-Glow */
-  box-shadow:
-    0 0 8px rgba(255,17,119,0.8),
-    0 0 16px rgba(255,17,119,0.6),
-    inset 0 0 6px rgba(255,17,119,0.4);
+    position: absolute;
+    /* dein bestehendes Styling hier… */
+
+    /* neon-farbener Rahmen */
+    border: 2px solid #FF1177;
+    /* Außen-Glow */
+    box-shadow:
+        0 0 8px rgba(255, 17, 119, 0.8),
+        0 0 16px rgba(255, 17, 119, 0.6),
+        inset 0 0 6px rgba(255, 17, 119, 0.4);
 }
 
 /* Optional: zweiter Farbton als leichter Über-Glow */
 .reveal .slides section::after {
-  content: "";
-  position: absolute;
-  top: -4px; left: -4px; right: -4px; bottom: -4px;
-  pointer-events: none;
-  border: 2px solid #fd29c8;
-  filter: blur(4px);
-  mix-blend-mode: screen;
+    content: "";
+    position: absolute;
+    top: -4px;
+    left: -4px;
+    right: -4px;
+    bottom: -4px;
+    pointer-events: none;
+    border: 2px solid #fd29c8;
+    filter: blur(4px);
+    mix-blend-mode: screen;
 }
 
 
@@ -641,16 +731,21 @@ body {
     align-items: center;
     max-width: 100%;
     max-height: 90%;
-    height: 100%; /* Nimmt die volle Modal-Höhe ein */
-    width: 100%; /* Nimmt die volle Modal-Breite ein */
+    height: 100%;
+    /* Nimmt die volle Modal-Höhe ein */
+    width: 100%;
+    /* Nimmt die volle Modal-Breite ein */
     margin: auto;
     position: relative;
 }
 
 .modal-content img {
-    max-height: 100%; /* Bildhöhe passt sich an die Höhe des Modals an */
-    max-width: 100%; /* Verhindert, dass das Bild die Breite des Modals überschreitet */
-    object-fit: contain; /* Erhält das Seitenverhältnis des Bildes */
+    max-height: 100%;
+    /* Bildhöhe passt sich an die Höhe des Modals an */
+    max-width: 100%;
+    /* Verhindert, dass das Bild die Breite des Modals überschreitet */
+    object-fit: contain;
+    /* Erhält das Seitenverhältnis des Bildes */
 }
 
 .popup-slide {

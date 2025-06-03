@@ -25,8 +25,7 @@
 			<section>
 				<img id="odea-logo" src="resources/misc/odea_edu_logo_dark3.jpg" alt="ODEA Logo"
 					style="width: auto; height: 400px;">
-				<img src="resources/misc/pic_ricardo.jpg" alt="Ricardo Cunha"
-					style="width: auto; height: 400px; float: right;">
+				<img src="resources/misc/pic_ricardo.jpg" alt="Ricardo Cunha" style="width: auto; height: 400px; float: right;">
 				<a href="https://www.uni-due.de/iac/gerrit_renner.php" target="_blank">
 					<img src="resources/misc/pic_gerrit.jpg" alt="Gerrit Renner"
 						style="width: auto; height: 400px; float: right;">
@@ -68,20 +67,30 @@ y: [10, 20, 30, 40, 50]</code>
 			</section>
 
 			<section data-markdown>
-				<script type="text/template">
-                        ## Demo 1
-                        Slide 1
-                        ---
-                        ## Demo 1
-                        Slide 2
-                        ---
-                        ## Demo 1
-                        Slide 3
-                    </script>
+				<textarea data-template>
+					# Demo 1
+					Slide 1 **bold** text or *italic* text
+					---
+					# Demo 2
+					1. Numbered list item 1
+					2. Numbered list item 2
+
+					Das ist eine Bullet-Liste:
+					- Bullet 1
+					- Bullet 2
+
+					---
+					# Demo 3
+					This is a table:
+					| Header 1 | Header 2  |
+					|----------|-----------|
+					| Row 1    | Data 1    |
+					| Row 2    | Data 2    |
+				</textarea>
 			</section>
 
 			<!-- Slide 2: Hier landet das dynamisch geladene Markdown -->
-			<section id="dynamic-tutorial" data-markdown="topics/00_datatreatment.md">		
+			<section id="dynamic-tutorial" data-markdown="topics/00_datatreatment.md">
 				<!-- hier wird das Markdown-Plugin den Inhalt einsetzen -->
 			</section>
 
