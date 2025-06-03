@@ -1,38 +1,43 @@
 Reveal.on('ready', () => {
-  console.log('[DEBUG] Reveal ist ready');
-
   document.querySelectorAll('.topic-link').forEach(a => {
-    a.addEventListener('click', e => {
+    a.addEventListener('click', async e => {
       e.preventDefault();
       const mdUrl = a.getAttribute('data-md');
-      console.log('[DEBUG] Link geklickt, data-md =', mdUrl);
+      console.log('[DEBUG] Klick, data-md =', mdUrl);
 
       const slide = document.querySelector('#dynamic-tutorial');
       if (!slide) {
-        console.error('[ERROR] Slide #dynamic-tutorial nicht gefunden!');
+        console.error('[ERROR] #dynamic-tutorial fehlt');
         return;
       }
 
-      // 1) Alten Content entfernen
+      // Alten Inhalt entfernen
       slide.removeAttribute('data-markdown');
-      slide.innerHTML = "";
-      console.log('[DEBUG] data-markdown entfernt, innerHTML geleert');
+      slide.innerHTML = '';
+      console.log('[DEBUG] Alten Content gelöscht');
 
-      // 2) Neues data-markdown setzen
+      // Neues data-markdown setzen
       slide.setAttribute('data-markdown', mdUrl);
-      console.log('[DEBUG] data-markdown gesetzt auf', slide.getAttribute('data-markdown'));
+      console.log('[DEBUG] data-markdown gesetzt:', slide.getAttribute('data-markdown'));
 
-      // 3) Reveal.sync() aufrufen
+      // Reveal.sync() ausführen
       console.log('[DEBUG] Vor Reveal.sync()');
       Reveal.sync();
       console.log('[DEBUG] Nach Reveal.sync()');
 
-      // 4) Zur dynamischen Slide springen (hier Index anpassen)
+      // Ein Tick warten, damit das Markdown-Plugin gerendert hat
+      await new Promise(requestAnimationFrame);
+
+      // Jetzt den Inhalt loggen
+      console.log('[DEBUG] slide.innerHTML nach Sync:\n', slide.innerHTML);
+
+      // Zur Folie springen
       Reveal.slide(2);
       console.log('[DEBUG] Zu Slide 2 gesprungen');
     });
   });
 });
+
 
 // Reveal.on('ready', () => {
 //   document.querySelectorAll('.topic-link').forEach(a => {
