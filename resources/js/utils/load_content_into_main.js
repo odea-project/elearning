@@ -1,8 +1,12 @@
 Reveal.on('ready', () => {
   console.log('[DEBUG] Reveal ist ready');
 
+  // Liste aller Plugins anzeigen
+  console.log('[DEBUG] Reveal.getPlugins():', Reveal.getPlugins());
+  console.log('[DEBUG] Reveal.getPlugin("markdown") direkt:', Reveal.getPlugin('markdown'));
+
   document.querySelectorAll('.topic-link').forEach(a => {
-    a.addEventListener('click', e => {
+    a.addEventListener('click', async e => {
       e.preventDefault();
       const mdUrl = a.getAttribute('data-md');
       console.log('[DEBUG] Link geklickt, data-md =', mdUrl);
@@ -20,29 +24,33 @@ Reveal.on('ready', () => {
 
       // 2) Neues data-markdown setzen
       slide.setAttribute('data-markdown', mdUrl);
-      console.log('[DEBUG] slide.dataset.markdown ist jetzt:', slide.dataset.markdown);
       console.log('[DEBUG] data-markdown gesetzt auf', slide.getAttribute('data-markdown'));
+      console.log('[DEBUG] slide.dataset.markdown =', slide.dataset.markdown);
 
-      // 3) Markdown-Plugin explizit zum Nachladen aufrufen
+      // 3) Markdown-Plugin direkt zum Nachladen aufrufen
       const markdownPlugin = Reveal.getPlugin('markdown');
       if (!markdownPlugin) {
-        console.error('[ERROR] Markdown-Plugin nicht gefunden!');
+        console.error('[ERROR] Markdown-Plugin nicht gefunden. Abbruch.');
         return;
       }
-      console.log('[DEBUG] Vor markdownPlugin.loadSlide()');
-      markdownPlugin.loadSlide(slide).then(() => {
-        console.log('[DEBUG] Nach markdownPlugin.loadSlide(): Inhalt gerendert');
-        console.log('[DEBUG] Slide-HTML:', slide.innerHTML);
-      }).catch(err => {
-        console.error('[ERROR] markdownPlugin.loadSlide() schlug fehl:', err);
-      });
+      console.log('[DEBUG] markdownPlugin.loadSlide ist:', markdownPlugin.loadSlide);
 
-      // 4) Zur dynamischen Slide springen (Index anpassen, hier 2)
+      try {
+        console.log('[DEBUG] Vor markdownPlugin.loadSlide()');
+        await markdownPlugin.loadSlide(slide);
+        console.log('[DEBUG] Nach markdownPlugin.loadSlide(): Inhalt gerendert');
+        console.log('[DEBUG] slide.innerHTML jetzt =\n', slide.innerHTML);
+      } catch (err) {
+        console.error('[ERROR] markdownPlugin.loadSlide() schlug fehl:', err);
+      }
+
+      // 4) Zur dynamischen Slide springen (Index ggf. anpassen)
       Reveal.slide(2);
       console.log('[DEBUG] Zu Slide 2 gesprungen');
     });
   });
 });
+
 
 
 
