@@ -54,7 +54,7 @@ y: [10, 20, 30, 40, 50]</code>
 	</div>
 </div>
 
---- (id="pixel-chart-slide")
+--- 
 <h1>Demo 7</h1>
 <div id="pixel-chart"></div>
   <script>
@@ -113,3 +113,4 @@ y: [10, 20, 30, 40, 50]</code>
       }
     });
   </script>
+  --- (id="pixel-chart-slide")
