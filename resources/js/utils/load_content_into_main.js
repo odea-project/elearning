@@ -1,42 +1,48 @@
 Reveal.on('ready', () => {
+  console.log('[DEBUG] Reveal ist ready');
+
   document.querySelectorAll('.topic-link').forEach(a => {
-    a.addEventListener('click', async e => {
+    a.addEventListener('click', e => {
       e.preventDefault();
       const mdUrl = a.getAttribute('data-md');
-      console.log('[DEBUG] Klick, data-md =', mdUrl);
+      console.log('[DEBUG] Link geklickt, data-md =', mdUrl);
 
       const slide = document.querySelector('#dynamic-tutorial');
       if (!slide) {
-        console.error('[ERROR] #dynamic-tutorial fehlt');
+        console.error('[ERROR] Slide #dynamic-tutorial nicht gefunden!');
         return;
       }
 
-      // Alten Inhalt entfernen
+      // 1) Alten Content und Attribut entfernen
       slide.removeAttribute('data-markdown');
       slide.innerHTML = '';
-      console.log('[DEBUG] Alten Content gelöscht');
+      console.log('[DEBUG] data-markdown entfernt, innerHTML geleert');
 
-      // Neues data-markdown setzen
+      // 2) Neues data-markdown setzen
       slide.setAttribute('data-markdown', mdUrl);
-      console.log('[DEBUG] data-markdown gesetzt:', slide.getAttribute('data-markdown'));
+      console.log('[DEBUG] data-markdown gesetzt auf', slide.getAttribute('data-markdown'));
 
-      // Reveal.sync() ausführen
-      console.log('[DEBUG] Vor Reveal.sync()');
-      Reveal.sync();
-      console.log('[DEBUG] Nach Reveal.sync()');
+      // 3) Markdown-Plugin explizit zum Nachladen aufrufen
+      const markdownPlugin = Reveal.getPlugin('markdown');
+      if (!markdownPlugin) {
+        console.error('[ERROR] Markdown-Plugin nicht gefunden!');
+        return;
+      }
+      console.log('[DEBUG] Vor markdownPlugin.loadSlide()');
+      markdownPlugin.loadSlide(slide).then(() => {
+        console.log('[DEBUG] Nach markdownPlugin.loadSlide(): Inhalt gerendert');
+        console.log('[DEBUG] Slide-HTML:', slide.innerHTML);
+      }).catch(err => {
+        console.error('[ERROR] markdownPlugin.loadSlide() schlug fehl:', err);
+      });
 
-      // Ein Tick warten, damit das Markdown-Plugin gerendert hat
-      await new Promise(requestAnimationFrame);
-
-      // Jetzt den Inhalt loggen
-      console.log('[DEBUG] slide.innerHTML nach Sync:\n', slide.innerHTML);
-
-      // Zur Folie springen
+      // 4) Zur dynamischen Slide springen (Index anpassen, hier 2)
       Reveal.slide(2);
       console.log('[DEBUG] Zu Slide 2 gesprungen');
     });
   });
 });
+
 
 
 // Reveal.on('ready', () => {
