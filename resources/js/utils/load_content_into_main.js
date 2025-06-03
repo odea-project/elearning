@@ -1,6 +1,7 @@
 Reveal.on('ready', () => {
   console.log('[DEBUG] Reveal ist ready');
 
+  // Direkt das Markdown-Plugin holen
   const markdownPlugin = Reveal.getPlugin('markdown');
   console.log('[DEBUG] Markdown-Plugin:', markdownPlugin);
 
@@ -10,91 +11,122 @@ Reveal.on('ready', () => {
       const mdUrl = a.getAttribute('data-md');
       console.log('[DEBUG] Link geklickt, data-md =', mdUrl);
 
-      // 1) Hole das Platzhalter-Element heraus
-      const placeholder = document.querySelector('#dynamic-tutorial');
-      if (!placeholder) {
-        console.error('[ERROR] #dynamic-tutorial nicht gefunden!');
-        return;
-      }
+      // 1) ALTE „.dynamic“-Slides finden und löschen
+      const allSlidesContainer = document.querySelector('.reveal .slides');
+      const oldDynamics = allSlidesContainer.querySelectorAll('section.dynamic');
+      oldDynamics.forEach(s => {
+        s.parentNode.removeChild(s);
+      });
+      console.log('[DEBUG] Alte dynamischen Slides (Klasse "dynamic") gelöscht:', oldDynamics.length);
 
-      // 2) Fetch + Markdown laden
+      // 2) Markdown-Datei via fetch() laden
       let markdownText;
       try {
+        console.log('[DEBUG] Vor fetch(', mdUrl, ')');
         const response = await fetch(mdUrl);
         if (!response.ok) {
-          throw new Error(`HTTP ${response.status} beim Laden von ${mdUrl}`);
+          throw new Error(`HTTP ${response.status} – ${response.statusText}`);
         }
         markdownText = await response.text();
-        console.log('[DEBUG] Markdown-Text empfangen (größerer Ausschnitt):\n', markdownText.slice(0, 200).replace(/\n/g,'⏎'));
+        console.log('[DEBUG] Markdown-Text empfangen:', markdownText.slice(0, 100).replace(/\n/g, '⏎'));
       } catch (err) {
         console.error('[ERROR] Kann Markdown nicht laden:', err);
-        placeholder.innerHTML = `<p style="color:red;">Fehler beim Laden von ${mdUrl}: ${err.message}</p>`;
-        Reveal.slide(/* Index von placeholder? */);
+        // Falls Lade-Fehler, fügen wir eine rote Fehlermeldung in einer Folie ein
+        const errorSection = document.createElement('section');
+        errorSection.classList.add('dynamic');
+        errorSection.innerHTML = `<p style="color:red;">Fehler beim Laden von <code>${mdUrl}</code>: ${err.message}</p>`;
+        // Direkt nach Menü-Folie einfügen (Index 2)
+        allSlidesContainer.insertBefore(errorSection, allSlidesContainer.children[2] || null);
+        Reveal.layout();
+        Reveal.slide(2);
         return;
       }
 
-      // 3) Markdown in Blöcke splitten (Trennlinie: alleinige ‚---‘-Zeile)
+      // 3) Markdown in Blöcke splitten („---“ allein auf einer Zeile)
       const chunks = markdownText.split(/^[ \t]*---[ \t]*$/m);
       console.log('[DEBUG] Markdown in', chunks.length, 'Blöcke gesplittet');
 
-      // 4) Parent-Container (.reveal .slides) ermitteln
-      const slidesContainer = placeholder.parentNode;  // sollte <div class="slides"> sein
-      if (!slidesContainer || !slidesContainer.classList.contains('slides')) {
-        console.error('[ERROR] Konnte .slides-Container nicht finden');
-        return;
-      }
-
-      // 5) Für jeden Markdown-Block ein neues <section> erzeugen
+      // 4) Für jeden Markdown-Block ein neues <section class="dynamic"> erzeugen
       const newSections = [];
       for (let i = 0; i < chunks.length; i++) {
         const mdPart = chunks[i].trim();
-        if (mdPart === '') {
-          // Leere Blöcke überspringen
-          continue;
-        }
+        if (!mdPart) continue; // leere Blöcke überspringen
+
         // Mit dem internen Parser in HTML umwandeln
         const html = markdownPlugin.marked(mdPart);
 
-        // Neue Section bauen und den HTML-String setzen
+        // Neue Section bauen und Content setzen
         const section = document.createElement('section');
+        section.classList.add('dynamic');
         section.innerHTML = html;
         newSections.push(section);
-        console.log(`[DEBUG] Neuer Block ${i} gerendert (erste 100 Zeichen):`, html.slice(0, 100).replace(/</g, '«').replace(/>/g, '»'));
+        console.log(`[DEBUG] Block ${i} gerendert (erste 80 Zeichen):`, html.slice(0, 80).replace(/</g,'«').replace(/>/g,'»'));
       }
 
-      // 6) Placeholder-Section durch die neuen Sections ersetzen
-      //    6a) Den Index der placeholder-Section innerhalb von slidesContainer ermitteln
-      const allSlides = Array.from(slidesContainer.children);
-      const idx = allSlides.indexOf(placeholder);
-      if (idx < 0) {
-        console.error('[ERROR] placeholder-Index konnte nicht ermittelt werden');
-        return;
-      }
-
-      // 6b) placeholder aus dem DOM entfernen
-      slidesContainer.removeChild(placeholder);
-
-      // 6c) Neue Sections an genau dieser Stelle einfügen (in derselben Reihenfolge)
+      // 5) Die neuen dynamischen Sections ab Index 2 einfügen
+      //    (falls slidesContainer weniger Elemente hat, hängt appendChild hinten an)
+      const slidesContainer = allSlidesContainer;
       for (let j = 0; j < newSections.length; j++) {
-        // slidesContainer.childNodes[idx + j] ist der Node, vor dem man einfügt
-        // wenn idx+j größer ist als Anzahl, hängt appendChild hinten an
-        const beforeNode = slidesContainer.childNodes[idx + j];
-        if (beforeNode) {
-          slidesContainer.insertBefore(newSections[j], beforeNode);
+        const insertBeforeNode = slidesContainer.children[2 + j];
+        if (insertBeforeNode) {
+          slidesContainer.insertBefore(newSections[j], insertBeforeNode);
         } else {
           slidesContainer.appendChild(newSections[j]);
         }
       }
-      console.log('[DEBUG] placeholder durch', newSections.length, 'Sections ersetzt');
+      console.log('[DEBUG] Neue dynamische Slides eingefügt:', newSections.length);
 
-      // 7) Reveal neu layouten, damit alles sichtbar und navigierbar wird
+      // 6) Reveal neu layouten
       Reveal.layout();
-      console.log('[DEBUG] Reveal.layout() aufgerufen');
+      console.log('[DEBUG] Reveal.layout() ausgeführt');
 
-      // 8) Auf die erste jener neu erzeugten Slides springen
-      //    Wenn placeholder vorher an Index 2 war, ist die erste neue Slide nun ebenfalls Index 2
-      Reveal.slide(idx);
-      console.log('[DEBUG] Zu Slide', idx, 'gesprungen');
+      // 7) Zur ersten der neuen Slides springen (Index 2)
+      Reveal.slide(2);
+      console.log('[DEBUG] Zu dynamischer Slide Index 2 gesprungen');
+      
+      // 8) KaTeX-Math nachrendern (s.u.)
+      renderMathInDynamicSlides(newSections);
     });
   });
 });
+
+// ---------------
+// 8) Math nachrendern
+// ---------------
+// Wenn in Euren MD-Blöcken Tex-Syntax ($…$ oder $$…$$) stand,
+// muss KaTeX das nach dem Injecten re-rendern. Wir rufen
+// hier die Reveal-KaTeX-Plugin-Funktion direkt auf.
+// Je nach Reveal-Version kann das etwas variieren; meistens
+// funktioniert so etwas wie `renderSlides()` oder `renderSlide(section)`.
+// Wir probieren zuerst getPlugin('katex').renderSlides(),
+// falls das nicht existiert, greifen wir auf die globale auto-render-Funktion zurück.
+
+function renderMathInDynamicSlides(sections) {
+  const katexPlugin = Reveal.getPlugin('katex');
+  if (katexPlugin && typeof katexPlugin.renderSlides === 'function') {
+    console.log('[DEBUG] KaTeX-Plugin.renderSlides() aufrufen');
+    katexPlugin.renderSlides(); // rendert Math in allen aktuellen Slides
+    return;
+  }
+  if (katexPlugin && typeof katexPlugin.renderSlide === 'function') {
+    // Falls es nur renderSlide gibt, rufen wir es für jede neue Section auf
+    console.log('[DEBUG] KaTeX-Plugin.renderSlide() aufrufen');
+    sections.forEach(slide => katexPlugin.renderSlide(slide));
+    return;
+  }
+  // Fallback: Wenn das KaTeX-Plugin kein renderSlides/renderSlide bereitstellt,
+  // verwenden wir die KaTeX auto-render-Funktion, falls sie geladen ist:
+  if (window.renderMathInElement) {
+    console.log('[DEBUG] Fallback: renderMathInElement() aufrufen');
+    sections.forEach(slide => {
+      renderMathInElement(slide, {
+        delimiters: [
+          { left: '$$', right: '$$', display: true },
+          { left: '$', right: '$', display: false }
+        ]
+      });
+    });
+  } else {
+    console.warn('[WARN] Keine Funktion gefunden, um Math zu rendern');
+  }
+}
