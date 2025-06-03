@@ -1,12 +1,11 @@
 Reveal.on('ready', () => {
   console.log('[DEBUG] Reveal ist ready');
 
-  // Liste aller Plugins anzeigen
   console.log('[DEBUG] Reveal.getPlugins():', Reveal.getPlugins());
   console.log('[DEBUG] Reveal.getPlugin("markdown") direkt:', Reveal.getPlugin('markdown'));
 
   document.querySelectorAll('.topic-link').forEach(a => {
-    a.addEventListener('click', async e => {
+    a.addEventListener('click', e => {
       e.preventDefault();
       const mdUrl = a.getAttribute('data-md');
       console.log('[DEBUG] Link geklickt, data-md =', mdUrl);
@@ -17,7 +16,7 @@ Reveal.on('ready', () => {
         return;
       }
 
-      // 1) Alten Content und Attribut entfernen
+      // 1) Alten Inhalt entfernen
       slide.removeAttribute('data-markdown');
       slide.innerHTML = '';
       console.log('[DEBUG] data-markdown entfernt, innerHTML geleert');
@@ -27,57 +26,19 @@ Reveal.on('ready', () => {
       console.log('[DEBUG] data-markdown gesetzt auf', slide.getAttribute('data-markdown'));
       console.log('[DEBUG] slide.dataset.markdown =', slide.dataset.markdown);
 
-      // 3) Markdown-Plugin direkt zum Nachladen aufrufen
+      // 3) Plugin processSlides() aufrufen
       const markdownPlugin = Reveal.getPlugin('markdown');
       if (!markdownPlugin) {
-        console.error('[ERROR] Markdown-Plugin nicht gefunden. Abbruch.');
+        console.error('[ERROR] Markdown-Plugin nicht gefunden!');
         return;
       }
-      console.log('[DEBUG] markdownPlugin.loadSlide ist:', markdownPlugin.loadSlide);
+      console.log('[DEBUG] Vor markdownPlugin.processSlides()');
+      markdownPlugin.processSlides();
+      console.log('[DEBUG] Nach markdownPlugin.processSlides(): slide.innerHTML =\n', slide.innerHTML);
 
-      try {
-        console.log('[DEBUG] Vor markdownPlugin.loadSlide()');
-        await markdownPlugin.loadSlide(slide);
-        console.log('[DEBUG] Nach markdownPlugin.loadSlide(): Inhalt gerendert');
-        console.log('[DEBUG] slide.innerHTML jetzt =\n', slide.innerHTML);
-      } catch (err) {
-        console.error('[ERROR] markdownPlugin.loadSlide() schlug fehl:', err);
-      }
-
-      // 4) Zur dynamischen Slide springen (Index ggf. anpassen)
+      // 4) Zur dynamischen Slide wechseln (Index anpassen, hier 2)
       Reveal.slide(2);
       console.log('[DEBUG] Zu Slide 2 gesprungen');
     });
   });
 });
-
-
-
-
-// Reveal.on('ready', () => {
-//   document.querySelectorAll('.topic-link').forEach(a => {
-//     a.addEventListener('click', e => {
-//       e.preventDefault();
-//       const mdUrl = a.getAttribute('data-md');
-//       const slide = document.querySelector('#dynamic-tutorial');
-//       if (!slide) {
-//         console.error('Slide #dynamic-tutorial nicht gefunden');
-//         return;
-//       }
-
-//       // 1) Alten Markdown-Content komplett entfernen
-//       slide.removeAttribute('data-markdown');
-//       slide.innerHTML = "";
-
-//       // 2) Neues data-markdown setzen
-//       slide.setAttribute('data-markdown', mdUrl);
-
-//       // 3) Definiere, welche Plugins neu geladen werden sollen
-//       //    (Reveal.sync() sorgt dafür, dass Markdown-Plugin den neuen Pfad rendert)
-//       Reveal.sync();
-
-//       // 4) Zur dynamischen Slide springen (Index anpassen, hier 2)
-//       Reveal.slide(2);
-//     });
-//   });
-// });
