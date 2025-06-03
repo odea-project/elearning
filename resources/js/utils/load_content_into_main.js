@@ -20,6 +20,7 @@ Reveal.on('ready', () => {
 
       // 2) Neues data-markdown setzen
       slide.setAttribute('data-markdown', mdUrl);
+      console.log('[DEBUG] slide.dataset.markdown ist jetzt:', slide.dataset.markdown);
       console.log('[DEBUG] data-markdown gesetzt auf', slide.getAttribute('data-markdown'));
 
       // 3) Markdown-Plugin explizit zum Nachladen aufrufen
