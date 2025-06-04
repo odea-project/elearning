@@ -13,10 +13,10 @@ Das ist eine Bullet-Liste:
 ---
 # Demo 3
 This is a table:
-| Header 1 | Header 2  |
-|----------|-----------|
-| Row 1    | Data 1    |
-| Row 2    | Data 2    |
+| Header 1 | Header 2 |
+| -------- | -------- |
+| Row 1    | Data 1   |
+| Row 2    | Data 2   |
 
 ---
 # Demo 4
@@ -57,60 +57,54 @@ y: [10, 20, 30, 40, 50]</code>
 --- 
 <h1>Demo 7</h1>
 <div id="pixel-chart"></div>
-  <script>
-    // Hinweis: Diese Funktion(en) müssen schon vorher global verfügbar sein:
-    //   createFigure(), addAxes(), addLine()
-    // und d3.js natürlich geladen.
-
-    // Wir lassen den Plot erst "live" zeichnen, wenn die Folie wirklich aktiv wird:
-    let myFig = null;
-    let axesAlready = false;
-
-    Reveal.on('slidechanged', event => {
-      if (event.currentSlide.id === 'pixel-chart-slide') {
-        if (!myFig) {
-          myFig = createFigure("pixel-chart", 800, 400, { top:50, right:50, bottom:50, left:50 });
-        }
-        if (!axesAlready) {
-          const sampleData1 = [
-            { x: 0, y:  5 },
-            { x: 1, y: 10 },
-            { x: 2, y:  8 },
-            { x: 3, y: 15 },
-            { x: 4, y: 12 },
-            { x: 5, y: 20 }
-          ];
-          const sampleData2 = [
-            { x: 0, y: 15 },
-            { x: 1, y: 12 },
-            { x: 2, y: 18 },
-            { x: 3, y: 10 },
-            { x: 4, y: 17 },
-            { x: 5, y: 22 }
-          ];
-
-          const allX = sampleData1.map(d => d.x).concat(sampleData2.map(d => d.x));
-          const allY = sampleData1.map(d => d.y).concat(sampleData2.map(d => d.y));
-          addAxes(myFig, d3.extent(allX), [0, d3.max(allY)], 5, 5);
-
-          addLine(myFig, sampleData1, {
-            curve: d3.curveNatural,
-            lineColor: "#A0A",
-            lineWidth: 3,
-            pointSize: 6,
-            pointColor: "#F0F"
-          });
-          addLine(myFig, sampleData2, {
-            curve: d3.curveNatural,
-            lineColor: "#0A0",
-            lineWidth: 3,
-            pointSize: 6,
-            pointColor: "#0F0"
-          });
-
-          axesAlready = true;
-        }
-      }
-    });
-  </script>
-  --- (id="pixel-chart-slide")
+  <script>// NO BLANK LINES ALLOWED IN SCRIPT TAGS!!!
+(function() {
+  let divID = "pixel-chart";
+  let sectionID = divID + "-slide";
+  let myFig = null;
+  let axesAlready = false;
+  // Beispiel: 5 Datensätze (als statisch oder asynchron geladen)
+  const sampleData1 = [
+    { x: 0, y:  5 },
+    { x: 1, y: 10 },
+    { x: 2, y:  8 },
+    { x: 3, y: 15 },
+    { x: 4, y: 12 },
+    { x: 5, y: 20 }
+  ]; 
+  // Angenommen, sampleData2 könnte aus CSV kommen – hier simuliert
+  const sampleData2 = [
+    { x: 0, y: 15 },
+    { x: 1, y: 12 },
+    { x: 2, y: 18 },
+    { x: 3, y: 10 },
+    { x: 4, y: 17 },
+    { x: 5, y: 22 }
+  ]; 
+  // Beispielhafte weitere Datenspuren
+  const sampleData3 = sampleData1.map(d => ({ x: d.x, y: d.y * 0.8 }));
+  const sampleData4 = sampleData2.map(d => ({ x: d.x, y: d.y * 1.2 }));
+  const sampleData5 = sampleData1.map(d => ({ x: d.x, y: d.y + 5 }));
+  // Alle Datensätze in einem Array
+  const dataSets = [
+    { data: sampleData1, options: { curve: d3.curveNatural, lineColor: "#A0A", pointColor: "#F0F" } },
+    { data: sampleData2, options: { curve: d3.curveNatural, lineColor: "#0A0", pointColor: "#0F0" } },
+    { data: sampleData3, options: { curve: d3.curveBasis,   lineColor: "#00F", pointColor: "#F00" } },
+    { data: sampleData4, options: { curve: d3.curveStep,    lineColor: "#F00", pointColor: "#00F" } },
+    { data: sampleData5, options: { curve: d3.curveCardinal, lineColor: "#FF0", pointColor: "#0FF" } }
+  ]; 
+  // Listener an den Slidewechsel anfügen
+  Reveal.addEventListener('slidechanged', event => {
+    if (event.currentSlide.id === sectionID) {
+      plotUtils.drawPixelChart(divID, dataSets);
+      Reveal.layout();
+    }
+  });
+  // Falls die dynamische Folie schon aktuell ist, Diagramm sofort zeichnen
+  if (Reveal.getCurrentSlide() && Reveal.getCurrentSlide().id === sectionID) {
+    plotUtils.drawPixelChart(divID, dataSets);
+    Reveal.layout();
+  }
+})();
+</script>
+--- (id="pixel-chart-slide")
