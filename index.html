@@ -21,12 +21,14 @@
 <body>
 	<div class="reveal">
 		<div class="slides">
+			<section>
+				hello world!
+			</section>
 			<!-- Slide 0: Logo + Autoren -->
 			<section id="intro-slide">
 				<img id="odea-logo" src="resources/misc/odea_edu_logo_dark3.jpg" alt="ODEA Logo"
 					style="width: auto; height: 400px;">
-				<img src="resources/misc/pic_ricardo.jpg" alt="Ricardo Cunha"
-					style="width: auto; height: 400px; float: right;">
+				<img src="resources/misc/pic_ricardo.jpg" alt="Ricardo Cunha" style="width: auto; height: 400px; float: right;">
 				<a href="https://www.uni-due.de/iac/gerrit_renner.php" target="_blank">
 					<img src="resources/misc/pic_gerrit.jpg" alt="Gerrit Renner"
 						style="width: auto; height: 400px; float: right;">
@@ -41,34 +43,33 @@
 			<section>
 				<h1>Load Tutorial</h1>
 
-				click to select a topic
-				<pre style="font-size: large;">
-	<a href="#/dynamic-tutorial" class="topic-link" data-md="topics/00_demos.md">
-    <code class="hoverable">	00. Demo</code></a><a href="#/dynamic-tutorial" class="topic-link" data-md="topics/01_datatreatment.md">
-    <code class="hoverable">	01. Data processing for large 
-			& diverse analytical data sets</code>
-  </a>
-	 </pre>
+				click to select a topic<br><br>
+				<pre style="font-size: medium;"><span style="font-family: 'Press Start 2P';">For developement purposes only!</span>
+					<a href="#/dynamic-tutorial" class="topic-link" data-md="topics/00_demos.md">
+    				<code class="hoverable">	00. Demo</code>
+					</a>
+	 			</pre>
+				<pre style="font-size: medium;"><span style="color: burlywood; font-family: 'Press Start 2P';">Short Course:</span><span style="font-family: 'Press Start 2P';">Data treatment processes for large<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;& diverse analytical data sets</span>
+					<a href="#/dynamic-tutorial" class="topic-link" data-md="topics/01_analyticalDataChallenges.md">
+						<code class="hoverable" >	01. Understanding Analytical Data Challenges</code>
+					</a><a href="#/dynamic-tutorial" class="topic-link" data-md="topics/02_toolsAndProgramming.md">
+						<code class="hoverable">	02. Open-Source Tools & Programming Languages</code>
+					</a><a href="#/dynamic-tutorial" class="topic-link" data-md="topics/03_dataProcessingTechniques.md">
+						<code class="hoverable">	03. Data Processing Techniques</code>
+					</a><a href="#/dynamic-tutorial" class="topic-link" data-md="topics/04_dataAnalysisTechniques.md">
+						<code class="hoverable">	04. Statistical & Exploratory Data Analysis</code>
+					</a>
+				</pre>
 			</section>
-			<!-- Slide 2: Hier landet das dynamisch geladene Markdown -->
+			<!-- Slide 2: Hier zwischen landet das dynamisch geladene Markdown -->
 			<section id="dynamic-tutorial">
-				<img src="resources/misc/rocketlunch.jpg" alt="Rocket Launch"
-					style="width: auto; height: 400px; float: left;">
+				<img src="resources/misc/rocketlunch.jpg" alt="Rocket Launch" style="width: auto; height: 400px; float: left;">
 				<p>Thanks for your attention!</p>
 				<div style="height: 300px;"></div>
 				<p style="text-align: center; margin-top: 20px;">
 					<a href="#/intro-slide" style="font-size: 1.2em; text-decoration: none;">← Back to Intro Slide</a>
 				</p>
 			</section>
-
-			<!-- <section id="pixel-chart-slide">
-				<h2 style="font-family: 'Press Start 2P', monospace; color: #0ff;">
-					Line Plot (Pixel Retro)
-				</h2>
-				<div id="pixel-chart" style="width: 800px; height: 400px; margin: 0 auto; image-rendering: pixelated;">
-				</div>
-			</section> -->
-
 		</div>
 	</div>
 
@@ -90,66 +91,6 @@
 	<script src="resources/js/utils/qr_code_home.js"></script>
 	<script src="resources/js/utils/load_content_into_main.js"></script>
 	<script src="resources/js/utils/plot_utils.js"></script>
-	<!-- <script>
-		let myFig = null;       // globale Variable, die das Figure-Objekt hält
-let axesAlready = false; // damit wir addAxes nur ein einziges Mal aufrufen
-
-Reveal.on('slidechanged', event => {
-  if (event.currentSlide.id === 'pixel-chart-slide') {
-    // 1) Wenn es das erste Mal ist, Figure anlegen
-    if (!myFig) {
-      myFig = createFigure("pixel-chart", 800, 400, { top:50, right:50, bottom:50, left:50 });
-    }
-
-    // 2) Achsen nur einmalig hinzufügen (nicht bei jedem Slide-Wechsel erneut)
-    if (!axesAlready) {
-      // Beispiel: gemeinsame Domain für beide Linien
-      const sampleData1 = [
-        { x: 0, y:  5 },
-        { x: 1, y: 10 },
-        { x: 2, y:  8 },
-        { x: 3, y: 15 },
-        { x: 4, y: 12 },
-        { x: 5, y: 20 }
-      ];
-      const sampleData2 = [
-        { x: 0, y: 15 },
-        { x: 1, y: 12 },
-        { x: 2, y: 18 },
-        { x: 3, y: 10 },
-        { x: 4, y: 17 },
-        { x: 5, y: 22 }
-      ];
-
-      // 2a) Achsen einfügen (Domain anhand beider Datenmengen)
-      const allX = sampleData1.map(d => d.x).concat(sampleData2.map(d => d.x));
-      const allY = sampleData1.map(d => d.y).concat(sampleData2.map(d => d.y));
-      addAxes(myFig, d3.extent(allX), [0, d3.max(allY)], /* xTicks */ 5, /* yTicks */ 5);
-
-      // 2b) Erste Linie hinzufügen (z. B. Magenta, geglättet)
-      addLine(myFig, sampleData1, {
-        curve: d3.curveNatural,
-        lineColor: "#A0A",
-        lineWidth: 3,
-        pointSize: 6,
-        pointColor: "#F0F"
-      });
-
-      // 2c) Zweite Linie hinzufügen (z. B. Grün, geglättet)
-      addLine(myFig, sampleData2, {
-        curve: d3.curveNatural,
-        lineColor: "#0A0",
-        lineWidth: 3,
-        pointSize: 6,
-        pointColor: "#0F0"
-      });
-
-      axesAlready = true;
-    }
-  }
-});
-
-	</script> -->
 </body>
 
 </html>

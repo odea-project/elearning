@@ -17,9 +17,9 @@
         .append("svg")
         .attr("width", width)
         .attr("height", height)
-        .style("background-color", "#111")            // dunkler Hintergrund
-        .style("image-rendering", "pixelated")        // Pixel-Look
-        .style("shape-rendering", "crispEdges")       // scharfe Kanten
+        .style("background-color", "rgba(0, 0, 0, 0.7)") // Dunkler Hintergrund
+        // .style("image-rendering", "pixelated")        // Pixel-Look
+        // .style("shape-rendering", "crispEdges")       // scharfe Kanten
         .append("g")
         .attr("transform", `translate(${margin.left},${margin.top})`);
 

@@ -1,21 +1,3 @@
-body {
-    cursor: url("../resources/misc/cursor.cur"), auto;
-}
-
-.reveal a,
-.reveal a:visited,
-.reveal a:hover,
-.reveal a:active {
-    cursor: url("../resources/misc/cursor2.cur"), auto !important;
-}
-
-/* 3) Buttons und Controls im Reveal sollen auch den Custom-Cursor */
-.reveal button,
-.reveal button:hover,
-.reveal button:focus {
-    cursor: url("../resources/misc/cursor2.cur"), auto !important;
-}
-
 #odea-logo {
     transition: opacity 0.5s ease-in-out;
 }
@@ -60,21 +42,7 @@ body {
     color: #00ffff;
 }
 
-.reveal .katex, 
-.reveal .katex .base {
-  font-family: "Neoletters", serif !important;
-}
 
-.reveal .katex .mord,
-.reveal .katex .math,
-.reveal .katex .strut {
-  font-family: "Neoletters", serif !important;
-}
-
-.reveal .katex .mord > .mord,
-.reveal .katex .mord > .mord > .mord {
-  font-family: "Neoletters", serif !important;
-}
 
 .reveal .slides ul li::marker {
     content: "» ";
@@ -150,6 +118,7 @@ body {
   shape-rendering: crispEdges;
   background-color: #111;  /* dunkler Hintergrund */
   border-radius: 8px;
+
 }
 
 /* Neon-Farben für Achsen und Text (Anpassung je nach Bedarf) */

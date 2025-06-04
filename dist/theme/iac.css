@@ -66,7 +66,6 @@
   --r-overlay-element-fg-color: 240, 240, 240;
 }
 
-
 .reveal-viewport {
   background: #fff;
   background-color: var(--r-background-color);
@@ -95,6 +94,11 @@
 .reveal .slides section > section {
   line-height: 1.3;
   font-weight: inherit;
+}
+
+/* Damit bei der aktiven (present) Folie immer "right: 0" gilt */
+.reveal .slides section.present {
+  right: -42px !important;
 }
 
 /*********************************************
@@ -388,4 +392,43 @@
   .backgrounds {
     background-color: var(--r-background-color);
   }
+}
+
+/*********************************************
+ * CUSTOM CURSOR
+ *********************************************/
+ body {
+    cursor: url("../../resources/misc/cursor.cur"), auto;
+}
+
+.reveal a,
+.reveal a:visited,
+.reveal a:hover,
+.reveal a:active {
+    cursor: url("../../resources/misc/cursor2.cur"), auto !important;
+}
+
+.reveal button,
+.reveal button:hover,
+.reveal button:focus {
+    cursor: url("../../resources/misc/cursor2.cur"), auto !important;
+}
+
+/*********************************************
+ * MATH EQUATIONS
+ *********************************************/
+.reveal .katex, 
+.reveal .katex .base {
+  font-family: "Neoletters", serif !important;
+}
+
+.reveal .katex .mord,
+.reveal .katex .math,
+.reveal .katex .strut {
+  font-family: "Neoletters", serif !important;
+}
+
+.reveal .katex .mord > .mord,
+.reveal .katex .mord > .mord > .mord {
+  font-family: "Neoletters", serif !important;
 }
