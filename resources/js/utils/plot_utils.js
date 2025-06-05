@@ -119,7 +119,8 @@
         lineColor = "#f0f",
         lineWidth = 3,
         pointSize = 6,
-        pointColor = "#ff0"
+        pointColor = "#ff0",
+        style = {}
       } = options;
 
       // 2) Line-Generator, unter Verwendung der bereits in fig gespeicherten Skalen
@@ -129,7 +130,7 @@
         .curve(curve);
 
       // 3) Neuen <path> für die Linie einfügen
-      fig.svg.append("path")
+      const path = fig.svg.append("path")
         .datum(data)
         .attr("class", "line")          // optional: wenn du Linien später gezielt ansprechen willst
         .attr("d", lineGenerator)
@@ -138,7 +139,13 @@
         .style("stroke-width", lineWidth)
         .style("shape-rendering", "crispEdges");
 
-      // 4) Punkte (Quadrate) an jedem Datenpunkt hinzufügen
+      // 4) style-Objekt anwenden (z. B. stroke-dasharray, andere CSS-Props)
+      Object.entries(style).forEach(([key, value]) => {
+        // key könnte z. B. "strokeDasharray" sein – D3 übersetzt es intern auf "stroke-dasharray"
+        path.style(key, value);
+      });
+
+      // 5) Punkte (Quadrate) an jedem Datenpunkt hinzufügen
       fig.svg.selectAll(null)          // Selektor „null“ erzwingt, dass wir keine bestehenden rects abgreifen
         .data(data)
         .enter()
@@ -175,13 +182,13 @@
      * Wenn bereits eine Figure im DIV existiert, wird sie wiederverwendet; 
      * die Achsen werden nur einmalig gesetzt.
      */
-    drawPixelChart: function(divID, dataSets) {
+    drawPixelChart: function(divID, dataSets, width=800, height=400) {
       // Wir nutzen ein Cache-Objekt, um Figuren pro DIV zu speichern.
       plotUtils._cache = plotUtils._cache || {};
       
       // Falls für diesen divID noch keine Figure existiert: Erstelle sie.
       if (!plotUtils._cache[divID]) {
-        const fig = plotUtils.createFigure(divID, 800, 400, { top:50, right:50, bottom:50, left:50 });
+        const fig = plotUtils.createFigure(divID, width, height, { top:50, right:50, bottom:50, left:50 });
         plotUtils._cache[divID] = { fig: fig, axesAlready: false };
       }
       
@@ -192,7 +199,7 @@
       if (!cacheItem.axesAlready) {
         const allX = dataSets.flatMap(set => set.data.map(d => d.x));
         const allY = dataSets.flatMap(set => set.data.map(d => d.y));
-        plotUtils.addAxes(fig, d3.extent(allX), [0, d3.max(allY)], 5, 5);
+        plotUtils.addAxes(fig, d3.extent(allX), [Math.min(0, d3.min(allY)), d3.max(allY)], 5, 5);
         cacheItem.axesAlready = true;
       }
       
