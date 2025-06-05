@@ -34,17 +34,31 @@
   font-style: normal;
 }
 
+@font-face {
+  font-family: 'Montserrat';
+  src: url("./fonts/montserrat/Montserrat-Regular.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Montserrat';
+  src: url("./fonts/montserrat/Montserrat-Bold.ttf") format("truetype");
+  font-weight: bold;
+  font-style: normal;
+}
+
 /*********************************************
  * GLOBAL STYLES
  *********************************************/
  :root {
   --r-background-color: #fff;
-  --r-main-font: 'Press Start 2P','Noto Sans', Source Sans Pro, Helvetica, sans-serif;
+  --r-main-font: 'Montserrat', Helvetica, sans-serif;
   --r-main-font-size: 20px;
   --r-main-color: #EFEFEF;
   --r-block-margin: 20px;
   --r-heading-margin: 0 0 20px 0;
-  --r-heading-font: 'Press Start 2P','Youre Gone','mabook', Source Sans Pro, Helvetica, sans-serif;
+  --r-heading-font: 'Press Start 2P','Youre Gone','mabook', Helvetica, sans-serif;
   --r-heading-color: #ff05ff;
   --r-heading-line-height: 1.2;
   --r-heading-letter-spacing: normal;
@@ -242,7 +256,7 @@
   width: 100%;
   margin: var(--r-block-margin) auto;
   text-align: left;
-  font-size: 0.55em;
+  font-size: 1em;
   font-family: var(--r-code-font);
   line-height: 1.2em;
   word-wrap: break-word;
@@ -253,19 +267,17 @@
   font-family: var(--r-code-font);
   text-transform: none;
   tab-size: 2;
-  color: #b8103b;
+  color: #00cf5d;
 }
 
 .reveal pre code {
   display: block;
-  font-family: "Press Start 2P";
   padding: 5px;
   overflow: auto;
   max-height: 400px;
   word-wrap: normal;
-  background-color: rgb(0, 0, 0);
-  color: rgb(0, 255, 13);
-  box-shadow: 0px 5px 15px rgba(0, 255, 242, 0.582);
+  background-color: rgb(42, 42, 42);
+  box-shadow: 0px 2px 5px rgba(0, 255, 60, 0.365);
 }
 
 .reveal .code-wrapper {
