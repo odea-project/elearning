@@ -64,56 +64,80 @@ The era of [*analog-to-digital converters (ADCs)*](https://dewesoft.com/blog/his
 
 # Analytical Data (not just Data)
 
-Due to the increased complexity of modern analytical instruments, the term 'analytical data' has evolved to encompass more than just raw numerical data.
+Due to the increased complexity of modern analytical instruments (and experiments), the term 'analytical data' has evolved to encompass more than just raw numerical data.
 
 ```mermaid
-  %%{init: {'theme': 'base', 'themeVariables': {'primaryColor': '#ffcc00', 'edgeLabelBackground':'#ffffff', 'tertiaryColor': '#f0f0f0'}}}%%
-  %%{flowchart: {curve: 'linear'}}%%
   graph TD1
-    A[Analytical Data] -->|Includes| B[Raw Data]
-    A -->|Includes| G[Instrument Metadata]
-    A -->|Includes| C[Processed Data]
-    A -->|Includes| E[Calibration Data]
-    A -->|Includes| H[Data Quality Metrics]
-    A -->|Includes| I[Data Provenance (Audit Trail)]
-    A -->|Includes| D[Other Metadata (e.g. Sample Information, Experimental Conditions)]
-    A -->|Includes| F[Data Visualizations]
+    A[Analytical Data] --> B[Raw Data]
+    A --> C[Instrument Metadata]
+    A --> D[Processed Data]
+    A --> E[Calibration Data]
+    A --> F[Data Quality Metrics]
+    A --> G[Data Provenance (Audit Trail)]
+    A --> H[Other Metadata (e.g. Sample Information, Experimental Conditions)]
 ```
----
-
-# Analytical Data in the Laboratory
-
-Modern analytical laboratories are equipped with advanced instruments that generate vast amounts of data, including chromatograms, spectra, and complex multivariate datasets. These instruments require sophisticated data processing and management systems to handle the complexity and volume of data generated.
 
 ---
 
-# Structure diversity of analytical data
+# Analytical data across various fields
+
+How analytical data is used in various fields (e.g., environmental monitoring, food safety, pharmaceuticals) and implications for data management and structure.
+
+```mermaid
+  graph TD3
+    A[Analytical Data Use Cases] --> B[Environmental Monitoring]
+    A --> C[Food Safety]
+    A --> D[Pharmaceuticals]
+    A --> E[Clinical Research]
+    A --> F[Industrial Applications]
+    A --> G[Academic Research]
+    A --> H[Regulatory Compliance]
+```
+
+---
+
+# Analytical Data management (1st challenge)
+
+The management of analytical data involves not only the storage and processing of raw data but also the handling of metadata, calibration data, and data quality metrics. This complexity necessitates specialized tools and workflows to ensure data integrity, reproducibility, and compliance with standards.
+
+```mermaid
+  graph TD2
+    A[Analytical Data Management] --> B[Data Storage]
+    A --> C[Data Processing]
+    A --> D[Metadata Management]
+    A --> E[Calibration Management]
+    A --> F[Data Quality Assurance]
+    A --> G[Data Visualization]
+    A --> H[Data Provenance Tracking]
+```
+
+---
+
+# Structure diversity and complexity (2nd challenge)
 
 How diverse the structure of analytical data can be (e.g., multivariate time series from sensors, spectral data and chromatographic profiles).
-
----
-
-# How do we use analytical data
-
-How analytical data is used in various fields (e.g., environmental monitoring, food safety, pharmaceuticals) and implications for data management.
-
----
-
-# Complexity levels in analytical data
-
 Highlight challenges arising from complexity and volume of analytical data, including the need for specialized tools and expertise.
 Challenges in data management, including data storage, processing, and visualization.
-
----
-
-# Data standardization
-
-Open data standards opportunities/advantages for tackling lack of data interoperability and how to ensure FAIRness during data handling. Making the work reproducible by working with metadata and standardization of data processing workflows, with benefit of automation and consequently, saving time.
+pH can be easily noted from the screen but mass spectrometry data requires specialized software to interpret complex spectra.
+The high complexity and size requires compression and efficient storage solutions, as well as advanced data processing techniques to extract meaningful insights.
+Show book and size comparison as well as notion of data compression and encoding frameworks.
 
 ---
 
 # Data formats and interoperability
 
 Need for interoperability in data formats. Encoding strategies from vendors as well as the reasons why and how to go around it.
+
+---
+
+# Data standardization (3rd challenge)
+
+Open data standards opportunities/advantages for tackling lack of data interoperability and how to ensure FAIRness during data handling. Making the work reproducible by working with metadata and standardization of data processing workflows, with benefit of automation and consequently, saving time.
+
+---
+
+# FAIR principles
+
+The FAIR principles (Findable, Accessible, Interoperable, Reusable) are essential for ensuring that analytical data is managed effectively. They promote the use of standardized formats, metadata, and documentation to enhance data sharing and collaboration across disciplines.
 
 ---
