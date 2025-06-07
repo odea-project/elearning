@@ -132,7 +132,7 @@
       // 3) Neuen <path> für die Linie einfügen
       const path = fig.svg.append("path")
         .datum(data)
-        .attr("class", "line")          // optional: wenn du Linien später gezielt ansprechen willst
+        .attr("class", "line " + options.key + "-line")          // optional: wenn du Linien später gezielt ansprechen willst
         .attr("d", lineGenerator)
         .attr("fill", "none")
         .style("stroke", lineColor)     // Inline-Style hat Vorrang
@@ -168,6 +168,7 @@
             .attr("stroke", pointColor)
             .attr("stroke-width", 1);
         });
+      return path; // Rückgabe des <path>-Elements, falls du es später noch brauchst
     },
 
     readCSV: function (filePath) {
@@ -189,7 +190,7 @@
       // Falls für diesen divID noch keine Figure existiert: Erstelle sie.
       if (!plotUtils._cache[divID]) {
         const fig = plotUtils.createFigure(divID, width, height, { top:50, right:50, bottom:50, left:50 });
-        plotUtils._cache[divID] = { fig: fig, axesAlready: false };
+        plotUtils._cache[divID] = { fig: fig, axesAlready: false, lines: {} };
       }
       
       const cacheItem = plotUtils._cache[divID];
@@ -205,13 +206,16 @@
       
       // Entferne existierende Linien und Punkte, bevor du neu zeichnest.
       fig.svg.selectAll(".line, .point").remove();
+      cacheItem.lines = {};
       
       // Zeichne alle Datenspuren
       dataSets.forEach(set => {
-        plotUtils.addLine(fig, set.data, set.options);
+        const key = set.options.key;
+        const pathSel = plotUtils.addLine(fig, set.data, set.options);
+        cacheItem.lines[key] = pathSel;
       });
       
-      return fig;
+      return {fig: fig, lines: cacheItem.lines};
     }
   };
 })(window);

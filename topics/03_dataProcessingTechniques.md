@@ -66,10 +66,12 @@
 
 # test floor
 <div id="chart-data-processing-007"></div>
-<div id="signal-buttons">
-  <button class="btn-toggle" data-key="componentA">Linie A</button>
-  <button class="btn-toggle" data-key="componentB">Linie B</button>
-  <button class="btn-toggle" data-key="componentC">Linie C</button>
-</div>
+ <!-- Rectangular switch -->
+<!-- Rounded switch -->
+<label class="switch">
+  <input type="checkbox" id="toggle-interference">
+  <span class="slider round"></span>
+</label>
+<span style="margin-left: 8px; vertical-align: middle;">Interference</span>
 <script src="../resources/js/charts/signal_processing_002.js"></script>
 --- (id="test-floor")
