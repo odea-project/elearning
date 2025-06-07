@@ -183,39 +183,107 @@
      * Wenn bereits eine Figure im DIV existiert, wird sie wiederverwendet; 
      * die Achsen werden nur einmalig gesetzt.
      */
-    drawPixelChart: function(divID, dataSets, width=800, height=400) {
-      // Wir nutzen ein Cache-Objekt, um Figuren pro DIV zu speichern.
+    drawPixelChart: function (
+      divID, dataSets,
+      width = 800, height = 400,
+      xmin = null, xmax = null,    // Standard auf null ändern
+      ymin = null, ymax = null     // statt 0/1
+    ) {
+      // Cache initialisieren
       plotUtils._cache = plotUtils._cache || {};
-      
-      // Falls für diesen divID noch keine Figure existiert: Erstelle sie.
+
+      // 1) Figure anlegen falls nötig
       if (!plotUtils._cache[divID]) {
-        const fig = plotUtils.createFigure(divID, width, height, { top:50, right:50, bottom:50, left:50 });
-        plotUtils._cache[divID] = { fig: fig, axesAlready: false, lines: {} };
+        const fig = plotUtils.createFigure(divID, width, height, {
+          top: 50, right: 50, bottom: 50, left: 50
+        });
+        plotUtils._cache[divID] = {
+          fig, axesAlready: false, lines: {}, lineGenerators: {}
+        };
       }
-      
       const cacheItem = plotUtils._cache[divID];
       const fig = cacheItem.fig;
-      
-      // Wenn die Achsen noch nicht gesetzt wurden: Berechne & setze sie.
+
+      // 2) Achsen nur einmal zeichnen
       if (!cacheItem.axesAlready) {
+        // a) alle x- und y-Werte sammeln
         const allX = dataSets.flatMap(set => set.data.map(d => d.x));
         const allY = dataSets.flatMap(set => set.data.map(d => d.y));
-        plotUtils.addAxes(fig, d3.extent(allX), [Math.min(0, d3.min(allY)), d3.max(allY)], 5, 5);
+
+        // b) x-Domain: wenn xmin/xmax gesetzt, sonst auto
+        const xDomain = (xmin !== null && xmax !== null)
+          ? [xmin, xmax]
+          : d3.extent(allX);
+
+        // c) y-Domain: wenn ymin/ymax gesetzt, sonst auto (inkl. 0 als Untergrenze)
+        const dataYmin = Math.min(0, d3.min(allY));
+        const dataYmax = d3.max(allY);
+        const yDomain = (ymin !== null && ymax !== null)
+          ? [ymin, ymax]
+          : [dataYmin, dataYmax];
+
+        // d) Achsen erzeugen
+        plotUtils.addAxes(fig, xDomain, yDomain, 5, 5);
         cacheItem.axesAlready = true;
       }
-      
-      // Entferne existierende Linien und Punkte, bevor du neu zeichnest.
+
+      // 3) Alte Linien/Punkte löschen
       fig.svg.selectAll(".line, .point").remove();
       cacheItem.lines = {};
-      
-      // Zeichne alle Datenspuren
+      cacheItem.lineGenerators = {};
+
+      // 4) Linien und Generatoren anlegen (wie zuvor)
       dataSets.forEach(set => {
         const key = set.options.key;
-        const pathSel = plotUtils.addLine(fig, set.data, set.options);
+
+        // 4a) Line-Generator
+        const lg = d3.line()
+          .x(d => fig.xScale(d.x))
+          .y(d => fig.yScale(d.y))
+          .curve(set.options.curve || d3.curveLinear);
+
+        // 4b) Pfad zeichnen
+        const pathSel = fig.svg.append("path")
+          .datum(set.data)
+          .attr("class", `line ${key}-line`)
+          .attr("d", lg)
+          .attr("fill", "none")
+          .style("stroke", set.options.lineColor || "#f0f")
+          .style("stroke-width", set.options.lineWidth || 3)
+          .style("shape-rendering", "crispEdges");
+
+        // 4c) style-Overrides
+        if (set.options.style) {
+          Object.entries(set.options.style)
+            .forEach(([k, v]) => pathSel.style(k, v));
+        }
+
+        // 4d) Punkte
+        fig.svg.selectAll(null)
+          .data(set.data)
+          .enter()
+          .append("rect")
+          .attr("class", "point")
+          .attr("x", d => Math.round(fig.xScale(d.x)) - (set.options.pointSize || 6) / 2)
+          .attr("y", d => Math.round(fig.yScale(d.y)) - (set.options.pointSize || 6) / 2)
+          .attr("width", set.options.pointSize || 6)
+          .attr("height", set.options.pointSize || 6)
+          .attr("fill", set.options.pointColor || "#ff0")
+          .attr("stroke", set.options.pointColor || "#ff0");
+
+        // 4e) im Cache ablegen
         cacheItem.lines[key] = pathSel;
+        cacheItem.lineGenerators[key] = lg;
       });
-      
-      return {fig: fig, lines: cacheItem.lines};
+
+      // 5) zurückgeben
+      return {
+        fig: cacheItem.fig,
+        lines: cacheItem.lines,
+        lineGenerators: cacheItem.lineGenerators
+      };
     }
+
+
   };
 })(window);

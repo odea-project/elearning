@@ -21,57 +21,48 @@
         <p class="subBullet">
             <strong>Analyte</strong>: the signal of interest
         </p>
-        <p class="subBullet">
+        <p class="subBullet fragment" data-fragment-index="1">
             <strong>Matrix</strong>: e.g., interference, suppression, or enhancement
         </p>
-        <p class="subBullet">
+        <p class="subBullet fragment" data-fragment-index="2">
             <strong>System</strong>: e.g., noise, drift, or baseline
         </p>
-        <p class="mainBullet">
+        <p class="mainBullet fragment" data-fragment-index="3">
             Goal: <strong>Extract</strong> the analyte signal.
         </p>
     </div>
     <div class="spacer"></div>
     <div class="rightBox">
-        <div class="tab-content active signal-tab" data-tab="signal1">
-            <div id="chart-data-processing-001"></div>
-        </div>
-        <div class="tab-content signal" data-tab="signal2">
-            <div id="chart-data-processing-002"></div>
-        </div>
-        <div class="tab-content signal" data-tab="signal3">
-            <div id="chart-data-processing-003"></div>
-        </div>
-        <div class="tab-content signal" data-tab="signal4">
-            <div id="chart-data-processing-004"></div>
-        </div>
-        <div class="tab-content signal" data-tab="signal5">
-            <div id="chart-data-processing-005"></div>
-        </div>
-        <div class="tab-content signal" data-tab="signal6">
-            <div id="chart-data-processing-006"></div>
-        </div>
-    </div>
-    <div class="tabs">
-        <div class="tab active signal-tab" data-tab="signal1">Analyte Signal</div>
-        <div class="tab signal" data-tab="signal2">Add interference</div>
-        <div class="tab signal" data-tab="signal3">Add suppression</div>
-        <div class="tab signal" data-tab="signal4">Add noise</div>
-        <div class="tab signal" data-tab="signal5">Add drift</div>
-        <div class="tab signal" data-tab="signal6">Full Signal</div>
+        <div id="chart-data-processing-007"></div>
     </div>
 </div>
-<script src="../resources/js/charts/signal_processing_001.js"></script>
---- (id="what-is-data-signal-processing")
-
-# test floor
-<div id="chart-data-processing-007"></div>
  <!-- Rectangular switch -->
 <!-- Rounded switch -->
+<div>
+<div class="fragment fade-up rightBox" data-fragment-index="1">
 <label class="switch">
   <input type="checkbox" id="toggle-interference">
   <span class="slider round"></span>
 </label>
 <span style="margin-left: 8px; vertical-align: middle;">Interference</span>
+<label class="switch">
+  <input type="checkbox" id="toggle-suppression">
+  <span class="slider round"></span>
+</label>
+<span style="margin-left: 8px; vertical-align: middle;">Suppression</span>
+</div>
+<div class="fragment fade-up leftBox" data-fragment-index="2">
+<label class="switch">
+  <input type="checkbox" id="toggle-drift">
+  <span class="slider round"></span>
+</label>
+<span style="margin-left: 8px; vertical-align: middle;">Drift</span>
+<label class="switch">
+  <input type="checkbox" id="toggle-noise">
+  <span class="slider round"></span>
+</label>
+<span style="margin-left: 8px; vertical-align: middle;">Noise</span>
+</div>
+</div>
 <script src="../resources/js/charts/signal_processing_002.js"></script>
 --- (id="test-floor")
