@@ -12,6 +12,63 @@ Das ist eine Bullet-Liste:
 
 ---
 # Demo 3
+1 abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+[]  
+2 this is the second line  
+3 this is the third line  
+4 this is the fourth line  
+5 this is the fifth line  
+6 this is the sixth line  
+7 this is the seventh line  
+8 this is the eighth line  
+9 this is the ninth line  
+10 this is the tenth line  
+11 this is the eleventh line  
+12 this is the twelfth line  
+13 this is the thirteenth line  
+14 this is the fourteenth line  
+15 this is the fifteenth line  
+16 this is the sixteenth line: here the end of the slide still fits in. (16:9)
+---
+# Demo 4
+1 abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+[]  
+2 this is the second line  
+3 this is the third line  
+4 this is the fourth line  
+5 this is the fifth line  
+6 this is the sixth line  
+7 this is the seventh line  
+8 this is the eighth line  
+9 this is the ninth line  
+10 this is the tenth line  
+11 this is the eleventh line  
+12 this is the twelfth line  
+13 this is the thirteenth line  
+14 this is the fourteenth line  
+15 this is the fifteenth line  
+16 this is the sixteenth line: here the end of the slide not fits in.    
+17 this is the seventeenth line: but still is visible on screen. (16:9)
+---
+# Demo 5
+1 abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+[]  
+2 this is the second line  
+3 this is the third line  
+4 this is the fourth line  
+5 this is the fifth line  
+6 this is the sixth line  
+7 this is the seventh line  
+8 this is the eighth line  
+9 this is the ninth line  
+10 this is the tenth line  
+11 this is the eleventh line  
+12 this is the twelfth line  
+13 this is the thirteenth line  
+14 this is the fourteenth line  
+15 this is the fifteenth line  
+16 this is the sixteenth line: here the end of the slide not fits in. (16:9)      
+17 this is the seventeenth line: but still is visible on screen.  
+18 <- this is the last line of this slide, which is not visible on screen.
+---
+# Demo 6
 This is a table:
 | Header 1 | Header 2 |
 | -------- | -------- |
@@ -19,14 +76,14 @@ This is a table:
 | Row 2    | Data 2   |
 
 ---
-# Demo 4
+# Demo 7
 This is an equation:
 $$
 erf(x) = \frac{2}{\sqrt{\pi}} \int_0^x e^{-t^2} dt
 $$
 
 ---
-# Demo 5
+# Demo 8
 This is a code block:
 ```python
 def hello_world():
@@ -37,7 +94,7 @@ if __name__ == "__main__":
 ```
 
 ---
-# Demo 6
+# Demo 9
 Here we use HTML to create a two column layout:
 <div>
   <div class="leftBox">
@@ -55,7 +112,7 @@ y: [10, 20, 30, 40, 50]</code>
 </div>
 
 --- 
-<h1>Demo 7</h1>
+# Demo 10
 <div id="pixel-chart"></div>
   <script>// NO BLANK LINES ALLOWED IN SCRIPT TAGS!!!
 (function() {
@@ -108,3 +165,15 @@ y: [10, 20, 30, 40, 50]</code>
 })();
 </script>
 --- (id="pixel-chart-slide")
+
+# Demo 11
+
+<div class="mermaid">
+flowchart TD
+  A[Start] --> B{Is it?};
+  B -- Yes --> C[OK];
+  C --> D[Rethink];
+  D --> B;
+  B -- No ----> E[End];
+</div>
+--- (id="mermaid-slide")
