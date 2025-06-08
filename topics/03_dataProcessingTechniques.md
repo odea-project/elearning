@@ -11,7 +11,7 @@
 </div>
 --- (id="objectives-and-pre-requisites")
 
-# What is Data/Signal Processing?
+## What is a <span class="post-it-strip">Signal?</span>
 <div>
     <div class="leftBox">
         <p class="mainBullet">
@@ -33,11 +33,10 @@
     </div>
     <div class="spacer"></div>
     <div class="rightBox">
-        <div id="chart-data-processing-007"></div>
+        <div id="chart-data-processing-002"></div>
     </div>
 </div>
- <!-- Rectangular switch -->
-<!-- Rounded switch -->
+<!-- SWITCHES -->
 <div>
 <div class="fragment fade-up rightBox" data-fragment-index="1">
 <label class="switch">
@@ -65,4 +64,36 @@
 </div>
 </div>
 <script src="../resources/js/charts/signal_processing_002.js"></script>
---- (id="test-floor")
+--- (id="what-is-a-signal")
+
+## In Addition, Data Preprocessing means making data <span class="post-it-strip">comparable</span>
+<div>
+  <div class="leftBox">
+      <div id="chart-data-processing-003"></div>
+  </div>
+  <div class="spacer"></div>
+  <div class="rightBox">
+      <p class="mainBullet">
+        <strong>Scaling:</strong> bring data to the same level
+      </p>
+      <p class="subBullet">
+        <strong>Normalization:</strong> min-max scaling
+      </p>
+        $$
+          x_{\text{norm}} = \frac{x - \min(x)}{\max(x) - \min(x)}
+        $$
+      <p class="subSubBullet">
+        Sets the minimum to 0 and the maximum to 1
+      </p>
+      <p class="subSubBullet">
+        Easy to implement, but sensitive to outliers or noise.
+      </p>
+  </div>
+</div>
+<label class="switch">
+  <input type="checkbox" id="toggle-normalization-1" checked>
+  <span class="slider round"></span>
+</label>
+<span style="margin-left: 8px; vertical-align: middle;">normalize</span>
+<script src="../resources/js/charts/signal_processing_003.js"></script>
+--- (id="data-normalization")

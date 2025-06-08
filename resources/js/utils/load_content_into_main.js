@@ -1,112 +1,134 @@
+// ====== 0) Markdown-Extension für ::tag(klasse){…} mit Inline-Handling für <p> ======
+;(function() {
+  const mdPlugin = Reveal.getPlugin('markdown');
+  const marked   = mdPlugin.marked;
+
+  const customBlock = {
+    name:  'customBlock',
+    level: 'block',
+
+    // findet jeden ::tag(klass){-Block
+    start(src) {
+      return src.match(/^::\w+\([^)]*\)\{/)?.index;
+    },
+
+    // tokenisiert bis zur korrespondierenden schließenden }
+    tokenizer(src) {
+      const cap = /^::(\w+)\(([^)]*)\)\{/.exec(src);
+      if (!cap) return;
+
+      const tag       = cap[1];                // "div" oder "p"
+      const className = cap[2];                // "leftBox" oder "mainBullet"
+      let   idx       = cap[0].length;         // Position direkt nach "{"
+      let   depth     = 1;
+
+      // bis zum passenden schließenden "}"
+      while (idx < src.length && depth > 0) {
+        if      (src[idx] === '{') depth++;
+        else if (src[idx] === '}') depth--;
+        idx++;
+      }
+
+      const raw  = src.slice(0, idx);
+      const body = src.slice(cap[0].length, idx - 1).trim();
+
+      return {
+        type:  'customBlock',
+        raw,
+        tag,
+        class: className,
+        text:  body
+      };
+    },
+
+    // rendert: für <p>_INLINE_, sonst _BLOCK_-Parsing
+    renderer(token) {
+      let innerHtml;
+      if (token.tag === 'p') {
+        // kein zusätzliches <p> drumherum
+        innerHtml = marked.parseInline(token.text);
+      } else {
+        // erlaubt Mehr-Zeilen-Markdown im Inneren
+        innerHtml = marked.parse(token.text);
+      }
+      return `<${token.tag} class="${token.class}">${innerHtml}</${token.tag}>`;
+    }
+  };
+
+  // Extension registrieren
+  marked.use({ extensions: [ customBlock ] });
+})();
+
+
+
+// ====== 1) Click-Handler wie gehabt, nur ohne expandShorthand() ======
 document.querySelectorAll('.topic-link').forEach(a => {
   a.addEventListener('click', async e => {
     e.preventDefault();
-    const mdUrl = a.getAttribute('data-md');
+    const mdUrl = a.dataset.md;
 
-    // 1) alte dynamische Slides entfernen
-    const allSlidesContainer = document.querySelector('.reveal .slides');
-    const oldDynamics = allSlidesContainer.querySelectorAll('section.dynamic');
-    oldDynamics.forEach(s => s.remove());
+    // (1) alte Slides weg
+    const allSlides = document.querySelector('.reveal .slides');
+    allSlides.querySelectorAll('section.dynamic').forEach(s => s.remove());
 
-    // 2) Markdown laden
+    // (2) Markdown holen
     let markdownText;
     try {
-      const response = await fetch(mdUrl);
-      if (!response.ok) throw new Error(`HTTP ${response.status}`);
-      markdownText = await response.text();
+      const res = await fetch(mdUrl);
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      markdownText = await res.text();
     } catch (err) {
-      // …Fehler-Folie einfügen (wie gehabt)…
-      const errorSection = document.createElement('section');
-      errorSection.classList.add('dynamic');
-      errorSection.innerHTML = `<p style="color:red;">Fehler beim Laden von <code>${mdUrl}</code>: ${err.message}</p>`;
-      allSlidesContainer.insertBefore(errorSection, allSlidesContainer.children[2] || null);
+      const errSec = document.createElement('section');
+      errSec.classList.add('dynamic');
+      errSec.innerHTML = `<p style="color:red;">
+        Fehler beim Laden von <code>${mdUrl}</code>: ${err.message}
+      </p>`;
+      allSlides.insertBefore(errSec, allSlides.children[2] || null);
       Reveal.layout();
-      Reveal.slide(2);
-      return;
+      return Reveal.slide(2);
     }
 
-    // 3) Markdown in Blöcke splitten **mit** optionaler ID-Angabe
-    //    Regex: erkennt Zeilen der Form:
-    //      ---           oder
-    //      --- (id="irgendwas")
-    //    und fängt die ID (falls da ist) in Gruppe 1 ab
+    // (3) split auf --- mit optionaler id
     const parts = markdownText.split(
       /^[ \t]*---(?:[ \t]*\(\s*id="([^"]+)"\s*\))?[ \t]*$/m
     );
-    // parts = [ block0, id1_or_undefined, block1, id2_or_undefined, block2, id3, … ]
 
-    // 4) Für jeden Block (parts[i]) eine neue <section class="dynamic"> bauen,
-    //    und falls parts[i+1] definiert, diese ID setzen.
-    const newSections = [];
+    // (4) Blöcke parsen — hier greift Deine customBlock-Extension
+    const newSecs = [];
     for (let i = 0; i < parts.length; i += 2) {
-      const mdPart = parts[i].trim();
+      const mdPart   = parts[i].trim();
+      const forcedId = parts[i+1];
       if (!mdPart) continue;
 
-      // Die (optionale) ID, die unmittelbar hinter dem Trenner stand:
-      const forcedId = parts[i + 1]; // z.B. "pixel-chart-slide" oder undefined
+      const html = Reveal
+        .getPlugin('markdown')
+        .marked(mdPart);
 
-      // Markdown-Teil in HTML umwandeln
-      const html = Reveal.getPlugin('markdown').marked(mdPart);
-
-      // Neue Section anlegen, ID setzen, Inhalt einfügen
       const section = document.createElement('section');
       section.classList.add('dynamic');
-      if (forcedId) {
-        section.id = forcedId;
-      }
+      if (forcedId) section.id = forcedId;
       section.innerHTML = html;
-      newSections.push(section);
-      console.log(
-        `[DEBUG] Block ${i / 2} gerendert` +
-        (forcedId ? ` (id="${forcedId}")` : "")
-      );
+      newSecs.push(section);
     }
 
-    // 5) Die neuen Sections ab Index 2 in .reveal .slides einfügen
-    for (let j = 0; j < newSections.length; j++) {
-      const insertBeforeNode = allSlidesContainer.children[2 + j];
-      if (insertBeforeNode) {
-        allSlidesContainer.insertBefore(newSections[j], insertBeforeNode);
-      } else {
-        allSlidesContainer.appendChild(newSections[j]);
-      }
-    }
-    console.log('[DEBUG] Neue dynamische Slides eingefügt:', newSections.length);
-
-    // 6) Reveal neu layouten
-    Reveal.layout();
-
-    const mermaidPlugin = Reveal.getPlugin("mermaid");
-    console.log("Mermaid-Plugin-Objekt:", mermaidPlugin);
-    console.log("Plugin-Methoden:", Object.keys(mermaidPlugin));
-
-    // Da nur “init” existiert, rufe es mit dem Reveal-Objekt auf:
-    if (mermaidPlugin && typeof mermaidPlugin.init === "function") {
-      console.log(">>> Aufruf: mermaidPlugin.init(Reveal)");
-      mermaidPlugin.init(Reveal);
-    } else {
-      console.warn(
-        "Mermaid-Plugin hat keine init()-Methode oder getPlugin('mermaid') war undefined"
-      );
-    }
-
-    // 7) Alle <script>-Tags innerhalb der neuen Sections „manuell“ ausführen
-    newSections.forEach(section => {
-      section.querySelectorAll('script').forEach(oldScript => {
-        const newScript = document.createElement('script');
-        if (oldScript.src) {
-          newScript.src = oldScript.src;
-        } else {
-          newScript.textContent = oldScript.innerHTML;
-        }
-        document.body.appendChild(newScript);
-      });
+    // (5) einfügen, (6) layout, (7) mermaid, (8) math, (9) jump
+    newSecs.forEach((sec, idx) => {
+      const before = allSlides.children[2 + idx];
+      before ? allSlides.insertBefore(sec, before)
+             : allSlides.appendChild(sec);
     });
-
-    // 8) KaTeX-Math nachrendern
-    renderMathInDynamicSlides(newSections);
-
-    // 9) direkt zur ersten dynamischen Folie (Index 2)
+    Reveal.layout();
+    const mer = Reveal.getPlugin('mermaid');
+    if (mer?.init) mer.init(Reveal);
+    newSecs.forEach(sec =>
+      sec.querySelectorAll('script').forEach(old => {
+        const ns = document.createElement('script');
+        old.src ? ns.src = old.src : ns.textContent = old.innerHTML;
+        document.body.appendChild(ns);
+      })
+    );
+    // KaTeX…
+    renderMathInDynamicSlides(newSecs);
     Reveal.slide(2);
   });
 });

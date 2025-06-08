@@ -1,9 +1,9 @@
 /* ----------------------------*/
-/* SIGNAL PROCESSING CHART 001 */
+/* SIGNAL PROCESSING CHART 002 */
 /* ----------------------------*/
 (function () {
-  let divID = "chart-data-processing-007";
-  let sectionID = "test-floor";
+  let divID = "chart-data-processing-002";
+  let sectionID = "what-is-a-signal";
   let myFig = null;
   let axesAlready = false;
   const n = 100;
