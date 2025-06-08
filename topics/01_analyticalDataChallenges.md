@@ -171,6 +171,69 @@ graph TD
 
 # Structure Variability
 
+<div style="display: flex; justify-content: center; align-items: center;">
+  <div id="myPlot" style="width:900px;height:400px;"></div>
+</div>
+<script>
+  // Generate random pH values between 2 and 12 for 10 samples
+  const samples = Array.from({length: 10}, (_, i) => i + 1);
+  const pH = samples.map(() => (Math.random() * 10 + 2).toFixed(2));
+  const trace = {
+    x: samples,
+    y: pH,
+    type: 'scatter',
+    mode: 'lines+markers',
+    name: 'pH',
+    marker: { color: '#00d0ff' },
+    line: { color: '#00d0ff' }
+  };
+  const layout = {
+    title: 'Random pH Values for 10 Samples',
+    xaxis: {
+      title: {
+        text: 'Sample',
+        color: '#fff'
+      },
+      color: '#fff',
+      linecolor: '#fff',
+      tickcolor: '#fff'
+    },
+    yaxis: {
+      title: {
+        text: 'pH',
+        color: '#fff'
+      },
+      color: '#fff',
+      range: [0, 14],
+      linecolor: '#fff',
+      tickcolor: '#fff'
+    },
+    legend: {
+      font: {
+        color: '#fff'
+      }
+    },
+    plot_bgcolor: '#000000',
+    paper_bgcolor: '#000000',
+    font: { color: '#fff' }
+  };
+  Reveal.on('slidechanged', function(event) {
+    if (event.currentSlide.querySelector('#myPlot')) {
+      Plotly.newPlot('myPlot', [trace], layout);
+    }
+  });
+</script>
+---
+
+# Structure Variability
+
+
+
+
+---
+
+# Structure Variability
+
 Add plots with increasing complexity, e.g., from simple pH time series to LC-UV and finally complex multivariate data, e.g. mass spectrometry data.
 
 <div style="display: flex; gap: 20px; align-items: flex-start;">
@@ -212,14 +275,39 @@ Variability of formats for MS data, e.g., Agilent MassHunter, Thermo Xcalibur, B
 
 ---
 
-# The Effots for Accessibility
+<!-- # The Effots for Accessibility
 
 <figure>
   <img src="resources/figures/01_analyticalDataChallenges/data_standards_time_line.png" data-preview-image alt="Data standards time line" height="330" style="display:inline-block; vertical-align:center; margin-right:10px;"/>
-  <!-- <figcaption style="font-size: 0.5em;"><em></em></figcaption>
+  <figcaption style="font-size: 0.5em;"><em></em></figcaption>
   </em></figcaption>
-  <p style="font-size: 0.5em;"><a href="">Source: </a></p> -->
+  <p style="font-size: 0.5em;"><a href="">Source: </a></p>
 </figure>
+
+--- -->
+
+# The Efforts for Accessibility
+
+```mermaid	
+timeline
+    title Development of Open Data Standards for Mass Spectrometry
+      vendor formats : d (Agilent), RAW (Thermo), wiff (Sciex)
+      < 2000 : ms1, ms2, MFG, pkl
+      2000 - 2010 : mzData : mzXML : mzML
+      2010 - 2020 : imzML : mz5 : mzDB
+      2023 - now : mzMLb : AnIML : ADF : ASM
+```
+
+[> 2000](https://pmc.ncbi.nlm.nih.gov/articles/PMC3518119/), 
+[mzData](http://tools.proteomecenter.org/formats/mzData/mzdata_xmlspy_docs.html), 
+[mzXML](http://tools.proteomecenter.org/wiki/index.php?title=Formats:mzXML), 
+[mzML](https://peptideatlas.org/tmp/mzML1.1.0.html), 
+[mz5](https://pubmed.ncbi.nlm.nih.gov/21960719/), 
+[mzDB](https://pmc.ncbi.nlm.nih.gov/articles/PMC4349994/), 
+[mzMLb](https://pubs.acs.org/doi/10.1021/acs.jproteome.0c00192), 
+[AnIML](https://www.animl.org/)
+[ADF](https://docs.allotrope.org/Allotrope%20Data%20Format.html), 
+[ASM](https://www.allotrope.org/asm).
 
 ---
 
