@@ -752,3 +752,8 @@ body {
 .popup-next {
     right: 0;
 }
+
+.mermaid {
+    background: transparent !important;
+    box-shadow: none !important;
+}
