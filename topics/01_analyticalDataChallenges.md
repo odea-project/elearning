@@ -5,8 +5,8 @@ The [*Ishango bone*](https://en.wikipedia.org/wiki/Ishango_bone) is considered t
 <figure>
   <img src="resources\figures\01_analyticalDataChallenges\Ishango_bone.jpg" data-preview-image alt="Ishango bone" height="260" style="display:inline-block; vertical-align:center; margin-right:10px;"/>
   <img src="resources\figures\01_analyticalDataChallenges\Ishango_bone_2.jpeg" data-preview-image alt="Another figure" height="260" style="display:inline-block; vertical-align:center;"/>
-  <figcaption style="font-size: 0.8em;"><em>The Ishango bone was discovered in the Democratic Republic of Congo, dating back to the Upper Paleolithic period, and is believed to be over 20,000 years old.</em></figcaption>
-  <p style="font-size: 0.6em;"><a href="https://en.wikipedia.org/wiki/Ishango_bone">Source: Wikipedia</a></p>
+  <figcaption style="font-size: 0.6em;"><em>The Ishango bone was discovered in the Democratic Republic of Congo, dating back to the Upper Paleolithic period, and is believed to be over 20,000 years old.</em></figcaption>
+  <p style="font-size: 0.5em;">Source: <a href="https://en.wikipedia.org/wiki/Ishango_bone">Wikipedia</a></p>
 </figure>
 
 ---
@@ -18,8 +18,8 @@ The [*Abacus*](https://en.wikipedia.org/wiki/Abacus) is one of the oldest known 
 <figure>
   <img src="resources/figures/01_analyticalDataChallenges/Abacus.png" data-preview-image alt="Abacus" height="200" style="display:inline-block; vertical-align:center; margin-right:10px;"/>
   <img src="resources/figures/01_analyticalDataChallenges/Abacus_2.jpg" data-preview-image alt="Another figure" height="200" style="display:inline-block; vertical-align:center;"/>
-  <figcaption style="font-size: 0.8em;"><em>The Abacus, used for centuries in various cultures approximately since 2400 BC, represents an early form of data processing and calculation.</em></figcaption>
-  <p style="font-size: 0.6em;"><a href="https://en.wikipedia.org/wiki/Abacus">Source: Wikipedia</a></p>
+  <figcaption style="font-size: 0.6em;"><em>The Abacus, used for centuries in various cultures approximately since 2400 BC, represents an early form of data processing and calculation.</em></figcaption>
+  <p style="font-size: 0.5em;">Source: <a href="https://en.wikipedia.org/wiki/Abacus">Wikipedia</a></p>
 </figure>
 
 ---
@@ -33,7 +33,7 @@ The era of [*analog-to-digital converters (ADCs)*](https://dewesoft.com/blog/his
     <figure>
       <img src="resources/figures/01_analyticalDataChallenges/IBM_7700_System_Photo.png" data-preview-image alt="IBM 7700" height="170" style="display:inline-block; vertical-align:center; margin-right:10px;"/>
       <figcaption style="font-size: 0.5em;"><em>The IBM 7700 Data Acquisition System, introduced in the 1960s, was one of the first systems to utilize analog-to-digital conversion for data acquisition.</em></figcaption>
-      <p style="font-size: 0.5em;"><a href="https://en.wikipedia.org/wiki/IBM_7700_Data_Acquisition_System">Source: Wikipedia</a></p>
+      <p style="font-size: 0.5em;">Source: <a href="https://en.wikipedia.org/wiki/IBM_7700_Data_Acquisition_System">Wikipedia</a></p>
     </figure>
   </div>
 
@@ -44,7 +44,7 @@ The era of [*analog-to-digital converters (ADCs)*](https://dewesoft.com/blog/his
       <img src="resources/figures/01_analyticalDataChallenges/Hewlett-Packard GC-MS 5992.png" data-preview-image alt="HP GC-MS 5992" height="170" style="display:inline-block; vertical-align:center; margin-right:10px;"/>
       <figcaption style="font-size: 0.5em;"><em>The Hewlett-Packard GC-MS 5992, introduced in the 1970s, was a pioneering instrument that combined gas chromatography with mass spectrometry, utilizing ADC technology for enhanced analytical capabilities.
       </em></figcaption>
-      <p style="font-size: 0.5em;"><a href="https://www.asms.org/docs/history-posters/hp5992.pdf?sfvrsn=2">Source: asms.org</a></p>
+      <p style="font-size: 0.5em;">Source: <a href="https://www.asms.org/docs/history-posters/hp5992.pdf?sfvrsn=2">asms.org</a></p>
     </figure>
   </div>
 
@@ -55,7 +55,7 @@ The era of [*analog-to-digital converters (ADCs)*](https://dewesoft.com/blog/his
       <img src="resources/figures/01_analyticalDataChallenges/Agilent IM-QTOF.webp" data-preview-image alt="Agilent IM-QTOF" height="170" style="display:inline-block; vertical-align:center; margin-right:10px;"/>
       <figcaption style="font-size: 0.5em;"><em>The Agilent 6560 Ion Mobility Q-TOF LC/MS, introduced in the 2010s, represents a modern advancement in analytical data acquisition, integrating ion mobility spectrometry with quadrupole time-of-flight mass spectrometry for enhanced separation and identification of complex mixtures.
       </em></figcaption>
-      <p style="font-size: 0.5em;"><a href="https://www.agilent.com/en/product/liquid-chromatography-mass-spectrometry-lc-ms/lc-ms-instruments/quadrupole-time-of-flight-lc-ms/6560-ion-mobility-lc-q-tof">Source: agilent.com</a></p>
+      <p style="font-size: 0.5em;">Source: <a href="https://www.agilent.com/en/product/liquid-chromatography-mass-spectrometry-lc-ms/lc-ms-instruments/quadrupole-time-of-flight-lc-ms/6560-ion-mobility-lc-q-tof">agilent.com</a></p>
     </figure>
   </div>
 </div>
@@ -88,11 +88,11 @@ graph TD
 
 # Use of Analytical Data
 
+Analytical data is utilized across various fields, each with unique requirements for data management.
+
 <figure>
   <img src="resources/figures/01_analyticalDataChallenges/analytical_data_fields.png" data-preview-image alt="Analytical data fields" height="180" style="display:inline-block; vertical-align:center; margin-right:10px;"/>
-  <figcaption style="font-size: 0.8em;"><em>Analytical data is utilized across various fields, each with unique requirements for data management and structure.</em></figcaption>
-  </em></figcaption>
-  <p style="font-size: 0.5em;"><a href="https://chatgpt.com/">Source: chatgpt.com</a></p>
+  <p style="font-size: 0.5em;">Figures source: <a href="https://chatgpt.com/">chatgpt.com</a></p>
 </figure>
 
 ---
@@ -169,7 +169,19 @@ graph TD
 
 ---
 
-# Do you what to know more?
+# Analytical Data Management Challenges
+
+<figure>
+  <img src="resources/figures/01_analyticalDataChallenges/ACD_LABS_AS.png" data-preview-image alt="Analytical data fields" height="300" style="display:inline-block; vertical-align:center; margin-right:10px;"/>
+  <p style="font-size: 0.7em;">Sources: 
+  <a href="https://theanalyticalscientist.com/issues/2023/articles/apr/demystifying-analytical-data-management">theanalyticalscientist.com</a> and <a href="https://bit.ly/3ZNKQkf">ACD/Labs, The Analytical Data Management Report 2022</a>
+  </p>
+</figure>
+<!-- https://theanalyticalscientist.videomarketingplatform.co/secret/83973388/a59993e289845aebb1a1e73d2bb282e6 -->
+
+---
+
+# Further reading
 
 <div style="display: flex; gap: 5px; align-items: center; justify-content: center; flex-wrap: wrap; height: 100%;">
   <div style="flex: 1; min-width: 300px; display: flex; justify-content: center; align-items: center;">
@@ -189,12 +201,12 @@ graph TD
 
 ---
 
-# Structure Variability
+# Structure Heterogeneity
 
 <div style="display: flex; justify-content: center; align-items: center; flex-wrap: wrap; height: 100%;">
   <div style="display: flex; flex-direction: row; align-items: flex-end; min-width: 300px;">
     <figure style="margin: 0;">
-      <img src="resources/figures/01_analyticalDataChallenges/wiley_book_cover.png" data-preview-image alt="Wiley Book Cover" height="390" style="display:inline-block;"/>
+      <img src="resources/figures/01_analyticalDataChallenges/wiley_book_cover.png" data-preview-image alt="Wiley Book Cover" height="400" style="display:inline-block;"/>
     </figure>
     <figcaption style="font-size: 0.5em; margin: 0 0 8px 16px; align-self: flex-end;">
       <a href="https://www.iuta.de/forschung/analytik-messtechnik/futurelab-nrw/" target="_blank" style="text-decoration:none; color:#00d0ff;">
@@ -206,21 +218,21 @@ graph TD
 
 ---
 
-# Structure Variability
+# Structure Heterogeneity
 
 <div style="display: flex; justify-content: center; align-items: center;">
   <div id="BVCZ_pHPlot" style="width:920px;height:400px;"></div>
 </div>
 <script>
-  const samples = Array.from({length: 18}, (_, i) => i + 1);
+  const samples = Array.from({length: 20}, (_, i) => i + 1);
   const mean = 7;
   const stddev = 0.7;
-  let pH = Array.from({length: 17}, () =>
+  let pH = Array.from({length: 19}, () =>
     Math.min(14, Math.max(1, (mean + stddev * (Math.random() * 2 - 1)).toFixed(2)))
   );
   // Insert an outlier at a random position
   const outlier = (Math.random() > 0.5) ? 1.2 : 13.5;
-  const outlierIndex = Math.floor(Math.random() * 18);
+  const outlierIndex = Math.floor(Math.random() * 20);
   pH.splice(outlierIndex, 0, outlier.toFixed(2));
   const trace = {
     x: samples,
@@ -233,7 +245,7 @@ graph TD
   };
   const layout = {
     title: {
-      text: 'pH Value of 18 Samples',
+      text: 'pH Value of 20 Samples',
       font: { color: '#fff' }
     },
     xaxis: {
@@ -272,7 +284,24 @@ graph TD
 </script>
 ---
 
-# Structure Variability
+# Structure Heterogeneity
+
+<div style="display: flex; justify-content: center; align-items: center; flex-wrap: wrap; height: 100%;">
+  <div style="display: flex; flex-direction: row; align-items: flex-end; min-width: 300px;">
+    <figure style="margin: 0;">
+      <img src="resources/figures/01_analyticalDataChallenges/wiley_book_cover.png" data-preview-image alt="Wiley Book Cover" height="400" style="display:inline-block;"/>
+    </figure>
+    <figcaption style="font-size: 0.5em; margin: 0 0 8px 16px; align-self: flex-end;">
+      <a href="https://www.iuta.de/forschung/analytik-messtechnik/futurelab-nrw/" target="_blank" style="text-decoration:none; color:#00d0ff;">
+        FutureLab.NRW
+      </a>
+    </figcaption>
+  </div>
+</div>
+
+---
+
+# Structure Heterogeneity
 
 <div style="display: flex; justify-content: center; align-items: center;">
   <div id="BVCZ_chromDADPlot" style="width:920px;height:400px;"></div>
@@ -313,7 +342,7 @@ graph TD
           },
           yaxis: {
             title: {
-              text: 'Absorbance / u.a.',
+              text: 'Absorbance / U.A.',
               color: '#fff'
             },
             color: '#fff',
@@ -337,7 +366,24 @@ graph TD
 
 ---
 
-# Structure Variability
+# Structure Heterogeneity
+
+<div style="display: flex; justify-content: center; align-items: center; flex-wrap: wrap; height: 100%;">
+  <div style="display: flex; flex-direction: row; align-items: flex-end; min-width: 300px;">
+    <figure style="margin: 0;">
+      <img src="resources/figures/01_analyticalDataChallenges/wiley_book_cover.png" data-preview-image alt="Wiley Book Cover" height="400" style="display:inline-block;"/>
+    </figure>
+    <figcaption style="font-size: 0.5em; margin: 0 0 8px 16px; align-self: flex-end;">
+      <a href="https://www.iuta.de/forschung/analytik-messtechnik/futurelab-nrw/" target="_blank" style="text-decoration:none; color:#00d0ff;">
+        FutureLab.NRW
+      </a>
+    </figcaption>
+  </div>
+</div>
+
+---
+
+# Structure Heterogeneity
 
 <div style="display: flex; justify-content: center; align-items: center;">
   <div id="BVCZ_ms3dPlot" style="width:920px;height:400px;"></div>
@@ -382,7 +428,7 @@ graph TD
             },
             yaxis: {
               title: {
-                text: '*m/z*',
+                text: '<i>m/z</i>',
                 color: '#fff'
               },
               color: '#fff',
@@ -426,7 +472,7 @@ graph TD
 
 ---
 
-# Structure Variability
+# Structure Heterogeneity
 
 <div style="display: flex; justify-content: center; align-items: center;">
   <div id="BVCZ_ProcessedPlot" style="width:750px;height:400px;"></div>
@@ -501,7 +547,7 @@ graph TD
 <div style="display: flex; justify-content: center; align-items: center; flex-wrap: wrap; height: 100%;">
   <div style="display: flex; flex-direction: row; align-items: flex-end; min-width: 300px;">
     <figure style="margin: 0;">
-      <img src="resources/figures/01_analyticalDataChallenges/sec_cers_setup.png" data-preview-image alt="SEC-CERS-SETUP" height="390" style="display:inline-block;"/>
+      <img src="resources/figures/01_analyticalDataChallenges/sec_cers_setup.png" data-preview-image alt="SEC-CERS-SETUP" height="300" style="display:inline-block;"/>
     </figure>
     <figcaption style="font-size: 0.5em; margin: 0 0 8px 16px; align-self: flex-end;">
       <a href="https://www.iuta.de/forschung/analytik-messtechnik/futurelab-nrw/" target="_blank" style="text-decoration:none; color:#00d0ff;">
@@ -522,7 +568,6 @@ graph TD
 <script>
   Reveal.on('slidechanged', function(event) {
     if (event.currentSlide.querySelector('#SEC_CERS_Plot')) {
-      console.log("Loading SEC-CERS dataset...");
       d3.csv('resources/data/01_analyticalDataChallenges/SEC_CERS_Dataset.csv').then(function(data) {
         const analyses = [...new Set(data.map(row => row.analysis))];
         const rtTraces = [];
@@ -575,7 +620,7 @@ graph TD
           paper_bgcolor: '#000000',
           font: {color: '#fff'},
           xaxis: {
-            title: {text: '"Elution volume / ml', color: '#fff'},
+            title: {text: 'Elution volume / ml', color: '#fff'},
             color: '#fff',
             linecolor: '#fff',
             tickcolor: '#fff'
@@ -602,7 +647,7 @@ graph TD
             font: {color: '#fff'}
           },
           title: {
-            text: 'SEC-CERS Dataset: Avastin',
+            text: 'SEC-CERS Dataset: <i>Avastin</i> (bevacizumab), <i>Darzalex</i> (daratumumab) and <i>Rixathon</i> (rituximab)',
             font: {color: '#fff'}
           }
         };
@@ -614,15 +659,25 @@ graph TD
 
 ---
 
+# Structure Heterogeneity
+
+In summary, data heterogeneity poses significant challenges:
+
+- Use of different data formats and standards across instruments and laboratories
+- Complications in data sharing and collaboration
+- Increased complexity in data processing and analysis
+
+---
+
 # Consequences of Complexity
 
-The greater the complexity of the analytical data, the more sophisticated the tools and expertise required for its management, processing and interpretation.
+The **greater the complexity of the analytical data**, the more sophisticated the tools and expertise required for its **management**, **processing** and **interpretation**.
 
 <div>
   <div class="leftBox">
-    <p class="mainBullet"><strong>pH Measurement</strong></p>
+    <p class="mainBullet"><strong>pH</strong></p>
     <ul style="font-size: 70%;">
-      <li><strong>Data</strong>
+      <li>Data
         <ul>
           <li>Single value (pH)</li>
           <li>Temperature</li>
@@ -636,7 +691,7 @@ The greater the complexity of the analytical data, the more sophisticated the to
   </div>
   <div class="spacer"></div>
   <div class="rightBox">
-    <p class="mainBullet"><strong>LC-HRMS Measurement</strong></p>
+    <p class="mainBullet"><strong>LC-HRMS</strong></p>
     <ul style="font-size: 70%;">
       <li>Data
         <ul>
@@ -741,11 +796,11 @@ timeline
 
 # FAIR Data Principles
 
-The FAIR (Findable, Accessible, Interoperable, Reusable) principles are essential for effective analytical data management and promote the use of standardized formats, metadata, and documentation to enhance data sharing and collaboration across disciplines.
+The FAIR (**Findable**, **Accessible**, **Interoperable**, **Reusable**) principles are essential for effective analytical data management and promote the use of standardized formats, metadata, and documentation to enhance data sharing and collaboration across disciplines.
 
 <figure>
   <img src="resources/figures/01_analyticalDataChallenges/FAIR_data_principles.png" data-preview-image alt="Abacus" height="200" style="display:inline-block; vertical-align:center; margin-right:10px;"/>
-  <p style="font-size: 0.6em;"><a href="https://knowledgebase.nfdi4chem.de/knowledge_base/docs/fair/">Source: NFDI4Chem</a></p>
+  <p style="font-size: 0.6em;">Source: <a href="https://knowledgebase.nfdi4chem.de/knowledge_base/docs/fair/">NFDI4Chem</a></p>
 </figure>
 
 ---
