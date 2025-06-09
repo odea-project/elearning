@@ -1,4 +1,4 @@
-# Data Processing Techniques
+## Data Processing Techniques
 <div>
 <div class="leftBox">
 <p class="mainBullet">Objectives</p>
@@ -67,6 +67,7 @@
 --- (id="what-is-a-signal")
 
 ## In Addition, Data Preprocessing means making data <span class="post-it-strip">comparable</span>
+<div class="py-code-button" id="py-code-normalization"></div>
 <div>
   <div class="leftBox">
       <div id="chart-data-processing-003"></div>
@@ -97,3 +98,1024 @@
 <span style="margin-left: 8px; vertical-align: middle;">normalize</span>
 <script src="../resources/js/charts/signal_processing_003.js"></script>
 --- (id="data-normalization")
+
+## In Addition, Data Preprocessing means making data <span class="post-it-strip">comparable</span>
+<div>
+  <div class="leftBox">
+      <div id="chart-data-processing-004"></div>
+  </div>
+  <div class="spacer"></div>
+  <div class="rightBox">
+    <p class="mainBullet">
+        <strong>Scaling:</strong> bring data to the same level
+    </p>
+    <p class="subBullet" style="font-size: large;">
+        <strong>Standardization:</strong> z-score scaling
+        $$
+        x_{\text{norm}} = \frac{x - \mu}{\sigma}
+        $$
+    </p>
+    <p class="subSubBullet" style="font-size: large;">
+        Sets the mean to 0 and the standard deviation to 1
+    </p>
+    <p class="subSubBullet" style="font-size: large;">
+        Robust to outliers, but sensitive to the scale of the data.
+    </p>
+  </div>
+</div>
+--- (id="data-standardization")
+
+## In Addition, Data Preprocessing means making data <span class="post-it-strip">comparable</span>
+<div>
+  <div class="leftBox">
+    <div class="tab-content active signal3-tab" data-tab="signal3a">
+      <pre style="font-size: large;">
+    Table A:
+    Sample ID | Fe [µg/L] | Cu [mg/L]
+    ---------------------------------
+    1         | 0.1       | 0.2
+    2         | 0.2       | 0.3
+    3         | 0.3       | 0.4
+    ---------------------------------</pre>
+      <pre style="font-size: large;">
+    Table B:
+    #ID | Cu (mg/L) | Fe (mg/L)
+    ---------------------------------
+    1   | 0.15    | 0.0003
+    2   | 0.25    | 0.0007
+    3   | 0.335   | 0.0011
+    ---------------------------------</pre>
+    </div>
+    <div class="tab-content signal3 signal3-tab" data-tab="signal3b">
+      <pre style="font-size: large;">
+    Table A: Harmonized
+    Sample ID | Fe [µg/L] | Cu [µg/L]
+    ---------------------------------
+    1         | 100.0     | 200
+    2         | 200.0     | 300
+    3         | 300.0     | 400
+    ---------------------------------</pre>
+
+  <pre style="font-size: large;">
+    Table B: Harmonized
+    Sample ID | Fe [µg/L] | Cu [µg/L]
+    ---------------------------------
+    1         | 0.3       | 150
+    2         | 0.7       | 250
+    3         | 1.1       | 335
+    ---------------------------------</pre>
+  </div>
+  <p class="question" style="font-size: large;">
+      Why is harmonization important in data preprocessing?
+  </p>
+</div>
+  <div class="spacer"></div>
+  <div class="rightBox">
+    <p class="mainBullet">
+      <strong>Harmonization:</strong> unify data from different sources
+    </p>
+    <p class="subBullet" style="font-size: large;">
+      <strong>Unit Harmonization:</strong> convert units
+    </p>
+    <p class="subSubBullet" style="font-size: large;">
+      e.g., convert concentration from mg/L to µg/L
+    </p>
+    <p class="subSubBullet" style="font-size: large;">
+      Requires knowledge about the data and the units.
+    </p>
+    <p class="subBullet" style="font-size: large;">
+      <strong>Label Harmonization:</strong> unify labels
+    </p>
+    <p class="subSubBullet" style="font-size: large;">
+      e.g., rename columns or rows
+    </p>
+    <p class="subSubBullet" style="font-size: large;">
+      Requires knowledge about the data and the labels.
+    </p>
+    <div class="tabs">
+      <div class="tab active signal3-tab" data-tab="signal3a">Original Data</div>
+      <div class="tab signal signal3-tab" data-tab="signal3b">Harmonize</div>
+    </div>
+  </div>
+</div>
+--- (id="data-harmonization")
+
+## Simple Denoising Techniques <span class="post-it-strip">Convolution</span>
+<div>
+    <div class="leftBox">
+        <p class="question">
+            What is <strong>Convolution</strong>?
+        </p>
+        <p class="mainBullet">
+            Convolution is a moving process that uses a <strong>kernel</strong> (analysis function) to
+            transform a signal.
+        </p>
+            $$
+            (f * g)(t) = \int_{-\infty}^{\infty} f(\tau) g(t - \tau) d\tau
+            $$
+            <span class="small-text">with $f$ as the signal and $g$ as the kernel</span>
+        <p class="subBullet">
+            We can use convolution to <strong>smooth</strong> a signal.
+        </p>
+    </div>
+    <div class="spacer"></div>
+    <div class="rightBox">
+        <div class="tabs">
+            <div class="tab active signal4-tab" data-tab="signal4a">step 1</div>
+            <div class="tab signal" data-tab="signal4b">step 2</div>
+            <div class="tab signal" data-tab="signal4c">step 3</div>
+            <div class="tab signal" data-tab="signal4d">step 4</div>
+            <div class="tab signal" data-tab="signal4e">step 5</div>
+        </div>
+        <div class="tab-content active signal4-tab" data-tab="signal4a">
+            <pre style="font-size: large; overflow: hidden; white-space: pre-wrap; word-break: break-word;" data-trim data-noescape>
+                <code data-trim data-noescape>Signal: 1    2    3    4    5    6    7    8    9   
+        ×    ×    ×    ×    
+Kernel: 0.25 0.25 0.25 0.25
+Result: 2.5  0    0    0    0    0    0    0    0</code>
+            </pre>
+        </div>
+        <div class="tab-content signal4-tab" data-tab="signal4b">
+            <pre style="font-size: large; overflow: hidden; white-space: pre-wrap; word-break: break-word;" data-trim data-noescape>
+                <code data-trim data-noescape>Signal: 1    2    3    4    5    6    7    8    9
+              ×    ×    ×    ×    
+Kernel:      0.25 0.25 0.25 0.25
+Result: 2.5  3.5  0    0    0    0    0    0    0</code>
+            </pre>
+        </div>
+        <div class="tab-content signal4-tab" data-tab="signal4c">
+            <pre style="font-size: large; overflow: hidden; white-space: pre-wrap; word-break: break-word;" data-trim data-noescape>
+                <code data-trim data-noescape>Signal: 1    2    3    4    5    6    7    8    9
+                  ×    ×    ×    ×    ×
+Kernel:           0.25 0.25 0.25 0.25
+Result: 2.5  3.5  4.5  0    0    0    0    0    0</code>
+            </pre>
+        </div>
+        <div class="tab-content signal4-tab" data-tab="signal4d">
+            <pre style="font-size: large; overflow: hidden; white-space: pre-wrap; word-break: break-word;" data-trim data-noescape>
+                <code data-trim data-noescape>Signal: 1    2    3    4    5    6    7    8    9
+                        ×    ×    ×    ×    
+Kernel:                0.25 0.25 0.25 0.25
+Result: 2.5  3.5  4.5  5.5  0    0    0    0    0</code>
+            </pre>
+        </div>
+        <div class="tab-content signal4-tab" data-tab="signal4e">
+            <pre style="font-size: large; overflow: hidden; white-space: pre-wrap; word-break: break-word;" data-trim data-noescape>
+                <code data-trim data-noescape>Signal: 1    2    3    4    5    6    7    8    9
+                            ×    ×    ×    ×    
+Kernel:                     0.25 0.25 0.25 0.25
+Result: 2.5  3.5  4.5  5.5  6.5  0    0    0    0</code>
+            </pre>
+        </div>
+        <p class="mainBullet">
+            <strong>Properties</strong> of a kernel for smoothing:
+        </p>
+        <p class="subBullet" style="font-size: large;">
+            <strong>Sum:</strong> the sum of the kernel should be 1
+        </p>
+        <p class="subBullet" style="font-size: large;">
+            <strong>Width:</strong> the width of the kernel determines the smoothing effect
+        </p>
+        <p class="subBullet" style="font-size: large;">
+            <strong>Values:</strong> the values (weights) of the kernel determine the smoothing effect
+        </p>
+    </div>
+--- (id="convolution-smoothing")
+
+## Kernels for <span class="post-it-strip">Smoothing</span>
+<div>
+    <div class="leftBox">
+        <p class="question">
+            What are <strong>Common Kernels</strong> for Smoothing?
+        </p>
+        <p class="subBullet">
+            <strong>Boxcar:</strong> all weights are equal
+        </p>
+        <p class="small-text">
+                e.g. [0.25, 0.25, 0.25, 0.25] <br>
+                or [0.33 0.33 0.33]
+                $$ k(t) = \frac{1}{n} $$
+        </p>
+        <p class="subSubBullet">
+            This is used for simple moving averages.
+        </p>
+        <!-- add slider here for changing span width of kernel -->
+        <p style="font-size: large;">
+            <input id="spanSlider" type="range" min="1" max="20" step="1" value="4"> Span:
+            <span id="spanValue">4</span>
+        </p>
+    </div>
+    <div class="spacer"></div>
+    <div class="rightBox">
+        <div id="chart_smoothing1"></div>
+    </div>
+</div>
+--- (id="kernels-for-smoothing")
+
+## Kernels for <span class="post-it-strip">Smoothing</span>
+<div>
+    <div class="leftBox">
+        <p class="subBullet">
+            <strong>Gaussian:</strong> weights follow a Gaussian distribution<br>
+            <span class="small-text
+                ">e.g. [0.05, 0.25, 0.4, 0.25, 0.05]
+                $$ k(t) = \frac{1}{\sqrt{2\pi\sigma^2}} \exp\left(-\frac{t^2}{2\sigma^2}\right) $$
+            </span>
+        </p>
+        <p class="subSubBullet">
+            This is used for weighted moving averages.
+        </p>
+        <p style="font-size: large;">
+            <input id="spanSlider2" type="range" min="1" max="20" step="1" value="4"> Span:
+            <span id="spanValue2">4</span>
+        </p>
+    </div>
+    <div class="spacer"></div>
+    <div class="rightBox">
+        <div id="chart_smoothing2"></div>
+    </div>
+</div>
+--- (id="kernels-for-smoothing-gaussian")
+
+## Kernels for <span class="post-it-strip">Smoothing</span>
+<div>
+    <div class="leftBox">
+        <p class="subBullet">
+            <strong>Savitzky-Golay:</strong> weights are polynomial coefficients<br>
+            <span class="small-text">
+                e.g. [-3, 12, 17, 12, -3] for a quadratic polynomial<br>
+                $$
+                y(t) = \sum_{i=-n}^{n} c_i \cdot f(t + i)
+                $$
+                Coefficients $ c_i $ are derived to fit a polynomial of order $ p $ in a moving
+                window.
+            </span>
+        </p>
+        <p class="subSubBullet">
+            This method is ideal for smoothing while preserving peak shapes in signals.
+        </p>
+        <p style="font-size: large;">
+            <input id="spanSlider3" type="range" min="3" max="25" step="2" value="5"> Window Size:
+            <span id="spanValue3">5</span><br>
+            <select id="polyOrder">
+                <option value="2" selected>Quadratic (2)</option>
+                <option value="3">Cubic (3)</option>
+                <option value="4">Quartic (4)</option>
+            </select> Polynomial Order
+        </p>
+    </div>
+    <div class="spacer"></div>
+    <div class="rightBox">
+        <div id="chart_smoothing3"></div>
+    </div>
+</div>
+--- (id="kernels-for-smoothing-savitzky-golay")
+
+## The <span class="post-it-strip">Trade-off</span> in Smoothing
+<div>
+    <div class="leftBox">
+        <p class="question">
+            What is the problem with <strong>Smoothing?</strong>
+        </p>
+        <p class="mainBullet">
+            Smoothing reduces <strong>noise</strong>, but it also alters the <strong>signal</strong>.
+        </p>
+        <p class="subBullet" style="font-size: large;">
+            <strong>Stronger smoothing:</strong>
+        </p>
+        <p class="subSubBullet" style="font-size: large;">
+            Removes more noise
+        </p>
+        <p class="subSubBullet" style="font-size: large;">
+            But reduces peak intensity
+        </p>
+        <p class="subSubBullet" style="font-size: large;">
+            And widens the signal
+        </p>
+        <p class="subBullet" style="font-size: large;">
+            <strong>Weaker smoothing:</strong>
+        </p>
+        <p class="subSubBullet" style="font-size: large;">
+            Preserves signal intensity and shape
+        </p>
+        <p class="subSubBullet" style="font-size: large;">
+            But leaves more noise in the data
+        </p>
+        <p class="subSubBullet" style="font-size: large;">
+            The choice of smoothing parameters (kernel size, type, etc.) is a trade-off between noise
+            reduction and signal preservation.
+        </p>
+    </div>
+    <div class="spacer"></div>
+    <div class="rightBox">
+        <div id="chart_smoothing_tradeoff"></div>
+    </div>
+</div>
+--- (id="trade-off-in-smoothing")
+
+## <span class="post-it-strip">The Elbow Criterion</span> in Smoothing
+<div>
+    <div class="leftBox">
+        <p class="mainBullet">
+            The elbow criterion is a method to determine the <strong>optimal smoothing</strong>
+            parameter.
+        </p>
+        <p class="subBullet" style="font-size: large;">
+            By plotting the <strong>error</strong> vs. the <strong>smoothing span</strong>, we can find
+            a point where:
+        </p>
+        <p class="subSubBullet" style="font-size: large;">
+            Increasing the span no longer significantly reduces the error.
+        </p>
+        <p class="subBullet" style="font-size: large;">
+            This point, resembling an <strong>elbow</strong> in the plot, indicates a balance between
+            noise reduction and signal preservation.
+        </p>
+        <p class="mainBullet">
+            <strong>Steps to apply:</strong>
+        </p>
+        <p class="subBullet" style="font-size: medium;">
+            1. Choose a range of smoothing spans.
+        </p>
+        <p class="subBullet" style="font-size: medium;">
+            2. Compute the error (e.g., root mean squared error) for each span.
+        </p>
+        <p class="subBullet" style="font-size: medium;">
+            3. Plot the error vs. the span and find the elbow point.
+        </p>
+    </div>
+    <div class="spacer"></div>
+    <div class="rightBox">
+        <div id="chart_elbow_criterion"></div>
+    </div>
+</div>
+--- (id="elbow-criterion-in-smoothing")
+
+## Savitzky-Golay: <span class="post-it-strip">1st Derivative</span>
+<div>
+    <div class="leftBox">
+        <p class="mainBullet">
+            The <strong>1st derivative</strong> provides both <strong>smoothing</strong> and
+            <strong>baseline correction</strong> by highlighting changes in the signal while reducing
+            noise.
+        </p>
+        <p class="subBullet" style="font-size: large;">
+            <strong>How it works:</strong>
+            <span class="small-text">
+                Savitzky-Golay computes derivatives directly from a polynomial fit within a moving
+                window.
+            </span>
+        </p>
+        <p class="mainBullet">
+            <strong>Applications:</strong>
+        </p>
+        <p class="subBullet" style="font-size: large;">
+            Removing baseline drifts by zeroing the derivative of constant or linear trends.
+        </p>
+        <p class="subBullet" style="font-size: large;">
+            Smoothing noisy data while retaining peak features and enhancing changes.
+        </p>
+        <p class="subSubBullet" style="font-size: large;">
+            Example Polynomial Fit:
+            \[
+            y'(t) = \frac{d}{dt} \sum_{i=-n}^{n} c_i \cdot f(t + i)
+            \]
+        </p>
+    </div>
+    <div class="spacer"></div>
+    <div class="rightBox">
+        <div id="chart_sg_derivative"></div>
+        <p class="subSubBullet" style="font-size: medium;">
+            Figure: solid blue line is the original signal, solid black line is the smoothed signal, and
+            dashed black line is the 1st derivative. The red dashed line shows the conventional
+            derivative without smoothing.
+    </div>
+</div>
+--- (id="savitzky-golay-1st-derivative")
+
+## Savitzky-Golay: <span class="post-it-strip">Generating Coefficients</span>
+<div>
+    <div class="leftBox">
+        <p class="question">
+            How are <strong>Savitzky-Golay Coefficients</strong> generated?
+        </p>
+        <p class="mainBullet" style="font-size: large;">
+            The coefficients are derived by fitting a polynomial over a moving window using a
+            <strong>Vandermonde matrix</strong> and its <strong>pseudo-inverse</strong>.
+        </p>
+        <p class="subBullet" style="font-size: medium;">
+            <strong>Vandermonde Matrix:</strong><br>(e.g., for 5 points & 2 orders)
+            $$
+            \mathbf{V} =
+            \begin{bmatrix}
+            1 & t_{-2} & t_{-2}^2 \\
+            1 & t_{-1} & t_{-1}^2 \\
+            1 & t_{0} & t_{0}^2 \\
+            1 & t_{1} & t_{1}^2 \\
+            1 & t_{2} & t_{2}^2
+            \end{bmatrix}
+            =
+            \begin{bmatrix}
+            1 & -2 & 4 \\
+            1 & -1 & 1 \\
+            1 & 0 & 0 \\
+            1 & 1 & 1 \\
+            1 & 2 & 4
+            \end{bmatrix}
+            $$
+            where $ t_i $ are the time points relative to the center of the window.
+            where $ t_i \in \{-2, -1, 0, 1, 2\} $ for a window of 5 points.
+        </p>
+        <p class="subBullet" style="font-size: medium;">
+            <strong>Pseudo-Inverse:</strong>
+            $$
+            \mathbf{V}^+ = (\mathbf{V}^T \mathbf{V})^{-1} \mathbf{V}^T
+            $$
+            The rows of $ \mathbf{V}^+ $ are the coefficients for smoothing and derivatives.
+        </p>
+    </div>
+    <div class="spacer"></div>
+    <div class="rightBox">
+        <p class="subBullet" style="font-size: medium;">
+            <strong>Extract Coefficients</strong>:
+            $$
+            \mathbf{V}^+ =
+            \begin{bmatrix}
+            -3 & 12 & 17 & 12 & -3 \\
+            -2 & -1 & 0 & 1 & 2 \\
+            1 & -2 & 0 & 2 & -1
+            \end{bmatrix}
+            $$
+            # 1st Row (Normalized): For smoothing.<br>
+            # 2nd Row: For the 1st derivative.<br>
+            # 3rd Row: For the 2nd derivative.
+        </p>
+        <p class="mainBullet" style="font-size: large;">
+            <strong>Normalization:</strong>
+            The 1st row (for smoothing) must be normalized:
+            $$
+            c_i^{\text{norm}} = \frac{c_i}{\sum_j c_j}
+            $$
+            Resulting in:
+            $$
+            c^{\text{norm}} = \left[ -0.086, 0.343, 0.486, 0.343, -0.086 \right]
+            $$
+        </p>
+        <p class="subBullet" style="font-size: medium;">
+            Relevance of Other Rows:
+        </p>
+        <p class="subSubBullet" style="font-size: medium;">
+            1st Row: Weighted mean for smoothing.
+        </p>
+        <p class="subSubBullet" style="font-size: medium;">
+            2nd Row: Approximates the 1st derivative (scaled by $ 1/\Delta t $).
+        </p>
+        <p class="subSubBullet" style="font-size: medium;">
+            3rd Row: Approximates the 2nd derivative (scaled by $ 1/\Delta t^2 $).
+        </p>
+    </div>
+</div>
+--- (id="savitzky-golay-coefficients")
+
+## Denoising using <span class="post-it-strip">Fourier Transformation</span>
+<div>
+    <div class="leftBox">
+        <p class="question">
+            What is <strong>Fourier Transformation</strong> and how does it work?
+        </p>
+        <p class="mainBullet" style="font-size: large;">
+            Fourier Transformation transfers <strong>axial frequencies</strong> to <strong>radial
+                frequencies</strong> and analyzes <strong>interferences</strong>.
+        </p>
+        <p class="subBullet" style="font-size: large;">
+            <strong>Axial Frequency:</strong><br>
+            Periodic signal along an axis.
+            $$
+            \cos(x \cdot f)
+            $$
+            Frequency: <input id="slider_axial" type="range" min="1" max="50" value="10" step="1">
+            <span id="value_axial">10</span>
+        <div id="chart_axial"></div>
+        </p>
+    </div>
+    <div class="spacer"></div>
+    <div class="rightBox">
+        <p class="mainBullet" style="font-size: large;">
+            <strong>Interference:</strong> <br>
+            Multiple frequencies can be combined to create interferences.
+            $$
+            \cos(x \cdot f_1) + \cos(x \cdot f_2)
+            $$
+            Frequency 1: <input id="slider_interference_1" type="range" min="1" max="50" value="10"
+                step="1">
+            <span id="value_interference_1">10</span><br>
+            Frequency 2: <input id="slider_interference_2" type="range" min="1" max="50" value="20"
+                step="1">
+            <span id="value_interference_2">20</span>
+        <div id="chart_interference"></div>
+        </p>
+    </div>
+</div>
+--- (id="denoising-fourier-transformation")
+
+## Denoising using <span class="post-it-strip">Fourier Transformation</span>
+<div>
+    <div class="leftBox">
+        <p class="subBullet" style="font-size: large;">
+            <strong>Radial:</strong><br>
+            Number of loops around a circle.
+            $$
+            \exp(i \cdot x \cdot f)
+            $$
+        <div id="chart_radial"></div>
+        </p>
+        <p class="subSubBullet" style="font-size: medium;">
+            The radial frequency is the number of loops around the circle per unit of time.
+        </p>
+    </div>
+    <div class="spacer"></div>
+    <div class="rightBox">
+        <p class="subBullet" style="font-size: large;">
+            <strong>Interference:</strong><br>
+            Combining <strong>axial</strong> and <strong>radial</strong> frequencies.
+            $$
+            \exp(i \cdot x \cdot f) \cdot \cos(x \cdot f)
+            $$
+        <div id="chart_interference2"></div>
+        </p>
+    </div>
+</div>
+--- (id="denoising-fourier-transformation-2")
+
+## Denoising using <span class="post-it-strip">Fourier Transformation</span>
+<div>
+    <div class="leftBox">
+        <p class="mainBullet">
+            Fourier Transformation combines <strong>axial</strong> and <strong>radial</strong>
+            frequencies to identify patterns:
+            $$
+            \hat{y}_k = \sum_{j=0}^{N-1} \left(e^{-2\pi i \cdot \frac{jk}{N}} \cdot y_j\right)
+            $$
+            Where $ y $ is the dataset with $ N $ points.
+        </p>
+        <p class="subBullet">
+            When frequencies differ, the integral approaches zero. For matching frequencies, the sum
+            increases.
+        </p>
+    </div>
+    <div class="spacer"></div>
+    <div class="rightBox">
+        <p class="subBullet" style="font-size: large;">
+            Circle Frequency:
+            <input id="frequencySlider" type="range" min="1" max="10" step="0.1" value="1">
+            <span id="frequencyValue">1</span>
+        </p>
+        <div id="chart_matching"></div>
+        <p class="subSubBullet" style="font-size: large;">
+            The integral can be interpreted as the distance between geometric mean of the dataset to the
+            origin of the cooordinate system, which is shown in blue.
+        </p>
+        <p class="subSubBullet" style="font-size: large;">
+            The dinstance maximizes when the frequencies match.
+        </p>
+    </div>
+</div>
+--- (id="denoising-fourier-transformation-3")
+
+## Systematic Frequency <span class="post-it-strip">Analysis</span>
+<div>
+    <div class="leftBox">
+        <p class="mainBullet">
+            Fourier Transformation systematically varies radial frequencies to identify all frequencies
+            in the dataset.
+        </p>
+        <p class="subBullet">
+            This process works in both directions and is reversible:
+        </p>
+    </div>
+    <div class="spacer"></div>
+    <div class="rightBox">
+        <img src="../resources/fft0.png" alt="Fourier Transformation" style="width: 100%;">
+    </div>
+</div>
+--- (id="systematic-frequency-analysis")
+
+## Frequency <span class="post-it-strip">Filtering</span>
+<div>
+    <div class="leftBox">
+        <p class="mainBullet">
+            High-frequency noise can be filtered by removing frequencies above a threshold:
+        </p>
+        <p class="subBullet">
+            $$
+            I(f) =
+            \begin{cases}
+            I(f), & \text{if } f < \text{threshold} \\ 0, & \text{otherwise.} \end{cases}
+            $$
+        </p>
+        <p class="mainBullet">
+            The result is a denoised dataset.
+        </p>
+    </div>
+    <div class="spacer"></div>
+    <div class="rightBox">
+        <img src="../resources/fft1.png" alt="Fourier Transformation" style="width: 100%;">
+    </div>
+</div>
+</section>
+
+## Frequency <span class="post-it-strip">Filtering</span>
+<div>
+    <img src="../resources/fft2.png" alt="Fourier Transformation" style="width: 31%;">
+    <img src="../resources/fft3.png" alt="Fourier Transformation" style="width: 31%;">
+    <img src="../resources/fft4.png" alt="Fourier Transformation" style="width: 31%;">
+</div>
+--- (id="frequency-filtering")
+
+## Frequency <span class="post-it-strip">Filtering</span>
+<div>
+    <img src="../resources/fft10.png" alt="Fourier Transformation" style="width: 80%;">
+    <div class="leftBox">
+    <p class="subSubBullet" style="font-size: large;">
+        When the signal contains sharp peaks, the Fourier Transformation may not be suitable for denoising.
+    </p>
+    </div>
+    <div class="spacer"></div>
+    <div class="rightBox">
+        <p class="subSubBullet" style="font-size: large;">
+            Sharp peaks contain high-frequency components that are essential for the signal.
+        </p>
+    </div>
+</div>
+--- (id="frequency-filtering-2")
+
+## Frequency <span class="post-it-strip">Filtering</span>
+<div>
+    <img src="../resources/fft10b.png" alt="Fourier Transformation" style="width: 80%;">
+    <div class="leftBox">
+    <p class="subSubBullet" style="font-size: large;">
+        Peaks contain not a single frequency but a range of frequencies.
+    </p>
+    <p class="subSubBullet" style="font-size: large;">
+        The sharper the peak, the broader the frequency range.
+    </p>
+    </div>
+    <div class="spacer"></div>
+    <div class="rightBox">
+        <p class="subSubBullet" style="font-size: large;">
+            This band from the peak limits the effectiveness of frequency filtering.
+        </p>
+    </div>
+</div>
+--- (id="frequency-filtering-3")
+
+## Frequency <span class="post-it-strip">Filtering</span>
+<div>
+    <img src="../resources/fft12.png" alt="Fourier Transformation" style="width: 80%;">
+    <div class="leftBox">
+    <p class="subSubBullet" style="font-size: large;">
+        When the signal contains broad peaks, the Fourier Transformation may be suitable for denoising.
+    </p>
+    </div>
+    <div class="spacer"></div>
+    <div class="rightBox">
+        <p class="subSubBullet" style="font-size: large;">
+            Broad peaks contain leave more room for frequency filtering.
+        </p>
+    </div>
+</div>
+--- (id="frequency-filtering-4")
+
+## Fourier Transformation <span class="post-it-strip">Summary</span>
+<div>
+    <div class="leftBox">
+        <p class="mainBullet" style="font-size: large;">
+            Fourier Transformation extracts <strong>frequencies</strong> from a signal:
+            $$
+            \hat{y}_k = \sum_{j=0}^{N-1} \left(e^{-2\pi i \cdot \frac{jk}{N}} \cdot y_j\right)
+            $$
+            Where $y$ is the dataset with $N$ points.
+            <strong>Output:</strong> Frequency spectrum showing which frequencies are present in the signal.
+        </p>
+        <p class="subBullet" style="font-size: large;">
+            Frequencies can be <strong>filtered</strong> (e.g., high-frequency noise removal).
+        </p>
+        <p class="subBullet" style="font-size: large;">
+            The signal can be transformed <strong>back</strong> to the time domain after filtering.
+        </p>
+    </div>
+    <div class="spacer"></div>
+    <div class="rightBox">
+        <p class="subBullet" style="font-size: large;">
+            <strong>Key Limitation:</strong><br>
+            Fourier Transformation does not provide information about where a frequency occurs in the dataset.
+        </p>
+        <p class="subBullet" style="font-size: large;">
+            <strong>Advantage:</strong><br>
+            Fourier Transformation uses that noise is often high-frequency and can be filtered out.
+        </p>
+        <p class="subBullet" style="font-size: large;">
+            <strong>Alternative:</strong><br>
+            Discrete Wavelet Transformation provides information about the location of frequencies.
+        </p>
+    </div>
+</div>
+--- (id="fourier-transformation-summary")
+
+## Discrete Wavelet Transformation <span class="post-it-strip">Introduction</span>
+<div>
+    <div class="leftBox">
+        <p class="mainBullet" style="font-size: large;">
+            <strong>Discrete Wavelet Transformation (DWT):</strong><br>
+            A method that decomposes a signal into components using wavelets.
+        </p>
+        <p class="subBullet" style="font-size: large;">
+            Unlike FFT, DWT provides both <strong>frequency</strong> and <strong>location</strong> information of the signal's features.
+        </p>
+        <p class="subBullet" style="font-size: large;">
+            $$
+            DWT(x) = \sum_{j,k} x(t) \cdot \psi_{j,k}(t)
+            $$
+            Where $\psi_{j,k}(t)$ are scaled and shifted versions of a mother wavelet.
+        </p>
+        <p class="subBullet" style="font-size: large;">
+            Wavelets are localized in both <strong>time</strong> and <strong>frequency</strong>.
+        </p>
+    </div>
+    <div class="spacer"></div>
+    <div class="rightBox">
+        <p class="subBullet" style="font-size: large;">
+            <strong>Comparison:</strong>
+        </p>
+        <ul style="font-size: large;">
+            <li><strong>FFT:</strong> Great for extracting global frequencies, but no location info.</li>
+            <li><strong>DWT:</strong> Ideal for detecting transient features and changes over time.</li>
+        </ul>
+        <p class="subBullet" style="font-size: large;">
+            What is a <strong>Wavelet?</strong>
+        </p>
+        <p class="subSubBullet" style="font-size: large;">
+            A wavelet is a kernel function with a specific shape and properties, e.g., sum of all values is zero.
+        </p>
+        <p class="subSubBullet" style="font-size: large;">
+            Wavelets are used to analyze signals at different scales, i.e. resolutions.
+        </p>
+        <p class="subSubBullet" style="font-size: large;">
+            The most simple wavelet is the Haar wavelet.<br>
+            $$
+            \psi(t) = \begin{cases} 1, & 0 \leq t < 0.5 \\ -1, & 0.5 \leq t < 1 \end{cases}
+            $$
+        </p>
+    </div>
+</div>
+--- (id="dwt-introduction")
+
+## The <span class="post-it-strip">Haar Wavelet</span>
+<div>
+    <div class="leftBox">
+        <p class="mainBullet" style="font-size: large;">
+            In DWT, we use two functions to analyze signals.
+        </p>
+        <p class="mainBullet" style="font-size: large;">
+            The Haar wavelet operates on two functions:
+        </p>
+        <p class="subBullet" style="font-size: medium;">
+            <strong>1. Scaling Function ($\phi(t)$):</strong><br>
+            Used to calculate <strong>averages</strong> (low-frequency components).<br>
+            $$
+            \phi(t) = \begin{cases} 1, & 0 \leq t < 1 \\ 0, & \text{otherwise.} \end{cases}
+            $$
+        </p>
+        <p class="subBullet" style="font-size: medium;">
+            <strong>2. Wavelet Function ($\psi(t)$):</strong><br>
+            Used to calculate <strong>differences</strong> (high-frequency components).<br>
+            $$
+            \psi(t) = \begin{cases} 1, & 0 \leq t < 0.5 \\ -1, & 0.5 \leq t < 1 \\ 0, & \text{otherwise.} \end{cases}
+            $$
+        </p>
+        <p class="subBullet" style="font-size: medium;">
+            These functions decompose a signal into <strong>approximations</strong> and <strong>details</strong>.
+        </p>
+    </div>
+    <div class="spacer"></div>
+    <div class="rightBox">
+        <p class="mainBullet" style="font-size: large;">
+            Haar Wavelet Examples on Different Scales:
+        </p>
+        <div id="chart_haar_wavelet"></div>
+    </div>
+</div>
+--- (id="haar-wavelet")
+
+## Haar Wavelet Transformation <span class="post-it-strip">Step-by-Step</span>
+<div>
+    <div class="leftBox">
+        <p class="mainBullet" style="font-size: large;">
+            The Haar Wavelet Transformation processes data by:
+        </p>
+        <p class="subBullet" style="font-size: large;">
+            1. Splitting the data $ y $ into <strong>vertical packages</strong>: (e.g., scale of 4)
+            $$
+            y = \begin{bmatrix} y_1 \\ y_2 \\ y_3 \\ y_4 \\ \vdots \\ y_n \end{bmatrix}
+            \rightarrow
+            P = \begin{bmatrix}
+            y_1 & y_{5} & y_{9} \\
+            y_2 & y_{6} & y_{10} \\
+            y_3 & y_{7} & y_{11} \\
+            y_4 & y_{8} & y_{12}
+            \end{bmatrix}
+            $$
+        </p>
+        <p class="subBullet" style="font-size: large;">
+            2. Applying the <strong>Scaling Function</strong>:
+            $$
+            \phi = \frac{1}{4} \begin{bmatrix} 1 & 1 & 1 & 1 \end{bmatrix}
+            $$
+            Averages:
+            $$
+            A = \phi \cdot P
+            $$
+        </p>
+    </div>
+    <div class="spacer"></div>
+    <div class="rightBox">
+        <p class="subBullet" style="font-size: large;">
+            3. Applying the <strong>Wavelet Function</strong>:
+            $$
+            \psi = \frac{1}{4} \begin{bmatrix} 1 & 1 & -1 & -1 \end{bmatrix}
+            $$
+            Differences:
+            $$
+            D = \psi \cdot P
+            $$
+        </p>
+        <p class="subBullet" style="font-size: large;">
+            4. Recursive Process: with a constant scale of 2, the process is repeated until the desired
+            <pre>
+P -> A1 & D1
+      ↳ A2 & D2
+         ↳ A3 & D3
+            ↳ A4 & D4</pre>
+                        </p>
+    </div>
+</div>
+--- (id="haar-wavelet-transformation-step-by-step")
+
+## Example of <span class="post-it-strip">DWT</span>
+<img src="../resources/dwt2.png" alt="DWT Example" style="width: 80%;">
+<div>
+    <div class="leftBox">
+        <p class="subBullet" style="font-size: large;">
+            The DWT decomposes a signal into <span style="color: red;"><strong>approximations</strong></span> and <span style="color: blue;"><strong>details</strong></span>.
+        </p>
+    </div>
+    <div class="spacer"></div>
+    <div class="rightBox">
+        <p class="subSubBullet" style="font-size: large;">
+            <span style="color: red;">Approximations</span> represent the signal's low-frequency components (father wavelet).
+        </p>
+        <p class="subSubBullet" style="font-size: large;">
+            <span style="color: blue;">Details</span> represent the signal's high-frequency components (mother wavelet).
+        </p>
+    </div>
+</div>
+--- (id="dwt-example")
+            
+## DWT and the <span class="post-it-strip">Multi Resolution Analysis</span>
+<img src="../resources/dwt5.png" alt="DWT Example" style="width: 80%;">
+<div>
+    <div class="leftBox">
+        <p class="subBullet" style="font-size: large;">
+            On the left side, we see the original signal.
+        </p>
+    </div>
+    <div class="spacer"></div>
+    <div class="rightBox">
+        <p class="subSubBullet" style="font-size: large;">
+            On the right side, we see the <span style="color: blue;">Details</span> of multiple scales (steps)
+        </p>
+        <p class="subSubBullet" style="font-size: large;">
+            The indivudal <span style="color: blue;">Details</span> describe the signal's frequencies at different scales (high scale = low frequency).
+        </p>
+    </div>
+</div>
+--- (id="dwt-multi-resolution-analysis")
+
+## DWT and the <span class="post-it-strip">Multi Resolution Analysis</span>
+<img src="../resources/dwt6.png" alt="DWT Example" style="width: 80%;">
+<div>
+    <div class="leftBox">
+        <p class="subBullet" style="font-size: large;">
+            On the left side, we see the original and reconstructed signal.
+        </p>
+    </div>
+    <div class="spacer"></div>
+    <div class="rightBox">
+        <p class="subSubBullet" style="font-size: large;">
+            To denoise, we use filters on the different scales (Details).
+        </p>
+        <p class="subSubBullet" style="font-size: large;">
+            The reconstructed signal is the sum of the approximations and the filtered details.
+        </p>
+    </div>
+</div>
+--- (id="dwt-multi-resolution-analysis-2")
+
+## DWT and the <span class="post-it-strip">Multi Resolution Analysis</span>
+<img src="../resources/dwt7.png" alt="DWT Example" style="width: 80%;">
+<div>
+    <div class="leftBox">
+        <p class="subBullet" style="font-size: large;">
+            Depending on the Wavelet, the signal may look step-like (e.g., Haar Wavelet).
+        </p>
+    </div>
+    <div class="spacer"></div>
+    <div class="rightBox">
+        <p class="subSubBullet" style="font-size: large;">
+            To improve the reconstruction, we can use different Wavelets.
+        </p>
+    </div>
+</div>
+--- (id="dwt-multi-resolution-analysis-3")
+
+## DWT and the <span class="post-it-strip">Multi Resolution Analysis</span>
+<img src="../resources/dwt8.png" alt="DWT Example" style="width: 80%;">
+<div>
+    <div class="leftBox">
+        <p class="subBullet" style="font-size: large;">
+            Depending on the Wavelet, the signal may look step-like (e.g., Haar Wavelet).
+        </p>
+    </div>
+    <div class="spacer"></div>
+    <div class="rightBox">
+        <p class="subSubBullet" style="font-size: large;">
+            There are many Wavelets available, e.g., rbio3.9 or db4. Each Wavelet has different strengths and weaknesses.
+        </p>
+    </div>
+</div>
+--- (id="dwt-multi-resolution-analysis-4")
+
+## DWT and the <span class="post-it-strip">Multi Resolution Analysis</span>
+<img src="../resources/dwt9.png" alt="DWT Example" style="width: 80%;">
+<div>
+    <div class="leftBox">
+        <p class="subBullet" style="font-size: large;">
+            On the left side, we see the original and reconstructed signal.
+        </p>
+    </div>
+    <div class="spacer"></div>
+    <div class="rightBox">
+        <p class="subSubBullet" style="font-size: large;">
+            To denoise, we use filters on the different scales (Details).
+        </p>
+        <p class="subSubBullet" style="font-size: large;">
+            The reconstructed signal is the sum of the approximations and the filtered details.
+        </p>
+    </div>
+</div>
+--- (id="dwt-multi-resolution-analysis-5")
+
+## Discrete Wavelet Transformation <span class="post-it-strip">Summary</span>
+<div>
+    <div class="leftBox">
+        <p class="mainBullet" style="font-size: large;">
+            The <strong>Discrete Wavelet Transformation (DWT)</strong> provides a way to analyze signals in both:
+        </p>
+        <p class="subBullet" style="font-size: large;">
+            <strong>Frequency domain</strong> (like FFT).
+        </p>
+        <p class="subBullet" style="font-size: large;">
+            <strong>Time domain</strong> (unlike FFT).
+        </p>
+        <p class="mainBullet" style="font-size: large;">
+            By using <strong>Wavelets</strong>:
+        </p>
+        <p class="subBullet" style="font-size: large;">
+            <strong>Approximations:</strong> Low-frequency components for trends (smooth signal).
+        </p>
+        <p class="subBullet" style="font-size: large;">
+            <strong>Details:</strong> High-frequency components for transient features (sharp changes).
+        </p>
+    </div>
+    <div class="spacer"></div>
+    <div class="rightBox">
+        <p class="mainBullet" style="font-size: large;">
+            <strong>Advantages of DWT:</strong>
+        </p>
+        <p class="subBullet" style="font-size: large;">
+            Detects <strong>location</strong> of features in the signal.
+        </p>
+        <p class="subBullet" style="font-size: large;">
+            Supports <strong>multi-resolution analysis</strong> (analyzing signals at different scales).
+        </p>
+        <p class="mainBullet" style="font-size: large;">
+            <strong>Key Applications:</strong>
+        </p>
+        <ul style="font-size: large;">
+            <li>Noise reduction (denoising).</li>
+            <li>Image compression (e.g., JPEG 2000).</li>
+            <li>Transient detection (e.g., ECG or fault detection).</li>
+        </ul>
+    </div>
+</div>
+--- (id="dwt-summary")
