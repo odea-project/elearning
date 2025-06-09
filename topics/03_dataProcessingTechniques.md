@@ -123,6 +123,24 @@
     </p>
   </div>
 </div>
+<div>
+<label class="switch">
+  <input type="checkbox" id="toggle-original" checked>
+  <span class="slider round"></span>
+</label>
+<span style="margin-left: 8px; vertical-align: middle;">original</span>
+<label class="switch">
+  <input type="checkbox" id="toggle-normalize-2" checked>
+  <span class="slider round"></span>
+</label>
+<span style="margin-left: 8px; vertical-align: middle;">normalize</span>
+<label class="switch">
+  <input type="checkbox" id="toggle-standardize" checked>
+  <span class="slider round"></span>
+</label>
+<span style="margin-left: 8px; vertical-align: middle;">standardize</span>
+</div>
+<script src="../resources/js/charts/signal_processing_004.js"></script>
 --- (id="data-standardization")
 
 ## In Addition, Data Preprocessing means making data <span class="post-it-strip">comparable</span>
@@ -301,8 +319,8 @@ Result: 2.5  3.5  4.5  5.5  6.5  0    0    0    0</code>
         </p>
         <!-- add slider here for changing span width of kernel -->
         <p style="font-size: large;">
-            <input id="spanSlider" type="range" min="1" max="20" step="1" value="4"> Span:
-            <span id="spanValue">4</span>
+            <input id="spanSlider" type="range" min="1" max="20" step="1" value="1"> Span:
+            <span id="spanValue">1</span>
         </p>
     </div>
     <div class="spacer"></div>
@@ -310,6 +328,7 @@ Result: 2.5  3.5  4.5  5.5  6.5  0    0    0    0</code>
         <div id="chart_smoothing1"></div>
     </div>
 </div>
+<script src="../resources/js/charts/signal_processing_005.js"></script>
 --- (id="kernels-for-smoothing")
 
 ## Kernels for <span class="post-it-strip">Smoothing</span>
@@ -326,8 +345,8 @@ Result: 2.5  3.5  4.5  5.5  6.5  0    0    0    0</code>
             This is used for weighted moving averages.
         </p>
         <p style="font-size: large;">
-            <input id="spanSlider2" type="range" min="1" max="20" step="1" value="4"> Span:
-            <span id="spanValue2">4</span>
+            <input id="spanSlider2" type="range" min="1" max="20" step="1" value="1"> Span:
+            <span id="spanValue2">1</span>
         </p>
     </div>
     <div class="spacer"></div>
@@ -335,25 +354,30 @@ Result: 2.5  3.5  4.5  5.5  6.5  0    0    0    0</code>
         <div id="chart_smoothing2"></div>
     </div>
 </div>
+<script src="../resources/js/charts/signal_processing_006.js"></script>
 --- (id="kernels-for-smoothing-gaussian")
 
 ## Kernels for <span class="post-it-strip">Smoothing</span>
 <div>
     <div class="leftBox">
         <p class="subBullet">
-            <strong>Savitzky-Golay:</strong> weights are polynomial coefficients<br>
-            <span class="small-text">
-                e.g. [-3, 12, 17, 12, -3] for a quadratic polynomial<br>
-                $$
-                y(t) = \sum_{i=-n}^{n} c_i \cdot f(t + i)
-                $$
-                Coefficients $ c_i $ are derived to fit a polynomial of order $ p $ in a moving
-                window.
-            </span>
+            <strong>Savitzky-Golay:</strong> weights are polynomial coefficients
+        </p>
+        <p class="small-text">
+            e.g. [-3, 12, 17, 12, -3] for a quadratic polynomial<br>
+            $$
+            y(t) = \sum_{i=-n}^{n} c_i \cdot f(t + i)
+            $$
+            Coefficients $ c_i $ are derived to fit a polynomial of order $ p $ in a moving
+            window.
         </p>
         <p class="subSubBullet">
             This method is ideal for smoothing while preserving peak shapes in signals.
         </p>
+    </div>
+    <div class="spacer"></div>
+    <div class="rightBox">
+        <div id="chart_smoothing3"></div>
         <p style="font-size: large;">
             <input id="spanSlider3" type="range" min="3" max="25" step="2" value="5"> Window Size:
             <span id="spanValue3">5</span><br>
@@ -363,10 +387,6 @@ Result: 2.5  3.5  4.5  5.5  6.5  0    0    0    0</code>
                 <option value="4">Quartic (4)</option>
             </select> Polynomial Order
         </p>
-    </div>
-    <div class="spacer"></div>
-    <div class="rightBox">
-        <div id="chart_smoothing3"></div>
     </div>
 </div>
 --- (id="kernels-for-smoothing-savitzky-golay")

@@ -25,6 +25,10 @@
             const variance = arr.reduce((acc, val) => acc + Math.pow(val - mean, 2), 0) / arr.length;
             return Math.sqrt(variance);
         },
+        sum: function (arr) {
+            // Berechnet die Summe der Werte in einem Array
+            return arr.reduce((acc, val) => acc + val, 0);
+        },
         normalize: function (arr) {
             // Normalisiert ein Array auf den Bereich [0, 1]
             if (arr.length === 0) return [];
@@ -63,6 +67,21 @@
                 acc.push((acc[i - 1] || 0) + val);
                 return acc;
             }, []);
+        },
+        convolution: function(signal, kernel) {
+            const kLen = kernel.length;
+            const half = Math.floor(kLen / 2);
+            return signal.map((_, i) => {
+                let sum = 0;
+                for (let j = 0; j < kLen; j++) {
+                    const idx = i + j - half;
+                    if (idx >= 0 && idx < signal.length) {
+                        // Flip den Kernel: kernel[kLen-1-j]
+                        sum += signal[idx] * kernel[kLen - 1 - j];
+                    }
+                }
+                return sum;
+            });
         },
     };
 })(window);
