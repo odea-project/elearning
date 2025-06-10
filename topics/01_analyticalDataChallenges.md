@@ -1,4 +1,4 @@
-## Origin of Analytical Data
+## Analytical Data <span class="post-it-strip">origin</span>
 
 The [*Ishango bone*](https://en.wikipedia.org/wiki/Ishango_bone) is considered the oldest known mathematical artifact.
 
@@ -11,7 +11,7 @@ The [*Ishango bone*](https://en.wikipedia.org/wiki/Ishango_bone) is considered t
 
 ---
 
-# Origin of Analytical Data Tools
+## Analytical Data <span class="post-it-strip">tools</span>
 
 The [*Abacus*](https://en.wikipedia.org/wiki/Abacus) is one of the oldest known calculating tools, pre-dating modern computing by thousands of years. The Abacus is used for arithmetic processes by representing values in a binary-like manner.
 
@@ -24,35 +24,29 @@ The [*Abacus*](https://en.wikipedia.org/wiki/Abacus) is one of the oldest known 
 
 ---
 
-# Evolution of Analytical Data Acquisition
+## Analytical Data <span class="post-it-strip">acquisition</span>
 
 The era of [*analog-to-digital converters (ADCs)*](https://dewesoft.com/blog/history-of-analog-to-digital-converters) revolutionized data acquisition, enabling the conversion of continuous signals into discrete digital data.
 
-<div style="display: flex; align-items: flex-start;">
-  <div style="text-align: center;">
+<div style="display: flex; justify-content: center; align-items: flex-start; gap: 10px;">
+  <div style="text-align: center; width: 300px;">
     <figure>
-      <img src="resources/figures/01_analyticalDataChallenges/IBM_7700_System_Photo.png" data-preview-image alt="IBM 7700" height="170" style="display:inline-block; vertical-align:center; margin-right:10px;"/>
+      <img src="resources/figures/01_analyticalDataChallenges/IBM_7700_System_Photo.png" data-preview-image alt="IBM 7700" height="170" style="display:inline-block; vertical-align:center;"/>
       <figcaption style="font-size: 0.5em;"><em>The IBM 7700 Data Acquisition System, introduced in the 1960s, was one of the first systems to utilize analog-to-digital conversion for data acquisition.</em></figcaption>
       <p style="font-size: 0.5em;">Source: <a href="https://en.wikipedia.org/wiki/IBM_7700_Data_Acquisition_System">Wikipedia</a></p>
     </figure>
   </div>
-
-  <div style="width: 20px;"></div>
-
-  <div style="text-align: center;">
+  <div style="text-align: center; width: 300px;">
     <figure>
-      <img src="resources/figures/01_analyticalDataChallenges/Hewlett-Packard GC-MS 5992.png" data-preview-image alt="HP GC-MS 5992" height="170" style="display:inline-block; vertical-align:center; margin-right:10px;"/>
+      <img src="resources/figures/01_analyticalDataChallenges/Hewlett-Packard GC-MS 5992.png" data-preview-image alt="HP GC-MS 5992" height="170" style="display:inline-block; vertical-align:center;"/>
       <figcaption style="font-size: 0.5em;"><em>The Hewlett-Packard GC-MS 5992, introduced in the 1970s, was a pioneering instrument that combined gas chromatography with mass spectrometry, utilizing ADC technology for enhanced analytical capabilities.
       </em></figcaption>
       <p style="font-size: 0.5em;">Source: <a href="https://www.asms.org/docs/history-posters/hp5992.pdf?sfvrsn=2">asms.org</a></p>
     </figure>
   </div>
-
-  <div style="width: 20px;"></div>
-
-  <div style="text-align: center;">
+  <div style="text-align: center; width: 300px;">
     <figure>
-      <img src="resources/figures/01_analyticalDataChallenges/Agilent IM-QTOF.webp" data-preview-image alt="Agilent IM-QTOF" height="170" style="display:inline-block; vertical-align:center; margin-right:10px;"/>
+      <img src="resources/figures/01_analyticalDataChallenges/Agilent IM-QTOF.jpg" data-preview-image alt="Agilent IM-QTOF" height="170" style="display:inline-block; vertical-align:center;"/>
       <figcaption style="font-size: 0.5em;"><em>The Agilent 6560 Ion Mobility Q-TOF LC/MS, introduced in the 2010s, represents a modern advancement in analytical data acquisition, integrating ion mobility spectrometry with quadrupole time-of-flight mass spectrometry for enhanced separation and identification of complex mixtures.
       </em></figcaption>
       <p style="font-size: 0.5em;">Source: <a href="https://www.agilent.com/en/product/liquid-chromatography-mass-spectrometry-lc-ms/lc-ms-instruments/quadrupole-time-of-flight-lc-ms/6560-ion-mobility-lc-q-tof">agilent.com</a></p>
@@ -62,13 +56,13 @@ The era of [*analog-to-digital converters (ADCs)*](https://dewesoft.com/blog/his
 
 ---
 
-# Analytical Data (not just Data)
+## Analytical Data <span class="post-it-strip">not just Data!</span>
 
 Due to the increased complexity of modern analytical instruments (and experiments), the term 'analytical data' has evolved to encompass more than just raw numerical data.
 
 ```mermaid
 graph TD
-  A[Analytical Data] --> B[Raw Data]
+  A[Analytical Data] ==> B[Raw Data]
   A -.-> C[Instrument Metadata]
   A -.-> E[Calibration Data]
   A -.-> D[Processed Data]
@@ -78,7 +72,7 @@ graph TD
 
   classDef whiteFill fill:#fff,stroke:#333,color:#222,font-size:24px;
   class C,D,E,F,G,H whiteFill;
-  classDef mainBoxes fill:#fff,stroke:#333,color:#222,font-size:28px, font-weight:bold;
+  classDef mainBoxes fill:#00ffff,stroke:#333,color:#222,font-size:28px,font-weight:bold;
   class A,B mainBoxes;
   linkStyle 0 stroke-width:3.5px;
   linkStyle 1,2,3,4,5,6 stroke-width:2.5px;
@@ -86,7 +80,7 @@ graph TD
 
 ---
 
-# Use of Analytical Data
+## Analytical Data <span class="post-it-strip">fields</span>
 
 Analytical data is utilized across various fields, each with unique requirements for data management.
 
@@ -97,7 +91,7 @@ Analytical data is utilized across various fields, each with unique requirements
 
 ---
 
-# Analytical Data Management
+## Analytical Data <span class="post-it-strip">management</span>
 
 <div style="display: flex; gap: 5px; align-items: flex-start; flex-wrap: wrap;height: 100%;">
   <div style="flex: 1; min-width: 150px;">
@@ -113,7 +107,7 @@ Analytical data is utilized across various fields, each with unique requirements
   ```
   
   </div>
-  <div style="flex: 1; min-width: 150px;">
+  <div class="fragment" style="flex: 1; min-width: 150px;">
   
   ```mermaid
   kanban
@@ -126,7 +120,7 @@ Analytical data is utilized across various fields, each with unique requirements
   ```
   
   </div>
-  <div style="flex: 1; min-width: 150px;">
+  <div class="fragment" style="flex: 1; min-width: 150px;">
   
   ```mermaid
   kanban
@@ -139,7 +133,7 @@ Analytical data is utilized across various fields, each with unique requirements
   ```
   
   </div>
-  <div style="flex: 1; min-width: 150px;">
+  <div class="fragment" style="flex: 1; min-width: 150px;">
   
   ```mermaid
   kanban
@@ -152,7 +146,7 @@ Analytical data is utilized across various fields, each with unique requirements
   ```
   
   </div>
-  <div style="flex: 1; min-width: 150px;">
+  <div class="fragment" style="flex: 1; min-width: 150px;">
   
   ```mermaid
   kanban
@@ -169,7 +163,7 @@ Analytical data is utilized across various fields, each with unique requirements
 
 ---
 
-# Analytical Data Management Challenges
+## Analytical Data <span class="post-it-strip">challenges</span>
 
 <figure>
   <img src="resources/figures/01_analyticalDataChallenges/ACD_LABS_AS.png" data-preview-image alt="Analytical data fields" height="300" style="display:inline-block; vertical-align:center; margin-right:10px;"/>
@@ -181,48 +175,55 @@ Analytical data is utilized across various fields, each with unique requirements
 
 ---
 
-# Further reading
+## Further reading
 
-<div style="display: flex; gap: 5px; align-items: center; justify-content: center; flex-wrap: wrap; height: 100%;">
-  <div style="flex: 1; min-width: 300px; display: flex; justify-content: center; align-items: center;">
+<div style="display: flex; justify-content: center; align-items: center; gap: 10px;">
+  <div style="width: 300px;">
     <figure style="margin: 0;">
       <img src="resources/figures/01_analyticalDataChallenges/wiley_book.jpg" data-preview-image alt="Wiley Book" height="400" style="display:inline-block;"/>
     </figure>
   </div>
-  <div style="flex: 1; min-width: 300px; display: flex; justify-content: center; align-items: center; text-align: justify;">
-    <span>
+  <div style="width: 350px; text-align: justify;">
+    <p>
       Provides an essential source of information and guidance on practical implementation on topics related to digitization and automation for all points in the laboratory value chain.<br>
       <br>
       <br>
       <figcaption style="font-size: 0.5em;"><em>Teutenberg et al.<br>ISBN: 978-3-527-35265-4<br>September 2025</em></figcaption>
-    </span>
+    </p>
   </div>
 </div>
 
 ---
 
-# Structure Heterogeneity
-
-<div style="display: flex; justify-content: center; align-items: center; flex-wrap: wrap; height: 100%;">
-  <div style="display: flex; flex-direction: row; align-items: flex-end; min-width: 300px;">
-    <figure style="margin: 0;">
-      <img src="resources/figures/01_analyticalDataChallenges/wiley_book_cover.png" data-preview-image alt="Wiley Book Cover" height="400" style="display:inline-block;"/>
-    </figure>
-    <figcaption style="font-size: 0.5em; margin: 0 0 8px 16px; align-self: flex-end;">
-      <a href="https://www.iuta.de/forschung/analytik-messtechnik/futurelab-nrw/" target="_blank" style="text-decoration:none; color:#00d0ff;">
-        FutureLab.NRW
-      </a>
-    </figcaption>
-  </div>
-</div>
-
----
-
-# Structure Heterogeneity
+## Analytical Data <span class="post-it-strip">heterogeneity</span>
 
 <div style="display: flex; justify-content: center; align-items: center;">
-  <div id="BVCZ_pHPlot" style="width:920px;height:400px;"></div>
+  <div class="tab-content active lab-figure-tab" data-tab="lab-figure" style="position: relative;height:400px">
+    <figure>
+      <img src="resources/figures/01_analyticalDataChallenges/wiley_book_cover.png" data-preview-image alt="Wiley Book Cover" height="350" style="display:inline-block;"/>
+    </figure>
+    <a href="https://www.iuta.de/forschung/analytik-messtechnik/futurelab-nrw/" style="font-size: 0.6em; position: absolute; top: 5%; left: 50%; transform: translate(-50%, -50%); text-align: center;">
+        FutureLab.NRW
+    </a>
+  </div>
+  <div id="BVCZ_pH_plot" class="tab-content signal BVCZ_pH_plot-tab" data-tab="BVCZ_pH_plot" style="width:920px;height:400px;"></div>
+  <div id="BVCZ_DAD_plot" class="tab-content signal BVCZ_DAD_plot-tab" data-tab="BVCZ_DAD_plot" style="width:920px;height:400px;"></div>
+  <div id="BVCZ_HRMS_plot" class="tab-content signal BVCZ_HRMS_plot-tab" data-tab="BVCZ_HRMS_plot" style="width:920px;height:400px;"></div>
+  <div id="Processed_BVCZ_HRMS_plot" class="tab-content signal Processed_BVCZ_HRMS_plot-tab" data-tab="Processed_BVCZ_HRMS_plot" style="position: relative;">
+    <div id="BVCZ_ProcessedPlot" style="width:920px;height:400px;"></div>
+    <a href="https://odea-project.github.io/StreamFind/articles/index.html" style="font-size: 0.6em; position: absolute; top: 20%; left: 50%; transform: translate(-50%, -50%); text-align: center;">
+        More details in articles section of odea-project.github.io/StreamFind
+    </a>
+  </div>
 </div>
+<div class="tabs">
+  <div class="tab active lab-figure-tab" data-tab="lab-figure">Lab</div>
+  <div class="tab signal BVCZ_pH_plot-tab" data-tab="BVCZ_pH_plot">pH</div>
+  <div class="tab signal BVCZ_DAD_plot-tab" data-tab="BVCZ_DAD_plot">LC-DAD</div>
+  <div class="tab signal BVCZ_HRMS_plot-tab" data-tab="BVCZ_HRMS_plot">LC-HRMS</div>
+  <div class="tab signal Processed_BVCZ_HRMS_plot-tab" data-tab="Processed_BVCZ_HRMS_plot">Processed LC-HRMS</div>
+</div>
+
 <script>
   const samples = Array.from({length: 20}, (_, i) => i + 1);
   const mean = 7;
@@ -230,7 +231,6 @@ Analytical data is utilized across various fields, each with unique requirements
   let pH = Array.from({length: 19}, () =>
     Math.min(14, Math.max(1, (mean + stddev * (Math.random() * 2 - 1)).toFixed(2)))
   );
-  // Insert an outlier at a random position
   const outlier = (Math.random() > 0.5) ? 1.2 : 13.5;
   const outlierIndex = Math.floor(Math.random() * 20);
   pH.splice(outlierIndex, 0, outlier.toFixed(2));
@@ -277,38 +277,15 @@ Analytical data is utilized across various fields, each with unique requirements
     font: { color: '#fff' }
   };
   Reveal.on('slidechanged', function(event) {
-    if (event.currentSlide.querySelector('#BVCZ_pHPlot')) {
-      Plotly.newPlot('BVCZ_pHPlot', [trace], layout);
+    if (event.currentSlide.querySelector('#BVCZ_pH_plot')) {
+      Plotly.newPlot('BVCZ_pH_plot', [trace], layout);
     }
   });
 </script>
----
 
-# Structure Heterogeneity
-
-<div style="display: flex; justify-content: center; align-items: center; flex-wrap: wrap; height: 100%;">
-  <div style="display: flex; flex-direction: row; align-items: flex-end; min-width: 300px;">
-    <figure style="margin: 0;">
-      <img src="resources/figures/01_analyticalDataChallenges/wiley_book_cover.png" data-preview-image alt="Wiley Book Cover" height="400" style="display:inline-block;"/>
-    </figure>
-    <figcaption style="font-size: 0.5em; margin: 0 0 8px 16px; align-self: flex-end;">
-      <a href="https://www.iuta.de/forschung/analytik-messtechnik/futurelab-nrw/" target="_blank" style="text-decoration:none; color:#00d0ff;">
-        FutureLab.NRW
-      </a>
-    </figcaption>
-  </div>
-</div>
-
----
-
-# Structure Heterogeneity
-
-<div style="display: flex; justify-content: center; align-items: center;">
-  <div id="BVCZ_chromDADPlot" style="width:920px;height:400px;"></div>
-</div>
 <script>
   Reveal.on('slidechanged', function(event) {
-    if (event.currentSlide.querySelector('#BVCZ_chromDADPlot')) {
+    if (event.currentSlide.querySelector('#BVCZ_DAD_plot')) {
       d3.csv('resources/data/01_analyticalDataChallenges/DAD_BVCZ_Chromatograms.csv').then(function(data) {
         const groups = {};
         data.forEach(row => {
@@ -358,39 +335,15 @@ Analytical data is utilized across various fields, each with unique requirements
           paper_bgcolor: '#000000',
           font: { color: '#fff' }
         };
-        Plotly.newPlot('BVCZ_chromDADPlot', traces, layout, {responsive: true, scrollZoom: true});
+        Plotly.newPlot('BVCZ_DAD_plot', traces, layout, {responsive: true, scrollZoom: true});
       });
     }
   });
 </script>
 
----
-
-# Structure Heterogeneity
-
-<div style="display: flex; justify-content: center; align-items: center; flex-wrap: wrap; height: 100%;">
-  <div style="display: flex; flex-direction: row; align-items: flex-end; min-width: 300px;">
-    <figure style="margin: 0;">
-      <img src="resources/figures/01_analyticalDataChallenges/wiley_book_cover.png" data-preview-image alt="Wiley Book Cover" height="400" style="display:inline-block;"/>
-    </figure>
-    <figcaption style="font-size: 0.5em; margin: 0 0 8px 16px; align-self: flex-end;">
-      <a href="https://www.iuta.de/forschung/analytik-messtechnik/futurelab-nrw/" target="_blank" style="text-decoration:none; color:#00d0ff;">
-        FutureLab.NRW
-      </a>
-    </figcaption>
-  </div>
-</div>
-
----
-
-# Structure Heterogeneity
-
-<div style="display: flex; justify-content: center; align-items: center;">
-  <div id="BVCZ_ms3dPlot" style="width:920px;height:400px;"></div>
-</div>
 <script>
   Reveal.on('slidechanged', function(event) {
-    if (event.currentSlide.querySelector('#BVCZ_ms3dPlot')) {
+    if (event.currentSlide.querySelector('#BVCZ_HRMS_plot')) {
       d3.csv('resources/data/01_analyticalDataChallenges/MS_BVCZ_Spectra.csv').then(function(data) {
         const groups = {};
         data.forEach(row => {
@@ -464,24 +417,12 @@ Analytical data is utilized across various fields, each with unique requirements
             pad: 0
           },
         };
-        Plotly.newPlot('BVCZ_ms3dPlot', traces, layout, {responsive: true, scrollZoom: true});
+        Plotly.newPlot('BVCZ_HRMS_plot', traces, layout, {responsive: true, scrollZoom: true});
       });
     }
   });
 </script>
 
----
-
-# Structure Heterogeneity
-
-<div style="display: flex; justify-content: center; align-items: center;">
-  <div id="BVCZ_ProcessedPlot" style="width:750px;height:400px;"></div>
-  <div style="text-align:center; vertical-align:middle;">
-  <a href="https://odea-project.github.io/StreamFind/articles/index.html" target="_blank" style="color:#00d0ff;">
-    More details in<br>articles section of<br>odea-project.github.io/StreamFind
-  </a>
-  </div>
-</div>
 <script>
   Reveal.on('slidechanged', function(event) {
     if (event.currentSlide.querySelector('#BVCZ_ProcessedPlot')) {
@@ -542,29 +483,25 @@ Analytical data is utilized across various fields, each with unique requirements
 
 ---
 
-# Hands-on Exercise
-
-<div style="display: flex; justify-content: center; align-items: center; flex-wrap: wrap; height: 100%;">
-  <div style="display: flex; flex-direction: row; align-items: flex-end; min-width: 300px;">
-    <figure style="margin: 0;">
-      <img src="resources/figures/01_analyticalDataChallenges/sec_cers_setup.png" data-preview-image alt="SEC-CERS-SETUP" height="300" style="display:inline-block;"/>
-    </figure>
-    <figcaption style="font-size: 0.5em; margin: 0 0 8px 16px; align-self: flex-end;">
-      <a href="https://www.iuta.de/forschung/analytik-messtechnik/futurelab-nrw/" target="_blank" style="text-decoration:none; color:#00d0ff;">
-        Thissen et al. (2025) Accepted<br>
-        Analytical and Bioanalytical Chemistry
-      </a>
-    </figcaption>
-  </div>
-</div>
-
----
-
-# Hands-on Exercise Data
+## Hands-on <span class="post-it-strip">exercise</span>
 
 <div style="display: flex; justify-content: center; align-items: center;">
-  <div id="SEC_CERS_Plot" style="width:900px;height:400px;"></div>
+  <div class="tab-content active sec_cers_setup-tab" data-tab="sec_cers_setup" style="height:400px">
+    <figure>
+      <img src="resources/figures/01_analyticalDataChallenges/sec_cers_setup.png" data-preview-image height="300" style="display:inline-block;"/>
+    </figure>
+    <figcaption>
+      <a href="https://pubmed.ncbi.nlm.nih.gov/38050672/" style="font-size: 0.6em;">Thissen et al. (2025)<br>Analytical and Bioanalytical Chemistry</a>
+    </figcaption>
+  </div>
+  <div id="SEC_CERS_Plot" class="tab-content sec_cers_data-tab" data-tab="sec_cers_data" style="width:900px;height:400px;"></div>
 </div>
+
+<div class="tabs">
+  <div class="tab active sec_cers_setup-tab" data-tab="sec_cers_setup">Setup</div>
+  <div class="tab signal sec_cers_data-tab" data-tab="sec_cers_data">Data</div>
+</div>
+
 <script>
   Reveal.on('slidechanged', function(event) {
     if (event.currentSlide.querySelector('#SEC_CERS_Plot')) {
@@ -659,17 +596,21 @@ Analytical data is utilized across various fields, each with unique requirements
 
 ---
 
-# Structure Heterogeneity
+## Analytical Data <span class="post-it-strip">heterogeneity</span>
 
 In summary, data heterogeneity poses significant challenges:
 
-- Use of different data formats and standards across instruments and laboratories
-- Complications in data sharing and collaboration
-- Increased complexity in data processing and analysis
+<div>
+  <ul>
+    <li>Use of different data formats and standards across instruments and laboratories</li>
+    <li>Complications in data sharing and collaboration</li>
+    <li>Increased complexity in data processing and analysis</li>
+  </ul>
+</div>
 
 ---
 
-# Consequences of Complexity
+## Consequences of Complexity
 
 The **greater the complexity of the analytical data**, the more sophisticated the tools and expertise required for its **management**, **processing** and **interpretation**.
 
@@ -718,13 +659,14 @@ The **greater the complexity of the analytical data**, the more sophisticated th
 
 ---
 
-# The Efforts for Accessibility
+## Community Efforts for Accessibility
 
-Development of Open Data Standards for Mass Spectrometry
+<p style = "margin-bottom: 0">Open Data Standards for Mass Spectrometry</p>
 
-<div style="max-height: 300px; overflow-y: auto;">
-
-```mermaid	
+<div style="width: 100%; margin: 0;">
+  <div class=timeline_costum style="width: 100%; height: 360px; overflow: hidden;">
+  
+```mermaid
 timeline
   vendor formats : d (Agilent), RAW (Thermo), wiff (Sciex)
   < 2000 : ms1, ms2, MFG, pkl
@@ -732,22 +674,41 @@ timeline
   2010 - 2020 : imzML : mz5 : mzDB
   2023 - now : mzMLb : AnIML : ADF : ASM
 ```
+
+  </div>
 </div>
 
-[> 2000](https://pmc.ncbi.nlm.nih.gov/articles/PMC3518119/), 
-[mzData](http://tools.proteomecenter.org/formats/mzData/mzdata_xmlspy_docs.html), 
-[mzXML](http://tools.proteomecenter.org/wiki/index.php?title=Formats:mzXML), 
-[mzML](https://peptideatlas.org/tmp/mzML1.1.0.html), 
-[mz5](https://pubmed.ncbi.nlm.nih.gov/21960719/), 
-[mzDB](https://pmc.ncbi.nlm.nih.gov/articles/PMC4349994/), 
-[mzMLb](https://pubs.acs.org/doi/10.1021/acs.jproteome.0c00192), 
-[AnIML](https://www.animl.org/)
-[ADF](https://docs.allotrope.org/Allotrope%20Data%20Format.html), 
-[ASM](https://www.allotrope.org/asm).
+<style>
+/* This will target Mermaid SVGs inside your slides and make them responsive */
+.mermaid svg {
+  width: 100% !important;
+  height: auto !important;
+  max-height: 360px;
+  display: block;
+}
+.timeline_costum pre {
+  margin-top: 0 !important;
+}
+</style>
+
+<div style="font-size: 0.7em;">
+  <p>Further reading:
+    <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC3518119/"> before 2000</a>, 
+    <a href="http://tools.proteomecenter.org/formats/mzData/mzdata_xmlspy_docs.html">mzData</a>, 
+    <a href="http://tools.proteomecenter.org/wiki/index.php?title=Formats:mzXML">mzXML</a>, 
+    <a href="https://peptideatlas.org/tmp/mzML1.1.0.html">mzML</a>, 
+    <a href="https://pubmed.ncbi.nlm.nih.gov/21960719/">mz5</a>, 
+    <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC4349994/">mzDB</a>, 
+    <a href="https://pubs.acs.org/doi/10.1021/acs.jproteome.0c00192">mzMLb</a>, 
+    <a href="https://www.animl.org/">AnIML</a>, 
+    <a href="https://docs.allotrope.org/Allotrope%20Data%20Format.html">ADF</a>, 
+    <a href="https://www.allotrope.org/asm">ASM</a>
+  </p>
+</div>
 
 ---
 
-# Encoding and Compression Streategies
+## Encoding and Compression <span class="post-it-strip">streategies</span>
 
 <div style="display: flex; justify-content: center; align-items: center;">
   <div id="formatSizeBarPlot" style="width:800px;height:400px;"></div>
@@ -769,10 +730,6 @@ timeline
     marker: { color: '#00d0ff' }
   };
   const file_formats_layout = {
-    title: {
-      text: 'File Size by Format',
-      font: { color: '#fff' }
-    },
     xaxis: {
       title: { text: 'Format', color: '#fff' },
       color: '#fff',
@@ -798,7 +755,7 @@ timeline
 
 ---
 
-# Encoding and Compression Streategies
+## Encoding and Compression <span class="post-it-strip">streategies</span>
 
 <figure>
   <img src="resources/figures/01_analyticalDataChallenges/encoding_abstract.png" data-preview-image alt="Encoding Abstract" height="300" style="display:inline-block; vertical-align:center; margin-right:10px;"/>
@@ -806,7 +763,7 @@ timeline
 
 ---
 
-# Data Encoding and Compresion Takeaways
+## Encoding and Compression <span class="post-it-strip">takeaways</span>
 
 <div>
   <ul>
