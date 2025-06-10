@@ -16,8 +16,8 @@
     yData_1 = yData_1.map((y, i) => y + noise_1[i]);
     yData_2 = yData_2.map((y, i) => y + noise_2[i]);
     // Normalisierung der Daten
-    yData_1_norm = mathUtils.normalize(yData_1);
-    yData_2_norm = mathUtils.normalize(yData_2);
+    const yData_1_norm = mathUtils.normalize(yData_1);
+    const yData_2_norm = mathUtils.normalize(yData_2);
     const xyData_1 = mathUtils.createXYData(xData, yData_1);
     const xyData_2 = mathUtils.createXYData(xData, yData_2);
     const xyData_1_norm = mathUtils.createXYData(xData, yData_1_norm);

@@ -433,6 +433,7 @@
 .reveal .katex, 
 .reveal .katex .base {
   font-family: "Neoletters", serif !important;
+  color: #FF0;
 }
 
 .reveal .katex .mord,
