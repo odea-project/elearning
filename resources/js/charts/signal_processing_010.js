@@ -47,7 +47,7 @@
 
 (function () {
     let divID = "chart_interference";
-    let sectionID = "denoising-fourier-transformation";
+    let sectionID = "denoising-fourier-transformation-2";
     let myFig = null;
     let axesAlready = false;
     const n = 100;

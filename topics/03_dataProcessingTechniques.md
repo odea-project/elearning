@@ -287,7 +287,7 @@ Kernel:                     0.25 0.25 0.25 0.25
 Result: 2.5  3.5  4.5  5.5  6.5  0    0    0    0</code>
             </pre>
         </div>
-        <p class="mainBullet">
+        <p class="mainBullet" style="margin-top: -20px;">
             <strong>Properties</strong> of a kernel for smoothing:
         </p>
         <p class="subBullet" style="font-size: large;">
@@ -373,14 +373,14 @@ Result: 2.5  3.5  4.5  5.5  6.5  0    0    0    0</code>
             Coefficients $ c_i $ are derived to fit a polynomial of order $ p $ in a moving
             window.
         </p>
-        <p class="subSubBullet">
+        <p class="subSubBullet" style="font-size: large;">
             This method is ideal for smoothing while preserving peak shapes in signals.
         </p>
     </div>
     <div class="spacer"></div>
     <div class="rightBox">
         <div id="chart_smoothing3"></div>
-        <p style="font-size: large;">
+        <p style="font-size: large; margin-top: -20px;">
             <input id="spanSlider3" type="range" min="1" max="25" step="1" value="1"> Half Window Size:
             <span id="spanValue3">1</span><br>
             <select id="polyOrder">
@@ -400,7 +400,7 @@ Result: 2.5  3.5  4.5  5.5  6.5  0    0    0    0</code>
         <p class="question">
             What is the problem with <strong>Smoothing?</strong>
         </p>
-        <p class="mainBullet">
+        <p class="mainBullet" style="font-size: large;">
             Smoothing reduces <strong>noise</strong>, but it also alters the <strong>signal</strong>.
         </p>
         <p class="subBullet" style="font-size: large;">
@@ -428,7 +428,7 @@ Result: 2.5  3.5  4.5  5.5  6.5  0    0    0    0</code>
     <div class="spacer"></div>
     <div class="rightBox">
         <div id="chart_smoothing_tradeoff"></div>
-        <p class="subSubBullet" style="font-size: large;">
+        <p class="subSubBullet" style="font-size: large; margin-top: -20px;">
             The choice of smoothing parameters (kernel size, type, etc.) is a trade-off between noise
             reduction and signal preservation.
         </p>
@@ -440,7 +440,7 @@ Result: 2.5  3.5  4.5  5.5  6.5  0    0    0    0</code>
 ## Savitzky-Golay: <span class="post-it-strip">1st Derivative</span>
 <div>
     <div class="leftBox">
-        <p class="mainBullet">
+        <p class="mainBullet" style="font-size: large;">
             The <strong>1st derivative</strong> provides both <strong>smoothing</strong> &
             <strong>baseline correction</strong>.
         </p>
@@ -449,9 +449,12 @@ Result: 2.5  3.5  4.5  5.5  6.5  0    0    0    0</code>
             <span class="small-text">
                 Savitzky-Golay computes derivatives directly from a polynomial fit within a moving
                 window.
+                $$
+                y'(t) = \frac{d}{dt} \sum_{i=-n}^{n} c_i \cdot f(t + i)
+                $$
             </span>
         </p>
-        <p class="mainBullet">
+        <p class="mainBullet" style="font-size: large;">
             <strong>Applications:</strong>
         </p>
         <p class="subBullet" style="font-size: large;">
@@ -460,17 +463,11 @@ Result: 2.5  3.5  4.5  5.5  6.5  0    0    0    0</code>
         <p class="subBullet" style="font-size: large;">
             Smoothing noisy data while retaining peak features and enhancing changes.
         </p>
-        <p class="subSubBullet" style="font-size: large;">
-            Example Polynomial Fit:
-            $$
-            y'(t) = \frac{d}{dt} \sum_{i=-n}^{n} c_i \cdot f(t + i)
-            $$
-        </p>
     </div>
     <div class="spacer"></div>
     <div class="rightBox">
         <div id="chart_sg_derivative"></div>
-        <p class="subSubBullet" style="font-size: medium;">
+        <p class="subSubBullet" style="font-size: medium; margin-top: -20px;">
             Figure: solid white line is the original signal, solid red line is the smoothed signal (SG1), and
             solid blue line is the 1st derivative without SG.
     </div>
@@ -509,6 +506,9 @@ Result: 2.5  3.5  4.5  5.5  6.5  0    0    0    0</code>
             $$
             where $ t_i $ are the time points relative to the center of the window.
         </p>
+    </div>
+    <div class="spacer"></div>
+    <div class="rightBox">
         <p class="subBullet" style="font-size: medium;">
             <strong>Pseudo-Inverse:</strong>
             $$
@@ -516,9 +516,6 @@ Result: 2.5  3.5  4.5  5.5  6.5  0    0    0    0</code>
             $$
             The rows of $ \mathbf{V}^+ $ are the coefficients for smoothing and derivatives.
         </p>
-    </div>
-    <div class="spacer"></div>
-    <div class="rightBox">
         <p class="subBullet" style="font-size: medium;">
             <strong>Extract Coefficients</strong>:
             $$
@@ -535,6 +532,13 @@ Result: 2.5  3.5  4.5  5.5  6.5  0    0    0    0</code>
             \end{array}
             $$
         </p>
+    </div>
+</div>
+--- (id="savitzky-golay-coefficients")
+
+## Savitzky-Golay: <span class="post-it-strip">Generating Coefficients</span>
+<div class="slide-content">
+    <div class="leftBox">
         <p class="mainBullet" style="font-size: large;">
             <strong>Normalization:</strong>
             The 1st row (for smoothing) must be normalized:
@@ -546,6 +550,9 @@ Result: 2.5  3.5  4.5  5.5  6.5  0    0    0    0</code>
             c^{\text{norm}} = \left[ -0.086, 0.343, 0.486, 0.343, -0.086 \right]
             $$
         </p>
+    </div>
+    <div class="spacer"></div>
+    <div class="rightBox">
         <p class="subBullet" style="font-size: medium;">
             Relevance of Other Rows:
         </p>
@@ -560,7 +567,7 @@ Result: 2.5  3.5  4.5  5.5  6.5  0    0    0    0</code>
         </p>
     </div>
 </div>
---- (id="savitzky-golay-coefficients")
+--- (id="savitzky-golay-coefficients-2")
 
 ## Denoising using <span class="post-it-strip">Fourier Transformation</span>
 <div>
@@ -578,19 +585,34 @@ Result: 2.5  3.5  4.5  5.5  6.5  0    0    0    0</code>
             $$
             \cos(x \cdot f)
             $$
-            Frequency: <input id="slider_axial" type="range" min="1" max="15" value="7" step="1">
-            <span id="value_axial">10</span>
-        <div id="chart_axial"></div>
         </p>
     </div>
     <div class="spacer"></div>
     <div class="rightBox">
+        <p class="subBullet" style="font-size: large;">
+        Frequency: <input id="slider_axial" type="range" min="1" max="15" value="7" step="1">
+            <span id="value_axial">10</span>
+            </p>
+        <div id="chart_axial"></div>
+    </div>
+</div>
+<script src="../resources/js/charts/signal_processing_010.js"></script>
+--- (id="denoising-fourier-transformation")
+
+## Denoising using <span class="post-it-strip">Fourier Transformation</span>
+<div>
+    <div class="leftBox">
         <p class="mainBullet" style="font-size: large;">
             <strong>Interference:</strong> <br>
             Multiple frequencies can be combined to create interferences.
             $$
             \cos(x \cdot f_1) + \cos(x \cdot f_2)
             $$
+        </p>
+    </div>
+    <div class="spacer"></div>
+    <div class="rightBox">
+        <p class="subBullet" style="font-size: large;">
             Frequency 1: <input id="slider_interference_1" type="range" min="1" max="15" value="5"
                 step="1">
             <span id="value_interference_1">5</span><br>
@@ -602,7 +624,7 @@ Result: 2.5  3.5  4.5  5.5  6.5  0    0    0    0</code>
     </div>
 </div>
 <script src="../resources/js/charts/signal_processing_010.js"></script>
---- (id="denoising-fourier-transformation")
+--- (id="denoising-fourier-transformation-2")
 
 ## Denoising using <span class="post-it-strip">Fourier Transformation</span>
 <div>
@@ -615,7 +637,7 @@ Result: 2.5  3.5  4.5  5.5  6.5  0    0    0    0</code>
             $$
         <div id="chart_radial"></div>
         </p>
-        <p class="subSubBullet" style="font-size: medium;">
+        <p class="subSubBullet" style="font-size: medium; margin-top: -40px;">
             The radial frequency is the number of loops around the circle per unit of time.
         </p>
     </div>
@@ -632,7 +654,7 @@ Result: 2.5  3.5  4.5  5.5  6.5  0    0    0    0</code>
     </div>
 </div>
 <script src="../resources/js/charts/signal_processing_011.js"></script>
---- (id="denoising-fourier-transformation-2")
+--- (id="denoising-fourier-transformation-3")
 
 ## Denoising using <span class="post-it-strip">Fourier Transformation</span>
 <div>
@@ -667,7 +689,7 @@ Result: 2.5  3.5  4.5  5.5  6.5  0    0    0    0</code>
         </p>
     </div>
 </div>
---- (id="denoising-fourier-transformation-3")
+--- (id="denoising-fourier-transformation-4")
 
 ## Systematic Frequency <span class="post-it-strip">Analysis</span>
 <div>
