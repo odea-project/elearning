@@ -18,7 +18,7 @@
             From an analytical perspective, a signal consists
             of multiple components.
         </p>
-        <p class="subBullet">
+        <p class="subBullet fragment" data-fragment-index="0">
             <strong>Analyte</strong>: the signal of interest
         </p>
         <p class="subBullet fragment" data-fragment-index="1">
@@ -33,7 +33,7 @@
     </div>
     <div class="spacer"></div>
     <div class="rightBox">
-        <div id="chart-data-processing-002"></div>
+        <div class="fragment fade-left" data-fragment-index="0" id="chart-data-processing-002"></div>
     </div>
 </div>
 <!-- SWITCHES -->
@@ -479,7 +479,7 @@ Result: 2.5  3.5  4.5  5.5  6.5  0    0    0    0</code>
 --- (id="savitzky-golay-1st-derivative")
 
 ## Savitzky-Golay: <span class="post-it-strip">Generating Coefficients</span>
-<div>
+<div class="slide-content">
     <div class="leftBox">
         <p class="question">
             How are <strong>Savitzky-Golay Coefficients</strong> generated?

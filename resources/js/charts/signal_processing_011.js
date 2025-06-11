@@ -76,7 +76,7 @@
   const t         = mathUtils.linspace(0, 2 * Math.PI, n);
 
   const A = 0.25;  // Modulations-Amplitude
-  const k = 6;     // Anzahl der Cos-Wellen
+  const k = 5;     // Anzahl der Cos-Wellen
 
   // Basis-Daten: Kreis und modulierte Kurve
   const xyCircle = t.map(angle => ({
@@ -84,7 +84,7 @@
     y: Math.sin(angle)
   }));
   const xyMod = t.map(angle => {
-    const r = 0.5 + A * Math.cos(k * angle);
+    const r = 0.75 + A * Math.cos(k * angle);
     return {
       x: r * Math.cos(angle),
       y: r * Math.sin(angle)
