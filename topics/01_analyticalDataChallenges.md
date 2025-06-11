@@ -206,8 +206,11 @@ Analytical data is utilized across various fields, each with unique requirements
         FutureLab.NRW
     </a>
   </div>
+  <!-- @Gerrit the processed plots could appear after pressing a slide bottom instead of adding the tab bottoms -->
+  <!-- @Gerrit in the processed plot for the LC-DAD why is the hover info with black font even when I set to white? Problem with conflicting CSS? -->
   <div id="BVCZ_pH_plot" class="tab-content signal BVCZ_pH_plot-tab" data-tab="BVCZ_pH_plot" style="width:920px;height:400px;"></div>
   <div id="BVCZ_DAD_plot" class="tab-content signal BVCZ_DAD_plot-tab" data-tab="BVCZ_DAD_plot" style="width:920px;height:400px;"></div>
+  <div id="Processed_BVCZ_DAD_plot" class="tab-content signal Processed_BVCZ_DAD_plot-tab" data-tab="Processed_BVCZ_DAD_plot" style="width:920px;height:400px;"></div>
   <div id="BVCZ_HRMS_plot" class="tab-content signal BVCZ_HRMS_plot-tab" data-tab="BVCZ_HRMS_plot" style="width:920px;height:400px;"></div>
   <div id="Processed_BVCZ_HRMS_plot" class="tab-content signal Processed_BVCZ_HRMS_plot-tab" data-tab="Processed_BVCZ_HRMS_plot" style="position: relative;">
     <div id="BVCZ_ProcessedPlot" style="width:920px;height:400px;"></div>
@@ -220,10 +223,12 @@ Analytical data is utilized across various fields, each with unique requirements
   <div class="tab active lab-figure-tab" data-tab="lab-figure">Lab</div>
   <div class="tab signal BVCZ_pH_plot-tab" data-tab="BVCZ_pH_plot">pH</div>
   <div class="tab signal BVCZ_DAD_plot-tab" data-tab="BVCZ_DAD_plot">LC-DAD</div>
+  <div class="tab signal Processed_BVCZ_DAD_plot-tab" data-tab="Processed_BVCZ_DAD_plot">Processed LC-DAD</div>
   <div class="tab signal BVCZ_HRMS_plot-tab" data-tab="BVCZ_HRMS_plot">LC-HRMS</div>
   <div class="tab signal Processed_BVCZ_HRMS_plot-tab" data-tab="Processed_BVCZ_HRMS_plot">Processed LC-HRMS</div>
 </div>
 
+<!-- MARK: pH plot -->
 <script>
   const samples = Array.from({length: 20}, (_, i) => i + 1);
   const mean = 7;
@@ -283,6 +288,7 @@ Analytical data is utilized across various fields, each with unique requirements
   });
 </script>
 
+<!-- MARK: Raw LC-DAD Plot -->
 <script>
   Reveal.on('slidechanged', function(event) {
     if (event.currentSlide.querySelector('#BVCZ_DAD_plot')) {
@@ -341,6 +347,131 @@ Analytical data is utilized across various fields, each with unique requirements
   });
 </script>
 
+<!-- MARK: Processed LC-DAD Plot -->
+<script>
+  Reveal.on('slidechanged', function(event) {
+    if (event.currentSlide.querySelector('#Processed_BVCZ_DAD_plot')) {
+      Promise.all([
+        d3.csv('resources/data/01_analyticalDataChallenges/DAD_BVCZ_Processed_Chromatograms.csv'),
+        d3.csv('resources/data/01_analyticalDataChallenges/DAD_BVCZ_chrompeaks.csv')
+      ]).then(function([data, peaks]) {
+        const groups = {};
+        data.forEach(row => {
+          const analysis = row.analysis;
+          if (!groups[analysis]) {
+            groups[analysis] = { x: [], y: [] };
+          }
+          groups[analysis].x.push(Number(row.rt));
+          groups[analysis].y.push(Number(row.intensity));
+        });
+        const analysisNames = Object.keys(groups);
+        const palette = [
+          '#00d0ff', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd', '#8c564b',
+          '#e377c2', '#7f7f7f', '#bcbd22', '#17becf', '#1f77b4', '#ffbb78',
+          '#98df8a', '#ff9896', '#c5b0d5', '#c49c94', '#f7b6d2', '#c7c7c7'
+        ];
+        const colorMap = {};
+        analysisNames.forEach((name, i) => {
+          colorMap[name] = palette[i % palette.length];
+        });
+        const traces = Object.keys(groups).map(analysis => ({
+          x: groups[analysis].x,
+          y: groups[analysis].y,
+          mode: 'lines',
+          name: analysis,
+          legendgroup: analysis,
+          type: 'scatter',
+          line: { color: colorMap[analysis] },
+          hoverinfo: 'none'
+        }));
+        const fillTraces = peaks.map(peak => {
+          const analysis = peak.analysis;
+          const rtmin = Number(peak.rtmin);
+          const rtmax = Number(peak.rtmax);
+          if (!groups[analysis]) return null;
+          const region = groups[analysis].x
+            .map((x, i) => ({ x, y: groups[analysis].y[i] }))
+            .filter(pt => pt.x >= rtmin && pt.x <= rtmax);
+          if (region.length === 0) return null;
+          // const hoverInfo = Object.entries(peak)
+          //   .map(([key, value]) => `${key}: ${value}`)
+          //   .join('<br>');
+          return {
+            x: region.map(pt => pt.x),
+            y: region.map(pt => pt.y),
+            fill: 'tozeroy',
+            type: 'scatter',
+            mode: 'none',
+            name: analysis,
+            legendgroup: analysis,
+            fillcolor: colorMap[analysis] + '50',
+            line: { width: 0, color: colorMap[analysis] },
+            showlegend: false,
+            // hoverinfo: 'text',
+            // text: region.map(() => hoverInfo)
+            hovertemplate: 'analysis: %{customdata[0]}<br>' +
+              'replicate: %{customdata[1]}<br>' +
+              'index: %{customdata[2]}<br>' +
+              'id: %{customdata[3]}<br>' +
+              'peak: %{customdata[4]}<br>' +
+              'polarity: %{customdata[5]}<br>' +
+              'pre_ce: %{customdata[6]}<br>' +
+              'pre_mz: %{customdata[7]}<br>' +
+              'pro_mz: %{customdata[8]}<br>' +
+              'idx: %{customdata[9]}<br>' +
+              'rt: %{customdata[10]}<br>' +
+              'rtmin: %{customdata[11]}<br>' +
+              'rtmax: %{customdata[12]}<br>' +
+              'intensity: %{customdata[13]}<br>' +
+              'width: %{customdata[14]}<br>' +
+              'area: %{customdata[15]}<br>' +
+              'sn: %{customdata[16]}<br>' +
+              'calibration: %{customdata[17]}<br>' +
+              '<extra></extra>',
+            customdata: region.map(() => [
+              peak.analysis, peak.replicate, peak.index, peak.id, peak.peak, peak.polarity,
+              peak.pre_ce, peak.pre_mz, peak.pro_mz, peak.idx, peak.rt, peak.rtmin,
+              peak.rtmax, peak.intensity, peak.width, peak.area, peak.sn, peak.calibration
+            ])
+          };
+        }).filter(Boolean);
+        const layout = {
+          title: {
+            text: 'Monoclonal Antibody Bevacizumab LC-DAD (214,4 nm) Chromatograms of 18 Analyses',
+            font: { color: '#fff' }
+          },
+          xaxis: {
+            title: { text: 'Retention Time / seconds', color: '#fff' },
+            color: '#fff',
+            linecolor: '#fff',
+            tickcolor: '#fff'
+          },
+          yaxis: {
+            title: { text: 'Absorbance / U.A.', color: '#fff' },
+            color: '#fff',
+            linecolor: '#fff',
+            tickcolor: '#fff'
+          },
+          legend: { font: { color: '#fff' } },
+          plot_bgcolor: '#000000',
+          paper_bgcolor: '#000000',
+          font: { color: '#fff' },
+          hoverlabel: {
+            bgcolor: "#222",
+            font: {
+              color: "white",
+              size: 14,
+              family: "Rockwell"
+            }
+          }
+        };
+        Plotly.newPlot('Processed_BVCZ_DAD_plot', [...traces, ...fillTraces], layout, {responsive: true, scrollZoom: true});
+      });
+    }
+  });
+</script>
+
+<!-- MARK: Raw LC-HRMS Plot -->
 <script>
   Reveal.on('slidechanged', function(event) {
     if (event.currentSlide.querySelector('#BVCZ_HRMS_plot')) {
@@ -423,6 +554,7 @@ Analytical data is utilized across various fields, each with unique requirements
   });
 </script>
 
+<!-- MARK: Processed LC-HRMS Plot -->
 <script>
   Reveal.on('slidechanged', function(event) {
     if (event.currentSlide.querySelector('#BVCZ_ProcessedPlot')) {
@@ -440,7 +572,7 @@ Analytical data is utilized across various fields, each with unique requirements
           x: groups[analysis].x,
           y: groups[analysis].y,
           mode: 'lines',
-          name: analysis,
+          name: "Avastin",
           type: 'scatter'
         }));
         const layout = {
