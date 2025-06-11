@@ -270,19 +270,37 @@
 
 ---
 
+## Analytical Data Processing with <span class="post-it-strip">Programming Languages</span>
+
+<div style="display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 350px;">
+  <div style="text-align: center; margin-bottom: 24px;">
+    <strong>The most flexible and powerful way to process analytical data</strong><br>
+    <strong class=fragment>but also the most complex</strong><br>
+  </div>
+  <div class=fragment style="text-align: center; margin-bottom: 24px;">
+    <strong>if not for the convenience of libraries and frameworks.</strong>
+    <div style="height: 220px;">
+    <img src="resources/figures/02_toolsAndProgramming/programming_languages_frameworks.png" alt="Programming Languages Figure">
+    </div>
+  </div>
+</div>
+
+---
+
 ## Analytical Data Processing with <span class="post-it-strip">StreamFind</span>
 
 <div style="display: flex; justify-content: center; align-items: center;">
   <div style="background: #fff; padding: 0; border-radius: 6px; box-shadow: 0 2px 8px rgba(0,0,0,0.04);">
     <iframe src="https://odea-project.github.io/StreamFind/" width="900" height="480" style="border:1px solid #ccc; background:#fff;" title="StreamFind"></iframe>
   </div>
+
 </div>
 
 ---
 
-# Programming for Data Processing
+## Learning with <span class="post-it-strip">Programming Languages</span>
 
-Describe the various programming languages that are commonly used for processing analytical data. Discuss the strengths and weaknesses of each language, including factors such as performance, ease of use, community support, and libraries available for data processing tasks.
+
 
 ---
 
