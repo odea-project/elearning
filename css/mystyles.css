@@ -235,12 +235,45 @@
     background-color: rgb(128, 128, 128);
 }
 
+.code-button-container {
+    position: absolute;
+    top: -40px;
+    left: 0px;
+    z-index: 1000;
+    background-color: rgba(0, 0, 0, 0.3);
+    border-radius: 5px;
+    padding: 5px;
+    display: flex;
+    align-items: center;
+}
+
+@keyframes wiggle {
+  0%   { transform: translateX(0); }
+  20%  { transform: translateX(-5px); }
+  80%  { transform: translateX(5px); }
+  100% { transform: translateX(0); }
+}
+
+.code-button-container::after {
+  content: "← get code";
+  position: relative;
+  left: 10px;
+  color: white;
+  font-size: 12px;
+  font-weight: bold;
+  display: inline;
+  font-family: "Montserrat", "Noto Sans", "Source Sans Pro", Helvetica, sans-serif;
+  /* hier eine weichere Timing-Funktion */
+  animation: wiggle 1s ease-in-out infinite;
+}
+
+
 .py-code-button {
     /* This is sqaure div button the is on the
     right top corner of the slide */
-    position: absolute;
+    /* position: absolute;
     top: 10px;
-    right: 10px;
+    right: 10px; */
     width: 25px;
     height: 25px;
     background-color: #007acb;
