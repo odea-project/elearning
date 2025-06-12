@@ -705,8 +705,14 @@ Result: 2.5  3.5  4.5  5.5  6.5  0    0    0    0</code>
     </div>
     <div class="spacer"></div>
     <div class="rightBox">
-        <div id="chart_fft1"></div>
-        <div id="chart_fft2"></div>
+        <div id="chart_fft1" style="margin-top: -40px;"></div>
+        <p class="subSubBullet" style="font-size: large;">
+            Original signal.
+        </p>
+        <div id="chart_fft2" style="margin-top: -40px;"></div>
+        <p class="subSubBullet" style="font-size: large;">
+            Fourier Transformation of the signal.
+        </p>
     </div>
 </div>
 <script src="../resources/js/charts/signal_processing_012.js"></script>
@@ -728,25 +734,38 @@ Result: 2.5  3.5  4.5  5.5  6.5  0    0    0    0</code>
         <p class="mainBullet">
             The result is a denoised dataset.
         </p>
+        <p class="subBullet" style="font-size: large;">
+            Frequency Filter:
+            <input id="frequencyFilterSlider" type="range" min="1" max="128" step="0.1" value="128">
+            <span id="frequencyFilterValue">128</span>
+        </p>
     </div>
     <div class="spacer"></div>
     <div class="rightBox">
-        <img src="../resources/fft1.png" alt="Fourier Transformation" style="width: 100%;">
+        <div id="chart_fft3" style="margin-top: -40px;"></div>
+        <p class="subSubBullet" style="font-size: large;">
+            Original & denoised signal.
+        </p>
+        <div id="chart_fft4" style="margin-top: -40px;"></div>
+        <p class="subSubBullet" style="font-size: large;">
+            Fourier Transformation of the signal including frequency filtering.
+        </p>
     </div>
 </div>
-</section>
+--- (id="frequency-filtering-1")
 
 ## Frequency <span class="post-it-strip">Filtering</span>
 <div>
-    <img src="../resources/fft2.png" alt="Fourier Transformation" style="width: 31%;">
-    <img src="../resources/fft3.png" alt="Fourier Transformation" style="width: 31%;">
-    <img src="../resources/fft4.png" alt="Fourier Transformation" style="width: 31%;">
+    <p class="mainBullet" style="font-size: large; margin-left: 40px;">
+        Noisy signal & denoised signal after frequency filtering:
+    </p>
+    <div id="chart_fft5"></div>
 </div>
---- (id="frequency-filtering")
+--- (id="frequency-filtering-2")
 
 ## Frequency <span class="post-it-strip">Filtering</span>
 <div>
-    <img src="../resources/fft10.png" alt="Fourier Transformation" style="width: 80%;">
+    <div id="chart_fft6"></div>
     <div class="leftBox">
     <p class="subSubBullet" style="font-size: large;">
         When the signal contains sharp peaks, the Fourier Transformation may not be suitable for denoising.
@@ -759,14 +778,19 @@ Result: 2.5  3.5  4.5  5.5  6.5  0    0    0    0</code>
         </p>
     </div>
 </div>
---- (id="frequency-filtering-2")
+--- (id="frequency-filtering-3")
 
 ## Frequency <span class="post-it-strip">Filtering</span>
-<div>
-    <img src="../resources/fft10b.png" alt="Fourier Transformation" style="width: 80%;">
+<div>  
     <div class="leftBox">
+    <div id="chart_fft7"></div>
     <p class="subSubBullet" style="font-size: large;">
         Peaks contain not a single frequency but a range of frequencies.
+    </p>
+    <p class="subBullet" style="font-size: large;">
+            Peak width:
+            <input id="peakWidthSlider" type="range" min="0.01" max="1" step="0.01" value="0.5">
+            <span id="peakWidthValue">0.5</span>
     </p>
     <p class="subSubBullet" style="font-size: large;">
         The sharper the peak, the broader the frequency range.
@@ -774,12 +798,18 @@ Result: 2.5  3.5  4.5  5.5  6.5  0    0    0    0</code>
     </div>
     <div class="spacer"></div>
     <div class="rightBox">
+    <div id="chart_fft8"></div>
         <p class="subSubBullet" style="font-size: large;">
             This band from the peak limits the effectiveness of frequency filtering.
         </p>
+        <p class="subBullet" style="font-size: large;">
+            Frequency Filtering:
+            <input id="frequencyFilterSlider3" type="range" min="1" max="128" step="0.1" value="128">
+            <span id="frequencyFilterValue3">128</span>
+    </p>
     </div>
 </div>
---- (id="frequency-filtering-3")
+--- (id="frequency-filtering-4")
 
 ## Frequency <span class="post-it-strip">Filtering</span>
 <div>
@@ -796,7 +826,7 @@ Result: 2.5  3.5  4.5  5.5  6.5  0    0    0    0</code>
         </p>
     </div>
 </div>
---- (id="frequency-filtering-4")
+--- (id="frequency-filtering-5")
 
 ## Fourier Transformation <span class="post-it-strip">Summary</span>
 <div>

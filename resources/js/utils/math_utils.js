@@ -203,6 +203,16 @@
 
             return result;
         },
+        ifft: function(signal) {
+            const N = signal.length;
+            if (N <= 1) return signal;
+
+            // Konjugieren der komplexen Zahlen
+            const conjugated = signal.map(([re, im]) => [re, -im]);
+            const transformed = this.fft(conjugated);
+            // Konjugieren zurück und normalisieren
+            return transformed.map(([re, im]) => [re / N, -im / N]);
+        },
         mathAddComplex: function([a, b], [c, d]) {
             return [a + c, b + d];
         },
