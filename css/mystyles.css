@@ -445,6 +445,7 @@
     position: relative;
     margin-left: 25px;
     text-align: left;
+    margin-top: -10px !important;
     /* Platz für das Icon */
 }
 
