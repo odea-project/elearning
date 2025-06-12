@@ -635,9 +635,9 @@ Result: 2.5  3.5  4.5  5.5  6.5  0    0    0    0</code>
             $$
             \exp(i \cdot x \cdot f)
             $$
-        <div id="chart_radial"></div>
+        <div id="chart_radial" style="margin-top: -40px;"></div>
         </p>
-        <p class="subSubBullet" style="font-size: medium; margin-top: -40px;">
+        <p class="subSubBullet" style="font-size: medium;">
             The radial frequency is the number of loops around the circle per unit of time.
         </p>
     </div>
@@ -649,7 +649,7 @@ Result: 2.5  3.5  4.5  5.5  6.5  0    0    0    0</code>
             $$
             \exp(i \cdot x \cdot f) \cdot \cos(x \cdot f)
             $$
-        <div id="chart_interference2"></div>
+        <div id="chart_interference2" style="margin-top: -40px;"></div>
         </p>
     </div>
 </div>
@@ -663,11 +663,11 @@ Result: 2.5  3.5  4.5  5.5  6.5  0    0    0    0</code>
             Fourier Transformation combines <strong>axial</strong> and <strong>radial</strong>
             frequencies to identify patterns:
             $$
-            \hat{y}_k = \sum_{j=0}^{N-1} \left(e^{-2\pi i \cdot \frac{jk}{N}} \cdot y_j\right)
+            y_k = \sum_{j=0}^{N-1} \left(e^{-2\pi i \cdot \frac{jk}{N}} \cdot y_j\right)
             $$
             Where $ y $ is the dataset with $ N $ points.
         </p>
-        <p class="subBullet">
+        <p class="subBullet" style="font-size: large;">
             When frequencies differ, the integral approaches zero. For matching frequencies, the sum
             increases.
         </p>
@@ -679,6 +679,7 @@ Result: 2.5  3.5  4.5  5.5  6.5  0    0    0    0</code>
             <input id="frequencySlider" type="range" min="1" max="10" step="0.1" value="1">
             <span id="frequencyValue">1</span>
         </p>
+        <label>Centroid Distance: <span id="distanceValue"></span></label>
         <div id="chart_matching"></div>
         <p class="subSubBullet" style="font-size: large;">
             The integral can be interpreted as the distance between geometric mean of the dataset to the
@@ -704,9 +705,11 @@ Result: 2.5  3.5  4.5  5.5  6.5  0    0    0    0</code>
     </div>
     <div class="spacer"></div>
     <div class="rightBox">
-        <img src="../resources/fft0.png" alt="Fourier Transformation" style="width: 100%;">
+        <div id="chart_fft1"></div>
+        <div id="chart_fft2"></div>
     </div>
 </div>
+<script src="../resources/js/charts/signal_processing_012.js"></script>
 --- (id="systematic-frequency-analysis")
 
 ## Frequency <span class="post-it-strip">Filtering</span>

@@ -143,6 +143,113 @@
   });
 })();
 
+(function () {
+  const divID       = "chart_matching";
+  const sectionID   = "denoising-fourier-transformation-4";
+  const numPoints   = 300;
+  const t           = mathUtils.linspace(0, 1, numPoints); 
+  // t in [0,1] für lineares Signal; Winkel später = 2π·f·t
+  const baseRadius  = 100;  // Pixel
+  const axialAmp    = 20;   // Stärke der radialen Modulation (in Pixel)
+  const slider      = document.getElementById("frequencySlider");
+  const displayFreq = document.getElementById("frequencyValue");
+  const displayDist = document.getElementById("distanceValue");
+
+  let svg, path, centroidPoint, centroidLine;
+
+  function init() {
+    // SVG aufsetzen (einmalig)
+    d3.select(`#${divID}`).selectAll("*").remove();
+    svg = d3.select(`#${divID}`)
+      .append("svg")
+        .attr("width", 2*baseRadius + 50)
+        .attr("height", 2*baseRadius + 50)
+      .append("g")
+        .attr("transform", `translate(${baseRadius+25},${baseRadius+25})`);
+
+    // Pfad und Schwerpunkt-Elemente
+    path = svg.append("path")
+      .attr("fill", "none")
+      .attr("stroke", "red")
+      .attr("stroke-width", 2);
+
+    centroidLine = svg.append("line")
+      .attr("stroke", "blue")
+      .attr("stroke-width", 1);
+
+    centroidPoint = svg.append("circle")
+      .attr("r", 5)
+      .attr("fill", "blue");
+
+    // Slider-Initialisierung
+    slider.min = 1;
+    slider.max = 10;
+    slider.step = 0.1;
+    slider.value = 1;
+    displayFreq.textContent = slider.value;
+  }
+
+  function update() {
+  const f = +slider.value;
+  displayFreq.textContent = f.toFixed(1);
+
+  // 1) Punkte berechnen
+  const points = t.map((u) => {
+    const cosVal = Math.cos(2 * Math.PI * u * 4.2);
+    const r      = baseRadius + cosVal * axialAmp;
+    const theta  = 2 * Math.PI * f * u;
+    return {
+      x: r * Math.cos(theta),
+      y: r * Math.sin(theta),
+      w: Math.abs(cosVal)
+    };
+  });
+
+  // 2) Offenen Pfad-Generator verwenden
+  const lineGen = d3.line()
+    .x(d => d.x)
+    .y(d => d.y)
+    .curve(d3.curveCardinal);
+
+  // 3) Pfad updaten
+  path.datum(points)
+      .attr("d", lineGen);
+
+  // 4) Schwerpunkt (centroid) berechnen
+  const centroid = points.reduce((acc, p) => {
+    acc.x += p.x * p.w;
+    acc.y += p.y * p.w;
+    acc.w += p.w;
+    return acc;
+  }, { x: 0, y: 0, w: 0 });
+
+  // erst nach dem Summieren normalisieren
+  centroid.x /= centroid.w;
+  centroid.y /= centroid.w;
+
+  // 5) Schwerpunkt-Visualisierung
+  centroidPoint
+    .attr("cx", centroid.x)
+    .attr("cy", centroid.y);
+  centroidLine
+    .attr("x1", 0).attr("y1", 0)
+    .attr("x2", centroid.x).attr("y2", centroid.y);
+
+  // 6) Abstand zum Ursprung anzeigen
+  const dist = Math.hypot(centroid.x, centroid.y);
+  displayDist.textContent = dist.toFixed(1);
+}
+
+  Reveal.addEventListener('slidechanged', event => {
+    if (event.currentSlide.id !== sectionID) return;
+    init();
+    update();
+    // jedes Mal neu zeichnen, wenn der Slider bewegt wird
+    slider.oninput = update;
+  });
+})();
+
+
 
 
 
