@@ -250,7 +250,7 @@
 
 ---
 
-## Analytical Data Processing with <span class="post-it-strip">KNIME</span>
+## Analytical Data <span class="post-it-strip">processing</span> with <a href="https://www.knime.com/">KNIME</a>
 
 <div style="display: flex; justify-content: center; align-items: center;">
   <div style="background: #fff; padding: 0; border-radius: 6px; box-shadow: 0 2px 8px rgba(0,0,0,0.04);">
@@ -260,7 +260,7 @@
 
 ---
 
-## Analytical Data Processing with <span class="post-it-strip">Galaxy</span>
+## Analytical Data <span class="post-it-strip">processing</span> with <a href="https://usegalaxy.eu/">Galaxy</a>
 
 <div style="display: flex; justify-content: center; align-items: center;">
   <div style="background: #fff; padding: 0; border-radius: 6px; box-shadow: 0 2px 8px rgba(0,0,0,0.04);">
@@ -270,12 +270,12 @@
 
 ---
 
-## Analytical Data Processing with <span class="post-it-strip">Programming Languages</span>
+## Analytical Data <span class="post-it-strip">processing</span> with Programming Languages
 
 <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 350px;">
   <div style="text-align: center; margin-bottom: 24px;">
     <strong>The most flexible and powerful way to process analytical data</strong><br>
-    <strong class=fragment>but also the most complex</strong><br>
+    <strong class=fragment><br>but also the most complex</strong><br>
   </div>
   <div class=fragment style="text-align: center; margin-bottom: 24px;">
     <strong>if not for the convenience of libraries and frameworks.</strong>
@@ -287,24 +287,78 @@
 
 ---
 
-## Analytical Data Processing with <span class="post-it-strip">StreamFind</span>
+## Analytical Data <span class="post-it-strip">processing</span> with <a href="https://odea-project.github.io/StreamFind/">StreamFind</a>
 
 <div style="display: flex; justify-content: center; align-items: center;">
   <div style="background: #fff; padding: 0; border-radius: 6px; box-shadow: 0 2px 8px rgba(0,0,0,0.04);">
     <iframe src="https://odea-project.github.io/StreamFind/" width="900" height="480" style="border:1px solid #ccc; background:#fff;" title="StreamFind"></iframe>
   </div>
-
 </div>
 
 ---
 
-## Learning with <span class="post-it-strip">Programming Languages</span>
+## Learning <span class="post-it-strip">Programming Languages</span>
 
-
+<br>
+<div style="display: flex; gap: 32px; justify-content: center; align-items: flex-start;">
+  <div style="flex: 1; min-width: 220px; max-width: 320px; text-align: center;">
+    <strong><a href="https://www.w3schools.com/">W3Schools</a></strong>
+    <div style="font-size: 0.7em;">
+      <br>
+      A beginner-friendly platform offering interactive tutorials and references for programming languages, web development and frameworks (e.g. NumPy, Pandas, Matplotlib and SciPy).
+      <br>
+      <br>
+      Great for quick learning and hands-on practice.
+      <br>
+      <br>
+      <em>Free (certificates available for a fee)</em>
+    </div>
+  </div>
+  <div style="flex: 1; min-width: 220px; max-width: 320px; text-align: center;">
+    <strong><a href="https://www.codecademy.com/" target="_blank">Codecademy</a></strong>
+    <div style="font-size: 0.8em;">
+      <br>
+      An interactive learning platform with guided career paths and courses in programming languages.
+      <br>
+      <br>
+      Suitable for structured courses and guided projects.
+      <br>
+      <br>
+      <em>Free and paid courses available</em>
+    </div>
+  </div>
+  <div style="flex: 1; min-width: 220px; max-width: 320px; text-align: center;">
+    <strong><a href="https://www.coursera.org/" target="_blank">Coursera</a></strong>
+    <div style="font-size: 0.8em;">
+      <br>
+      Offers online courses from top universities and organizations, covering programming and computer science topics in depth.
+      <br>
+      <br>
+      Includes video lectures, assignments, and certificates.
+      <br>
+      <br>
+      <em>Free and paid courses available</em>
+    </div>
+  </div>
+</div>
 
 ---
 
-# Analytical Data Reporting Tools
+## Learning <span class="post-it-strip">Programming Languages</span>
+
+<div style="display: flex; justify-content: center; align-items: center;">
+  <div style="text-align: center; max-width: 900px;">
+    Yet, learning programming languages is not just about the language itself!
+    <br><br>
+    You must find applied projects to focus your learning and keep you motivated.
+    <br><br>
+    Applied Learning is <span class="post-it-strip">better than</span> Theoretical Learning!
+  </div>
+</div>
+
+---
+
+##  Analytical Data <span class="post-it-strip">Reporting</span>
 
 List various tools that are commonly used for reporting analytical data. Discuss the features, strengths, and weaknesses of each tool, including factors such as visualization capabilities, ease of use, integration with data sources, and support for different output formats.
 
