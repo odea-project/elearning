@@ -118,6 +118,8 @@ document.querySelectorAll('.topic-link').forEach(a => {
              : allSlides.appendChild(sec);
     });
     Reveal.layout();
+
+    // (7) mermaid, (8) math …
     const mer = Reveal.getPlugin('mermaid');
     if (mer?.init) mer.init(Reveal);
     newSecs.forEach(sec =>
@@ -129,6 +131,7 @@ document.querySelectorAll('.topic-link').forEach(a => {
     );
     // KaTeX…
     renderMathInDynamicSlides(newSecs);
+    
     Reveal.slide(2);
   });
 });
@@ -173,3 +176,5 @@ function renderMathInDynamicSlides(sections) {
     console.warn('[WARN] Keine Funktion gefunden, um Math zu rendern');
   }
 }
+
+

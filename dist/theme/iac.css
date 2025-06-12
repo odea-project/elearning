@@ -432,19 +432,19 @@
  *********************************************/
 .reveal .katex, 
 .reveal .katex .base {
-  font-family: "Neoletters", serif !important;
+  font-family: "Montserrat", serif !important;
   color: #FF0;
 }
 
 .reveal .katex .mord,
 .reveal .katex .math,
 .reveal .katex .strut {
-  font-family: "Neoletters", serif !important;
+  font-family: "Montserrat", serif !important;
 }
 
 .reveal .katex .mord > .mord,
 .reveal .katex .mord > .mord > .mord {
-  font-family: "Neoletters", serif !important;
+  font-family: "Montserrat", serif !important;
 }
 
 /*********************************************

@@ -186,8 +186,9 @@
     drawPixelChart: function (
       divID, dataSets,
       width = 800, height = 400,
-      xmin = null, xmax = null,    // Standard auf null ändern
-      ymin = null, ymax = null     // statt 0/1
+      xmin = null, xmax = null,            // Standard auf null ändern
+      ymin = null, ymax = null,            // statt 0/1
+      hideXAxis = false, hideYAxis = false // optional, um Achsen zu verstecken
     ) {
       // Cache initialisieren
       plotUtils._cache = plotUtils._cache || {};
@@ -224,6 +225,13 @@
 
         // d) Achsen erzeugen
         plotUtils.addAxes(fig, xDomain, yDomain, 5, 5);
+        // e) Achsen verstecken, falls gewünscht
+        if (hideXAxis) {
+          fig.xAxisGroup.style("display", "none");
+        }
+        if (hideYAxis) {
+          fig.yAxisGroup.style("display", "none");
+        }
         cacheItem.axesAlready = true;
       }
 
