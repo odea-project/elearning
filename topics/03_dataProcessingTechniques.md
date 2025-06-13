@@ -6,7 +6,7 @@
 </div>
 <div class="spacer"></div>
 <div class="rightBox">
-<img src="../resources/misc/objectives.jpg" alt="Objectives and Pre-requisites" style="width: auto; height: 350px; float: right;">
+<img src="resources/misc/objectives.jpg" alt="Objectives and Pre-requisites" style="width: auto; height: 350px; float: right;">
 </div>
 </div>
 --- (id="objectives-and-pre-requisites")
