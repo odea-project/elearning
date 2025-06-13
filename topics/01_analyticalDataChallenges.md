@@ -907,13 +907,13 @@ timeline
 
 ---
 
-## Encoding and Compression <span class="post-it-strip">streategies</span>
+<!-- ## Encoding and Compression <span class="post-it-strip">streategies</span>
 
 <figure>
   <img src="resources/figures/01_analyticalDataChallenges/encoding_abstract.png" data-preview-image alt="Encoding Abstract" height="300" style="display:inline-block; vertical-align:center; margin-right:10px;"/>
 </figure>
 
----
+--- -->
 
 ## Encoding and Compression <span class="post-it-strip">takeaways</span>
 

@@ -153,7 +153,7 @@
 <br>
 <br>
 <br>
-<p>Further reading: <a href="https://www.cdi.fau.de/en/services/electronic-lab-notebooks/kriterien/">Criteria for Selecting an ELN</a></p>
+<p style="font-size: 0.7em;"> Further reading: <a href="https://www.cdi.fau.de/en/services/electronic-lab-notebooks/kriterien/">Criteria for Selecting an ELN</a> and <a href="https://eln-finder.ulb.tu-darmstadt.de/home">ELN Finder</a></p>
 
 ---
 
@@ -437,14 +437,39 @@
 
 ---
 
-# Map of best tools for getting started quickly
+## Analytical Data <span class="post-it-strip">visualisation</span> with <a href="https://plotly.com/graphing-libraries/" target="_blank">Plotly</a>
 
-
+<div style="display: flex; justify-content: center; align-items: center;">
+  <div style="background: #fff; padding: 0; border-radius: 6px; box-shadow: 0 2px 8px rgba(0,0,0,0.04);">
+    <iframe src="https://plotly.com/graphing-libraries/" width="900" height="480" style="border:1px solid #ccc; background:#fff;" title="Plotly Graphing Libraries"></iframe>
+  </div>
+</div>
 
 ---
 
-# Map of best tools for building a reproducible research pipeline
+## Concluding Remarks and <span class="post-it-strip">Recommendations</span>
 
-
+<br>
+<div>
+  <ul>
+    <li><strong>Best for getting started quickly</strong>
+      <ul>
+        <li>Dedicated software for specific tasks (e.g., <a href="https://mzio.io/mzmine-news/">mzmine</a>)</li>
+        <li>Hybrid platforms for interactive and flexible data processing (e.g., <a href="https://www.knime.com/">KNIME</a>)</li>
+      </ul>
+    </li>
+    <br>
+    <br>
+    <li><strong>Best for building a reproducible research pipeline</strong>
+      <ul>
+        <li>Code-based solutions for data processing (e.g., <a href="https://www.python.org/">Python</a>, <a href="https://cran.r-project.org/">R</a>)</li>
+        <li>Libraries and Frameworks for boosting capabilities and productivity (e.g., <a href="https://github.com/odea-project/StreamFind">StreamFind</a>)</li>
+        <li>Tools for flexible and interactive reporting and visualisation (e.g., <a href="https://quarto.org/">Quarto Documents</a>)</li>
+      </ul>
+    </li>
+  </ul>
+</div>
+<br>
+<br>
 
 ---
