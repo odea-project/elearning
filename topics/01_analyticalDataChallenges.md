@@ -380,9 +380,9 @@ Analytical data is utilized across various fields, each with unique requirements
           mode: 'lines',
           name: analysis,
           legendgroup: analysis,
+          showlegend: false,
           type: 'scatter',
-          line: { color: colorMap[analysis] },
-          hoverinfo: 'none'
+          line: {width: 1, color: colorMap[analysis] }
         }));
         const fillTraces = peaks.map(peak => {
           const analysis = peak.analysis;
@@ -393,9 +393,6 @@ Analytical data is utilized across various fields, each with unique requirements
             .map((x, i) => ({ x, y: groups[analysis].y[i] }))
             .filter(pt => pt.x >= rtmin && pt.x <= rtmax);
           if (region.length === 0) return null;
-          // const hoverInfo = Object.entries(peak)
-          //   .map(([key, value]) => `${key}: ${value}`)
-          //   .join('<br>');
           return {
             x: region.map(pt => pt.x),
             y: region.map(pt => pt.y),
@@ -406,33 +403,58 @@ Analytical data is utilized across various fields, each with unique requirements
             legendgroup: analysis,
             fillcolor: colorMap[analysis] + '50',
             line: { width: 0, color: colorMap[analysis] },
-            showlegend: false,
-            // hoverinfo: 'text',
-            // text: region.map(() => hoverInfo)
-            hovertemplate: 'analysis: %{customdata[0]}<br>' +
-              'replicate: %{customdata[1]}<br>' +
-              'index: %{customdata[2]}<br>' +
-              'id: %{customdata[3]}<br>' +
-              'peak: %{customdata[4]}<br>' +
-              'polarity: %{customdata[5]}<br>' +
-              'pre_ce: %{customdata[6]}<br>' +
-              'pre_mz: %{customdata[7]}<br>' +
-              'pro_mz: %{customdata[8]}<br>' +
-              'idx: %{customdata[9]}<br>' +
-              'rt: %{customdata[10]}<br>' +
-              'rtmin: %{customdata[11]}<br>' +
-              'rtmax: %{customdata[12]}<br>' +
-              'intensity: %{customdata[13]}<br>' +
-              'width: %{customdata[14]}<br>' +
-              'area: %{customdata[15]}<br>' +
-              'sn: %{customdata[16]}<br>' +
-              'calibration: %{customdata[17]}<br>' +
-              '<extra></extra>',
-            customdata: region.map(() => [
-              peak.analysis, peak.replicate, peak.index, peak.id, peak.peak, peak.polarity,
-              peak.pre_ce, peak.pre_mz, peak.pro_mz, peak.idx, peak.rt, peak.rtmin,
-              peak.rtmax, peak.intensity, peak.width, peak.area, peak.sn, peak.calibration
-            ])
+            showlegend: false
+          };
+        }).filter(Boolean);
+
+        const traces2 = peaks.map(peak => {
+          const analysis = peak.analysis;
+          const rtmin = Number(peak.rtmin);
+          const rtmax = Number(peak.rtmax);
+          if (!groups[analysis]) return null;
+          const region = groups[analysis].x
+            .map((x, i) => ({ x, y: groups[analysis].y[i] }))
+            .filter(pt => pt.x >= rtmin && pt.x <= rtmax);
+          if (region.length === 0) return null;
+          const hoverInfo = Object.entries(peak)
+            .map(([key, value]) => `${key}: ${value}`)
+            .join('<br>');
+          return {
+            x: region.map(pt => pt.x),
+            y: region.map(pt => pt.y),
+            type: 'scatter',
+            mode: 'lines',
+            name: analysis,
+            legendgroup: analysis,
+            line: { width: 2, color: colorMap[analysis] },
+            showlegend: true,
+            hoverinfo: 'text',
+            text: region.map(() => hoverInfo),
+            // hovertemplate: '%{text}<extra></extra>',
+            // hovertemplate: 'analysis: %{customdata[0]}<br>' +
+            //   'replicate: %{customdata[1]}<br>' +
+            //   'index: %{customdata[2]}<br>' +
+            //   'id: %{customdata[3]}<br>' +
+            //   'peak: %{customdata[4]}<br>' +
+            //   'polarity: %{customdata[5]}<br>' +
+            //   'pre_ce: %{customdata[6]}<br>' +
+            //   'pre_mz: %{customdata[7]}<br>' +
+            //   'pro_mz: %{customdata[8]}<br>' +
+            //   'idx: %{customdata[9]}<br>' +
+            //   'rt: %{customdata[10]}<br>' +
+            //   'rtmin: %{customdata[11]}<br>' +
+            //   'rtmax: %{customdata[12]}<br>' +
+            //   'intensity: %{customdata[13]}<br>' +
+            //   'width: %{customdata[14]}<br>' +
+            //   'area: %{customdata[15]}<br>' +
+            //   'sn: %{customdata[16]}<br>' +
+            //   'calibration: %{customdata[17]}<br>' +
+            //   '<extra></extra>',
+            // customdata: region.map(() => [
+            //   peak.analysis, peak.replicate, peak.index, peak.id, peak.peak, peak.polarity,
+            //   peak.pre_ce, peak.pre_mz, peak.pro_mz, peak.idx, peak.rt, peak.rtmin,
+            //   peak.rtmax, peak.intensity, peak.width, peak.area, peak.sn, peak.calibration
+            // ])
           };
         }).filter(Boolean);
         const layout = {
@@ -457,15 +479,14 @@ Analytical data is utilized across various fields, each with unique requirements
           paper_bgcolor: '#000000',
           font: { color: '#fff' },
           hoverlabel: {
-            bgcolor: "#222",
+            // bgcolor: '#fff',
             font: {
-              color: "white",
-              size: 14,
-              family: "Rockwell"
+              color: '#000',
+              size: 8,
             }
           }
         };
-        Plotly.newPlot('Processed_BVCZ_DAD_plot', [...traces, ...fillTraces], layout, {responsive: true, scrollZoom: true});
+        Plotly.newPlot('Processed_BVCZ_DAD_plot', [...traces, ...fillTraces, ...traces2], layout, {responsive: true, scrollZoom: true});
       });
     }
   });
@@ -887,16 +908,17 @@ timeline
 
 ---
 
-## Encoding and Compression <span class="post-it-strip">streategies</span>
+<!-- ## Encoding and Compression <span class="post-it-strip">streategies</span>
 
 <figure>
   <img src="resources/figures/01_analyticalDataChallenges/encoding_abstract.png" data-preview-image alt="Encoding Abstract" height="300" style="display:inline-block; vertical-align:center; margin-right:10px;"/>
 </figure>
 
----
+--- -->
 
 ## Encoding and Compression <span class="post-it-strip">takeaways</span>
 
+<br>
 <div>
   <ul>
     <li><strong>Data Encoding:</strong>
@@ -905,6 +927,8 @@ timeline
         <li><em>Binary encoding</em> represents data in binary digits (0s and 1s), forming the foundation for more complex (and often proprietary) encoding methods.</li>
       </ul>
     </li>
+    <br>
+    <br>
     <li><strong>Data Compression:</strong>
       <ul>
         <li>Data compression reduces the size of data files, optimizing storage and transmission.</li>
@@ -913,6 +937,8 @@ timeline
     </li>
   </ul>
 </div>
+<br>
+<br>  
 
 <p style="font-size: 0.7em;">Further reading: 
   <a href="https://realpython.com/python-bytes/"> Bytes Objects: Handling Binary Data in Python</a> and <a href="https://link.springer.com/book/10.1007/978-1-84882-903-9">Handbook of Data Compression</a>
@@ -935,34 +961,34 @@ The FAIR (**Findable**, **Accessible**, **Interoperable**, **Reusable**) princip
 
 <div>
   <ul>
-    <li><strong>Data management:</strong>
+    <li><strong>Management:</strong>
       <ul>
-        <li>There is a need for efficient data management systems to handle the large volumes of data generated by modern analytical instruments.</li>
+        <li style="font-size: 0.7em;">There is a need for efficient data management systems to handle the large volumes of data generated by modern analytical instruments.</li>
       </ul>
     </li>
-    <li><strong>Data complexity and volume:</strong>
+    <li><strong>Complexity and Volume:</strong>
       <ul>
-        <li>The growing complexity and scale of analytical data necessitates sophisticated processing techniques and tools for extracting meaningful insights.</li>
+        <li style="font-size: 0.7em;">The growing complexity and scale of analytical data necessitates sophisticated processing techniques and tools for extracting meaningful insights.</li>
       </ul>
     </li>
-    <li><strong>Data standardisation and interoperability:</strong>
+    <li><strong>Standardisation and Interoperability:</strong>
       <ul>
-        <li>The lack of standardised data formats and interoperability between different analytical instruments and software can hinder data sharing and collaboration.</li>
+        <li style="font-size: 0.7em;">The lack of standardised data formats and interoperability between different analytical instruments and software can hinder data sharing and collaboration.</li>
       </ul>
     </li>
-    <li><strong>Data provenance:</strong>
+    <li><strong>Provenance:</strong>
       <ul>
-        <li>Ensuring data provenance and maintaining an audit trail is crucial for reproducibility and trust in analytical results, and supports the FAIR principles.</li>
+        <li style="font-size: 0.7em;">Ensuring data provenance and maintaining an audit trail is crucial for reproducibility and trust in analytical results, and supports the FAIR principles.</li>
       </ul>
     </li>
-    <li><strong>Data visualisation:</strong>
+    <li><strong>Visualisation:</strong>
       <ul>
-        <li>Effective visualisation techniques are necessary to interpret complex analytical data, enabling researchers to derive insights and communicate their findings effectively.</li>
+        <li style="font-size: 0.7em;">Effective visualisation techniques are necessary to interpret complex analytical data, enabling researchers to derive insights and communicate their findings effectively.</li>
       </ul>
     </li>
-    <li><strong>Data quality:</strong>
-      <ul>
-        <li>Rigorously validating and controlling data quality is essential for reliable results.</li>
+    <li><strong>Quality:</strong>
+      <ul>  
+        <li style="font-size: 0.7em;">Rigorously validating and controlling data quality is essential for reliable results.</li>
       </ul>
     </li>
   </ul>

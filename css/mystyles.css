@@ -656,9 +656,15 @@ body {
 }
 
 .line {
-    fill: none;
+    fill: 'none';
     stroke: #000;
     stroke-width: 2px;
+}
+
+.plotly .line {
+    fill: #000;
+    stroke: #000;
+    stroke-width: 0.1px;
 }
 
 /* Axis styling */
@@ -842,3 +848,4 @@ body {
   box-shadow: 0 0 20px rgba(255,255,255,0.5);
   border-radius: 4px;
 }
+

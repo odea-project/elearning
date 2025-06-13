@@ -1,68 +1,69 @@
 ## Proprietary Software <span class="post-it-strip"> vs </span> Open-Source Software
 
 <div style="display: flex; gap: 50px; justify-content: center; align-items: center;">
-  <div style="width: 450px;">
-    <!-- <img src="PATH_TO_CODE_SOLUTION_IMAGE" alt="Proprietary Software" style="height: 400px;"> -->
-    <!-- Suggest a figure that visually represents vendor (proprietary) software for analytical data processing, highlighting features such as professional technical support and regular updates, optimization for specific instruments and workflows, user-friendly interfaces and documentation, and reliable performance and validation. -->
+  <!-- Left side: Vendor -->
+  <div style="width: 450px; min-height: 250px; position: relative;">
+    <figure class="fragment fade-out" style="margin:0;">
+      <img src="resources/figures/02_toolsAndProgramming/vendor.jpg" alt="Proprietary Software" style="height: 250px;">
+      <figcaption style="font-size:0.7em; text-align:center; margin-top:4px;">
+        Source: <a href="https://pixabay.com/" target="_blank">pixabay.com</a>
+      </figcaption>
+    </figure>
+    <div class="fragment fade-in" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; align-items: flex-start; justify-content: center;">
+      <ul>
+        <li><strong>Vendor Pros:</strong>
+          <ul style="font-size: 0.75em;">
+            <li>Professional technical support and regular updates</li>
+            <li>Optimized for specific instruments and workflows</li>
+            <li>User-friendly interfaces and documentation</li>
+            <li>Reliable performance and validation</li>
+          </ul>
+        </li>
+        <br>
+        <li class="fragment fade-in"><strong>Vendor Cons:</strong>
+          <ul style="font-size: 0.75em;">
+            <li>High licensing and maintenance costs</li>
+            <li>Limited flexibility and customization</li>
+            <li>Vendor lock-in and proprietary data formats</li>
+            <li>Less community involvement and slower innovation</li>
+          </ul>
+        </li>
+      </ul>
+    </div>
   </div>
-  <div style="width: 450px;">
-    <!-- <img src="PATH_TO_CODE_SOLUTION_IMAGE" alt="Open-Source Software" style="height: 400px;"> -->
-    <!-- Suggest a figure that visually represents open-source software for analytical data processing, highlighting features such as being free to use, highly flexible and customizable, active community support and rapid innovation, and promoting open standards and interoperability. -->
+  <!-- Right side: Open Source -->
+  <div style="width: 450px; min-height: 250px; position: relative;">
+    <figure class="fragment fade-out" style="margin:0;">
+      <img src="resources/figures/02_toolsAndProgramming/opensource.jpg" alt="Open-Source Software" style="height: 250px;">
+      <figcaption style="font-size:0.7em; text-align:center; margin-top:4px;">
+        Source: <a href="https://pixabay.com/" target="_blank">pixabay.com</a>
+      </figcaption>
+    </figure>
+    <div class="fragment fade-in" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; align-items: flex-start; justify-content: center;">
+      <ul>
+        <li><strong>Open-Source Pros:</strong>
+          <ul style="font-size: 0.75em;">
+            <li>Free to use</li>
+            <li>Highly flexible and customizable</li>
+            <li>Active community support and rapid innovation</li>
+            <li>Promotes open standards and interoperability</li>
+          </ul>
+        </li>
+        <br>
+        <li class="fragment fade-in"><strong>Open-Source Cons:</strong>
+          <ul style="font-size: 0.75em;">
+            <li>May lack official technical support</li>
+            <li>Steeper learning curve for some tools</li>
+            <li>Variable documentation and user experience</li>
+            <li>Potential compatibility issues with vendor hardware</li>
+          </ul>
+        </li>
+      </ul>
+    </div>
   </div>
 </div>
 
----
-
-## Proprietary Software <span class="post-it-strip"> vs </span> Open-Source Software
-
-<br>
-<br>
-<div style="display: flex; gap: 50px; justify-content: center; align-items: center;">
-  <div style="width: 450px;">
-    <ul>
-      <li><strong>Pros:</strong>
-        <ul style="font-size: 0.75em;">
-          <li>Professional technical support and regular updates</li>
-          <li>Optimized for specific instruments and workflows</li>
-          <li>User-friendly interfaces and documentation</li>
-          <li>Reliable performance and validation</li>
-        </ul>
-      </li>
-      <li><strong>Cons:</strong>
-        <ul style="font-size: 0.75em;">
-          <li>High licensing and maintenance costs</li>
-          <li>Limited flexibility and customization</li>
-          <li>Vendor lock-in and proprietary data formats</li>
-          <li>Less community involvement and slower innovation</li>
-        </ul>
-      </li>
-    </ul>
-  </div>
-  <div style="width: 450px;">
-    <ul>
-      <li><strong>Pros:</strong>
-        <ul style="font-size: 0.75em;">
-          <li>Free to use</li>
-          <li>Highly flexible and customizable</li>
-          <li>Active community support and rapid innovation</li>
-          <li>Promotes open standards and interoperability</li>
-        </ul>
-      </li>
-      <li><strong>Cons:</strong>
-        <ul style="font-size: 0.75em;">
-          <li>May lack official technical support</li>
-          <li>Steeper learning curve for some tools</li>
-          <li>Variable documentation and user experience</li>
-          <li>Potential compatibility issues with vendor hardware</li>
-        </ul>
-      </li>
-    </ul>
-  </div>
-</div>
-<br>
-<br>
-
-<span class="fragment" style="display:block; text-align:center; font-size:1em; margin-top:24px;">
+<span class="fragment fade-in" style="display:block; text-align:center; font-size:1em; margin-top:24px;">
   <em>The focus will be on open-source software!</em>
 </span>
 
@@ -152,7 +153,7 @@
 <br>
 <br>
 <br>
-<p>Further reading: <a href="https://www.cdi.fau.de/en/services/electronic-lab-notebooks/kriterien/">Criteria for Selecting an ELN</a></p>
+<p style="font-size: 0.7em;"> Further reading: <a href="https://www.cdi.fau.de/en/services/electronic-lab-notebooks/kriterien/">Criteria for Selecting an ELN</a> and <a href="https://eln-finder.ulb.tu-darmstadt.de/home">ELN Finder</a></p>
 
 ---
 
@@ -212,45 +213,47 @@
 
 ## Analytical Data <span class="post-it-strip">processing</span> Software
 
-<div style="display: flex; gap: 32px; justify-content: center; align-items: stretch;">
+<div style="display: flex; gap: 32px; justify-content: center; align-items: flex-start;">
   <div style="flex: 1; min-width: 220px; max-width: 340px; text-align: center;">
     <h3>Code</h3>
-    <div style="height: 60px; margin-bottom: 12px;">
-      <!-- <img src="PATH_TO_CODE_SOLUTION_IMAGE" alt="Code Solutions" style="max-height: 60px;"> -->
-      <!-- Abstract figure of purelly code based software. -->
+    <div style="height: 100px; margin-bottom: 12px;">
+      <img src="resources/figures/02_toolsAndProgramming/code.png" alt="Code Solutions" style="height: 80px;">
     </div>
-    <div style="font-size: 0.95em;">
+    <div style="font-size: 0.7em;">
       These involve writing scripts or programs to process analytical data. They offer high flexibility and performance but require programming skills.<br>
+      <br>
       <strong>Examples:</strong> <a href="https://www.python.org/">Python</a>, <a href="https://cran.r-project.org/">R</a>, <a href="https://julialang.org/">Julia</a>
     </div>
   </div>
   <div style="flex: 1; min-width: 220px; max-width: 340px; text-align: center;">
     <h3>no-code</h3>
-    <div style="height: 60px; margin-bottom: 12px;">
-      <!-- <img src="PATH_TO_NO_CODE_SOLUTION_IMAGE" alt="No-code Solutions" style="max-height: 60px;"> -->
-      <!-- Abstract figure of software with a graphical user interface, so no-code usage. -->
+    <div style="height: 100px; margin-bottom: 12px;">
+      <img src="resources/figures/02_toolsAndProgramming/no_code.png" alt="No-code Solutions" style="height: 80px;">
     </div>
-    <div style="font-size: 0.95em;">
+    <div style="font-size: 0.7em;">
       User-friendly platforms that allow users to process data without writing code. They often provide drag-and-drop or fixed interfaces and pre-built functions.<br>
+      <br>
       <strong>Examples:</strong> <a href="https://mzio.io/mzmine-news/">mzmine</a>, <a href="https://usegalaxy.eu/">Galaxy (Europe)</a>, 
     </div>
   </div>
   <div style="flex: 1; min-width: 220px; max-width: 340px; text-align: center;">
     <h3>hybrid</h3>
-    <div style="height: 60px; margin-bottom: 12px;">
-      <!-- <img src="PATH_TO_HYBRID_SOLUTION_IMAGE" alt="Hybrid Solutions" style="max-height: 60px;"> -->
-      <!-- Abstract figure with software have a graphical user interface but also allows the use of costume scripts. -->
+    <div style="height: 100px; margin-bottom: 12px;">
+      <img src="resources/figures/02_toolsAndProgramming/hybrid.png" alt="Hybrid Solutions" style="height: 80px;">
     </div>
-    <div style="font-size: 0.95em;">
+    <div style="font-size: 0.7em;">
       Combine both coding and no-code approaches, allowing users to write custom scripts while also providing a graphical user interface.<br>
+      <br>
       <strong>Examples:</strong> <a href="https://www.knime.com/">KNIME</a>, <a href="https://orangedatamining.com/">Orange Data Mining</a>, <a href="https://github.com/odea-project/StreamFind">StreamFind</a>
     </div>
   </div>
 </div>
+<br>
+<br>
 
 ---
 
-## Analytical Data Processing with <span class="post-it-strip">KNIME</span>
+## Analytical Data <span class="post-it-strip">processing</span> with <a href="https://www.knime.com/">KNIME</a>
 
 <div style="display: flex; justify-content: center; align-items: center;">
   <div style="background: #fff; padding: 0; border-radius: 6px; box-shadow: 0 2px 8px rgba(0,0,0,0.04);">
@@ -260,7 +263,7 @@
 
 ---
 
-## Analytical Data Processing with <span class="post-it-strip">Galaxy</span>
+## Analytical Data <span class="post-it-strip">processing</span> with <a href="https://usegalaxy.eu/">Galaxy</a>
 
 <div style="display: flex; justify-content: center; align-items: center;">
   <div style="background: #fff; padding: 0; border-radius: 6px; box-shadow: 0 2px 8px rgba(0,0,0,0.04);">
@@ -270,7 +273,24 @@
 
 ---
 
-## Analytical Data Processing with <span class="post-it-strip">StreamFind</span>
+## Analytical Data <span class="post-it-strip">processing</span> with Programming Languages
+
+<div style="display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 350px;">
+  <div style="text-align: center; margin-bottom: 24px;">
+    <strong>The most flexible and powerful way to process analytical data</strong><br>
+    <strong class=fragment><br>but also the most complex</strong><br>
+  </div>
+  <div class=fragment style="text-align: center; margin-bottom: 24px;">
+    <strong>if not for the convenience of libraries and frameworks.</strong>
+    <div style="height: 220px;">
+    <img src="resources/figures/02_toolsAndProgramming/programming_languages_frameworks.png" alt="Programming Languages Figure">
+    </div>
+  </div>
+</div>
+
+---
+
+## Analytical Data <span class="post-it-strip">processing</span> with <a href="https://odea-project.github.io/StreamFind/">StreamFind</a>
 
 <div style="display: flex; justify-content: center; align-items: center;">
   <div style="background: #fff; padding: 0; border-radius: 6px; box-shadow: 0 2px 8px rgba(0,0,0,0.04);">
@@ -280,26 +300,176 @@
 
 ---
 
-# Programming for Data Processing
+## Learning <span class="post-it-strip">Programming Languages</span>
 
-Describe the various programming languages that are commonly used for processing analytical data. Discuss the strengths and weaknesses of each language, including factors such as performance, ease of use, community support, and libraries available for data processing tasks.
+<br>
+<div style="display: flex; gap: 32px; justify-content: center; align-items: flex-start;">
+  <div style="flex: 1; min-width: 220px; max-width: 320px; text-align: center;">
+    <strong><a href="https://www.w3schools.com/">W3Schools</a></strong>
+    <div style="font-size: 0.7em;">
+      <br>
+      A beginner-friendly platform offering interactive tutorials and references for programming languages, web development and frameworks (e.g. NumPy, Pandas, Matplotlib and SciPy).
+      <br>
+      <br>
+      Great for quick learning and hands-on practice.
+      <br>
+      <br>
+      <em>Free (certificates available for a fee)</em>
+    </div>
+  </div>
+  <div style="flex: 1; min-width: 220px; max-width: 320px; text-align: center;">
+    <strong><a href="https://www.codecademy.com/" target="_blank">Codecademy</a></strong>
+    <div style="font-size: 0.8em;">
+      <br>
+      An interactive learning platform with guided career paths and courses in programming languages.
+      <br>
+      <br>
+      Suitable for structured courses and guided projects.
+      <br>
+      <br>
+      <em>Free and paid courses available</em>
+    </div>
+  </div>
+  <div style="flex: 1; min-width: 220px; max-width: 320px; text-align: center;">
+    <strong><a href="https://www.coursera.org/" target="_blank">Coursera</a></strong>
+    <div style="font-size: 0.8em;">
+      <br>
+      Offers online courses from top universities and organizations, covering programming and computer science topics in depth.
+      <br>
+      <br>
+      Includes video lectures, assignments, and certificates.
+      <br>
+      <br>
+      <em>Free and paid courses available</em>
+    </div>
+  </div>
+</div>
 
 ---
 
-# Analytical Data Reporting Tools
+## Learning <span class="post-it-strip">Programming Languages</span>
 
-List various tools that are commonly used for reporting analytical data. Discuss the features, strengths, and weaknesses of each tool, including factors such as visualization capabilities, ease of use, integration with data sources, and support for different output formats.
+<div style="display: flex; justify-content: center; align-items: center;">
+  <div style="text-align: center; max-width: 900px;">
+    Yet, learning programming languages is not just about the language itself!
+    <br><br>
+    <strong>Keep motivated</strong> by focusing your learning on <strong>applied projects</strong>.
+    <br><br>
+  </div>
+</div>
 
 ---
 
-# Map of best tools for getting started quickly
+##  Analytical Data <span class="post-it-strip">Reporting</span>
 
-
+<div style="display: flex; justify-content: center; align-items: center;">
+  <div style="text-align: center; max-width: 900px;">
+    <strong>Reporting analytical data is a crucial step in the data analysis process.</strong>
+    <ul style="text-align: left; margin: 24px auto 0 auto; display: inline-block;">
+      <li>Support for dynamic content (e.g., tables and charts)</li>
+      <li>Flexible layout and design options</li>
+      <li>Integration with various data structures (i.e., interoperability)</li>
+      <li>Support for multiple output formats (e.g., PDF and HTML)</li>
+    </ul>
+  </div>
+</div>
 
 ---
 
-# Map of best tools for building a reproducible research pipeline
+##  Analytical Data <span class="post-it-strip">Reporting</span>
 
+<br>
+<div style="display: flex; gap: 32px; justify-content: center; align-items: flex-start;">
+  <div style="flex: 1; min-width: 220px; max-width: 320px; text-align: center;">
+    <div style="height: 70px; margin-bottom: 12px;">
+      <img src="resources/figures/02_toolsAndProgramming/Jupyter_logo.webp" alt="Jupyter Logo" style="height: 60px;">
+    </div>
+    <strong><a href="https://jupyter.org/" target="_blank">Jupyter Notebooks</a></strong>
+    <div style="font-size: 0.8em; margin-top: 8px;">
+      An open-source web application for creating and sharing documents that contain live code, equations, visualizations, and narrative text.<br><br>
+      Widely used for data analysis, teaching, and reproducible research.<br><br>
+      <em>Free and open-source</em>
+    </div>
+  </div>
+  <div style="flex: 1; min-width: 220px; max-width: 320px; text-align: center;">
+    <div style="height: 70px; margin-bottom: 12px;">
+      <img src="resources/figures\02_toolsAndProgramming/quarto-dark-bg.jpeg" alt="Quarto Logo" style="height: 60px;">
+    </div>
+    <strong><a href="https://quarto.org/" target="_blank">Quarto Documents</a></strong>
+    <div style="font-size: 0.8em; margin-top: 8px;">
+      A scientific and technical publishing system from Posit for creating dynamic documents, presentations, and websites with code, text, and visualizations.<br><br>
+      Supports R, Python, Julia, and Observable JS.<br><br>
+      <em>Free and open-source</em>
+    </div>
+  </div>
+  <div style="flex: 1; min-width: 220px; max-width: 320px; text-align: center;">
+    <div style="height: 70px; margin-bottom: 12px;">
+      <img src="resources/figures/02_toolsAndProgramming/reveal-black-text-sticker.png" alt="Reveal.js Logo" style="max-height: 60px;">
+    </div>
+    <strong><a href="https://revealjs.com/" target="_blank">Reveal.js</a></strong>
+    <div style="font-size: 0.8em; margin-top: 8px;">
+      A framework for creating interactive HTML presentations using Markdown or HTML.<br><br>
+      Ideal for sharing code, results, and explanations in a visually engaging way.<br><br>
+      <em>Free and open-source</em>
+    </div>
+  </div>
+</div>
 
+---
+
+## Analytical Data <span class="post-it-strip">Reporting</span> with <a href="https://quarto.org/docs/get-started/" target="_blank">Quarto Documents</a>
+
+<div style="display: flex; justify-content: center; align-items: center;">
+  <div style="background: #fff; padding: 0; border-radius: 6px; box-shadow: 0 2px 8px rgba(0,0,0,0.04);">
+    <iframe src="https://quarto.org/docs/get-started/" width="900" height="480" style="border:1px solid #ccc; background:#fff;" title="Quarto Get Started"></iframe>
+  </div>
+</div>
+
+---
+
+## Analytical Data <span class="post-it-strip">visualisation</span> with <a href="https://quarto.org/docs/interactive/" target="_blank">Quarto Documents</a>
+
+<div style="display: flex; justify-content: center; align-items: center;">
+  <div style="background: #fff; padding: 0; border-radius: 6px; box-shadow: 0 2px 8px rgba(0,0,0,0.04);">
+    <iframe src="https://quarto.org/docs/interactive/" width="900" height="480" style="border:1px solid #ccc; background:#fff;" title="Quarto Interactive Docs"></iframe>
+  </div>
+</div>
+
+---
+
+## Analytical Data <span class="post-it-strip">visualisation</span> with <a href="https://plotly.com/graphing-libraries/" target="_blank">Plotly</a>
+
+<div style="display: flex; justify-content: center; align-items: center;">
+  <div style="background: #fff; padding: 0; border-radius: 6px; box-shadow: 0 2px 8px rgba(0,0,0,0.04);">
+    <iframe src="https://plotly.com/graphing-libraries/" width="900" height="480" style="border:1px solid #ccc; background:#fff;" title="Plotly Graphing Libraries"></iframe>
+  </div>
+</div>
+
+---
+
+## Concluding Remarks and <span class="post-it-strip">Recommendations</span>
+
+<br>
+<div>
+  <ul>
+    <li><strong>Best for getting started quickly</strong>
+      <ul>
+        <li>Dedicated software for specific tasks (e.g., <a href="https://mzio.io/mzmine-news/">mzmine</a>)</li>
+        <li>Hybrid platforms for interactive and flexible data processing (e.g., <a href="https://www.knime.com/">KNIME</a>)</li>
+      </ul>
+    </li>
+    <br>
+    <br>
+    <li><strong>Best for building a reproducible research pipeline</strong>
+      <ul>
+        <li>Code-based solutions for data processing (e.g., <a href="https://www.python.org/">Python</a>, <a href="https://cran.r-project.org/">R</a>)</li>
+        <li>Libraries and Frameworks for boosting capabilities and productivity (e.g., <a href="https://github.com/odea-project/StreamFind">StreamFind</a>)</li>
+        <li>Tools for flexible and interactive reporting and visualisation (e.g., <a href="https://quarto.org/">Quarto Documents</a>)</li>
+      </ul>
+    </li>
+  </ul>
+</div>
+<br>
+<br>
 
 ---
