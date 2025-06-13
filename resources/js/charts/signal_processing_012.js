@@ -368,8 +368,10 @@
     Reveal.addEventListener('slidechanged', event => {
         if (event.currentSlide.id !== sectionID) return;
 
+        const yMin = Math.min(...yData_1);
+        const yMax = Math.max(...yData_1);
         const { fig, lines } = plotUtils.drawPixelChart(
-            divID, dataSets, 800, 400, 0, 2 * Math.PI, -6, 6
+            divID, dataSets, 800, 400, 0, 2 * Math.PI, yMin, yMax
         );
         Reveal.layout();
     });
@@ -460,30 +462,32 @@
         if (event.currentSlide.id !== sectionID) return;
 
         const { fig, lines } = plotUtils.drawPixelChart(
-            divID, dataSets, 800, 300, 0, 2 * Math.PI, -6, 30
+            divID, dataSets, 800, 350, 0, 2 * Math.PI, -6, 30
         );
         Reveal.layout();
     });
 })();
 
 (function () {
-    const divID = "chart_fft7";
+    const divTimeID = "chart_fft7";
+    const divFreqID = "chart_fft8";
     const sectionID = "frequency-filtering-4";
     const n = 256;
 
-    // x-Achse (Zeit von 0…2π)
+    // x-Achse Zeit von 0…2π
     const xData = mathUtils.linspace(0, 2 * Math.PI, n);
+    // Frequenz-Achse Bins 0…N/2-1
+    const freqAxis = Array(n / 2).fill().map((_, i) => i);
 
     // Initiale Peak-Breite
     let peakWidth = 0.5;
     // Basis-Signal (mit variablem Peak)
     let yDataBase = mathUtils.addGaussianPeak(xData, 3, 20, peakWidth);
 
-    // Einmalige FFT auf dem Basis-Signal
-    const Y_base = mathUtils.fft(yDataBase.map(y => [y, 0]));
-    const N = Y_base.length;
+    // Anzahl der FFT-Bins
+    const N = n;
 
-    // Filter-Funktion: filtern zwischen cutoff und N-cutoff
+    // Filter-Funktion
     function applyFilter(cutoff, Y_fft) {
         return Y_fft.map(([re, im], i) =>
             (i > cutoff && i < N - cutoff) ? [0, 0] : [re, im]
@@ -496,209 +500,206 @@
         // Default-Cutoff
         const defaultCutoff = 128;
 
-        // Ersten Filter-Call und IFFT durchführen
+        // --- Initiale Berechnungen ---
+        // FFT auf Basis-Signal
+        const Y_base = mathUtils.fft(yDataBase.map(v => [v, 0]));
+        // Gefiltertes IFFT
         const yFiltInit = mathUtils.ifft(
             applyFilter(defaultCutoff, Y_base)
         ).map(([re]) => re);
 
-        // DataSets initial
-        const dataSets = [
+        // Spektren (Magnitude, halbes Spektrum)
+        const magOrigInit = Y_base.map(([re, im]) => Math.hypot(re, im)).slice(0, N/2);
+        const Yf_init    = applyFilter(defaultCutoff, Y_base);
+        const magFiltInit = Yf_init.map(([re, im]) => Math.hypot(re, im)).slice(0, N/2);
+
+        // --- 1) Zeit-Domain Plot (chart_fft7) ---
+        const dataSetsTime = [
             {
                 data: mathUtils.createXYData(xData, yDataBase),
-                options: {
-                    key: "Original Signal",
-                    curve: d3.curveNatural,
-                    lineColor: "#FFF",
-                    pointColor: "none",
-                    lineWidth: 1.5
-                }
+                options: { key: "Original Signal", curve: d3.curveNatural, lineColor: "#FFF", pointColor: "none", lineWidth: 1.5 }
             },
             {
                 data: mathUtils.createXYData(xData, yFiltInit),
-                options: {
-                    key: "Filtered Signal",
-                    curve: d3.curveNatural,
-                    lineColor: "#F0F",
-                    pointColor: "none",
-                    lineWidth: 2.5
-                }
+                options: { key: "Filtered Signal", curve: d3.curveNatural, lineColor: "#F0F", pointColor: "none", lineWidth: 2.5 }
             }
         ];
-
-        // Chart zeichnen – y auf Min/Max von Original+Gefiltert skalieren
-        const allY = yDataBase.concat(yFiltInit);
-        const { fig, lines } = plotUtils.drawPixelChart(
-            divID, dataSets,
-            400, 200,             // Breite, Höhe
-            0, 2 * Math.PI,       // x von 0…2π
-            Math.min(...allY),    // y-Min
-            Math.max(...allY)     // y-Max
+        const allYTime = yDataBase.concat(yFiltInit);
+        const { fig: figTime, lines: linesTime } = plotUtils.drawPixelChart(
+            divTimeID, dataSetsTime,
+            400, 200,
+            0, 2 * Math.PI,
+            Math.min(...allYTime), Math.max(...allYTime)
         );
+
+        // --- 2) Frequenz-Domain Plot (chart_fft8) ---
+        const dataSetsFreq = [
+            {
+                data: mathUtils.createXYData(freqAxis, magOrigInit),
+                options: { key: "Original Spectrum",   curve: d3.curveLinear, lineColor: "#FFF", pointColor: "none", lineWidth: 1.5 }
+            },
+            {
+                data: mathUtils.createXYData(freqAxis, magFiltInit),
+                options: { key: "Filtered Spectrum",   curve: d3.curveLinear, lineColor: "#F0F", pointColor: "none", lineWidth: 2.5 }
+            }
+        ];
+        const maxMag = Math.max(d3.max(magOrigInit), d3.max(magFiltInit));
+        const { fig: figFreq, lines: linesFreq } = plotUtils.drawPixelChart(
+            divFreqID, dataSetsFreq,
+            400, 200,
+            0, (freqAxis.length - 1)/2,
+            0, maxMag
+        );
+
         Reveal.layout();
 
-        // Slider-DOM-Elemente
-        const sliderCut = document.getElementById("frequencyFilterSlider3");
-        const labelCut  = document.getElementById("frequencyFilterValue3");
-        const sliderPeak= document.getElementById("peakWidthSlider");
-        const labelPeak = document.getElementById("peakWidthValue");
+        // DOM: Slider + Labels
+        const sliderCut  = document.getElementById("frequencyFilterSlider3");
+        const labelCut   = document.getElementById("frequencyFilterValue3");
+        const sliderPeak = document.getElementById("peakWidthSlider");
+        const labelPeak  = document.getElementById("peakWidthValue");
 
-        // Line-Generator
-        const lineGen = d3.line()
-            .x(d => fig.xScale(d.x))
-            .y(d => fig.yScale(d.y))
+        // Line-Generatoren (jeweils für die beiden Plots)
+        const lineTimeGen = d3.line()
+            .x(d => figTime.xScale(d.x))
+            .y(d => figTime.yScale(d.y))
             .curve(d3.curveNatural);
+
+        const lineFreqGen = d3.line()
+            .x(d => figFreq.xScale(d.x))
+            .y(d => figFreq.yScale(d.y))
+            .curve(d3.curveLinear);
 
         // Gemeinsame Update-Funktion
         function updatePlot() {
-            // --- Original mit neuem Peak ---
+            // --- 1) Original-Zeit mit neuem Peak ---
             peakWidth = +sliderPeak.value;
             labelPeak.textContent = peakWidth.toFixed(2);
-
             yDataBase = mathUtils.addGaussianPeak(xData, 3, 20, peakWidth);
-
-            lines["Original Signal"]
+            linesTime["Original Signal"]
                 .datum(mathUtils.createXYData(xData, yDataBase))
-                .attr("d", lineGen);
-            // --- Filter-Signal ---
-            // TODO HIER MUSS DIE FFT FILTER IFFT durchgeführt werden
+                .attr("d", lineTimeGen);
+
+            // --- 2) Gefiltertes Zeit-Signal via FFT/Filter/IFFT ---
             const cutoff = +sliderCut.value;
             labelCut.textContent = cutoff.toFixed(0);
-
-            const yFilt = mathUtils.ifft(
-                applyFilter(cutoff, Y_base)
-            ).map(([re]) => re);
-
-            lines["Filtered Signal"]
+            const Y_new = mathUtils.fft(yDataBase.map(v => [v, 0]));
+            const Yf_new = applyFilter(cutoff, Y_new);
+            const yFilt = mathUtils.ifft(Yf_new).map(([re]) => re);
+            linesTime["Filtered Signal"]
                 .datum(mathUtils.createXYData(xData, yFilt))
-                .attr("d", lineGen);
+                .attr("d", lineTimeGen);
+
+            // --- 3) Frequenzspektrum neu berechnen und plotten ---
+            const magOrig = Y_new.map(([re, im]) => Math.hypot(re, im)).slice(0, N/2);
+            const magFilt = Yf_new.map(([re, im]) => Math.hypot(re, im)).slice(0, N/2);
+
+            linesFreq["Original Spectrum"]
+                .datum(mathUtils.createXYData(freqAxis, magOrig))
+                .attr("d", lineFreqGen);
+
+            linesFreq["Filtered Spectrum"]
+                .datum(mathUtils.createXYData(freqAxis, magFilt))
+                .attr("d", lineFreqGen);
         }
 
-        // beide Slider auf ein und die gleiche Update-Funktion legen
-        sliderCut.addEventListener("input",  updatePlot);
+        // Slider-Listener
+        sliderCut .addEventListener("input", updatePlot);
         sliderPeak.addEventListener("input", updatePlot);
 
-        // Initial einmal aufrufen, damit Label & Plot synchron sind
+        // Initiales Update
         updatePlot();
     });
 })();
 
+(function () {
+    let divID = "chart_fft9";
+    let sectionID = "frequency-filtering-5";
+    let myFig = null;
+    let axesAlready = false;
 
-// (function () {
-//     const divID = "chart_fft8";
-//     const sectionID = "frequency-filtering-4";
+    const n = 256;
+    // x-Achse
+    const xData = mathUtils.linspace(0, 2 * Math.PI, n);
 
-//     const n = 256;
-//     const frequency1 = 5;
-//     const frequency2 = 5;
-//     const frequency3 = 100;
+    // zusammengesetztes Signal cumulativ sum of random numbers
+    let yData_1 = Array.from({ length: n }, () => Math.random() - 0.5);
+    yData_1 = mathUtils.calcCumulativeSum(yData_1);
+    // add peak to yData_1
+    const yData_2 = mathUtils.addGaussianPeak(xData,3, 20, 0.1);
+    yData_1 = yData_1.map((y, i) => y + yData_2[i]); // add peak to random walk
+    yData_1 = yData_1.map((y, i) => y + Math.random() * 5); // add noise
 
-//     // x-Achse für Zeit (0…2π) und für Frequenz (Bins 0…N/2-1)
-//     const xData = mathUtils.linspace(0, 2 * Math.PI, n);
-//     const freqAxis = Array(n / 2).fill().map((_, i) => i);
+    // FFT vorbereiten (Complex-Array)
+    const yData_1_complex = yData_1.map(y => [y, 0]);
+    const yData_1_fft = mathUtils.fft(yData_1_complex);
+    const N = yData_1_fft.length; // == n
 
-//     // zusammengesetztes Signal
-//     let y = mathUtils.addGaussianPeak(xData, 3, 20, 0.5);
+    // Magnitude für Plot (nur bis N/2)
+    const magnitude = yData_1_fft.map(([re, im]) => Math.hypot(re, im));
+    const halfMag = magnitude.slice(0, N / 2);
+    const freqAxis = Array(halfMag.length).fill().map((_, i) => i);
+    const fftXY = mathUtils.createXYData(freqAxis, halfMag);
 
-//     // FFT des Originals
-//     const yComplex = y.map(v => [v, 0]);
-//     const Y = mathUtils.fft(yComplex);
-//     const N = Y.length; // == n
+    // Initialer Cutoff (Index)
+    let cutoffFrequency = 20;
 
-//     // Start-Magnitude (halbes Spektrum)
-//     const magOrig = Y.map(([re, im]) => Math.hypot(re, im)).slice(0, N / 2);
+    // Funktion für Filter und IFFT
+    function applyFilter(cutoff) {
+        // FFT spiegelnd filtern: Bins i ∈ (cutoff, N-cutoff) → 0
+        const filteredFFT = yData_1_fft.map(([re, im], i) => {
+            if (i > cutoff && i < N - cutoff) {
+                return [0, 0];
+            } else {
+                return [re, im];
+            }
+        });
 
-//     // Filterfunktion (gibt gefiltertes FFT-Array zurück)
-//     function applyFilter(cutoff) {
-//         return Y.map(([re, im], i) => {
-//             // alle Bins zwischen cutoff und N-cutoff auf null
-//             return (i > cutoff && i < N - cutoff) ? [0, 0] : [re, im];
-//         });
-//     }
+        // zurücktransformieren
+        let yData_ifft = mathUtils.ifft(filteredFFT);
 
-//     // Default Cutoff
-//     let cutoff = 128;
+        // falls mathUtils.ifft nicht normiert, hier noch durch N teilen:
+        // yData_ifft = yData_ifft.map(([re, im]) => [re / N, im / N]);
 
-//     // Gefiltertes Spektrum initial
-//     let Yf = applyFilter(cutoff);
-//     let magFilt = Yf.map(([re, im]) => Math.hypot(re, im)).slice(0, N / 2);
+        // nur Realteil
+        return yData_ifft.map(([re, im]) => re);
+    }
 
-//     // Datensätze für das Plot
-//     const dataSets = [
-//         {
-//             data: mathUtils.createXYData(freqAxis, magOrig),
-//             options: {
-//                 key: "Original Spectrum",
-//                 curve: d3.curveLinear,
-//                 lineColor: "#FFF",
-//                 pointColor: "none",
-//                 lineWidth: 1.5
-//             }
-//         },
-//         {
-//             data: mathUtils.createXYData(freqAxis, magFilt),
-//             options: {
-//                 key: "Filtered Spectrum",
-//                 curve: d3.curveLinear,
-//                 lineColor: "#F0F",
-//                 pointColor: "none",
-//                 lineWidth: 1.5
-//             }
-//         }
-//     ];
+    // Initiales gefiltertes Signal
+    const yData_ifft_init = applyFilter(cutoffFrequency);
+    const xyData_ifft = mathUtils.createXYData(xData, yData_ifft_init);
 
-//     Reveal.addEventListener('slidechanged', event => {
-//         if (event.currentSlide.id !== sectionID) return;
+    // Datensätze fürs Plotten
+    const dataSets = [
+        {
+            data: mathUtils.createXYData(xData, yData_1),
+            options: {
+                key: "Original Signal",
+                curve: d3.curveNatural,
+                lineColor: "#FFF",
+                pointColor: "none",
+                lineWidth: 1.5
+            }
+        },
+        {
+            data: xyData_ifft,
+            options: {
+                key: "Filtered Signal",
+                curve: d3.curveNatural,
+                lineColor: "#F0F",
+                pointColor: "none",
+                lineWidth: 2.5
+            }
+        }
+    ];
 
-//         // y-Achse auf max aus beiden Spektren skalieren
-//         const yMax = d3.max(magOrig.concat(magFilt));
+    // Listener für Slidewechsel
+    Reveal.addEventListener('slidechanged', event => {
+        if (event.currentSlide.id !== sectionID) return;
 
-//         const { fig, lines } = plotUtils.drawPixelChart(
-//             divID, dataSets,
-//             400, 200,          // Breite, Höhe
-//             0, freqAxis.length - 1,  // x-Achse: Frequenzbins
-//             0, yMax           // y-Achse: Magnitude
-//         );
-//         Reveal.layout();
-
-//         const slider = document.getElementById("frequencyFilterSlider3");
-//         const label = document.getElementById("frequencyFilterValue3");
-//         const slider2 = document.getElementById("peakWidthSlider");
-//         const label2 = document.getElementById("peakWidthValue");
-
-//         // Line-Generator für Spektren
-//         const lineGen = d3.line()
-//             .x(d => fig.xScale(d.x))
-//             .y(d => fig.yScale(d.y))
-//             .curve(d3.curveLinear);
-
-//         // Slider-Event: nur gefiltertes Spektrum updaten
-//         slider.addEventListener("input", () => {
-//             cutoff = +slider.value;
-//             label.textContent = cutoff.toFixed(0);
-
-//             // Neues gefiltertes FFT → Magnitude → halbes Spektrum
-//             Yf = applyFilter(cutoff);
-//             magFilt = Yf.map(([re, im]) => Math.hypot(re, im)).slice(0, N / 2);
-
-//             // Update der Linie
-//             const newData = mathUtils.createXYData(freqAxis, magFilt);
-//             lines["Filtered Spectrum"]
-//                 .datum(newData)
-//                 .attr("d", lineGen);
-//         });
-//         // Slider-Event für Peak-Breite
-//         slider2.addEventListener("input", () => {
-//             const peakWidth = parseFloat(slider2.value);
-//             label2.textContent = peakWidth.toFixed(2);
-
-//             // Neuen Peak generieren
-//             const newPeak = mathUtils.addGaussianPeak(xData, 3, 20, peakWidth);
-//             const newY = y.map((v, i) => v + newPeak[i]);
-//             const newXY = mathUtils.createXYData(xData, newY);
-
-//             lines["Original Signal"]
-//                 .datum(newXY)
-//                 .attr("d", lineGen);
-//         });
-//     });
-// })();
+        const { fig, lines } = plotUtils.drawPixelChart(
+            divID, dataSets, 800, 350, 0, 2 * Math.PI, -6, 30
+        );
+        Reveal.layout();
+    });
+})();

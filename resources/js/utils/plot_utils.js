@@ -17,7 +17,7 @@
         .append("svg")
         .attr("width", width)
         .attr("height", height)
-        .style("background-color", "rgba(0, 0, 0, 0.7)") // Dunkler Hintergrund
+        .style("background-color", "rgba(0, 0, 0, 0.0)") // transparent
         // .style("image-rendering", "pixelated")        // Pixel-Look
         // .style("shape-rendering", "crispEdges")       // scharfe Kanten
         .append("g")
