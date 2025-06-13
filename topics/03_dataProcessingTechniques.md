@@ -635,9 +635,9 @@ Result: 2.5  3.5  4.5  5.5  6.5  0    0    0    0</code>
             $$
             \exp(i \cdot x \cdot f)
             $$
-        <div id="chart_radial"></div>
+        <div id="chart_radial" style="margin-top: -40px;"></div>
         </p>
-        <p class="subSubBullet" style="font-size: medium; margin-top: -40px;">
+        <p class="subSubBullet" style="font-size: medium;">
             The radial frequency is the number of loops around the circle per unit of time.
         </p>
     </div>
@@ -649,7 +649,7 @@ Result: 2.5  3.5  4.5  5.5  6.5  0    0    0    0</code>
             $$
             \exp(i \cdot x \cdot f) \cdot \cos(x \cdot f)
             $$
-        <div id="chart_interference2"></div>
+        <div id="chart_interference2" style="margin-top: -40px;"></div>
         </p>
     </div>
 </div>
@@ -663,11 +663,11 @@ Result: 2.5  3.5  4.5  5.5  6.5  0    0    0    0</code>
             Fourier Transformation combines <strong>axial</strong> and <strong>radial</strong>
             frequencies to identify patterns:
             $$
-            \hat{y}_k = \sum_{j=0}^{N-1} \left(e^{-2\pi i \cdot \frac{jk}{N}} \cdot y_j\right)
+            y_k = \sum_{j=0}^{N-1} \left(e^{-2\pi i \cdot \frac{jk}{N}} \cdot y_j\right)
             $$
             Where $ y $ is the dataset with $ N $ points.
         </p>
-        <p class="subBullet">
+        <p class="subBullet" style="font-size: large;">
             When frequencies differ, the integral approaches zero. For matching frequencies, the sum
             increases.
         </p>
@@ -679,6 +679,7 @@ Result: 2.5  3.5  4.5  5.5  6.5  0    0    0    0</code>
             <input id="frequencySlider" type="range" min="1" max="10" step="0.1" value="1">
             <span id="frequencyValue">1</span>
         </p>
+        <label>Centroid Distance: <span id="distanceValue"></span></label>
         <div id="chart_matching"></div>
         <p class="subSubBullet" style="font-size: large;">
             The integral can be interpreted as the distance between geometric mean of the dataset to the
@@ -704,9 +705,17 @@ Result: 2.5  3.5  4.5  5.5  6.5  0    0    0    0</code>
     </div>
     <div class="spacer"></div>
     <div class="rightBox">
-        <img src="../resources/fft0.png" alt="Fourier Transformation" style="width: 100%;">
+        <div id="chart_fft1" style="margin-top: -40px;"></div>
+        <p class="subSubBullet" style="font-size: large;">
+            Original signal.
+        </p>
+        <div id="chart_fft2" style="margin-top: -40px;"></div>
+        <p class="subSubBullet" style="font-size: large;">
+            Fourier Transformation of the signal.
+        </p>
     </div>
 </div>
+<script src="../resources/js/charts/signal_processing_012.js"></script>
 --- (id="systematic-frequency-analysis")
 
 ## Frequency <span class="post-it-strip">Filtering</span>
@@ -725,25 +734,38 @@ Result: 2.5  3.5  4.5  5.5  6.5  0    0    0    0</code>
         <p class="mainBullet">
             The result is a denoised dataset.
         </p>
+        <p class="subBullet" style="font-size: large;">
+            Frequency Filter:
+            <input id="frequencyFilterSlider" type="range" min="1" max="128" step="0.1" value="128">
+            <span id="frequencyFilterValue">128</span>
+        </p>
     </div>
     <div class="spacer"></div>
     <div class="rightBox">
-        <img src="../resources/fft1.png" alt="Fourier Transformation" style="width: 100%;">
+        <div id="chart_fft3" style="margin-top: -40px;"></div>
+        <p class="subSubBullet" style="font-size: large;">
+            Original & denoised signal.
+        </p>
+        <div id="chart_fft4" style="margin-top: -40px;"></div>
+        <p class="subSubBullet" style="font-size: large;">
+            Fourier Transformation of the signal including frequency filtering.
+        </p>
     </div>
 </div>
-</section>
+--- (id="frequency-filtering-1")
 
 ## Frequency <span class="post-it-strip">Filtering</span>
 <div>
-    <img src="../resources/fft2.png" alt="Fourier Transformation" style="width: 31%;">
-    <img src="../resources/fft3.png" alt="Fourier Transformation" style="width: 31%;">
-    <img src="../resources/fft4.png" alt="Fourier Transformation" style="width: 31%;">
+    <p class="mainBullet" style="font-size: large; margin-left: 40px;">
+        Noisy signal & denoised signal after frequency filtering:
+    </p>
+    <div id="chart_fft5"></div>
 </div>
---- (id="frequency-filtering")
+--- (id="frequency-filtering-2")
 
 ## Frequency <span class="post-it-strip">Filtering</span>
 <div>
-    <img src="../resources/fft10.png" alt="Fourier Transformation" style="width: 80%;">
+    <div id="chart_fft6"></div>
     <div class="leftBox">
     <p class="subSubBullet" style="font-size: large;">
         When the signal contains sharp peaks, the Fourier Transformation may not be suitable for denoising.
@@ -756,14 +778,19 @@ Result: 2.5  3.5  4.5  5.5  6.5  0    0    0    0</code>
         </p>
     </div>
 </div>
---- (id="frequency-filtering-2")
+--- (id="frequency-filtering-3")
 
 ## Frequency <span class="post-it-strip">Filtering</span>
-<div>
-    <img src="../resources/fft10b.png" alt="Fourier Transformation" style="width: 80%;">
+<div>  
     <div class="leftBox">
+    <div id="chart_fft7"></div>
     <p class="subSubBullet" style="font-size: large;">
         Peaks contain not a single frequency but a range of frequencies.
+    </p>
+    <p class="subBullet" style="font-size: large;">
+            Peak width:
+            <input id="peakWidthSlider" type="range" min="0.01" max="1" step="0.01" value="0.5">
+            <span id="peakWidthValue">0.5</span>
     </p>
     <p class="subSubBullet" style="font-size: large;">
         The sharper the peak, the broader the frequency range.
@@ -771,16 +798,22 @@ Result: 2.5  3.5  4.5  5.5  6.5  0    0    0    0</code>
     </div>
     <div class="spacer"></div>
     <div class="rightBox">
+    <div id="chart_fft8"></div>
         <p class="subSubBullet" style="font-size: large;">
             This band from the peak limits the effectiveness of frequency filtering.
         </p>
+        <p class="subBullet" style="font-size: large;">
+            Frequency Filtering:
+            <input id="frequencyFilterSlider3" type="range" min="1" max="128" step="0.1" value="128">
+            <span id="frequencyFilterValue3">128</span>
+    </p>
     </div>
 </div>
---- (id="frequency-filtering-3")
+--- (id="frequency-filtering-4")
 
 ## Frequency <span class="post-it-strip">Filtering</span>
 <div>
-    <img src="../resources/fft12.png" alt="Fourier Transformation" style="width: 80%;">
+    <div id="chart_fft9"></div>
     <div class="leftBox">
     <p class="subSubBullet" style="font-size: large;">
         When the signal contains broad peaks, the Fourier Transformation may be suitable for denoising.
@@ -793,7 +826,7 @@ Result: 2.5  3.5  4.5  5.5  6.5  0    0    0    0</code>
         </p>
     </div>
 </div>
---- (id="frequency-filtering-4")
+--- (id="frequency-filtering-5")
 
 ## Fourier Transformation <span class="post-it-strip">Summary</span>
 <div>
@@ -879,89 +912,76 @@ Result: 2.5  3.5  4.5  5.5  6.5  0    0    0    0</code>
 </div>
 --- (id="dwt-introduction")
 
-## The <span class="post-it-strip">Haar Wavelet</span>
+## Approximation & Details <span class="post-it-strip">Decomposition</span>
 <div>
     <div class="leftBox">
         <p class="mainBullet" style="font-size: large;">
-            In DWT, we use two functions to analyze signals.
+            In DWT, we use two kernels to decompose a signal into details and approximations:
         </p>
         <p class="mainBullet" style="font-size: large;">
-            The Haar wavelet operates on two functions:
+            The Haar wavelet operates with the following kernels:
         </p>
         <p class="subBullet" style="font-size: medium;">
-            <strong>1. Scaling Function ($\phi(t)$):</strong><br>
+            <strong>1. Approximation kernel ($h$):</strong><br>
             Used to calculate <strong>averages</strong> (low-frequency components).<br>
             $$
-            \phi(t) = \begin{cases} 1, & 0 \leq t < 1 \\ 0, & \text{otherwise.} \end{cases}
+            h = \frac{1}{\sqrt{2}} \begin{bmatrix} 1 & 1 \end{bmatrix}
             $$
         </p>
         <p class="subBullet" style="font-size: medium;">
-            <strong>2. Wavelet Function ($\psi(t)$):</strong><br>
+            <strong>2. Details kernel ($g$):</strong><br>
             Used to calculate <strong>differences</strong> (high-frequency components).<br>
             $$
-            \psi(t) = \begin{cases} 1, & 0 \leq t < 0.5 \\ -1, & 0.5 \leq t < 1 \\ 0, & \text{otherwise.} \end{cases}
+            g = \frac{1}{\sqrt{2}} \begin{bmatrix} 1 & -1 \end{bmatrix}
             $$
-        </p>
-        <p class="subBullet" style="font-size: medium;">
-            These functions decompose a signal into <strong>approximations</strong> and <strong>details</strong>.
         </p>
     </div>
     <div class="spacer"></div>
     <div class="rightBox">
         <p class="mainBullet" style="font-size: large;">
-            Haar Wavelet Examples on Different Scales:
+            Example a): haar Wavelet:
         </p>
-        <div id="chart_haar_wavelet"></div>
+        <div id="chart_haar_wavelet" style="margin-top: -20px;"></div>
+        <p class="mainBullet" style="font-size: large;">
+            Example b) rbio3.9 Wavelet:
+        </p>
+        <div id="chart_rbio3_9_wavelet" style="margin-top: -20px;"></div>
     </div>
 </div>
+<script src="../resources/js/charts/signal_processing_013.js"></script>
 --- (id="haar-wavelet")
 
-## Haar Wavelet Transformation <span class="post-it-strip">Step-by-Step</span>
+## Wavelet Transformation <span class="post-it-strip">Step-by-Step</span>
 <div>
     <div class="leftBox">
         <p class="mainBullet" style="font-size: large;">
-            The Haar Wavelet Transformation processes data by:
+            The Wavelet Transformation processes data by:
         </p>
         <p class="subBullet" style="font-size: large;">
-            1. Splitting the data $ y $ into <strong>vertical packages</strong>: (e.g., scale of 4)
+            1. Convolution with two discrete kernels (filters):
             $$
-            y = \begin{bmatrix} y_1 \\ y_2 \\ y_3 \\ y_4 \\ \vdots \\ y_n \end{bmatrix}
-            \rightarrow
-            P = \begin{bmatrix}
-            y_1 & y_{5} & y_{9} \\
-            y_2 & y_{6} & y_{10} \\
-            y_3 & y_{7} & y_{11} \\
-            y_4 & y_{8} & y_{12}
-            \end{bmatrix}
+            y_{\mathrm{h}}[k] = \sum_{n=0}^{L-1} h[n]\cdot x[k - n]
             $$
-        </p>
-        <p class="subBullet" style="font-size: large;">
-            2. Applying the <strong>Scaling Function</strong>:
             $$
-            \phi = \frac{1}{4} \begin{bmatrix} 1 & 1 & 1 & 1 \end{bmatrix}
+            y_{\mathrm{g}}[k] = \sum_{n=0}^{L-1} g[n]\cdot x[k - n]
             $$
-            Averages:
-            $$
-            A = \phi \cdot P
-            $$
+            where $h[n]$ is the approximation and $g[n]$ is the details of length $L$.
         </p>
     </div>
     <div class="spacer"></div>
     <div class="rightBox">
         <p class="subBullet" style="font-size: large;">
-            3. Applying the <strong>Wavelet Function</strong>:
+            2. Down-Sampling by 2 (keep every second sample):
             $$
-            \psi = \frac{1}{4} \begin{bmatrix} 1 & 1 & -1 & -1 \end{bmatrix}
+            A[k] = y_{\mathrm{h}}[2k], \quad
+            D[k] = y_{\mathrm{g}}[2k]
             $$
-            Differences:
-            $$
-            D = \psi \cdot P
-            $$
+            yielding the approximation coefficients $A$ and detail coefficients $D$ of half the original length.
         </p>
         <p class="subBullet" style="font-size: large;">
-            4. Recursive Process: with a constant scale of 2, the process is repeated until the desired
+            3. Recursive Process: with a constant scale of 2, the process is repeated until the desired
             <pre>
-P -> A1 & D1
+y -> A1 & D1
       ↳ A2 & D2
          ↳ A3 & D3
             ↳ A4 & D4</pre>
@@ -971,55 +991,65 @@ P -> A1 & D1
 --- (id="haar-wavelet-transformation-step-by-step")
 
 ## Example of <span class="post-it-strip">DWT</span>
-<img src="../resources/dwt2.png" alt="DWT Example" style="width: 80%;">
+<div id="chart_dwt_example1" style="margin-top: -10px;"></div>
 <div>
     <div class="leftBox">
+        <div id="chart_dwt_example2" style="margin-top: -20px;"></div>
         <p class="subBullet" style="font-size: large;">
-            The DWT decomposes a signal into <span style="color: red;"><strong>approximations</strong></span> and <span style="color: blue;"><strong>details</strong></span>.
+            The DWT decomposes a signal into <span style="color: red;"><strong>approximations</strong></span> and <span style="color: cyan;"><strong>details</strong></span>.
         </p>
     </div>
     <div class="spacer"></div>
     <div class="rightBox">
+        <div id="chart_dwt_example3" style="margin-top: -20px;"></div>
         <p class="subSubBullet" style="font-size: large;">
             <span style="color: red;">Approximations</span> represent the signal's low-frequency components (father wavelet).
         </p>
         <p class="subSubBullet" style="font-size: large;">
-            <span style="color: blue;">Details</span> represent the signal's high-frequency components (mother wavelet).
+            <span style="color: cyan;">Details</span> represent the signal's high-frequency components (mother wavelet).
         </p>
     </div>
 </div>
 --- (id="dwt-example")
             
 ## DWT and the <span class="post-it-strip">Multi Resolution Analysis</span>
-<img src="../resources/dwt5.png" alt="DWT Example" style="width: 80%;">
 <div>
     <div class="leftBox">
+        <div id="chart_dwt_multi_resolution_analysis" style="margin-top: -20px;"></div>
         <p class="subBullet" style="font-size: large;">
             On the left side, we see the original signal.
         </p>
     </div>
     <div class="spacer"></div>
     <div class="rightBox">
+        <div id="chart_dwt_multi_resolution_analysis_details1" style="margin-top: -20px;"></div>
+        <div id="chart_dwt_multi_resolution_analysis_details2" style="margin-top: -80px;"></div>
+        <div id="chart_dwt_multi_resolution_analysis_details3" style="margin-top: -80px;"></div>
+        <div id="chart_dwt_multi_resolution_analysis_details4" style="margin-top: -80px;"></div>
         <p class="subSubBullet" style="font-size: large;">
-            On the right side, we see the <span style="color: blue;">Details</span> of multiple scales (steps)
+            On the right side, we see the <span style="color: cyan;">Details</span> of multiple scales (steps)
         </p>
         <p class="subSubBullet" style="font-size: large;">
-            The indivudal <span style="color: blue;">Details</span> describe the signal's frequencies at different scales (high scale = low frequency).
+            The indivudal <span style="color: cyan;">Details</span> describe the signal's frequencies at different scales (high scale = low frequency).
         </p>
     </div>
 </div>
 --- (id="dwt-multi-resolution-analysis")
 
 ## DWT and the <span class="post-it-strip">Multi Resolution Analysis</span>
-<img src="../resources/dwt6.png" alt="DWT Example" style="width: 80%;">
 <div>
     <div class="leftBox">
+        <div id="chart_dwt_multi_resolution_analysis-2" style="margin-top: -20px;"></div>
         <p class="subBullet" style="font-size: large;">
             On the left side, we see the original and reconstructed signal.
         </p>
     </div>
     <div class="spacer"></div>
     <div class="rightBox">
+        <div id="chart_dwt_multi_resolution_analysis_details5" style="margin-top: -20px;"></div>
+        <div id="chart_dwt_multi_resolution_analysis_details6" style="margin-top: -80px;"></div>
+        <div id="chart_dwt_multi_resolution_analysis_details7" style="margin-top: -80px;"></div>
+        <div id="chart_dwt_multi_resolution_analysis_details8" style="margin-top: -80px;"></div>
         <p class="subSubBullet" style="font-size: large;">
             To denoise, we use filters on the different scales (Details).
         </p>
@@ -1029,60 +1059,6 @@ P -> A1 & D1
     </div>
 </div>
 --- (id="dwt-multi-resolution-analysis-2")
-
-## DWT and the <span class="post-it-strip">Multi Resolution Analysis</span>
-<img src="../resources/dwt7.png" alt="DWT Example" style="width: 80%;">
-<div>
-    <div class="leftBox">
-        <p class="subBullet" style="font-size: large;">
-            Depending on the Wavelet, the signal may look step-like (e.g., Haar Wavelet).
-        </p>
-    </div>
-    <div class="spacer"></div>
-    <div class="rightBox">
-        <p class="subSubBullet" style="font-size: large;">
-            To improve the reconstruction, we can use different Wavelets.
-        </p>
-    </div>
-</div>
---- (id="dwt-multi-resolution-analysis-3")
-
-## DWT and the <span class="post-it-strip">Multi Resolution Analysis</span>
-<img src="../resources/dwt8.png" alt="DWT Example" style="width: 80%;">
-<div>
-    <div class="leftBox">
-        <p class="subBullet" style="font-size: large;">
-            Depending on the Wavelet, the signal may look step-like (e.g., Haar Wavelet).
-        </p>
-    </div>
-    <div class="spacer"></div>
-    <div class="rightBox">
-        <p class="subSubBullet" style="font-size: large;">
-            There are many Wavelets available, e.g., rbio3.9 or db4. Each Wavelet has different strengths and weaknesses.
-        </p>
-    </div>
-</div>
---- (id="dwt-multi-resolution-analysis-4")
-
-## DWT and the <span class="post-it-strip">Multi Resolution Analysis</span>
-<img src="../resources/dwt9.png" alt="DWT Example" style="width: 80%;">
-<div>
-    <div class="leftBox">
-        <p class="subBullet" style="font-size: large;">
-            On the left side, we see the original and reconstructed signal.
-        </p>
-    </div>
-    <div class="spacer"></div>
-    <div class="rightBox">
-        <p class="subSubBullet" style="font-size: large;">
-            To denoise, we use filters on the different scales (Details).
-        </p>
-        <p class="subSubBullet" style="font-size: large;">
-            The reconstructed signal is the sum of the approximations and the filtered details.
-        </p>
-    </div>
-</div>
---- (id="dwt-multi-resolution-analysis-5")
 
 ## Discrete Wavelet Transformation <span class="post-it-strip">Summary</span>
 <div>

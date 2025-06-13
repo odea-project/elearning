@@ -183,5 +183,44 @@
             // optional: Normieren, so dass Summe der Koeffizienten = 1
             return kernel;
         },
+        fft: function(signal) {
+            const N = signal.length;
+            if (N <= 1) return signal;
+
+            const even = this.fft(signal.filter((_, i) => i % 2 === 0));
+            const odd  = this.fft(signal.filter((_, i) => i % 2 !== 0));
+
+            const T = Array(N / 2).fill().map((_, k) => {
+                const exp = -2 * Math.PI * k / N;
+                return this.mathMultiplyComplex(odd[k], [Math.cos(exp), Math.sin(exp)]);
+            });
+
+            const result = [];
+            for (let k = 0; k < N / 2; k++) {
+                result[k] = this.mathAddComplex(even[k], T[k]);
+                result[k + N / 2] = this.mathSubtractComplex(even[k], T[k]);
+            }
+
+            return result;
+        },
+        ifft: function(signal) {
+            const N = signal.length;
+            if (N <= 1) return signal;
+
+            // Konjugieren der komplexen Zahlen
+            const conjugated = signal.map(([re, im]) => [re, -im]);
+            const transformed = this.fft(conjugated);
+            // Konjugieren zurück und normalisieren
+            return transformed.map(([re, im]) => [re / N, -im / N]);
+        },
+        mathAddComplex: function([a, b], [c, d]) {
+            return [a + c, b + d];
+        },
+        mathSubtractComplex: function([a, b], [c, d]) {
+            return [a - c, b - d];
+        },
+        mathMultiplyComplex: function ([a, b], [c, d]) {
+            return [a * c - b * d, a * d + b * c];
+        }
     };
 })(window);
