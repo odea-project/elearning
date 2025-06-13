@@ -221,6 +221,290 @@
         },
         mathMultiplyComplex: function ([a, b], [c, d]) {
             return [a * c - b * d, a * d + b * c];
+        },
+        // distance functions
+        euclideanDistance: function (a, b) {
+            return Math.sqrt(a.reduce((acc, val, i) => acc + (val - b[i]) ** 2, 0));
+        },
+
+        manhattanDistance: function (a, b) {
+            return a.reduce((acc, val, i) => acc + Math.abs(val - b[i]), 0);
+        },
+
+        pearsonCorrelation: function (a, b) {
+            const meanA = a.reduce((acc, val) => acc + val, 0) / a.length;
+            const meanB = b.reduce((acc, val) => acc + val, 0) / b.length;
+
+            const num = a.reduce((acc, val, i) => acc + (val - meanA) * (b[i] - meanB), 0);
+            const denA = Math.sqrt(a.reduce((acc, val) => acc + (val - meanA) ** 2, 0));
+            const denB = Math.sqrt(b.reduce((acc, val) => acc + (val - meanB) ** 2, 0));
+
+            return 1 - num / (denA * denB);
+        },
+
+        spearmanDistance: function (a, b) {
+            const n = a.length;
+            const rankA = a.map(val => a.filter(aVal => aVal < val).length + 1);
+            const rankB = b.map(val => b.filter(bVal => bVal < val).length + 1);
+
+            return 1 - 6 * a.reduce((acc, val, i) => acc + (rankA[i] - rankB[i]) ** 2, 0) / (n * (n ** 2 - 1));
+        },
+
+        cosineDistance: function (a, b) {
+            const dotProduct = a.reduce((acc, val, i) => acc + val * b[i], 0);
+            const magA = Math.sqrt(a.reduce((acc, val) => acc + val ** 2, 0));
+            const magB = Math.sqrt(b.reduce((acc, val) => acc + val ** 2, 0));
+
+            return 1 - dotProduct / (magA * magB);
+        },
+        // create distance matrix
+        createDistanceMatrix: function(data, distanceFunction) {
+            const matrix = Array(data.length).fill(null).map(() => Array(data.length).fill(0));
+
+            for (let i = 0; i < data.length; i++) {
+                for (let j = i + 1; j < data.length; j++) {
+                    const dist = distanceFunction(data[i], data[j]);
+                    matrix[i][j] = dist;
+                    matrix[j][i] = dist;
+                }
+            }
+
+            return matrix;
+        },
+        // Generate linkage matrix for dendrogram based on distance matrix
+        hierarchicalClustering: function (data, distanceFunction) {
+            const matrix = createDistanceMatrix(data, distanceFunction);
+            const clusters = data.map((_, i) => [i]);  // Start with each point as a separate cluster
+            const linkageMatrix = [];
+
+            while (clusters.length > 1) {
+                let minDistance = Infinity;
+                let mergeIndexA = -1;
+                let mergeIndexB = -1;
+
+                // Find the two closest clusters
+                for (let i = 0; i < clusters.length; i++) {
+                    for (let j = i + 1; j < clusters.length; j++) {
+                        const dist = calculateClusterDistance(clusters[i], clusters[j], matrix);
+                        if (dist < minDistance) {
+                            minDistance = dist;
+                            mergeIndexA = i;
+                            mergeIndexB = j;
+                        }
+                    }
+                }
+
+                // Merge the two closest clusters
+                const mergedCluster = clusters[mergeIndexA].concat(clusters[mergeIndexB]);
+                clusters.splice(mergeIndexB, 1);  // Remove the second cluster
+                clusters[mergeIndexA] = mergedCluster;  // Update the first cluster
+
+                // Record the merge in the linkage matrix (structure: [index1, index2, distance, cluster size])
+                linkageMatrix.push([mergeIndexA, mergeIndexB, minDistance, mergedCluster.length]);
+            }
+
+            return linkageMatrix;
+        },
+
+        // Calculate distance between two clusters
+        calculateClusterDistance: function (clusterA, clusterB, matrix) {
+            let minDistance = Infinity;
+            for (let i of clusterA) {
+                for (let j of clusterB) {
+                    minDistance = Math.min(minDistance, matrix[i][j]);
+                }
+            }
+            return minDistance;
+        },
+
+        dendrogram: function (data, options = {}) {
+            const {
+                width: width = 420,
+                height: height = 320,
+                hideLabels: hideLabels = false,
+                paddingBottom: paddingBottom = hideLabels ? 20 : 200,
+                innerHeight = height - paddingBottom,
+                innerWidth = width - 10,
+                paddingLeft = 30,
+                h: cutHeight = undefined,
+                yLabel: yLabel = "↑ Height",
+                colors: colors = d3.schemeTableau10,
+                fontFamily: fontFamily = "Inter, sans-serif",
+                linkColor: linkColor = "white",
+                fontSize: fontSize = 10,
+                strokeWidth: strokeWidth = 3
+            } = options;
+
+            const svg = d3
+                .create("svg")
+                .attr("width", width)
+                .attr("height", height)
+                .attr("viewBox", [0, 0, width, innerHeight])
+                .attr("style", "max-width: 100%; height: auto; height: intrinsic;");
+
+            var clusterLayout = d3.cluster().size([width - paddingLeft * 2, innerHeight]);
+
+            const root = d3.hierarchy(data);
+            const maxHeight = root.data.height;
+
+            const yScaleLinear = d3
+                .scaleLinear()
+                .domain([0, maxHeight])
+                .range([hideLabels ? innerHeight - 35 : innerHeight, 0]);
+
+            const yAxisLinear = d3.axisLeft(yScaleLinear).tickSize(5);
+
+            function transformY(data) {
+                const height = hideLabels ? innerHeight - 15 : innerHeight;
+                return height - (data.data.height / maxHeight) * height;
+            }
+
+            // traverse through first order children and assign colors
+            if (cutHeight) {
+                let curIndex = -1;
+                root.each((child) => {
+                    if (
+                        child.data.height <= cutHeight &&
+                        child.data.height > 0 &&
+                        child.parent &&
+                        !child.parent.color
+                    ) {
+                        curIndex++;
+                        child.color = colors[curIndex];
+                    } else if (child.parent && child.parent.color) {
+                        child.color = child.parent.color;
+                    }
+                });
+            }
+
+            clusterLayout(root);
+
+            // y-axis
+            svg
+                .append("g")
+                .attr("transform", `translate(0, ${hideLabels ? 20 : 0})`)
+                .append("g")
+                .attr("class", "axis")
+                .attr("transform", `translate(${paddingLeft},${hideLabels ? 20 : 0})`)
+                .call(yAxisLinear)
+                .call((g) => g.select(".domain").remove())
+                .call((g) =>
+                    g
+                        .append("text")
+                        .attr("x", -paddingLeft)
+                        .attr("y", -20)
+                        .attr("fill", "currentColor")
+                        .attr("text-anchor", "start")
+                        .style("font-family", fontFamily)
+                        .text(yLabel)
+                )
+                .selectAll(".tick")
+                .classed("baseline", (d) => d == 0)
+                .style("font-size", `${fontSize}px`)
+                .style("font-family", fontFamily);
+
+            // Links
+            // Links with configurable color and stroke width
+            root.links().forEach((link) => {
+                svg
+                    .append("path")
+                    .attr("class", "link")
+                    .attr("stroke", link.source.color || options.linkColor || "#FFFFFF") // Default to white if no color specified
+                    .attr("stroke-width", options.strokeWidth || 3.5) // Default to 1.5 if not specified
+                    .attr("fill", "none")
+                    .attr("transform", `translate(${paddingLeft}, ${options.hideLabels ? 20 : 0})`)
+                    .attr("d", elbow(link));
+            });
+
+
+            // Nodes
+            // Sample labels at the x-axis for each leaf node, rotated 90 degrees
+            root.descendants().forEach((desc) => {
+                if (desc.data.isLeaf && !options.hideLabels) {
+                    svg.append("text")
+                        .attr("x", desc.x + paddingLeft) // Horizontal position based on dendrogram layout
+                        .attr("y", innerHeight + 15) // Position below the dendrogram
+                        .attr("text-anchor", "end")
+                        .attr("font-size", `${fontSize}px`)
+                        .attr("font-family", fontFamily)
+                        .attr("transform", `rotate(-90, ${desc.x + paddingLeft}, ${innerHeight + 15})`) // Rotate text
+                        .text(desc.data.name || desc.data.index); // Use name or index as label
+                }
+            });
+
+
+            // Custom path generator
+            function elbow(d) {
+                return (
+                    "M" +
+                    d.source.x +
+                    "," +
+                    transformY(d.source) +
+                    "H" +
+                    d.target.x +
+                    "V" +
+                    transformY(d.target)
+                );
+            }
+
+            return svg.node();
+        },
+         // Agglomerative clustering function (from previous example)
+        agglomerativeClustering: function (distances, labels) {
+            let clusters = labels.map((label, i) => ({
+            name: `Sample ${label}`,
+            height: 0,
+            isLeaf: true,
+            index: i
+            }));
+        
+            const n = clusters.length;
+            let currentClusterIndex = n;
+        
+            function calculateAverageDistance(cluster1, cluster2) {
+            let totalDistance = 0;
+            let count = 0;
+            cluster1.indices.forEach(i => {
+                cluster2.indices.forEach(j => {
+                totalDistance += distances[i][j];
+                count += 1;
+                });
+            });
+            return totalDistance / count;
+            }
+        
+            clusters.forEach(cluster => {
+            cluster.indices = [cluster.index];
+            });
+        
+            while (clusters.length > 1) {
+            let minDistance = Infinity;
+            let mergeIndices = [0, 1];
+        
+            for (let i = 0; i < clusters.length - 1; i++) {
+                for (let j = i + 1; j < clusters.length; j++) {
+                const distance = calculateAverageDistance(clusters[i], clusters[j]);
+                if (distance < minDistance) {
+                    minDistance = distance;
+                    mergeIndices = [i, j];
+                }
+                }
+            }
+        
+            const [index1, index2] = mergeIndices;
+            const newCluster = {
+                name: `Cluster ${currentClusterIndex++}`,
+                height: minDistance,
+                children: [clusters[index1], clusters[index2]],
+                indices: [...clusters[index1].indices, ...clusters[index2].indices]
+            };
+        
+            clusters.splice(index2, 1);
+            clusters.splice(index1, 1);
+            clusters.push(newCluster);
+            }
+        
+            return clusters[0];
         }
     };
 })(window);

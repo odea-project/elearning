@@ -176,5 +176,3 @@ function renderMathInDynamicSlides(sections) {
     console.warn('[WARN] Keine Funktion gefunden, um Math zu rendern');
   }
 }
-
-
