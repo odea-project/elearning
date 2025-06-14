@@ -1,4 +1,4 @@
-## First Slide
+## Statistical & Exploratory Data Analysis
 --- (id="first-slide")
 
 ## Initial thoughts on data analysis
@@ -33,10 +33,10 @@
     </p>
   </div>
 </div>
-<script src="../resources/js/charts/data_analysis_tools_001.js"></script>
-<script src="../resources/js/charts/data_analysis_tools_002.js"></script>
-<script src="../resources/js/charts/data_analysis_tools_003.js"></script>
-<script src="../resources/js/charts/data_analysis_tools_004.js"></script>
+<script src="resources/js/charts/data_analysis_tools_001.js"></script>
+<script src="resources/js/charts/data_analysis_tools_002.js"></script>
+<script src="resources/js/charts/data_analysis_tools_003.js"></script>
+<script src="resources/js/charts/data_analysis_tools_004.js"></script>
 <script>
   function drawBootstrapSample() {
     const dataset = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
@@ -150,6 +150,9 @@
 
 
 ## Minkowski Distance
+<div class="code-button-container">
+    <div class="py-code-button" data-code="minkowski"></div>
+</div>
 <div>
   <div class="leftBox">
     <p class="styled-point">
@@ -179,6 +182,9 @@ d = 0.90</code></pre>
 --- (id="minkowski-distance")
 
 ## Correlation-based Similarity Measures
+<div class="code-button-container">
+    <div class="py-code-button" data-code="pearson"></div>
+</div>
 <div>
   <div class="leftBox">
     <p class="styled-point">Correlation coefficients quantify the similarity between variables by measuring
@@ -222,6 +228,9 @@ Cov(A, B) / (std(A) * std(B)) = 0.99
 
 
 ## Correlation-based Similarity Measures
+<div class="code-button-container">
+    <div class="py-code-button" data-code="spearman"></div>
+</div>
 <div>
   <div class="leftBox">
     <p class="styled-point">Correlation coefficients quantify the similarity between variables by measuring
@@ -261,6 +270,9 @@ r_s = 0.6
 --- (id="correlation-based-similarity-measures-2")
 
 ## Cosine Similarity as a Similarity Measure
+<div class="code-button-container">
+    <div class="py-code-button" data-code="cosine"></div>
+</div>
 <div>
   <div class="leftBox">
     <p class="styled-point">Cosine similarity measures the similarity between two vectors by comparing their
@@ -317,7 +329,7 @@ similarity ≈ 0.80</code></pre>
     <p class="styled-point2" style="font-size: medium">Useful in high-dimensional data (e.g., text).</p>
     <p class="styled-point2" style="font-size: medium">Focuses on orientation, not magnitude.</p>
     <p class="styled-point4" style="font-size: medium">
-      There is no one-size-fits-all similarity measure. Choose the one that best fits your data and research
+      <span class="post-it-strip">There is no one-size-fits-all</span> similarity measure. Choose the one that best fits your data and research
       question.
     </p>
   </div>
@@ -368,6 +380,9 @@ similarity ≈ 0.80</code></pre>
 
 
 ## Step 1: Calculating Pairwise Distances
+<div class="code-button-container">
+    <div class="py-code-button" data-code="distance_matrix"></div>
+</div>
 <div>
   <div class="leftBox">
     <p class="styled-point">HCA starts by calculating distances or similarities between all pairs of items.</p>
@@ -659,6 +674,9 @@ average linkage:
 
 
 ## Step 4: Building the Dendrogram
+<div class="code-button-container">
+    <div class="py-code-button" data-code="hca_dendrogram"></div>
+</div>
 <div>
   <div class="leftBox">
     <p class="styled-point">The process continues until all items are merged into a single cluster.</p>
@@ -877,6 +895,9 @@ average linkage:
 
 
 ## Evaluating the Clustering Results
+<div class="code-button-container">
+    <div class="py-code-button" data-code="kmeans_f_classif"></div>
+</div>
 <div>
   <div class="leftBox">
     <p class="styled-point">To assess clustering quality, metrics such as the following are commonly used:</p>
@@ -886,7 +907,7 @@ average linkage:
       to 1.</p>
     <p class="styled-point2"><strong>ANOVA:</strong> Evaluates the separation between clusters by comparing
       between-cluster and within-cluster variance.</p>
-    <img src="../resources/figures/04_dataAnalysisTools/kmeans.png" alt="k-means evaluation metrics"        style="width: 30%; box-shadow: 5px 5px 15px rgba(0, 255, 38, 0.3); background-color: #f0f0f0; padding: 10px; border-radius: 5px;" data-preview-image>
+    <img src="resources/figures/04_dataAnalysisTools/kmeans.png" alt="k-means evaluation metrics"        style="width: 30%; box-shadow: 5px 5px 15px rgba(0, 255, 38, 0.3); background-color: #f0f0f0; padding: 10px; border-radius: 5px;" data-preview-image>
   </div>
   <div class="spacer"></div>
   <div class="rightBox">
@@ -980,7 +1001,7 @@ average linkage:
   </div>
   <div class="spacer"></div>
   <div class="rightBox">
-    <img src="../resources/figures/04_dataAnalysisTools/pca-3.png" alt="PCA example"
+    <img src="resources/figures/04_dataAnalysisTools/pca-3.png" alt="PCA example"
       style="width: 100%; box-shadow: 5px 5px 15px rgba(0, 255, 38, 0.3); background-color: #f0f0f0; padding: 10px; border-radius: 5px;">
     <p class="small-text" style="font-size: large;">src: <a
         href="https://abego.cn/autopca/reference/pca.html">https://abego.cn/autopca/reference/pca.html</a></p>
@@ -989,7 +1010,7 @@ average linkage:
 --- (id="what-is-principal-component-analysis-pca")
 
 ## Dimensionality Reduction through Axis Transformation
-<img src="../resources/figures/04_dataAnalysisTools/pca_princ.png" alt="PCA axis transformation"
+<img src="resources/figures/04_dataAnalysisTools/pca_princ.png" alt="PCA axis transformation"
   style="width: 100%; box-shadow: 5px 5px 15px rgba(0, 255, 38, 0.3);; background-color: #f0f0f0; padding: 10px; border-radius: 5px;">
 --- (id="dimensionality-reduction-through-axis-transformation")
 
@@ -1029,6 +1050,9 @@ average linkage:
 --- (id="covariance-matrix-and-data-variance")
 
 ## Example: Covariance Matrix of a 4-Dimensional Dataset
+<div class="code-button-container">
+    <div class="py-code-button" data-code="covariance_matrix"></div>
+</div>
 <div>
   <div class="leftBox">
     <p class="styled-point">
@@ -1069,6 +1093,9 @@ Cov = │ 0.8  1.9  0.4  0.9 │
 --- (id="example-covariance-matrix-of-a-4-dimensional-dataset")
 
 ## Covariance Matrix and Its Eigenvectors & Eigenvalues
+<div class="code-button-container">
+    <div class="py-code-button" data-code="cov_eigen"></div>
+</div>
 <div>
   <div class="leftBox">
     <p class="styled-point">The covariance matrix of the data:</p>
@@ -1238,18 +1265,24 @@ Sweetness Weight Price Sourness Color(R) Color(G) Color(B)
 
 
 ## Working Example: PCA on Fruits Dataset <span class="magenta-text">
+<div class="code-button-container">
+    <div class="py-code-button" data-code="pca_iris"></div>
+</div>
     < Scores Plot>
   </span>
-<img src="../resources/figures/04_dataAnalysisTools/pca_fruits_scores.png" alt="PCA on Fruits Dataset"
-  style="width: 70%; box-shadow: 5px 5px 15px rgba(0, 255, 38, 0.3);; background-color: #f0f0f0; padding: 10px; border-radius: 5px;">
+<img src="resources/figures/04_dataAnalysisTools/pca_fruits_scores.png" alt="PCA on Fruits Dataset"
+  style="width: 60%; box-shadow: 5px 5px 15px rgba(0, 255, 38, 0.3);; background-color: #f0f0f0; padding: 10px; border-radius: 5px; margin-top: -20px">
 --- (id="working-example-pca-on-fruits-dataset-scores-plot")
 
 
 ## Working Example: PCA on Fruits Dataset <span class="magenta-text">
+<div class="code-button-container">
+    <div class="py-code-button" data-code="pca_biplot_iris"></div>
+</div>
     < Bi-Plot>
   </span>
-<img src="../resources/figures/04_dataAnalysisTools/pca_fruits_biplot.png" alt="PCA on Fruits Dataset"
-  style="width: 70%; box-shadow: 5px 5px 15px rgba(0, 255, 38, 0.3);; background-color: #f0f0f0; padding: 10px; border-radius: 5px;">
+<img src="resources/figures/04_dataAnalysisTools/pca_fruits_biplot.png" alt="PCA on Fruits Dataset"
+  style="width: 60%; box-shadow: 5px 5px 15px rgba(0, 255, 38, 0.3);; background-color: #f0f0f0; padding: 10px; border-radius: 5px; margin-top: -20px">
 --- (id="working-example-pca-on-fruits-dataset-bi-plot")
 
 
@@ -1267,15 +1300,14 @@ Sweetness Weight Price Sourness Color(R) Color(G) Color(B)
     <p class="styled-point2">
       The length and direction of feature vectors indicate their importance and relationship to samples.
     </p>
+    <p class="styled-point2">
+      In this example, the 1st principal component (PC1) is strongly influenced by weight, while PC2 is driven by color features.
+    </p>
   </div>
   <div class="spacer"></div>
   <div class="rightBox">
-    <img src="../resources/figures/04_dataAnalysisTools/pca_fruits_biplot.png" alt="PCA on Fruits Dataset"
+    <img src="resources/figures/04_dataAnalysisTools/pca_fruits_biplot.png" alt="PCA on Fruits Dataset"
       style="width: 100%; box-shadow: 5px 5px 15px rgba(0, 255, 38, 0.3);; background-color: #f0f0f0; padding: 10px; border-radius: 5px;">
-    <p class="styled-point2">
-      In this example, the first principal component (PC1) is strongly influenced weight, while the second
-      principal component (PC2) is driven by color features.
-    </p>
   </div>
 </div>
 --- (id="working-example-pca-on-fruits-dataset-interpretation")
@@ -1337,20 +1369,20 @@ Sweetness Weight Price Sourness Color(R) Color(G) Color(B)
       <code>between-group covariance matrix</code>, to find new axes.
       $$ C = \Sigma_w^{-1} \cdot \Sigma_b $$
     </p>
+    <p class="styled-point2">
+      The new axes (or <code>discriminant components</code>) in LDA are chosen to best separate the groups, not just capture variance.
+    </p>
   </div>
   <div class="spacer"></div>
   <div class="rightBox">
-    <p class="styled-point2">
-      The new axes (or <code>discriminant components</code>) in LDA are chosen to best separate the groups, not
-      just capture variance.
+    <p class="styled-point">
+      Pros & Cons of LDA:
     </p>
     <p class="styled-point2">
-      <code>Applications</code>: Often used in classification tasks, as it enhances differences between
-      categories, improving separability.
+      <code>Applications</code>: Often used in classification tasks, as it enhances differences between categories, improving separability.
     </p>
     <p class="styled-point2">
-      <code>Limitations</code>: LDA assumes normally distributed data within each group and may struggle with
-      non-linear boundaries.
+      <code>Limitations</code>: LDA assumes normally distributed data within each group and may struggle with non-linear boundaries.
     </p>
   </div>
 </div>
@@ -1359,9 +1391,9 @@ Sweetness Weight Price Sourness Color(R) Color(G) Color(B)
 
 ## LDA vs. PCA
 <div style="display: inline-block;">
-  <img src="../resources/figures/04_dataAnalysisTools/lda1.png" alt="LDA vs. PCA"
+  <img src="resources/figures/04_dataAnalysisTools/lda1.png" alt="LDA vs. PCA"
     style="width: 45%; box-shadow: 5px 5px 15px rgba(0, 255, 38, 0.3);; background-color: #f0f0f0; padding: 10px; border-radius: 5px;">
-  <img src="../resources/figures/04_dataAnalysisTools/lda2.png" alt="LDA vs. PCA"
+  <img src="resources/figures/04_dataAnalysisTools/lda2.png" alt="LDA vs. PCA"
     style="width: 45%; box-shadow: 5px 5px 15px rgba(0, 255, 38, 0.3);; background-color: #f0f0f0; padding: 10px; border-radius: 5px;">
 </div>
 --- (id="lda-vs-pca")
@@ -1376,65 +1408,58 @@ Sweetness Weight Price Sourness Color(R) Color(G) Color(B)
           from data without explicit programming.
         </span>
       </p>
-      <div class="fragment fade-up" data-fragment-index="1">
-        <p class="mainBullet">
-          <strong>Objectives</strong> of ML:
-        </p>
-        <div class="fragment fade-up" data-fragment-index="2">
-          <p class="subBullet">
-            Classification<br>
-            <span style="font-size: large; font-style: italic;">
-              Predicting discrete categories, e.g., identifying spam emails, or classifying water quality.
-            </span>
-          </p>
-        </div>
-        <div class="fragment fade-up" data-fragment-index="3">
-          <p class="subBullet">
-            Regression<br>
-            <span style="font-size: large; font-style: italic;">
-              Predicting continuous values, e.g., forecasting house prices, or estimating chemical concentrations.
-            </span>
-          </p>
-        </div>
-      </div>
     </div>
     <div class="spacer"></div>
     <div class="rightBox">
-      <div class="fragment fade-up" data-fragment-index="4">
-        <p class="mainBullet">
-          <strong>Types</strong> of ML:
-        </p>
-        <div class="fragment fade-up" data-fragment-index="5">
-          <p class="subBullet">
-            Supervised Learning<br>
-            <span style="font-size: large; font-style: italic;">
-              Learning from labeled data, e.g., classifying images as "cat" or "dog" or predicting blood glucose
-              levels. <span class="post-it-strip">Reference data</span>
-            </span>
-          </p>
-        </div>
-        <div class="fragment fade-up" data-fragment-index="6">
-          <p class="subBullet">
-            Unsupervised Learning<br>
-            <span style="font-size: large; font-style: italic;">
-              Finding hidden patterns in unlabeled data, e.g., customer segmentation or anomaly detection. <span
-                class="post-it-strip">No reference data</span>
-            </span>
-          </p>
-        </div>
-        <div class="fragment fade-up" data-fragment-index="7">
-          <p class="subBullet">
-            Reinforcement Learning<br>
-            <span style="font-size: large; font-style: italic;">
-              Learning by interacting with an environment, e.g., training robots or game-playing AI. <span
-                class="post-it-strip">Feedback from environment</span>
-            </span>
-          </p>
-        </div>
-      </div>
+      <p class="mainBullet">
+        <strong>Objectives</strong> of ML:
+      </p>
+      <p class="subBullet">
+        Classification<br>
+        <span style="font-size: large; font-style: italic;">
+          Predicting discrete categories, e.g., identifying spam emails, or classifying water quality.
+        </span>
+      </p>
+      <p class="subBullet">
+        Regression<br>
+        <span style="font-size: large; font-style: italic;">
+          Predicting continuous values, e.g., forecasting house prices, or estimating chemical concentrations.
+        </span>
+      </p>
     </div>
   </div>
 --- (id="what-is-machine-learning")
+
+## Types of <span class="post-it-strip">Machine Learning</span>
+  <div>
+    <div class="leftBox">
+    </div>
+    <div class="spacer"></div>
+    <div class="rightBox">
+      <p class="mainBullet">
+        Supervised Learning<br>
+        <span style="font-size: large; font-style: italic;">
+          Learning from labeled data, e.g., classifying images as "cat" or "dog" or predicting blood glucose
+          levels. <span class="post-it-strip">Reference data</span>
+        </span>
+      </p>
+      <p class="mainBullet">
+        Unsupervised Learning<br>
+        <span style="font-size: large; font-style: italic;">
+          Finding hidden patterns in unlabeled data, e.g., customer segmentation or anomaly detection. <span
+            class="post-it-strip">No reference data</span>
+        </span>
+      </p>
+      <p class="mainBullet">
+        Reinforcement Learning<br>
+        <span style="font-size: large; font-style: italic;">
+          Learning by interacting with an environment, e.g., training robots or game-playing AI. <span
+            class="post-it-strip">Feedback from environment</span>
+        </span>
+      </p>
+    </div>
+  </div>
+--- (id="types-of-machine-learning")
 
 ## Important <span class="post-it-strip">Terms</span> in ML
   <div>
@@ -1502,7 +1527,7 @@ Sweetness Weight Price Sourness Color(R) Color(G) Color(B)
     </div>
     <div class="spacer"></div>
     <div class="rightBox">
-      <img src="../resources/figures/04_dataAnalysisTools/rf_scheme.png" alt="Random Forest Scheme" style="width: auto; height: 100%; box-shadow: 5px 5px 15px rgba(0, 255, 38, 0.3);; background-color: #f0f0f0; padding: 10px; border-radius: 5px;">
+      <img src="resources/figures/04_dataAnalysisTools/rf_scheme.png" alt="Random Forest Scheme" style="width: auto; height: 100%; box-shadow: 5px 5px 15px rgba(0, 255, 38, 0.3);; background-color: #f0f0f0; padding: 10px; border-radius: 5px;">
       <p style="text-align: center; font-style: italic; font-size: medium;">Random Forest Scheme
         (https://www.datacamp.com/de/tutorial/random-forests-classifier-python)</p>
     </div>
@@ -1517,10 +1542,10 @@ Sweetness Weight Price Sourness Color(R) Color(G) Color(B)
         <div class="tab decision-tree-tab" data-tab="split">Tree</div>
       </div>
       <div class="tab-content active decision-tree-tab" data-tab="node">
-        <img src="../resources/figures/04_dataAnalysisTools/decision_tree_node.png" alt="Decision Tree Node" style="width: auto; height: 350px; box-shadow: 5px 5px 15px rgba(0, 255, 38, 0.3);; background-color: #f0f0f0; padding: 10px; border-radius: 5px;">
+        <img src="resources/figures/04_dataAnalysisTools/decision_tree_node.png" alt="Decision Tree Node" style="width: auto; height: 350px; box-shadow: 5px 5px 15px rgba(0, 255, 38, 0.3);; background-color: #f0f0f0; padding: 10px; border-radius: 5px;">
       </div>
       <div class="tab-content decision-tree-tab" data-tab="split">
-        <img src="../resources/figures/04_dataAnalysisTools/decision_tree_node2.png" alt="Decision Tree Split" style="width: auto; height: 350px; box-shadow: 5px 5px 15px rgba(0, 255, 38, 0.3);; background-color: #f0f0f0; padding: 10px; border-radius: 5px;">
+        <img src="resources/figures/04_dataAnalysisTools/decision_tree_node2.png" alt="Decision Tree Split" style="width: auto; height: 350px; box-shadow: 5px 5px 15px rgba(0, 255, 38, 0.3);; background-color: #f0f0f0; padding: 10px; border-radius: 5px;">
       </div>
     </div>
     <div class="spacer"></div>
@@ -1534,16 +1559,16 @@ Sweetness Weight Price Sourness Color(R) Color(G) Color(B)
       <p class="mainBullet">
         <strong>How it works:</strong><br>
         <span style="font-size: large; font-style: italic;">
-          a) Splits data based on a feature and threshold to maximize separation.<br>
+          a) Splits data to maximize separation (purity).<br>
           b) Grows branches until a stopping criterion is met (e.g., min samples or max depth).
       </p>
       <p class="mainBullet">
         <strong>Components of a Decision Tree:</strong><br>
         <span style="font-size: large; font-style: italic;">
-          <strong>Root Node:</strong> Represents the entire dataset and the first split.<br>
-          <strong>Decision Nodes:</strong> Points where the data is split further.<br>
-          <strong>Leaf Nodes:</strong> Terminal nodes showing the final result.<br>
-          <strong>Branches:</strong> Connect nodes and represent the outcome of a decision.
+          <strong>Root Node:</strong> Input dataset & 1. split.<br>
+          <strong>Decision Nodes:</strong> Points where data split further.<br>
+          <strong>Leaf Nodes:</strong> Terminal nodes showing result.<br>
+          <strong>Branches:</strong> Connect nodes.
         </span>
       </p>
     </div>
@@ -1554,7 +1579,7 @@ Sweetness Weight Price Sourness Color(R) Color(G) Color(B)
   <div>
     <div class="leftBox">
       <p class="mainBullet">
-        <strong>Definition:</strong><br>
+        <strong>Concept:</strong><br>
         <span style="font-size: large; font-style: italic;">
           Combining predictions from multiple decision trees to improve overall model performance.
         </span>
@@ -1562,13 +1587,13 @@ Sweetness Weight Price Sourness Color(R) Color(G) Color(B)
       <p class="mainBullet">
         <strong>How it works:</strong>
       </p>
-      <p class="subBullet">
+      <p class="subBullet" style="font-size: large;">
         Builds multiple decision trees from different subsets of data.
       </p>
-      <p class="subBullet">
+      <p class="subBullet" style="font-size: large;">
         Each tree contributes a vote (classification) or prediction (regression).
       </p>
-      <p class="subBullet">
+      <p class="subBullet" style="font-size: large;">
         The final output is based on majority vote (classification) or average (regression).
       </p>
     </div>
@@ -1590,13 +1615,13 @@ Final Prediction: Average = 5.27</code></pre>
       <p class="mainBullet">
         <strong>Why use an ensemble?</strong>
       </p>
-      <p class="subBullet">
+      <p class="subBullet" style="font-size: large;">
         Reduces overfitting by averaging predictions.
       </p>
-      <p class="subBullet">
+      <p class="subBullet" style="font-size: large;">
         Improves robustness and accuracy.
       </p>
-      <p class="subBullet">
+      <p class="subBullet" style="font-size: large;">
         Handles noisy data better than a single tree.
       </p>
     </div>
@@ -1628,14 +1653,6 @@ Final Prediction: Average = 5.27</code></pre>
     <div class="spacer"></div>
     <div class="rightBox">
       <p class="mainBullet">
-        <strong>In Practice:</strong>
-        <pre><code data-trim data-noescape>original_dataset = [1, 2, 3, 4, 5]
-bootstrapped_tree1 = [2, 4, 5, 1, 2]
-bootstrapped_tree2 = [3, 5, 1, 3, 3]
-oob_sample_tree1 = [3]
-oob_sample_tree2 = [2, 4]</code></pre>
-      </p>
-      <p class="mainBullet">
         <strong>How many trees are built?</strong><br>
         <span style="font-size: large; font-style: italic;">
           Typically, hundreds to thousands of trees are trained in a Random Forest. <strong>
@@ -1644,12 +1661,12 @@ oob_sample_tree2 = [2, 4]</code></pre>
         </span>
       </p>
       <p class="mainBullet">
-        <strong>Example:</strong> <button onclick="drawBootstrapSample()">Draw Bootstrap Sample</button>
+        <strong>Example Bootstrap:</strong> <button onclick="drawBootstrapSample()">Draw Bootstrap Sample</button>
         <pre id="originalDataset" style="font-size: x-large;">
 x = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]</pre>
-        <pre id="bootstrapSample" style="font-size: large; color: teal;">
+        <pre id="bootstrapSample" style="font-size: x-large; color: magenta;">
           <!-- Bootstrap sample will appear here --></pre>
-        <pre id="oobSample" style="font-size: large; color: gray;">
+        <pre id="oobSample" style="font-size: x-large; color: cyan;">
           <!-- OOB sample will appear here --></pre>
       </p>
     </div>
@@ -1662,39 +1679,27 @@ x = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]</pre>
       <p class="mainBullet">
         <strong>Structure of a Random Forest:</strong>
       </p>
-      <p class="subBullet">
+      <p class="subBullet" style="font-size: large;">
         Composed of multiple decision trees.
       </p>
-      <p class="subBullet">
+      <p class="subBullet" style="font-size: large;">
         Each tree is trained on a unique bootstrapped dataset.
       </p>
-      <p class="subBullet">
+      <p class="subBullet" style="font-size: large;">
         Not only the data but also the features are randomly sampled for each node in each tree.
       </p>
-      <p class="subBullet">
+      <p class="subBullet" style="font-size: large;">
         Feature that provides the best split of the data is selected.
       </p>
-      <p class="subBullet">
+      <p class="subBullet" style="font-size: large;">
         Trees grow independently until a stopping condition (e.g., max depth, min samples per leaf).
       </p>
     </div>
     <div class="spacer"></div>
     <div class="rightBox">
-      <img src="../resources/figures/04_dataAnalysisTools/rf_scheme2.webp" alt="Random Forest Scheme" style="width: auto; height: 100%; 350px; box-shadow: 5px 5px 15px rgba(0, 255, 38, 0.3);; background-color: #f0f0f0; padding: 10px; border-radius: 5px;">
-      <p style="text-align: center; font-style: italic; font-size: medium;">Random Forest Scheme
+      <img src="resources/figures/04_dataAnalysisTools/rf_scheme2.webp" alt="Random Forest Scheme" style="width: auto; height: 100%; 350px; box-shadow: 5px 5px 15px rgba(0, 255, 38, 0.3);; background-color: #f0f0f0; padding: 10px; border-radius: 5px;">
+      <p style="text-align: center; font-style: italic; font-size: medium;margin-top: -20px">Random Forest Scheme
         (https://blog.dailydoseofds.com/p/your-random-forest-is-underperforming)</p>
-      <p class="mainBullet">
-        <strong>Key Features:</strong>
-      </p>
-      <p class="subBullet" style="font-size: large;">
-        Combines outputs of trees using majority vote (classification) or averaging (regression).
-      </p>
-      <p class="subBullet" style="font-size: large;">
-        Randomness ensures diversity in trees, reducing overfitting.
-      </p>
-      <p class="subBullet" style="font-size: large;">
-        Out-of-bag (OOB) samples can validate model performance.
-      </p>
     </div>
   </div>
 --- (id="how-to-set-up-an-rf")
@@ -1711,38 +1716,31 @@ x = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]</pre>
       <p class="subBullet" style="font-size: large;">
         Each feature in the subset is evaluated to determine the best split for the data.
       </p>
-      <p class="mainBullet">
-        <strong>Criterion for Splitting:</strong>
-      </p>
-      <p class="subBullet" style="font-size: large;">
-        Common criteria evaluate <strong>purity</strong> of the resulting child nodes after a split.
-      </p>
-      <p class="subBullet" style="font-size: large;">
-        <strong>For classification:</strong><br>
-        <span style="font-size: large; font-style: italic;">
-          Gini Index: Measures impurity. Lower values are better.<br>
-          $$ Gini = 1 - \sum_{i=1}^{n} p_i^2$$ 
-          where p is the proportion of samples in class i.
-        </span>
-      </p>
-      <p class="subBullet" style="font-size: large;">
-        <strong>For regression:</strong><br>
-        <span style="font-size: large; font-style: italic;">
-          Mean Squared Error (MSE): Evaluates the reduction in variance after a split.
-        </span>
-      </p>
+      <div class="tabs">
+        <div class="tab active" data-tab="rf_class">Classification</div>
+        <div class="tab" data-tab="rf_regression">Regression</div>
+      </div>
+      <div class="tab-content active" data-tab="rf_class">
+        <p class="subBullet" style="font-size: large;">
+          <strong>For classification:</strong><br>
+          <span style="font-size: large; font-style: italic;">
+            Gini Index: Measures impurity. Lower values are better.<br>
+            $$ Gini = 1 - \sum_{i=1}^{n} p_i^2$$ 
+            where p is the proportion of samples in class i.
+          </span>
+        </p>
+      </div>
+      <div class="tab-content" data-tab="rf_regression">
+        <p class="subBullet" style="font-size: large;">
+          <strong>For regression:</strong><br>
+          <span style="font-size: large; font-style: italic;">
+            Mean Squared Error (MSE): Evaluates the reduction in variance after a split.
+          </span>
+        </p>
+      </div>
     </div>
     <div class="spacer"></div>
     <div class="rightBox">
-      <p class="mainBullet">
-        <strong>How the Best Criterion is Determined:</strong>
-      </p>
-      <p class="subBullet" style="font-size: large;">
-        For each feature and potential split point, calculate the criterion value.
-      </p>
-      <p class="subBullet" style="font-size: large;">
-        Choose the split point that maximizes the improvement in purity or minimizes the error.)
-      </p>
       <p class="mainBullet">
         <strong>Example:</strong>
       </p>
@@ -1769,7 +1767,7 @@ Best Split: Conductivity < 100 (Gini Index = 0.1)</code></pre>
 ## Example for <span class="post-it-strip">Gini Index</span>
   <div>
     <div class="leftBox">
-      <img src="../resources/figures/04_dataAnalysisTools/criterion_selection.png" alt="Decision Tree Split" style="width: auto; height: auto; box-shadow: 5px 5px 15px rgba(0, 255, 38, 0.3);; background-color: #f0f0f0; padding: 10px; border-radius: 5px;">
+      <img src="resources/figures/04_dataAnalysisTools/criterion_selection.png" alt="Decision Tree Split" style="width: auto; height: auto; box-shadow: 5px 5px 15px rgba(0, 255, 38, 0.3);; background-color: #f0f0f0; padding: 10px; border-radius: 5px;">
       <p style="text-align: center; font-style: italic; font-size: medium;">
         Possible splits for a decision tree node.
       </p>
@@ -1777,9 +1775,9 @@ Best Split: Conductivity < 100 (Gini Index = 0.1)</code></pre>
     <div class="spacer"></div>
     <div class="rightBox">
       <p class="mainBullet">
-        <strong>A: out1 (5, 2); out2 (2, 3)</strong>
+        <strong>A: out1 (6, 2); out2 (2, 3)</strong>
         <span style="font-size: large; ">
-        $$ Gini_1 = 1 - \left( \left( \frac{6}{7} \right)^2 + \left( \frac{2}{7} \right)^2 \right) \approx 0.375$$ 
+        $$ Gini_1 = 1 - \left( \left( \frac{6}{8} \right)^2 + \left( \frac{2}{8} \right)^2 \right) \approx 0.375$$ 
         $$ Gini_2 = 1 - \left( \left( \frac{2}{5} \right)^2 + \left( \frac{3}{5} \right)^2 \right) = 0.48$$ 
         $$ Gini_{\text{split}} = \frac{n_1}{n} \times Gini_1 + \frac{n_2}{n} \times Gini_2$$ 
         $$ Gini_{\text{split}} = \frac{8}{13} \times 0.375 + \frac{5}{13} \times 0.48 \approx 0.42$$ 
@@ -1800,7 +1798,7 @@ Best Split: Conductivity < 100 (Gini Index = 0.1)</code></pre>
 ## What if I have <span class="post-it-strip">Multiple classes</span>?
   <div>
     <div class="leftBox">
-      <img src="../resources/figures/04_dataAnalysisTools/decision_trees2.png" alt="Decision Tree Split" style="width: auto; height: auto; box-shadow: 5px 5px 15px rgba(0, 255, 38, 0.3);; background-color: #f0f0f0; padding: 10px; border-radius: 5px;">
+      <img src="resources/figures/04_dataAnalysisTools/decision_trees2.png" alt="Decision Tree Split" style="width: auto; height: auto; box-shadow: 5px 5px 15px rgba(0, 255, 38, 0.3);; background-color: #f0f0f0; padding: 10px; border-radius: 5px;">
     </div>
     <div class="spacer"></div>
     <div class="rightBox">
@@ -1837,21 +1835,12 @@ Best Split: Conductivity < 100 (Gini Index = 0.1)</code></pre>
       <p class="subBullet" style="font-size: large;">
         A measure of how valuable each feature is for improving the model's performance.
       </p>
-      <p class="mainBullet">
-        <strong>How is it calculated?</strong>
-      </p>
       <p class="subBullet" style="font-size: large;">
         <strong>Impurity-Based Importance:</strong> Sum of impurity reduction (e.g., Gini Index or MSE) for splits using the feature.
         $$ \text{Importance of feat.} = \sum_{\text{all trees}} \sum_{\text{all nodes}} \text{Impurity Reduction} \div \text{Total Impurity Reduction}$$ 
       </p>
       <p class="subBullet" style="font-size: large;">
       <strong>Permutation Importance:</strong> Decrease in model performance when feature values are shuffled.
-      </p>
-      <p class="mainBullet">
-        <strong>Why is it important?</strong>
-      </p>
-      <p class="subBullet" style="font-size: large;">
-        Identifies which features contribute most to predictions, aiding interpretability and model refinement.
       </p>
     </div>
     <div class="spacer"></div>
@@ -1869,6 +1858,9 @@ Conductivity: 0.1</code></pre>
 --- (id="understanding-feature-importance-in-rf")
 
 ## Random Forest Example: <span class="post-it-strip">Classification</span>
+  <div class="code-button-container">
+    <div class="py-code-button" data-code="rf_classification_wine"></div>
+  </div>
   <div>
     <div class="leftBox">
     <p class="mainBullet">

@@ -339,6 +339,8 @@
     // Initiales gefiltertes Signal
     const yData_ifft_init = applyFilter(cutoffFrequency);
     const xyData_ifft = mathUtils.createXYData(xData, yData_ifft_init);
+    const yData_ifft_init_2 = applyFilter(cutoffFrequency/3); // zusätzliches gefiltertes Signal
+    const xyData_ifft_2 = mathUtils.createXYData(xData, yData_ifft_init_2);
 
     // Datensätze fürs Plotten
     const dataSets = [
@@ -359,7 +361,17 @@
                 curve: d3.curveNatural,
                 lineColor: "#F0F",
                 pointColor: "none",
-                lineWidth: 2.5
+                lineWidth: 3.5
+            }
+        },
+        {
+            data: xyData_ifft_2,
+            options: {
+                key: "Filtered Signal (Cutoff/3)",
+                curve: d3.curveNatural,
+                lineColor: "#0FF",
+                pointColor: "none",
+                lineWidth: 3.5
             }
         }
     ];
