@@ -1,14 +1,4 @@
 ## Data Processing Techniques
-<div>
-<div class="leftBox">
-<p class="mainBullet">Objectives</p>
-<p class="subBullet">O 1</p>
-</div>
-<div class="spacer"></div>
-<div class="rightBox">
-<img src="../resources/misc/objectives.jpg" alt="Objectives and Pre-requisites" style="width: auto; height: 350px; float: right;">
-</div>
-</div>
 --- (id="objectives-and-pre-requisites")
 
 ## What is a <span class="post-it-strip">Signal?</span>
@@ -18,27 +8,26 @@
             From an analytical perspective, a signal consists
             of multiple components.
         </p>
-        <p class="subBullet fragment" data-fragment-index="0">
+        <p class="subBullet">
             <strong>Analyte</strong>: the signal of interest
         </p>
-        <p class="subBullet fragment" data-fragment-index="1">
+        <p class="subBullet">
             <strong>Matrix</strong>: e.g., interference, suppression, or enhancement
         </p>
-        <p class="subBullet fragment" data-fragment-index="2">
+        <p class="subBullet">
             <strong>System</strong>: e.g., noise, drift, or baseline
         </p>
-        <p class="mainBullet fragment" data-fragment-index="3">
+        <p class="mainBullet">
             Goal: <strong>Extract</strong> the analyte signal.
         </p>
     </div>
     <div class="spacer"></div>
     <div class="rightBox">
-        <div class="fragment fade-left" data-fragment-index="0" id="chart-data-processing-002"></div>
+        <div id="chart-data-processing-002"></div>
     </div>
 </div>
 <!-- SWITCHES -->
 <div>
-<div class="fragment fade-up rightBox" data-fragment-index="1">
 <label class="switch">
   <input type="checkbox" id="toggle-interference">
   <span class="slider round"></span>
@@ -49,8 +38,6 @@
   <span class="slider round"></span>
 </label>
 <span style="margin-left: 8px; vertical-align: middle;">Suppression</span>
-</div>
-<div class="fragment fade-up leftBox" data-fragment-index="2">
 <label class="switch">
   <input type="checkbox" id="toggle-drift">
   <span class="slider round"></span>
@@ -62,13 +49,12 @@
 </label>
 <span style="margin-left: 8px; vertical-align: middle;">Noise</span>
 </div>
-</div>
-<script src="../resources/js/charts/signal_processing_002.js"></script>
+<script src="resources/js/charts/signal_processing_002.js"></script>
 --- (id="what-is-a-signal")
 
 ## In Addition, Data Preprocessing means making data <span class="post-it-strip">comparable</span>
 <div class="code-button-container">
-    <div class="py-code-button" id="py-code-normalization"></div>
+    <div class="py-code-button" data-code="normalize"></div>
 </div>  
 <div>
   <div class="leftBox">
@@ -98,10 +84,13 @@
   <span class="slider round"></span>
 </label>
 <span style="margin-left: 8px; vertical-align: middle;">normalize</span>
-<script src="../resources/js/charts/signal_processing_003.js"></script>
+<script src="resources/js/charts/signal_processing_003.js"></script>
 --- (id="data-normalization")
 
 ## In Addition, Data Preprocessing means making data <span class="post-it-strip">comparable</span>
+<div class="code-button-container">
+    <div class="py-code-button" data-code="standardize"></div>
+</div> 
 <div>
   <div class="leftBox">
       <div id="chart-data-processing-004"></div>
@@ -142,7 +131,7 @@
 </label>
 <span style="margin-left: 8px; vertical-align: middle;">standardize</span>
 </div>
-<script src="../resources/js/charts/signal_processing_004.js"></script>
+<script src="resources/js/charts/signal_processing_004.js"></script>
 --- (id="data-standardization")
 
 ## In Addition, Data Preprocessing means making data <span class="post-it-strip">comparable</span>
@@ -249,42 +238,42 @@
         </div>
         <div class="tab-content active signal4-tab" data-tab="signal4a">
             <pre style="font-size: large; overflow: hidden; white-space: pre-wrap; word-break: break-word;" data-trim data-noescape>
-                <code data-trim data-noescape>Signal: 1    2    3    4    5    6    7    8    9   
-        ×    ×    ×    ×    
-Kernel: 0.25 0.25 0.25 0.25
-Result: 2.5  0    0    0    0    0    0    0    0</code>
+                <code data-trim data-noescape>Signal: 5    7    9    4    1    1    8    3    5   
+        ×    ×    ×    ×    ×
+Kernel: 0.2  0.2  0.2  0.2  0.2
+Result: 0    0    5.2  0    0    0    0    0    0</code>
             </pre>
         </div>
         <div class="tab-content signal4-tab" data-tab="signal4b">
             <pre style="font-size: large; overflow: hidden; white-space: pre-wrap; word-break: break-word;" data-trim data-noescape>
-                <code data-trim data-noescape>Signal: 1    2    3    4    5    6    7    8    9
-              ×    ×    ×    ×    
-Kernel:      0.25 0.25 0.25 0.25
-Result: 2.5  3.5  0    0    0    0    0    0    0</code>
+                <code data-trim data-noescape>Signal: 5    7    9    4    1    1    8    3    5
+              ×    ×    ×    ×    ×
+Kernel:      0.2  0.2  0.2  0.2  0.2
+Result: 0    0    5.2  4.4  0    0    0    0    0</code>
             </pre>
         </div>
         <div class="tab-content signal4-tab" data-tab="signal4c">
             <pre style="font-size: large; overflow: hidden; white-space: pre-wrap; word-break: break-word;" data-trim data-noescape>
-                <code data-trim data-noescape>Signal: 1    2    3    4    5    6    7    8    9
-                   ×    ×    ×    ×
-Kernel:           0.25 0.25 0.25 0.25
-Result: 2.5  3.5  4.5  0    0    0    0    0    0</code>
+                <code data-trim data-noescape>Signal: 5    7    9    4    1    1    8    3    5
+                   ×    ×    ×    ×    ×
+Kernel:           0.2  0.2  0.2  0.2  0.2
+Result: 0    0    5.2  4.4  4.6  0    0    0    0</code>
             </pre>
         </div>
         <div class="tab-content signal4-tab" data-tab="signal4d">
             <pre style="font-size: large; overflow: hidden; white-space: pre-wrap; word-break: break-word;" data-trim data-noescape>
-                <code data-trim data-noescape>Signal: 1    2    3    4    5    6    7    8    9
-                        ×    ×    ×    ×    
-Kernel:                0.25 0.25 0.25 0.25
-Result: 2.5  3.5  4.5  5.5  0    0    0    0    0</code>
+                <code data-trim data-noescape>Signal: 5    7    9    4    1    1    8    3    5
+                        ×    ×    ×    ×    ×
+Kernel:                0.2  0.2  0.2  0.2  0.2
+Result: 0    0    5.2  4.4  4.6  3.4  0    0    0</code>
             </pre>
         </div>
         <div class="tab-content signal4-tab" data-tab="signal4e">
             <pre style="font-size: large; overflow: hidden; white-space: pre-wrap; word-break: break-word;" data-trim data-noescape>
-                <code data-trim data-noescape>Signal: 1    2    3    4    5    6    7    8    9
-                             ×    ×    ×    ×    
-Kernel:                     0.25 0.25 0.25 0.25
-Result: 2.5  3.5  4.5  5.5  6.5  0    0    0    0</code>
+                <code data-trim data-noescape>Signal: 5    7    9    4    1    1    8    3    5
+                             ×    ×    ×    ×    ×
+Kernel:                     0.2  0.2  0.2  0.2  0.2
+Result: 0    0    5.2  4.4  4.6  3.4  3.6  0    0</code>
             </pre>
         </div>
         <p class="mainBullet" style="margin-top: -20px;">
@@ -303,6 +292,9 @@ Result: 2.5  3.5  4.5  5.5  6.5  0    0    0    0</code>
 --- (id="convolution-smoothing")
 
 ## Kernels for <span class="post-it-strip">Smoothing</span>
+<div class="code-button-container">
+    <div class="py-code-button" data-code="moving_average"></div>
+</div>
 <div>
     <div class="leftBox">
         <p class="question">
@@ -330,10 +322,13 @@ Result: 2.5  3.5  4.5  5.5  6.5  0    0    0    0</code>
         <div id="chart_smoothing1"></div>
     </div>
 </div>
-<script src="../resources/js/charts/signal_processing_005.js"></script>
+<script src="resources/js/charts/signal_processing_005.js"></script>
 --- (id="kernels-for-smoothing")
 
 ## Kernels for <span class="post-it-strip">Smoothing</span>
+<div class="code-button-container">
+    <div class="py-code-button" data-code="gaussian_smoothing"></div>
+</div>
 <div>
     <div class="leftBox">
         <p class="subBullet">
@@ -356,10 +351,13 @@ Result: 2.5  3.5  4.5  5.5  6.5  0    0    0    0</code>
         <div id="chart_smoothing2"></div>
     </div>
 </div>
-<script src="../resources/js/charts/signal_processing_006.js"></script>
+<script src="resources/js/charts/signal_processing_006.js"></script>
 --- (id="kernels-for-smoothing-gaussian")
 
 ## Kernels for <span class="post-it-strip">Smoothing</span>
+<div class="code-button-container">
+    <div class="py-code-button" data-code="savgol"></div>
+</div>
 <div>
     <div class="leftBox">
         <p class="subBullet">
@@ -391,7 +389,7 @@ Result: 2.5  3.5  4.5  5.5  6.5  0    0    0    0</code>
         </p>
     </div>
 </div>
-<script src="../resources/js/charts/signal_processing_007.js"></script>
+<script src="resources/js/charts/signal_processing_007.js"></script>
 --- (id="kernels-for-smoothing-savitzky-golay")
 
 ## The <span class="post-it-strip">Trade-off</span> in Smoothing
@@ -434,10 +432,13 @@ Result: 2.5  3.5  4.5  5.5  6.5  0    0    0    0</code>
         </p>
     </div>
 </div>
-<script src="../resources/js/charts/signal_processing_008.js"></script>
+<script src="resources/js/charts/signal_processing_008.js"></script>
 --- (id="trade-off-in-smoothing")
 
 ## Savitzky-Golay: <span class="post-it-strip">1st Derivative</span>
+<div class="code-button-container">
+    <div class="py-code-button" data-code="sg_deriv"></div>
+</div>
 <div>
     <div class="leftBox">
         <p class="mainBullet" style="font-size: large;">
@@ -472,7 +473,7 @@ Result: 2.5  3.5  4.5  5.5  6.5  0    0    0    0</code>
             solid blue line is the 1st derivative without SG.
     </div>
 </div>
-<script src="../resources/js/charts/signal_processing_009.js"></script>
+<script src="resources/js/charts/signal_processing_009.js"></script>
 --- (id="savitzky-golay-1st-derivative")
 
 ## Savitzky-Golay: <span class="post-it-strip">Generating Coefficients</span>
@@ -596,7 +597,7 @@ Result: 2.5  3.5  4.5  5.5  6.5  0    0    0    0</code>
         <div id="chart_axial"></div>
     </div>
 </div>
-<script src="../resources/js/charts/signal_processing_010.js"></script>
+<script src="resources/js/charts/signal_processing_010.js"></script>
 --- (id="denoising-fourier-transformation")
 
 ## Denoising using <span class="post-it-strip">Fourier Transformation</span>
@@ -623,7 +624,7 @@ Result: 2.5  3.5  4.5  5.5  6.5  0    0    0    0</code>
         </p>
     </div>
 </div>
-<script src="../resources/js/charts/signal_processing_010.js"></script>
+<script src="resources/js/charts/signal_processing_010.js"></script>
 --- (id="denoising-fourier-transformation-2")
 
 ## Denoising using <span class="post-it-strip">Fourier Transformation</span>
@@ -653,7 +654,7 @@ Result: 2.5  3.5  4.5  5.5  6.5  0    0    0    0</code>
         </p>
     </div>
 </div>
-<script src="../resources/js/charts/signal_processing_011.js"></script>
+<script src="resources/js/charts/signal_processing_011.js"></script>
 --- (id="denoising-fourier-transformation-3")
 
 ## Denoising using <span class="post-it-strip">Fourier Transformation</span>
@@ -715,10 +716,13 @@ Result: 2.5  3.5  4.5  5.5  6.5  0    0    0    0</code>
         </p>
     </div>
 </div>
-<script src="../resources/js/charts/signal_processing_012.js"></script>
+<script src="resources/js/charts/signal_processing_012.js"></script>
 --- (id="systematic-frequency-analysis")
 
 ## Frequency <span class="post-it-strip">Filtering</span>
+<div class="code-button-container">
+    <div class="py-code-button" data-code="fft_denoise"></div>
+</div>
 <div>
     <div class="leftBox">
         <p class="mainBullet">
@@ -902,12 +906,6 @@ Result: 2.5  3.5  4.5  5.5  6.5  0    0    0    0</code>
         <p class="subSubBullet" style="font-size: large;">
             Wavelets are used to analyze signals at different scales, i.e. resolutions.
         </p>
-        <p class="subSubBullet" style="font-size: large;">
-            The most simple wavelet is the Haar wavelet.<br>
-            $$
-            \psi(t) = \begin{cases} 1, & 0 \leq t < 0.5 \\ -1, & 0.5 \leq t < 1 \end{cases}
-            $$
-        </p>
     </div>
 </div>
 --- (id="dwt-introduction")
@@ -948,7 +946,7 @@ Result: 2.5  3.5  4.5  5.5  6.5  0    0    0    0</code>
         <div id="chart_rbio3_9_wavelet" style="margin-top: -20px;"></div>
     </div>
 </div>
-<script src="../resources/js/charts/signal_processing_013.js"></script>
+<script src="resources/js/charts/signal_processing_013.js"></script>
 --- (id="haar-wavelet")
 
 ## Wavelet Transformation <span class="post-it-strip">Step-by-Step</span>
@@ -981,10 +979,11 @@ Result: 2.5  3.5  4.5  5.5  6.5  0    0    0    0</code>
         <p class="subBullet" style="font-size: large;">
             3. Recursive Process: with a constant scale of 2, the process is repeated until the desired
             <pre>
-y -> A1 & D1
-      ↳ A2 & D2
-         ↳ A3 & D3
-            ↳ A4 & D4</pre>
+<span style="font-weight: bold;">Data Sets:           Data points: </span>
+y -> A1 & D1         128 -> 64 & 64
+      ↳ A2 & D2              ↳ 32 & 32
+         ↳ A3 & D3              ↳ 16 & 16
+            ↳ A4 & D4              ↳ 8 & 8</pre>
                         </p>
     </div>
 </div>
@@ -1037,6 +1036,9 @@ y -> A1 & D1
 --- (id="dwt-multi-resolution-analysis")
 
 ## DWT and the <span class="post-it-strip">Multi Resolution Analysis</span>
+<div class="code-button-container">
+    <div class="py-code-button" data-code="dwt_denoise"></div>
+</div>
 <div>
     <div class="leftBox">
         <div id="chart_dwt_multi_resolution_analysis-2" style="margin-top: -20px;"></div>
@@ -1059,6 +1061,10 @@ y -> A1 & D1
     </div>
 </div>
 --- (id="dwt-multi-resolution-analysis-2")
+
+## DWT Overview of common <span class="post-it-strip">Kernels</span>
+<img src="resources/figures/03_dataProcessingTools/wavelets_overview.svg" alt="DWT Kernels" style="width: 100%; height: auto;">
+--- (id="dwt-kernels-overview")
 
 ## Discrete Wavelet Transformation <span class="post-it-strip">Summary</span>
 <div>

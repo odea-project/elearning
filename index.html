@@ -24,6 +24,7 @@
 		<div class="slides">
 			<!-- Slide 0: Logo + Autoren -->
 			<section id="intro-slide">
+				<h2>https://odea-project.github.io/elearning</h2>
 				<img id="odea-logo" src="resources/misc/odea_edu_logo_dark3.jpg" alt="ODEA Logo"
 					style="width: auto; height: 400px;">
 				<img src="resources/misc/pic_ricardo.jpg" alt="Ricardo Cunha"
@@ -43,11 +44,11 @@
 				<h1>Load Tutorial</h1>
 
 				click to select a topic<br><br>
-				<pre style="font-size: large;"><span style="font-family: 'Montserrat';">For developement purposes only!</span>
+				<!-- <pre style="font-size: large;"><span style="font-family: 'Montserrat';">For developement purposes only!</span>
 					<a href="#/dynamic-tutorial" class="topic-link" data-md="topics/00_demos.md">
     				<code class="hoverable">	00. Demo</code>
 					</a>
-	 			</pre>
+	 			</pre> -->
 				<pre style="font-size: large;"><span style="color: burlywood; font-family: 'Montserrat'; font-weight: bold;">Short Course: </span><span style="font-family: 'Montserrat';">Data treatment processes for large<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;& diverse analytical data sets</span>
 					<a href="#/dynamic-tutorial" class="topic-link" data-md="topics/01_analyticalDataChallenges.md">
 						<code class="hoverable" >	01. Understanding Analytical Data Challenges</code>
@@ -74,7 +75,7 @@
 			</section>
 		</div>
 	</div>
-
+	<!-- Clock -->
 	<div id="clock">--:--</div>
 
 	<!-- Reveal‐JS + Plugins -->
@@ -96,6 +97,7 @@
 	<script src="resources/js/utils/load_content_into_main.js"></script>
 	<script src="resources/js/utils/plot_utils.js"></script>
 	<script src="resources/js/utils/math_utils.js"></script>
+	<script src="resources/js/utils/d3_utils.js"></script>
 	<script>
 		// Einmalig (z.B. direkt nach dem Laden deines Scripts) irgendwo reinhängen:
 		document.querySelector('.reveal .slides').addEventListener('click', function (event) {
@@ -124,6 +126,29 @@
 
 			// 7. Das/die entsprechende(n) .tab-content aktivieren
 			slide.querySelectorAll(`.tab-content[data-tab="${tabId}"]`).forEach(c => c.classList.add('active'));
+		});
+	</script>
+	<script>
+		document.body.addEventListener("click", e => {
+			// Prüfe, ob das geklickte Element ein Vorschaubild ist
+			const img = e.target;
+			if (!img.matches("img[data-preview-image]")) return;
+
+			// Overlay erstellen
+			const overlay = document.createElement("div");
+			overlay.classList.add("preview-overlay");
+
+			// Großes Bild reinladen
+			const bigImg = document.createElement("img");
+			bigImg.src = img.src;
+			overlay.appendChild(bigImg);
+
+			// Klick auf Overlay schließt es wieder
+			overlay.addEventListener("click", () => {
+				document.body.removeChild(overlay);
+			});
+
+			document.body.appendChild(overlay);
 		});
 	</script>
 </body>

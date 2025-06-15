@@ -588,3 +588,75 @@ input:checked + .slider:before {
     mask-size: 100% 100%;
     -webkit-mask-size: 100% 100%;
 }
+
+/* CODE OVERLAY */
+/* === Overlay-Hintergrund (halbtransparent über gesamtem Bildschirm) === */
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.8); /* dunkler Hintergrund */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999; /* weit über Reveal.js */
+}
+
+/* === Standardmäßig versteckt === */
+.hidden {
+  display: none;
+}
+
+/* === Container für Code und Buttons === */
+.overlay-content {
+  background: #000000;
+  padding: 1rem 1.5rem;
+  border-radius: 0.5rem;
+  box-shadow: 5 5 20px rgba(255, 0, 174, 0.4);
+  max-width: 90%;
+  max-height: 90%;
+  overflow: auto;
+  position: relative;
+  font-family: monospace;
+  font-size: 0.95rem;
+  line-height: 1.4;
+}
+
+/* === Der Schließen-Button (✕) === */
+#close-overlay,
+#copy-overlay {
+  position: absolute;
+  top: 0.5rem;
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  cursor: url("../../resources/misc/cursor2.cur"), auto !important;
+  padding: 0.25rem;
+}
+
+#copy-overlay {
+  color: #11bcff;
+}
+
+#close-overlay {
+  color: #FF1177;
+}
+
+/* ✕ ganz rechts oben */
+#close-overlay {
+  right: 0.5rem;
+}
+
+/* 📋 daneben, mit Abstand */
+#copy-overlay {
+  right: 2.5rem;
+}
+
+/* === Code-Block === */
+#overlay-code {
+  white-space: pre-wrap;      /* Zeilen umbrechen */
+  word-break: break-word;     /* Wörter umbrechen bei Bedarf */
+  color: #f0e400;
+}

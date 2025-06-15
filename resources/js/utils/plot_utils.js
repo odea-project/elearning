@@ -290,8 +290,116 @@
         lines: cacheItem.lines,
         lineGenerators: cacheItem.lineGenerators
       };
+    },
+
+  drawPixelBarChart: function (
+    divID, dataSets,
+    width = 800, height = 400,
+    xmin = null, xmax = null,
+    ymin = null, ymax = null,
+    hideXAxis = false, hideYAxis = false,
+    defaultBarWidth = 10
+  ) {
+    // Cache initialisieren
+    plotUtils._cache = plotUtils._cache || {};
+
+    // 1) Figure anlegen falls nötig
+    if (!plotUtils._cache[divID]) {
+      const fig = plotUtils.createFigure(divID, width, height, {
+        top: 50, right: 50, bottom: 50, left: 50
+      });
+      plotUtils._cache[divID] = {
+        fig,
+        axesAlready: false,
+        bars: []
+      };
+    }
+    const cacheItem = plotUtils._cache[divID];
+    const fig = cacheItem.fig;
+
+    // 2) Achsen nur einmal zeichnen
+    if (!cacheItem.axesAlready) {
+      // a) alle x- und y-Werte sammeln
+      const allX = dataSets.flatMap(ds => ds.data.map(d => d.x));
+      const allY = dataSets.flatMap(ds => ds.data.map(d => d.y));
+
+      // b) x-Domain bestimmen
+      const x0 = xmin != null ? xmin : d3.min(allX);
+      const x1 = xmax != null ? xmax : d3.max(allX);
+
+      // c) y-Domain bestimmen (Beginn immer 0)
+      const y0 = 0;
+      const y1 = ymax != null ? ymax : d3.max(allY);
+
+      // d) Achsen erzeugen – liefert intern fig.xScale und fig.yScale
+      plotUtils.addAxes(fig, [x0, x1], [y0, y1], 5, 5);
+
+      if (hideXAxis) fig.xAxisGroup.style("display", "none");
+      if (hideYAxis) fig.yAxisGroup.style("display", "none");
+
+      cacheItem.axesAlready = true;
     }
 
+    // 3) Alte Bars entfernen
+    cacheItem.bars.forEach(sel => sel.remove());
+    cacheItem.bars = [];
 
+    // 4) Bars zeichnen
+    const xScale = fig.xScale;
+    const yScale = fig.yScale;
+
+    // Pixel-Koordinate der Nulllinie
+    const yZero = yScale(0);
+
+    dataSets.forEach((ds, i) => {
+      const { data, options } = ds;
+      const color = options.barColor || "#69b3a2";
+      const stroke = options.barStroke || "none";
+      const bwOption = options.barWidth; // optional override
+
+      // Bar-Breite berechnen
+      let bw;
+      if (xScale.bandwidth) {
+        const band = xScale.bandwidth();
+        bw = bwOption != null
+          ? bwOption
+          : (band / dataSets.length) * 0.9;
+      } else {
+        bw = bwOption != null
+          ? bwOption
+          : defaultBarWidth;
+      }
+
+      // Offset für Mehrfach-Datasets
+      const offset = xScale.bandwidth
+        ? (i - (dataSets.length - 1) / 2) * bw
+        : 0;
+
+      // Bars anlegen
+      const sel = fig.svg.selectAll(null)
+        .data(data)
+        .enter()
+        .append("rect")
+          .attr("class", "bar")
+          .attr("x", d => {
+            const base = xScale(d.x);
+            return Math.round(base + offset - bw / 2);
+          })
+          .attr("y", d => Math.round(yScale(d.y)))
+          .attr("width", bw)
+          .attr("height", d => Math.round(yZero - yScale(d.y)))
+          .style("fill", color)
+          .style("stroke", stroke)
+          .style("shape-rendering", "crispEdges");
+
+      cacheItem.bars.push(sel);
+    });
+
+    return {
+      fig: fig,
+      bars: cacheItem.bars
+    };
+  }
   };
+
 })(window);

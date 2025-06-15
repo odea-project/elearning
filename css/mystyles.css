@@ -324,10 +324,11 @@
 }
 
 .styled-point2 {
-    font-size: x-large;
+    font-size: medium;
     position: relative;
     margin-left: 25px;
     text-align: left;
+    margin-top: -10px !important;
     /* Platz für das Icon */
 }
 
@@ -539,20 +540,21 @@
 
 .styled-noPoint .katex .mord,
 .styled-noPoint .katex .mop {
-    color: #b8103b;
+    color: #ffae00;
     /* Deine gewünschte Farbe für LaTeX-Elemente */
 }
 
 
 .styled-point2 .katex .mord,
 .styled-point2 .katex .mop {
-    color: #b8103b;
+    color: #ffae00;
+    margin-top: -10px !important;
     /* Deine gewünschte Farbe für LaTeX-Elemente */
 }
 
 .styled-point .katex .mord,
 .styled-point .katex .mop {
-    color: #b8103b;
+    color: #ffae00;
     /* Deine gewünschte Farbe für LaTeX-Elemente */
 }
 
@@ -682,6 +684,7 @@ body {
     stroke: rgb(238, 238, 238);
     stroke-width: 1px;
     stroke-dasharray: 0;
+    color: rgb(26, 81, 43);
 }
 
 
@@ -829,3 +832,21 @@ body {
     background: transparent !important;
     box-shadow: none !important;
 }
+
+.preview-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: zoom-out;
+  z-index: 9999;
+}
+.preview-overlay img {
+  max-width: 90%;
+  max-height: 90%;
+  box-shadow: 0 0 20px rgba(255,255,255,0.5);
+  border-radius: 4px;
+}
+
