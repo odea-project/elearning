@@ -230,59 +230,59 @@ Analytical data is utilized across various fields, each with unique requirements
 
 <!-- MARK: pH plot -->
 <script>
-  const samples = Array.from({length: 20}, (_, i) => i + 1);
-  const mean = 7;
-  const stddev = 0.7;
-  let pH = Array.from({length: 19}, () =>
-    Math.min(14, Math.max(1, (mean + stddev * (Math.random() * 2 - 1)).toFixed(2)))
-  );
-  const outlier = (Math.random() > 0.5) ? 1.2 : 13.5;
-  const outlierIndex = Math.floor(Math.random() * 20);
-  pH.splice(outlierIndex, 0, outlier.toFixed(2));
-  const trace = {
-    x: samples,
-    y: pH,
-    type: 'scatter',
-    mode: 'lines+markers',
-    name: 'pH',
-    marker: { color: '#00d0ff' },
-    line: { color: '#00d0ff' }
-  };
-  const layout = {
-    title: {
-      text: 'pH Value of 20 Samples',
-      font: { color: '#fff' }
-    },
-    xaxis: {
-      title: {
-        text: 'Sample',
-        color: '#fff'
-      },
-      color: '#fff',
-      linecolor: '#fff',
-      tickcolor: '#fff'
-    },
-    yaxis: {
-      title: {
-        text: 'pH',
-        color: '#fff'
-      },
-      color: '#fff',
-      range: [0, 14],
-      linecolor: '#fff',
-      tickcolor: '#fff'
-    },
-    legend: {
-      font: {
-        color: '#fff'
-      }
-    },
-    plot_bgcolor: '#000000',
-    paper_bgcolor: '#000000',
-    font: { color: '#fff' }
-  };
   Reveal.on('slidechanged', function(event) {
     if (event.currentSlide.querySelector('#BVCZ_pH_plot')) {
+      const samples = Array.from({length: 20}, (_, i) => i + 1);
+      const mean = 7;
+      const stddev = 0.7;
+      let pH = Array.from({length: 19}, () =>
+        Math.min(14, Math.max(1, (mean + stddev * (Math.random() * 2 - 1)).toFixed(2)))
+      );
+      const outlier = (Math.random() > 0.5) ? 1.2 : 13.5;
+      const outlierIndex = Math.floor(Math.random() * 20);
+      pH.splice(outlierIndex, 0, outlier.toFixed(2));
+      const trace = {
+        x: samples,
+        y: pH,
+        type: 'scatter',
+        mode: 'lines+markers',
+        name: 'pH',
+        marker: { color: '#00d0ff' },
+        line: { color: '#00d0ff' }
+      };
+      const layout = {
+        title: {
+          text: 'pH Value of 20 Samples',
+          font: { color: '#fff' }
+        },
+        xaxis: {
+          title: {
+            text: 'Sample',
+            color: '#fff'
+          },
+          color: '#fff',
+          linecolor: '#fff',
+          tickcolor: '#fff'
+        },
+        yaxis: {
+          title: {
+            text: 'pH',
+            color: '#fff'
+          },
+          color: '#fff',
+          range: [0, 14],
+          linecolor: '#fff',
+          tickcolor: '#fff'
+        },
+        legend: {
+          font: {
+            color: '#fff'
+          }
+        },
+        plot_bgcolor: '#000000',
+        paper_bgcolor: '#000000',
+        font: { color: '#fff' }
+      };
       Plotly.newPlot('BVCZ_pH_plot', [trace], layout);
     }
   });
@@ -653,17 +653,30 @@ Analytical data is utilized across various fields, each with unique requirements
 <div class="tabs">
   <div class="tab active sec_cers_setup-tab" data-tab="sec_cers_setup">Setup</div>
   <div class="tab signal sec_cers_data-tab" data-tab="sec_cers_data">Data</div>
+  <a href="resources/data/01_analyticalDataChallenges/SEC_CERS_Dataset.csv"
+     download
+     class="tab"
+     style="text-decoration: none; color: inherit;">
+    Download CSV
+  </a>
 </div>
 
+<!-- MARK: SEC-CERS -->
 <script>
   Reveal.on('slidechanged', function(event) {
     if (event.currentSlide.querySelector('#SEC_CERS_Plot')) {
       d3.csv('resources/data/01_analyticalDataChallenges/SEC_CERS_Dataset.csv').then(function(data) {
-        const analyses = [...new Set(data.map(row => row.analysis))];
+        let analyses = [...new Set(data.map(row => row.analysis))];
+        analyses = analyses.filter((_, i) => i % 3 === 0);
+        const colorPalette = ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd', '#8c564b'];
+        const analysisColors = {};
+        analyses.forEach((analysis, i) => {
+          analysisColors[analysis] = colorPalette[i % colorPalette.length];
+        });
         const rtTraces = [];
         const shiftTraces = [];
         analyses.forEach(analysis => {
-          const filtered = data.filter(row => row.replicate === "Avastin" && row.analysis === analysis);
+          const filtered = data.filter(row => row.analysis === analysis);
           // 1. RT vs cumulative intensity
           const rtMap = new Map();
           filtered.forEach(row => {
@@ -678,9 +691,11 @@ Analytical data is utilized across various fields, each with unique requirements
             y: rtY,
             mode: 'lines',
             name: analysis,
+            legendgroup: analysis,
             type: 'scatter',
             xaxis: 'x1',
-            yaxis: 'y1'
+            yaxis: 'y1',
+            line: {color: analysisColors[analysis]}
           });
           // 2. Shift vs average intensity
           const shiftMap = new Map();
@@ -698,14 +713,16 @@ Analytical data is utilized across various fields, each with unique requirements
             y: shiftY,
             mode: 'lines',
             name: analysis,
+            legendgroup: analysis,
             type: 'scatter',
             xaxis: 'x2',
             yaxis: 'y2',
-            showlegend: false
+            showlegend: false,
+            line: {color: analysisColors[analysis]}
           });
         });
         const layout = {
-          grid: {rows: 1, columns: 2, pattern: 'independent'},
+          grid: {rows: 1, columns: 2},
           plot_bgcolor: '#000000',
           paper_bgcolor: '#000000',
           font: {color: '#fff'},
