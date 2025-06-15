@@ -1264,31 +1264,25 @@ Sweetness Weight Price Sourness Color(R) Color(G) Color(B)
 --- (id="working-example-pca-on-fruits-dataset")
 
 
-## Working Example: PCA on Fruits Dataset <span class="magenta-text">
+## Working Example: PCA on Fruits Dataset <span class="magenta-text">Scores Plot</span>
 <div class="code-button-container">
     <div class="py-code-button" data-code="pca_iris"></div>
 </div>
-    < Scores Plot>
-  </span>
 <img src="resources/figures/04_dataAnalysisTools/pca_fruits_scores.png" alt="PCA on Fruits Dataset"
-  style="width: 60%; box-shadow: 5px 5px 15px rgba(0, 255, 38, 0.3);; background-color: #f0f0f0; padding: 10px; border-radius: 5px; margin-top: -20px">
+  style="width: 60%; box-shadow: 5px 5px 15px rgba(0, 255, 38, 0.3);; background-color: #f0f0f0; padding: 10px; border-radius: 5px; margin-top: 0px">
 --- (id="working-example-pca-on-fruits-dataset-scores-plot")
 
 
-## Working Example: PCA on Fruits Dataset <span class="magenta-text">
+## Working Example: PCA on Fruits Dataset <span class="magenta-text">Bi-Plot</span>
 <div class="code-button-container">
     <div class="py-code-button" data-code="pca_biplot_iris"></div>
 </div>
-    < Bi-Plot>
-  </span>
 <img src="resources/figures/04_dataAnalysisTools/pca_fruits_biplot.png" alt="PCA on Fruits Dataset"
-  style="width: 60%; box-shadow: 5px 5px 15px rgba(0, 255, 38, 0.3);; background-color: #f0f0f0; padding: 10px; border-radius: 5px; margin-top: -20px">
+  style="width: 60%; box-shadow: 5px 5px 15px rgba(0, 255, 38, 0.3);; background-color: #f0f0f0; padding: 10px; border-radius: 5px; margin-top: 0px">
 --- (id="working-example-pca-on-fruits-dataset-bi-plot")
 
 
-## Working Example: PCA on Fruits Dataset <span class="magenta-text">
-    < Interpretation>
-  </span>
+## Working Example: PCA on Fruits Dataset <span class="magenta-text">Interpretation</span>
 <div>
   <div class="leftBox">
     <p class="styled-point">
@@ -1433,6 +1427,9 @@ Sweetness Weight Price Sourness Color(R) Color(G) Color(B)
 ## Types of <span class="post-it-strip">Machine Learning</span>
   <div>
     <div class="leftBox">
+    <img src="resources/figures/04_dataAnalysisTools/supervised_ml.jpg" alt="Supervised Learning" style="width: 50%; box-shadow: 5px 5px 15px rgba(0, 255, 38, 0.3);; background-color: #c5ece7; padding: 10px; border-radius: 5px;" data-preview-image>
+    <img src="resources/figures/04_dataAnalysisTools/unsupervised_ml.jpg" alt="Unsupervised Learning" style="width: 50%; box-shadow: 5px 5px 15px rgba(0, 255, 38, 0.3);; background-color: #c5ece7; padding: 10px; border-radius: 5px; margin-top: 0px;" data-preview-image>
+    <img src="resources/figures/04_dataAnalysisTools/reinforcement_ml.jpg" alt="Reinforcement Learning" style="width: 50%; box-shadow: 5px 5px 15px rgba(0, 255, 38, 0.3);; background-color: #c5ece7; padding: 10px; border-radius: 5px; margin-top: 0px;" data-preview-image>
     </div>
     <div class="spacer"></div>
     <div class="rightBox">
