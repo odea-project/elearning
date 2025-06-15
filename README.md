@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="resources/misc/odea_edu_logo.png" alt="Odea Education" width="250">
+  <img src="resources/misc/odea_edu_logo.png" alt="Odea Education" width="350">
 </p>
 
 This repository contains elearning materials of the Open Data Evaluation Algorithms (ODEA) project.
