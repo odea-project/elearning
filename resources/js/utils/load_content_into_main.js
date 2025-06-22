@@ -52,91 +52,93 @@
 })();
 
 
-// ====== 1) Click-Handler für dynamische Slides mit erweiterten Attributen ======
-document.querySelectorAll('.topic-link').forEach(a => {
-  a.addEventListener('click', async e => {
-    e.preventDefault();
-    const mdUrl = a.dataset.md;
+window.loadMarkdownAsSlides = async function(mdUrl) {
+  // (1) Remove old dynamic slides
+  const allSlides = document.querySelector('.reveal .slides');
+  allSlides.querySelectorAll('section.dynamic').forEach(s => s.remove());
 
-    // (1) alte Slides entfernen
-    const allSlides = document.querySelector('.reveal .slides');
-    allSlides.querySelectorAll('section.dynamic').forEach(s => s.remove());
-
-    // (2) Markdown laden
-    let markdownText;
-    try {
-      const res = await fetch(mdUrl);
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      markdownText = await res.text();
-    } catch (err) {
-      const errSec = document.createElement('section');
-      errSec.classList.add('dynamic');
-      errSec.innerHTML = `<p style="color:red;">
-        Fehler beim Laden von <code>${mdUrl}</code>: ${err.message}
-      </p>`;
-      allSlides.insertBefore(errSec, allSlides.children[2] || null);
-      Reveal.layout();
-      return Reveal.slide(2);
-    }
-
-    // (3) Markdown trennen an --- mit optionalen Attributen in (key="value" ...)
-    const parts = markdownText.split(
-      /^[ \t]*---(?:[ \t]*\(\s*([^)]+)\s*\))?[ \t]*$/m
-    );
-
-    // (4) Slides parsen und <section> mit Attributen erzeugen
-    const newSecs = [];
-    for (let i = 0; i < parts.length; i += 2) {
-      const mdPart    = parts[i].trim();
-      const attrText  = parts[i+1];
-      if (!mdPart) continue;
-
-      const html = Reveal.getPlugin('markdown').marked(mdPart);
-      const section = document.createElement('section');
-      section.classList.add('dynamic');
-
-      if (attrText) {
-        attrText.trim().split(/\s+/).forEach(pair => {
-          const [key, valRaw] = pair.split('=');
-          const value = valRaw?.replace(/^"(.+)"$/, '$1');
-          if (key && value !== undefined) {
-            section.setAttribute(key, value);
-          }
-        });
-      }
-
-      section.innerHTML = html;
-      newSecs.push(section);
-    }
-
-    // (5) Einfügen der neuen Slides
-    newSecs.forEach((sec, idx) => {
-      const before = allSlides.children[2 + idx];
-      before ? allSlides.insertBefore(sec, before)
-             : allSlides.appendChild(sec);
-    });
+  // (2) Load markdown
+  let markdownText;
+  try {
+    const res = await fetch(mdUrl);
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    markdownText = await res.text();
+  } catch (err) {
+    const errSec = document.createElement('section');
+    errSec.classList.add('dynamic');
+    errSec.innerHTML = `<p style="color:red;">
+      Fehler beim Laden von <code>${mdUrl}</code>: ${err.message}
+    </p>`;
+    allSlides.insertBefore(errSec, allSlides.children[2] || null);
     Reveal.layout();
+    return Reveal.slide(2);
+  }
 
-    // (6) Mermaid initialisieren
-    const mer = Reveal.getPlugin('mermaid');
-    if (mer?.init) mer.init(Reveal);
+  // Strip YAML header if present:
+  function stripYamlFrontmatter(md) {
+    // Remove initial YAML block if present (from very start!)
+    return md.replace(/^---\s*[\r\n]+[\s\S]*?[\r\n]+---[\r\n]+/, '');
+  }
 
-    // (7) Skripte neu laden
-    newSecs.forEach(sec =>
-      sec.querySelectorAll('script').forEach(old => {
-        const ns = document.createElement('script');
-        old.src ? ns.src = old.src : ns.textContent = old.innerHTML;
-        document.body.appendChild(ns);
-      })
-    );
+  const markdownTextNoYaml = stripYamlFrontmatter(markdownText);
 
-    // (8) KaTeX-Math nachrendern
-    renderMathInDynamicSlides(newSecs);
+  // (3) Split markdown into slides at --- with attributes
+  const parts = markdownTextNoYaml.split(
+    /^[ \t]*---(?:[ \t]*\(\s*([^)]+)\s*\))?[ \t]*$/m
+  );
 
-    // (9) Erste neue Folie anzeigen
-    Reveal.slide(2);
+  // (4) Parse slides and create <section> elements
+  const newSecs = [];
+  for (let i = 0; i < parts.length; i += 2) {
+    const mdPart = parts[i].trim();
+    const attrText = parts[i + 1];
+    if (!mdPart) continue;
+
+    const html = Reveal.getPlugin('markdown').marked(mdPart);
+    const section = document.createElement('section');
+    section.classList.add('dynamic');
+
+    if (attrText) {
+      attrText.trim().split(/\s+/).forEach(pair => {
+        const [key, valRaw] = pair.split('=');
+        const value = valRaw?.replace(/^"(.+)"$/, '$1');
+        if (key && value !== undefined) {
+          section.setAttribute(key, value);
+        }
+      });
+    }
+
+    section.innerHTML = html;
+    newSecs.push(section);
+  }
+
+  // (5) Insert new slides
+  newSecs.forEach((sec, idx) => {
+    const before = allSlides.children[2 + idx];
+    before ? allSlides.insertBefore(sec, before)
+           : allSlides.appendChild(sec);
   });
-});
+  Reveal.layout();
+
+  // (6) Initialize Mermaid
+  // const mer = Reveal.getPlugin('mermaid');
+  // if (mer?.init) mer.init(Reveal);
+
+  // (7) Reload scripts
+  newSecs.forEach(sec =>
+    sec.querySelectorAll('script').forEach(old => {
+      const ns = document.createElement('script');
+      old.src ? ns.src = old.src : ns.textContent = old.innerHTML;
+      document.body.appendChild(ns);
+    })
+  );
+
+  // (8) Render math
+  renderMathInDynamicSlides(newSecs);
+
+  // (9) Show the first new slide
+  Reveal.slide(2);
+}
 
 
 // ====== 2) Math-Rendering für dynamische Slides ======

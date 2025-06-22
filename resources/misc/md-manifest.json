@@ -1,0 +1,72 @@
+[
+  {
+    "filename": "00_demos.md",
+    "title": "00_demos.md",
+    "keywords": [],
+    "thumbnail": null,
+    "requirements": []
+  },
+  {
+    "filename": "01_analyticalDataChallenges.md",
+    "title": "01_analyticalDataChallenges.md",
+    "keywords": [],
+    "thumbnail": null,
+    "requirements": []
+  },
+  {
+    "filename": "01_datatreatment.md",
+    "title": "01_datatreatment.md",
+    "keywords": [],
+    "thumbnail": null,
+    "requirements": []
+  },
+  {
+    "filename": "02_toolsAndProgramming.md",
+    "title": "02_toolsAndProgramming.md",
+    "keywords": [],
+    "thumbnail": null,
+    "requirements": []
+  },
+  {
+    "filename": "03_dataProcessingTechniques.md",
+    "title": "03_dataProcessingTechniques.md",
+    "keywords": [],
+    "thumbnail": null,
+    "requirements": []
+  },
+  {
+    "filename": "04_dataAnalysisTechniques.md",
+    "title": "04_dataAnalysisTechniques.md",
+    "keywords": [],
+    "thumbnail": null,
+    "requirements": []
+  },
+  {
+    "filename": "05_newTopic.md",
+    "title": "New Topic",
+    "keywords": [
+      "keyword 1",
+      "keyword 2"
+    ],
+    "thumbnail": null,
+    "requirements": [
+      "req 1",
+      "req 2"
+    ]
+  },
+  {
+    "filename": "minkowskiDistance.md",
+    "title": "Minkowski Distance",
+    "keywords": [
+      "Minkowski",
+      "Distance",
+      "Metric",
+      "Similarity",
+      "Dissimilarity"
+    ],
+    "thumbnail": null,
+    "requirements": [
+      "none"
+    ]
+  }
+]

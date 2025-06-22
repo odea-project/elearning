@@ -1,0 +1,1284 @@
+/*---------------------------------------------------
+  FONTS
+---------------------------------------------------*/
+
+/* Main custom fonts for headings and text */
+@font-face {
+  font-family: 'Press Start 2P';
+  src: url("./fonts/press-start-2p/PressStart2P-Regular.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Montserrat';
+  src: url("./fonts/montserrat/Montserrat-Regular.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Montserrat';
+  src: url("./fonts/montserrat/Montserrat-Bold.ttf") format("truetype");
+  font-weight: bold;
+  font-style: normal;
+}
+
+/* XKCD-style font for humorous elements */
+@font-face {
+  font-family: 'Humor Sans';
+  src: url('./fonts/humor-sans/Humor-Sans.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'mabook';
+  src: url('./fonts/mabook/Mabook.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+/*---------------------------------------------------
+  CSS ROOT VARIABLES (easy theme customization)
+---------------------------------------------------*/
+:root {
+  --r-background-color: #fff;
+  --r-main-font: 'Montserrat', Helvetica, sans-serif;
+  --r-main-font-size: 1.5em;
+  --r-main-color: #EFEFEF;
+  --r-block-margin: 20px;
+  --r-heading-margin: 0 0 20px 0;
+  --r-heading-font: 'Press Start 2P', Helvetica, sans-serif;
+  --r-heading-color: #ff05ff;
+  --r-heading-line-height: 1.2;
+  --r-heading-letter-spacing: normal;
+  --r-heading-text-transform: uppercase;
+  --r-heading-text-shadow: none;
+  --r-heading-font-weight: 600;
+  --r-heading1-text-shadow: none;
+  --r-heading1-size: 1.5em;
+  --r-heading2-size: 0.8em;
+  --r-heading3-size: 0.7em;
+  --r-heading4-size: 0.5em;
+  --r-code-font: monospace;
+  --r-link-color: #2a76dd;
+  --r-link-color-dark: #1a53a1;
+  --r-link-color-hover: #6ca0e8;
+  --r-selection-background-color: #98bdef;
+  --r-selection-color: #fff;
+  --r-overlay-element-bg-color: 0, 0, 0;
+  --r-overlay-element-fg-color: 240, 240, 240;
+}
+
+/*---------------------------------------------------
+  BASE / GLOBAL STYLES
+---------------------------------------------------*/
+
+/* Set the overall background for Reveal.js presentations */
+.reveal-viewport {
+  background: var(--r-background-color);
+}
+
+/* Main font and text color for Reveal.js slides */
+.reveal {
+  font-family: var(--r-main-font);
+  font-size: var(--r-main-font-size);
+  color: var(--r-main-color);
+}
+
+/* Text selection color */
+.reveal ::selection,
+.reveal ::-moz-selection {
+  color: var(--r-selection-color);
+  background: var(--r-selection-background-color);
+  text-shadow: none;
+}
+
+/* Block element styling for slides */
+.reveal .slides section,
+.reveal .slides section>section {
+  line-height: 1.3;
+  font-weight: inherit;
+}
+
+/* Ensure active (present) slide is positioned correctly */
+.reveal .slides section.present {
+  right: -42px !important;
+}
+
+/* Paragraph spacing and line height */
+.reveal p {
+  margin: var(--r-block-margin) 0;
+  line-height: 1.3;
+}
+
+/* Remove trailing margin after last header */
+.reveal h1:last-child,
+.reveal h2:last-child,
+.reveal h3:last-child,
+.reveal h4:last-child,
+.reveal h5:last-child,
+.reveal h6:last-child {
+  margin-bottom: 0;
+}
+
+/* Make media never exceed slide boundaries */
+.reveal img,
+.reveal video,
+.reveal iframe {
+  max-width: 95%;
+  max-height: 95%;
+}
+
+.reveal img {
+  margin: var(--r-block-margin) 0;
+}
+
+/* Strong and emphasis styling */
+.reveal strong,
+.reveal b,
+.reveal .slides strong,
+.reveal .slides b,
+.reveal .slides em,
+.reveal .slides i {
+  font-weight: bold;
+  color: #00ffff;
+}
+
+.reveal em {
+  font-style: italic;
+}
+
+/*----------------------------------------------
+  HEADINGS
+----------------------------------------------*/
+.reveal h1,
+.reveal h2,
+.reveal h3,
+.reveal h4,
+.reveal h5,
+.reveal h6 {
+  margin: var(--r-heading-margin);
+  color: var(--r-heading-color);
+  font-family: var(--r-heading-font);
+  font-weight: var(--r-heading-font-weight);
+  line-height: var(--r-heading-line-height);
+  letter-spacing: var(--r-heading-letter-spacing);
+  text-transform: var(--r-heading-text-transform);
+  text-shadow: var(--r-heading-text-shadow);
+  word-wrap: break-word;
+}
+
+.reveal h1 {
+  font-size: var(--r-heading1-size);
+  text-shadow: var(--r-heading1-text-shadow);
+}
+
+.reveal h2 {
+  font-size: var(--r-heading2-size);
+}
+
+.reveal h3 {
+  font-size: var(--r-heading3-size);
+}
+
+.reveal h4 {
+  font-size: var(--r-heading4-size);
+}
+
+/*----------------------------------------------
+  LISTS
+----------------------------------------------*/
+.reveal ol,
+.reveal dl,
+.reveal ul {
+  display: inline-block;
+  text-align: left;
+  margin: 0 0 0 1em;
+}
+
+.reveal ol {
+  list-style-type: decimal;
+}
+
+.reveal ul {
+  list-style-type: disc;
+}
+
+.reveal ul ul {
+  list-style-type: square;
+}
+
+.reveal ul ul ul {
+  list-style-type: circle;
+}
+
+.reveal ul ul,
+.reveal ul ol,
+.reveal ol ol,
+.reveal ol ul {
+  display: block;
+  margin-left: 40px;
+}
+
+.reveal dt {
+  font-weight: bold;
+}
+
+.reveal dd {
+  margin-left: 40px;
+}
+
+/* Custom list item markers for slides */
+.reveal .slides ul li::marker,
+.reveal .slides ol li::marker {
+  color: #f92672;
+}
+
+.reveal .slides ul li::marker {
+  content: "\f30b   ";
+  font-family: "FontAwesome";
+}
+
+.reveal .slides ul,
+.reveal .slides ol {
+  color: #EFEFEF;
+}
+
+/*----------------------------------------------
+  BLOCKQUOTES & CODE BLOCKS
+----------------------------------------------*/
+.reveal blockquote {
+  display: block;
+  position: relative;
+  width: 70%;
+  margin: var(--r-block-margin) auto;
+  padding: 5px;
+  font-style: italic;
+  background: rgba(255, 255, 255, 0.3);
+  box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.2);
+}
+
+.reveal blockquote p:first-child,
+.reveal blockquote p:last-child {
+  display: inline-block;
+}
+
+.reveal q {
+  font-style: italic;
+}
+
+.reveal pre {
+  display: block;
+  position: relative;
+  width: 100%;
+  margin: var(--r-block-margin) auto;
+  text-align: left;
+  font-size: 1em;
+  font-family: var(--r-code-font);
+  line-height: 1.2em;
+  word-wrap: break-word;
+  box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.15);
+}
+
+.reveal code {
+  font-family: var(--r-code-font);
+  text-transform: none;
+  tab-size: 2;
+  color: #00cf5d;
+}
+
+.reveal pre code {
+  display: block;
+  padding: 5px;
+  overflow: auto;
+  max-height: 400px;
+  background-color: rgb(42, 42, 42);
+  box-shadow: 0px 2px 5px rgba(0, 255, 60, 0.365);
+}
+
+.reveal .code-wrapper {
+  white-space: normal;
+}
+
+.reveal .code-wrapper code {
+  white-space: pre;
+}
+
+/*----------------------------------------------
+  TABLES (base + enhanced styles)
+----------------------------------------------*/
+/* Basic Reveal table styling */
+.reveal table {
+  margin: auto;
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+/* Enhanced Reveal table styles */
+.reveal .slides table {
+  width: 80%;
+  margin: 1em auto;
+  border-collapse: collapse;
+  color: #ffffff;
+  box-shadow: 0 0 10px rgba(0, 255, 255, 0.4);
+  border: 2px solid #00ffff;
+  border-radius: 8px;
+}
+
+/* Table header */
+.reveal .slides table thead th {
+  background-color: #00ffff;
+  color: #000000;
+  padding: 0.6em 1em;
+  text-transform: uppercase;
+  font-weight: bold;
+  border: 2px solid #00ffff;
+}
+
+/* Table body cells */
+.reveal .slides table tbody td {
+  background-color: rgba(0, 255, 255, 0.1);
+  padding: 0.5em 1em;
+  border: 1px solid rgba(0, 255, 255, 0.3);
+}
+
+/* Zebra striping for table rows */
+.reveal .slides table tbody tr:nth-child(odd) td {
+  background-color: rgba(0, 255, 255, 0.05);
+}
+
+.reveal .slides table tbody tr:nth-child(even) td {
+  background-color: rgba(0, 255, 255, 0.15);
+}
+
+/* Table cell alignment */
+.reveal .slides table th,
+.reveal .slides table td {
+  text-align: center;
+}
+
+.reveal table th {
+  font-weight: bold;
+}
+
+.reveal table th,
+.reveal table td {
+  text-align: left;
+  padding: 0.2em 0.5em;
+  border-bottom: 1px solid;
+}
+
+.reveal table th[align=center],
+.reveal table td[align=center] {
+  text-align: center;
+}
+
+.reveal table th[align=right],
+.reveal table td[align=right] {
+  text-align: right;
+}
+
+.reveal table tbody tr:last-child th,
+.reveal table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* Table hover effect */
+.reveal .slides table tbody tr:hover td {
+  background-color: rgba(0, 255, 255, 0.3);
+}
+
+/*----------------------------------------------
+  SUP/SUB, SMALL TEXT, IMAGE-BOXES
+----------------------------------------------*/
+.reveal sup {
+  vertical-align: super;
+  font-size: smaller;
+}
+
+.reveal sub {
+  vertical-align: sub;
+  font-size: smaller;
+}
+
+.reveal small,
+.reveal small * {
+  display: inline-block;
+  font-size: 0.6em;
+  line-height: 1.2em;
+  vertical-align: top;
+}
+
+.image-box {
+  display: block;
+  border: 5px solid #d4d4d4;
+  padding: 10px;
+  margin: 10px;
+  border-radius: 5px;
+  background-color: #ededed;
+  box-shadow: 0 0 25px rgba(0, 0, 0, 0.3);
+  color: #000;
+  position: relative;
+  font-size: large;
+  width: 90%;
+  text-align: center;
+}
+
+/*---------------------------------------------------
+  LINKS
+---------------------------------------------------*/
+.reveal a {
+  color: var(--r-link-color);
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+
+.reveal a:hover {
+  color: var(--r-link-color-hover);
+  text-shadow: none;
+  border: none;
+}
+
+.reveal .roll span:after {
+  color: #fff;
+  background: var(--r-link-color-dark);
+}
+
+/*---------------------------------------------------
+  FRAME & BORDERS
+---------------------------------------------------*/
+.reveal .r-frame {
+  border: 4px solid var(--r-main-color);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
+}
+
+.reveal a .r-frame {
+  transition: all 0.15s linear;
+}
+
+.reveal a:hover .r-frame {
+  border-color: var(--r-link-color);
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.55);
+}
+
+/*---------------------------------------------------
+  NAVIGATION & PROGRESS BAR
+---------------------------------------------------*/
+.reveal .controls {
+  color: var(--r-link-color);
+}
+
+.reveal .progress {
+  background: rgba(0, 0, 0, 0.2);
+  color: var(--r-link-color);
+}
+
+/*---------------------------------------------------
+  PRINT BACKGROUND
+---------------------------------------------------*/
+@media print {
+
+  .backgrounds,
+  .slide-background {
+    background-color: var(--r-background-color) !important;
+    -webkit-print-color-adjust: exact;
+  }
+}
+
+/*---------------------------------------------------
+  CUSTOM CURSORS
+---------------------------------------------------*/
+/* Standard cursor for body */
+body {
+  font-family: 'Humor Sans', sans-serif;
+  cursor: url("../../resources/misc/cursor.cur"), auto;
+}
+
+/* Pointer cursor for links and buttons */
+.reveal a,
+.reveal a:visited,
+.reveal a:hover,
+.reveal a:active,
+.reveal button,
+.reveal button:hover,
+.reveal button:focus {
+  cursor: url("../../resources/misc/cursor2.cur"), auto !important;
+}
+
+/*---------------------------------------------------
+  SLIDER SWITCHES (custom toggle UI)
+---------------------------------------------------*/
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: url("../../resources/misc/cursor2.cur"), auto !important;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  transition: .4s;
+}
+
+input:checked+.slider {
+  background-color: #2196F3;
+}
+
+input:focus+.slider {
+  box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked+.slider:before {
+  transform: translateX(26px);
+}
+
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+
+/*---------------------------------------------------
+  NEON SLIDE BORDER EFFECT (for highlight)
+---------------------------------------------------*/
+.reveal .slides section {
+  position: absolute;
+  background-color: rgba(0, 0, 0, 0.85);
+  border-radius: 15px;
+  padding: 20px;
+  margin: 20px;
+}
+
+.reveal .slides section::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border: 4px solid #FF1177;
+  border-radius: 15px;
+  box-shadow:
+    0 0 8px rgba(255, 17, 119, 0.8),
+    0 0 16px rgba(255, 17, 119, 0.6),
+    inset 0 0 6px rgba(255, 17, 119, 0.4);
+  mask-image: linear-gradient(to bottom, black 0%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to bottom, black 0%, transparent 100%);
+  mask-repeat: no-repeat;
+  mask-size: 100% 100%;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-size: 100% 100%;
+}
+
+.reveal .slides section::after {
+  content: "";
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  pointer-events: none;
+  border: 6px solid #fd29c8;
+  border-radius: 15px;
+  filter: blur(1px);
+  mix-blend-mode: screen;
+  mask-image: linear-gradient(to bottom, black 0%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to bottom, black 0%, transparent 100%);
+  mask-repeat: no-repeat;
+  mask-size: 100% 100%;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-size: 100% 100%;
+}
+
+/*---------------------------------------------------
+  CODE OVERLAY MODAL
+---------------------------------------------------*/
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.hidden {
+  display: none;
+}
+
+.overlay-content {
+  background: #000000;
+  padding: 1rem 1.5rem;
+  border-radius: 0.5rem;
+  box-shadow: 5 5 20px rgba(255, 0, 174, 0.4);
+  max-width: 90%;
+  max-height: 90%;
+  overflow: auto;
+  position: relative;
+  font-family: monospace;
+  font-size: 0.95rem;
+  line-height: 1.4;
+}
+
+#close-overlay,
+#copy-overlay {
+  position: absolute;
+  top: 0.5rem;
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  cursor: url("../../resources/misc/cursor2.cur"), auto !important;
+  padding: 0.25rem;
+}
+
+#copy-overlay {
+  color: #11bcff;
+  right: 2.5rem;
+}
+
+#close-overlay {
+  color: #FF1177;
+  right: 0.5rem;
+}
+
+#overlay-code {
+  white-space: pre-wrap;
+  word-break: break-word;
+  color: #f0e400;
+}
+
+/*---------------------------------------------------
+  CUSTOM UTILITY CLASSES
+---------------------------------------------------*/
+/* Magenta highlight text */
+.magenta-text {
+  color: rgb(233, 30, 99);
+}
+
+/* Topic icon link with high z-index */
+.icon-link {
+  position: relative;
+  z-index: 100000;
+}
+
+/* Hoverable span for links, preserves whitespace */
+.hoverable {
+  display: inline-block;
+  white-space: pre;
+}
+
+.topic-link:hover .hoverable::after {
+  color: #f92672;
+  content: " <<";
+}
+
+/*---------------------------------------------------
+  FOOTER AND LOGO
+---------------------------------------------------*/
+#odea-logo {
+  transition: opacity 0.5s ease-in-out;
+}
+
+.footer-global {
+  position: fixed;
+  bottom: 10px;
+  left: 60px;
+  font-size: 14px;
+  color: #666;
+}
+
+/*---------------------------------------------------
+  SPECIAL BOXES FOR CONTENT HIGHLIGHTING
+---------------------------------------------------*/
+.exam-box,
+.info-box,
+.interactive-box {
+  display: block;
+  padding: 10px;
+  margin: 10px;
+  border-radius: 5px;
+  box-shadow: 0 0 25px rgba(0, 0, 0, 0.3);
+  color: #000;
+  position: relative;
+  font-size: large;
+  width: 90%;
+}
+
+.exam-box {
+  border: 5px solid #AA3A39;
+  background-color: #dcb9b8;
+  font-weight: bold;
+}
+
+.info-box {
+  border: 5px solid #3d9f9f;
+  background-color: #c0fafa;
+}
+
+.interactive-box {
+  border: 5px solid #dcca05;
+  background-color: #fef69c;
+}
+
+/*---------------------------------------------------
+  FLEX CONTAINER FOR BOX + IMAGE
+---------------------------------------------------*/
+.container {
+  display: flex;
+  align-items: flex-start;
+}
+
+.container img {
+  width: 50%;
+  margin-left: 20px;
+}
+
+/*---------------------------------------------------
+  COLOR BOXES FOR VISUALIZATION (e.g. for demos)
+---------------------------------------------------*/
+.box {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  margin: 2px;
+}
+
+.blue {
+  background-color: rgb(0, 166, 255);
+}
+
+.red {
+  background-color: rgb(214, 90, 68);
+}
+
+.green {
+  background-color: rgb(0, 184, 52);
+}
+
+.yellow {
+  background-color: rgb(255, 221, 0);
+}
+
+.purple {
+  background-color: rgb(200, 37, 245);
+}
+
+.gray {
+  background-color: rgb(128, 128, 128);
+}
+
+/*---------------------------------------------------
+  CODE BUTTONS AND CONTAINERS
+---------------------------------------------------*/
+.code-button-container {
+  position: absolute;
+  top: -40px;
+  left: 0px;
+  z-index: 1000;
+  background-color: rgba(0, 0, 0, 0.3);
+  border-radius: 5px;
+  padding: 5px;
+  display: flex;
+  align-items: center;
+}
+
+@keyframes wiggle {
+  0% {
+    transform: translateX(0);
+  }
+
+  20% {
+    transform: translateX(-5px);
+  }
+
+  80% {
+    transform: translateX(5px);
+  }
+
+  100% {
+    transform: translateX(0);
+  }
+}
+
+.code-button-container::after {
+  content: "← get code";
+  position: relative;
+  left: 10px;
+  color: white;
+  font-size: 12px;
+  font-weight: bold;
+  display: inline;
+  font-family: "Montserrat", "Noto Sans", "Source Sans Pro", Helvetica, sans-serif;
+  animation: wiggle 1s ease-in-out infinite;
+}
+
+.py-code-button {
+  width: 25px;
+  height: 25px;
+  background-color: #007acb;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: url("../../resources/misc/cursor2.cur"), auto !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 5px rgba(0, 234, 255, 0.439);
+}
+
+.py-code-button:hover {
+  background-color: #005f99;
+}
+
+.py-code-button::before {
+  font-family: "Font Awesome 5 Brands";
+  font-weight: 400;
+  color: white;
+  content: "\f3e2";
+}
+
+/*---------------------------------------------------
+  CUSTOM BULLET POINTS & ICON LISTS
+---------------------------------------------------*/
+/* .styled-point, .styled-point2, .styled-point3, .styled-point4,
+.mainBullet, .subBullet, .subSubBullet, .question, .task, .styled-noPoint {
+  font-size: x-large; position: relative; margin-left: 25px; text-align: left;
+}
+.styled-point2, .subSubBullet { font-size: medium; margin-top: -10px !important; }
+.styled-point4, .mainBullet, .subBullet, .subSubBullet, .question, .task { font-size: x-large; }
+
+.styled-point::before, .mainBullet::before {
+  content: "\f0c8"; font-family: "Font Awesome 5 Free"; font-weight: 900;
+  color: burlywood; position: absolute; font-size: medium; left: -20px; top: 0.75ex;
+}
+.mainBullet::before { color: rgb(235,14,168); }
+.styled-point2::before, .subBullet::before {
+  content: "\f101"; font-family: "Font Awesome 5 Free"; font-weight: 900;
+  color: rgb(219,93,43); position: absolute; font-size: medium; left: -20px; top: 0.75ex;
+}
+.styled-point3::before {
+  content: "\f128"; font-family: "Font Awesome 5 Free"; font-weight: 900;
+  color: rgb(13,180,74); position: absolute; font-size: medium; left: -20px; top: 0.75ex;
+}
+.styled-point4::before {
+  content: "\f292"; font-family: "Font Awesome 5 Free"; font-weight: 500;
+  color: blue; position: absolute; font-size: medium; left: -20px; top: 0.75ex;
+}
+.subSubBullet::before {
+  content: "\f0eb"; font-family: "Font Awesome 5 Free"; font-weight: 900;
+  color: rgb(219,93,43); position: absolute; font-size: medium; left: -20px; top: 0.75ex;
+}
+.question::before {
+  content: "\f059"; font-family: "Font Awesome 5 Free"; font-weight: 500;
+  color: rgb(255,0,119); position: absolute; font-size: x-large; left: -3ex; top: 0.0ex;
+}
+.task::before {
+  content: "\f086"; font-family: "Font Awesome 5 Free"; font-weight: 500;
+  color: rgb(0,92,251); position: absolute; font-size: x-large; left: -3ex; top: 0.0ex;
+}
+/* Special color for math in these points */
+/* .styled-noPoint .katex .mord,
+.styled-noPoint .katex .mop,
+.styled-point2 .katex .mord,
+.styled-point2 .katex .mop,
+.styled-point .katex .mord,
+.styled-point .katex .mop {
+  color: #ffae00;
+} */
+
+/*---------------------------------------------------
+  TABS
+---------------------------------------------------*/
+.tab {
+  display: inline-block;
+  padding: 5px 10px;
+  cursor: url("../../resources/misc/cursor2.cur"), auto !important;
+  background-color: rgb(117, 3, 48);
+  border: 1px solid rgb(95, 3, 40);
+  margin-right: 10px;
+  font-size: medium;
+  height: 20px;
+  color: white;
+}
+
+.tab.active {
+  background-color: #007acb;
+  border: 1px solid #094a76;
+}
+
+.tab-content {
+  display: none;
+}
+
+.tab-content.active {
+  display: block;
+  height: auto;
+  padding: 10px;
+}
+
+/*---------------------------------------------------
+  SPLIT COLUMN LAYOUT
+---------------------------------------------------*/
+/* .leftBox { display: inline-block; width: 40%; text-align: left; vertical-align: top; }
+.spacer { display: inline-block; width: 5%; text-align: left; vertical-align: middle; }
+.rightBox { display: inline-block; width: 50%; text-align: left; vertical-align: top; } */
+
+/*---------------------------------------------------
+  CLOCK WIDGET
+---------------------------------------------------*/
+#clock {
+  position: fixed;
+  top: 10px;
+  right: 20px;
+  font-size: 2.5em;
+  font-weight: bold;
+  font-family: 'Montserrat', Source Sans Pro, Helvetica, sans-serif;
+  color: #333;
+  background-color: rgba(255, 255, 255, 0.8);
+  padding: 5px 10px;
+  border-radius: 5px;
+  z-index: 1000;
+}
+
+/*---------------------------------------------------
+  XKCD / HANDDRAWN STYLE CHARTS
+---------------------------------------------------*/
+.xkcd-line {
+  stroke-width: 4px;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.bar {
+  stroke: #343434;
+  stroke-width: 2px;
+}
+
+.line {
+  fill: none;
+  stroke: #000;
+  stroke-width: 2px;
+}
+
+.plotly .line {
+  fill: #000;
+  stroke: #000;
+  stroke-width: 0.1px;
+}
+
+.axis path,
+.axis line {
+  stroke: #333;
+  stroke-width: 1.5px;
+  shape-rendering: crispEdges;
+}
+
+.wiggle {
+  filter: url(#wiggle-filter);
+}
+
+.grid-line {
+  stroke: rgb(238, 238, 238);
+  stroke-width: 1px;
+  color: rgb(26, 81, 43);
+}
+
+.node circle {
+  fill: #69b3a2;
+  stroke: #000;
+  stroke-width: 1.5px;
+}
+
+.node text {
+  font: 12px sans-serif;
+  text-anchor: start;
+}
+
+/*---------------------------------------------------
+  POST-IT NOTE EFFECT
+---------------------------------------------------*/
+.post-it-strip,
+.reveal .slides strong {
+  position: relative;
+  min-height: 1.5em;
+  background-color: #0FF;
+  border-radius: 5px;
+  box-shadow: 2px 2px 5px rgba(0, 255, 255, 0.5);
+  transform: perspective(300px) rotateX(5deg) rotateZ(2deg) rotateY(-5deg) translateY(-0.4em);
+  padding: 0 10px;
+  display: inline-block;
+  justify-content: flex-start;
+  align-items: center;
+  font-family: "mabook", Helvetica, sans-serif;
+  color: #000;
+  font-weight: bold;
+}
+
+/*---------------------------------------------------
+  COLOR TEXT VARIANTS
+---------------------------------------------------*/
+.color-text-1 {
+  color: #ef476f;
+}
+
+.color-text-2 {
+  color: #ffd166;
+}
+
+.color-text-3 {
+  color: #06d6a0;
+}
+
+.color-text-4 {
+  color: #118ab2;
+}
+
+.color-text-5 {
+  color: #073b4c;
+}
+
+/*---------------------------------------------------
+  IMAGE GALLERY MODAL
+---------------------------------------------------*/
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+
+.thumbnail {
+  width: 100%;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.thumbnail:hover {
+  transform: scale(1.2);
+}
+
+.modal {
+  display: none;
+  position: fixed;
+  top: 5%;
+  left: 2.5%;
+  width: 95%;
+  height: 90%;
+  background-color: rgba(0, 0, 0, 0.8);
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  overflow: hidden;
+}
+
+.modal-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 100%;
+  max-height: 90%;
+  height: 100%;
+  width: 100%;
+  margin: auto;
+  position: relative;
+}
+
+.modal-content img {
+  max-height: 100%;
+  max-width: 100%;
+  object-fit: contain;
+}
+
+.popup-slide {
+  display: none;
+}
+
+.close {
+  position: absolute;
+  top: 20px;
+  left: 30px;
+  color: white;
+  font-size: 30px;
+  cursor: pointer;
+}
+
+.popup-prev,
+.popup-next {
+  cursor: pointer;
+  position: absolute;
+  top: 50%;
+  width: auto;
+  margin-top: -22px;
+  padding: 16px;
+  color: white;
+  font-size: 18px;
+  user-select: none;
+}
+
+.popup-prev {
+  left: 0;
+}
+
+.popup-next {
+  right: 0;
+}
+
+/*---------------------------------------------------
+  MERMAID DIAGRAMS, OVERLAYS
+---------------------------------------------------*/
+.mermaid {
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.preview-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: zoom-out;
+  z-index: 9999;
+}
+
+.preview-overlay img {
+  max-width: 90%;
+  max-height: 90%;
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+  border-radius: 4px;
+}
+
+/*---------------------------------------------------
+  PIXEL CHART (pixel-art style chart visuals)
+---------------------------------------------------*/
+#pixel-chart svg {
+  image-rendering: pixelated;
+  shape-rendering: crispEdges;
+  background-color: #111;
+  border-radius: 8px;
+}
+
+#pixel-chart svg .axis path,
+#pixel-chart svg .axis line {
+  stroke: #0ff;
+  stroke-width: 2px;
+  shape-rendering: crispEdges;
+}
+
+#pixel-chart svg .axis text {
+  fill: #0ff;
+  font-size: 14px;
+  font-family: 'Press Start 2P', monospace;
+}
+
+/*---------------------------------------------------
+  MATH (KaTeX in slides)
+---------------------------------------------------*/
+.reveal .katex,
+.reveal .katex .base {
+  font-family: "Montserrat", serif !important;
+  color: #FF0;
+}
+
+.reveal .katex .mord,
+.reveal .katex .math,
+.reveal .katex .strut {
+  font-family: "Montserrat", serif !important;
+}
+
+.reveal .katex .mord>.mord,
+.reveal .katex .mord>.mord>.mord {
+  font-family: "Montserrat", serif !important;
+}
+
+/*---------------------------------------------------
+  Mosaic Search for Tutorials
+---------------------------------------------------*/
+.tutorialGrid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.tutorialGridTile {
+  width: 180px;
+  border-radius: 12px;
+  box-shadow: 2px 2px 10px rgba(180, 6, 110, 0.593);
+  background: rgba(0, 0, 0, 0);
+  overflow: hidden;
+  transition: transform .1s;
+  cursor: pointer;
+}
+
+.tutorialGridTile:hover {
+  transform: scale(1.04);
+}
+
+.thumb {
+  width: 100%;
+  aspect-ratio: 1/1;
+  object-fit: cover;
+  background: #eee;
+  display: block;
+}
+
+.title {
+  padding: 8px 10px;
+  font-weight: bold;
+  margin-top: -130px;
+  background: rgba(0, 0, 0, 0.7);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  border-radius: 2px !important;
+}
+
+.keywords {
+  padding: 0 10px 10px 10px;
+  font-size: 0.92em;
+  color: #555;
+}
+
+#search {
+  margin-bottom: 20px;
+  font-size: 0.8em;
+  padding: 8px;
+  width: 300px;
+  border-radius: 10px;
+  border: 1px solid #073b4c;
+  background-color: #073b4c;
+  color: #fff;
+  font-family: 'Montserrat', sans-serif;
+}
+
+/*---------------------------------------------------
+  MISC
+---------------------------------------------------*/

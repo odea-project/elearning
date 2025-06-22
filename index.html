@@ -4,35 +4,44 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Reveal mit dynamischem Markdown</title>
+	<title>ODEA elearning</title>
 
 	<!-- Reveal‐CSS -->
 	<link rel="stylesheet" href="dist/reset.css">
 	<link rel="stylesheet" href="dist/reveal.css">
-	<link rel="stylesheet" href="dist/theme/iac.css">
+	<link rel="stylesheet" href="dist/theme/odea.css">
 
-	<!-- Eigene Styles (u. a. Regen, Cursor, uvm.) -->
-	<link rel="stylesheet" href="css/mystyles.css">
+	<!-- Font Awesome for Icons -->
+	<link rel="stylesheet" href="vendor/fontawesome/css/all.min.css" />
 
-	<!-- Font Awesome für Icons -->
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+	<!-- icon for the browser tab -->
 	<link rel="icon" href="resources/misc/favicon.ico" type="image/x-icon">
 </head>
 
 <body>
 	<div class="reveal">
 		<div class="slides">
-			<!-- Slide 0: Logo + Autoren -->
+			<section>
+				<h2>This is a normal slide</h2>
+			</section>
+
+			<section data-view="board">
+				<h2>This is a scrollable board</h2>
+				<p>Super long content...</p>
+				<div style="height: 2000px; background: #eee;">Scroll me!</div>
+			</section>
+
+			<section>
+				<h2>Back to slides!</h2>
+			</section>
+
 			<section id="intro-slide">
-				<h2>https://odea-project.github.io/elearning</h2>
 				<img id="odea-logo" src="resources/misc/odea_edu_logo_dark3.jpg" alt="ODEA Logo"
 					style="width: auto; height: 400px;">
 				<img src="resources/misc/pic_ricardo.jpg" alt="Ricardo Cunha"
 					style="width: auto; height: 400px; float: right;">
-				<a href="https://www.uni-due.de/iac/gerrit_renner.php" target="_blank">
-					<img src="resources/misc/pic_gerrit.jpg" alt="Gerrit Renner"
-						style="width: auto; height: 400px; float: right;">
-				</a>
+				<img src="resources/misc/pic_gerrit.jpg" alt="Gerrit Renner"
+					style="width: auto; height: 400px; float: right;">
 				<h2 style="font-size: medium; color: #ff05ff;">
 					by <a href="https://www.uni-due.de/iac/gerrit_renner.php" target="_blank">Gerrit Renner</a>
 					& <a href="https://www.linkedin.com/in/ricardo-cunha-755308152/" target="_blank">Ricardo Cunha</a>
@@ -40,26 +49,10 @@
 			</section>
 
 			<!-- Slide 1: Themen-Auswahl -->
-			<section>
+			<section data-state="mosaic">
 				<h1>Load Tutorial</h1>
-
-				click to select a topic<br><br>
-				<!-- <pre style="font-size: large;"><span style="font-family: 'Montserrat';">For developement purposes only!</span>
-					<a href="#/dynamic-tutorial" class="topic-link" data-md="topics/00_demos.md">
-    				<code class="hoverable">	00. Demo</code>
-					</a>
-	 			</pre> -->
-				<pre style="font-size: large;"><span style="color: burlywood; font-family: 'Montserrat'; font-weight: bold;">Short Course: </span><span style="font-family: 'Montserrat';">Data treatment processes for large<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;& diverse analytical data sets</span>
-					<a href="#/dynamic-tutorial" class="topic-link" data-md="topics/01_analyticalDataChallenges.md">
-						<code class="hoverable" >	01. Understanding Analytical Data Challenges</code>
-					</a><a href="#/dynamic-tutorial" class="topic-link" data-md="topics/02_toolsAndProgramming.md">
-						<code class="hoverable">	02. Open-Source Tools & Programming Languages</code>
-					</a><a href="#/dynamic-tutorial" class="topic-link" data-md="topics/03_dataProcessingTechniques.md">
-						<code class="hoverable">	03. Data Processing Techniques</code>
-					</a><a href="#/dynamic-tutorial" class="topic-link" data-md="topics/04_dataAnalysisTechniques.md">
-						<code class="hoverable">	04. Statistical & Exploratory Data Analysis</code>
-					</a>
-				</pre>
+				<input id="search" placeholder="Filter by keyword(s)...">
+        <div class="tutorialGrid" id="tutorialGrid"></div>
 			</section>
 			<!-- Slide 2: Hier zwischen landet das dynamisch geladene Markdown -->
 			<section id="dynamic-tutorial">
@@ -85,11 +78,11 @@
 	<script src="plugin/highlight/highlight.js"></script>
 	<script src="plugin/math/math.js"></script>
 	<!-- External 3rd Party Libraries -->
-	<script src="https://d3js.org/d3.v7.min.js"></script>
-	<script src="https://cdn.jsdelivr.net/npm/reveal.js-mermaid-plugin@11.4.1/plugin/mermaid/mermaid.js"></script>
-	<script src="https://cdn.plot.ly/plotly-3.0.1.min.js" charset="utf-8"></script>
+	<!-- <script src="https://d3js.org/d3.v7.min.js"></script> -->
+	<!-- <script src="https://cdn.jsdelivr.net/npm/reveal.js-mermaid-plugin@11.4.1/plugin/mermaid/mermaid.js"></script> -->
+	<!-- <script src="https://cdn.plot.ly/plotly-3.0.1.min.js" charset="utf-8"></script> -->
 	<!-- Custom Scripts -->
-	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> -->
 	<script src="resources/js/utils/init_main.js"></script>
 	<script src="resources/js/utils/rain_effect_background.js"></script>
 	<script src="resources/js/utils/clock.js"></script>
@@ -151,6 +144,7 @@
 			document.body.appendChild(overlay);
 		});
 	</script>
+	<script src="resources/js/utils/tutorial_search.js"></script>
 </body>
 
 </html>
