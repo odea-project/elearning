@@ -2,8 +2,8 @@ Reveal.initialize({
   // The "normal" size of the presentation, aspect ratio will
   // be preserved when the presentation is scaled to fit different
   // resolutions. Can be specified using percentage units.
-  width: 960,//960,
-  height: 540,//540,
+  width: 1920,//960,
+  height: 1080,//540,
 
   // Factor of the display size that should remain empty around
   // the content
@@ -18,10 +18,9 @@ Reveal.initialize({
   // parallaxBackgroundHorizontal: 200,
   hash: true,
   touch: true,
+  autoAnimate: true,
 
-  // Activate the scroll view
-  view: 'scroll',
-
+  
   // Force the scrollbar to remain visible
   scrollProgress: true,
   // // mermaid initialize config

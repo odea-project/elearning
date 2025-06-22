@@ -55,10 +55,9 @@
     ]
   },
   {
-    "filename": "minkowskiDistance.md",
-    "title": "Minkowski Distance",
+    "filename": "distancesIntroduction.md",
+    "title": "Distances",
     "keywords": [
-      "Minkowski",
       "Distance",
       "Metric",
       "Similarity",

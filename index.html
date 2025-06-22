@@ -20,19 +20,16 @@
 
 <body>
 	<div class="reveal">
+      	<div class="parallax-layer layer-back"></div>
+		<div class="parallax-layer layer-front"></div>
 		<div class="slides">
 			<section>
 				<h2>This is a normal slide</h2>
 			</section>
 
-			<section data-view="board">
-				<h2>This is a scrollable board</h2>
-				<p>Super long content...</p>
-				<div style="height: 2000px; background: #eee;">Scroll me!</div>
-			</section>
-
 			<section>
-				<h2>Back to slides!</h2>
+				<h2>This is a normal slide</h2>
+				with some more text.
 			</section>
 
 			<section id="intro-slide">
@@ -145,6 +142,19 @@
 		});
 	</script>
 	<script src="resources/js/utils/tutorial_search.js"></script>
+	<script>
+		Reveal.on('slidechanged', event => {
+			const index = event.indexh;
+			const offset = index * 200;
+
+			const back = document.querySelector('.layer-back');
+			const front = document.querySelector('.layer-front');
+
+			back.style.backgroundPositionX = `-${offset * 1}px`;   // z.B. langsamer (weiter entfernt)
+			front.style.backgroundPositionX = `-${offset * 2}px`;  // z.B. schneller (näher dran)
+		});
+	</script>
+
 </body>
 
 </html>

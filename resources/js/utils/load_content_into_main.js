@@ -74,45 +74,57 @@ window.loadMarkdownAsSlides = async function(mdUrl) {
     return Reveal.slide(2);
   }
 
-  // Strip YAML header if present:
+  // (3) Strip YAML header if present:
   function stripYamlFrontmatter(md) {
     // Remove initial YAML block if present (from very start!)
     return md.replace(/^---\s*[\r\n]+[\s\S]*?[\r\n]+---[\r\n]+/, '');
   }
-
   const markdownTextNoYaml = stripYamlFrontmatter(markdownText);
 
-  // (3) Split markdown into slides at --- with attributes
-  const parts = markdownTextNoYaml.split(
-    /^[ \t]*---(?:[ \t]*\(\s*([^)]+)\s*\))?[ \t]*$/m
-  );
+  // (4) Split markdown into slides at --- (ohne Attribute dahinter!)
+  const parts = markdownTextNoYaml.split(/^[ \t]*---[ \t]*$/m);
 
-  // (4) Parse slides and create <section> elements
+  // (5) Parse slides and create <section> elements
   const newSecs = [];
-  for (let i = 0; i < parts.length; i += 2) {
-    const mdPart = parts[i].trim();
-    const attrText = parts[i + 1];
-    if (!mdPart) continue;
+  for (let part of parts) {
+    part = part.trim();
+    if (!part) continue;
 
+    // (A) Attribut-Kommentar suchen (am Anfang)
+    let attrText = "";
+    let mdPart = part;
+    // Nur ganz am Anfang: <!-- .slide: ... -->
+    const attrCommentMatch = part.match(/^<!--\s*\.slide:\s*([^>]*)-->\s*\n?/);
+
+    if (attrCommentMatch) {
+      attrText = attrCommentMatch[1].trim();
+      // Kommentarzeile aus md entfernen
+      mdPart = part.replace(/^<!--\s*\.slide:\s*([^>]*)-->\s*\n?/, '');
+    }
+
+    // (B) Markdown in HTML parsen
     const html = Reveal.getPlugin('markdown').marked(mdPart);
     const section = document.createElement('section');
     section.classList.add('dynamic');
 
+    // (C) Attribute setzen (wenn vorhanden)
     if (attrText) {
-      attrText.trim().split(/\s+/).forEach(pair => {
-        const [key, valRaw] = pair.split('=');
-        const value = valRaw?.replace(/^"(.+)"$/, '$1');
-        if (key && value !== undefined) {
-          section.setAttribute(key, value);
-        }
-      });
+      // id="foo" data-auto-animate class="red"
+      // wird zu section.setAttribute(...)
+      const attrRegex = /([\w-]+)(?:="([^"]*)")?/g;
+      let match;
+      while ((match = attrRegex.exec(attrText))) {
+        const key = match[1];
+        const val = match[2] !== undefined ? match[2] : "";
+        section.setAttribute(key, val);
+      }
     }
 
     section.innerHTML = html;
     newSecs.push(section);
   }
 
-  // (5) Insert new slides
+  // (6) Insert new slides
   newSecs.forEach((sec, idx) => {
     const before = allSlides.children[2 + idx];
     before ? allSlides.insertBefore(sec, before)
@@ -120,11 +132,11 @@ window.loadMarkdownAsSlides = async function(mdUrl) {
   });
   Reveal.layout();
 
-  // (6) Initialize Mermaid
+  // (7) Initialize Mermaid (optional)
   // const mer = Reveal.getPlugin('mermaid');
   // if (mer?.init) mer.init(Reveal);
 
-  // (7) Reload scripts
+  // (8) Reload scripts
   newSecs.forEach(sec =>
     sec.querySelectorAll('script').forEach(old => {
       const ns = document.createElement('script');
@@ -133,12 +145,13 @@ window.loadMarkdownAsSlides = async function(mdUrl) {
     })
   );
 
-  // (8) Render math
+  // (9) Render math
   renderMathInDynamicSlides(newSecs);
 
-  // (9) Show the first new slide
+  // (10) Show the first new slide
   Reveal.slide(2);
 }
+
 
 
 // ====== 2) Math-Rendering für dynamische Slides ======

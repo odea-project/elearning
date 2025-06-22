@@ -43,7 +43,7 @@
 :root {
   --r-background-color: #fff;
   --r-main-font: 'Montserrat', Helvetica, sans-serif;
-  --r-main-font-size: 1.5em;
+  --r-main-font-size: 2.5em;
   --r-main-color: #EFEFEF;
   --r-block-margin: 20px;
   --r-heading-margin: 0 0 20px 0;
@@ -568,10 +568,11 @@ input:checked+.slider:before {
 ---------------------------------------------------*/
 .reveal .slides section {
   position: absolute;
-  background-color: rgba(0, 0, 0, 0.85);
+  background-color: rgba(0, 0, 0, 0.85); /* Slide background */
   border-radius: 15px;
   padding: 20px;
   margin: 20px;
+  box-shadow: 0 0 64px rgb(0, 0, 0);
 }
 
 .reveal .slides section::before {
@@ -579,12 +580,52 @@ input:checked+.slider:before {
   position: absolute;
   inset: 0;
   pointer-events: none;
-  border: 4px solid #FF1177;
+  border: 2px solid #FF1177;
+  border-radius: 15px;
+  box-shadow: 0 0 .2rem #fff,
+              0 0 .2rem #fff,
+              0 0 2rem #bc13fe,
+              0 0 0.8rem #bc13fe,
+              0 0 2.8rem #bc13fe,
+              inset 0 0 1.3rem #bc13fe;
+  animation: neon-border-pulse 2s infinite alternate;
+}
+
+/* Keyframes für sanftes Neon-Pulsieren */
+@keyframes neon-border-pulse { 
+  0%, 100% {
+    box-shadow: 0 0 .2rem #fff,
+              0 0 .2rem #fff,
+              0 0 2rem #bc13fe,
+              0 0 0.8rem #bc13fe,
+              0 0 2.8rem #bc13fe,
+              inset 0 0 1.3rem #bc13fe;
+    border-color: #fd29c8;
+    opacity: .9;
+  }
+  50% {
+    box-shadow: 0 0 .2rem #fff,
+              0 0 .2rem #fff,
+              0 0 2rem #bc13fe,
+              0 0 0.8rem #bc13fe,
+              0 0 2.8rem #bc13fe,
+              inset 0 0 1.3rem #bc13fe;
+    border-color: #fff;
+    opacity: 0.7;
+  }
+}
+/*
+.reveal .slides section::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border: 0px solid #FF1177;
   border-radius: 15px;
   box-shadow:
-    0 0 8px rgba(255, 17, 119, 0.8),
-    0 0 16px rgba(255, 17, 119, 0.6),
-    inset 0 0 6px rgba(255, 17, 119, 0.4);
+    0 0 1px rgba(255, 17, 119, 0.0),
+    0 0 2px rgba(255, 17, 119, 0.0),
+    inset 0 0 6px rgba(255, 17, 119, 0.0);
   mask-image: linear-gradient(to bottom, black 0%, transparent 100%);
   -webkit-mask-image: linear-gradient(to bottom, black 0%, transparent 100%);
   mask-repeat: no-repeat;
@@ -601,9 +642,13 @@ input:checked+.slider:before {
   right: -2px;
   bottom: -2px;
   pointer-events: none;
-  border: 6px solid #fd29c8;
+  border: 9px solid #fd29c8;
   border-radius: 15px;
-  filter: blur(1px);
+  box-shadow:
+    0 0 16px 4px #ffe40e,
+    0 0 32px 8px #ff17e9,
+    inset 0 0 6px #fd29c8;
+  filter: blur(3px);
   mix-blend-mode: screen;
   mask-image: linear-gradient(to bottom, black 0%, transparent 100%);
   -webkit-mask-image: linear-gradient(to bottom, black 0%, transparent 100%);
@@ -611,7 +656,9 @@ input:checked+.slider:before {
   mask-size: 100% 100%;
   -webkit-mask-repeat: no-repeat;
   -webkit-mask-size: 100% 100%;
-}
+  animation: neon-border-pulse 2s infinite alternate;
+} */
+
 
 /*---------------------------------------------------
   CODE OVERLAY MODAL
@@ -1255,6 +1302,7 @@ input:checked+.slider:before {
 .title {
   padding: 8px 10px;
   font-weight: bold;
+  font-size: 0.75em;
   margin-top: -130px;
   background: rgba(0, 0, 0, 0.7);
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
@@ -1278,6 +1326,49 @@ input:checked+.slider:before {
   color: #fff;
   font-family: 'Montserrat', sans-serif;
 }
+
+/*---------------------------------------------------
+  PARALLAX EFFECT
+---------------------------------------------------*/
+
+.parallax-layer {
+  position: absolute;
+  top: 0; left: 0;
+  width: 300%;  /* 3 slides x 100% width */
+  height: 100%;
+  background-repeat: repeat-x;
+  background-size: auto 100%;
+  background-position-x: 0px;
+  z-index: -1;
+  transition: background-position-x 1s ease;
+}
+
+.layer-back {
+  background-image: url('../../resources/misc/bg2.jpg');
+  background-repeat: repeat-x;
+  background-size: auto 100%;
+  background-position-x: 0px;
+  z-index: -1;
+  transition: background-position-x 1s ease;
+  pointer-events: none;
+}
+
+
+.layer-front {
+  background: url('../../resources/misc/fg.png') repeat-x;
+  background-repeat: repeat-x;
+  background-size: auto 100%;
+  background-position-x: 0px;
+  z-index: 0; /* höher als layer-back */
+  position: absolute;
+  top: 0; left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  transition: background-position-x 1s ease;
+}
+
+
 
 /*---------------------------------------------------
   MISC
