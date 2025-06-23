@@ -67,5 +67,22 @@
     "requirements": [
       "none"
     ]
+  },
+  {
+    "filename": "howTo.md",
+    "title": "How to: 4 Creators",
+    "keywords": [
+      "how to",
+      "creators",
+      "teachers",
+      "slides",
+      "examples",
+      "layouts",
+      "demonstrations"
+    ],
+    "thumbnail": null,
+    "requirements": [
+      "none"
+    ]
   }
 ]

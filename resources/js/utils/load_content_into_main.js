@@ -74,43 +74,150 @@ window.loadMarkdownAsSlides = async function(mdUrl) {
     return Reveal.slide(2);
   }
 
-  // (3) Strip YAML header if present:
+  // (3) Strip YAML frontmatter if present
   function stripYamlFrontmatter(md) {
-    // Remove initial YAML block if present (from very start!)
     return md.replace(/^---\s*[\r\n]+[\s\S]*?[\r\n]+---[\r\n]+/, '');
   }
+
+  // (4) Split markdown into slides, ignoring '---' inside code blocks
+  function splitMarkdownSlidesSafely(mdText) {
+    const lines = mdText.split(/\r?\n/);
+    const parts = [];
+    let buffer = [];
+    let inCodeBlock = false;
+
+    for (let line of lines) {
+      const trimmed = line.trim();
+
+      // Toggle code block state on ``` lines
+      if (/^```/.test(trimmed)) {
+        inCodeBlock = !inCodeBlock;
+      }
+
+      // Only split if we're not inside a code block
+      if (!inCodeBlock && /^---\s*$/.test(trimmed)) {
+        parts.push(buffer.join('\n'));
+        buffer = [];
+      } else {
+        buffer.push(line);
+      }
+    }
+
+    if (buffer.length > 0) {
+      parts.push(buffer.join('\n'));
+    }
+
+    return parts;
+  }
+
+  // (5) Custom bullet list transformer (-?, ->, -!)
+  function preprocessListMarkers(mdText) {
+    const lines = mdText.split('\n');
+    const result = [];
+    let currentType = null;
+    let buffer = [];
+
+    const marked = Reveal.getPlugin('markdown').marked;
+
+    function flushBuffer() {
+      if (buffer.length > 0) {
+        const classMap = {
+          '?': 'q-list',
+          '>': 'arrow-list',
+          '!': 'exclam-list',
+          ':': 'tag-list',
+        };
+        const cls = classMap[currentType] || '';
+        const ul = `<ul class="${cls}">\n` +
+          buffer.map(item => {
+            const html = marked(item.trim());
+            const liContent = html.replace(/^<p>(.*?)<\/p>\s*$/s, '$1');
+            return `<li>${liContent}</li>`;
+          }).join('\n') +
+          `\n</ul>`;
+        result.push(ul);
+        buffer = [];
+      }
+    }
+
+    for (let line of lines) {
+      const match = line.match(/^-([?!>:])\s+(.*)/);
+      if (match) {
+        const type = match[1];
+        const content = match[2];
+        if (type !== currentType) {
+          flushBuffer();
+          currentType = type;
+        }
+        buffer.push(content);
+      } else {
+        flushBuffer();
+        result.push(line);
+        currentType = null;
+      }
+    }
+
+    flushBuffer();
+    return result.join('\n');
+  }
+
+  // (6) Grid layout transformer
+  function transformLayoutBlocks(mdText) {
+    return mdText.replace(
+      /<!--\s*layout\s*=\s*{([^}]*)}\s*-->([\s\S]*?)<!--\s*\/layout\s*-->/g,
+      (match, layoutRaw, innerContent) => {
+        const layout = Object.fromEntries(layoutRaw.split(',')
+          .map(kv => kv.split(':').map(s => s.trim())));
+        const rows = layout.rows || 1;
+        const columns = layout.columns || 1;
+
+        const blocks = [];
+        const positionRegex = /<!--\s*position\s*=\s*{([^}]*)}\s*-->([\s\S]*?)<!--\s*\/position\s*-->/g;
+        let m;
+        while ((m = positionRegex.exec(innerContent)) !== null) {
+          const pos = Object.fromEntries(m[1].split(',').map(kv => kv.split(':').map(s => s.trim())));
+          const row = pos.row || 1;
+          const column = pos.column || 1;
+          const rawContent = m[2].trim();
+          const content = Reveal.getPlugin('markdown').marked(rawContent);
+          blocks.push(`<div style="grid-row: ${row}; grid-column: ${column};">\n${content}\n</div>`);
+        }
+
+        return `<div class="custom-grid" style="display: grid; grid-template-columns: repeat(${columns}, 1fr); grid-template-rows: repeat(${rows}, auto); gap: 2em;">\n${blocks.join("\n")}\n</div>`;
+      }
+    );
+  }
+
   const markdownTextNoYaml = stripYamlFrontmatter(markdownText);
+  const parts = splitMarkdownSlidesSafely(markdownTextNoYaml);
 
-  // (4) Split markdown into slides at --- (ohne Attribute dahinter!)
-  const parts = markdownTextNoYaml.split(/^[ \t]*---[ \t]*$/m);
-
-  // (5) Parse slides and create <section> elements
+  // (7) Parse slides and create <section> elements
   const newSecs = [];
   for (let part of parts) {
     part = part.trim();
     if (!part) continue;
 
-    // (A) Attribut-Kommentar suchen (am Anfang)
+    // (A) Optional slide attribute comment
     let attrText = "";
     let mdPart = part;
-    // Nur ganz am Anfang: <!-- .slide: ... -->
-    const attrCommentMatch = part.match(/^<!--\s*\.slide:\s*([^>]*)-->\s*\n?/);
 
+    const attrCommentMatch = part.match(/^<!--\s*\.slide:\s*([^>]*)-->\s*\n?/);
     if (attrCommentMatch) {
       attrText = attrCommentMatch[1].trim();
-      // Kommentarzeile aus md entfernen
       mdPart = part.replace(/^<!--\s*\.slide:\s*([^>]*)-->\s*\n?/, '');
     }
 
-    // (B) Markdown in HTML parsen
+    // (B) Apply custom preprocessing
+    mdPart = preprocessListMarkers(mdPart);
+    mdPart = transformLayoutBlocks(mdPart);
+
+    // (C) Convert to HTML
     const html = Reveal.getPlugin('markdown').marked(mdPart);
     const section = document.createElement('section');
     section.classList.add('dynamic');
 
-    // (C) Attribute setzen (wenn vorhanden)
+    // (D) Set attributes
     if (attrText) {
-      // id="foo" data-auto-animate class="red"
-      // wird zu section.setAttribute(...)
       const attrRegex = /([\w-]+)(?:="([^"]*)")?/g;
       let match;
       while ((match = attrRegex.exec(attrText))) {
@@ -124,7 +231,7 @@ window.loadMarkdownAsSlides = async function(mdUrl) {
     newSecs.push(section);
   }
 
-  // (6) Insert new slides
+  // (8) Insert new slides
   newSecs.forEach((sec, idx) => {
     const before = allSlides.children[2 + idx];
     before ? allSlides.insertBefore(sec, before)
@@ -132,11 +239,7 @@ window.loadMarkdownAsSlides = async function(mdUrl) {
   });
   Reveal.layout();
 
-  // (7) Initialize Mermaid (optional)
-  // const mer = Reveal.getPlugin('mermaid');
-  // if (mer?.init) mer.init(Reveal);
-
-  // (8) Reload scripts
+  // (9) Reload scripts
   newSecs.forEach(sec =>
     sec.querySelectorAll('script').forEach(old => {
       const ns = document.createElement('script');
@@ -145,12 +248,12 @@ window.loadMarkdownAsSlides = async function(mdUrl) {
     })
   );
 
-  // (9) Render math
+  // (10) Render math
   renderMathInDynamicSlides(newSecs);
 
-  // (10) Show the first new slide
+  // (11) Show the first new slide
   Reveal.slide(2);
-}
+};
 
 
 

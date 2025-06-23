@@ -1078,7 +1078,7 @@ input:checked+.slider:before {
   background-color: #0FF;
   border-radius: 5px;
   box-shadow: 2px 2px 5px rgba(0, 255, 255, 0.5);
-  transform: perspective(300px) rotateX(5deg) rotateZ(2deg) rotateY(-5deg) translateY(-0.4em);
+  transform: perspective(300px) rotateX(5deg) rotateZ(2deg) rotateY(-5deg) translateY(0.0em);
   padding: 0 10px;
   display: inline-block;
   justify-content: flex-start;
@@ -1367,6 +1367,60 @@ input:checked+.slider:before {
   pointer-events: none;
   transition: background-position-x 1s ease;
 }
+
+/*---------------------------------------------------
+  GRID LAYOUT FOR SLIDES
+---------------------------------------------------*/
+.custom-grid {
+  display: grid;
+  gap: 2em;
+}
+.custom-grid > div {
+  background: rgba(255, 255, 255, 0.00);
+  border-radius: 12px;
+  padding: 1em;
+}
+
+/*---------------------------------------------------
+  CUSTOM BULLET POINTS
+---------------------------------------------------*/
+.reveal .slides ul.q-list li::marker {
+  content: "\f059   ";
+  font-family: "FontAwesome";
+  color: #00b7ff;
+}
+.reveal .slides ul.arrow-list li::marker {
+  content: "\f30b   ";
+  font-family: "FontAwesome";
+  color: #ff00ff;
+}
+.reveal .slides ul.exclam-list li::marker {
+  content: "\f06a   ";
+  font-family: "FontAwesome";
+  color: #dbeb00;
+}
+.reveal .slides ul.tag-list li::marker {
+  content: "\f02c   ";
+  font-family: "FontAwesome";
+  color: #ff8c00;
+}
+.reveal .slides ul.tag-list li {
+  font-size: 0.7em;
+}
+
+
+/*---------------------------------------------------
+  HORIZONTAL RULES
+---------------------------------------------------*/
+.reveal hr {
+  border: none;
+  height: 4px;
+  background-image: linear-gradient(90deg, #0ff 25%, transparent 25%, transparent 50%, #0ff 50%, #0ff 75%, transparent 75%);
+  background-size: 20px 100%;
+  margin-top: 40px;
+  margin-bottom: 40px;
+}
+
 
 
 

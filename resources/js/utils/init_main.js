@@ -2,7 +2,7 @@ Reveal.initialize({
   // The "normal" size of the presentation, aspect ratio will
   // be preserved when the presentation is scaled to fit different
   // resolutions. Can be specified using percentage units.
-  width: 1920,//960,
+  width: 1880,//1920,//960,
   height: 1080,//540,
 
   // Factor of the display size that should remain empty around
