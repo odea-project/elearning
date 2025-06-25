@@ -36,6 +36,14 @@ description: "Introduction to distance metrics and their applications in data si
 --- 
 <!-- .slide: id="distance-matrix" -->
 ## From **data similarity** to **distance matrix**
+<div class="code-button-container">
+    <div class="task-button"><img src="resources/misc/stier.png"></div>
+    <div class="task-button"><img src="resources/misc/atier.png"></div>
+    <div class="task-button"><img src="resources/misc/btier.png"></div>
+    <div class="task-button"><img src="resources/misc/ctier.png"></div>
+    <div class="task-button"><img src="resources/misc/dtier.png"></div>
+    <div class="task-button"><img src="resources/misc/etier.png"></div>
+</div> 
 <!-- layout={rows: 1, columns: 2} -->
 <!-- position={row: 1, column: 1} -->
 -! A quite intuitive way to compare the `objects` is considering the `variable's` absolute differences.
