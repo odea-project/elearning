@@ -470,7 +470,7 @@
 
 .reveal .progress {
   background: rgba(0, 0, 0, 0.2);
-  color: var(--r-link-color);
+  color: rgba(0, 0, 0, 0);
 }
 
 /*---------------------------------------------------
@@ -846,9 +846,9 @@ input:checked+.slider:before {
 ---------------------------------------------------*/
 .code-button-container {
   position: absolute;
-  top: -40px;
+  top: 0px;
   left: 0px;
-  z-index: 1000;
+  z-index: 100;
   background-color: rgba(0, 0, 0, 0.3);
   border-radius: 5px;
   padding: 5px;
@@ -875,9 +875,9 @@ input:checked+.slider:before {
 }
 
 .code-button-container::after {
-  content: "← get code";
+  content: "← challenge a task";
   position: relative;
-  left: 10px;
+  left: 0px;
   color: white;
   font-size: 12px;
   font-weight: bold;
@@ -887,8 +887,8 @@ input:checked+.slider:before {
 }
 
 .py-code-button {
-  width: 25px;
-  height: 25px;
+  width: 50px;
+  height: 50px;
   background-color: #007acb;
   color: white;
   border: none;
@@ -909,6 +909,23 @@ input:checked+.slider:before {
   font-weight: 400;
   color: white;
   content: "\f3e2";
+}
+
+.task-button {
+  width: 64px;
+  height: 64px;
+  background-color: rgba(0, 92, 251, 0.0);
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: url("../../resources/misc/cursor2.cur"), auto !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.task-button:hover {
+  background-color: #0ba6ba;
 }
 
 /*---------------------------------------------------
@@ -1360,6 +1377,20 @@ input:checked+.slider:before {
   background-size: auto 100%;
   background-position-x: 0px;
   z-index: 0; /* höher als layer-back */
+  position: absolute;
+  top: 0; left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  transition: background-position-x 1s ease;
+}
+
+.layer-very-front {
+  background: url('../../resources/misc/ffg.png') repeat-x;
+  background-repeat: repeat-x;
+  background-size: auto 100%;
+  background-position-x: 0px;
+  z-index: 1001; /* höher als layer-front */
   position: absolute;
   top: 0; left: 0;
   width: 100vw;
