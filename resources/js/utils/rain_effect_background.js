@@ -26,7 +26,7 @@ Reveal.on('ready', () => {
   function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.strokeStyle = 'rgba(255,255,255,0.2)';
-    ctx.lineWidth = 2;
+    ctx.lineWidth = 3;
     for (const d of drops) {
       ctx.beginPath();
       ctx.moveTo(d.x, d.y);
