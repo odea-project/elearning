@@ -46,7 +46,7 @@
   --r-main-font-size: 2.5em;
   --r-main-color: #EFEFEF;
   --r-block-margin: 20px;
-  --r-heading-margin: 20px 0 20px 0;
+  --r-heading-margin: 40px 0 20px 0;
   --r-heading-font: 'Press Start 2P', Helvetica, sans-serif;
   --r-heading-color: #ff05ff;
   --r-heading-line-height: 1.2;
@@ -614,50 +614,55 @@ input:checked+.slider:before {
     opacity: 0.7;
   }
 }
-/*
-.reveal .slides section::before {
-  content: "";
+
+/*---------------------------------------------------
+  Slide Top Taskbar
+---------------------------------------------------*/
+.taskbar {
   position: absolute;
-  inset: 0;
-  pointer-events: none;
-  border: 0px solid #FF1177;
-  border-radius: 15px;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 40px;
+  width: 100%;
+  background: rgba(0, 99, 126, 0.75);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 0;
   box-shadow:
-    0 0 1px rgba(255, 17, 119, 0.0),
-    0 0 2px rgba(255, 17, 119, 0.0),
-    inset 0 0 6px rgba(255, 17, 119, 0.0);
-  mask-image: linear-gradient(to bottom, black 0%, transparent 100%);
-  -webkit-mask-image: linear-gradient(to bottom, black 0%, transparent 100%);
-  mask-repeat: no-repeat;
-  mask-size: 100% 100%;
-  -webkit-mask-repeat: no-repeat;
-  -webkit-mask-size: 100% 100%;
+    0 0 1px #13feea,
+    0 0 2px #13feea,
+    0 0 4px #00c3ff,
+    0 0 8px #00c3ff,
+    inset 0 0 4px rgba(0, 132, 255, 0.5),
+    inset 0 0 10px rgba(0, 255, 255, 0.25);
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
+  overflow: hidden; /* wichtig, damit die Scanlines nicht über den Rand laufen */
+  flex: 1;
+  text-align: left;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
-.reveal .slides section::after {
+/* CRT Scanlines als Overlay */
+.taskbar::after {
   content: "";
   position: absolute;
-  top: -2px;
-  left: -2px;
-  right: -2px;
-  bottom: -2px;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   pointer-events: none;
-  border: 9px solid #fd29c8;
-  border-radius: 15px;
-  box-shadow:
-    0 0 16px 4px #ffe40e,
-    0 0 32px 8px #ff17e9,
-    inset 0 0 6px #fd29c8;
-  filter: blur(3px);
-  mix-blend-mode: screen;
-  mask-image: linear-gradient(to bottom, black 0%, transparent 100%);
-  -webkit-mask-image: linear-gradient(to bottom, black 0%, transparent 100%);
-  mask-repeat: no-repeat;
-  mask-size: 100% 100%;
-  -webkit-mask-repeat: no-repeat;
-  -webkit-mask-size: 100% 100%;
-  animation: neon-border-pulse 2s infinite alternate;
-} */
+  z-index: 2;
+  background-image: repeating-linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.2) 1px,
+    transparent 2px
+  );
+  opacity: 0.3;
+}
 
 
 /*---------------------------------------------------

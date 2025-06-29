@@ -74,6 +74,8 @@ window.loadMarkdownAsSlides = async function(mdUrl) {
     return Reveal.slide(2);
   }
 
+  const headerData = extractYamlHeader(markdownText);
+
   // (3) Strip YAML frontmatter if present
   function stripYamlFrontmatter(md) {
     return md.replace(/^---\s*[\r\n]+[\s\S]*?[\r\n]+---[\r\n]+/, '');
@@ -216,6 +218,29 @@ window.loadMarkdownAsSlides = async function(mdUrl) {
     const section = document.createElement('section');
     section.classList.add('dynamic');
 
+    // Add a taskbar div to each slide
+    const taskbarDiv = document.createElement('div');
+    taskbarDiv.classList.add('taskbar');
+
+    // Left: title by author
+    const leftDiv = document.createElement('div');
+    leftDiv.style.flex = "0";
+    leftDiv.style.paddingLeft = "12px";
+    leftDiv.style.fontSize = "0.5em";
+    leftDiv.textContent = `${headerData.title || ''} by ${headerData.author || ''}`;
+
+    // Right: dynamic slide number
+    // const rightDiv = document.createElement('div');
+    // rightDiv.style.flex = "0";
+    // rightDiv.style.paddingRight = "12px";
+    // rightDiv.style.fontSize = "0.5em";
+    // rightDiv.classList.add('slide-number-holder');
+    // rightDiv.textContent = `here will be slide number`;
+
+    taskbarDiv.appendChild(leftDiv);
+    // taskbarDiv.appendChild(rightDiv);
+    
+
     // (D) Set attributes
     if (attrText) {
       const attrRegex = /([\w-]+)(?:="([^"]*)")?/g;
@@ -228,6 +253,7 @@ window.loadMarkdownAsSlides = async function(mdUrl) {
     }
 
     section.innerHTML = html;
+    section.appendChild(taskbarDiv);
     newSecs.push(section);
   }
 
@@ -237,6 +263,7 @@ window.loadMarkdownAsSlides = async function(mdUrl) {
     before ? allSlides.insertBefore(sec, before)
            : allSlides.appendChild(sec);
   });
+
   Reveal.layout();
 
   // (9) Reload scripts
@@ -283,6 +310,20 @@ function renderMathInDynamicSlides(sections) {
   } else {
     console.warn('[WARN] Keine Funktion gefunden, um Math zu rendern');
   }
+}
+
+// extract yaml
+function extractYamlHeader(mdText) {
+  const match = mdText.match(/^---\s*\n([\s\S]*?)\n---\s*\n/);
+  if (!match) return {};
+  const yamlText = match[1];
+  const lines = yamlText.split(/\r?\n/);
+  const data = {};
+  for (const line of lines) {
+    const [key, value] = line.split(/:\s+/);
+    if (key && value) data[key.trim()] = value.replace(/^"|"$/g, '').trim();
+  }
+  return data;
 }
 
 // ---------------
