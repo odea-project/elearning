@@ -277,14 +277,13 @@
   font-family: var(--r-code-font);
   line-height: 1.2em;
   word-wrap: break-word;
-  box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.15);
 }
 
 .reveal code {
   font-family: var(--r-code-font);
   text-transform: none;
   tab-size: 2;
-  color: #00cf5d;
+  color: cyan;
 }
 
 .reveal pre code {
@@ -292,8 +291,10 @@
   padding: 5px;
   overflow: auto;
   max-height: 400px;
-  background-color: rgb(42, 42, 42);
-  box-shadow: 0px 2px 5px rgba(0, 255, 60, 0.365);
+  background-color: #2C2650;
+  border-radius: 15px;
+  color: #F8F8E3;
+  padding-left: 10px;
 }
 
 .reveal .code-wrapper {
@@ -302,6 +303,18 @@
 
 .reveal .code-wrapper code {
   white-space: pre;
+}
+
+.hljs-number {
+  color: #BD93F9;
+}
+
+.hljs-keyword {
+  color: #50FA7B;
+}
+
+.hljs-built_in {
+  color: #8BE9FD;
 }
 
 /*----------------------------------------------
@@ -1411,6 +1424,7 @@ input:checked+.slider:before {
 .custom-grid {
   display: grid;
   gap: 2em;
+  text-align: left;
 }
 .custom-grid > div {
   background: rgba(255, 255, 255, 0.00);

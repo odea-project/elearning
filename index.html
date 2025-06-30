@@ -22,7 +22,7 @@
 	<div class="reveal">
 		<div class="parallax-layer layer-back"></div>
 		<div class="parallax-layer layer-front"></div>
-		<div class="parallax-layer layer-very-front"></div>
+		<!-- <div class="parallax-layer layer-very-front"></div> -->
 		<div class="slides">
 			<section id="intro-slide" data-markdown>
 				![ODEA Logo](resources/misc/odea_edu_logo_dark2_small.jpg)
@@ -135,11 +135,11 @@
 
 			const back = document.querySelector('.layer-back');
 			const front = document.querySelector('.layer-front');
-			const veryFront = document.querySelector('.layer-very-front');
+			// const veryFront = document.querySelector('.layer-very-front');
 
 			back.style.backgroundPositionX = `-${offset * 1}px`;   // z.B. langsamer (weiter entfernt)
 			front.style.backgroundPositionX = `-${offset * 2}px`;  // z.B. schneller (näher dran)
-			veryFront.style.backgroundPositionX = `-${offset * 3}px`; // z.B. noch schneller (am nächsten dran)
+			// veryFront.style.backgroundPositionX = `-${offset * 3}px`; // z.B. noch schneller (am nächsten dran)
 		});
 	</script>
 

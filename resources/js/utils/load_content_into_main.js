@@ -195,6 +195,27 @@ window.loadMarkdownAsSlides = async function(mdUrl) {
 
   // (7) Parse slides and create <section> elements
   const newSecs = [];
+
+  // === Neue Einleitungsfolie auf Basis von YAML-Header ===
+  if (headerData.title || headerData.author) {
+    const introSection = document.createElement('section');
+    introSection.classList.add('dynamic');
+
+    const titleHtml = headerData.title
+      ? `<h1 style="margin-bottom: 0.3em;">${headerData.title}</h1>` : '';
+    const authorHtml = headerData.author
+      ? `<p style="font-size: 0.8em; opacity: 0.7;">by ${headerData.author}</p>` : '';
+
+    introSection.innerHTML = `
+      <div class="intro-slide" style="text-align: center;">
+        ${titleHtml}
+        ${authorHtml}
+      </div>
+    `;
+
+    newSecs.unshift(introSection);
+  }
+
   for (let part of parts) {
     part = part.trim();
     if (!part) continue;
@@ -265,6 +286,14 @@ window.loadMarkdownAsSlides = async function(mdUrl) {
   });
 
   Reveal.layout();
+  const highlightPlugin = Reveal.getPlugin('highlight');
+  if (highlightPlugin && typeof highlightPlugin.highlightBlock === 'function') {
+    newSecs.forEach(sec =>
+      sec.querySelectorAll('pre code').forEach(block => {
+        highlightPlugin.highlightBlock(block);
+      })
+    );
+  }
 
   // (9) Reload scripts
   newSecs.forEach(sec =>

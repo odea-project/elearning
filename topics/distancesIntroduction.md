@@ -5,10 +5,6 @@ keywords: ["Distance", "Metric", "Similarity", "Dissimilarity"]
 requirements: ["none"]
 description: "Introduction to distance metrics and their applications in data similarity analysis."
 
----
-
-# Distances
-
 --- 
 <!-- .slide: id="initial-thoughts" -->
 ## Initial thoughts on **data similarity** analysis
@@ -19,6 +15,8 @@ description: "Introduction to distance metrics and their applications in data si
 ***
 
 -? How can we compare these samples (`objects`)?
+
+-? How similar are samples A and B?
 <!-- /position -->
 <!-- position={row: 1, column: 2} -->
 *Tab 1* : Univariate data set
@@ -75,7 +73,7 @@ $$ d_{i,j} = |x_i - x_j| $$
 
 -> I.e., every `object` has a `vector` of `variables` associated with it.
 
-```
+```python
 A = [2.3, 1.2, 0.5, 0.2]
 ```
 
@@ -99,17 +97,25 @@ A = [2.3, 1.2, 0.5, 0.2]
 ## From **data similarity** to **multivariate distance matrix**
 <!-- layout={rows: 1, columns: 2} -->
 <!-- position={row: 1, column: 1} -->
--! A quite intuitive way to compare `objects` is considering the `variables` absolute differences as sum.
+-! Simple comparing `objects`: sum `variables` absolute differences
 
 ***
 
 $$ d_{i,j} = \sum_{k=1}^{n} |x_{i,k} - x_{j,k}| $$
 
--: Where $x_{i,k}$ and $x_{j,k}$ are the values of the `variable` [k] of the samples $i$ and $j$, respectively.
+-: Where $x_{i,k}$ & $x_{j,k}$ are values of `variable` [k] of samples $i$ & $j$.
 
 ***
 
-- The result is a `distance matrix` containing differences between all samples.
+-: example distance
+
+```python
+A = [2.3, 1.2, 0.5, 0.2]
+B = [2.7, 1.1, 0.4, 0.3]
+d_AB = 0
+for k in range(len(A)):
+    d_AB = d_AB + abs(A[k] - B[k])
+```
 <!-- /position -->
 <!-- position={row: 1, column: 2} -->
 | Sample |  A  |  B  |  C  |  D  |  E  |
@@ -120,6 +126,7 @@ $$ d_{i,j} = \sum_{k=1}^{n} |x_{i,k} - x_{j,k}| $$
 | *D* | 0.8 | 1.0 | 1.0 | 0.0 | 1.0 |
 | *E* | 0.9 | 0.8 | 1.2 | 1.0 | 0.0 |
 
+- The result is a `distance matrix` containing differences between all samples.
 <!-- /position -->  
 <!-- /layout -->
 
