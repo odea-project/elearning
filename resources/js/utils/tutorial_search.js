@@ -74,10 +74,12 @@ grid.addEventListener('click', function(event) {
   event.preventDefault();
   const mdUrl = tile.getAttribute('data-md');
   if (!mdUrl) return;
-  // Call your dynamic markdown loading function here
-  // For now, just alert the file path:
-  // alert("Clicked: " + mdUrl);
+  
+  // change url without reloading the page
+  const newUrl = new URL(window.location);
+  newUrl.searchParams.set('file', mdUrl);
+  history.pushState({}, '', newUrl);
 
-  // Call the code you already use to load and display markdown as slides:
+  // Load the markdown file as slides
   loadMarkdownAsSlides(mdUrl);
 });

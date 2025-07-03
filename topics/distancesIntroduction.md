@@ -4,8 +4,9 @@ author: "Gerrit Renner"
 keywords: ["Distance", "Metric", "Similarity", "Dissimilarity"]
 requirements: ["none"]
 description: "Introduction to distance metrics and their applications in data similarity analysis."
+---
+<!-- End of metadata -->
 
---- 
 <!-- .slide: id="initial-thoughts" -->
 ## Initial thoughts on **data similarity** analysis
 <!-- layout={rows: 1, columns: 2} -->
