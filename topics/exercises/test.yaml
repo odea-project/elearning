@@ -8,4 +8,22 @@
     # Schreibe deinen Code hier
     ...
   solution: |
+    # Finde den Datentyp heraus
+    x = 42
+    # Schreibe deinen Code hier
     print(type(x))
+
+- id: ex02
+  title: "String Manipulation"
+  task: |
+    Erstelle einen String, der deinen Namen enthält, und gib ihn in Großbuchstaben aus.
+  starter_code: |
+    # Erstelle einen String mit deinem Namen
+    name = "Dein Name"
+    # Gib den Namen in Großbuchstaben aus
+    ...
+  solution: |
+    # Erstelle einen String mit deinem Namen
+    name = "Dein Name"
+    # Gib den Namen in Großbuchstaben aus
+    print(name.upper())
