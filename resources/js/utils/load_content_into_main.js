@@ -1,9 +1,16 @@
-(function() {
-  const mdPlugin = Reveal.getPlugin('markdown');
-  const marked   = mdPlugin.marked;
+/**
+ * Custom Markdown loader for Reveal.js that supports dynamic slides,
+ * YAML headers, special bullet styles, grid layouts, and more.
+ * Style: Modern ES6+, following Airbnb/Google JS best practices.
+ */
 
+(() => {
+  const mdPlugin = Reveal.getPlugin('markdown');
+  const marked = mdPlugin.marked;
+
+  // --- 1. Custom Markdown block extension
   const customBlock = {
-    name:  'customBlock',
+    name: 'customBlock',
     level: 'block',
 
     start(src) {
@@ -11,325 +18,342 @@
     },
 
     tokenizer(src) {
-      const cap = /^::(\w+)\(([^)]*)\)\{/.exec(src);
-      if (!cap) return;
+      const match = /^::(\w+)\(([^)]*)\)\{/.exec(src);
+      if (!match) return;
 
-      const tag       = cap[1];
-      const className = cap[2];
-      let   idx       = cap[0].length;
-      let   depth     = 1;
+      const [rawStart, tag, className] = match;
+      let idx = rawStart.length;
+      let depth = 1;
 
       while (idx < src.length && depth > 0) {
-        if      (src[idx] === '{') depth++;
-        else if (src[idx] === '}') depth--;
-        idx++;
+        if (src[idx] === '{') depth += 1;
+        else if (src[idx] === '}') depth -= 1;
+        idx += 1;
       }
 
-      const raw  = src.slice(0, idx);
-      const body = src.slice(cap[0].length, idx - 1).trim();
-
       return {
-        type:  'customBlock',
-        raw,
+        type: 'customBlock',
+        raw: src.slice(0, idx),
         tag,
         class: className,
-        text:  body
+        text: src.slice(rawStart.length, idx - 1).trim(),
       };
     },
 
     renderer(token) {
-      let innerHtml;
-      if (token.tag === 'p') {
-        innerHtml = marked.parseInline(token.text);
-      } else {
-        innerHtml = marked.parse(token.text);
-      }
+      const innerHtml = token.tag === 'p'
+        ? marked.parseInline(token.text)
+        : marked.parse(token.text);
+
       return `<${token.tag} class="${token.class}">${innerHtml}</${token.tag}>`;
-    }
+    },
   };
 
-  marked.use({ extensions: [ customBlock ] });
+  marked.use({ extensions: [customBlock] });
 })();
 
+/**
+ * Loads a Markdown file and injects its content as Reveal.js slides.
+ * @param {string} mdUrl - URL to the markdown file
+ */
+window.loadMarkdownAsSlides = async function loadMarkdownAsSlides(mdUrl) {
+  const slidesContainer = document.querySelector('.reveal .slides');
+  slidesContainer.querySelectorAll('section.dynamic').forEach(sec => sec.remove());
 
-window.loadMarkdownAsSlides = async function(mdUrl) {
-  // (1) Remove old dynamic slides
-  const allSlides = document.querySelector('.reveal .slides');
-  allSlides.querySelectorAll('section.dynamic').forEach(s => s.remove());
-
-  // (2) Load markdown
-  let markdownText;
+  let markdownText = '';
   try {
-    const res = await fetch(mdUrl);
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    markdownText = await res.text();
+    const response = await fetch(mdUrl);
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    markdownText = await response.text();
   } catch (err) {
-    const errSec = document.createElement('section');
-    errSec.classList.add('dynamic');
-    errSec.innerHTML = `<p style="color:red;">
-      Fehler beim Laden von <code>${mdUrl}</code>: ${err.message}
-    </p>`;
-    allSlides.insertBefore(errSec, allSlides.children[2] || null);
+    insertErrorSlide(slidesContainer, mdUrl, err);
     Reveal.layout();
-    return Reveal.slide(2);
+    Reveal.slide(2);
+    return;
   }
 
   const headerData = extractYamlHeader(markdownText);
+  const markdownBody = stripYamlFrontmatter(markdownText);
+  const slideParts = splitMarkdownSlidesSafely(markdownBody);
 
-  // (3) Strip YAML frontmatter if present
-  function stripYamlFrontmatter(md) {
-    return md.replace(/^---\s*[\r\n]+[\s\S]*?[\r\n]+---[\r\n]+/, '');
-  }
+  // --- Build slides
+  const newSections = [];
 
-  // (4) Split markdown into slides, ignoring '---' inside code blocks
-  function splitMarkdownSlidesSafely(mdText) {
-    const lines = mdText.split(/\r?\n/);
-    const parts = [];
-    let buffer = [];
-    let inCodeBlock = false;
-
-    for (let line of lines) {
-      const trimmed = line.trim();
-
-      // Toggle code block state on ``` lines
-      if (/^```/.test(trimmed)) {
-        inCodeBlock = !inCodeBlock;
-      }
-
-      // Only split if we're not inside a code block
-      if (!inCodeBlock && /^---\s*$/.test(trimmed)) {
-        parts.push(buffer.join('\n'));
-        buffer = [];
-      } else {
-        buffer.push(line);
-      }
-    }
-
-    if (buffer.length > 0) {
-      parts.push(buffer.join('\n'));
-    }
-
-    return parts;
-  }
-
-  // (5) Custom bullet list transformer (-?, ->, -!)
-  function preprocessListMarkers(mdText) {
-    const lines = mdText.split('\n');
-    const result = [];
-    let currentType = null;
-    let buffer = [];
-
-    const marked = Reveal.getPlugin('markdown').marked;
-
-    function flushBuffer() {
-      if (buffer.length > 0) {
-        const classMap = {
-          '?': 'q-list',
-          '>': 'arrow-list',
-          '!': 'exclam-list',
-          ':': 'tag-list',
-        };
-        const cls = classMap[currentType] || '';
-        const ul = `<ul class="${cls}">\n` +
-          buffer.map(item => {
-            const html = marked(item.trim());
-            const liContent = html.replace(/^<p>(.*?)<\/p>\s*$/s, '$1');
-            return `<li>${liContent}</li>`;
-          }).join('\n') +
-          `\n</ul>`;
-        result.push(ul);
-        buffer = [];
-      }
-    }
-
-    for (let line of lines) {
-      const match = line.match(/^-([?!>:])\s+(.*)/);
-      if (match) {
-        const type = match[1];
-        const content = match[2];
-        if (type !== currentType) {
-          flushBuffer();
-          currentType = type;
-        }
-        buffer.push(content);
-      } else {
-        flushBuffer();
-        result.push(line);
-        currentType = null;
-      }
-    }
-
-    flushBuffer();
-    return result.join('\n');
-  }
-
-  // (6) Grid layout transformer
-  function transformLayoutBlocks(mdText) {
-    return mdText.replace(
-      /<!--\s*layout\s*=\s*{([^}]*)}\s*-->([\s\S]*?)<!--\s*\/layout\s*-->/g,
-      (match, layoutRaw, innerContent) => {
-        const layout = Object.fromEntries(layoutRaw.split(',')
-          .map(kv => kv.split(':').map(s => s.trim())));
-        const rows = layout.rows || 1;
-        const columns = layout.columns || 1;
-
-        const blocks = [];
-        const positionRegex = /<!--\s*position\s*=\s*{([^}]*)}\s*-->([\s\S]*?)<!--\s*\/position\s*-->/g;
-        let m;
-        while ((m = positionRegex.exec(innerContent)) !== null) {
-          const pos = Object.fromEntries(m[1].split(',').map(kv => kv.split(':').map(s => s.trim())));
-          const row = pos.row || 1;
-          const column = pos.column || 1;
-          const rawContent = m[2].trim();
-          const content = Reveal.getPlugin('markdown').marked(rawContent);
-          blocks.push(`<div style="grid-row: ${row}; grid-column: ${column};">\n${content}\n</div>`);
-        }
-
-        return `<div class="custom-grid" style="display: grid; grid-template-columns: repeat(${columns}, 1fr); grid-template-rows: repeat(${rows}, auto); gap: 2em;">\n${blocks.join("\n")}\n</div>`;
-      }
-    );
-  }
-
-  const markdownTextNoYaml = stripYamlFrontmatter(markdownText);
-  const parts = splitMarkdownSlidesSafely(markdownTextNoYaml);
-
-  // (7) Parse slides and create <section> elements
-  const newSecs = [];
-
-  // === Neue Einleitungsfolie auf Basis von YAML-Header ===
+  // (A) Optional: Intro slide based on YAML
   if (headerData.title || headerData.author) {
-    const introSection = document.createElement('section');
-    introSection.classList.add('dynamic');
-
-    const titleHtml = headerData.title
-      ? `<h1 style="margin-bottom: 0.3em;">${headerData.title}</h1>` : '';
-    const authorHtml = headerData.author
-      ? `<p style="font-size: 0.8em; opacity: 0.7;">by ${headerData.author}</p>` : '';
-
-    introSection.innerHTML = `
-      <div class="intro-slide" style="text-align: center;">
-        ${titleHtml}
-        ${authorHtml}
-      </div>
-    `;
-
-    newSecs.unshift(introSection);
+    newSections.push(createIntroSection(headerData));
   }
 
-  for (let part of parts) {
-    part = part.trim();
-    if (!part) continue;
-
-    // (A) Optional slide attribute comment
-    let attrText = "";
+  // (B) Main slides
+  for (let part of slideParts.map(p => p.trim()).filter(Boolean)) {
+    let attrText = '';
     let mdPart = part;
 
-    const attrCommentMatch = part.match(/^<!--\s*\.slide:\s*([^>]*)-->\s*\n?/);
-    if (attrCommentMatch) {
-      attrText = attrCommentMatch[1].trim();
-      mdPart = part.replace(/^<!--\s*\.slide:\s*([^>]*)-->\s*\n?/, '');
+    // Slide attribute comment (optional)
+    const attrMatch = mdPart.match(/^<!--\s*\.slide:\s*([^>]*)-->\s*\n?/);
+    if (attrMatch) {
+      attrText = attrMatch[1].trim();
+      mdPart = mdPart.replace(/^<!--\s*\.slide:\s*([^>]*)-->\s*\n?/, '');
     }
 
-    // (B) Apply custom preprocessing
+    // Preprocessors: bullets, grids
     mdPart = preprocessListMarkers(mdPart);
     mdPart = transformLayoutBlocks(mdPart);
 
-    // (C) Convert to HTML
+    // Markdown to HTML
     const html = Reveal.getPlugin('markdown').marked(mdPart);
+
+    // Section creation
     const section = document.createElement('section');
     section.classList.add('dynamic');
+    section.innerHTML = html;
+    section.appendChild(createTaskbar(headerData));
 
-    // Add a taskbar div to each slide
-    const taskbarDiv = document.createElement('div');
-    taskbarDiv.classList.add('taskbar');
-
-    // Left: title by author
-    const leftDiv = document.createElement('div');
-    leftDiv.style.flex = "0";
-    leftDiv.style.paddingLeft = "12px";
-    leftDiv.style.fontSize = "0.5em";
-    leftDiv.textContent = `${headerData.title || ''} by ${headerData.author || ''}`;
-
-    // Right: dynamic slide number
-    // const rightDiv = document.createElement('div');
-    // rightDiv.style.flex = "0";
-    // rightDiv.style.paddingRight = "12px";
-    // rightDiv.style.fontSize = "0.5em";
-    // rightDiv.classList.add('slide-number-holder');
-    // rightDiv.textContent = `here will be slide number`;
-
-    taskbarDiv.appendChild(leftDiv);
-    // taskbarDiv.appendChild(rightDiv);
-    
-
-    // (D) Set attributes
+    // Add slide attributes
     if (attrText) {
-      const attrRegex = /([\w-]+)(?:="([^"]*)")?/g;
-      let match;
-      while ((match = attrRegex.exec(attrText))) {
-        const key = match[1];
-        const val = match[2] !== undefined ? match[2] : "";
-        section.setAttribute(key, val);
+      for (const [k, v] of parseHtmlAttributes(attrText)) {
+        section.setAttribute(k, v);
       }
     }
 
-    section.innerHTML = html;
-    section.appendChild(taskbarDiv);
-    newSecs.push(section);
+    newSections.push(section);
   }
 
-  // (8) Insert new slides
-  newSecs.forEach((sec, idx) => {
-    const before = allSlides.children[2 + idx];
-    before ? allSlides.insertBefore(sec, before)
-           : allSlides.appendChild(sec);
+  // (C) Insert slides
+  newSections.forEach((sec, idx) => {
+    const before = slidesContainer.children[2 + idx];
+    before ? slidesContainer.insertBefore(sec, before) : slidesContainer.appendChild(sec);
   });
 
   Reveal.layout();
-  const highlightPlugin = Reveal.getPlugin('highlight');
-  if (highlightPlugin && typeof highlightPlugin.highlightBlock === 'function') {
-    newSecs.forEach(sec =>
-      sec.querySelectorAll('pre code').forEach(block => {
-        highlightPlugin.highlightBlock(block);
-      })
-    );
-  }
 
-  // (9) Reload scripts
-  newSecs.forEach(sec =>
-    sec.querySelectorAll('script').forEach(old => {
-      const ns = document.createElement('script');
-      old.src ? ns.src = old.src : ns.textContent = old.innerHTML;
-      document.body.appendChild(ns);
-    })
-  );
+  // Syntax highlighting
+  highlightSlides(newSections);
 
-  // (10) Render math
-  renderMathInDynamicSlides(newSecs);
+  // Reload scripts in new slides
+  reloadScriptsInSlides(newSections);
 
-  // (11) Show the first new slide
+  // Math rendering
+  renderMathInDynamicSlides(newSections);
+
+  // Go to first new slide
   Reveal.slide(2);
 };
 
+/**
+ * Helper to parse YAML from Markdown frontmatter.
+ * @param {string} mdText
+ * @returns {Object} header key-value pairs
+ */
+function extractYamlHeader(mdText) {
+  const match = mdText.match(/^---\s*\n([\s\S]*?)\n---\s*\n/);
+  if (!match) return {};
+  const yaml = Object.create(null);
+  for (const line of match[1].split(/\r?\n/)) {
+    const [key, ...rest] = line.split(/:\s+/);
+    if (key && rest.length) yaml[key.trim()] = rest.join(': ').replace(/^"|"$/g, '').trim();
+  }
+  return yaml;
+}
 
+/**
+ * Removes YAML frontmatter from a Markdown string.
+ * @param {string} md
+ * @returns {string}
+ */
+function stripYamlFrontmatter(md) {
+  return md.replace(/^---\s*[\r\n]+[\s\S]*?[\r\n]+---[\r\n]+/, '');
+}
 
-// ====== 2) Math-Rendering für dynamische Slides ======
+/**
+ * Splits Markdown into slides using --- as delimiter,
+ * ignoring those inside code blocks.
+ * @param {string} mdText
+ * @returns {string[]}
+ */
+function splitMarkdownSlidesSafely(mdText) {
+  const lines = mdText.split(/\r?\n/);
+  const parts = [];
+  let buffer = [];
+  let inCodeBlock = false;
+
+  for (const line of lines) {
+    const trimmed = line.trim();
+    if (/^```/.test(trimmed)) inCodeBlock = !inCodeBlock;
+
+    if (!inCodeBlock && /^---\s*$/.test(trimmed)) {
+      parts.push(buffer.join('\n'));
+      buffer = [];
+    } else {
+      buffer.push(line);
+    }
+  }
+  if (buffer.length > 0) parts.push(buffer.join('\n'));
+  return parts;
+}
+
+/**
+ * Transforms custom bullet list markers into styled <ul> lists.
+ * Supported: -?, ->, -!, -:
+ * @param {string} mdText
+ * @returns {string}
+ */
+function preprocessListMarkers(mdText) {
+  const lines = mdText.split('\n');
+  const result = [];
+  let buffer = [];
+  let currentType = null;
+  const marked = Reveal.getPlugin('markdown').marked;
+
+  const classMap = {
+    '?': 'q-list',
+    '>': 'arrow-list',
+    '!': 'exclam-list',
+    ':': 'tag-list',
+  };
+
+  function flushBuffer() {
+    if (buffer.length === 0) return;
+    const cls = classMap[currentType] || '';
+    const ulHtml = `<ul class="${cls}">\n${buffer.map(item => {
+      const html = marked(item.trim());
+      return `<li>${html.replace(/^<p>(.*?)<\/p>\s*$/s, '$1')}</li>`;
+    }).join('\n')}\n</ul>`;
+    result.push(ulHtml);
+    buffer = [];
+  }
+
+  for (const line of lines) {
+    const match = line.match(/^-([?!>:])\s+(.*)/);
+    if (match) {
+      const [, type, content] = match;
+      if (type !== currentType) flushBuffer();
+      currentType = type;
+      buffer.push(content);
+    } else {
+      flushBuffer();
+      result.push(line);
+      currentType = null;
+    }
+  }
+  flushBuffer();
+  return result.join('\n');
+}
+
+/**
+ * Transforms custom HTML grid layout blocks in Markdown.
+ * @param {string} mdText
+ * @returns {string}
+ */
+function transformLayoutBlocks(mdText) {
+  return mdText.replace(
+    /<!--\s*layout\s*=\s*{([^}]*)}\s*-->([\s\S]*?)<!--\s*\/layout\s*-->/g,
+    (match, layoutRaw, innerContent) => {
+      const layout = Object.fromEntries(
+        layoutRaw.split(',').map(kv => kv.split(':').map(s => s.trim()))
+      );
+      const rows = layout.rows || 1;
+      const columns = layout.columns || 1;
+      const blocks = [];
+      const positionRegex = /<!--\s*position\s*=\s*{([^}]*)}\s*-->([\s\S]*?)<!--\s*\/position\s*-->/g;
+      let m;
+      while ((m = positionRegex.exec(innerContent)) !== null) {
+        const pos = Object.fromEntries(
+          m[1].split(',').map(kv => kv.split(':').map(s => s.trim()))
+        );
+        const row = pos.row || 1;
+        const column = pos.column || 1;
+        const rawContent = m[2].trim();
+        const content = Reveal.getPlugin('markdown').marked(rawContent);
+        blocks.push(`<div style="grid-row: ${row}; grid-column: ${column};">\n${content}\n</div>`);
+      }
+      return `<div class="custom-grid" style="display: grid; grid-template-columns: repeat(${columns}, 1fr); grid-template-rows: repeat(${rows}, auto); gap: 2em;">\n${blocks.join('\n')}\n</div>`;
+    }
+  );
+}
+
+/**
+ * Parses attribute string in .slide comments into key/value pairs.
+ * @param {string} attrText
+ * @returns {Array<[string, string]>}
+ */
+function parseHtmlAttributes(attrText) {
+  const attrRegex = /([\w-]+)(?:="([^"]*)")?/g;
+  const attrs = [];
+  let match;
+  while ((match = attrRegex.exec(attrText))) {
+    attrs.push([match[1], match[2] !== undefined ? match[2] : '']);
+  }
+  return attrs;
+}
+
+/**
+ * Creates an introductory section based on header data.
+ * @param {{title?: string, author?: string}} headerData
+ * @returns {HTMLElement}
+ */
+function createIntroSection(headerData) {
+  const section = document.createElement('section');
+  section.classList.add('dynamic');
+  section.innerHTML = `
+    <div class="intro-slide" style="text-align: center;">
+      ${headerData.title ? `<h1 style="margin-bottom: 0.3em;">${headerData.title}</h1>` : ''}
+      ${headerData.author ? `<p style="font-size: 0.8em; opacity: 0.7;">by ${headerData.author}</p>` : ''}
+    </div>
+  `;
+  return section;
+}
+
+/**
+ * Creates the bottom taskbar (info strip) for each slide.
+ * @param {{title?: string, author?: string}} headerData
+ * @returns {HTMLElement}
+ */
+function createTaskbar(headerData) {
+  const taskbar = document.createElement('div');
+  taskbar.classList.add('taskbar');
+  const left = document.createElement('div');
+  left.style.flex = '0';
+  left.style.paddingLeft = '12px';
+  left.style.fontSize = '0.5em';
+  left.textContent = `${headerData.title || ''} by ${headerData.author || ''}`;
+  taskbar.appendChild(left);
+  // For right-aligned slide number, add here if needed.
+  return taskbar;
+}
+
+/**
+ * Adds an error slide if Markdown fails to load.
+ * @param {Element} container
+ * @param {string} mdUrl
+ * @param {Error} err
+ */
+function insertErrorSlide(container, mdUrl, err) {
+  const errSec = document.createElement('section');
+  errSec.classList.add('dynamic');
+  errSec.innerHTML = `<p style="color:red;">
+    Error loading <code>${mdUrl}</code>: ${err.message}
+  </p>`;
+  container.insertBefore(errSec, container.children[2] || null);
+}
+
+/**
+ * Renders math in all provided slide sections using KaTeX (or fallback).
+ * @param {HTMLElement[]} sections
+ */
 function renderMathInDynamicSlides(sections) {
   const katexPlugin = Reveal.getPlugin('katex');
   if (katexPlugin && typeof katexPlugin.renderSlides === 'function') {
-    console.log('[DEBUG] KaTeX-Plugin.renderSlides() aufrufen');
     katexPlugin.renderSlides();
     return;
   }
   if (katexPlugin && typeof katexPlugin.renderSlide === 'function') {
-    console.log('[DEBUG] KaTeX-Plugin.renderSlide() aufrufen');
     sections.forEach(slide => katexPlugin.renderSlide(slide));
     return;
   }
   if (window.renderMathInElement) {
-    console.log('[DEBUG] Fallback: renderMathInElement() aufrufen');
     sections.forEach(slide => {
-      renderMathInElement(slide, {
+      window.renderMathInElement(slide, {
         delimiters: [
           { left: '$$', right: '$$', display: true },
           { left: '$', right: '$', display: false }
@@ -337,20 +361,37 @@ function renderMathInDynamicSlides(sections) {
       });
     });
   } else {
-    console.warn('[WARN] Keine Funktion gefunden, um Math zu rendern');
+    // eslint-disable-next-line no-console
+    console.warn('[WARN] No function found for math rendering');
   }
 }
 
-// extract yaml
-function extractYamlHeader(mdText) {
-  const match = mdText.match(/^---\s*\n([\s\S]*?)\n---\s*\n/);
-  if (!match) return {};
-  const yamlText = match[1];
-  const lines = yamlText.split(/\r?\n/);
-  const data = {};
-  for (const line of lines) {
-    const [key, value] = line.split(/:\s+/);
-    if (key && value) data[key.trim()] = value.replace(/^"|"$/g, '').trim();
+/**
+ * Runs syntax highlighting on all <pre><code> blocks in slides.
+ * @param {HTMLElement[]} sections
+ */
+function highlightSlides(sections) {
+  const highlightPlugin = Reveal.getPlugin('highlight');
+  if (highlightPlugin && typeof highlightPlugin.highlightBlock === 'function') {
+    sections.forEach(section =>
+      section.querySelectorAll('pre code').forEach(block => {
+        highlightPlugin.highlightBlock(block);
+      })
+    );
   }
-  return data;
+}
+
+/**
+ * Reloads scripts in dynamically created slides.
+ * @param {HTMLElement[]} sections
+ */
+function reloadScriptsInSlides(sections) {
+  sections.forEach(section =>
+    section.querySelectorAll('script').forEach(oldScript => {
+      const script = document.createElement('script');
+      if (oldScript.src) script.src = oldScript.src;
+      else script.textContent = oldScript.innerHTML;
+      document.body.appendChild(script);
+    })
+  );
 }
