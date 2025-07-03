@@ -1,0 +1,11 @@
+- id: ex01
+  title: "Datentyp erkennen"
+  task: |
+    Was ist der Datentyp von `42` in Python?
+  starter_code: |
+    # Finde den Datentyp heraus
+    x = 42
+    # Schreibe deinen Code hier
+    ...
+  solution: |
+    print(type(x))

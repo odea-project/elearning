@@ -1,0 +1,6 @@
+{
+  "distance-matrix": [
+    { "exercise_id": "ex01", "file": "topics/exercises/test.yaml", "level": "easy" },
+    { "exercise_id": "ex02", "file": "topics/exercises/test.yaml", "level": "medium" }
+  ]
+}
