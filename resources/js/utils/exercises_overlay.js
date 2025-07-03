@@ -2,18 +2,15 @@ function ensureExerciseOverlay() {
   if (document.getElementById('exercise-overlay')) return;
 
   const overlay = document.createElement('div');
+  overlay.className = 'exercise-overlay';
   overlay.id = 'exercise-overlay';
   overlay.style.cssText = `
     display: none; position: fixed; z-index: 9999; top: 0; left: 0;
     width: 100vw; height: 100vh; background: rgba(20,20,40,0.95); color: #eee;
   `;
   overlay.innerHTML = `
-    <div id="exercise-content"
-         style="position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
-                background: #232347; border-radius: 2em; padding: 2em; min-width: 40vw;
-                max-width: 80vw; min-height: 20vh; box-shadow: 0 0 24px #19f1ff;">
-      <button id="close-exercise"
-              style="position: absolute; top: 1.2em; right: 1.2em;">Close ✖</button>
+    <div class="exercise-content" id="exercise-content">
+      <button id="close-exercise">✖</button>
       <div id="exercise-tasks"></div>
     </div>
   `;

@@ -23,13 +23,12 @@ function addExerciseButtonToTaskbar(section, exercisesMeta) {
     btn.onclick = () => {
       showExerciseOverlay();
       document.getElementById('exercise-tasks').innerHTML = `
-        <div style="font-size: 1.1em; margin-bottom: 1em;">
-          (${exercisesMeta.length}) exercise(s) available for this slide:
-          <ul>
+        <div class="reveal" style="font-size: 1.1em; margin-bottom: 1em;">
+          <h2 style="margin-top: 0;">(<span style="color:rgb(236, 228, 2);">${exercisesMeta.length}</span>) exercise(s) available for this slide:</h2>
+          <ul style="list-style: none; padding: 0; margin: 0;">
             ${exercisesMeta.map((ex) => `
               <li>
-                <strong>${ex.level}</strong>
-                <button onclick="window.loadExercise('${ex.file}', '${ex.exercise_id}')">Open</button>
+                <button class="exercise-level-btn" onclick="window.loadExercise('${ex.file}', '${ex.exercise_id}')"><strong>${ex.level}</strong></button>
               </li>
             `).join('')}
           </ul>

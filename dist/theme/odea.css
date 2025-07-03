@@ -963,55 +963,6 @@ input:checked+.slider:before {
 }
 
 /*---------------------------------------------------
-  CUSTOM BULLET POINTS & ICON LISTS
----------------------------------------------------*/
-/* .styled-point, .styled-point2, .styled-point3, .styled-point4,
-.mainBullet, .subBullet, .subSubBullet, .question, .task, .styled-noPoint {
-  font-size: x-large; position: relative; margin-left: 25px; text-align: left;
-}
-.styled-point2, .subSubBullet { font-size: medium; margin-top: -10px !important; }
-.styled-point4, .mainBullet, .subBullet, .subSubBullet, .question, .task { font-size: x-large; }
-
-.styled-point::before, .mainBullet::before {
-  content: "\f0c8"; font-family: "Font Awesome 5 Free"; font-weight: 900;
-  color: burlywood; position: absolute; font-size: medium; left: -20px; top: 0.75ex;
-}
-.mainBullet::before { color: rgb(235,14,168); }
-.styled-point2::before, .subBullet::before {
-  content: "\f101"; font-family: "Font Awesome 5 Free"; font-weight: 900;
-  color: rgb(219,93,43); position: absolute; font-size: medium; left: -20px; top: 0.75ex;
-}
-.styled-point3::before {
-  content: "\f128"; font-family: "Font Awesome 5 Free"; font-weight: 900;
-  color: rgb(13,180,74); position: absolute; font-size: medium; left: -20px; top: 0.75ex;
-}
-.styled-point4::before {
-  content: "\f292"; font-family: "Font Awesome 5 Free"; font-weight: 500;
-  color: blue; position: absolute; font-size: medium; left: -20px; top: 0.75ex;
-}
-.subSubBullet::before {
-  content: "\f0eb"; font-family: "Font Awesome 5 Free"; font-weight: 900;
-  color: rgb(219,93,43); position: absolute; font-size: medium; left: -20px; top: 0.75ex;
-}
-.question::before {
-  content: "\f059"; font-family: "Font Awesome 5 Free"; font-weight: 500;
-  color: rgb(255,0,119); position: absolute; font-size: x-large; left: -3ex; top: 0.0ex;
-}
-.task::before {
-  content: "\f086"; font-family: "Font Awesome 5 Free"; font-weight: 500;
-  color: rgb(0,92,251); position: absolute; font-size: x-large; left: -3ex; top: 0.0ex;
-}
-/* Special color for math in these points */
-/* .styled-noPoint .katex .mord,
-.styled-noPoint .katex .mop,
-.styled-point2 .katex .mord,
-.styled-point2 .katex .mop,
-.styled-point .katex .mord,
-.styled-point .katex .mop {
-  color: #ffae00;
-} */
-
-/*---------------------------------------------------
   TABS
 ---------------------------------------------------*/
 .tab {
@@ -1173,7 +1124,7 @@ input:checked+.slider:before {
 
 .thumbnail {
   width: 100%;
-  cursor: pointer;
+  cursor: url("../../resources/misc/cursor2.cur");
   transition: transform 0.2s ease;
 }
 
@@ -1223,12 +1174,12 @@ input:checked+.slider:before {
   left: 30px;
   color: white;
   font-size: 30px;
-  cursor: pointer;
+  cursor: url("../../resources/misc/cursor2.cur");
 }
 
 .popup-prev,
 .popup-next {
-  cursor: pointer;
+  cursor: url("../../resources/misc/cursor2.cur");
   position: absolute;
   top: 50%;
   width: auto;
@@ -1335,7 +1286,7 @@ input:checked+.slider:before {
   background: rgba(0, 0, 0, 0);
   overflow: hidden;
   transition: transform .1s;
-  cursor: pointer;
+  cursor: url("../../resources/misc/cursor2.cur");
 }
 
 .tutorialGridTile:hover {
@@ -1487,7 +1438,125 @@ input:checked+.slider:before {
   margin-bottom: 40px;
 }
 
+/*---------------------------------------------------
+  EXERCISE BOXES
+---------------------------------------------------*/
+/* Overlay background */
 
+
+/* Centered overlay box */
+.exercise-content {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  background: #232347;
+  border-radius: 15px;
+  padding: 2em;
+  min-width: 40vw;
+  max-width: 80vw;
+  min-height: 20vh;
+  box-shadow: 0 0 24px #19f1ff;
+  /* Responsive: */
+  box-sizing: border-box;
+}
+
+.exercise-content button#close-exercise {
+  position: absolute;
+  top: 1.2em;
+  right: 1.2em;
+  background: #361e19;
+  border: none;
+  color: #ff5619;
+  font-size: 1.2em;
+  cursor: url("../../resources/misc/cursor2.cur");
+  border-radius: 5px;
+  padding: 0.5em 0.7em;
+  transition: background 0.15s;
+  z-index: 1000; /* Ensure button is above other content */
+}
+.exercise-content button#close-exercise:hover {
+  background: #5a3027;
+  color: #f0490c;
+}
+
+.exercise-level-btn {
+  /* Deine Styles hier */
+  background: #232347;
+  color: #19f1ff;
+  border: 1px solid #19f1ff;
+  border-radius: 5px;
+  padding: 0.5em 1.2em;
+  font-weight: bold;
+  font-size: 1em;
+  margin: 0.5em 0.2em;
+  cursor: url("../../resources/misc/cursor2.cur");
+  box-shadow: 0 0 10px #19f1ff66;
+  transition: background 0.2s, color 0.2s;
+}
+
+.exercise-level-btn:hover {
+  background: #19f1ff;
+  color: #232347;
+  box-shadow: 0 0 16px #19f1ffcc;
+}
+
+.exercise-btn {
+  background: #232347;
+  color: #19f1ff;
+  border: 1px solid #19f1ff;
+  border-radius: 5px;
+  padding: 0.1em .5em;
+  font-weight: bold;
+  font-size: .5em;
+  margin: 0.1em 0.1em;
+  cursor: url("../../resources/misc/cursor2.cur");
+  box-shadow: 0 0 10px #19f1ff66;
+  transition: background 0.2s, color 0.2s;
+}
+
+.exercise-btn:hover {
+  background: #19f1ff;
+  color: #232347;
+  box-shadow: 0 0 16px #19f1ffcc;
+}
+
+.run-python-btn {
+  background: #007acb;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 0.5em 1.2em;
+  font-weight: bold;
+  font-size: 1em;
+  cursor: url("../../resources/misc/cursor2.cur");
+  box-shadow: 0 0 10px #007acb66;
+  transition: background 0.2s, color 0.2s;
+}
+
+.run-python-btn:hover {
+  background: #005f99;
+  color: #ffffff;
+  box-shadow: 0 0 16px #007acbcc;
+}
+
+.show-solution-btn {
+  background: #361e19;
+  color: #ff5619;
+  border: none;
+  border-radius: 5px;
+  padding: 0.5em 1.2em;
+  font-weight: bold;
+  font-size: 1em;
+  cursor: url("../../resources/misc/cursor2.cur");
+  box-shadow: 0 0 10px #ff561966;
+  transition: background 0.2s, color 0.2s;
+}
+
+.show-solution-btn:hover {
+  background: #5a3027;
+  color: #f0490c;
+  box-shadow: 0 0 16px #ff5619cc;
+}
 
 
 /*---------------------------------------------------
