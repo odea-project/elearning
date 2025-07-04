@@ -9,37 +9,69 @@ window.loadExercise = function(file, exerciseId) {
           `<p style="color:red;">Exercise not found.</p>`;
         return;
       }
-      // Render the exercise
+
+      // Render overlay HTML with a div for the editor
       document.getElementById('exercise-tasks').innerHTML = `
         <div class="reveal">
           <h2>${exercise.title || ''}</h2>
           <div style="margin-bottom:.5em;">${exercise.task || ''}</div>
-          <pre>
-            <code id="exercise-editor" contenteditable="true" spellcheck="false" class="language-python">${exercise.starter_code || ''}</code>
-          </pre>
-        </div>
-        <button class="run-python-btn" id="run-python-btn" style="margin-right:1em;">Run Code</button>
-        <button class="show-solution-btn" id="show-solution-btn">Show Solution</button>
-        <pre id="python-output" style="background: #22223b; color: #60ffe7; margin-top: 1em; border-radius: 1em; min-height: 2em; padding: 1em;"></pre>
+          <div class="custom-grid" style="display:grid; grid-template-columns: repeat(2, 1fr); grid-template-rows: repeat(1, 1fr); gap: 2em;">
+          <div style="grid-row: 1; grid-column: 1; padding:0em;">
+          <div id="editor-container" style="margin-bottom:0em;"></div>
+          </div>
+          <div style="grid-row: 1; grid-column: 2; padding:0em;">
+        <button class="run-python-btn" id="run-python-btn" style="margin-right:.5em; font-size:0.4em">Run Code</button>
+        <button class="show-solution-btn" id="show-solution-btn" style="font-size:0.4em">Show Solution</button>
+        <div id="output-editor-container" style="height: 120px;"></div>
+          </div>
+          </div>
       `;
 
-      const codeElement = document.getElementById('exercise-editor');
-      if (window.hljs) {
-        window.hljs.highlightElement(codeElement);
-      } else if (Reveal.getPlugin('highlight') && Reveal.getPlugin('highlight').highlightBlock) {
-        Reveal.getPlugin('highlight').highlightBlock(codeElement);
+      // Initialize CodeMirror 6
+      const editorParent = document.getElementById('editor-container');
+      let cmEditor = new window.EditorView({
+        state: window.EditorState.create({
+          doc: exercise.starter_code || "",
+          extensions: [window.basicSetup, window.python(), window.monokai]
+        }),
+        parent: editorParent
+      });
+
+      // Initialize Output Editor
+      let outputEditor = new window.EditorView({
+        state: window.EditorState.create({
+          doc: '',
+          extensions: [
+            window.basicSetup,
+            window.python(),     // Optional, oder besser window.StreamLanguage.define(window.python()) für weniger Färbung
+            window.monokai,
+            window.EditorView.editable.of(false), // Output is readonly!
+          ]
+        }),
+        parent: document.getElementById('output-editor-container')
+      });
+
+      // Feedback-Banner anzeigen
+      function showCheckmark(msg) {
+        let banner = document.getElementById('exercise-banner');
+        if (!banner) {
+          banner = document.createElement('div');
+          banner.id = 'exercise-banner';
+          banner.style.cssText = 'position:absolute; top:1em; right:2em; z-index:10000; font-size:1.2em; background:#232347; color:#19f1ff; padding: .5em 1em; border-radius:.7em; box-shadow:0 0 1em #19f1ff80;';
+          document.body.appendChild(banner);
+        }
+        banner.textContent = msg;
+        banner.style.display = '';
+        setTimeout(() => { banner.style.display = 'none'; }, 2000);
       }
 
-      document.getElementById('run-python-btn').onclick = () => {
-        const code = document.getElementById('exercise-editor').textContent;
-        const outputElement = document.getElementById('python-output');
-        outputElement.textContent = 'Running...';
 
+
+      document.getElementById('run-python-btn').onclick = () => {
+        const code = cmEditor.state.doc.toString();
         // Skulpt config: output collection
         let output = '';
-        function outf(text) {
-          output += text;
-        }
+        function outf(text) { output += text; }
 
         Sk.configure({
           output: outf,
@@ -54,34 +86,40 @@ window.loadExercise = function(file, exerciseId) {
           try {
             output = '';
             await Sk.misceval.asyncToPromise(() => Sk.importMainWithBody("<stdin>", false, code, true));
-            outputElement.textContent = output || '[No output]';
-          } catch (err) {
-            outputElement.textContent = '[Error]\n' + err.toString();
+            outputEditor.dispatch({
+              changes: { from: 0, to: outputEditor.state.doc.length, insert: output || '[No output]' }
+            });
+
+          // ==== RESULT COMPARISON ====
+          if (exercise.expected_output !== undefined) {
+            // Trim whitespace for more robust check
+            const userOutput = output.trim();
+            const solutionOutput = (exercise.expected_output || "").trim();
+            if (userOutput === solutionOutput) {
+              // Optional: Success-Message
+              showCheckmark("Success! Your output is correct.");
+            } else {
+              // Optional: Failure-Message
+              showCheckmark("Sorry, your output does not match the solution.");
+            }
           }
-        })();
-        const codeElement = document.getElementById('exercise-editor');
-        rehighlightCodeBlock(codeElement);
-      };
-      document.getElementById('show-solution-btn').onclick = () => {
-        document.getElementById('exercise-editor').textContent = exercise.solution || '';
-        document.getElementById('python-output').textContent = '';
-        const codeElement = document.getElementById('exercise-editor');
-        rehighlightCodeBlock(codeElement);
-      };
-
-      function rehighlightCodeBlock(codeElement) {
-        // Reset previous highlight state (HLJS)
-        codeElement.removeAttribute('data-highlighted');
-        codeElement.classList.remove('hljs');
-        if (window.hljs) {
-          window.hljs.highlightElement(codeElement);
-        } else if (Reveal.getPlugin('highlight') && Reveal.getPlugin('highlight').highlightBlock) {
-          Reveal.getPlugin('highlight').highlightBlock(codeElement);
+        } catch (err) {
+          outputEditor.dispatch({
+            changes: { from: 0, to: outputEditor.state.doc.length, insert: '[Error]\n' + err.toString() }
+          });
         }
-      }
+      })();
+    };
 
+      document.getElementById('show-solution-btn').onclick = () => {
+        cmEditor.dispatch({
+          changes: { from: 0, to: cmEditor.state.doc.length, insert: exercise.solution || '' }
+        });
+
+        outputEditor.dispatch({
+          changes: { from: 0, to: outputEditor.state.doc.length, insert: "" }
+        });
+      };
 
     });
-
-  
 };

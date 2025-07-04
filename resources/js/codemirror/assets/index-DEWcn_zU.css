@@ -1,0 +1,22 @@
+body {
+  background: #2c2650;
+  color: #f8f8e3
+}
+
+#editor-container {
+  margin: .5em auto;
+  width: 100%;
+  border-radius: .1em;
+  overflow: hidden
+}
+
+.cm-editor {
+  font-size: .7em;
+  border-radius: .1em
+}
+
+.cm-content {
+  padding: 1em;
+  background: #2c2650;
+  color: #f8f8e3
+}

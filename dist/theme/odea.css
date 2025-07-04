@@ -1452,7 +1452,7 @@ input:checked+.slider:before {
   background: #232347;
   border-radius: 15px;
   padding: 2em;
-  min-width: 40vw;
+  min-width: 80vw;
   max-width: 80vw;
   min-height: 20vh;
   box-shadow: 0 0 24px #19f1ff;
@@ -1557,7 +1557,6 @@ input:checked+.slider:before {
   color: #f0490c;
   box-shadow: 0 0 16px #ff5619cc;
 }
-
 
 /*---------------------------------------------------
   MISC

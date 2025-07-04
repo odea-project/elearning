@@ -52,3 +52,6 @@ let EXERCISE_MAP = {};
 fetch('topics/exercises/exercises_map.json')
   .then((res) => res.json())
   .then((json) => { EXERCISE_MAP = json; });
+
+Reveal.on('slidechanged', hideExerciseOverlay);
+Reveal.on('ready', hideExerciseOverlay);

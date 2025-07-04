@@ -12,6 +12,8 @@
     x = 42
     # Schreibe deinen Code hier
     print(type(x))
+  expected_output: |
+    <class 'int'>
 
 - id: ex02
   title: "String Manipulation"
@@ -27,3 +29,5 @@
     name = "Dein Name"
     # Gib den Namen in Großbuchstaben aus
     print(name.upper())
+  expected_output: |
+    DEIN NAME
