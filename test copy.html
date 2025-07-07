@@ -1,24 +1,20 @@
 <div id="overworld"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/simplex-noise/2.4.0/simplex-noise.min.js"></script>
 <script>
-const gridWidth = 50;
-const gridHeight = 1;
-const numLevels = 1;
+const gridWidth = 16;
+const gridHeight = 16;
+const numLevels = 5;
+const simplex = new SimplexNoise();
 
 function createHexGrid(width, height) {
     const grid = [];
-    const height_scale = 10;
-    let h = (Math.random()-.5) * height_scale;
-    let len_grid = 0;
+    let h = 0;
     for (let r = 0; r < height; r++) {
         for (let q = 0; q < width; q += 2) {
-            h += (Math.random()-.5) * height_scale;
             grid.push({ q, r, h, type: "land" });
-            len_grid++;
         }
         for (let q = 1; q < width; q += 2) {
-            h = grid[len_grid - Math.floor(width / 2)].h  + (Math.random()-.5) * height_scale;
             grid.push({ q, r, h, type: "land" });
-            len_grid++;
         }
     }
     return grid;
@@ -30,7 +26,6 @@ function createRandomPath(grid, width, height, numLevels) {
     let current = { q: 1, r: Math.floor(height / 2) };
     path.push(current);
     let r_increment = current.q % 2 === 0 ? 0 : 1;
-
     while (path.length < numLevels) {
         let options = [
             { q: current.q + 1, r: current.r },
@@ -51,6 +46,47 @@ function createRandomPath(grid, width, height, numLevels) {
     return path;
 }
 
+function hexDistance(a, b) {
+    // Axiale Distanz, aber für odd-q Offset-Koordinaten angepasst
+    // (Du kannst auch axial nehmen, wenn du umstellen willst)
+    // s = -q - r
+    const s1 = -a.q - a.r;
+    const s2 = -b.q - b.r;
+    return Math.max(
+        Math.abs(a.q - b.q),
+        Math.abs(a.r - b.r),
+        Math.abs(s1 - s2)
+    );
+}
+
+function generateIsland(grid, width, height, noiseScale=0.18, noiseStrength=0.16, radius=2.3) {
+    // Mittelpunkt (am besten gerundet auf ganze Hex-Zellen)
+    const center = { q: Math.floor((width - 1) / 2), r: Math.floor((height - 1) / 2) };
+
+    // Finde maximalen Abstand
+    let maxDist = 0;
+    for (const cell of grid) {
+        const dist = hexDistance(cell, center);
+        if (dist > maxDist) maxDist = dist;
+    }
+
+    // SimplexNoise initialisieren (falls noch nicht gemacht)
+    if (typeof simplex === "undefined") simplex = new SimplexNoise();
+
+    // Höhe setzen: Berg in der Mitte, Wasser am Rand, mit Noise
+    for (const cell of grid) {
+        const dist = hexDistance(cell, center);
+        let h = 1 - Math.pow(dist / maxDist*radius, 2);   // Parabelförmiger Berg
+        // Simplex-Rauschen für Natürlichkeit
+        h += simplex.noise2D(cell.q * noiseScale, cell.r * noiseScale) * noiseStrength;
+        // Clamp zwischen 0...1
+        h = Math.max(0, Math.min(1, h))*-100 + cell.h; // Negativ für Isometrie
+        cell.h = h/2;
+    }
+}
+
+
+
 function setGridTypes(grid, path) {
     path.forEach((node, i) => {
         let cell = grid.find(g => g.q === node.q && g.r === node.r);
@@ -63,26 +99,32 @@ function setGridTypes(grid, path) {
     }
 }
 
-// function drawHexOverworld(grid, width, height) {
-//     const size = 30;
-//     let svg = `<svg width="${(width+1)*size*2.5}" height="${(height+1)*size*2.5}">`;
-//     for (const cell of grid) {
-//         const x = (cell.q + 1) * size * 1.5;
-//         const y = (cell.r + 1) * size * 1.7 + (cell.q % 2) * size * 0.85;
-//         let color =
-//             cell.type === "level" ? "#ff0000" :
-//             cell.type === "path" ? "#ffffff" : "#ccc";
-//         svg += `<polygon points="${hexPoints(x, y, size)}"
-//             fill="${color}" stroke="#222" stroke-width="2"
-//             ${cell.type === "level" ? 'cursor="pointer"' : ""}
-//         />`;
-//     }
-//     svg += "</svg>";
-//     document.getElementById('overworld').innerHTML = svg;
-// }
+function setGridTypeWater(grid, h_threshold = 0) {
+    grid.forEach(cell => {
+        if (cell.h >= h_threshold) {
+            cell.type = "water";
+        }
+    });
+}
+
+function setGridTypeBeach(grid, h_threshold = 0) {
+    grid.forEach(cell => {
+        if (cell.h >= h_threshold && cell.type !== "water") {
+            cell.type = "beach";
+        }
+    });
+}
+
+function setGridTypeGreen(grid, h_threshold = 0) {
+    grid.forEach(cell => {
+        if (cell.h >= h_threshold && cell.type !== "water" && cell.type !== "beach") {
+            cell.type = "green";
+        }
+    });
+}
 
 function drawHexOverworld(grid, width, height) {
-    const size = 16;
+    const size = 32;
     const scaleY = 0.5;
     let hight_level = 0;
     let svg = `<svg width="${(width+1)*size*2}" height="${(height+1)*size*2}">`;
@@ -92,10 +134,16 @@ function drawHexOverworld(grid, width, height) {
         const y = (cell.r + 1) * size * 0.89 + (cell.q % 2) * size * 0.5 + cell.h
         let color =
             cell.type === "level" ? "#ff0088" :
-            cell.type === "path" ? "#24ffe9" : "#ccc";
+            cell.type === "path" ? "#24ffe9" : 
+            cell.type === "water" ? "#00aaff" :
+            cell.type === "beach" ? "#f0d6a0" : 
+            cell.type === "green" ? "#00ff00" : "#ccc";
         let color_bottom =
             cell.type === "level" ? "#dd0066" :
-            cell.type === "path" ? "#04ddc7" : "#aaa";
+            cell.type === "path" ? "#04ddc7" : 
+            cell.type === "water" ? "#0088cc" : 
+            cell.type === "beach" ? "#d0b080" :  
+            cell.type === "green" ? "#00cc00" : "#aaa";
         svg += `<polygon points="${hexPointsIso(x, y, size, scaleY)}"
             fill="${color}" stroke="#222" stroke-width="2"
             ${cell.type === "level" ? 'cursor="pointer"' : ""}
@@ -151,6 +199,12 @@ function hexPointsIso_bottom(cx, cy, s, scaleY = 0.5) {
 
 // ---- MAIN ----
 let grid = createHexGrid(gridWidth, gridHeight);
+generateIsland(grid, gridWidth, gridHeight, .18, .316, 2.3);
+generateIsland(grid, gridWidth, gridHeight, .18, .316, 4);
+generateIsland(grid, gridWidth, gridHeight, .18, .316, 8);
+setGridTypeWater(grid,-2);
+setGridTypeBeach(grid, -10);
+setGridTypeGreen(grid, -50);
 let path = createRandomPath(grid, gridWidth, gridHeight, numLevels);
 setGridTypes(grid, path);
 drawHexOverworld(grid, gridWidth, gridHeight);
