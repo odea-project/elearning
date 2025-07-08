@@ -1,8 +1,8 @@
 <div id="overworld"></div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/simplex-noise/2.4.0/simplex-noise.min.js"></script>
 <script>
-const gridWidth = 16;
-const gridHeight = 16;
+const gridWidth = 12;
+const gridHeight = 12;
 const numLevels = 5;
 const simplex = new SimplexNoise();
 
@@ -90,12 +90,12 @@ function generateIsland(grid, width, height, noiseScale=0.18, noiseStrength=0.16
 function setGridTypes(grid, path) {
     path.forEach((node, i) => {
         let cell = grid.find(g => g.q === node.q && g.r === node.r);
-        if (cell) cell.type = (i === 0 || i === path.length-1 || i % 2 === 0) ? "level" : "path";
+        if (cell) cell.type_secondary = (i === 0 || i === path.length-1 || i % 2 === 0) ? "level" : "path";
     });
     // Set path between levels
     for (let i = 1; i < path.length; i++) {
         let cell = grid.find(g => g.q === path[i].q && g.r === path[i].r);
-        if (cell && cell.type !== "level") cell.type = "path";
+        if (cell && cell.type_secondary !== "level") cell.type_secondary = "path";
     }
 }
 
@@ -124,48 +124,153 @@ function setGridTypeGreen(grid, h_threshold = 0) {
 }
 
 function drawHexOverworld(grid, width, height) {
-    const size = 32;
+    const size = 48;
     const scaleY = 0.5;
-    let hight_level = 0;
     let svg = `<svg width="${(width+1)*size*2}" height="${(height+1)*size*2}">`;
     for (const cell of grid) {
+        if (cell.type === "water") {
+            cell.h += 10;
+        }
         const x = (cell.q + 1) * size * 1.5;
-        // Für isometrische Ansicht y stärker staffeln
-        const y = (cell.r + 1) * size * 0.89 + (cell.q % 2) * size * 0.5 + cell.h
+        const y = (cell.r + 1) * size * 0.89 + (cell.q % 2) * size * 0.5 + cell.h;
+        const h = cell.h;
+
+        // Farbcodes (mit Variation, wo gewünscht)
+        f = 0.5;
         let color =
-            cell.type === "level" ? "#ff0088" :
-            cell.type === "path" ? "#24ffe9" : 
-            cell.type === "water" ? "#00aaff" :
-            cell.type === "beach" ? "#f0d6a0" : 
-            cell.type === "green" ? "#00ff00" : "#ccc";
+            cell.type === "water" ? varyHexColor("#00aaff", cell.q, cell.r, 0.12*f, 0.10*f) :
+            cell.type === "beach" ? varyHexColor("#f0d6a0", cell.q, cell.r, 0.12*f, 0.13*f) :
+            cell.type === "green" ? varyHexColor("#00ff00", cell.q, cell.r, 0.13*f, 0.14*f) :
+            varyHexColor("#cccccc", cell.q, cell.r, 0.13*f, 0.14*f);
         let color_bottom =
-            cell.type === "level" ? "#dd0066" :
-            cell.type === "path" ? "#04ddc7" : 
-            cell.type === "water" ? "#0088cc" : 
-            cell.type === "beach" ? "#d0b080" :  
-            cell.type === "green" ? "#00cc00" : "#aaa";
+            cell.type === "water" ? varyHexColor("#0088cc", cell.q, cell.r, 0.10*f, 0.09*f) :
+            cell.type === "beach" ? varyHexColor("#d0b080", cell.q, cell.r, 0.12*f, 0.13*f) :
+            cell.type === "green" ? varyHexColor("#00cc00", cell.q, cell.r, 0.11*f, 0.12*f) :
+            varyHexColor("#aaaaaa", cell.q, cell.r, 0.11*f, 0.12*f);
+        let color_strokes =
+            cell.type === "water" ? varyHexColor("#006699", cell.q, cell.r, 0.09*f, 0.09*f) :
+            cell.type === "beach" ? varyHexColor("#b08060", cell.q, cell.r, 0.10*f, 0.10*f) :
+            cell.type === "green" ? varyHexColor("#009900", cell.q, cell.r, 0.10*f, 0.10*f) :
+            varyHexColor("#888888", cell.q, cell.r, 0.10*f, 0.10*f);
+
         svg += `<polygon points="${hexPointsIso(x, y, size, scaleY)}"
-            fill="${color}" stroke="#222" stroke-width="2"
+            fill="${color_bottom}" stroke="${color_strokes}" stroke-width="2"
             ${cell.type === "level" ? 'cursor="pointer"' : ""}
         />`;
-        svg += `<polygon points="${hexPointsIso_bottom(x, y, size, scaleY)}"
-            fill="${color_bottom}" stroke="#222" stroke-width="2"
+        svg += `<polygon points="${hexPointsIso(x, y, size*.7, scaleY)}"
+            fill="${color}" stroke="${color_bottom}" stroke-width="2"
             ${cell.type === "level" ? 'cursor="pointer"' : ""}
         />`;
+        svg += `<polygon points="${hexPointsIso_bottom(x, y, size, scaleY, 20-h)}"
+            fill="${color_bottom}" stroke="${color_strokes}" stroke-width="2"
+            ${cell.type === "level" ? 'cursor="pointer"' : ""}
+        />`;
+        // 1. Finde alle Pfadpunkte
+        let pathCells = grid.filter(cell =>
+            cell.type === "level" || cell.type_secondary === "level" || cell.type_secondary === "path"
+        );
+
+        // Optional: Sortieren, falls du eine Reihenfolge hast, z.B. nach cell.levelIndex
+        // pathCells.sort((a, b) => a.levelIndex - b.levelIndex);
+
+        // 2. Sammle die Mittelpunkte (x, y)
+        let points = pathCells.map(cell => {
+            const x = (cell.q + 1) * size * 1.5;
+            const y = (cell.r + 1) * size * 0.89 + (cell.q % 2) * size * 0.5 + cell.h;
+            return [x, y];
+        });
+
+        // 3. SVG-Pfad als Spline zeichnen (Catmull-Rom zu Bézier umrechnen)
+        function catmullRom2bezier(points) {
+            let d = "";
+            for (let i = 0; i < points.length; i++) {
+                let p = [
+                    points[i - 1] || points[i],
+                    points[i],
+                    points[i + 1] || points[i],
+                    points[i + 2] || points[i + 1] || points[i]
+                ];
+                if (i === 0) {
+                    d += `M${p[1][0]},${p[1][1]}`;
+                } else {
+                    let c1x = p[1][0] + (p[2][0] - p[0][0]) / 6;
+                    let c1y = p[1][1] + (p[2][1] - p[0][1]) / 6;
+                    let c2x = p[2][0] - (p[3][0] - p[1][0]) / 6;
+                    let c2y = p[2][1] - (p[3][1] - p[1][1]) / 6;
+                    d += ` C${c1x},${c1y} ${c2x},${c2y} ${p[2][0]},${p[2][1]}`;
+                }
+            }
+            return d;
+        }
+        if (points.length > 1) {
+            let pathD = catmullRom2bezier(points);
+            svg += `<path d="${pathD}" fill="none" stroke="#ff61cf" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" opacity="0.67" />`;
+        }
+
+        // 4. Kleine Kreise auf Level-Punkten
+        for (const pt of points) {
+            svg += `<circle cx="${pt[0]}" cy="${pt[1]}" r="13" fill="#fff" stroke="#ff0088" stroke-width="4" opacity="0.89"/>`;
+            svg += `<circle cx="${pt[0]}" cy="${pt[1]}" r="7" fill="#ff0088" opacity="1"/>`;
+        }
+
     }
     svg += "</svg>";
     document.getElementById('overworld').innerHTML = svg;
 }
 
+function varyHexColor(hex, q, r, maxS = 0.10, maxL = 0.12) {
+    // hex: "#rrggbb", q/r: Position, maxS/L: z.B. 0.1 ... 0.18 (max. Offset)
+    // (1) Hex → RGB
+    let c = parseInt(hex.slice(1), 16);
+    let rC = ((c >> 16) & 0xFF)/255, gC = ((c >> 8) & 0xFF)/255, bC = (c & 0xFF)/255;
 
-function hexPoints(cx, cy, s) {
-    let points = [];
-    for (let a = 0; a < 6; a++) {
-        let angle = Math.PI/3 * a;
-        points.push([cx + s * Math.cos(angle), cy + s * Math.sin(angle)]);
+    // (2) RGB → HSL
+    let max = Math.max(rC, gC, bC), min = Math.min(rC, gC, bC);
+    let h, s, l = (max + min) / 2;
+    if (max === min) {
+        h = s = 0;
+    } else {
+        let d = max - min;
+        s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+        switch(max){
+            case rC: h = (gC - bC) / d + (gC < bC ? 6 : 0); break;
+            case gC: h = (bC - rC) / d + 2; break;
+            case bC: h = (rC - gC) / d + 4; break;
+        }
+        h /= 6;
     }
-    return points.map(p => p.join(",")).join(" ");
+
+    // (3) Streuung pro Zelle: deterministisches Pseudorandom (z.B. über sinus)
+    let pr = Math.sin(q*95813.5 + r*1511.7) * 10000;
+    let offS = ((pr % 1000) / 1000 - 0.5) * 2 * maxS;
+    let offL = (((pr * 7) % 1000) / 1000 - 0.5) * 2 * maxL;
+    s = Math.max(0, Math.min(1, s + offS));
+    l = Math.max(0, Math.min(1, l + offL));
+
+    // (4) HSL → RGB (Standard-Formel)
+    function h2rgb(p, q, t){
+        if(t < 0) t += 1;
+        if(t > 1) t -= 1;
+        if(t < 1/6) return p + (q - p) * 6 * t;
+        if(t < 1/2) return q;
+        if(t < 2/3) return p + (q - p) * (2/3 - t) * 6;
+        return p;
+    }
+    let r1, g1, b1;
+    if(s === 0){
+        r1 = g1 = b1 = l;
+    } else {
+        let q2 = l < 0.5 ? l * (1 + s) : l + s - l * s;
+        let p = 2 * l - q2;
+        r1 = h2rgb(p, q2, h + 1/3);
+        g1 = h2rgb(p, q2, h);
+        b1 = h2rgb(p, q2, h - 1/3);
+    }
+    let R = Math.round(r1*255), G = Math.round(g1*255), B = Math.round(b1*255);
+    return `#${((1<<24)+(R<<16)+(G<<8)+B).toString(16).slice(1)}`;
 }
+
+
 
 function hexPointsIso(cx, cy, s, scaleY = 0.5) {
     let points = [];
@@ -178,7 +283,7 @@ function hexPointsIso(cx, cy, s, scaleY = 0.5) {
     return points.map(p => p.join(",")).join(" ");
 }
 
-function hexPointsIso_bottom(cx, cy, s, scaleY = 0.5) {
+function hexPointsIso_bottom(cx, cy, s, scaleY = 0.5, offset = 100) {
     let points = [];
     for (let a = 0; a < 4; a++) {
         let angle = Math.PI / 3 * a;
@@ -190,7 +295,7 @@ function hexPointsIso_bottom(cx, cy, s, scaleY = 0.5) {
         let angle = Math.PI / 3 * a;
         let x = cx + s * Math.cos(angle);
         let y = cy + s * Math.sin(angle) * scaleY;
-        y += 100
+        y += offset;
         points.push([x, y]);
     }
     return points.map(p => p.join(",")).join(" ");
