@@ -1,3 +1,7 @@
+/**
+ * Small search UI for the tutorial landing page. Reads the manifest once and
+ * then filters client-side to keep navigation snappy.
+ */
 let mdData = [];
 const grid = document.getElementById('tutorialGrid');
 const searchInput = document.getElementById('search');

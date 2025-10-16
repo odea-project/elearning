@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <title>Base R im Browser (webR, lazy)</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- CodeMirror (R-Mode) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/r/r.min.js"></script>
+
+  <style>
+    body{margin:0;background:#0a0f1f;color:#d6e1ff;font-family:ui-sans-serif,system-ui}
+    .wrap{max-width:920px;margin:32px auto;padding:16px}
+    .bar{display:flex;gap:8px;align-items:center;margin:10px 0 12px}
+    button{border:0;padding:8px 14px;border-radius:12px;background:#1a2340;color:#9efcff;
+           box-shadow:0 0 0 1px #2d3a66 inset, 0 0 12px #00e1ff44}
+    button:hover{filter:brightness(1.12);cursor:pointer}
+    .cm-shell.CodeMirror{height:260px;border-radius:14px;box-shadow:0 0 0 1px #2d3a66 inset, 0 0 24px #00e1ff22}
+    .out{white-space:pre-wrap;background:#0d1329;border-radius:14px;padding:12px;min-height:110px;
+         box-shadow:0 0 0 1px #2d3a66 inset}
+    .badge{font-size:12px;opacity:.8}
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <div style="font-size:20px;margin-bottom:6px;color:#9ad1ff">Base-R im Browser (ohne Installation, ohne Server)</div>
+  <div class="badge">Lazy Load: webR wird erst beim ersten Run geladen. Nur R-Base.</div>
+
+  <textarea id="editor"># Beispielcode (nur Base R)
+x <- rnorm(100)
+mean(x)
+
+plot(x, main="Base-Plot aus webR", pch=16)
+summary(x)
+  </textarea>
+
+  <div class="bar">
+    <button id="run">Run</button>
+    <span id="status" class="badge">Bereit (webR wird bei Bedarf geladen)…</span>
+  </div>
+
+  <div class="out" id="stdout">(keine Konsolenausgabe)</div>
+  <div class="badge" style="margin-top:8px">Plots erscheinen unterhalb:</div>
+  <div id="plot-area"></div>
+</div>
+
+<script>
+  // CodeMirror Editor
+  const cm = CodeMirror.fromTextArea(document.getElementById("editor"), {
+    mode: "r",
+    theme: "default",
+    lineNumbers: true
+  });
+  cm.getWrapperElement().classList.add("cm-shell");
+
+  const statusEl = document.getElementById("status");
+  const stdoutEl = document.getElementById("stdout");
+  const plotArea = document.getElementById("plot-area");
+
+  let webR = null; // Lazy-Referenz
+
+  async function ensureWebR() {
+    if (webR) return;
+    statusEl.textContent = "Lade webR (Base)…";
+    // Lazy Import (lädt Runtime erst jetzt)
+    const mod = await import("https://webr.r-wasm.org/latest/webr.mjs");
+    webR = new mod.WebR({ /* keine Zusatzpakete, nur Base */ });
+    await webR.init();
+    statusEl.textContent = "webR bereit.";
+  }
+
+  async function runBaseR(code) {
+    // Konsolen-Output einsammeln
+    const r = await webR.evalR(`
+    paste(capture.output({
+      tryCatch({
+        ${code}
+      }, error = function(e) {
+        message("Error: ", conditionMessage(e))
+      })
+    }), collapse="\\n")
+  `);
+  const out = await r.toString();
+  return out.trim();
+  }
+  
+  async function openPngDevice(path){
+    await webR.evalR(`try(grDevices::png("${path}", width=720, height=450, res=96), silent=TRUE)`);
+  }
+  async function closeDevice(){
+    await webR.evalR(`try(grDevices::dev.off(), silent=TRUE)`);
+  }
+  async function readPng(path){
+    const file = await webR.FS.readFile(path);
+    const url = URL.createObjectURL(new Blob([file], {type:"image/png"}));
+    const img = new Image();
+    img.onload = () => URL.revokeObjectURL(url);
+    img.src = url;
+    img.style.maxWidth = "100%";
+    img.style.borderRadius = "14px";
+    img.style.boxShadow = "0 0 0 1px #2d3a66 inset, 0 0 24px #00e1ff22";
+    return img;
+  }
+
+  document.getElementById("run").addEventListener("click", async () => {
+    try {
+      await ensureWebR();
+      statusEl.textContent = "Führe aus…";
+      stdoutEl.textContent = "";
+      plotArea.innerHTML = "";
+
+      const pngPath = "/tmp/webr_plot.png";
+      try { webR.FS.unlink(pngPath); } catch(e) {} // altes Bild entfernen
+      await openPngDevice(pngPath);
+
+      const out = await runBaseR(cm.getValue());
+
+      await closeDevice();
+      // Versuche, ein Plotbild zu laden (falls gezeichnet wurde)
+      try {
+        const img = await readPng(pngPath);
+        plotArea.appendChild(img);
+      } catch(e) { /* kein Plot erzeugt */ }
+
+      stdoutEl.textContent = out || "(keine Konsolenausgabe)";
+      statusEl.textContent = "Fertig.";
+    } catch (e) {
+      statusEl.textContent = "Fehler.";
+      stdoutEl.textContent = String(e);
+    }
+  });
+</script>
+</body>
+</html>

@@ -1,3 +1,8 @@
+/**
+ * Simple Easter-egg toggle: swap the ODEA logo with a QR code when the user
+ * clicks it. The transition keeps animation smooth by waiting for the fade-out
+ * to complete before swapping the source.
+ */
 document.addEventListener('DOMContentLoaded', () => {
   const logo = document.getElementById('odea-logo');
   if (!logo) return;

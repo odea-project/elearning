@@ -1,0 +1,41 @@
+- id: rex01
+  title: "Datentyp erkennen (R)"
+  task: |
+    Was ist der Typ von `42` in R?
+  starter_code: |
+    # Finde den Datentyp heraus
+    x <- 42
+    # Dein Code:
+    ...
+  solution: |
+    x <- 42
+    print(typeof(x))
+  expected_output: |
+    double
+
+- id: rex02
+  title: "String-Manipulation (R)"
+  task: |
+    Erzeuge einen String und gib ihn in Großbuchstaben aus.
+  starter_code: |
+    name <- "Dein Name"
+    # Dein Code:
+    ...
+  solution: |
+    name <- "Dein Name"
+    print(toupper(name))
+  expected_output: |
+    DEIN NAME
+
+- id: rex03
+  title: "Ein Plot (R base)"
+  task: |
+    Erzeuge einen einfachen Scatterplot von `x`.
+  starter_code: |
+    x <- rnorm(100)
+    # Dein Code (z. B. plot(x)):
+    ...
+  solution: |
+    x <- rnorm(100)
+    plot(x, main="Mein Plot", pch=16)
+  # Kein expected_output nötig (reiner Plot)

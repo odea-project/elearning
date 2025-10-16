@@ -1,3 +1,8 @@
+/**
+ * Lightweight parallax effect that offsets layered backgrounds based on the
+ * horizontal slide index. Works because Reveal exposes the index via
+ * slidechange events.
+ */
 Reveal.on('slidechanged', event => {
   const index = event.indexh;
   const offset = index * 200;

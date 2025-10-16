@@ -55,6 +55,47 @@
     ]
   },
   {
+    "filename": "chemometricsCourseIntro.md",
+    "title": "Chemometrics & Applied Statistics: Intro",
+    "keywords": [
+      "Introduction",
+      "Chemometrics & Applied Statistics",
+      "Schedule"
+    ],
+    "thumbnail": null,
+    "requirements": [
+      "none"
+    ]
+  },
+  {
+    "filename": "chemometricsCourseMean.md",
+    "title": "Mean Values",
+    "keywords": [
+      "arithmetic mean",
+      "geometric mean",
+      "harmonic mean",
+      "expected value",
+      "median"
+    ],
+    "thumbnail": null,
+    "requirements": [
+      "none"
+    ]
+  },
+  {
+    "filename": "chemometricsCourseVariable.md",
+    "title": "Random Variables",
+    "keywords": [
+      "random variable",
+      "discrete random variable",
+      "continuous random variable"
+    ],
+    "thumbnail": null,
+    "requirements": [
+      "none"
+    ]
+  },
+  {
     "filename": "distancesIntroduction.md",
     "title": "Distances",
     "keywords": [
@@ -79,6 +120,18 @@
       "examples",
       "layouts",
       "demonstrations"
+    ],
+    "thumbnail": null,
+    "requirements": [
+      "none"
+    ]
+  },
+  {
+    "filename": "installGuides\\installPython.md",
+    "title": "Installing Python",
+    "keywords": [
+      "Python",
+      "Install"
     ],
     "thumbnail": null,
     "requirements": [

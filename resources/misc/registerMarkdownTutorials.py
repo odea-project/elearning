@@ -26,6 +26,7 @@ def extract_yaml_header(filepath):
 
 manifest = []
 
+# Register main markdown directory
 for root, _, files in os.walk(MARKDOWN_DIR):
     for name in files:
         if name.lower().endswith('.md'):
@@ -43,5 +44,4 @@ for root, _, files in os.walk(MARKDOWN_DIR):
 os.makedirs(os.path.dirname(OUTPUT_JSON), exist_ok=True)
 with open(OUTPUT_JSON, 'w', encoding='utf-8') as f:
     json.dump(manifest, f, indent=2, ensure_ascii=False)
-
 print(f"Manifest written to {OUTPUT_JSON}")

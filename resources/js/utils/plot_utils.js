@@ -1,4 +1,8 @@
 (function (global) {
+  /**
+   * Helper toolkit that wraps raw d3 primitives so our slides can declare
+   * plots with only a few lines of code while keeping styling consistent.
+   */
   global.plotUtils = {
     /**
      * Erzeugt eine leere SVG‐Figure im DIV mit ID=divId.

@@ -1,8 +1,19 @@
 (function (global) {
-  global.d3Utils = {
+    /**
+     * Collection of small convenience helpers that keep the chart creation code
+     * in the slide Markdown compact and consistent.
+     */
+    global.d3Utils = {
 
-// Helper function to create SVG container with xkcd wiggle filter
-createSVG: function(containerId, width, height, margin) {
+    /**
+     * Creates a fresh SVG container with the xkcd wiggle filter attached.
+     * @param {string} containerId - DOM id of the container element.
+     * @param {number} width - Chart width.
+     * @param {number} height - Chart height.
+     * @param {{top:number,right:number,bottom:number,left:number}} margin - Margin object for the chart.
+     * @returns {d3.Selection} The translated group that acts as drawing root.
+     */
+    createSVG: function(containerId, width, height, margin) {
     d3.select(`#${containerId}`).selectAll("*").remove(); // Clear existing content
 
     const svg = d3.select(`#${containerId}`)
@@ -23,8 +34,20 @@ createSVG: function(containerId, width, height, margin) {
     return svg;
 },
 
-// Helper function to create scales for line chart
-createXYScales: function(data, width, height, xKey, yKey, xMin = null, xMax = null, yMin = null, yMax = null) {
+    /**
+     * Creates x/y scales for an XY dataset with optional domain overrides.
+     * @param {Array<Object>} data - Source data.
+     * @param {number} width - Inner chart width.
+     * @param {number} height - Inner chart height.
+     * @param {string} xKey - Property containing the x-value.
+     * @param {string} yKey - Property containing the y-value.
+     * @param {?number} xMin - Optional lower bound for x.
+     * @param {?number} xMax - Optional upper bound for x.
+     * @param {?number} yMin - Optional lower bound for y.
+     * @param {?number} yMax - Optional upper bound for y.
+     * @returns {{x: d3.ScaleLinear<number, number>, y: d3.ScaleLinear<number, number>}}
+     */
+    createXYScales: function(data, width, height, xKey, yKey, xMin = null, xMax = null, yMin = null, yMax = null) {
     const x = d3.scaleLinear()
         .domain(xMin !== null && xMax !== null ? [xMin, xMax] : d3.extent(data, d => d[xKey]))
         .range([0, width]);
@@ -38,8 +61,17 @@ createXYScales: function(data, width, height, xKey, yKey, xMin = null, xMax = nu
 },
 
 
-// Helper function to create scales
-createScales: function(data, metals, width, height, yMin = null, yMax = null) {
+    /**
+     * Builds the grouped bar chart scales.
+     * @param {Array<Object>} data - Chart data.
+     * @param {Array<string>} metals - Keys used for the inner scale.
+     * @param {number} width - Inner width.
+     * @param {number} height - Inner height.
+     * @param {?number} yMin - Optional min y.
+     * @param {?number} yMax - Optional max y.
+     * @returns {{x0: d3.ScaleBand<string>, x1: d3.ScaleBand<string>, y: d3.ScaleLinear<number, number>}}
+     */
+    createScales: function(data, metals, width, height, yMin = null, yMax = null) {
     const x0 = d3.scaleBand()
         .domain(data.map(d => d.sample))
         .range([0, width])
@@ -58,8 +90,18 @@ createScales: function(data, metals, width, height, yMin = null, yMax = null) {
     return { x0, x1, y };
 },
 
-// Helper function to add axes
-addAxes: function (svg, xScale, yScale, width, height, margin, xLabel, yLabel) {
+    /**
+     * Renders axes with the xkcd look.
+     * @param {d3.Selection} svg - Root group returned by createSVG.
+     * @param {d3.ScaleBand|d3.ScaleLinear} xScale - X axis scale.
+     * @param {d3.ScaleLinear<number, number>} yScale - Y axis scale.
+     * @param {number} width - Inner width.
+     * @param {number} height - Inner height.
+     * @param {{top:number,right:number,bottom:number,left:number}} margin - Margins.
+     * @param {string} xLabel - Caption for x axis.
+     * @param {string} yLabel - Caption for y axis.
+     */
+    addAxes: function (svg, xScale, yScale, width, height, margin, xLabel, yLabel) {
     // X-axis
     svg.append("g")
         .attr("transform", `translate(0,${height})`)
@@ -89,8 +131,14 @@ addAxes: function (svg, xScale, yScale, width, height, margin, xLabel, yLabel) {
         .text(yLabel);
 },
 
-// Helper function to add legend
-addLegend: function (svg, metals, colorScale, width) {
+    /**
+     * Adds a simple categorical legend.
+     * @param {d3.Selection} svg - Root group.
+     * @param {Array<string>} metals - Keys to render.
+     * @param {d3.ScaleOrdinal<string, string>} colorScale - Shared color scale.
+     * @param {number} width - Inner width.
+     */
+    addLegend: function (svg, metals, colorScale, width) {
     const legend = svg.append("g")
         .attr("transform", `translate(${width - 10}, 0)`)
         .selectAll("g")
@@ -112,8 +160,15 @@ addLegend: function (svg, metals, colorScale, width) {
         .text(d => d);
 },
 
-// Helper function to add grid lines with xkcd style
-addGrid: function (svg, xScale, yScale, width, height) {
+    /**
+     * Draws horizontal and vertical helper grid lines.
+     * @param {d3.Selection} svg - Root group.
+     * @param {d3.ScaleBand|d3.ScaleLinear} xScale - X scale.
+     * @param {d3.ScaleLinear<number, number>} yScale - Y scale.
+     * @param {number} width - Inner width.
+     * @param {number} height - Inner height.
+     */
+    addGrid: function (svg, xScale, yScale, width, height) {
     // Add horizontal grid lines with xkcd style
     svg.append("g")
         .attr("class", "grid-line")
@@ -135,8 +190,16 @@ addGrid: function (svg, xScale, yScale, width, height) {
 },
 
 
-// Main charting function with xkcd styling
-createGroupedBarChart:function (containerId, data, xLabel, yLabel, yMin = null, yMax = null) {
+    /**
+     * High-level grouped bar chart helper with the project’s default styling.
+     * @param {string} containerId - Target container id.
+     * @param {Array<Object>} data - Dataset to render.
+     * @param {string} xLabel - X axis label.
+     * @param {string} yLabel - Y axis label.
+     * @param {?number} yMin - Optional y lower bound.
+     * @param {?number} yMax - Optional y upper bound.
+     */
+    createGroupedBarChart:function (containerId, data, xLabel, yLabel, yMin = null, yMax = null) {
     // Chart dimensions
     const width = 300;
     const height = 300;
@@ -179,8 +242,27 @@ createGroupedBarChart:function (containerId, data, xLabel, yLabel, yMin = null, 
     this.addLegend(svg, metals, color, width);
 },
 
-// Main function to create XY line chart with optional markers and grid
-createXYLineChart: function(containerId, data, xKey, yKey, xLabel, yLabel, showLines = true, showMarkers = false, showGrid = false, xMin = null, xMax = null, yMin = null, yMax = null, w = 300, h = 400, hideAxes = false) {
+    /**
+     * Draws an XY chart and optionally returns the scales for additional series.
+     * @param {string} containerId - Target container id.
+     * @param {Array<Object>} data - Series data.
+     * @param {string} xKey - Property name for x values.
+     * @param {string} yKey - Property name for y values.
+     * @param {string} xLabel - X axis caption.
+     * @param {string} yLabel - Y axis caption.
+     * @param {boolean} showLines - Whether to draw the connecting line.
+     * @param {boolean} showMarkers - Whether to draw circular markers.
+     * @param {boolean} showGrid - Whether to draw grid lines.
+     * @param {?number} xMin - Optional x min.
+     * @param {?number} xMax - Optional x max.
+     * @param {?number} yMin - Optional y min.
+     * @param {?number} yMax - Optional y max.
+     * @param {number} w - Chart width.
+     * @param {number} h - Chart height.
+     * @param {boolean} hideAxes - Skip axis rendering.
+     * @returns {{xScale: d3.ScaleLinear<number, number>, yScale: d3.ScaleLinear<number, number>}}
+     */
+    createXYLineChart: function(containerId, data, xKey, yKey, xLabel, yLabel, showLines = true, showMarkers = false, showGrid = false, xMin = null, xMax = null, yMin = null, yMax = null, w = 300, h = 400, hideAxes = false) {
     // Chart dimensions
     const width = w;
     const height = h;
@@ -236,7 +318,22 @@ createXYLineChart: function(containerId, data, xKey, yKey, xLabel, yLabel, showL
     return { xScale: x, yScale: y };
 },
 
-addPlotSeries: function(containerId, data, xScale, yScale, xKey, yKey, lineColor = "steelblue", markerColor = "#ef476f", showLine = true, showMarkers = true, lineWidth=4, lineStyle = "curve") {
+    /**
+     * Adds another series to an existing XY chart created via createXYLineChart.
+     * @param {string} containerId - Target container id.
+     * @param {Array<Object>} data - Series data.
+     * @param {d3.ScaleLinear<number, number>} xScale - Shared x scale.
+     * @param {d3.ScaleLinear<number, number>} yScale - Shared y scale.
+     * @param {string} xKey - Property name for x.
+     * @param {string} yKey - Property name for y.
+     * @param {string} [lineColor="steelblue"] - Stroke color.
+     * @param {string} [markerColor="#ef476f"] - Marker fill color.
+     * @param {boolean} [showLine=true] - Whether to draw the line.
+     * @param {boolean} [showMarkers=true] - Whether to draw markers.
+     * @param {number} [lineWidth=4] - Line width in px.
+     * @param {"curve"|"dashed"} [lineStyle="curve"] - Visual cue for differentiation.
+     */
+    addPlotSeries: function(containerId, data, xScale, yScale, xKey, yKey, lineColor = "steelblue", markerColor = "#ef476f", showLine = true, showMarkers = true, lineWidth=4, lineStyle = "curve") {
     const svg = d3.select(`#${containerId} svg g`); // Wählt das bestehende `g`-Element aus
 
     const line = d3.line()

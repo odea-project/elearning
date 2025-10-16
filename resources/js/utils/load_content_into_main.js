@@ -194,7 +194,7 @@ function splitMarkdownSlidesSafely(mdText) {
 
 /**
  * Transforms custom bullet list markers into styled <ul> lists.
- * Supported: -?, ->, -!, -:
+ * Supported: -?, ->, -!, -:, -@, -home
  * @param {string} mdText
  * @returns {string}
  */
@@ -203,28 +203,31 @@ function preprocessListMarkers(mdText) {
   const result = [];
   let buffer = [];
   let currentType = null;
-  const marked = Reveal.getPlugin('markdown').marked;
+  const { marked } = Reveal.getPlugin('markdown');
 
   const classMap = {
     '?': 'q-list',
     '>': 'arrow-list',
     '!': 'exclam-list',
     ':': 'tag-list',
+    '@': 'at-list',
+    home: 'home-list', // no quotes needed for 'home'
   };
 
   function flushBuffer() {
     if (buffer.length === 0) return;
     const cls = classMap[currentType] || '';
     const ulHtml = `<ul class="${cls}">\n${buffer.map(item => {
-      const html = marked(item.trim());
-      return `<li>${html.replace(/^<p>(.*?)<\/p>\s*$/s, '$1')}</li>`;
+      const html = marked.parseInline(item.trim());
+      return `<li>${html}</li>`;
     }).join('\n')}\n</ul>`;
     result.push(ulHtml);
     buffer = [];
   }
 
   for (const line of lines) {
-    const match = line.match(/^-([?!>:])\s+(.*)/);
+    // Match either a single character or the word 'home' after the dash
+    const match = line.match(/^-([?!>:@]|home)\s+(.*)/);
     if (match) {
       const [, type, content] = match;
       if (type !== currentType) flushBuffer();

@@ -1,48 +1,88 @@
 (function (global) {
+    /**
+     * Numerical helper routines used across the exercises and visualisations.
+     * Most functions deliberately avoid external dependencies so they can run
+     * inside the browser-only Python/R playgrounds as reference implementations.
+     */
     global.mathUtils = {
+        /**
+         * Creates an array with `num` equally spaced values between start and stop.
+         * @param {number} start
+         * @param {number} stop
+         * @param {number} [num=50]
+         * @returns {number[]}
+         */
         linspace: function (start, stop, num = 50) {
-            // Erzeugt ein Array mit 'num' gleichmäßig verteilten Werten zwischen 'start' und 'stop'
             const step = (stop - start) / (num - 1);
             return Array.from({ length: num }, (_, i) => start + i * step);
         },
+        /**
+         * Computes the arithmetic mean of the provided values.
+         * @param {number[]} arr
+         * @returns {number}
+         */
         mean: function (arr) {
-            // Berechnet den Durchschnittswert eines Arrays
             if (arr.length === 0) return 0;
             const sum = arr.reduce((acc, val) => acc + val, 0);
             return sum / arr.length;
         },
+        /**
+         * Determines the median of the array.
+         * @param {number[]} arr
+         * @returns {number}
+         */
         median: function (arr) {
-            // Berechnet den Median eines Arrays
             if (arr.length === 0) return 0;
             const sorted = [...arr].sort((a, b) => a - b);
             const mid = Math.floor(sorted.length / 2);
             return sorted.length % 2 !== 0 ? sorted[mid] : (sorted[mid - 1] + sorted[mid]) / 2;
         },
+        /**
+         * Calculates the population standard deviation.
+         * @param {number[]} arr
+         * @returns {number}
+         */
         stdDev: function (arr) {
-            // Berechnet die Standardabweichung eines Arrays
             if (arr.length === 0) return 0;
             const mean = this.mean(arr);
             const variance = arr.reduce((acc, val) => acc + Math.pow(val - mean, 2), 0) / arr.length;
             return Math.sqrt(variance);
         },
+        /**
+         * Returns the sum of all elements in the array.
+         * @param {number[]} arr
+         * @returns {number}
+         */
         sum: function (arr) {
-            // Berechnet die Summe der Werte in einem Array
             return arr.reduce((acc, val) => acc + val, 0);
         },
+        /**
+         * Approximates the derivative via finite differences.
+         * @param {number[]} arr
+         * @param {number} [dx=1]
+         * @returns {number[]}
+         */
         derivative: function (arr, dx = 1) {
-            // Berechnet die Ableitung eines Arrays
             if (arr.length === 0) return [];
             return arr.map((val, i) => i === 0 ? 0 : (val - arr[i - 1]) / dx);
         },
+        /**
+         * Normalises values to the [0, 1] range.
+         * @param {number[]} arr
+         * @returns {number[]}
+         */
         normalize: function (arr) {
-            // Normalisiert ein Array auf den Bereich [0, 1]
             if (arr.length === 0) return [];
             const min = Math.min(...arr);
             const max = Math.max(...arr);
             return arr.map(val => (val - min) / (max - min));
         },
+        /**
+         * Converts values to z-scores.
+         * @param {number[]} arr
+         * @returns {number[]}
+         */
         zScore: function (arr) {
-            // Berechnet den Z-Score eines Arrays
             if (arr.length === 0) return [];
             const mean = this.mean(arr);
             const stdDev = this.stdDev(arr);

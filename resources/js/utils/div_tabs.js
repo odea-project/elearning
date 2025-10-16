@@ -1,4 +1,8 @@
-// Einmalig (z.B. direkt nach dem Laden deines Scripts) irgendwo reinhängen:
+/**
+ * Basic tab switching logic for slides that use `.tab` headers and `.tab-content`
+ * panels. The handler relies on event delegation so new tabs added at runtime
+ * continue to work without extra wiring.
+ */
 document.querySelector('.reveal .slides').addEventListener('click', function (event) {
   // 1. Finde heraus, ob das geklickte Element eine Tab-Überschrift ist:
   //    a) Entweder event.target ist .tab

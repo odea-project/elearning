@@ -28,7 +28,7 @@ function addExerciseButtonToTaskbar(section, exercisesMeta) {
           <ul style="list-style: none; padding: 0; margin: 0;">
             ${exercisesMeta.map((ex) => `
               <li>
-                <button class="exercise-level-btn" onclick="window.loadExercise('${ex.file}', '${ex.exercise_id}')"><strong>${ex.level}</strong></button>
+                <button class="exercise-level-btn" onclick="window.openExercise('${ex.file}', '${ex.exercise_id}', '${ex.lang}')"><strong>${ex.level}</strong></button>
               </li>
             `).join('')}
           </ul>

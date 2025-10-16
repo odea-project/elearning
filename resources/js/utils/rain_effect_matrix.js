@@ -1,3 +1,7 @@
+/**
+ * Matrix-style rain animation used for certain slides. Runs on-demand once the
+ * deck is ready so it respects the Reveal background container structure.
+ */
 Reveal.on('ready', () => {
   const bgContainer = document.querySelector('.reveal .backgrounds');
   if (!bgContainer) return;

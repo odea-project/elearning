@@ -1,3 +1,8 @@
+/**
+ * Central Reveal.js bootstrapping. Keep this file in sync with the plugins
+ * included in index.html so lazy-loaded content behaves the same as base
+ * slides.
+ */
 Reveal.initialize({
   // The "normal" size of the presentation, aspect ratio will
   // be preserved when the presentation is scaled to fit different

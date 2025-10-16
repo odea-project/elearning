@@ -1,6 +1,10 @@
 {
   "distance-matrix": [
-    { "exercise_id": "ex01", "file": "topics/exercises/test.yaml", "level": "easy" },
-    { "exercise_id": "ex02", "file": "topics/exercises/test.yaml", "level": "medium" }
+    { "exercise_id": "ex01", "file": "topics/exercises/test.yaml", "level": "easy", "lang": "py" },
+    { "exercise_id": "ex02", "file": "topics/exercises/test.yaml", "level": "medium", "lang": "py" }
+  ],
+  "mean-values": [
+    { "exercise_id": "rex01", "file": "topics/exercises/test_R.yaml", "level": "easy", "lang": "r" },
+    { "exercise_id": "rex02", "file": "topics/exercises/test_R.yaml", "level": "hard", "lang": "r" }
   ]
 }

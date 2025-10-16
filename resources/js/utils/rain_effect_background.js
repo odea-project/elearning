@@ -1,3 +1,7 @@
+/**
+ * Adds a subtle rain overlay to the slide background. Rendered on a canvas so
+ * it does not interfere with pointer events.
+ */
 Reveal.on('ready', () => {
   const bgContainer = document.querySelector('.reveal .backgrounds');
   if (!bgContainer) {

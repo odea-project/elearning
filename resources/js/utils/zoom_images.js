@@ -1,3 +1,7 @@
+/**
+ * Enables lightweight image previews: clicking any element decorated with
+ * `data-preview-image` opens a full-screen overlay that closes on click.
+ */
 document.body.addEventListener("click", e => {
   // Prüfe, ob das geklickte Element ein Vorschaubild ist
   const img = e.target;
