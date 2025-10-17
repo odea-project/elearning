@@ -1,7 +1,8 @@
 {
-  "distance-matrix": [
-    { "exercise_id": "ex01", "file": "topics/exercises/test.yaml", "level": "easy", "lang": "py" },
-    { "exercise_id": "ex02", "file": "topics/exercises/test.yaml", "level": "medium", "lang": "py" }
+  "initial-thoughts-dice": [
+    { "exercise_id": "rv01", "file": "topics/exercises/randomVariable_R.yaml", "level": "easy", "lang": "r" },
+    { "exercise_id": "rv02", "file": "topics/exercises/randomVariable_R.yaml", "level": "medium", "lang": "r" },
+    { "exercise_id": "rv03", "file": "topics/exercises/randomVariable_R.yaml", "level": "hard", "lang": "r" }
   ],
   "mean-values": [
     { "exercise_id": "rex01", "file": "topics/exercises/test_R.yaml", "level": "easy", "lang": "r" },

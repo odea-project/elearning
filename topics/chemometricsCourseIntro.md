@@ -42,47 +42,36 @@ Contact:
 <!-- position={row: 1, column: 1} -->
 **October**
 
-`10-21` Introduction, Basics
-
-`10-28` Distributions
+-: `10-21` Introduction, Basics
+-: `10-28` Distributions
 <!-- /position -->
 <!-- position={row: 1, column: 2} -->
 **November**
 
-`11-04` Similarity
-
-`11-11` no class
-
-`11-18` no class
-
-`11-25` Similarity
+-: `11-04` Similarity
+-: `11-11` <br> no class
+-: `11-18` <br>no class
+-: `11-25` Similarity
 <!-- /position -->
 <!-- position={row: 1, column: 3} -->
 **December**
 
-`12-02` Linear Regression
-
-`12-09` Uncertainty, LOD, LOQ
-
-`12-16` DoE
+-: `12-02` <br> Linear Regression
+-: `12-09` Uncertainty, LOD, LOQ
+-: `12-16` <br> DoE
 <!-- /position -->
 <!-- position={row: 1, column: 4} -->
 **January**
 
-`01-06` DoE
-
-`01-13` Clusters
-
-`01-20` Clusters
-
-`01-27` Machine Learning
+-: `01-06` <br> DoE
+-: `01-13` Clusters
+-: `01-20` Clusters
+-: `01-27` Machine Learning
 <!-- /position -->
 <!-- position={row: 1, column: 5} -->
 **February**
 
-`02-03` Non-linear Regression
-
-`02-10` Wrap-up
+-: `02-03` <br> Non-linear Regression
 <!-- /position -->
 <!-- /layout -->
 
