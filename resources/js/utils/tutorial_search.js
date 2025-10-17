@@ -15,35 +15,107 @@ fetch('resources/misc/md-manifest.json')
 
 function renderGrid(items) {
   grid.innerHTML = '';
-  items.forEach(item => {
-    const tile = document.createElement('div');
-    tile.className = 'tutorialGridTile topic-link';
-    tile.setAttribute('data-md', 'topics/' + item.filename);
+  
+  // Create outer grid container with 2 columns
+  grid.style.display = 'grid';
+  grid.style.gridTemplateColumns = 'repeat(2, 1fr)';
+  grid.style.gap = '20px';
+  grid.style.width = '70%';
+  grid.style.paddingLeft = '13%';
+  grid.style.paddingTop = '20px';
+  
+  // Split items into groups of 6 (2 columns × 3 rows per outer column)
+  const itemsPerOuterColumn = 6;
+  const numOuterColumns = Math.ceil(items.length / itemsPerOuterColumn);
+  
+  for (let outerCol = 0; outerCol < numOuterColumns; outerCol++) {
+    const innerGrid = document.createElement('div');
+    innerGrid.style.display = 'grid';
+    innerGrid.style.gridTemplateColumns = 'repeat(2, 1fr)';
+    innerGrid.style.gridTemplateRows = 'repeat(3, 1fr)';
+    innerGrid.style.gap = '15px';
+    
+    // Get items for this outer column (6 items max)
+    const startIdx = outerCol * itemsPerOuterColumn;
+    const endIdx = Math.min(startIdx + itemsPerOuterColumn, items.length);
+    const columnItems = items.slice(startIdx, endIdx);
+    
+    columnItems.forEach(item => {
+      const tile = document.createElement('div');
+      tile.className = 'tutorialGridTile topic-link';
+      tile.setAttribute('data-md', 'topics/' + item.filename);
+      tile.style.position = 'relative';
+      tile.style.zIndex = '1';
+      tile.style.width = '256px';
+      tile.style.minWidth = '256px';
+      tile.style.minHeight = '256px';
+      tile.style.display = 'flex';
+      tile.style.flexDirection = 'column';
+      tile.style.alignItems = 'center';
+      tile.style.justifyContent = 'center';
 
-    if (item.thumbnail) {
-      // Use image if thumbnail exists
-      const thumb = document.createElement('img');
-      thumb.className = 'tutorialGridTileThumb';
-      thumb.src = item.thumbnail;
-      thumb.alt = item.title;
-      tile.appendChild(thumb);
-    } else {
-      // Create colored div instead of placeholder image
-      const colorDiv = document.createElement('div');
-      colorDiv.style.width = '192px';
-      colorDiv.style.height = '192px';
-      colorDiv.style.backgroundColor = getRandomColor();
-      colorDiv.style.borderRadius = '4px';  // optional styling
-      tile.appendChild(colorDiv);
-    }
+      if (item.thumbnail) {
+        // Use image if thumbnail exists
+        const thumb = document.createElement('img');
+        thumb.className = 'tutorialGridTileThumb';
+        thumb.src = item.thumbnail;
+        thumb.alt = item.title;
+        tile.appendChild(thumb);
+      } else {
+        // Create polaroid-style colored div
+        const colorDiv = document.createElement('div');
+        colorDiv.style.width = '200px';
+        colorDiv.style.height = '200px';
+        colorDiv.style.minWidth = '100px';
+        colorDiv.style.minHeight = '100px';
+        colorDiv.style.flexShrink = '0';
+        colorDiv.style.backgroundColor = getRandomColor();
+        colorDiv.style.borderRadius = '2px';
+        colorDiv.style.padding = '12px';
+        colorDiv.style.paddingBottom = '12px';
+        colorDiv.style.backgroundColor = '#fff';
+        colorDiv.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.3), 0 1px 3px rgba(0, 0, 0, 0.2)';
+        colorDiv.style.marginBottom = '70px';
+        
+        // Random rotation between -4 and 4 degrees
+        const rotation = (1 * (Math.random() * 8 - 4)).toFixed(2);
+        colorDiv.style.transform = `rotate(${rotation}deg)`;
+        colorDiv.style.transition = 'transform 0.3s ease, box-shadow 0.3s ease';
+        
+        // Inner colored area (the actual photo part)
+        const photoArea = document.createElement('div');
+        photoArea.style.width = '100%';
+        photoArea.style.height = '100%';
+        photoArea.style.backgroundColor = getRandomColor();
+        photoArea.style.borderRadius = '1px';
+        
+        colorDiv.appendChild(photoArea);
+        
+        // Hover effect
+        colorDiv.addEventListener('mouseenter', () => {
+          colorDiv.style.transform = `rotate(0deg) scale(1.05)`;
+          colorDiv.style.boxShadow = '0 8px 16px rgba(0, 0, 0, 0.4), 0 2px 6px rgba(0, 0, 0, 0.3)';
+        });
+        colorDiv.addEventListener('mouseleave', () => {
+          colorDiv.style.transform = `rotate(${rotation}deg)`;
+          colorDiv.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.3), 0 1px 3px rgba(0, 0, 0, 0.2)';
+        });
+        
+        tile.appendChild(colorDiv);
+      }
 
-    const title = document.createElement('div');
-    title.className = 'title';
-    title.textContent = item.title;
-    tile.appendChild(title);
+      const title = document.createElement('div');
+      title.className = 'title';
+      title.textContent = item.title;
+      title.style.position = 'relative';
+      title.style.zIndex = '2';
+      tile.appendChild(title);
 
-    grid.appendChild(tile);
-  });
+      innerGrid.appendChild(tile);
+    });
+    
+    grid.appendChild(innerGrid);
+  }
 }
 
 // Utility function to generate a random color (hex)

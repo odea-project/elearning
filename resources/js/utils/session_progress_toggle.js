@@ -31,6 +31,8 @@
   let pendingActivateButton = null;
   let lastRecordedSlide = null;
   let activeButton = null;
+  let fileHandle = null;
+  let saveDebounce = null;
 
   const revealPromise = waitForReveal();
   attachGlobalListeners();
@@ -68,7 +70,8 @@
   const buttons = [
     createToggleButton('load', 'Load'),
     createToggleButton('off', 'Off'),
-    createToggleButton('new', 'New')
+    createToggleButton('new', 'New'),
+    createToggleButton('save', 'Save')
   ];
 
   buttons.forEach((btn) => container.appendChild(btn));
@@ -98,10 +101,17 @@
       switch (value) {
         case 'load':
           pendingActivateButton = button;
-          promptForExistingSession();
+          await promptForExistingSession();
           break;
         case 'new':
           await createNewSession(button);
+          break;
+        case 'save':
+          if (fileHandle) {
+            await saveToDisk();
+          } else {
+            triggerDownload(window.sessionProgress);
+          }
           break;
         case 'off':
         default:
@@ -148,6 +158,7 @@
         if (computedHash !== hash) {
           throw new Error('Session file failed integrity check.');
         }
+        fileHandle = null;
         const envelope = { meta, data, hash };
         normalizeSessionData(envelope);
         activateSessionTracking(envelope, pendingActivateButton || buttons.find((b) => b.dataset.state === 'load'), 'loaded');
@@ -166,7 +177,37 @@
     });
   }
 
-  function promptForExistingSession() {
+  async function promptForExistingSession() {
+    if ('showOpenFilePicker' in window) {
+      try {
+        const [handle] = await window.showOpenFilePicker({
+          types: [{ description: 'JSON', accept: { 'application/json': ['.json'] } }],
+          excludeAcceptAllOption: true,
+          multiple: false
+        });
+        const file = await handle.getFile();
+        const contents = await file.text();
+        const session = JSON.parse(contents);
+        const { hash, meta, data } = session;
+        if (!hash || !meta || !data) {
+          throw new Error('Session file missing required keys.');
+        }
+        const computedHash = await computeHash(meta, data);
+        if (computedHash !== hash) {
+          throw new Error('Session file failed integrity check.');
+        }
+        fileHandle = handle;
+        const envelope = { meta, data, hash };
+        normalizeSessionData(envelope);
+        activateSessionTracking(envelope, pendingActivateButton || buttons.find((b) => b.dataset.state === 'load'), 'loaded');
+        return;
+      } catch (err) {
+        console.warn('OpenFilePicker not available or cancelled, using fallback.', err);
+        if (!sessionTrackingEnabled && activeButton) {
+          setActive(activeButton);
+        }
+      }
+    }
     hiddenFileInput.click();
   }
 
@@ -184,7 +225,25 @@
     };
     try {
       const envelope = await buildEnvelope(meta, data);
-      triggerDownload(envelope);
+
+      if ('showSaveFilePicker' in window) {
+        try {
+          fileHandle = await window.showSaveFilePicker({
+            suggestedName: buildFilename(),
+            types: [{ description: 'JSON', accept: { 'application/json': ['.json'] } }],
+            excludeAcceptAllOption: true
+          });
+          window.sessionProgress = envelope;
+          normalizeSessionData(envelope);
+          await saveToDisk();
+        } catch (err) {
+          console.warn('SaveFilePicker cancelled, falling back to download.', err);
+          triggerDownload(envelope);
+        }
+      } else {
+        triggerDownload(envelope);
+      }
+
       normalizeSessionData(envelope);
       document.dispatchEvent(new CustomEvent('session-progress-created', { detail: envelope }));
       activateSessionTracking(envelope, sourceButton || buttons.find((b) => b.dataset.state === 'new'), 'created');
@@ -200,6 +259,7 @@
   function disableSessionTracking() {
     sessionTrackingEnabled = false;
     lastRecordedSlide = null;
+    fileHandle = null;
     setActive(buttons.find((b) => b.dataset.state === 'off'));
     document.dispatchEvent(new CustomEvent('session-progress-disabled', {
       detail: window.sessionProgress || null
@@ -313,6 +373,25 @@
     }
   }
 
+  async function saveToDiskDebounced() {
+    if (!fileHandle) return;
+    clearTimeout(saveDebounce);
+    saveDebounce = setTimeout(saveToDisk, 400);
+  }
+
+  async function saveToDisk() {
+    try {
+      if (!fileHandle) return;
+      await refreshSessionHash();
+      const writable = await fileHandle.createWritable();
+      await writable.write(JSON.stringify(window.sessionProgress, null, 2));
+      await writable.close();
+    } catch (err) {
+      console.warn('Autosave failed, falling back to download.', err);
+      triggerDownload(window.sessionProgress);
+    }
+  }
+
   async function recordSlideVisit(slideId) {
     if (!sessionTrackingEnabled) return;
     if (!window.sessionProgress) return;
@@ -325,6 +404,7 @@
 
     try {
       await refreshSessionHash();
+      await saveToDiskDebounced();
       document.dispatchEvent(new CustomEvent('session-progress-updated', {
         detail: window.sessionProgress
       }));

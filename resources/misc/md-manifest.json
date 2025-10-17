@@ -1,62 +1,7 @@
 [
   {
-    "filename": "00_demos.md",
-    "title": "00_demos.md",
-    "keywords": [],
-    "thumbnail": null,
-    "requirements": []
-  },
-  {
-    "filename": "01_analyticalDataChallenges.md",
-    "title": "01_analyticalDataChallenges.md",
-    "keywords": [],
-    "thumbnail": null,
-    "requirements": []
-  },
-  {
-    "filename": "01_datatreatment.md",
-    "title": "01_datatreatment.md",
-    "keywords": [],
-    "thumbnail": null,
-    "requirements": []
-  },
-  {
-    "filename": "02_toolsAndProgramming.md",
-    "title": "02_toolsAndProgramming.md",
-    "keywords": [],
-    "thumbnail": null,
-    "requirements": []
-  },
-  {
-    "filename": "03_dataProcessingTechniques.md",
-    "title": "03_dataProcessingTechniques.md",
-    "keywords": [],
-    "thumbnail": null,
-    "requirements": []
-  },
-  {
-    "filename": "04_dataAnalysisTechniques.md",
-    "title": "04_dataAnalysisTechniques.md",
-    "keywords": [],
-    "thumbnail": null,
-    "requirements": []
-  },
-  {
-    "filename": "05_newTopic.md",
-    "title": "New Topic",
-    "keywords": [
-      "keyword 1",
-      "keyword 2"
-    ],
-    "thumbnail": null,
-    "requirements": [
-      "req 1",
-      "req 2"
-    ]
-  },
-  {
     "filename": "chemometricsCourseIntro.md",
-    "title": "Chemometrics & Applied Statistics: Intro",
+    "title": "Course Intro",
     "keywords": [
       "Introduction",
       "Chemometrics & Applied Statistics",
@@ -68,23 +13,8 @@
     ]
   },
   {
-    "filename": "chemometricsCourseMean.md",
-    "title": "Mean Values",
-    "keywords": [
-      "arithmetic mean",
-      "geometric mean",
-      "harmonic mean",
-      "expected value",
-      "median"
-    ],
-    "thumbnail": null,
-    "requirements": [
-      "none"
-    ]
-  },
-  {
-    "filename": "chemometricsCourseVariable.md",
-    "title": "Random Variables",
+    "filename": "RandomVariable.md",
+    "title": "Variables",
     "keywords": [
       "random variable",
       "discrete random variable",
@@ -96,42 +26,14 @@
     ]
   },
   {
-    "filename": "distancesIntroduction.md",
-    "title": "Distances",
+    "filename": "MeanValue.md",
+    "title": "Mean Values",
     "keywords": [
-      "Distance",
-      "Metric",
-      "Similarity",
-      "Dissimilarity"
-    ],
-    "thumbnail": null,
-    "requirements": [
-      "none"
-    ]
-  },
-  {
-    "filename": "howTo.md",
-    "title": "How to: 4 Creators",
-    "keywords": [
-      "how to",
-      "creators",
-      "teachers",
-      "slides",
-      "examples",
-      "layouts",
-      "demonstrations"
-    ],
-    "thumbnail": null,
-    "requirements": [
-      "none"
-    ]
-  },
-  {
-    "filename": "installGuides\\installPython.md",
-    "title": "Installing Python",
-    "keywords": [
-      "Python",
-      "Install"
+      "arithmetic mean",
+      "geometric mean",
+      "harmonic mean",
+      "expected value",
+      "median"
     ],
     "thumbnail": null,
     "requirements": [

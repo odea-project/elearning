@@ -33,14 +33,10 @@
 				#### Analytical data management, processing, evaluation, and visualization
 			</section>
 			<!-- Slide 1: Themen-Auswahl -->
-			<section data-state="mosaic">
-				<h1>Load Tutorial</h1>
-				<input id="search" placeholder="Filter by keyword(s)...">
-        		<div class="tutorialGrid" id="tutorialGrid"></div>
-				<div id="bg">
-					<img src="resources/misc/tutorial_mosaic_bg.webp" alt="Background Image"
-						style="width: 100%; height: 100%; object-fit: cover; opacity: 0.5;">
-				</div>
+			<section data-state="mosaic" style="height: 90%; width: 100%;" id="load-tutorial">
+				<div id="bg" style="position: absolute; top: -130px; left: 0; width: 100%; height: 126%; z-index: -1; background-image: url('resources/misc/book.jpg'); background-size: contain; background-position: center; background-repeat: no-repeat; opacity: 1.0;"></div>
+				<div class="tutorialGrid" id="tutorialGrid"></div>
+				<input id="search" placeholder="Filter by keyword(s)..." style="position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%);">
 			</section>
 			<!-- Slide 2: Hier zwischen landet das dynamisch geladene Markdown -->
 			<section id="dynamic-tutorial">
@@ -83,7 +79,7 @@
 	<script src="resources/js/utils/clock.js"></script>
 	<script src="resources/js/utils/load_content_into_main.js"></script>
 	<script src="resources/js/utils/div_tabs.js"></script>
-	<script src="resources/js/utils/session_progress_toggle.js"></script>
+	<!-- <script src="resources/js/utils/session_progress_toggle.js"></script> -->
 	<script src="resources/js/utils/zoom_images.js"></script>
 	<script src="resources/js/utils/tutorial_search.js"></script>
 	<script src="resources/js/utils/parallax_background.js"></script>

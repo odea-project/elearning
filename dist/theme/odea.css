@@ -1282,7 +1282,7 @@ input:checked+.slider:before {
 .tutorialGridTile {
   width: 180px;
   border-radius: 12px;
-  box-shadow: 2px 2px 10px rgba(180, 6, 110, 0.593);
+  /* box-shadow: 2px 2px 10px rgba(180, 6, 110, 0.593); */
   background: rgba(0, 0, 0, 0);
   overflow: hidden;
   transition: transform .1s;
