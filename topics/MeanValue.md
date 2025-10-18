@@ -44,6 +44,7 @@ Red Thread:
 
 <!-- .slide:id="initial-thoughts-mean" -->
 ## Initial Thoughts
+<div id="five-dice-editor" class="code-editor-container" style="border: 1px solid #2d3a66; border-radius: 8px; margin: 20px; display: none; text-align: left;"></div>
 <!-- layout={rows: 1, columns: 2} -->
 <!-- position={row: 1, column: 1} -->
 -! Let's assume we roll **five dice** and calculate their **sum**.
@@ -65,7 +66,6 @@ Red Thread:
 <!-- position={row: 1, column: 2} -->
 Roll five dice and calculate the sum:
 <div style="display: flex; flex-direction: column; gap: 10px; width: 100%;">
-  <div id="five-dice-editor" style="border: 1px solid #2d3a66; border-radius: 8px; overflow: hidden; display: none;"></div>
   <div style="display: flex; gap: 10px;">
     <button id="toggle-five-dice-code" style="padding: 8px 16px; background: #2d3a66; color: #9efcff; border: 1px solid #2d3a66; border-radius: 6px; cursor: pointer; font-size: 0.9em;">
       <i class="fas fa-code"></i> Show Code
@@ -85,11 +85,7 @@ Roll five dice and calculate the sum:
       return;
     }
 
-    const diceCode = `dice <- sample(1:6, 5, replace = TRUE)
-sum_result <- sum(dice)
-
-print(dice)
-print(paste("Sum:", sum_result))`;
+    const diceCode = `sum(sample(1:6, 5, replace = TRUE))`;
 
     let rLang = [];
     if (window.rLanguageSupport) {
@@ -163,6 +159,11 @@ print(paste("Sum:", sum_result))`;
         columnElements.forEach(col => {
           col.style.display = isHidden ? 'none' : 'block';
         });
+        
+        // Re-center slide after content change
+        if (window.Reveal) {
+          setTimeout(() => window.Reveal.layout(), 50);
+        }
       };
     }
 
@@ -219,21 +220,14 @@ print(paste("Sum:", sum_result))`;
 
 <!-- .slide:id="arithmetic-mean-intro" -->
 ## Arithmetic Mean - Introduction
+<div id="mean-5-editor" class="code-editor-container" style="border: 1px solid #2d3a66; border-radius: 8px; margin: 20px; display: none; text-align: left;"></div>
 <!-- layout={rows: 1, columns: 2} -->
 <!-- position={row: 1, column: 1} -->
--! The **arithmetic mean** (or average) is the sum of all values divided by the count.
+-! The **arithmetic mean** is the sum of all values divided by the count.
 
 ***
-
-Formula: 
 
 $$\bar{x} = \frac{1}{n} \sum_{i=1}^{n} x_i$$
-
-***
-
--! For our five dice, the **expected value** (theoretical mean) is:
-
-$$E[X] = 5 \times 3.5 = 17.5$$
 
 ***
 
@@ -243,7 +237,6 @@ $$E[X] = 5 \times 3.5 = 17.5$$
 <!-- position={row: 1, column: 2} -->
 Calculate mean of 5 rolls:
 <div style="display: flex; flex-direction: column; gap: 10px; width: 100%;">
-  <div id="mean-5-editor" style="border: 1px solid #2d3a66; border-radius: 8px; overflow: hidden; display: none;"></div>
   <div style="display: flex; gap: 10px;">
     <button id="toggle-mean-5-code" style="padding: 8px 16px; background: #2d3a66; color: #9efcff; border: 1px solid #2d3a66; border-radius: 6px; cursor: pointer; font-size: 0.9em;">
       <i class="fas fa-code"></i> Show Code
@@ -268,8 +261,7 @@ sums <- replicate(n_experiments, sum(sample(1:6, 5, replace = TRUE)))
 mean_value <- mean(sums)
 
 print(paste("Sums:", paste(sums, collapse = ", ")))
-print(paste("Arithmetic Mean:", round(mean_value, 2)))
-print(paste("Expected Value: 17.5"))`;
+print(paste("Arithmetic Mean:", round(mean_value, 2)))`;
 
     let rLang = [];
     if (window.rLanguageSupport) {
@@ -343,6 +335,11 @@ print(paste("Expected Value: 17.5"))`;
         columnElements.forEach(col => {
           col.style.display = isHidden ? 'none' : 'block';
         });
+        
+        // Re-center slide after content change
+        if (window.Reveal) {
+          setTimeout(() => window.Reveal.layout(), 50);
+        }
       };
     }
 
@@ -400,8 +397,89 @@ print(paste("Expected Value: 17.5"))`;
 
 ---
 
+<!-- .slide:id="expected-value-theory" -->
+## Expected Value - Theoretical Approach
+<!-- layout={rows: 1, columns: 2} -->
+<!-- position={row: 1, column: 1} -->
+**Calculating Expected Value**
+
+-! The `expected value` is the theoretical mean we expect from a random experiment.
+
+***
+
+-! For a discrete random variable, it's calculated using probabilities:
+
+$$E[X] = \sum_{i=1}^{n} x_i \cdot P(x_i)$$
+
+-: $x_i$ = possible outcomes
+-: $P(x_i)$ = probability of each outcome
+
+<!-- /position -->
+<!-- position={row: 1, column: 2} -->
+**Five Dice Example**
+
+-! For `one die` <i class="fas fa-dice"></i> : Each outcome (1,2,3,4,5,6) has probability $\frac{1}{6}$
+
+$E[$<i class="fas fa-dice"></i>$] = 1 \cdot \frac{1}{6} + ... + 6 \cdot \frac{1}{6}$
+
+$E[$<i class="fas fa-dice"></i>$] = \frac{1+2+3+4+5+6}{6} = \frac{21}{6} = 3.5$
+
+***
+
+-! For `five dice`, by linearity of expectation:
+
+$E[$5<i class="fas fa-dice"></i>$] = 5 \times E[$<i class="fas fa-dice"></i>$] = 5 \times 3.5 = 17.5$
+
+***
+
+-= This fits almost with what we observed experimentally!
+
+<!-- /position -->
+<!-- /layout -->
+
+---
+
+<!-- .slide:id="expected-value-problem" -->
+## The Real-World Challenge
+<!-- layout={rows: 1, columns: 2} -->
+<!-- position={row: 1, column: 1} -->
+**Theoretical vs. Practical**
+
+-! In our dice example, we **knew** the probabilities:
+-> Each outcome: $P(x_i) = \frac{1}{6}$
+-> We could calculate: $E[$<i class="fas fa-dice"></i>$] = 3.5$
+
+***
+
+-? But what about other **real-world processes ?**
+
+***
+
+-! For most real-world processes, we **don't know** the true probabilities!
+
+<!-- /position -->
+<!-- position={row: 1, column: 2} -->
+-! Examples:
+<div style="background: #8b1a1a; color: #ffffff; padding: 8px 12px; border-radius: 8px; margin: 6px 0; font-size: 0.7em;">Water temperature in a lake</div>
+<div style="background: #8b7508ff; color: #ffffff; padding: 8px 12px; border-radius: 8px; margin: 6px 0; font-size: 0.7em;">Contaminant concentration in groundwater</div>
+<div style="background: #1a4d7a; color: #ffffff; padding: 8px 12px; border-radius: 8px; margin: 6px 0; font-size: 0.7em;">Rainfall amounts</div>
+<div style="background: #3d2966; color: #ffffff; padding: 8px 12px; border-radius: 8px; margin: 6px 0; font-size: 0.7em;">Bacterial growth rates</div>
+
+***
+
+-< We must `estimate` the expected value from `sample data` using the `arithmetic mean`!
+
+$$\bar{x} = \frac{1}{n} \sum_{i=1}^{n} x_i \approx E[X]$$
+
+<!-- /position -->
+<!-- /layout -->
+
+---
+
 <!-- .slide:id="law-of-large-numbers" -->
 ## Law of Large Numbers
+<div id="mean-50-editor" class="code-editor-container" style="border: 1px solid #2d3a66; border-radius: 8px; margin: 20px; display: none; text-align: left;"></div>
+<div id="mean-50m-editor" class="code-editor-container" style="border: 1px solid #2d3a66; border-radius: 8px; margin: 20px; display: none; text-align: left;"></div>
 <!-- layout={rows: 1, columns: 2} -->
 <!-- position={row: 1, column: 1} -->
 -! As we increase the number of experiments, the arithmetic mean converges to the **expected value**.
@@ -412,15 +490,14 @@ print(paste("Expected Value: 17.5"))`;
 
 ***
 
--? Try with 50 and 50,000,000 experiments!
+-? Try with 50 and 50,000 experiments!
 
 <!-- /position -->
 <!-- position={row: 1, column: 2} -->
 <div style="display: flex; flex-direction: column; gap: 15px;">
   <div>
-    <strong>50 experiments:</strong>
+    <b>50 experiments:</b>
     <div style="display: flex; flex-direction: column; gap: 5px;">
-      <div id="mean-50-editor" style="border: 1px solid #2d3a66; border-radius: 8px; overflow: hidden; display: none;"></div>
       <div style="display: flex; gap: 10px;">
         <button id="toggle-mean-50-code" style="padding: 8px 16px; background: #2d3a66; color: #9efcff; border: 1px solid #2d3a66; border-radius: 6px; cursor: pointer; font-size: 0.9em;">
           <i class="fas fa-code"></i> Show Code
@@ -432,17 +509,16 @@ print(paste("Expected Value: 17.5"))`;
       <div id="mean-50-output" style="border: 1px solid #2d3a66; border-radius: 8px; overflow: hidden; min-height: 40px;"></div>
     </div>
   </div>
-  
+  <br/>
   <div>
-    <strong>50,000,000 experiments:</strong>
+    <b>50,000 experiments:</b>
     <div style="display: flex; flex-direction: column; gap: 5px;">
-      <div id="mean-50m-editor" style="border: 1px solid #2d3a66; border-radius: 8px; overflow: hidden; display: none;"></div>
       <div style="display: flex; gap: 10px;">
         <button id="toggle-mean-50m-code" style="padding: 8px 16px; background: #2d3a66; color: #9efcff; border: 1px solid #2d3a66; border-radius: 6px; cursor: pointer; font-size: 0.9em;">
           <i class="fas fa-code"></i> Show Code
         </button>
         <button id="run-mean-50m-btn" style="padding: 8px 16px; background: #1a2340; color: #9efcff; border: 1px solid #2d3a66; border-radius: 6px; cursor: pointer; font-size: 0.9em;">
-          <i class="fas fa-play"></i> Run (50M times)
+          <i class="fas fa-play"></i> Run (50K times)
         </button>
       </div>
       <div id="mean-50m-output" style="border: 1px solid #2d3a66; border-radius: 8px; overflow: hidden; min-height: 40px;"></div>
@@ -536,6 +612,11 @@ print(paste("Mean:", round(mean_value, 4), "| Expected: 17.5"))`;
           columnElements.forEach(col => {
             col.style.display = isHidden ? 'none' : 'block';
           });
+          
+          // Re-center slide after content change
+          if (window.Reveal) {
+            setTimeout(() => window.Reveal.layout(), 50);
+          }
         };
       }
 
@@ -591,11 +672,11 @@ print(paste("Mean:", round(mean_value, 4), "| Expected: 17.5"))`;
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', () => {
       createMeanExperiment('50', 50)();
-      createMeanExperiment('50m', 50000000)();
+      createMeanExperiment('50m', 50000)();
     });
   } else {
     createMeanExperiment('50', 50)();
-    createMeanExperiment('50m', 50000000)();
+    createMeanExperiment('50m', 50000)();
   }
 })();
 </script>
@@ -606,37 +687,28 @@ print(paste("Mean:", round(mean_value, 4), "| Expected: 17.5"))`;
 
 <!-- .slide:id="arithmetic-mean-water-science" -->
 ## Arithmetic Mean in Water Science
+<div id="water-mean-editor" class="code-editor-container" style="border: 1px solid #2d3a66; border-radius: 8px; margin: 20px; display: none; text-align: left;"></div>
 <!-- layout={rows: 1, columns: 2} -->
 <!-- position={row: 1, column: 1} -->
-### When to Use Arithmetic Mean
+<b>When to Use Arithmetic Mean</b>
 
 -! **Best for**: Data without extreme outliers or skewness
 
 ***
 
-**Examples:**
+-! Examples:
 
--! **pH measurements** of a water source
-  - Multiple samples: 7.1, 7.3, 7.2, 7.0, 7.4
-  - Mean: 7.2
+<div style="background: #1a588bff; color: #ffffff; padding: 8px 12px; border-radius: 8px; margin: 6px 0; font-size: 0.7em;">pH measurements of a water source<br>Multiple samples: 7.1, 7.3, 7.2, 7.0, 7.4<br>Mean: 7.2</div>
 
-***
-
--! **Temperature monitoring**
-  - Daily measurements for quality control
-
-***
-
--! **Turbidity readings** under normal conditions
-
+<div style="background: #436b8bff; color: #ffffff; padding: 8px 12px; border-radius: 8px; margin: 6px 0; font-size: 0.7em;">Dissolved oxygen levels in a river<br>Multiple samples: 8.5, 8.7, 8.6, 8.4, 8.8 mg/L<br>Mean: 8.6 mg/L</div>
+<div style="background: #619accff; color: #ffffff; padding: 8px 12px; border-radius: 8px; margin: 6px 0; font-size: 0.7em;">Nitrate concentrations in groundwater<br>Multiple samples: 3.2, 3.5, 3.3, 3.4, 3.6 mg/L<br>Mean: 3.4 mg/L</div>
 <!-- /position -->
 <!-- position={row: 1, column: 2} -->
-### R Exercise
+### R Example:
 
 Calculate the arithmetic mean of Fe concentrations:
 
 <div style="display: flex; flex-direction: column; gap: 10px; width: 100%;">
-  <div id="water-mean-editor" style="border: 1px solid #2d3a66; border-radius: 8px; overflow: hidden; display: none;"></div>
   <div style="display: flex; gap: 10px;">
     <button id="toggle-water-mean-code" style="padding: 8px 16px; background: #2d3a66; color: #9efcff; border: 1px solid #2d3a66; border-radius: 6px; cursor: pointer; font-size: 0.9em;">
       <i class="fas fa-code"></i> Show Code
@@ -734,6 +806,11 @@ print(paste("Arithmetic Mean:", round(mean_fe, 2), "mg/L"))`;
         columnElements.forEach(col => {
           col.style.display = isHidden ? 'none' : 'block';
         });
+        
+        // Re-center slide after content change
+        if (window.Reveal) {
+          setTimeout(() => window.Reveal.layout(), 50);
+        }
       };
     }
 
@@ -792,65 +869,54 @@ print(paste("Arithmetic Mean:", round(mean_fe, 2), "mg/L"))`;
 ## When Arithmetic Mean Fails
 <!-- layout={rows: 1, columns: 2} -->
 <!-- position={row: 1, column: 1} -->
-### Problem with Rates and Ratios
+<b>Problem with Rates and Ratios</b>
 
--! Consider **bacterial growth** over 3 days:
-  - Day 1→2: Growth factor = 2 (doubles)
-  - Day 2→3: Growth factor = 8 (8x increase)
+-! Consider bacterial growth over 3 days:
+-: Day 1→2: Growth factor = 2 (doubles)
+-: Day 2→3: Growth factor = 8 (8x increase)
 
 ***
 
 -! Arithmetic mean: $(2 + 8) / 2 = 5$
-
-***
-
--! But: $100 \times 2 \times 8 = 1600$ bacteria
-  - Using mean of 5: $100 \times 5 \times 5 = 2500$ ❌ Wrong!
-
-***
-
--! **Geometric mean** is appropriate: $\sqrt{2 \times 8} = 4$
-  - Check: $100 \times 4 \times 4 = 1600$ ✓ Correct!
-
+-> Predicts 5x growth each day
+<br/>
+-! Starting with 100 bacteria:
+-: $100 \times 2 \times 8 = 1600$ bacteria ✓ True!
+-: Using mean of 5: $100 \times 5 \times 5 = 2500$ ❌ Wrong!
 <!-- /position -->
 <!-- position={row: 1, column: 2} -->
-### Geometric Mean Formula
+<b>The Geometric Mean</b>
 
 $$\bar{x}_{geom} = \sqrt[n]{x_1 \times x_2 \times ... \times x_n}$$
 
 Or equivalently:
 
-$$\bar{x}_{geom} = \exp\left(\frac{1}{n}\sum_{i=1}^{n}\ln(x_i)\right)$$
+$$= exp\left(\frac{1}{n}\sum_{i=1}^{n}ln(x_i)\right)$$
 
 ***
 
--! **Use when**: Data involves multiplication, rates, or ratios
-
-***
-
+-! **Use when** : Data involves multiplication, rates, or ratios
 -! Common in: Growth rates, concentration ratios, fold changes
-
 <!-- /position -->
 <!-- /layout -->
 
 ---
 
 <!-- .slide:id="geometric-mean-exercise" -->
-## Geometric Mean - R Exercise
+## Geometric Mean - R Example
+<div id="geom-mean-editor" class="code-editor-container" style="border: 1px solid #2d3a66; border-radius: 8px; margin: 20px; display: none; text-align: left;"></div>
 <!-- layout={rows: 1, columns: 2} -->
 <!-- position={row: 1, column: 1} -->
-### Calculate Geometric Mean
+<b>Calculate Geometric Mean</b>
 
 -! Calculate the geometric mean of bacterial growth factors
 
 ***
 
--? Compare arithmetic vs geometric mean!
-
+-! Compare arithmetic vs geometric mean!
 <!-- /position -->
 <!-- position={row: 1, column: 2} -->
 <div style="display: flex; flex-direction: column; gap: 10px; width: 100%;">
-  <div id="geom-mean-editor" style="border: 1px solid #2d3a66; border-radius: 8px; overflow: hidden; display: none;"></div>
   <div style="display: flex; gap: 10px;">
     <button id="toggle-geom-mean-code" style="padding: 8px 16px; background: #2d3a66; color: #9efcff; border: 1px solid #2d3a66; border-radius: 6px; cursor: pointer; font-size: 0.9em;">
       <i class="fas fa-code"></i> Show Code
@@ -955,6 +1021,11 @@ print(paste("Geometric Mean:", round(geom_mean, 2)))`;
         columnElements.forEach(col => {
           col.style.display = isHidden ? 'none' : 'block';
         });
+        
+        // Re-center slide after content change
+        if (window.Reveal) {
+          setTimeout(() => window.Reveal.layout(), 50);
+        }
       };
     }
 
@@ -1010,70 +1081,172 @@ print(paste("Geometric Mean:", round(geom_mean, 2)))`;
 
 ---
 
-<!-- .slide:id="geometric-mean-water-science" -->
-## Geometric Mean in Water Science
-
--! **Bacterial concentration monitoring** (E. coli, fecal coliforms)
-  - Highly variable, skewed data with occasional spikes
-  - EPA water quality standards use geometric mean
-
-***
-
--! **Dilution factors** in serial dilutions
-
-***
-
--! **Concentration ratios** across sampling points
-
-***
-
--! **pH changes** (since pH is logarithmic scale)
-
----
-
-<!-- .slide:id="harmonic-mean-intro" -->
-## Harmonic Mean
+<!-- .slide:id="geometric-mean-water-science-1" -->
+## Geometric Mean in Water Science I
 <!-- layout={rows: 1, columns: 2} -->
 <!-- position={row: 1, column: 1} -->
-### When Rates Have Different Denominators
+*Bacterial Concentration Monitoring*
 
--! Consider **water flow rates**:
-  - Section 1: 10 L/min for 5 minutes
-  - Section 2: 2 L/min for 5 minutes
+-! Parameters such as `E. coli` or `fecal coliform` concentrations are typically highly variable.
 
-***
+-! The data often show a `right-skewed (log-normal) distribution`:
+-: Many low or moderate values
+-: Occasional very high spikes
 
--! Total time: 10 min
-  - Total volume: $(10 \times 5) + (2 \times 5) = 60$ L
-  - Average rate: $60 / 10 = 6$ L/min
-
-***
-
--! Arithmetic mean: $(10 + 2) / 2 = 6$ L/min ✓ (by luck!)
-
-***
-
--! **Harmonic mean**: $\frac{2}{\frac{1}{10} + \frac{1}{2}} = 3.33$ L/min
-  - This is the correct mean when rates apply over equal times
+<br/>
+<div style="text-align: center; margin-top: 20px;">
+<i class="fas fa-bacterium" style="font-size: 6em; opacity: 0.9;"></i>
+</div>
 
 <!-- /position -->
 <!-- position={row: 1, column: 2} -->
-### Harmonic Mean Formula
+*Problem*
 
-$$\bar{x}_{harm} = \frac{n}{\sum_{i=1}^{n}\frac{1}{x_i}}$$
+-! The arithmetic mean is sensitive to outliers and tends to overestimate the central tendency.
 
-***
-
--! **Use when**: Averaging rates or velocities with equal time intervals
-
-***
-
--! Common in: Flow rates, velocities, concentration gradients
+<div style="background: #702914ff; color: #ffffff; padding: 8px 12px; border-radius: 8px; margin: 6px 0; font-size: 0.7em;">E.g., [$10, 100, 10{,}000$]</div>
+-: Arithmetic mean: $\frac{10+100+10{,}000}{3} = 3{,}370$
+-: Geometric mean: $(10 \times 100 \times 10{,}000)^{1/3} = 464$
+-= The geometric mean gives a more representative "typical" concentration.
 
 ***
 
--? The harmonic mean is always ≤ geometric mean ≤ arithmetic mean
+*Regulatory Relevance*
 
+-! The *U.S. EPA* water quality standards for microbial indicators are based on the geometric mean.
+<!-- /position -->
+<!-- /layout -->
+
+---
+
+<!-- .slide:id="geometric-mean-water-science-2" -->
+## Geometric Mean in Water Science II
+<!-- layout={rows: 1, columns: 2} -->
+
+<!-- position={row: 1, column: 1} -->
+*Concentration Ratios Across Sampling Points*
+
+-! Ratios capture `multiplicative` changes between locations or times (e.g., upstream ↔ downstream).
+-! The geometric mean summarizes `typical proportional change` without being skewed by extremes.
+
+<br/>
+<div style="text-align: center; margin-top: 20px;">
+<i class="fas fa-arrows-left-right" style="font-size: 6em; opacity: 0.9;"></i>
+</div>
+<!-- /position -->
+<!-- position={row: 1, column: 2} -->
+*Example & Interpretation*
+
+<div style="background: #702914ff; color: #ffffff; padding: 8px 12px; border-radius: 8px; margin: 6px 0; font-size: 0.7em;">
+Example ratios: $[0.5,\, 2,\, 5]$
+</div>
+
+-: Arithmetic mean: $\dfrac{0.5 + 2 + 5}{3} = 2.5$
+-: Geometric mean: $(0.5 \times 2 \times 5)^{1/3} \approx 1.7$
+-= The geometric mean reflects the `typical multiplicative change` (≈ `+70%`) across sites/events.
+
+***
+
+*Use Cases*
+
+-! Trend analysis over repeated campaigns
+-! Spatial assessments in routine monitoring
+<!-- /position -->
+<!-- /layout -->
+
+
+---
+
+<!-- .slide:id="harmonic-mean-problem" -->
+## Harmonic Mean I — Why Other Means Fail
+<!-- layout={rows: 1, columns: 2} -->
+
+<!-- position={row: 1, column: 1} -->
+*Scenario: Flow Velocity Over Equal Distances*
+
+-! A pollutant moves through `two river sections` of equal length:
+-: Section 1: 10 m/s  
+-: Section 2: 2 m/s
+
+***  
+
+-! We want the `average velocity` across both sections.
+<br/>
+<div style="text-align: center; margin-top: 20px;">
+<i class="fas fa-water" style="font-size: 6em; opacity: 0.9;"></i>
+</div>
+<!-- /position -->
+
+<!-- position={row: 1, column: 2} -->
+*Testing the Usual Means*
+
+<div style="background: #702914ff; color: #ffffff; padding: 8px 12px; border-radius: 8px; margin: 6px 0; font-size: 0.7em;">
+Example velocities: [10, 2] m/s
+</div>
+
+-: Arithmetic mean: $(10 + 2)/2 = 6$ m/s  
+-: Geometric mean: $(10 × 2)^{1/2} = 4.47$ m/s  
+
+***
+
+<div style="margin: 10px 0; padding: 10px; background: #1a2340; border-radius: 8px;">
+  <button id="start-harmonic-animation" style="padding: 10px 20px; background: #2d3a66; color: #9efcff; border: 1px solid #2d3a66; border-radius: 6px; cursor: pointer; font-size: 1em; font-weight: bold; margin-bottom: 10px; width: 100%;">
+    ▶ Start Animation
+  </button>
+  <div style="margin-bottom: 8px;">
+    <label style="display: inline-flex; align-items: center; cursor: pointer; color: #00ff00; font-size: 0.9em;">
+      <input type="checkbox" id="toggle-arithmetic-mean" style="margin-right: 8px; cursor: pointer;">
+      <span>Show Arithmetic Mean Position (6 m/s)</span>
+    </label>
+  </div>
+  <div>
+    <label style="display: inline-flex; align-items: center; cursor: pointer; color: #ff00ff; font-size: 0.9em;">
+      <input type="checkbox" id="toggle-geometric-mean" style="margin-right: 8px; cursor: pointer;">
+      <span>Show Geometric Mean Position (4.47 m/s)</span>
+    </label>
+  </div>
+</div>
+
+<div id="chart-harmonic-flow" style="margin: 20px auto; text-align: center;"></div>
+
+<script src="resources/js/charts/harmonic_mean_flow.js"></script>
+
+<!-- /position -->
+<!-- /layout -->
+
+---
+
+<!-- .slide:id="harmonic-mean-definition" -->
+## Harmonic Mean II — The Correct Approach
+<!-- layout={rows: 1, columns: 2} -->
+
+<!-- position={row: 1, column: 1} -->
+*Correct Average Velocity*
+
+-! Total travel time:
+$${t}\_{\text{total}} = \frac{d}{10} + \frac{d}{2}$$
+
+-! Average velocity over both sections:
+$$v\_{\text{avg}} = \frac{2d}{t\_{\text{total}}} = \frac{2}{\frac{1}{10} + \frac{1}{2}} = 3.33\text{ m/s}$$
+
+-= The *harmonic mean* correctly accounts for *unequal travel times* over equal distances.
+<!-- /position -->
+
+<!-- position={row: 1, column: 2} -->
+*General Formula and Use Cases*
+
+$$
+\bar{x}\_{\text{harm}} = \frac{n}{\sum_{i=1}^{n}\frac{1}{x_i}}
+$$
+
+***
+
+-! *Use when*: Averaging rates, velocities, or concentrations over `equal distances or quantities`.
+
+-! Common applications:
+-: Flow velocities in rivers or pipes  
+-: Travel speeds over road segments  
+-: Diffusion or transport rates  
 <!-- /position -->
 <!-- /layout -->
 
@@ -1081,6 +1254,7 @@ $$\bar{x}_{harm} = \frac{n}{\sum_{i=1}^{n}\frac{1}{x_i}}$$
 
 <!-- .slide:id="harmonic-mean-exercise" -->
 ## Harmonic Mean - R Exercise
+<div id="harm-mean-editor" class="code-editor-container" style="border: 1px solid #2d3a66; border-radius: 8px; margin: 20px; display: none; text-align: left;"></div>
 <!-- layout={rows: 1, columns: 2} -->
 <!-- position={row: 1, column: 1} -->
 ### Calculate Harmonic Mean
@@ -1090,7 +1264,6 @@ $$\bar{x}_{harm} = \frac{n}{\sum_{i=1}^{n}\frac{1}{x_i}}$$
 <!-- /position -->
 <!-- position={row: 1, column: 2} -->
 <div style="display: flex; flex-direction: column; gap: 10px; width: 100%;">
-  <div id="harm-mean-editor" style="border: 1px solid #2d3a66; border-radius: 8px; overflow: hidden; display: none;"></div>
   <div style="display: flex; gap: 10px;">
     <button id="toggle-harm-mean-code" style="padding: 8px 16px; background: #2d3a66; color: #9efcff; border: 1px solid #2d3a66; border-radius: 6px; cursor: pointer; font-size: 0.9em;">
       <i class="fas fa-code"></i> Show Code
@@ -1195,6 +1368,11 @@ print(paste("Harmonic Mean:", round(harm_mean, 2), "L/min"))`;
         columnElements.forEach(col => {
           col.style.display = isHidden ? 'none' : 'block';
         });
+        
+        // Re-center slide after content change
+        if (window.Reveal) {
+          setTimeout(() => window.Reveal.layout(), 50);
+        }
       };
     }
 
@@ -1252,304 +1430,38 @@ print(paste("Harmonic Mean:", round(harm_mean, 2), "L/min"))`;
 
 <!-- .slide:id="harmonic-mean-water-science" -->
 ## Harmonic Mean in Water Science
-
--! **Average velocity in pipes** with varying flow rates
-
-***
-
--! **Groundwater flow** through layers with different hydraulic conductivities
-
-***
-
--! **Dilution rates** in continuous flow systems
-
-***
-
--! **Residence time** calculations in treatment plants
-
----
-
-<!-- .slide:id="median-intro" -->
-## Median - When Data Has Outliers
 <!-- layout={rows: 1, columns: 2} -->
+
 <!-- position={row: 1, column: 1} -->
-### Problem with Extreme Values
+*Chemical Exposure Through Soil Layers*
 
--! Consider turbidity measurements (NTU):
-  - Day 1-4: 2.1, 2.3, 2.0, 2.2
-  - Day 5: 45.0 (storm runoff!)
+-! A chemical leaches vertically through two soil layers of equal thickness.
+-! Each layer has a different diffusion coefficient ($D$):
+-: Layer 1 (sandy soil): $D_1 = 2 \times 10^{-6}$ m²/s  
+-: Layer 2 (clay): $D_2 = 1 \times 10^{-8}$ m²/s  
 
-***
+***  
 
--! Arithmetic mean: $(2.1 + 2.3 + 2.0 + 2.2 + 45.0) / 5 = 10.72$ NTU
-  - Not representative of typical conditions!
+-! Since diffusion acts in series through the layers, the overall effective diffusion depends on the *sum of resistances* ($1/D$).
 
-***
-
--! **Median**: Middle value when sorted: 2.0, 2.1, 2.2, 2.3, 45.0
-  - Median = 2.2 NTU ✓ More representative!
-
+-= The correct average diffusion coefficient is the harmonic mean.
 <!-- /position -->
 <!-- position={row: 1, column: 2} -->
-### Median Definition
-
--! The **median** is the middle value in a sorted dataset
-
-***
-
--! For **odd** n: Median = middle value
-
--! For **even** n: Median = average of two middle values
-
-***
-
--! **Use when**: Data has outliers or is highly skewed
-
-***
-
--! **Robust** to extreme values (unlike mean)
-
-<!-- /position -->
-<!-- /layout -->
-
----
-
-<!-- .slide:id="median-exercise" -->
-## Median - R Exercise
-<!-- layout={rows: 1, columns: 2} -->
-<!-- position={row: 1, column: 1} -->
-### Calculate Median
-
--! Calculate median of turbidity data with outlier
-
-***
-
--? Compare with arithmetic mean!
-
-<!-- /position -->
-<!-- position={row: 1, column: 2} -->
-<div style="display: flex; flex-direction: column; gap: 10px; width: 100%;">
-  <div id="median-editor" style="border: 1px solid #2d3a66; border-radius: 8px; overflow: hidden; display: none;"></div>
-  <div style="display: flex; gap: 10px;">
-    <button id="toggle-median-code" style="padding: 8px 16px; background: #2d3a66; color: #9efcff; border: 1px solid #2d3a66; border-radius: 6px; cursor: pointer; font-size: 0.9em;">
-      <i class="fas fa-code"></i> Show Code
-    </button>
-    <button id="run-median-btn" style="padding: 8px 16px; background: #1a2340; color: #9efcff; border: 1px solid #2d3a66; border-radius: 6px; cursor: pointer; font-size: 0.9em;">
-      <i class="fas fa-play"></i> Calculate
-    </button>
-  </div>
-  <div id="median-output" style="border: 1px solid #2d3a66; border-radius: 8px; overflow: hidden; min-height: 80px;"></div>
+<div style="text-align: center; margin-top: 20px;">
+  <i class="fas fa-flask" style="font-size: 3.5em; opacity: 0.9; margin-right: 0.2em; color: #dd277cff;"></i>
+  <i class="fas fa-person-running" style="font-size: 3em; opacity: 0.8; color: #ddc227ff;"></i>
 </div>
 
-<script>
-(function() {
-  const initMedian = async () => {
-    if (!window.EditorView || !window.EditorState || !window.basicSetup) {
-      setTimeout(initMedian, 100);
-      return;
-    }
+*Example & Interpretation*
 
-    const code = `# Turbidity measurements (NTU)
-turbidity <- c(2.1, 2.3, 2.0, 2.2, 45.0)
+<div style="background: #702914ff; color: #ffffff; padding: 8px 12px; border-radius: 8px; margin: 6px 0; font-size: 0.7em;">
+Example diffusion coefficients: $[2\times10^{-6},\, 1\times10^{-8}]$ m²/s
+</div>
 
-# Mean vs Median
-mean_val <- mean(turbidity)
-median_val <- median(turbidity)
+-: Arithmetic mean: $(2\times10^{-6} + 1\times10^{-8}) / 2 = 1.01\times10^{-6}$ m²/s  
+-: Geometric mean: $(2\times10^{-6} \times 1\times10^{-8})^{1/2} = 1.41\times10^{-7}$ m²/s  
+-: Harmonic mean: $\dfrac{2}{\frac{1}{2\times10^{-6}} + \frac{1}{1\times10^{-8}}} = 2.0\times10^{-8}$ m²/s  
 
-print(paste("Turbidity:", paste(turbidity, collapse = ", "), "NTU"))
-print(paste("Arithmetic Mean:", round(mean_val, 2), "NTU"))
-print(paste("Median:", round(median_val, 2), "NTU"))
-print("Median is more representative!")`;
-
-    let rLang = [];
-    if (window.rLanguageSupport) {
-      rLang = window.rLanguageSupport;
-    }
-
-    const fontSizeTheme = window.EditorView.theme({
-      "&": { fontSize: "1.5em" },
-      ".cm-content": { fontSize: "1.5em" },
-      ".cm-gutters": { fontSize: "1.5em" }
-    });
-
-    const editorParent = document.getElementById('median-editor');
-    if (!editorParent || editorParent.querySelector('.cm-editor')) return;
-
-    const editorExtensions = [window.basicSetup];
-    if (rLang.length) editorExtensions.push(rLang);
-    editorExtensions.push(window.monokai, fontSizeTheme);
-
-    const editor = new window.EditorView({
-      state: window.EditorState.create({
-        doc: code,
-        extensions: editorExtensions
-      }),
-      parent: editorParent
-    });
-
-    const outputParent = document.getElementById('median-output');
-    if (!outputParent) return;
-
-    const outputExtensions = [
-      window.basicSetup,
-      window.monokai,
-      fontSizeTheme,
-      window.EditorView.editable.of(false)
-    ];
-    if (rLang.length) outputExtensions.splice(1, 0, rLang);
-
-    const outputEditor = new window.EditorView({
-      state: window.EditorState.create({
-        doc: '',
-        extensions: outputExtensions
-      }),
-      parent: outputParent
-    });
-
-    // Store reference to first column elements
-    const slide = document.getElementById('median-exercise');
-    let columnElements = null;
-    
-    const findColumns = () => {
-      if (slide) {
-        return Array.from(slide.querySelectorAll('div')).filter(el => {
-          const style = el.getAttribute('style') || '';
-          return style.includes('grid-column: 1') || style.includes('grid-area: 1 / 1') || style.includes('grid-area: 1/1');
-        });
-      }
-      return [];
-    };
-
-    // Toggle code visibility
-    const toggleBtn = document.getElementById('toggle-median-code');
-    if (toggleBtn) {
-      toggleBtn.onclick = () => {
-        const isHidden = editorParent.style.display === 'none';
-        editorParent.style.display = isHidden ? 'block' : 'none';
-        toggleBtn.innerHTML = isHidden ? '<i class="fas fa-code"></i> Hide Code' : '<i class="fas fa-code"></i> Show Code';
-        
-        // Hide/show first column (opposite of code visibility)
-        columnElements = findColumns();
-        columnElements.forEach(col => {
-          col.style.display = isHidden ? 'none' : 'block';
-        });
-      };
-    }
-
-    const runBtn = document.getElementById('run-median-btn');
-    if (runBtn) {
-      runBtn.onclick = async () => {
-        const codeText = editor.state.doc.toString();
-        outputEditor.dispatch({
-          changes: { from: 0, to: outputEditor.state.doc.length, insert: "Computing..." }
-        });
-
-        try {
-          const mod = await import('https://webr.r-wasm.org/latest/webr.mjs');
-          const webR = new mod.WebR();
-          await webR.init();
-
-          const r = await webR.evalR(`
-            paste(capture.output({
-              tryCatch({
-                ${codeText}
-              }, error = function(e) {
-                message("Error: ", conditionMessage(e))
-              })
-            }), collapse="\\n")
-          `);
-          let output = await r.toString();
-          output = output.replace(/^\[\d+\]\s*/gm, '');
-          outputEditor.dispatch({
-            changes: { from: 0, to: outputEditor.state.doc.length, insert: output.trim() || "[No output]" }
-          });
-        } catch (err) {
-          const turb = [2.1, 2.3, 2.0, 2.2, 45.0];
-          const mean = turb.reduce((a, b) => a + b, 0) / turb.length;
-          const sorted = turb.slice().sort((a, b) => a - b);
-          const median = sorted[Math.floor(sorted.length / 2)];
-          const output = `[Simulated in JavaScript]\nTurbidity: ${turb.join(", ")} NTU\nArithmetic Mean: ${mean.toFixed(2)} NTU\nMedian: ${median.toFixed(2)} NTU\nMedian is more representative!`;
-          outputEditor.dispatch({
-            changes: { from: 0, to: outputEditor.state.doc.length, insert: output }
-          });
-        }
-      };
-    }
-  };
-
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initMedian);
-  } else {
-    initMedian();
-  }
-})();
-</script>
+-= The harmonic mean correctly captures the slowest controlling layer, which dominates the chemical’s overall movement through soil.
 <!-- /position -->
 <!-- /layout -->
-
----
-
-<!-- .slide:id="median-water-science" -->
-## Median in Water Science
-
--! **Heavy metal concentrations** with occasional contamination spikes
-
-***
-
--! **Rainfall data** (often highly skewed)
-
-***
-
--! **Particle size distributions** in sediment analysis
-
-***
-
--! **Water quality indices** with extreme outliers from accidents
-
-***
-
--! **Regulatory compliance** - Some standards use median instead of mean
-
----
-
-<!-- .slide:id="summary-means" -->
-## Summary: Choosing the Right Mean
-<!-- layout={rows: 1, columns: 2} -->
-<!-- position={row: 1, column: 1} -->
-### Arithmetic Mean
-$$\bar{x} = \frac{1}{n} \sum_{i=1}^{n} x_i$$
-
--! Use for: Normal data without extreme outliers
--! Examples: pH, temperature, Fe concentration
-
-***
-
-### Geometric Mean
-$$\bar{x}_{geom} = \sqrt[n]{\prod_{i=1}^{n} x_i}$$
-
--! Use for: Rates, ratios, fold changes
--! Examples: Bacterial growth, dilution factors
-
-<!-- /position -->
-<!-- position={row: 1, column: 2} -->
-### Harmonic Mean
-$$\bar{x}_{harm} = \frac{n}{\sum_{i=1}^{n}\frac{1}{x_i}}$$
-
--! Use for: Averaging rates over equal times
--! Examples: Flow rates, velocities
-
-***
-
-### Median
--! Middle value of sorted data
-
--! Use for: Data with outliers or skewed distributions
--! Examples: Turbidity with storms, contamination events
-
-***
-
--? **Always consider your data characteristics before choosing!**
-
-<!-- /position -->
-<!-- /layout -->
-

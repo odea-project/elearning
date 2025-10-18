@@ -66,7 +66,7 @@
       if (event.currentSlide.id !== sectionID) return;
     
     const { fig, lines } = plotUtils.drawPixelChart(
-      divID, dataSets, 600, 400, 0, 10, 3, 7
+      divID, dataSets, 800, 600, 0, 10, 3, 7
     );
     
     Reveal.layout();

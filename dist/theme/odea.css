@@ -1407,7 +1407,9 @@ input:checked+.slider:before {
 .reveal .slides ul.exclam-list,
 .reveal .slides ul.tag-list,
 .reveal .slides ul.at-list,
-.reveal .slides ul.home-list {
+.reveal .slides ul.home-list,
+.reveal .slides ul.idea-list,
+.reveal .slides ul.bullseye-list {
   display: block !important;     /* kill display:flex/inline */
   list-style: none;
   padding-left: 1.4em;
@@ -1420,9 +1422,11 @@ input:checked+.slider:before {
 .reveal .slides ul.exclam-list > li,
 .reveal .slides ul.tag-list > li,
 .reveal .slides ul.at-list > li,
-.reveal .slides ul.home-list > li {
-  display: list-item !important; 
-  float: none !important;       
+.reveal .slides ul.home-list > li,
+.reveal .slides ul.idea-list > li,
+.reveal .slides ul.bullseye-list > li {
+  display: list-item !important;
+  float: none !important;
   white-space: normal !important;
   margin: 0.4em 0;
   line-height: 1.3;
@@ -1460,6 +1464,16 @@ input:checked+.slider:before {
   content: "\f015   ";
   font-family: "FontAwesome";
   color: #ff0066;
+}
+.reveal .slides ul.idea-list li::marker {
+  content: "\f0eb   ";
+  font-family: "FontAwesome";
+  color: #ffdd00;
+} 
+.reveal .slides ul.bullseye-list li::marker {
+  content: "\f140   ";
+  font-family: "FontAwesome";
+  color: #00ffd5;
 }
 
 

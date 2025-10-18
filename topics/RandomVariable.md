@@ -27,10 +27,10 @@ description: "Introduction to random variables, their types, and applications"
 
 ***
 
--? Which result will it when rolling?
+-? Which result do you expect when rolling the dice?
 <!-- /position -->
 <!-- position={row: 1, column: 2} -->
-Rolling a digital dice:
+Rolling a digital dice in `R`:
 <div style="display: flex; flex-direction: column; gap: 10px; width: 100%;">
   <div id="dice-editor-container" style="border: 1px solid #2d3a66; border-radius: 8px; overflow: hidden;"></div>
   <button id="run-dice-btn" style="padding: 8px 16px; background: #1a2340; color: #9efcff; border: 1px solid #2d3a66; border-radius: 6px; cursor: pointer; font-size: 0.9em;">
@@ -48,8 +48,7 @@ Rolling a digital dice:
       return;
     }
 
-    const diceCode = `result <- sample(1:6, 1)
-print(result)`;
+    const diceCode = `sample(1:6, 1)`;
 
     // Get R language support
     let rLang = [];
@@ -158,20 +157,25 @@ print(result)`;
 ## Initial Thoughts - 2
 <!-- layout={rows: 1, columns: 2} -->
 <!-- position={row: 1, column: 1} -->
--! The result of rolling a dice is not deterministic.
+-! The result of rolling a dice is `not deterministic`.
 
 ***
 
--! The result of rolling a dice is influenced by random processes.
+-! The result of rolling a dice is `influenced by random processes`.
+
+***
+
+-= The result of rolling a dice can be described by a **random variable**.
 
 <!-- /position -->
 <!-- position={row: 1, column: 2} -->
 
--! The result of rolling a dice can be described by a **random variable**.
-
-***
-
 -? What's about the results of measuring a sample, e.g., `[Fe]` in drinking water?
+
+<div style="display: flex; align-items: center; justify-content: center; margin-top: 30px; color: #9efcff;">
+  <i class="fas fa-flask" style="font-size: 6em; opacity: 0.9; transform: rotate(30deg);"></i>
+</div>
+
 <!-- /position -->
 <!-- /layout -->
 
@@ -182,9 +186,13 @@ print(result)`;
 <!-- position={row: 1, column: 1} -->
 -! When measuring a sample (e.g., Fe concentration in water), we expect a constant value.
 
+$$ I(t) = I_0 = \text{constant} $$
+
 ***
 
 -! In reality, each measurement contains noise and uncertainty.
+
+$$ I(t) = I_0 + \text{noise} $$
 
 ***
 
@@ -200,9 +208,10 @@ print(result)`;
       <span style="color: #ff6b6b;">Real Measurement (with noise)</span>
     </label>
   </div>
-  <div style="text-align: center; font-size: 0.9em; color: #888;">
-    <span style="color: #00ff00;">━━━</span> Ideal Signal (constant) &nbsp;&nbsp;
-    <span style="color: #ff6b6b;">━━━</span> Real Signal (noisy)
+  <div id="space-for-legend" style="height: 100px;"></div>
+  <div style="text-align: left; font-size: 0.9em; color: #888;">
+    <span style="color: #00ff00;">━━</span> Ideal Signal (constant) <br>
+    <span style="color: #ff6b6b;">━━</span> Real Signal (noisy)
   </div>
 </div>
 
@@ -215,36 +224,34 @@ print(result)`;
 ## Types of Random Variables
 <!-- layout={rows: 1, columns: 2} -->
 <!-- position={row: 1, column: 1} -->
-### Discrete Random Variables
+**Discrete Random Variables**
 
--! **Definition** : Can only take specific, countable values
+-= only specific, countable values
 
 ***
 -> `Number of E. coli colonies` in 100 mL water sample
--: Values: 0, 1, 2, 3, ... (whole numbers only)
+<div style="background: #8b1a1a; color: #ffffff; padding: 8px 12px; border-radius: 8px; margin: 6px 0; font-size: 0.7em;"><b>Values: </b>0, 1, 2, 3, ... (whole numbers only)</div><br>
 
 -> `pH classification` (if categorized)
--: Values: acidic (1), neutral (2), alkaline (3)
+<div style="background: #b5440d; color: #ffffff; padding: 8px 12px; border-radius: 8px; margin: 6px 0; font-size: 0.7em;"><b>Values: </b>acidic (1), neutral (2), alkaline (3)</div><br>
 
 -> `Sample contamination status`
--: Values: clean (0), contaminated (1)
-
+<div style="background: #8b7508ff; color: #ffffff; padding: 8px 12px; border-radius: 8px; margin: 6px 0; font-size: 0.7em;"><b>Values: </b>clean (0), contaminated (1)</div>
 <!-- /position -->
 <!-- position={row: 1, column: 2} -->
-### Continuous Random Variables
+**Continuous Random Variables**
 
--! **Definition** : Can take any value within a range
+-= any value within a range
 
 ***
+-> `pH value` (when measured continuously)
+<div style="background: #1a4d7a; color: #ffffff; padding: 8px 12px; border-radius: 8px; margin: 6px 0; font-size: 0.7em;"><b>Values: </b>0 to 14 (e.g., 6.8, 7.2, 7.45)</div><br>
 
 -> `Iron concentration [Fe]` in mg/L
--: Values: Any positive real number (e.g., 4.73, 5.02, 5.18 mg/L)
+<div style="background: #2d6b2d; color: #ffffff; padding: 8px 12px; border-radius: 8px; margin: 6px 0; font-size: 0.7em;"><b>Values: </b>Any positive real number (e.g., 4.73 mg/L)</div><br>
 
--> `pH value` (when measured continuously)
--: Values: 0 to 14 (e.g., 6.8, 7.2, 7.45)
-
--> `Turbidity` in NTU (Nephelometric Turbidity Units)
--: Values: Any non-negative real number
+-> `Intensity` in HPLC Measurements
+<div style="background: #3d2966; color: #ffffff; padding: 8px 12px; border-radius: 8px; margin: 6px 0; font-size: 0.7em;"><b>Values: </b>Any real number (e.g., -120.5, 350.2)</div>
 <!-- /position -->
 <!-- /layout -->
 

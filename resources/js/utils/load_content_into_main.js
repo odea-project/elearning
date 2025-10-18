@@ -194,7 +194,7 @@ function splitMarkdownSlidesSafely(mdText) {
 
 /**
  * Transforms custom bullet list markers into styled <ul> lists.
- * Supported: -?, ->, -!, -:, -@, -home
+ * Supported: -?, ->, -!, -:, -@, -home, -<, -=
  * @param {string} mdText
  * @returns {string}
  */
@@ -212,6 +212,8 @@ function preprocessListMarkers(mdText) {
     ':': 'tag-list',
     '@': 'at-list',
     home: 'home-list', // no quotes needed for 'home'
+    '<': 'idea-list',
+    '=': 'bullseye-list',
   };
 
   function flushBuffer() {
@@ -227,7 +229,7 @@ function preprocessListMarkers(mdText) {
 
   for (const line of lines) {
     // Match either a single character or the word 'home' after the dash
-    const match = line.match(/^-([?!>:@]|home)\s+(.*)/);
+    const match = line.match(/^-([?!>:@<=]|home)\s+(.*)/);
     if (match) {
       const [, type, content] = match;
       if (type !== currentType) flushBuffer();
