@@ -1522,26 +1522,18 @@ Example turbidity: [2.1, 2.3, 2.0, 2.2, 45.0] NTU
 
 ***
 
-**For odd number of values:**
+*For odd number of values:*
 -: Median = the middle value
 
-**Example:** [2.0, 2.1, **2.2**, 2.3, 45.0]
--= Median = 2.2 NTU  Much more representative!
+e.g., [2.0, 2.1, **2.2**, 2.3, 45.0]
 
 ***
 
-**For even number of values:**
+*For even number of values:*
 -: Median = average of two middle values
 
-**Example:** [2.0, **2.1, 2.2**, 2.3]
--= Median = $(2.1 + 2.2) / 2 = 2.15$ NTU
-
-<br/>
-<div style="text-align: center; margin-top: 20px;">
-<i class="fas fa-chart-line" style="font-size: 6em; opacity: 0.9;"></i>
-</div>
+e.g., [2.0, **2.1, 2.2**, 2.3]
 <!-- /position -->
-
 <!-- position={row: 1, column: 2} -->
 *The Median Formula*
 
@@ -1549,22 +1541,15 @@ Example turbidity: [2.1, 2.3, 2.0, 2.2, 45.0] NTU
 
 **Step 2:** Find the middle position
 
--! For $n$ values (odd):
-$$\text{Median} = x_{\left(\frac{n+1}{2}\right)}$$
+| odd | even |
+|:-------:|:---------:|
+| $x_{\left(\frac{n+1}{2}\right)}$| $\frac{1}{2}\left(x_{\left(\frac{n}{2}\right)} + x_{\left(\frac{n}{2}+1\right)}\right)$ |
 
--! For $n$ values (even):
-$$\text{Median} = \frac{x_{\left(\frac{n}{2}\right)} + x_{\left(\frac{n}{2}+1\right)}}{2}$$
 
-***
-
-**Key Properties:**
+*Key Properties:*
 
 -! **Robust to outliers**: Extreme values don't affect the median
--! **Position-based**: Only depends on order, not magnitude
 -! **50th percentile**: Half the values are below, half above
-
--? **Use when**: Data is skewed or has outliers
-
 <!-- /position -->
 <!-- /layout -->
 
@@ -1767,21 +1752,6 @@ Example Pb concentrations: [0.5, 0.7, 0.6, 0.8, 15.0] µg/L
 
 -= The median better represents baseline conditions for compliance monitoring.
 
-***
-
-*Rainfall Data*
-
--! Rainfall is **highly skewed**:
--: Many days: little or no rain
--: Few days: heavy storms
-
--= Median rainfall gives a better sense of typical conditions than mean.
-
-<br/>
-<div style="text-align: center; margin-top: 20px;">
-<i class="fas fa-cloud-rain" style="font-size: 6em; opacity: 0.9;"></i>
-</div>
-
 <!-- /position -->
 <!-- position={row: 1, column: 2} -->
 *Particle Size Distribution*
@@ -1791,17 +1761,6 @@ Example Pb concentrations: [0.5, 0.7, 0.6, 0.8, 15.0] µg/L
 -: Coarse particles: sand, gravel (fewer)
 
 -= The median particle size (D₅₀) is the standard metric in sediment characterization.
-
-***
-
-*Regulatory Applications*
-
--! Some water quality standards use **median** instead of mean:
--: Less sensitive to occasional accidents
--: Better represents long-term conditions
--: Fairer for compliance assessment
-
-***
 
 <div style="background: #1a4d7a; color: #ffffff; padding: 12px; border-radius: 8px; margin: 10px 0;">
 <strong>When to Choose Median:</strong><br>
@@ -1824,23 +1783,20 @@ Example Pb concentrations: [0.5, 0.7, 0.6, 0.8, 15.0] µg/L
 $$\bar{x} = \frac{1}{n} \sum_{i=1}^{n} x_i$$
 
 -! Use for: Normal data without extreme outliers
--! Examples: pH, temperature, Fe concentration
 
 ***
 
 ### Geometric Mean
-$$\bar{x}_{geom} = \sqrt[n]{\prod_{i=1}^{n} x_i}$$
+$$\bar{x}\_{geom} = \sqrt[n]{\prod_{i=1}^{n} x_i}$$
 
 -! Use for: Rates, ratios, fold changes
--! Examples: Bacterial growth, dilution factors
 
 <!-- /position -->
 <!-- position={row: 1, column: 2} -->
 ### Harmonic Mean
-$$\bar{x}_{harm} = \frac{n}{\sum_{i=1}^{n}\frac{1}{x_i}}$$
+$$\bar{x}\_{harm} = \frac{n}{\sum_{i=1}^{n}\frac{1}{x_i}}$$
 
 -! Use for: Averaging rates over equal times
--! Examples: Flow rates, velocities
 
 ***
 
@@ -1848,11 +1804,6 @@ $$\bar{x}_{harm} = \frac{n}{\sum_{i=1}^{n}\frac{1}{x_i}}$$
 -! Middle value of sorted data
 
 -! Use for: Data with outliers or skewed distributions
--! Examples: Turbidity with storms, heavy metals, rainfall
-
-***
-
--? **Always consider your data characteristics before choosing!**
 
 <!-- /position -->
 <!-- /layout -->
