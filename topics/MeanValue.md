@@ -1465,3 +1465,394 @@ Example diffusion coefficients: $[2\times10^{-6},\, 1\times10^{-8}]$ m²/s
 -= The harmonic mean correctly captures the slowest controlling layer, which dominates the chemical’s overall movement through soil.
 <!-- /position -->
 <!-- /layout -->
+
+---
+
+<!-- .slide:id="median-problem" -->
+## Median  When Data Has Outliers
+<!-- layout={rows: 1, columns: 2} -->
+
+<!-- position={row: 1, column: 1} -->
+*Scenario: Turbidity Measurements*
+
+-! Consider `turbidity measurements` (NTU) from a water treatment plant over 5 days:
+-: Days 1-4: 2.1, 2.3, 2.0, 2.2 (normal conditions)
+-: Day 5: 45.0 (storm runoff event!)
+
+***
+
+-! We want a measure of `"typical" turbidity` for process control.
+
+<br/>
+<div style="text-align: center; margin-top: 20px;">
+<i class="fas fa-droplet" style="font-size: 6em; opacity: 0.9;"></i>
+</div>
+<!-- /position -->
+
+<!-- position={row: 1, column: 2} -->
+*Testing the Usual Means*
+
+<div style="background: #702914ff; color: #ffffff; padding: 8px 12px; border-radius: 8px; margin: 6px 0; font-size: 0.7em;">
+Example turbidity: [2.1, 2.3, 2.0, 2.2, 45.0] NTU
+</div>
+
+-: Arithmetic mean: $(2.1 + 2.3 + 2.0 + 2.2 + 45.0) / 5 = 10.72$ NTU
+-=  Not representative of typical conditions!
+
+***
+
+-! The single outlier (storm event) **dominates** the mean.
+
+-! For process control, we need a measure that's **robust** to extreme values.
+
+-=  The **median** is the solution!
+
+<!-- /position -->
+<!-- /layout -->
+
+---
+
+<!-- .slide:id="median-definition" -->
+## The Median
+<!-- layout={rows: 1, columns: 2} -->
+<!-- position={row: 1, column: 1} -->
+*What is the Median?*
+
+-! The **median** is the `middle value` when data is sorted in order.
+
+***
+
+**For odd number of values:**
+-: Median = the middle value
+
+**Example:** [2.0, 2.1, **2.2**, 2.3, 45.0]
+-= Median = 2.2 NTU  Much more representative!
+
+***
+
+**For even number of values:**
+-: Median = average of two middle values
+
+**Example:** [2.0, **2.1, 2.2**, 2.3]
+-= Median = $(2.1 + 2.2) / 2 = 2.15$ NTU
+
+<br/>
+<div style="text-align: center; margin-top: 20px;">
+<i class="fas fa-chart-line" style="font-size: 6em; opacity: 0.9;"></i>
+</div>
+<!-- /position -->
+
+<!-- position={row: 1, column: 2} -->
+*The Median Formula*
+
+**Step 1:** Sort the data in ascending order
+
+**Step 2:** Find the middle position
+
+-! For $n$ values (odd):
+$$\text{Median} = x_{\left(\frac{n+1}{2}\right)}$$
+
+-! For $n$ values (even):
+$$\text{Median} = \frac{x_{\left(\frac{n}{2}\right)} + x_{\left(\frac{n}{2}+1\right)}}{2}$$
+
+***
+
+**Key Properties:**
+
+-! **Robust to outliers**: Extreme values don't affect the median
+-! **Position-based**: Only depends on order, not magnitude
+-! **50th percentile**: Half the values are below, half above
+
+-? **Use when**: Data is skewed or has outliers
+
+<!-- /position -->
+<!-- /layout -->
+
+---
+
+<!-- .slide:id="median-exercise" -->
+## Median - R Exercise
+<div id="median-editor" class="code-editor-container" style="border: 1px solid #2d3a66; border-radius: 8px; margin: 20px; display: none; text-align: left;"></div>
+<!-- layout={rows: 1, columns: 2} -->
+<!-- position={row: 1, column: 1} -->
+*Calculate Median*
+
+-! Calculate median of turbidity data with outlier
+
+***
+
+-? Compare with arithmetic mean!
+
+<!-- /position -->
+<!-- position={row: 1, column: 2} -->
+<div style="display: flex; flex-direction: column; gap: 10px; width: 100%;">
+  <div style="display: flex; gap: 10px;">
+    <button id="toggle-median-code" style="padding: 8px 16px; background: #2d3a66; color: #9efcff; border: 1px solid #2d3a66; border-radius: 6px; cursor: pointer; font-size: 0.9em;">
+      <i class="fas fa-code"></i> Show Code
+    </button>
+    <button id="run-median-btn" style="padding: 8px 16px; background: #1a2340; color: #9efcff; border: 1px solid #2d3a66; border-radius: 6px; cursor: pointer; font-size: 0.9em;">
+      <i class="fas fa-play"></i> Calculate
+    </button>
+  </div>
+  <div id="median-output" style="border: 1px solid #2d3a66; border-radius: 8px; overflow: hidden; min-height: 80px;"></div>
+</div>
+
+<script>
+(function() {
+  const initMedian = async () => {
+    if (!window.EditorView || !window.EditorState || !window.basicSetup) {
+      setTimeout(initMedian, 100);
+      return;
+    }
+
+    const code = `# Turbidity measurements (NTU)
+turbidity <- c(2.1, 2.3, 2.0, 2.2, 45.0)
+
+# Mean vs Median
+mean_val <- mean(turbidity)
+median_val <- median(turbidity)
+
+print(paste("Turbidity:", paste(turbidity, collapse = ", "), "NTU"))
+print(paste("Arithmetic Mean:", round(mean_val, 2), "NTU"))
+print(paste("Median:", round(median_val, 2), "NTU"))
+print("Median is more representative!")`;
+
+    let rLang = [];
+    if (window.rLanguageSupport) {
+      rLang = window.rLanguageSupport;
+    }
+
+    const fontSizeTheme = window.EditorView.theme({
+      "&": { fontSize: "1.5em" },
+      ".cm-content": { fontSize: "1.5em" },
+      ".cm-gutters": { fontSize: "1.5em" }
+    });
+
+    const editorParent = document.getElementById('median-editor');
+    if (!editorParent || editorParent.querySelector('.cm-editor')) return;
+
+    const editorExtensions = [window.basicSetup];
+    if (rLang.length) editorExtensions.push(rLang);
+    editorExtensions.push(window.monokai, fontSizeTheme);
+
+    const editor = new window.EditorView({
+      state: window.EditorState.create({
+        doc: code,
+        extensions: editorExtensions
+      }),
+      parent: editorParent
+    });
+
+    const outputParent = document.getElementById('median-output');
+    if (!outputParent) return;
+
+    const outputExtensions = [
+      window.basicSetup,
+      window.monokai,
+      fontSizeTheme,
+      window.EditorView.editable.of(false)
+    ];
+    if (rLang.length) outputExtensions.splice(1, 0, rLang);
+
+    const outputEditor = new window.EditorView({
+      state: window.EditorState.create({
+        doc: '',
+        extensions: outputExtensions
+      }),
+      parent: outputParent
+    });
+
+    const slide = document.getElementById('median-exercise');
+    let columnElements = null;
+    
+    const findColumns = () => {
+      if (slide) {
+        return Array.from(slide.querySelectorAll('div')).filter(el => {
+          const style = el.getAttribute('style') || '';
+          return style.includes('grid-column: 1') || style.includes('grid-area: 1 / 1') || style.includes('grid-area: 1/1');
+        });
+      }
+      return [];
+    };
+
+    const toggleBtn = document.getElementById('toggle-median-code');
+    if (toggleBtn) {
+      toggleBtn.onclick = () => {
+        const isHidden = editorParent.style.display === 'none';
+        editorParent.style.display = isHidden ? 'block' : 'none';
+        toggleBtn.innerHTML = isHidden ? '<i class="fas fa-code"></i> Hide Code' : '<i class="fas fa-code"></i> Show Code';
+        
+        columnElements = findColumns();
+        columnElements.forEach(col => {
+          col.style.display = isHidden ? 'none' : 'block';
+        });
+        
+        if (window.Reveal) {
+          setTimeout(() => window.Reveal.layout(), 50);
+        }
+      };
+    }
+
+    const runBtn = document.getElementById('run-median-btn');
+    if (runBtn) {
+      runBtn.onclick = async () => {
+        const codeText = editor.state.doc.toString();
+        outputEditor.dispatch({
+          changes: { from: 0, to: outputEditor.state.doc.length, insert: "Computing..." }
+        });
+
+        try {
+          const mod = await import('https://webr.r-wasm.org/latest/webr.mjs');
+          const webR = new mod.WebR();
+          await webR.init();
+
+          const r = await webR.evalR(`
+            paste(capture.output({
+              tryCatch({
+                ${codeText}
+              }, error = function(e) {
+                message("Error: ", conditionMessage(e))
+              })
+            }), collapse="\\n")
+          `);
+          let output = await r.toString();
+          output = output.replace(/^\[\d+\]\s*/gm, '');
+          outputEditor.dispatch({
+            changes: { from: 0, to: outputEditor.state.doc.length, insert: output.trim() || "[No output]" }
+          });
+        } catch (err) {
+          const turb = [2.1, 2.3, 2.0, 2.2, 45.0];
+          const mean = turb.reduce((a, b) => a + b, 0) / turb.length;
+          const sorted = turb.slice().sort((a, b) => a - b);
+          const median = sorted[Math.floor(sorted.length / 2)];
+          const output = `[Simulated in JavaScript]\nTurbidity: ${turb.join(", ")} NTU\nArithmetic Mean: ${mean.toFixed(2)} NTU\nMedian: ${median.toFixed(2)} NTU\nMedian is more representative!`;
+          outputEditor.dispatch({
+            changes: { from: 0, to: outputEditor.state.doc.length, insert: output }
+          });
+        }
+      };
+    }
+  };
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initMedian);
+  } else {
+    initMedian();
+  }
+})();
+</script>
+<!-- /position -->
+<!-- /layout -->
+
+---
+
+<!-- .slide:id="median-water-science" -->
+## Median in Water Science
+<!-- layout={rows: 1, columns: 2} -->
+<!-- position={row: 1, column: 1} -->
+*Heavy Metal Monitoring*
+
+-! `Heavy metal concentrations` (e.g., lead, mercury) often show:
+-: Most samples: low, safe levels
+-: Occasional spikes: contamination events
+
+***
+
+<div style="background: #702914ff; color: #ffffff; padding: 8px 12px; border-radius: 8px; margin: 6px 0; font-size: 0.7em;">
+Example Pb concentrations: [0.5, 0.7, 0.6, 0.8, 15.0] µg/L
+</div>
+
+-: Arithmetic mean: 3.52 µg/L (misleading)
+-: Median: 0.7 µg/L (typical value)
+
+-= The median better represents baseline conditions for compliance monitoring.
+
+***
+
+*Rainfall Data*
+
+-! Rainfall is **highly skewed**:
+-: Many days: little or no rain
+-: Few days: heavy storms
+
+-= Median rainfall gives a better sense of typical conditions than mean.
+
+<br/>
+<div style="text-align: center; margin-top: 20px;">
+<i class="fas fa-cloud-rain" style="font-size: 6em; opacity: 0.9;"></i>
+</div>
+
+<!-- /position -->
+<!-- position={row: 1, column: 2} -->
+*Particle Size Distribution*
+
+-! In sediment analysis, particle sizes follow **log-normal distributions**:
+-: Fine particles: clay, silt (abundant)
+-: Coarse particles: sand, gravel (fewer)
+
+-= The median particle size (D₅₀) is the standard metric in sediment characterization.
+
+***
+
+*Regulatory Applications*
+
+-! Some water quality standards use **median** instead of mean:
+-: Less sensitive to occasional accidents
+-: Better represents long-term conditions
+-: Fairer for compliance assessment
+
+***
+
+<div style="background: #1a4d7a; color: #ffffff; padding: 12px; border-radius: 8px; margin: 10px 0;">
+<strong>When to Choose Median:</strong><br>
+✓ Data with outliers<br>
+✓ Skewed distributions<br>
+✓ Non-normal data<br>
+✓ Need robust statistics
+</div>
+
+<!-- /position -->
+<!-- /layout -->
+
+---
+
+<!-- .slide:id="summary-means" -->
+## Summary: Choosing the Right Mean
+<!-- layout={rows: 1, columns: 2} -->
+<!-- position={row: 1, column: 1} -->
+### Arithmetic Mean
+$$\bar{x} = \frac{1}{n} \sum_{i=1}^{n} x_i$$
+
+-! Use for: Normal data without extreme outliers
+-! Examples: pH, temperature, Fe concentration
+
+***
+
+### Geometric Mean
+$$\bar{x}_{geom} = \sqrt[n]{\prod_{i=1}^{n} x_i}$$
+
+-! Use for: Rates, ratios, fold changes
+-! Examples: Bacterial growth, dilution factors
+
+<!-- /position -->
+<!-- position={row: 1, column: 2} -->
+### Harmonic Mean
+$$\bar{x}_{harm} = \frac{n}{\sum_{i=1}^{n}\frac{1}{x_i}}$$
+
+-! Use for: Averaging rates over equal times
+-! Examples: Flow rates, velocities
+
+***
+
+### Median
+-! Middle value of sorted data
+
+-! Use for: Data with outliers or skewed distributions
+-! Examples: Turbidity with storms, heavy metals, rainfall
+
+***
+
+-? **Always consider your data characteristics before choosing!**
+
+<!-- /position -->
+<!-- /layout -->
