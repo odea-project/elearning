@@ -7,5 +7,12 @@
   "mean-values": [
     { "exercise_id": "rex01", "file": "topics/exercises/test_R.yaml", "level": "easy", "lang": "r" },
     { "exercise_id": "rex02", "file": "topics/exercises/test_R.yaml", "level": "hard", "lang": "r" }
+  ],
+  "r-snippets": [
+    { "exercise_id": "var01", "file": "topics/exercises/variance_R.yaml", "level": "easy", "lang": "r" },
+    { "exercise_id": "var02", "file": "topics/exercises/variance_R.yaml", "level": "medium", "lang": "r" },
+    { "exercise_id": "var03", "file": "topics/exercises/variance_R.yaml", "level": "medium", "lang": "r" },
+    { "exercise_id": "var04", "file": "topics/exercises/variance_R.yaml", "level": "hard", "lang": "r" },
+    { "exercise_id": "var05", "file": "topics/exercises/variance_R.yaml", "level": "hard", "lang": "r" }
   ]
 }

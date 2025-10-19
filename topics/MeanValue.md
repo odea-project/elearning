@@ -227,7 +227,7 @@ Roll five dice and calculate the sum:
 
 ***
 
-$$\bar{x} = \frac{1}{n} \sum_{i=1}^{n} x_i$$
+$$\bar{x} = \frac{1}{n} \sum_{i=1}^{n} x_{i}$$
 
 ***
 
@@ -409,10 +409,10 @@ print(paste("Arithmetic Mean:", round(mean_value, 2)))`;
 
 -! For a discrete random variable, it's calculated using probabilities:
 
-$$E[X] = \sum_{i=1}^{n} x_i \cdot P(x_i)$$
+$$E[X] = \sum_{i=1}^{n} x_{i} \cdot P(x_{i})$$
 
--: $x_i$ = possible outcomes
--: $P(x_i)$ = probability of each outcome
+-: $x_{i}$ = possible outcomes
+-: $P(x_{i})$ = probability of each outcome
 
 <!-- /position -->
 <!-- position={row: 1, column: 2} -->
@@ -446,7 +446,7 @@ $E[$5<i class="fas fa-dice"></i>$] = 5 \times E[$<i class="fas fa-dice"></i>$] =
 **Theoretical vs. Practical**
 
 -! In our dice example, we **knew** the probabilities:
--> Each outcome: $P(x_i) = \frac{1}{6}$
+-> Each outcome: $P(x_{i}) = \frac{1}{6}$
 -> We could calculate: $E[$<i class="fas fa-dice"></i>$] = 3.5$
 
 ***
@@ -469,7 +469,7 @@ $E[$5<i class="fas fa-dice"></i>$] = 5 \times E[$<i class="fas fa-dice"></i>$] =
 
 -< We must `estimate` the expected value from `sample data` using the `arithmetic mean`!
 
-$$\bar{x} = \frac{1}{n} \sum_{i=1}^{n} x_i \approx E[X]$$
+$$\bar{x} = \frac{1}{n} \sum_{i=1}^{n} x_{i} \approx E[X]$$
 
 <!-- /position -->
 <!-- /layout -->
@@ -887,11 +887,11 @@ print(paste("Arithmetic Mean:", round(mean_fe, 2), "mg/L"))`;
 <!-- position={row: 1, column: 2} -->
 <b>The Geometric Mean</b>
 
-$$\bar{x}_{geom} = \sqrt[n]{x_1 \times x_2 \times ... \times x_n}$$
+$$\bar{x}\_{geom} = \sqrt[n]{x_{1} \times x_{2} \times ... \times x_{n}}$$
 
 Or equivalently:
 
-$$= exp\left(\frac{1}{n}\sum_{i=1}^{n}ln(x_i)\right)$$
+$$= exp\left(\frac{1}{n}\sum_{i=1}^{n}ln(x_{i})\right)$$
 
 ***
 
@@ -1102,7 +1102,7 @@ print(paste("Geometric Mean:", round(geom_mean, 2)))`;
 <!-- position={row: 1, column: 2} -->
 *Problem*
 
--! The arithmetic mean is sensitive to outliers and tends to overestimate the central tendency.
+-! The arithmetic mean is sensitive to outliers and can be biased.
 
 <div style="background: #702914ff; color: #ffffff; padding: 8px 12px; border-radius: 8px; margin: 6px 0; font-size: 0.7em;">E.g., [$10, 100, 10{,}000$]</div>
 -: Arithmetic mean: $\frac{10+100+10{,}000}{3} = 3{,}370$
@@ -1113,7 +1113,7 @@ print(paste("Geometric Mean:", round(geom_mean, 2)))`;
 
 *Regulatory Relevance*
 
--! The *U.S. EPA* water quality standards for microbial indicators are based on the geometric mean.
+-! *U.S. EPA* water quality standards for microbial indicators use the geometric mean.
 <!-- /position -->
 <!-- /layout -->
 
@@ -1780,21 +1780,21 @@ Example Pb concentrations: [0.5, 0.7, 0.6, 0.8, 15.0] µg/L
 <!-- layout={rows: 1, columns: 2} -->
 <!-- position={row: 1, column: 1} -->
 ### Arithmetic Mean
-$$\bar{x} = \frac{1}{n} \sum_{i=1}^{n} x_i$$
+$$\bar{x} = \frac{1}{n} \sum_{i=1}^{n} x_{i}$$
 
 -! Use for: Normal data without extreme outliers
 
 ***
 
 ### Geometric Mean
-$$\bar{x}\_{geom} = \sqrt[n]{\prod_{i=1}^{n} x_i}$$
+$$\bar{x}\_{geom} = \sqrt[n]{\prod_{i=1}^{n} x_{i}}$$
 
 -! Use for: Rates, ratios, fold changes
 
 <!-- /position -->
 <!-- position={row: 1, column: 2} -->
 ### Harmonic Mean
-$$\bar{x}\_{harm} = \frac{n}{\sum_{i=1}^{n}\frac{1}{x_i}}$$
+$$\bar{x}\_{harm} = \frac{n}{\sum_{i=1}^{n}\frac{1}{x_{i}}}$$
 
 -! Use for: Averaging rates over equal times
 

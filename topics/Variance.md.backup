@@ -1,0 +1,100 @@
+<!-- 
+============================================================
+Variance, Standard Deviation & Standard Error — Slide Plan
+============================================================
+
+1. Why Do We Need More Than a Mean?
+- Example: two datasets with same mean, different spread.
+- Takeaway: mean = center; variance/SD = variability.
+
+2. Variance: Definition & Idea
+- Population: Var(X)=E[(X−μ)²]
+- Sample: s²=Σ(xᵢ−x̄)²/(n−1)
+- Squaring ensures all deviations positive.
+- Units in squared units → interpret carefully.
+
+3. Standard Deviation (SD)
+- s = √s² (same units as data)
+- Rule of thumb: ~2/3 within ±1 SD for normal-ish data.
+- Visual: histogram with ±1 SD band.
+
+4. Sample vs Population & Bessel’s Correction
+- μ, σ (population) vs x̄, s (sample)
+- n−1 because mean estimated from sample (loss of 1 df).
+
+5. Standard Error (SE) of the Mean
+- SE( x̄ ) = s / √n
+- SD → spread of data (unchanged by n)
+- SE → precision of mean (shrinks with √n)
+
+6. LLN Intuition
+- As n ↑, sample mean → true mean; spread of means narrows.
+- Visual: sampling distributions for n=5, 30, 100.
+
+7. Example (near-symmetric)
+- Dissolved oxygen (mg/L) across days.
+- Compute x̄, s, SE.
+- SD = day-to-day variability; SE = precision of average.
+
+8. Skewed Data
+- E. coli counts (right-skewed).
+- Arithmetic mean & SD overstate “typical” value.
+- Hint: transform (log) or use geometric mean.
+
+9. Geometric Context
+- g = exp(mean(log x))
+- Spread measured on log scale: s_logx (→ multiplicative “× factor”).
+- State conceptually: variability assessed on same scale as mean.
+
+10. Harmonic Context
+- h = n / Σ(1/xᵢ)
+- Used for rates in series (e.g., hydraulic conductivity layers).
+- Mention concept of variability of 1/x qualitatively.
+
+11. SD vs SE on Plots
+- Show difference between SD bars (data spread) and SE bars (precision).
+- Warning: common mix-up in literature.
+
+12. Units, Scaling, and CV
+- SD/SE scale with units.
+- CV = s / x̄  (unitless; meaningful for positive ratio-scale data).
+- Use when comparing sites with different mean levels.
+
+13. Choosing the Right Summary
+| Data structure | Typical mean | Appropriate spread |
+|----------------|---------------|--------------------|
+| Additive/symmetric | Arithmetic | SD, SE(x̄) |
+| Multiplicative/lognormal | Geometric | SD of log x |
+| Reciprocal/rates | Harmonic | SD of 1/x (conceptual) |
+
+14. Minimal R Snippets
+Arithmetic:
+  mean(x); sd(x); se <- sd(x)/sqrt(length(x))
+Geometric:
+  g  <- exp(mean(log(x)))
+  sL <- sd(log(x))        # spread on log scale
+  exp(sL)                 # multiplicative factor
+Harmonic:
+  h <- 1/mean(1/x)
+
+15. Short Exercises
+A. Nitrate (near-normal): compute mean, SD, SE.
+B. E. coli (skewed): compute arithmetic vs geometric mean; compare.
+C. Hydraulic K (rates): compute harmonic mean of [0.5, 5].
+
+16. Common Pitfalls
+- Confusing SD and SE.
+- Using arithmetic mean on right-skewed data.
+- Ignoring units (variance in squared units).
+- Averaging rates arithmetically in series.
+
+17. Summary
+- SD = spread of data; SE = precision of mean.
+- SE decreases with √n.
+- Match mean & scale (additive → arithmetic, multiplicative → geometric, reciprocal → harmonic).
+- Always label SD vs SE clearly.
+
+============================================================
+End of Slide Plan
+============================================================
+-->

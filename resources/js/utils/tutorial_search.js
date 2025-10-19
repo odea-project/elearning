@@ -86,7 +86,9 @@ function renderGrid(items) {
         const photoArea = document.createElement('div');
         photoArea.style.width = '100%';
         photoArea.style.height = '100%';
-        photoArea.style.backgroundColor = getRandomColor();
+        const baseColor = getRandomColor();
+        // Create gradient from lighter top-left to darker bottom-right for depth
+        photoArea.style.background = `linear-gradient(135deg, ${baseColor} 0%, ${adjustColorBrightness(baseColor, -50)} 100%)`;
         photoArea.style.borderRadius = '1px';
         
         colorDiv.appendChild(photoArea);
@@ -129,6 +131,22 @@ function getRandomColor() {
 
   // Fully random:
   return '#' + Math.floor(Math.random() * 16777215).toString(16).padStart(6, '0');
+}
+
+// Utility function to adjust color brightness (for gradients)
+function adjustColorBrightness(color, percent) {
+  // Convert hex to RGB
+  const num = parseInt(color.replace('#', ''), 16);
+  let r = (num >> 16) + percent;
+  let g = ((num >> 8) & 0x00FF) + percent;
+  let b = (num & 0x0000FF) + percent;
+  
+  // Clamp values between 0 and 255
+  r = Math.max(0, Math.min(255, r));
+  g = Math.max(0, Math.min(255, g));
+  b = Math.max(0, Math.min(255, b));
+  
+  return '#' + ((r << 16) | (g << 8) | b).toString(16).padStart(6, '0');
 }
 
 

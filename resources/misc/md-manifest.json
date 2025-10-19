@@ -39,5 +39,20 @@
     "requirements": [
       "none"
     ]
+  },
+  {
+    "filename": "Variance.md",
+    "title": "Variance",
+    "keywords": [
+      "variance",
+      "standard deviation",
+      "standard error",
+      "spread",
+      "uncertainty"
+    ],
+    "thumbnail": null,
+    "requirements": [
+      "Mean Values"
+    ]
   }
 ]

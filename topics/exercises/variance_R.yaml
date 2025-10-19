@@ -1,0 +1,216 @@
+- id: var01
+  title: "Nitrate Concentrations - Basic Statistics"
+  task: |
+    Calculate the arithmetic mean, standard deviation, and standard error for nitrate concentrations.
+  starter_code: |
+    # Nitrate concentrations (mg/L)
+    nitrate <- c(5.2, 5.8, 4.9, 5.5, 5.1, 5.4, 5.3)
+    
+    # Calculate mean
+    mean_nitrate <- ...
+    
+    # Calculate standard deviation
+    sd_nitrate <- ...
+    
+    # Calculate standard error
+    n <- length(nitrate)
+    se_nitrate <- ...
+    
+    # Display results
+    print(paste("Mean:", round(mean_nitrate, 2), "mg/L"))
+    print(paste("SD:", round(sd_nitrate, 3), "mg/L"))
+    print(paste("SE:", round(se_nitrate, 3), "mg/L"))
+  solution: |
+    # Nitrate concentrations (mg/L)
+    nitrate <- c(5.2, 5.8, 4.9, 5.5, 5.1, 5.4, 5.3)
+
+    # Calculate mean
+    mean_nitrate <- mean(nitrate)
+
+    # Calculate standard deviation
+    sd_nitrate <- sd(nitrate)
+
+    # Calculate standard error
+    n <- length(nitrate)
+    se_nitrate <- sd_nitrate / sqrt(n)
+    
+    # Display results
+    print(paste("Mean:", round(mean_nitrate, 2), "mg/L"))
+    print(paste("SD:", round(sd_nitrate, 3), "mg/L"))
+    print(paste("SE:", round(se_nitrate, 3), "mg/L"))
+  expected_output: |
+    [1] "Mean: 5.31 mg/L"
+    [1] "SD: 0.291 mg/L"
+    [1] "SE: 0.11 mg/L"
+
+- id: var02
+  title: "E. coli - Arithmetic vs Geometric Mean"
+  task: |
+    Calculate arithmetic and geometric means for 
+    skewed E. coli data.
+  starter_code: |
+    # E. coli counts (CFU/100mL)
+    ecoli <- c(8, 15, 22, 35, 180)
+    
+    # Arithmetic mean
+    mean_arith <- ...
+    
+    # Geometric mean
+    mean_geom <- ...
+    
+    # SD on log scale
+    sd_log <- ...
+    
+    # Multiplicative factor
+    mult_factor <- ...
+    
+    print(paste("Arith:", round(mean_arith, 1)))
+    print(paste("Geom:", round(mean_geom, 1)))
+    print(paste("Factor:", round(mult_factor, 2)))
+  solution: |
+    # E. coli counts (CFU/100mL)
+    ecoli <- c(8, 15, 22, 35, 180)
+    
+    # Arithmetic mean
+    mean_arith <- mean(ecoli)
+    
+    # Geometric mean
+    mean_geom <- exp(mean(log(ecoli)))
+    
+    # SD on log scale
+    sd_log <- sd(log(ecoli))
+    
+    # Multiplicative factor
+    mult_factor <- exp(sd_log)
+    
+    print(paste("Arith:", round(mean_arith, 1)))
+    print(paste("Geom:", round(mean_geom, 1)))
+    print(paste("Factor:", round(mult_factor, 2)))
+  expected_output: |
+    [1] "Arith: 52"
+    [1] "Geom: 27.8"
+    [1] "Factor: 3.24"
+
+- id: var03
+  title: "Hydraulic K - Harmonic Mean"
+  task: |
+    Calculate arithmetic and harmonic means for
+    hydraulic conductivity in layered soil.
+  starter_code: |
+    # Hydraulic conductivity (m/day)
+    k_values <- c(0.5, 5.0)
+    
+    # Arithmetic mean
+    mean_arith <- ...
+    
+    # Harmonic mean
+    mean_harm <- ...
+    
+    print(paste("Arith:", round(mean_arith, 2)))
+    print(paste("Harm:", round(mean_harm, 2)))
+    print("Use harmonic for series!")
+  solution: |
+    # Hydraulic conductivity (m/day)
+    k_values <- c(0.5, 5.0)
+    
+    # Arithmetic mean
+    mean_arith <- mean(k_values)
+    
+    # Harmonic mean
+    mean_harm <- 1 / mean(1 / k_values)
+    
+    print(paste("Arith:", round(mean_arith, 2)))
+    print(paste("Harm:", round(mean_harm, 2)))
+    print("Use harmonic for series!")
+  expected_output: |
+    [1] "Arith: 2.75"
+    [1] "Harm: 0.91"
+    [1] "Use harmonic for series!"
+
+- id: var04
+  title: "SD vs SE Comparison"
+  task: |
+    Compare SD and SE for small vs large samples.
+    Observe: SE decreases, SD stays constant.
+  starter_code: |
+    # Set seed for reproducibility
+    set.seed(123)
+    
+    # Small sample (n=10)
+    s_small <- rnorm(10, mean = 50, sd = 10)
+    sd_s <- ...
+    se_s <- ...
+    
+    # Large sample (n=100)
+    s_large <- rnorm(100, mean = 50, sd = 10)
+    sd_l <- ...
+    se_l <- ...
+    
+    print(paste("n=10: SD=", round(sd_s, 2),
+                "SE=", round(se_s, 2)))
+    print(paste("n=100: SD=", round(sd_l, 2),
+                "SE=", round(se_l, 2)))
+  solution: |
+    # Set seed for reproducibility
+    set.seed(123)
+    
+    # Small sample (n=10)
+    s_small <- rnorm(10, mean = 50, sd = 10)
+    sd_s <- sd(s_small)
+    se_s <- sd_s / sqrt(length(s_small))
+    
+    # Large sample (n=100)
+    s_large <- rnorm(100, mean = 50, sd = 10)
+    sd_l <- sd(s_large)
+    se_l <- sd_l / sqrt(length(s_large))
+    
+    print(paste("n=10: SD=", round(sd_s, 2),
+                "SE=", round(se_s, 2)))
+    print(paste("n=100: SD=", round(sd_l, 2),
+                "SE=", round(se_l, 2)))
+  expected_output: |
+    [1] "n=10: SD= 9.54 SE= 3.02"
+    [1] "n=100: SD= 9.04 SE= 0.9"
+
+- id: var05
+  title: "Coefficient of Variation (CV)"
+  task: |
+    Calculate CV to compare relative variability
+    across datasets with different units.
+  starter_code: |
+    # Dataset A: Temperature (°C)
+    temp <- c(18.0, 18.5, 19.0, 18.2, 18.8)
+    mean_t <- mean(temp)
+    sd_t <- sd(temp)
+    cv_t <- ...
+    
+    # Dataset B: Dissolved oxygen (mg/L)
+    do_data <- c(7.0, 8.5, 9.0, 7.8, 8.2)
+    mean_d <- mean(do_data)
+    sd_d <- sd(do_data)
+    cv_d <- ...
+    
+    print(paste("Temp CV:", 
+                round(cv_t * 100, 2), "%"))
+    print(paste("DO CV:", 
+                round(cv_d * 100, 2), "%"))
+  solution: |
+    # Dataset A: Temperature (°C)
+    temp <- c(18.0, 18.5, 19.0, 18.2, 18.8)
+    mean_t <- mean(temp)
+    sd_t <- sd(temp)
+    cv_t <- sd_t / mean_t
+    
+    # Dataset B: Dissolved oxygen (mg/L)
+    do_data <- c(7.0, 8.5, 9.0, 7.8, 8.2)
+    mean_d <- mean(do_data)
+    sd_d <- sd(do_data)
+    cv_d <- sd_d / mean_d
+    
+    print(paste("Temp CV:", 
+                round(cv_t * 100, 2), "%"))
+    print(paste("DO CV:", 
+                round(cv_d * 100, 2), "%"))
+  expected_output: |
+    [1] "Temp CV: 2.23 %"
+    [1] "DO CV: 9.32 %"
