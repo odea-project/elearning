@@ -55,12 +55,61 @@ function renderGrid(items) {
       tile.style.justifyContent = 'center';
 
       if (item.thumbnail) {
-        // Use image if thumbnail exists
-        const thumb = document.createElement('img');
-        thumb.className = 'tutorialGridTileThumb';
-        thumb.src = item.thumbnail;
-        thumb.alt = item.title;
-        tile.appendChild(thumb);
+        // Create polaroid-style colored div with SVG icon overlay
+        const colorDiv = document.createElement('div');
+        colorDiv.style.width = '200px';
+        colorDiv.style.height = '200px';
+        colorDiv.style.minWidth = '100px';
+        colorDiv.style.minHeight = '100px';
+        colorDiv.style.flexShrink = '0';
+        colorDiv.style.borderRadius = '2px';
+        colorDiv.style.padding = '12px';
+        colorDiv.style.paddingBottom = '12px';
+        colorDiv.style.backgroundColor = '#fff';
+        colorDiv.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.3), 0 1px 3px rgba(0, 0, 0, 0.2)';
+        colorDiv.style.marginBottom = '70px';
+        colorDiv.style.position = 'relative';
+        
+        // Random rotation between -4 and 4 degrees
+        const rotation = (1 * (Math.random() * 8 - 4)).toFixed(2);
+        colorDiv.style.transform = `rotate(${rotation}deg)`;
+        colorDiv.style.transition = 'transform 0.3s ease, box-shadow 0.3s ease';
+        
+        // Inner colored area (the actual photo part) with gradient
+        const photoArea = document.createElement('div');
+        photoArea.style.width = '100%';
+        photoArea.style.height = '100%';
+        const baseColor = getRandomColor();
+        photoArea.style.background = `linear-gradient(135deg, ${baseColor} 0%, ${adjustColorBrightness(baseColor, -20)} 100%)`;
+        photoArea.style.borderRadius = '1px';
+        photoArea.style.position = 'relative';
+        photoArea.style.display = 'flex';
+        photoArea.style.alignItems = 'center';
+        photoArea.style.justifyContent = 'center';
+        
+        // SVG icon overlay
+        const icon = document.createElement('img');
+        icon.src = item.thumbnail;
+        icon.alt = item.title;
+        icon.style.width = '100%';
+        icon.style.height = '100%';
+        icon.style.objectFit = 'contain';
+        icon.style.filter = 'drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3))';
+        
+        photoArea.appendChild(icon);
+        colorDiv.appendChild(photoArea);
+        
+        // Hover effect
+        colorDiv.addEventListener('mouseenter', () => {
+          colorDiv.style.transform = `rotate(0deg) scale(1.05)`;
+          colorDiv.style.boxShadow = '0 8px 16px rgba(0, 0, 0, 0.4), 0 2px 6px rgba(0, 0, 0, 0.3)';
+        });
+        colorDiv.addEventListener('mouseleave', () => {
+          colorDiv.style.transform = `rotate(${rotation}deg)`;
+          colorDiv.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.3), 0 1px 3px rgba(0, 0, 0, 0.2)';
+        });
+        
+        tile.appendChild(colorDiv);
       } else {
         // Create polaroid-style colored div
         const colorDiv = document.createElement('div');

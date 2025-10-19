@@ -7,7 +7,7 @@
       "Chemometrics & Applied Statistics",
       "Schedule"
     ],
-    "thumbnail": null,
+    "thumbnail": "resources/icons/course-intro.svg",
     "requirements": [
       "none"
     ]
@@ -20,7 +20,7 @@
       "discrete random variable",
       "continuous random variable"
     ],
-    "thumbnail": null,
+    "thumbnail": "resources/icons/variable.svg",
     "requirements": [
       "none"
     ]
@@ -35,7 +35,7 @@
       "expected value",
       "median"
     ],
-    "thumbnail": null,
+    "thumbnail": "resources/icons/mean.svg",
     "requirements": [
       "none"
     ]
@@ -50,7 +50,7 @@
       "spread",
       "uncertainty"
     ],
-    "thumbnail": null,
+    "thumbnail": "resources/icons/variance.svg",
     "requirements": [
       "Mean Values"
     ]

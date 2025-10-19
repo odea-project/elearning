@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <!-- Simple variable x -->
+  <text x="100" y="120" font-family="Georgia, serif" font-size="120" font-style="italic" font-weight="normal" fill="white" text-anchor="middle">
+    x
+  </text>
+</svg>
