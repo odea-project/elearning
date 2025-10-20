@@ -1,0 +1,35 @@
+<svg viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="300" height="300" fill="#1a2340" rx="10"/>
+  
+  <!-- Title -->
+  <text x="150" y="35" font-size="18" font-weight="bold" fill="#9efcff" text-anchor="middle" font-family="'Montserrat', Helvetica, sans-serif">Multiple Sensors</text>
+  
+  <!-- Sensor 1 -->
+  <rect x="40" y="90" width="60" height="80" fill="#61AFEF" opacity="0.3" stroke="#61AFEF" stroke-width="2" rx="5"/>
+  <circle cx="70" cy="110" r="8" fill="#61AFEF"/>
+  <line x1="70" y1="125" x2="70" y2="145" stroke="#61AFEF" stroke-width="2"/>
+  <text x="70" y="190" font-size="16" font-weight="bold" fill="#61AFEF" text-anchor="middle" font-family="'Montserrat', Helvetica, sans-serif">480</text>
+  <text x="70" y="205" font-size="10" fill="#ABB2BF" text-anchor="middle" font-family="'Montserrat', Helvetica, sans-serif">µS/cm</text>
+  
+  <!-- Sensor 2 -->
+  <rect x="120" y="90" width="60" height="80" fill="#98C379" opacity="0.3" stroke="#98C379" stroke-width="2" rx="5"/>
+  <circle cx="150" cy="110" r="8" fill="#98C379"/>
+  <line x1="150" y1="125" x2="150" y2="145" stroke="#98C379" stroke-width="2"/>
+  <text x="150" y="190" font-size="16" font-weight="bold" fill="#98C379" text-anchor="middle" font-family="'Montserrat', Helvetica, sans-serif">500</text>
+  <text x="150" y="205" font-size="10" fill="#ABB2BF" text-anchor="middle" font-family="'Montserrat', Helvetica, sans-serif">µS/cm</text>
+  
+  <!-- Sensor 3 -->
+  <rect x="200" y="90" width="60" height="80" fill="#C678DD" opacity="0.3" stroke="#C678DD" stroke-width="2" rx="5"/>
+  <circle cx="230" cy="110" r="8" fill="#C678DD"/>
+  <line x1="230" y1="125" x2="230" y2="145" stroke="#C678DD" stroke-width="2"/>
+  <text x="230" y="190" font-size="16" font-weight="bold" fill="#C678DD" text-anchor="middle" font-family="'Montserrat', Helvetica, sans-serif">520</text>
+  <text x="230" y="205" font-size="10" fill="#ABB2BF" text-anchor="middle" font-family="'Montserrat', Helvetica, sans-serif">µS/cm</text>
+  
+  <!-- Label -->
+  <text x="150" y="240" font-size="14" fill="#ABB2BF" text-anchor="middle" font-family="'Montserrat', Helvetica, sans-serif">Electrical Conductivity</text>
+  
+  <!-- Average indicator -->
+  <line x1="40" y1="260" x2="260" y2="260" stroke="#E5C07B" stroke-width="2" stroke-dasharray="5,5"/>
+  <text x="150" y="275" font-size="12" fill="#E5C07B" text-anchor="middle" font-family="'Montserrat', Helvetica, sans-serif">Sensor Average</text>
+</svg>

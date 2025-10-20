@@ -1,0 +1,33 @@
+<svg viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="300" height="300" fill="#1a2340" rx="10"/>
+  
+  <!-- Title -->
+  <text x="150" y="35" font-size="18" font-weight="bold" fill="#9efcff" text-anchor="middle" font-family="'Montserrat', Helvetica, sans-serif">Pollutant at River Sites</text>
+  
+  <!-- River path -->
+  <path d="M 30 150 Q 100 120, 150 150 Q 200 180, 270 150" 
+        stroke="#61AFEF" stroke-width="8" fill="none" opacity="0.5"/>
+  
+  <!-- Site 1 (low concentration) -->
+  <circle cx="70" cy="135" r="15" fill="#98C379" opacity="0.3" stroke="#98C379" stroke-width="2"/>
+  <text x="70" y="142" font-size="14" font-weight="bold" fill="#98C379" text-anchor="middle" font-family="'Montserrat', Helvetica, sans-serif">0.01</text>
+  <text x="70" y="175" font-size="10" fill="#ABB2BF" text-anchor="middle" font-family="'Montserrat', Helvetica, sans-serif">Site 1</text>
+  
+  <!-- Site 2 (medium concentration) -->
+  <circle cx="150" cy="150" r="25" fill="#E5C07B" opacity="0.3" stroke="#E5C07B" stroke-width="2"/>
+  <text x="150" y="157" font-size="14" font-weight="bold" fill="#E5C07B" text-anchor="middle" font-family="'Montserrat', Helvetica, sans-serif">0.1</text>
+  <text x="150" y="195" font-size="10" fill="#ABB2BF" text-anchor="middle" font-family="'Montserrat', Helvetica, sans-serif">Site 2</text>
+  
+  <!-- Site 3 (high concentration - hotspot) -->
+  <circle cx="230" cy="160" r="35" fill="#E06C75" opacity="0.3" stroke="#E06C75" stroke-width="3"/>
+  <text x="230" y="167" font-size="14" font-weight="bold" fill="#E06C75" text-anchor="middle" font-family="'Montserrat', Helvetica, sans-serif">1.0</text>
+  <text x="230" y="215" font-size="10" fill="#ABB2BF" text-anchor="middle" font-family="'Montserrat', Helvetica, sans-serif">Site 3</text>
+  
+  <!-- Warning for hotspot -->
+  <text x="230" y="235" font-size="16" fill="#E06C75" text-anchor="middle">⚠</text>
+  
+  <!-- Label -->
+  <text x="150" y="260" font-size="12" fill="#ABB2BF" text-anchor="middle" font-family="'Montserrat', Helvetica, sans-serif">Pesticide concentration (µg/L)</text>
+  <text x="150" y="280" font-size="11" fill="#75715e" text-anchor="middle" font-family="'Montserrat', Helvetica, sans-serif">log-normal distribution</text>
+</svg>

@@ -1,0 +1,50 @@
+<svg viewBox="0 0 800 280" xmlns="http://www.w3.org/2000/svg">
+  <!-- Title -->
+  <text x="400" y="35" font-size="24" font-weight="bold" fill="#9efcff" text-anchor="middle" font-family="'Montserrat', Helvetica, sans-serif">Turbidity Measurements Over 5 Days</text>
+  
+  <!-- Day 1 -->
+  <g id="day1">
+    <circle cx="100" cy="200" r="30" fill="#61AFEF" opacity="0.3" stroke="#61AFEF" stroke-width="3"/>
+    <text x="100" y="208" font-size="24" font-weight="bold" fill="#61AFEF" text-anchor="middle" font-family="'Montserrat', Helvetica, sans-serif">2.1</text>
+    <text x="100" y="260" font-size="14" fill="#ABB2BF" text-anchor="middle" font-family="'Montserrat', Helvetica, sans-serif">Day 1</text>
+  </g>
+  
+  <!-- Day 2 -->
+  <g id="day2">
+    <circle cx="220" cy="200" r="30" fill="#61AFEF" opacity="0.3" stroke="#61AFEF" stroke-width="3"/>
+    <text x="220" y="208" font-size="24" font-weight="bold" fill="#61AFEF" text-anchor="middle" font-family="'Montserrat', Helvetica, sans-serif">2.3</text>
+    <text x="220" y="260" font-size="14" fill="#ABB2BF" text-anchor="middle" font-family="'Montserrat', Helvetica, sans-serif">Day 2</text>
+  </g>
+  
+  <!-- Day 3 -->
+  <g id="day3">
+    <circle cx="340" cy="200" r="30" fill="#61AFEF" opacity="0.3" stroke="#61AFEF" stroke-width="3"/>
+    <text x="340" y="208" font-size="24" font-weight="bold" fill="#61AFEF" text-anchor="middle" font-family="'Montserrat', Helvetica, sans-serif">2.0</text>
+    <text x="340" y="260" font-size="14" fill="#ABB2BF" text-anchor="middle" font-family="'Montserrat', Helvetica, sans-serif">Day 3</text>
+  </g>
+  
+  <!-- Day 4 -->
+  <g id="day4">
+    <circle cx="460" cy="200" r="30" fill="#61AFEF" opacity="0.3" stroke="#61AFEF" stroke-width="3"/>
+    <text x="460" y="208" font-size="24" font-weight="bold" fill="#61AFEF" text-anchor="middle" font-family="'Montserrat', Helvetica, sans-serif">2.2</text>
+    <text x="460" y="260" font-size="14" fill="#ABB2BF" text-anchor="middle" font-family="'Montserrat', Helvetica, sans-serif">Day 4</text>
+  </g>
+  
+  <!-- Day 5 (OUTLIER) -->
+  <g id="day5">
+    <circle cx="620" cy="140" r="50" fill="#E06C75" opacity="0.3" stroke="#E06C75" stroke-width="4"/>
+    <text x="620" y="150" font-size="32" font-weight="bold" fill="#E06C75" text-anchor="middle" font-family="'Montserrat', Helvetica, sans-serif">45.0</text>
+    <text x="620" y="260" font-size="14" fill="#ABB2BF" text-anchor="middle" font-family="'Montserrat', Helvetica, sans-serif">Day 5</text>
+    <text x="620" y="100" font-size="16" fill="#FF1493" text-anchor="middle" font-family="'Montserrat', Helvetica, sans-serif">Storm Event!</text>
+    
+    <!-- Warning icon -->
+    <text x="620" y="75" font-size="24" fill="#E5C07B" text-anchor="middle">⚠</text>
+  </g>
+  
+  <!-- Normal range indicator -->
+  <line x1="80" y1="240" x2="480" y2="240" stroke="#98C379" stroke-width="2" stroke-dasharray="5,5"/>
+  <text x="280" y="255" font-size="12" fill="#98C379" text-anchor="middle" font-family="'Montserrat', Helvetica, sans-serif">Normal conditions (≈ 2 NTU)</text>
+  
+  <!-- Unit label -->
+  <text x="50" y="200" font-size="16" fill="#ABB2BF" text-anchor="end" font-family="'Montserrat', Helvetica, sans-serif">NTU</text>
+</svg>

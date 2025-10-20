@@ -1212,6 +1212,15 @@ Example ratios: $[0.5,\, 2,\, 5]$
 
 <!-- .slide:id="harmonic-mean-problem" -->
 ## Harmonic Mean I — Why Other Means Fail
+
+<img src="resources/figures/harmonic_mean_intro.svg" alt="Pollutant Flow Through River Sections" style="max-width: 90%; margin: 20px auto; display: block;">
+
+-? What is the average velocity of the pollutant across both sections?
+
+---
+
+<!-- .slide:id="harmonic-mean-problem" -->
+## Harmonic Mean I — Why Other Means Fail
 <!-- layout={rows: 1, columns: 2} -->
 
 <!-- position={row: 1, column: 1} -->
@@ -1518,6 +1527,15 @@ Example diffusion coefficients: $[2\times10^{-6},\, 1\times10^{-8}]$ m²/s
 -= The harmonic mean correctly captures the slowest controlling layer, which dominates the chemical’s overall movement through soil.
 <!-- /position -->
 <!-- /layout -->
+
+---
+
+<!-- .slide:id="median-intro" -->
+## Median  When Data Has Outliers
+
+<img src="resources/figures/median_outlier_intro.svg" alt="Turbidity Measurements with Outlier" style="max-width: 90%; margin: 20px auto; display: block;">
+
+-? What is a representative "typical" turbidity value for process control?
 
 ---
 
@@ -1860,3 +1878,29 @@ $$\bar{x}\_{harm} = \frac{n}{\sum_{i=1}^{n}\frac{1}{x_{i}}}$$
 
 <!-- /position -->
 <!-- /layout -->
+
+---
+
+<!-- .slide:id="case-scenarios" -->
+## Group Discussion: Which Mean to Use?
+
+<div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; padding: 5px;">
+  <div style="text-align: center;">
+    <img src="resources/figures/case03_sensors.svg" alt="Case 3: Multiple Sensors" style="width: 70%; border-radius: 8px;">
+  </div>
+  <div style="text-align: center;">
+    <img src="resources/figures/case05_microplastics.svg" alt="Case 5: Microplastics" style="width: 70%; border-radius: 8px;">
+  </div>
+  <div style="text-align: center;">
+    <img src="resources/figures/case01_replicates.svg" alt="Case 1: Replicate Measurements" style="width: 70%; border-radius: 8px;">
+  </div>
+  <div style="text-align: center;">
+    <img src="resources/figures/case04_pollutant_sites.svg" alt="Case 4: Pollutant Sites" style="width: 70%; border-radius: 8px;">
+  </div>
+  <div style="text-align: center;">
+    <img src="resources/figures/case02_river_loads.svg" alt="Case 2: River Loads" style="width: 70%; border-radius: 8px;">
+  </div>
+  <div style="text-align: center;">
+    <img src="resources/figures/case06_reactors.svg" alt="Case 6: Series Reactors" style="width: 70%; border-radius: 8px;">
+  </div>
+</div>

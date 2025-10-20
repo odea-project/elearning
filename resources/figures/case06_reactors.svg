@@ -1,0 +1,50 @@
+<svg viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="300" height="300" fill="#1a2340" rx="10"/>
+  
+  <!-- Title -->
+  <text x="150" y="35" font-size="18" font-weight="bold" fill="#9efcff" text-anchor="middle" font-family="'Montserrat', Helvetica, sans-serif">Series Reactors</text>
+  
+  <!-- Reactor 1 (slow) -->
+  <rect x="30" y="100" width="60" height="80" fill="#61AFEF" opacity="0.3" stroke="#61AFEF" stroke-width="2" rx="5"/>
+  <text x="60" y="135" font-size="16" font-weight="bold" fill="#61AFEF" text-anchor="middle" font-family="'Montserrat', Helvetica, sans-serif">k₁</text>
+  <text x="60" y="155" font-size="14" fill="#61AFEF" text-anchor="middle" font-family="'Montserrat', Helvetica, sans-serif">0.5</text>
+  <text x="60" y="170" font-size="10" fill="#ABB2BF" text-anchor="middle" font-family="'Montserrat', Helvetica, sans-serif">h⁻¹</text>
+  <text x="60" y="200" font-size="9" fill="#75715e" text-anchor="middle" font-family="'Montserrat', Helvetica, sans-serif">Reactor 1</text>
+  
+  <!-- Reactor 2 (medium) -->
+  <rect x="120" y="100" width="60" height="80" fill="#98C379" opacity="0.3" stroke="#98C379" stroke-width="2" rx="5"/>
+  <text x="150" y="135" font-size="16" font-weight="bold" fill="#98C379" text-anchor="middle" font-family="'Montserrat', Helvetica, sans-serif">k₂</text>
+  <text x="150" y="155" font-size="14" fill="#98C379" text-anchor="middle" font-family="'Montserrat', Helvetica, sans-serif">1.0</text>
+  <text x="150" y="170" font-size="10" fill="#ABB2BF" text-anchor="middle" font-family="'Montserrat', Helvetica, sans-serif">h⁻¹</text>
+  <text x="150" y="200" font-size="9" fill="#75715e" text-anchor="middle" font-family="'Montserrat', Helvetica, sans-serif">Reactor 2</text>
+  
+  <!-- Reactor 3 (fast) -->
+  <rect x="210" y="100" width="60" height="80" fill="#C678DD" opacity="0.3" stroke="#C678DD" stroke-width="2" rx="5"/>
+  <text x="240" y="135" font-size="16" font-weight="bold" fill="#C678DD" text-anchor="middle" font-family="'Montserrat', Helvetica, sans-serif">k₃</text>
+  <text x="240" y="155" font-size="14" fill="#C678DD" text-anchor="middle" font-family="'Montserrat', Helvetica, sans-serif">2.0</text>
+  <text x="240" y="170" font-size="10" fill="#ABB2BF" text-anchor="middle" font-family="'Montserrat', Helvetica, sans-serif">h⁻¹</text>
+  <text x="240" y="200" font-size="9" fill="#75715e" text-anchor="middle" font-family="'Montserrat', Helvetica, sans-serif">Reactor 3</text>
+  
+  <!-- Flow arrows -->
+  <path d="M 20 140 L 30 140" stroke="#E5C07B" stroke-width="3" fill="none"/>
+  <polygon points="30,140 25,137 25,143" fill="#E5C07B"/>
+  
+  <path d="M 90 140 L 120 140" stroke="#E5C07B" stroke-width="3" fill="none"/>
+  <polygon points="120,140 115,137 115,143" fill="#E5C07B"/>
+  
+  <path d="M 180 140 L 210 140" stroke="#E5C07B" stroke-width="3" fill="none"/>
+  <polygon points="210,140 205,137 205,143" fill="#E5C07B"/>
+  
+  <path d="M 270 140 L 280 140" stroke="#E5C07B" stroke-width="3" fill="none"/>
+  <polygon points="280,140 275,137 275,143" fill="#E5C07B"/>
+  
+  <!-- Labels -->
+  <text x="25" y="125" font-size="10" fill="#E5C07B" text-anchor="middle" font-family="'Montserrat', Helvetica, sans-serif">IN</text>
+  <text x="275" y="125" font-size="10" fill="#E5C07B" text-anchor="middle" font-family="'Montserrat', Helvetica, sans-serif">OUT</text>
+  
+  <!-- Bottom info -->
+  <text x="150" y="230" font-size="12" fill="#ABB2BF" text-anchor="middle" font-family="'Montserrat', Helvetica, sans-serif">Wastewater Treatment</text>
+  <text x="150" y="250" font-size="11" fill="#75715e" text-anchor="middle" font-family="'Montserrat', Helvetica, sans-serif">Series configuration</text>
+  
+  </svg>

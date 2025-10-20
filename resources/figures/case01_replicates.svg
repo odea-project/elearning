@@ -1,0 +1,25 @@
+<svg viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="300" height="300" fill="#1a2340" rx="10"/>
+  
+  <!-- Title -->
+  <text x="150" y="35" font-size="18" font-weight="bold" fill="#9efcff" text-anchor="middle" font-family="'Montserrat', Helvetica, sans-serif">Replicate Measurements</text>
+  
+  <!-- Lab flask -->
+  <path d="M 110 80 L 110 120 L 80 180 L 80 200 Q 80 210 90 210 L 210 210 Q 220 210 220 200 L 220 180 L 190 120 L 190 80 Z" 
+        fill="#61AFEF" opacity="0.3" stroke="#61AFEF" stroke-width="2"/>
+  <line x1="100" y1="80" x2="200" y2="80" stroke="#61AFEF" stroke-width="3"/>
+  
+  <!-- Water sample -->
+  <rect x="85" y="170" width="130" height="35" fill="#61AFEF" opacity="0.5"/>
+  
+  <!-- Measurement values -->
+  <text x="150" y="245" font-size="20" font-weight="bold" fill="#98C379" text-anchor="middle" font-family="'Montserrat', Helvetica, sans-serif">4.8, 5.0, 5.2</text>
+  <text x="150" y="265" font-size="14" fill="#ABB2BF" text-anchor="middle" font-family="'Montserrat', Helvetica, sans-serif">mg/L nitrate</text>
+  
+  <!-- Precision indicator -->
+  <circle cx="40" cy="150" r="3" fill="#98C379"/>
+  <circle cx="260" cy="150" r="3" fill="#98C379"/>
+  <circle cx="40" cy="180" r="3" fill="#98C379"/>
+  <circle cx="260" cy="180" r="3" fill="#98C379"/>
+</svg>

@@ -1,0 +1,29 @@
+<svg viewBox="0 0 800 280" xmlns="http://www.w3.org/2000/svg">
+  <!-- Title -->
+  <text x="400" y="35" font-size="24" font-weight="bold" fill="#9efcff" text-anchor="middle" font-family="'Montserrat', Helvetica, sans-serif">Pollutant Flow Through River Sections</text>
+  
+  <!-- Distance markers (top) -->
+  <line x1="80" y1="90" x2="280" y2="90" stroke="#98C379" stroke-width="2"/>
+  <line x1="80" y1="85" x2="80" y2="95" stroke="#98C379" stroke-width="2"/>
+  <line x1="280" y1="85" x2="280" y2="95" stroke="#98C379" stroke-width="2"/>
+  <text x="180" y="78" font-size="14" fill="#98C379" text-anchor="middle" font-family="'Montserrat', Helvetica, sans-serif">distance d</text>
+  
+  <line x1="380" y1="90" x2="580" y2="90" stroke="#98C379" stroke-width="2"/>
+  <line x1="380" y1="85" x2="380" y2="95" stroke="#98C379" stroke-width="2"/>
+  <line x1="580" y1="85" x2="580" y2="95" stroke="#98C379" stroke-width="2"/>
+  <text x="480" y="78" font-size="14" fill="#98C379" text-anchor="middle" font-family="'Montserrat', Helvetica, sans-serif">distance d</text>
+  
+  <!-- Section 1 (Fast) - Blue -->
+  <rect x="80" y="110" width="200" height="90" fill="#61AFEF" opacity="0.3" stroke="#61AFEF" stroke-width="3" rx="5"/>
+  <text x="180" y="160" font-size="28" font-weight="bold" fill="#61AFEF" text-anchor="middle" font-family="'Montserrat', Helvetica, sans-serif">10 m/s</text>
+  <text x="180" y="230" font-size="16" fill="#ABB2BF" text-anchor="middle" font-family="'Montserrat', Helvetica, sans-serif">Section 1 (Fast)</text>
+  
+  <!-- Transition Arrow -->
+  <text x="330" y="158" font-size="36" fill="#E5C07B" text-anchor="middle" font-family="'Montserrat', Helvetica, sans-serif">→</text>
+  <text x="330" y="185" font-size="12" fill="#75715e" text-anchor="middle" font-family="'Montserrat', Helvetica, sans-serif">equal distance</text>
+  
+  <!-- Section 2 (Slow) - Purple -->
+  <rect x="380" y="110" width="200" height="90" fill="#C678DD" opacity="0.3" stroke="#C678DD" stroke-width="3" rx="5"/>
+  <text x="480" y="160" font-size="28" font-weight="bold" fill="#C678DD" text-anchor="middle" font-family="'Montserrat', Helvetica, sans-serif">2 m/s</text>
+  <text x="480" y="230" font-size="16" fill="#ABB2BF" text-anchor="middle" font-family="'Montserrat', Helvetica, sans-serif">Section 2 (Slow)</text>
+</svg>

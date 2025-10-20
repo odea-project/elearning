@@ -1,0 +1,58 @@
+<svg viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="300" height="300" fill="#1a2340" rx="10"/>
+  
+  <!-- Title -->
+  <text x="150" y="35" font-size="18" font-weight="bold" fill="#9efcff" text-anchor="middle" font-family="'Montserrat', Helvetica, sans-serif">Microplastic Counts</text>
+  
+  <!-- Sediment sample container -->
+  <rect x="80" y="70" width="140" height="100" fill="#8b7508" opacity="0.3" stroke="#8b7508" stroke-width="2" rx="5"/>
+  <text x="150" y="60" font-size="12" fill="#ABB2BF" text-anchor="middle" font-family="'Montserrat', Helvetica, sans-serif">Sediment Sample</text>
+  
+  <!-- Subsample 1 (low) -->
+  <g>
+    <rect x="50" y="200" width="50" height="60" fill="#61AFEF" opacity="0.3" stroke="#61AFEF" stroke-width="2" rx="3"/>
+    <circle cx="65" cy="220" r="2" fill="#61AFEF"/>
+    <circle cx="75" cy="225" r="2" fill="#61AFEF"/>
+    <circle cx="85" cy="220" r="2" fill="#61AFEF"/>
+    <text x="75" y="252" font-size="12" font-weight="bold" fill="#61AFEF" text-anchor="middle" font-family="'Montserrat', Helvetica, sans-serif">100</text>
+    <text x="75" y="275" font-size="9" fill="#ABB2BF" text-anchor="middle" font-family="'Montserrat', Helvetica, sans-serif">part/kg</text>
+  </g>
+  
+  <!-- Subsample 2 (medium) -->
+  <g>
+    <rect x="125" y="200" width="50" height="60" fill="#E5C07B" opacity="0.3" stroke="#E5C07B" stroke-width="2" rx="3"/>
+    <circle cx="135" cy="220" r="2" fill="#E5C07B"/>
+    <circle cx="145" cy="215" r="2" fill="#E5C07B"/>
+    <circle cx="155" cy="220" r="2" fill="#E5C07B"/>
+    <circle cx="140" cy="230" r="2" fill="#E5C07B"/>
+    <circle cx="150" cy="225" r="2" fill="#E5C07B"/>
+    <circle cx="160" cy="230" r="2" fill="#E5C07B"/>
+    <text x="150" y="252" font-size="12" font-weight="bold" fill="#E5C07B" text-anchor="middle" font-family="'Montserrat', Helvetica, sans-serif">1000</text>
+    <text x="150" y="275" font-size="9" fill="#ABB2BF" text-anchor="middle" font-family="'Montserrat', Helvetica, sans-serif">part/kg</text>
+  </g>
+  
+  <!-- Subsample 3 (high - many particles) -->
+  <g>
+    <rect x="200" y="200" width="50" height="60" fill="#E06C75" opacity="0.3" stroke="#E06C75" stroke-width="2" rx="3"/>
+    <circle cx="210" cy="215" r="2" fill="#E06C75"/>
+    <circle cx="220" cy="210" r="2" fill="#E06C75"/>
+    <circle cx="230" cy="215" r="2" fill="#E06C75"/>
+    <circle cx="240" cy="210" r="2" fill="#E06C75"/>
+    <circle cx="215" cy="225" r="2" fill="#E06C75"/>
+    <circle cx="225" cy="220" r="2" fill="#E06C75"/>
+    <circle cx="235" cy="225" r="2" fill="#E06C75"/>
+    <circle cx="245" cy="220" r="2" fill="#E06C75"/>
+    <circle cx="210" cy="235" r="2" fill="#E06C75"/>
+    <circle cx="220" cy="230" r="2" fill="#E06C75"/>
+    <circle cx="230" cy="235" r="2" fill="#E06C75"/>
+    <circle cx="240" cy="230" r="2" fill="#E06C75"/>
+    <text x="225" y="252" font-size="12" font-weight="bold" fill="#E06C75" text-anchor="middle" font-family="'Montserrat', Helvetica, sans-serif">10000</text>
+    <text x="225" y="275" font-size="9" fill="#ABB2BF" text-anchor="middle" font-family="'Montserrat', Helvetica, sans-serif">part/kg</text>
+  </g>
+  
+  <!-- Arrows from sediment to subsamples -->
+  <line x1="110" y1="170" x2="75" y2="195" stroke="#ABB2BF" stroke-width="1" stroke-dasharray="2,2"/>
+  <line x1="150" y1="170" x2="150" y2="195" stroke="#ABB2BF" stroke-width="1" stroke-dasharray="2,2"/>
+  <line x1="190" y1="170" x2="225" y2="195" stroke="#ABB2BF" stroke-width="1" stroke-dasharray="2,2"/>
+</svg>

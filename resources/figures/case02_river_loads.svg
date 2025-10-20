@@ -1,0 +1,31 @@
+<svg viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="300" height="300" fill="#1a2340" rx="10"/>
+  
+  <!-- Title -->
+  <text x="150" y="35" font-size="18" font-weight="bold" fill="#9efcff" text-anchor="middle" font-family="'Montserrat', Helvetica, sans-serif">River Nutrient Loads</text>
+  
+  <!-- Lake (center) -->
+  <ellipse cx="150" cy="180" rx="70" ry="50" fill="#61AFEF" opacity="0.3" stroke="#61AFEF" stroke-width="2"/>
+  <text x="150" y="190" font-size="16" fill="#ABB2BF" text-anchor="middle" font-family="'Montserrat', Helvetica, sans-serif">Lake</text>
+  
+  <!-- River 1 (top left) -->
+  <path d="M 30 80 Q 60 100 90 120" stroke="#98C379" stroke-width="4" fill="none"/>
+  <text x="30" y="70" font-size="14" font-weight="bold" fill="#98C379" text-anchor="start" font-family="'Montserrat', Helvetica, sans-serif">200 g/s</text>
+  
+  <!-- River 2 (top right) -->
+  <path d="M 270 80 Q 240 100 210 120" stroke="#E5C07B" stroke-width="4" fill="none"/>
+  <text x="270" y="70" font-size="14" font-weight="bold" fill="#E5C07B" text-anchor="end" font-family="'Montserrat', Helvetica, sans-serif">300 g/s</text>
+  
+  <!-- River 3 (bottom) -->
+  <path d="M 150 280 L 150 230" stroke="#C678DD" stroke-width="4" fill="none"/>
+  <text x="150" y="270" font-size="14" font-weight="bold" fill="#C678DD" text-anchor="middle" font-family="'Montserrat', Helvetica, sans-serif">200 g/s</text>
+  
+  <!-- Arrows -->
+  <polygon points="90,120 95,115 85,115" fill="#98C379"/>
+  <polygon points="210,120 215,115 205,115" fill="#E5C07B"/>
+  <polygon points="150,230 145,235 155,235" fill="#C678DD"/>
+  
+  <!-- Label -->
+  <text x="150" y="255" font-size="12" fill="#ABB2BF" text-anchor="middle" font-family="'Montserrat', Helvetica, sans-serif">Phosphorus inputs</text>
+</svg>
