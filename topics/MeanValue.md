@@ -89,6 +89,7 @@ Roll five dice and calculate the sum:
 
     let rLang = [];
     if (window.rLanguageSupport) {
+      console.log("R language support detected");
       rLang = window.rLanguageSupport;
     }
 
@@ -1162,6 +1163,10 @@ Example ratios: $[0.5,\, 2,\, 5]$
 <!-- layout={rows: 1, columns: 2} -->
 
 <!-- position={row: 1, column: 1} -->
+<div style="text-align: center; margin-top: 20px;">
+<i class="fas fa-water" style="font-size: 6em; opacity: 0.9;"></i>
+</div>
+
 *Scenario: Flow Velocity Over Equal Distances*
 
 -! A pollutant moves through `two river sections` of equal length:
@@ -1171,10 +1176,6 @@ Example ratios: $[0.5,\, 2,\, 5]$
 ***  
 
 -! We want the `average velocity` across both sections.
-<br/>
-<div style="text-align: center; margin-top: 20px;">
-<i class="fas fa-water" style="font-size: 6em; opacity: 0.9;"></i>
-</div>
 <!-- /position -->
 
 <!-- position={row: 1, column: 2} -->
@@ -1190,17 +1191,17 @@ Example velocities: [10, 2] m/s
 ***
 
 <div style="margin: 10px 0; padding: 10px; background: #1a2340; border-radius: 8px;">
-  <button id="start-harmonic-animation" style="padding: 10px 20px; background: #2d3a66; color: #9efcff; border: 1px solid #2d3a66; border-radius: 6px; cursor: pointer; font-size: 1em; font-weight: bold; margin-bottom: 10px; width: 100%;">
+  <button id="start-harmonic-animation" style="padding: 10px 20px; background: #2d3a66; color: #9efcff; border: 1px solid #2d3a66; border-radius: 6px; cursor: pointer; font-size: .75em; font-weight: bold; margin-bottom: 10px; width: 100%;">
     ▶ Start Animation
   </button>
   <div style="margin-bottom: 8px;">
-    <label style="display: inline-flex; align-items: center; cursor: pointer; color: #00ff00; font-size: 0.9em;">
+    <label style="display: inline-flex; align-items: center; cursor: pointer; color: #00ff00; font-size: 0.7em;">
       <input type="checkbox" id="toggle-arithmetic-mean" style="margin-right: 8px; cursor: pointer;">
       <span>Show Arithmetic Mean Position (6 m/s)</span>
     </label>
   </div>
   <div>
-    <label style="display: inline-flex; align-items: center; cursor: pointer; color: #ff00ff; font-size: 0.9em;">
+    <label style="display: inline-flex; align-items: center; cursor: pointer; color: #ff00ff; font-size: 0.7em;">
       <input type="checkbox" id="toggle-geometric-mean" style="margin-right: 8px; cursor: pointer;">
       <span>Show Geometric Mean Position (4.47 m/s)</span>
     </label>

@@ -1,10 +1,34 @@
 import { EditorView } from "@codemirror/view";
 import { EditorState } from "@codemirror/state";
-import { basicSetup } from "@codemirror/basic-setup";
+import { defaultKeymap, history, historyKeymap } from "@codemirror/commands";
+import { keymap, lineNumbers, highlightActiveLineGutter, highlightSpecialChars, drawSelection, dropCursor, rectangularSelection, crosshairCursor, highlightActiveLine } from "@codemirror/view";
+import { foldGutter, indentOnInput, syntaxHighlighting, defaultHighlightStyle, bracketMatching, foldKeymap, HighlightStyle, StreamLanguage } from "@codemirror/language";
 import { python } from "@codemirror/lang-python";
-import { StreamLanguage, syntaxHighlighting, defaultHighlightStyle } from "@codemirror/language";
-import { HighlightStyle, tags } from "@lezer/highlight";
+import { tags } from "@lezer/highlight";
 import { r } from "@codemirror/legacy-modes/mode/r";
+
+// Basic setup as an array of extensions
+const basicSetup = [
+  lineNumbers(),
+  highlightActiveLineGutter(),
+  highlightSpecialChars(),
+  history(),
+  foldGutter(),
+  drawSelection(),
+  dropCursor(),
+  EditorState.allowMultipleSelections.of(true),
+  indentOnInput(),
+  syntaxHighlighting(defaultHighlightStyle, { fallback: true }),
+  bracketMatching(),
+  rectangularSelection(),
+  crosshairCursor(),
+  highlightActiveLine(),
+  keymap.of([
+    ...defaultKeymap,
+    ...historyKeymap,
+    ...foldKeymap
+  ])
+];
 
 const monokaiTheme = EditorView.theme(
   {
@@ -102,7 +126,34 @@ const monokaiHighlightStyle = HighlightStyle.define([
 
 const monokai = [monokaiTheme, syntaxHighlighting(monokaiHighlightStyle)];
 
-const rLanguageSupport = [StreamLanguage.define(r), syntaxHighlighting(defaultHighlightStyle)];
+// R language support
+const rLang = StreamLanguage.define(r);
+
+// Custom R theme and highlighting
+const rHighlightStyle = HighlightStyle.define([
+  { tag: tags.comment, color: "#75715e", fontStyle: "italic" },
+  { tag: tags.string, color: "#98C379" },
+  { tag: tags.number, color: "#61AFEF" },
+  { tag: tags.bool, color: "#FF1493" },
+  { tag: tags.atom, color: "#FF1493" },
+  { tag: tags.keyword, color: "#C678DD", fontWeight: "bold" },
+  { tag: tags.variableName, color: "#E06C75" },
+  { tag: tags.operator, color: "#56B6C2" },
+  { tag: tags.paren, color: "#ABB2BF" },
+  { tag: tags.bracket, color: "#ABB2BF" },
+  { tag: tags.brace, color: "#ABB2BF" }
+]);
+
+const rTheme = EditorView.theme({
+  "&": { color: "#ABB2BF", backgroundColor: "#282c34" },
+  ".cm-content": { caretColor: "#528bff" },
+  ".cm-cursor, .cm-dropCursor": { borderLeftColor: "#528bff" },
+  ".cm-selectionBackground, .cm-content ::selection": { backgroundColor: "#3e4451" },
+  "&.cm-focused .cm-selectionBackground": { backgroundColor: "#3e4451" },
+  ".cm-activeLine": { backgroundColor: "#2c313c" }
+}, { dark: true });
+
+const rLanguageSupport = [rLang, rTheme, syntaxHighlighting(rHighlightStyle)];
 
 // Expose bundles on the window so existing code keeps working.
 window.EditorView = EditorView;
