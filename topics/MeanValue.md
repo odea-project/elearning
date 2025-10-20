@@ -393,6 +393,9 @@ print(paste("Arithmetic Mean:", round(mean_value, 2)))`;
   }
 })();
 </script>
+
+-? Is the result close to what we expect? 
+-: What do we expect?
 <!-- /position -->
 <!-- /layout -->
 
@@ -434,43 +437,6 @@ $E[$5<i class="fas fa-dice"></i>$] = 5 \times E[$<i class="fas fa-dice"></i>$] =
 ***
 
 -= This fits almost with what we observed experimentally!
-
-<!-- /position -->
-<!-- /layout -->
-
----
-
-<!-- .slide:id="expected-value-problem" -->
-## The Real-World Challenge
-<!-- layout={rows: 1, columns: 2} -->
-<!-- position={row: 1, column: 1} -->
-**Theoretical vs. Practical**
-
--! In our dice example, we **knew** the probabilities:
--> Each outcome: $P(x_{i}) = \frac{1}{6}$
--> We could calculate: $E[$<i class="fas fa-dice"></i>$] = 3.5$
-
-***
-
--? But what about other **real-world processes ?**
-
-***
-
--! For most real-world processes, we **don't know** the true probabilities!
-
-<!-- /position -->
-<!-- position={row: 1, column: 2} -->
--! Examples:
-<div style="background: #8b1a1a; color: #ffffff; padding: 8px 12px; border-radius: 8px; margin: 6px 0; font-size: 0.7em;">Water temperature in a lake</div>
-<div style="background: #8b7508ff; color: #ffffff; padding: 8px 12px; border-radius: 8px; margin: 6px 0; font-size: 0.7em;">Contaminant concentration in groundwater</div>
-<div style="background: #1a4d7a; color: #ffffff; padding: 8px 12px; border-radius: 8px; margin: 6px 0; font-size: 0.7em;">Rainfall amounts</div>
-<div style="background: #3d2966; color: #ffffff; padding: 8px 12px; border-radius: 8px; margin: 6px 0; font-size: 0.7em;">Bacterial growth rates</div>
-
-***
-
--< We must `estimate` the expected value from `sample data` using the `arithmetic mean`!
-
-$$\bar{x} = \frac{1}{n} \sum_{i=1}^{n} x_{i} \approx E[X]$$
 
 <!-- /position -->
 <!-- /layout -->
@@ -686,6 +652,43 @@ print(paste("Mean:", round(mean_value, 4), "| Expected: 17.5"))`;
 
 ---
 
+<!-- .slide:id="expected-value-problem" -->
+## The Real-World Challenge
+<!-- layout={rows: 1, columns: 2} -->
+<!-- position={row: 1, column: 1} -->
+**Theoretical vs. Practical**
+
+-! In our dice example, we **knew** the probabilities:
+-> Each outcome: $P(x_{i}) = \frac{1}{6}$
+-> We could calculate: $E[$<i class="fas fa-dice"></i>$] = 3.5$
+
+***
+
+-? But what about other **real-world processes ?**
+
+***
+
+-! For most real-world processes, we **don't know** the true probabilities!
+
+<!-- /position -->
+<!-- position={row: 1, column: 2} -->
+-! Examples:
+<div style="background: #8b1a1a; color: #ffffff; padding: 8px 12px; border-radius: 8px; margin: 6px 0; font-size: 0.7em;">Water temperature in a lake</div>
+<div style="background: #8b7508ff; color: #ffffff; padding: 8px 12px; border-radius: 8px; margin: 6px 0; font-size: 0.7em;">Contaminant concentration in groundwater</div>
+<div style="background: #1a4d7a; color: #ffffff; padding: 8px 12px; border-radius: 8px; margin: 6px 0; font-size: 0.7em;">Rainfall amounts</div>
+<div style="background: #3d2966; color: #ffffff; padding: 8px 12px; border-radius: 8px; margin: 6px 0; font-size: 0.7em;">Bacterial growth rates</div>
+
+***
+
+-< We must `estimate` the expected value from `sample data` using the `arithmetic mean`!
+
+$$\bar{x} = \frac{1}{n} \sum_{i=1}^{n} x_{i} \approx E[X]$$
+
+<!-- /position -->
+<!-- /layout -->
+
+---
+
 <!-- .slide:id="arithmetic-mean-water-science" -->
 ## Arithmetic Mean in Water Science
 <div id="water-mean-editor" class="code-editor-container" style="border: 1px solid #2d3a66; border-radius: 8px; margin: 20px; display: none; text-align: left;"></div>
@@ -863,6 +866,55 @@ print(paste("Arithmetic Mean:", round(mean_fe, 2), "mg/L"))`;
 </script>
 <!-- /position -->
 <!-- /layout -->
+
+---
+
+<!-- .slide:id="geometric-mean-visual" -->
+## Bacterial Growth: Why Arithmetic Mean Fails
+
+<svg viewBox="0 0 1000 300" xmlns="http://www.w3.org/2000/svg" style="max-width: 90%; margin: 20px auto; background: transparent;">
+  <!-- Title -->
+  <text x="500" y="40" font-size="28" font-weight="bold" fill="#9efcff" text-anchor="middle">Bacterial Growth Over 3 Days</text>
+  
+  <!-- Day 1 (Start) -->
+  <g id="day1">
+    <circle cx="150" cy="200" r="40" fill="#61AFEF" opacity="0.3" stroke="#61AFEF" stroke-width="3"/>
+    <text x="150" y="210" font-size="32" font-weight="bold" fill="#61AFEF" text-anchor="middle">100</text>
+    <text x="150" y="270" font-size="18" fill="#ABB2BF" text-anchor="middle">Day 1</text>
+    <text x="150" y="295" font-size="16" fill="#98C379" text-anchor="middle">Start</text>
+  </g>
+  
+  <!-- Arrow 1: x2 -->
+  <g id="arrow1">
+    <line x1="200" y1="200" x2="320" y2="200" stroke="#E5C07B" stroke-width="4" marker-end="url(#arrowhead)"/>
+    <text x="260" y="180" font-size="24" font-weight="bold" fill="#E5C07B" text-anchor="middle">×2</text>
+    <text x="260" y="235" font-size="14" fill="#75715e" text-anchor="middle">doubles</text>
+  </g>
+  
+  <!-- Day 2 -->
+  <g id="day2">
+    <circle cx="380" cy="200" r="50" fill="#98C379" opacity="0.3" stroke="#98C379" stroke-width="3"/>
+    <text x="380" y="210" font-size="32" font-weight="bold" fill="#98C379" text-anchor="middle">200</text>
+    <text x="380" y="280" font-size="18" fill="#ABB2BF" text-anchor="middle">Day 2</text>
+  </g>
+  
+  <!-- Arrow 2: x8 -->
+  <g id="arrow2">
+    <line x1="440" y1="200" x2="620" y2="200" stroke="#E5C07B" stroke-width="4" marker-end="url(#arrowhead)"/>
+    <text x="530" y="180" font-size="24" font-weight="bold" fill="#E5C07B" text-anchor="middle">×8</text>
+    <text x="530" y="235" font-size="14" fill="#75715e" text-anchor="middle">8x increase</text>
+  </g>
+  
+  <!-- Day 3 (End) -->
+  <g id="day3">
+    <circle cx="700" cy="200" r="60" fill="#C678DD" opacity="0.3" stroke="#C678DD" stroke-width="3"/>
+    <text x="700" y="210" font-size="32" font-weight="bold" fill="#C678DD" text-anchor="middle">1600</text>
+    <text x="700" y="290" font-size="18" fill="#ABB2BF" text-anchor="middle">Day 3</text>
+    <text x="700" y="315" font-size="16" fill="#FF1493" text-anchor="middle">Final</text>
+  </g>
+</svg>
+
+-? What is the average daily growth rate?
 
 ---
 
