@@ -21547,6 +21547,218 @@ var __codemirror__ = (() => {
   };
 
   // resources/js/codemirror/src/main.js
+  var extendedBuiltins = [
+    // Base R functions
+    "c",
+    "list",
+    "vector",
+    "matrix",
+    "array",
+    "data.frame",
+    "factor",
+    // Math functions
+    "abs",
+    "sign",
+    "sqrt",
+    "ceiling",
+    "floor",
+    "trunc",
+    "round",
+    "signif",
+    "exp",
+    "log",
+    "log10",
+    "log2",
+    "cos",
+    "sin",
+    "tan",
+    "acos",
+    "asin",
+    "atan",
+    "atan2",
+    // Statistical functions
+    "mean",
+    "median",
+    "sum",
+    "prod",
+    "min",
+    "max",
+    "range",
+    "var",
+    "sd",
+    "cov",
+    "cor",
+    "quantile",
+    "IQR",
+    "mad",
+    // Sampling and distributions
+    "sample",
+    "replicate",
+    "rnorm",
+    "runif",
+    "rbinom",
+    "rpois",
+    "rexp",
+    "rgamma",
+    "dnorm",
+    "pnorm",
+    "qnorm",
+    "dbinom",
+    "pbinom",
+    "qbinom",
+    // Data manipulation
+    "subset",
+    "merge",
+    "aggregate",
+    "transform",
+    "within",
+    "rbind",
+    "cbind",
+    "t",
+    "apply",
+    "lapply",
+    "sapply",
+    "tapply",
+    "mapply",
+    "sort",
+    "order",
+    "rank",
+    "unique",
+    "duplicated",
+    "rev",
+    // Logical and comparison
+    "which",
+    "ifelse",
+    "all",
+    "any",
+    "identical",
+    // NA handling
+    "is.na",
+    "na.omit",
+    "complete.cases",
+    "na.exclude",
+    // Type checking and conversion
+    "is.numeric",
+    "is.character",
+    "is.logical",
+    "is.factor",
+    "is.matrix",
+    "is.data.frame",
+    "as.numeric",
+    "as.character",
+    "as.logical",
+    "as.factor",
+    "as.matrix",
+    "as.data.frame",
+    // String functions
+    "paste",
+    "paste0",
+    "cat",
+    "print",
+    "sprintf",
+    "substr",
+    "substring",
+    "strsplit",
+    "grep",
+    "grepl",
+    "sub",
+    "gsub",
+    "toupper",
+    "tolower",
+    // I/O functions
+    "read.csv",
+    "read.table",
+    "write.csv",
+    "write.table",
+    "readLines",
+    "writeLines",
+    "load",
+    "save",
+    "source",
+    // Plotting functions
+    "plot",
+    "points",
+    "lines",
+    "abline",
+    "curve",
+    "hist",
+    "boxplot",
+    "barplot",
+    "pie",
+    "dotchart",
+    "matplot",
+    "pairs",
+    "par",
+    "layout",
+    "legend",
+    "title",
+    "axis",
+    "mtext",
+    // Inspection functions
+    "str",
+    "summary",
+    "head",
+    "tail",
+    "names",
+    "colnames",
+    "rownames",
+    "length",
+    "dim",
+    "nrow",
+    "ncol",
+    "class",
+    "typeof",
+    "mode",
+    // Sequence generation
+    "seq",
+    "seq_len",
+    "seq_along",
+    "rep",
+    "rep_len",
+    // Package management
+    "library",
+    "require",
+    "install.packages",
+    "update.packages",
+    // Other common functions
+    "table",
+    "cut",
+    "findInterval",
+    "approx",
+    "spline",
+    "lm",
+    "glm",
+    "anova",
+    "predict",
+    "residuals",
+    "fitted",
+    "eigen",
+    "svd",
+    "qr",
+    "chol",
+    "solve",
+    "det",
+    "diag"
+  ];
+  var builtinSet = new Set(extendedBuiltins);
+  var rExtended = {
+    name: "r-extended",
+    startState: r.startState,
+    copyState: r.copyState,
+    indent: r.indent,
+    electricInput: r.electricInput,
+    token: function(stream, state) {
+      const style = r.token(stream, state);
+      if (style === "variable" || style === "variableName") {
+        const word = stream.current();
+        if (builtinSet.has(word)) {
+          return "builtin";
+        }
+      }
+      return style;
+    }
+  };
+  var rLang = StreamLanguage.define(rExtended);
   var basicSetup = [
     lineNumbers(),
     highlightActiveLineGutter(),
@@ -21661,7 +21873,6 @@ var __codemirror__ = (() => {
     }
   ]);
   var monokai = [monokaiTheme, syntaxHighlighting(monokaiHighlightStyle)];
-  var rLang = StreamLanguage.define(r);
   var rHighlightStyle = HighlightStyle.define([
     { tag: tags.comment, color: "#75715e", fontStyle: "italic" },
     { tag: tags.string, color: "#98C379" },
@@ -21669,8 +21880,11 @@ var __codemirror__ = (() => {
     { tag: tags.bool, color: "#FF1493" },
     { tag: tags.atom, color: "#FF1493" },
     { tag: tags.keyword, color: "#C678DD", fontWeight: "bold" },
+    { tag: tags.standard(tags.variableName), color: "#E5C07B", fontWeight: "bold" },
+    // Built-in functions
     { tag: tags.variableName, color: "#E06C75" },
-    { tag: tags.operator, color: "#56B6C2" }
+    { tag: tags.operator, color: "#56B6C2" },
+    { tag: tags.punctuation, color: "#ABB2BF" }
   ]);
   var rTheme = EditorView.theme({
     "&": { color: "#ABB2BF", backgroundColor: "#282c34" },
