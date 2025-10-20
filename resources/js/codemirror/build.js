@@ -7,7 +7,7 @@ esbuild.build({
   outfile: path.join(__dirname, 'assets', 'index-CI_ESZ2V.js'),
   format: 'iife',
   globalName: '__codemirror__',
-  minify: true,
+  minify: false,
   sourcemap: false,
   platform: 'browser',
   target: ['es2020'],

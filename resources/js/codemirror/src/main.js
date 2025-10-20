@@ -138,10 +138,7 @@ const rHighlightStyle = HighlightStyle.define([
   { tag: tags.atom, color: "#FF1493" },
   { tag: tags.keyword, color: "#C678DD", fontWeight: "bold" },
   { tag: tags.variableName, color: "#E06C75" },
-  { tag: tags.operator, color: "#56B6C2" },
-  { tag: tags.paren, color: "#ABB2BF" },
-  { tag: tags.bracket, color: "#ABB2BF" },
-  { tag: tags.brace, color: "#ABB2BF" }
+  { tag: tags.operator, color: "#56B6C2" }
 ]);
 
 const rTheme = EditorView.theme({
