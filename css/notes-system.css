@@ -1,0 +1,520 @@
+/**
+ * Notes System Styles
+ * Styling for the presentation notes overlay, toolbar, and components
+ */
+
+/* ========================================
+   Toggle Button (Fixed Position)
+   ======================================== */
+.notes-toggle-btn {
+  position: fixed;
+  left: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #2d3a66 0%, #1a2340 100%);
+  border: 2px solid #61AFEF;
+  color: #9efcff;
+  font-size: 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s ease;
+  z-index: 999;
+}
+
+.notes-toggle-btn:hover {
+  background: linear-gradient(135deg, #3d4a76 0%, #2a3350 100%);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+  transform: translateY(-50%) scale(1.1);
+}
+
+.notes-toggle-btn.active {
+  background: linear-gradient(135deg, #E5C07B 0%, #d4a960 100%);
+  color: #1a2340;
+  border-color: #E5C07B;
+}
+
+/* Badge indicator for slides with notes */
+.notes-toggle-btn.has-notes::after {
+  content: '';
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  width: 12px;
+  height: 12px;
+  background: #98C379;
+  border: 2px solid #1a2340;
+  border-radius: 50%;
+  animation: pulse-badge 2s ease-in-out infinite;
+}
+
+@keyframes pulse-badge {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.7;
+    transform: scale(1.1);
+  }
+}
+
+/* ========================================
+   Overlay (Full Screen)
+   ======================================== */
+.notes-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(26, 35, 64, 0.95);
+  z-index: 1000;
+  display: none;
+}
+
+/* ========================================
+   Canvas (Drawing Layer)
+   ======================================== */
+.notes-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  cursor: crosshair;
+  z-index: 100;
+  pointer-events: auto;
+}
+
+/* Text mode cursor */
+.notes-overlay.text-mode .notes-canvas {
+  cursor: copy;
+  pointer-events: auto;
+}
+
+.notes-overlay.text-mode .notes-canvas:active {
+  cursor: copy;
+}
+
+/* ========================================
+   Toolbar (Top Bar)
+   ======================================== */
+.notes-toolbar {
+  position: absolute;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 15px;
+  padding: 12px 20px;
+  background: rgba(45, 58, 102, 0.95);
+  border: 2px solid #61AFEF;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+  z-index: 1002;
+}
+
+.notes-toolbar-group {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.notes-divider {
+  width: 1px;
+  height: 30px;
+  background: rgba(158, 252, 255, 0.2);
+  margin: 0 5px;
+}
+
+/* ========================================
+   Buttons
+   ======================================== */
+.notes-btn {
+  min-width: 36px;
+  height: 36px;
+  padding: 8px;
+  background: rgba(26, 35, 64, 0.8);
+  border: 1px solid rgba(97, 175, 239, 0.3);
+  border-radius: 6px;
+  color: #9efcff;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  font-size: 14px;
+}
+
+/* Opacity display */
+.notes-opacity-display {
+  min-width: 45px;
+  padding: 0 10px;
+  color: #E5C07B;
+  font-size: 14px;
+  font-weight: 600;
+  text-align: center;
+  user-select: none;
+  font-family: 'Montserrat', Helvetica, monospace;
+}
+
+.notes-btn:hover {
+  background: rgba(45, 58, 102, 0.9);
+  border-color: #61AFEF;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(97, 175, 239, 0.3);
+}
+
+.notes-btn:active {
+  transform: translateY(0);
+}
+
+.notes-btn.active {
+  background: #61AFEF;
+  color: #1a2340;
+  border-color: #61AFEF;
+}
+
+/* Color buttons */
+.notes-color-btn {
+  width: 30px;
+  height: 30px;
+  min-width: 30px;
+  padding: 0;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  transition: all 0.2s ease;
+}
+
+.notes-color-btn:hover {
+  transform: scale(1.15);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+}
+
+.notes-color-btn.active {
+  border-color: #9efcff;
+  box-shadow: 0 0 0 3px rgba(158, 252, 255, 0.3);
+}
+
+/* Width buttons */
+.notes-width-btn {
+  width: 36px;
+  color: #9efcff;
+}
+
+.notes-width-btn.active {
+  background: #61AFEF;
+  color: #1a2340;
+}
+
+/* Close button */
+.notes-close-btn {
+  background: rgba(224, 108, 117, 0.2);
+  border-color: #E06C75;
+  color: #E06C75;
+}
+
+.notes-close-btn:hover {
+  background: #E06C75;
+  color: #fff;
+}
+
+/* ========================================
+   Text Notes (Draggable)
+   ======================================== */
+.text-note {
+  position: absolute;
+  min-width: 200px;
+  max-width: 400px;
+  background: rgba(229, 192, 123, 0.95);
+  border: 2px solid #d4a960;
+  border-radius: 8px;
+  padding: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  z-index: 1001;
+  font-family: 'Montserrat', Helvetica, sans-serif;
+  animation: fadeIn 0.2s ease;
+  pointer-events: auto;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.note-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: -8px -8px 8px -8px;
+  padding: 8px 8px 8px 12px;
+  border-bottom: 2px solid rgba(26, 35, 64, 0.3);
+  background: rgba(212, 169, 96, 0.3);
+  border-radius: 6px 6px 0 0;
+  min-height: 32px;
+}
+
+.note-handle {
+  cursor: grab;
+  user-select: none;
+  flex: 1;
+  display: flex;
+  align-items: center;
+}
+
+.note-handle:hover {
+  background: rgba(212, 169, 96, 0.2);
+}
+
+.note-handle:active {
+  cursor: grabbing;
+  background: rgba(212, 169, 96, 0.4);
+}
+
+.note-drag-indicator {
+  color: #1a2340;
+  font-size: 12px;
+  opacity: 0.7;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  pointer-events: none;
+}
+
+.note-handle:hover .note-drag-indicator {
+  opacity: 1;
+}
+
+.note-delete-btn {
+  background: transparent;
+  border: none;
+  color: #E06C75;
+  cursor: pointer;
+  padding: 6px 10px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  font-size: 14px;
+  flex-shrink: 0;
+  z-index: 10;
+  position: relative;
+}
+
+.note-delete-btn:hover {
+  background: rgba(224, 108, 117, 0.3);
+  transform: scale(1.15);
+  color: #fff;
+}
+
+.note-delete-btn:active {
+  transform: scale(1.05);
+}
+
+.note-content {
+  color: #1a2340;
+  font-size: 14px;
+  line-height: 1.5;
+  min-height: 40px;
+  max-height: 300px;
+  overflow-y: auto;
+  outline: none;
+  padding: 5px;
+  border-radius: 4px;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+.note-content:focus {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.note-content:empty::before {
+  content: 'Notiz eingeben...';
+  color: rgba(26, 35, 64, 0.5);
+  font-style: italic;
+}
+
+/* ========================================
+   Scrollbar Styling for Text Notes
+   ======================================== */
+.note-content::-webkit-scrollbar {
+  width: 6px;
+}
+
+.note-content::-webkit-scrollbar-track {
+  background: rgba(26, 35, 64, 0.1);
+  border-radius: 3px;
+}
+
+.note-content::-webkit-scrollbar-thumb {
+  background: rgba(26, 35, 64, 0.3);
+  border-radius: 3px;
+}
+
+.note-content::-webkit-scrollbar-thumb:hover {
+  background: rgba(26, 35, 64, 0.5);
+}
+
+/* ========================================
+   Responsive Design
+   ======================================== */
+@media (max-width: 768px) {
+  .notes-toolbar {
+    flex-wrap: wrap;
+    max-width: 90vw;
+    gap: 10px;
+  }
+
+  .notes-toolbar-group {
+    gap: 6px;
+  }
+
+  .notes-btn {
+    min-width: 32px;
+    height: 32px;
+    font-size: 12px;
+  }
+
+  .notes-toggle-btn {
+    width: 45px;
+    height: 45px;
+    font-size: 18px;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  .text-note {
+    min-width: 150px;
+    max-width: 90vw;
+  }
+
+  .note-content {
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 480px) {
+  .notes-toolbar {
+    top: 10px;
+    padding: 10px 15px;
+  }
+
+  .notes-divider {
+    display: none;
+  }
+
+  .text-note {
+    min-width: 120px;
+  }
+}
+
+/* ========================================
+   Notifications
+   ======================================== */
+.notes-notification {
+  position: fixed;
+  top: 100px;
+  left: 50%;
+  transform: translateX(-50%) translateY(-100px);
+  padding: 15px 25px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+  z-index: 1003;
+  opacity: 0;
+  transition: all 0.3s ease;
+  pointer-events: none;
+  font-family: 'Montserrat', Helvetica, sans-serif;
+}
+
+.notes-notification.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+.notes-notification-success {
+  background: rgba(152, 195, 121, 0.95);
+  color: #1a2340;
+  border: 2px solid #98C379;
+}
+
+.notes-notification-error {
+  background: rgba(224, 108, 117, 0.95);
+  color: #fff;
+  border: 2px solid #E06C75;
+}
+
+.notes-notification-info {
+  background: rgba(97, 175, 239, 0.95);
+  color: #1a2340;
+  border: 2px solid #61AFEF;
+}
+
+/* ========================================
+   Print Styles (Hide notes when printing)
+   ======================================== */
+@media print {
+  .notes-overlay,
+  .notes-toggle-btn,
+  .notes-notification {
+    display: none !important;
+  }
+}
+
+/* ========================================
+   Accessibility
+   ======================================== */
+.notes-btn:focus,
+.note-delete-btn:focus,
+.notes-toggle-btn:focus {
+  outline: 2px solid #61AFEF;
+  outline-offset: 2px;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .notes-overlay {
+    background: rgba(0, 0, 0, 0.98);
+  }
+
+  .notes-toolbar,
+  .notes-btn {
+    border-width: 2px;
+  }
+
+  .text-note {
+    border-width: 3px;
+  }
+}
+
+/* Reduce motion for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+  .notes-btn,
+  .notes-toggle-btn,
+  .text-note,
+  .notes-color-btn {
+    transition: none;
+    animation: none;
+  }
+
+  .notes-toggle-btn.has-notes::after {
+    animation: none;
+  }
+}

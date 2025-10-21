@@ -1,0 +1,48 @@
+{
+  "presentation": "/notes-demo.html",
+  "version": "1.0",
+  "notes": {
+    "demo-slide-1": {
+      "text": [
+        {
+          "content": "Willkommen zur Demo! 👋",
+          "x": 100,
+          "y": 150,
+          "id": "note-demo-1"
+        },
+        {
+          "content": "Diese Notiz wurde importiert! 📥",
+          "x": 500,
+          "y": 200,
+          "id": "note-demo-2"
+        }
+      ],
+      "drawings": [],
+      "timestamp": "2025-10-21T10:00:00Z"
+    },
+    "demo-slide-2": {
+      "text": [
+        {
+          "content": "Zeichnen macht Spaß! 🎨",
+          "x": 200,
+          "y": 300,
+          "id": "note-demo-3"
+        }
+      ],
+      "drawings": [],
+      "timestamp": "2025-10-21T10:05:00Z"
+    },
+    "demo-slide-5": {
+      "text": [
+        {
+          "content": "a² + b² = c²\n\nBeispiel:\n3² + 4² = 5²\n9 + 16 = 25 ✓",
+          "x": 600,
+          "y": 400,
+          "id": "note-demo-4"
+        }
+      ],
+      "drawings": [],
+      "timestamp": "2025-10-21T10:10:00Z"
+    }
+  }
+}

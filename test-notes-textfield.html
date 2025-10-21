@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text-Notizen Test</title>
+    <link rel="stylesheet" href="vendor/fontawesome/css/all.min.css" />
+    <link rel="stylesheet" href="css/notes-system.css">
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #1a2340 0%, #2d3a66 100%);
+            color: white;
+            min-height: 100vh;
+        }
+        .test-area {
+            margin: 50px auto;
+            max-width: 800px;
+            padding: 40px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+        }
+        h1 {
+            color: #9efcff;
+            text-align: center;
+        }
+        .instructions {
+            background: rgba(229, 192, 123, 0.2);
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        .instructions h2 {
+            color: #E5C07B;
+            margin-top: 0;
+        }
+        .instructions ul {
+            line-height: 1.8;
+        }
+        .test-button {
+            display: inline-block;
+            padding: 12px 24px;
+            background: #61AFEF;
+            color: #1a2340;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            margin: 10px 5px;
+        }
+        .test-button:hover {
+            background: #4a9edf;
+        }
+        kbd {
+            background: #1a2340;
+            padding: 3px 8px;
+            border-radius: 4px;
+            border: 1px solid #61AFEF;
+            font-family: monospace;
+        }
+        .status {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            padding: 15px;
+            background: rgba(152, 195, 121, 0.9);
+            color: #1a2340;
+            border-radius: 8px;
+            font-weight: bold;
+            display: none;
+        }
+        .status.show {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="status" id="status"></div>
+    
+    <div class="test-area">
+        <h1>🧪 Text-Notizen System Test</h1>
+        
+        <div class="instructions">
+            <h2>📝 Test-Anleitung</h2>
+            <ol>
+                <li>Klicke auf den Button unten rechts oder drücke <kbd>N</kbd></li>
+                <li>Wähle Text-Modus mit <kbd>T</kbd> oder Button</li>
+                <li>Der Cursor sollte sich zu ➕ ändern</li>
+                <li><strong>Klicke auf freie Stelle</strong> → Neue Notiz sollte erscheinen</li>
+                <li><strong>Klicke auf bestehende Notiz</strong> → Keine neue Notiz!</li>
+                <li><strong>Ziehe am Handle (≡)</strong> → Notiz verschieben</li>
+                <li><strong>Beim Ziehen:</strong> Keine neue Notiz erstellen!</li>
+            </ol>
+        </div>
+
+        <div class="instructions">
+            <h2>✅ Was funktionieren sollte:</h2>
+            <ul>
+                <li>✓ Klick auf Folie → Neue Notiz an Klick-Position</li>
+                <li>✓ Cursor zeigt ➕ im Text-Modus</li>
+                <li>✓ Cursor zeigt ✋ beim Handle</li>
+                <li>✓ Ziehen verschiebt Notiz (keine neue Notiz!)</li>
+                <li>✓ Klick auf Notiz → Editieren (keine neue Notiz!)</li>
+            </ul>
+        </div>
+
+        <div class="instructions">
+            <h2>🐛 Zu prüfende Bugs:</h2>
+            <ul>
+                <li>❌ Klick auf Notiz erstellt neue Notiz</li>
+                <li>❌ Drag & Drop aus Notiz erstellt neue Notiz</li>
+                <li>❌ Cursor ändert sich nicht</li>
+                <li>❌ Klick auf freie Stelle funktioniert nicht</li>
+            </ul>
+        </div>
+
+        <button class="test-button" onclick="openNotes()">
+            <i class="fas fa-sticky-note"></i> Notizen öffnen (Taste N)
+        </button>
+        
+        <button class="test-button" onclick="checkConsole()">
+            <i class="fas fa-bug"></i> Console Log prüfen
+        </button>
+
+        <button class="test-button" onclick="resetNotes()">
+            <i class="fas fa-redo"></i> Alle Notizen löschen
+        </button>
+    </div>
+
+    <script>
+        function openNotes() {
+            if (window.notesManager) {
+                window.notesManager.open();
+                window.notesManager.setMode('text');
+                showStatus('✅ Notizen geöffnet im Text-Modus');
+            } else {
+                showStatus('❌ NotesManager nicht geladen!');
+            }
+        }
+
+        function checkConsole() {
+            console.log('=== Notes Manager Status ===');
+            console.log('Mode:', window.notesManager?.mode);
+            console.log('Is Active:', window.notesManager?.isActive);
+            console.log('Text Notes:', window.notesManager?.textNotes?.length);
+            console.log('Overlay Opacity:', window.notesManager?.overlayOpacity);
+            showStatus('📊 Status in Console geloggt');
+        }
+
+        function resetNotes() {
+            if (confirm('Alle Notizen wirklich löschen?')) {
+                localStorage.removeItem('presentation-notes');
+                location.reload();
+            }
+        }
+
+        function showStatus(message) {
+            const status = document.getElementById('status');
+            status.textContent = message;
+            status.classList.add('show');
+            setTimeout(() => {
+                status.classList.remove('show');
+            }, 3000);
+        }
+
+        // Keyboard shortcut
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'n' && !e.ctrlKey && !e.metaKey) {
+                openNotes();
+            }
+        });
+    </script>
+
+    <script src="resources/js/notes-system.js"></script>
+</body>
+</html>
