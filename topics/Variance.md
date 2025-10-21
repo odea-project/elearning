@@ -703,8 +703,8 @@ K values: [0.5, 2.0, 5.0] m/day (three layers)
 
 -! **SD** & **SE** have same units as data.
 
--: Temperature in °C ? SD in °C
--: Concentration in mg/L ? SD in mg/L
+-: Temperature in °C -> SD in °C
+-: Concentration in mg/L -> SD in mg/L
 
 ***
 
@@ -728,8 +728,8 @@ $$CV = \frac{s}{\bar{x}}$$
 
 <div style="background: #1a4d7a; color: #ffffff; padding: 12px; border-radius: 8px; margin: 10px 0; font-size: 0.75em;">
 <b>Example:</b><br>
-A: mean = 8 mg/L, SD = 0.2 ? CV = 2.5%<br>
-B: mean = 20 mg/L, SD = 1.0 ? CV = 5%<br>
+A: mean = 8 mg/L, SD = 0.2 -> CV = 2.5%<br>
+B: mean = 20 mg/L, SD = 1.0 -> CV = 5%<br>
 <br>
 -> B has higher absolute variability but similar relative variability.
 </div>
