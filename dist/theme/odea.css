@@ -1077,16 +1077,16 @@ input:checked+.slider:before {
 .reveal .slides strong {
   position: relative;
   min-height: 1.5em;
-  background-color: #0FF;
+  background-color: rgb(255, 0, 179);
   border-radius: 5px;
-  box-shadow: 2px 2px 5px rgba(0, 255, 255, 0.5);
+  box-shadow: 2px 2px 5px rgba(255, 0, 179, 0.5);
   transform: perspective(300px) rotateX(5deg) rotateZ(2deg) rotateY(-5deg) translateY(0.0em);
   padding: 0 10px;
   display: inline-block;
   justify-content: flex-start;
   align-items: center;
   font-family: "mabook", Helvetica, sans-serif;
-  color: #000;
+  color: #ffd2f0;
   font-weight: bold;
 }
 

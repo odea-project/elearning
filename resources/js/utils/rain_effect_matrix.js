@@ -3,17 +3,24 @@
  * deck is ready so it respects the Reveal background container structure.
  */
 Reveal.on('ready', () => {
-  const bgContainer = document.querySelector('.reveal .backgrounds');
-  if (!bgContainer) return;
+  // Check if matrix rain canvas already exists
+  let canvas = document.querySelector('.matrix-rain-canvas');
+  if (canvas) {
+    console.log('Matrix rain canvas already exists, skipping creation');
+    return;
+  }
 
-  const canvas = document.createElement('canvas');
-  canvas.classList.add('rain-canvas');
-  canvas.style.position = 'absolute';
-  canvas.style.top = 0;
-  canvas.style.left = 0;
+  canvas = document.createElement('canvas');
+  canvas.classList.add('matrix-rain-canvas');
+  canvas.style.position = 'fixed';
+  canvas.style.top = '0';
+  canvas.style.left = '0';
+  canvas.style.width = '100%';
+  canvas.style.height = '100%';
   canvas.style.pointerEvents = 'none';
   canvas.style.background = 'transparent';
-  bgContainer.appendChild(canvas);
+  canvas.style.zIndex = '-1';
+  document.body.appendChild(canvas);
   const ctx = canvas.getContext('2d');
 
   const fontSize = 8;
@@ -30,7 +37,15 @@ Reveal.on('ready', () => {
   }
   window.addEventListener('resize', resize);
 
+  let animationId;
   function draw() {
+    // Check if canvas is still in DOM
+    if (!document.body.contains(canvas)) {
+      console.warn('Matrix rain canvas removed from DOM, stopping animation');
+      cancelAnimationFrame(animationId);
+      return;
+    }
+
     // 1) Fading: entferne nur die Zeichen, ohne mit Schwarz zu malen
     ctx.globalCompositeOperation = 'destination-out';
     ctx.fillStyle = 'rgba(0, 0, 0, 0.05)'; // je kleiner der Alpha, desto länger die Trails
@@ -48,7 +63,7 @@ Reveal.on('ready', () => {
       else drops[i]++;
     }
 
-    requestAnimationFrame(draw);
+    animationId = requestAnimationFrame(draw);
   }
 
   resize();

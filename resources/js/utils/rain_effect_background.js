@@ -3,14 +3,31 @@
  * it does not interfere with pointer events.
  */
 Reveal.on('ready', () => {
+  // Check if rain canvas already exists
+  let canvas = document.querySelector('.rain-canvas');
+  if (canvas) {
+    console.log('Rain canvas already exists, skipping creation');
+    return;
+  }
+
   const bgContainer = document.querySelector('.reveal .backgrounds');
   if (!bgContainer) {
     console.error('Hintergrund-Container nicht gefunden!');
     return;
   }
-  const canvas = document.createElement('canvas');
+  
+  canvas = document.createElement('canvas');
   canvas.classList.add('rain-canvas');
-  bgContainer.appendChild(canvas);
+  canvas.style.position = 'fixed';
+  canvas.style.top = '0';
+  canvas.style.left = '0';
+  canvas.style.width = '100%';
+  canvas.style.height = '100%';
+  canvas.style.pointerEvents = 'none';
+  canvas.style.zIndex = '-1'; // Behind everything but still visible
+  
+  // Append to body instead of backgrounds to prevent removal
+  document.body.appendChild(canvas);
   const ctx = canvas.getContext('2d');
 
   function resize() {
@@ -27,7 +44,15 @@ Reveal.on('ready', () => {
     ys: 8 + Math.random() * 12
   }));
 
+  let animationId;
   function draw() {
+    // Check if canvas is still in DOM
+    if (!document.body.contains(canvas)) {
+      console.warn('Rain canvas removed from DOM, stopping animation');
+      cancelAnimationFrame(animationId);
+      return;
+    }
+    
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.strokeStyle = 'rgba(255,255,255,0.2)';
     ctx.lineWidth = 3;
@@ -42,7 +67,7 @@ Reveal.on('ready', () => {
         d.y = -20;
       }
     }
-    requestAnimationFrame(draw);
+    animationId = requestAnimationFrame(draw);
   }
   draw();
 });

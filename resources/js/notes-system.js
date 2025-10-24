@@ -20,9 +20,14 @@ class NotesManager {
     this.isDrawing = false;
     this.currentColor = '#E5C07B'; // Monokai yellow
     this.currentWidth = 3;
+    this.currentStrokes = []; // Store vector strokes for current slide
+    this.currentStroke = null; // Current stroke being drawn
     
     // Text notes
     this.textNotes = [];
+    
+    // Pinned previews tracking
+    this.pinnedPreviews = new Map(); // Maps noteId to preview element
     
     // Press-and-hold for text note creation
     this.pressTimer = null;
@@ -37,8 +42,19 @@ class NotesManager {
     this.maxOpacity = 1.0;
     this.opacityStep = 0.05;
     
-    // Pinch gesture state
-    this.lastPinchDistance = null;
+    // Opacity slider state
+    this.isSliderDragging = false;
+    
+    // Context menu for creating notes from selected text
+    this.contextMenu = null;
+    this.selectedText = '';
+    this.contextMenuPosition = { x: 0, y: 0 };
+    
+    // Highlighted text markers
+    this.textHighlights = []; // Store references to highlighted text elements
+    
+    // Position markers for notes created by right-click
+    this.positionMarkers = []; // Store references to position marker elements
     
     this.init();
   }
@@ -48,8 +64,8 @@ class NotesManager {
    */
   init() {
     this.createUI();
+    this.createContextMenu();
     this.attachEventListeners();
-    console.log('NotesManager initialized');
   }
 
   /**
@@ -78,7 +94,6 @@ class NotesManager {
   saveNotes() {
     try {
       localStorage.setItem(this.storageKey, JSON.stringify(this.notes));
-      console.log('Notes saved:', this.currentSlideId);
     } catch (error) {
       console.error('Error saving notes:', error);
     }
@@ -103,6 +118,11 @@ class NotesManager {
    */
   setCurrentSlide(slideId) {
     if (this.currentSlideId !== slideId) {
+      // Clear highlights from previous slide (if not in notes mode)
+      if (!this.isActive) {
+        this.clearTextHighlights();
+      }
+      
       // Save current notes before switching
       if (this.currentSlideId && this.isActive) {
         this.saveCurrentSlideNotes();
@@ -113,6 +133,9 @@ class NotesManager {
       // Load notes for new slide
       if (this.isActive) {
         this.loadCurrentSlideNotes();
+      } else {
+        // Even if notes mode is not active, show highlights for notes with source text
+        this.showHighlightsForCurrentSlide();
       }
     }
   }
@@ -130,12 +153,18 @@ class NotesManager {
       content: note.element.querySelector('.note-content').textContent,
       x: parseFloat(note.element.style.left),
       y: parseFloat(note.element.style.top),
-      id: note.id
+      id: note.id,
+      sourceText: note.sourceText || null,
+      highlightId: note.highlightId || null,
+      markerId: note.markerId || null,
+      markerPosition: note.markerPosition || null
     }));
 
-    // Save drawing as data URL
-    if (this.canvas) {
-      slideNotes.drawings = [this.canvas.toDataURL()];
+    // Save drawings as vector strokes (much more efficient than images)
+    if (this.canvas && this.currentStrokes.length > 0) {
+      slideNotes.drawings = this.currentStrokes;
+    } else {
+      slideNotes.drawings = [];
     }
 
     slideNotes.timestamp = new Date().toISOString();
@@ -156,17 +185,29 @@ class NotesManager {
 
     // Load text notes
     slideNotes.text.forEach(note => {
-      this.createTextNote(note.content, note.x, note.y, note.id);
+      this.createTextNote(note.content, note.x, note.y, note.id, note.sourceText, note.highlightId, note.markerId, note.markerPosition);
     });
 
-    // Load drawings
+    // Load drawings - replay vector strokes
+    this.currentStrokes = [];
     if (slideNotes.drawings.length > 0 && this.canvas) {
-      const img = new Image();
-      img.onload = () => {
-        this.ctx.drawImage(img, 0, 0);
-      };
-      img.src = slideNotes.drawings[0];
+      // Check if drawings are in new vector format or old image format
+      if (Array.isArray(slideNotes.drawings) && slideNotes.drawings[0] && typeof slideNotes.drawings[0] === 'object' && slideNotes.drawings[0].points) {
+        // New vector format
+        this.currentStrokes = slideNotes.drawings;
+        this.replayStrokes();
+      } else if (typeof slideNotes.drawings[0] === 'string' && slideNotes.drawings[0].startsWith('data:image')) {
+        // Old image format - load as image
+        const img = new Image();
+        img.onload = () => {
+          this.ctx.drawImage(img, 0, 0);
+        };
+        img.src = slideNotes.drawings[0];
+      }
     }
+    
+    // Restore text highlights
+    this.restoreTextHighlights();
   }
 
   /**
@@ -181,10 +222,636 @@ class NotesManager {
     });
     this.textNotes = [];
 
-    // Clear canvas
+    // Clear canvas and strokes
     if (this.canvas && this.ctx) {
       this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+      this.currentStrokes = [];
     }
+    
+    // Clear text highlights
+    this.clearTextHighlights();
+    
+    // Clear position markers
+    this.clearPositionMarkers();
+  }
+
+  /**
+   * Restore text highlights for current slide
+   */
+  restoreTextHighlights() {
+    if (!this.currentSlideId) return;
+    
+    const slideNotes = this.getSlideNotes(this.currentSlideId);
+    
+    // For each note with source text, try to find and highlight it
+    slideNotes.text.forEach(note => {
+      if (note.sourceText && note.highlightId) {
+        const noteObj = this.textNotes.find(n => n.id === note.id);
+        if (noteObj) {
+          this.highlightTextInSlide(note.sourceText, note.highlightId, noteObj);
+        }
+      }
+    });
+  }
+
+  /**
+   * Show highlights for current slide (even when notes mode is not active)
+   * This creates lightweight highlights with preview functionality
+   */
+  showHighlightsForCurrentSlide() {
+    if (!this.currentSlideId) return;
+    
+    const slideNotes = this.getSlideNotes(this.currentSlideId);
+    
+    // For each note with source text, create a highlight
+    slideNotes.text.forEach(note => {
+      if (note.sourceText && note.highlightId) {
+        // Create a temporary note object for the preview functionality
+        const tempNoteObj = {
+          id: note.id,
+          highlightId: note.highlightId,
+          element: {
+            querySelector: () => ({
+              textContent: note.content
+            })
+          }
+        };
+        
+        this.highlightTextInSlide(note.sourceText, note.highlightId, tempNoteObj);
+      }
+      
+      // For each note with position marker, create a marker
+      if (note.markerId && note.markerPosition) {
+        const tempNoteObj = {
+          id: note.id,
+          markerId: note.markerId,
+          markerPosition: note.markerPosition,
+          element: {
+            querySelector: () => ({
+              textContent: note.content
+            })
+          }
+        };
+        
+        this.createPositionMarker(note.markerPosition.x, note.markerPosition.y, note.markerId, tempNoteObj);
+      }
+    });
+  }
+
+  /**
+   * Highlight text in the current slide
+   */
+  highlightTextInSlide(text, highlightId, noteObj) {
+    const currentSlide = window.Reveal ? Reveal.getCurrentSlide() : null;
+    if (!currentSlide) return null;
+    
+    // Check if already highlighted with this ID
+    const existingHighlight = document.querySelector(`[data-highlight-id="${highlightId}"]`);
+    if (existingHighlight) return existingHighlight;
+    
+    // Try to find the text using a more flexible approach
+    // First, try using window.find() to highlight text across elements
+    const selection = window.getSelection();
+    selection.removeAllRanges();
+    
+    // Search for the text in the slide
+    let found = false;
+    const textToFind = text.trim();
+    
+    // Get all text content from the slide
+    const slideText = currentSlide.textContent;
+    if (!slideText.includes(textToFind)) return null;
+    
+    // Create a temporary range to search
+    const searchRange = document.createRange();
+    searchRange.selectNodeContents(currentSlide);
+    
+    // Try to find and select the text
+    try {
+      // Use TreeWalker to find all text nodes
+      const walker = document.createTreeWalker(
+        currentSlide,
+        NodeFilter.SHOW_TEXT,
+        {
+          acceptNode: (node) => {
+            // Skip if in notes elements
+            if (node.parentElement.closest('.notes-overlay') ||
+                node.parentElement.closest('.notes-toggle-btn') ||
+                node.parentElement.closest('.notes-highlight')) {
+              return NodeFilter.FILTER_REJECT;
+            }
+            return NodeFilter.FILTER_ACCEPT;
+          }
+        }
+      );
+      
+      // Collect all text nodes and their combined text
+      const textNodes = [];
+      let combinedText = '';
+      let node;
+      
+      while (node = walker.nextNode()) {
+        textNodes.push({
+          node: node,
+          start: combinedText.length,
+          end: combinedText.length + node.textContent.length
+        });
+        combinedText += node.textContent;
+      }
+      
+      // Find the text in the combined string
+      const startIndex = combinedText.indexOf(textToFind);
+      if (startIndex === -1) return null;
+      
+      const endIndex = startIndex + textToFind.length;
+      
+      // Find which text nodes contain our target text
+      const affectedNodes = textNodes.filter(tn => 
+        (tn.start < endIndex && tn.end > startIndex)
+      );
+      
+      if (affectedNodes.length === 0) return null;
+      
+      // Create wrapper span
+      const highlightSpan = document.createElement('span');
+      highlightSpan.className = 'notes-highlight';
+      highlightSpan.setAttribute('data-highlight-id', highlightId);
+      highlightSpan.setAttribute('data-note-id', noteObj.id);
+      
+      if (affectedNodes.length === 1) {
+        // Simple case: text is in one node
+        const tn = affectedNodes[0];
+        const nodeStartOffset = Math.max(0, startIndex - tn.start);
+        const nodeEndOffset = Math.min(tn.node.textContent.length, endIndex - tn.start);
+        
+        const range = document.createRange();
+        range.setStart(tn.node, nodeStartOffset);
+        range.setEnd(tn.node, nodeEndOffset);
+        
+        try {
+          range.surroundContents(highlightSpan);
+          found = true;
+        } catch (e) {
+          // If surroundContents fails, try wrapping the parent element
+          const parent = tn.node.parentElement;
+          if (parent && !parent.classList.contains('notes-highlight')) {
+            parent.style.setProperty('background', 'rgba(0, 255, 255, 0.2)', 'important');
+            parent.style.setProperty('border-bottom', '2px solid #00ffff', 'important');
+            parent.style.setProperty('padding', '2px 0', 'important');
+            parent.style.setProperty('cursor', 'help', 'important');
+            parent.style.setProperty('transition', 'all 0.2s ease', 'important');
+            parent.style.setProperty('position', 'relative', 'important');
+            parent.style.setProperty('box-shadow', '0 0 5px rgba(0, 255, 255, 0.3)', 'important');
+            parent.style.setProperty('display', 'inline', 'important');
+            parent.setAttribute('data-highlight-id', highlightId);
+            parent.setAttribute('data-note-id', noteObj.id);
+            parent.classList.add('notes-highlight');
+            
+            this.textHighlights.push({
+              element: parent,
+              noteId: noteObj.id,
+              highlightId: highlightId
+            });
+            
+            this.attachHighlightHoverEvent(parent, noteObj);
+            return parent;
+          }
+        }
+      } else {
+        // Complex case: text spans multiple nodes
+        // Wrap the common ancestor with highlighting styles
+        const firstNode = affectedNodes[0].node;
+        const lastNode = affectedNodes[affectedNodes.length - 1].node;
+        
+        // Find common ancestor
+        let ancestor = firstNode.parentElement;
+        while (ancestor && !ancestor.contains(lastNode)) {
+          ancestor = ancestor.parentElement;
+        }
+        
+        if (ancestor && ancestor !== currentSlide) {
+          ancestor.style.setProperty('background', 'rgba(0, 255, 255, 0.2)', 'important');
+          ancestor.style.setProperty('border-bottom', '2px solid #00ffff', 'important');
+          ancestor.style.setProperty('padding', '2px 0', 'important');
+          ancestor.style.setProperty('cursor', 'help', 'important');
+          ancestor.style.setProperty('transition', 'all 0.2s ease', 'important');
+          ancestor.style.setProperty('position', 'relative', 'important');
+          ancestor.style.setProperty('box-shadow', '0 0 5px rgba(0, 255, 255, 0.3)', 'important');
+          ancestor.style.setProperty('display', 'inline', 'important');
+          ancestor.setAttribute('data-highlight-id', highlightId);
+          ancestor.setAttribute('data-note-id', noteObj.id);
+          ancestor.classList.add('notes-highlight');
+          
+          this.textHighlights.push({
+            element: ancestor,
+            noteId: noteObj.id,
+            highlightId: highlightId
+          });
+          
+          this.attachHighlightHoverEvent(ancestor, noteObj);
+          return ancestor;
+        }
+      }
+      
+      if (found && highlightSpan.parentNode) {
+        // Store reference
+        this.textHighlights.push({
+          element: highlightSpan,
+          noteId: noteObj.id,
+          highlightId: highlightId
+        });
+        
+        // Add hover event to show note preview
+        this.attachHighlightHoverEvent(highlightSpan, noteObj);
+        
+        return highlightSpan;
+      }
+      
+      return null;
+    } catch (e) {
+      console.warn('Could not highlight text:', e);
+      return null;
+    }
+  }
+
+  /**
+   * Attach hover event to highlight to show note preview
+   */
+  attachHighlightHoverEvent(highlightElement, noteObj) {
+    let previewTimeout = null;
+    let hoverPreviewElement = null;
+    const noteId = noteObj.id;
+    
+    const showPreview = (e) => {
+      // Don't show hover preview if already pinned
+      if (this.pinnedPreviews.has(noteId)) return;
+      
+      previewTimeout = setTimeout(() => {
+        const noteContent = noteObj.element.querySelector('.note-content').textContent;
+        
+        hoverPreviewElement = document.createElement('div');
+        hoverPreviewElement.className = 'notes-highlight-preview';
+        hoverPreviewElement.textContent = noteContent;
+        document.body.appendChild(hoverPreviewElement);
+        
+        // Position near the highlight
+        const rect = highlightElement.getBoundingClientRect();
+        hoverPreviewElement.style.left = `${rect.left}px`;
+        hoverPreviewElement.style.top = `${rect.bottom + 10}px`;
+        
+        // Adjust if goes off screen
+        setTimeout(() => {
+          const previewRect = hoverPreviewElement.getBoundingClientRect();
+          if (previewRect.right > window.innerWidth) {
+            hoverPreviewElement.style.left = `${window.innerWidth - previewRect.width - 20}px`;
+          }
+          if (previewRect.bottom > window.innerHeight) {
+            hoverPreviewElement.style.top = `${rect.top - previewRect.height - 10}px`;
+          }
+          hoverPreviewElement.classList.add('show');
+        }, 10);
+      }, 300);
+    };
+    
+    const hidePreview = () => {
+      if (previewTimeout) {
+        clearTimeout(previewTimeout);
+        previewTimeout = null;
+      }
+      if (hoverPreviewElement) {
+        hoverPreviewElement.classList.remove('show');
+        setTimeout(() => {
+          if (hoverPreviewElement && hoverPreviewElement.parentNode) {
+            hoverPreviewElement.parentNode.removeChild(hoverPreviewElement);
+          }
+          hoverPreviewElement = null;
+        }, 200);
+      }
+    };
+    
+    const togglePin = (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      
+      if (this.pinnedPreviews.has(noteId)) {
+        // Unpin: remove existing pinned preview
+        const pinnedElement = this.pinnedPreviews.get(noteId);
+        pinnedElement.classList.remove('show');
+        setTimeout(() => {
+          if (pinnedElement && pinnedElement.parentNode) {
+            pinnedElement.parentNode.removeChild(pinnedElement);
+          }
+        }, 200);
+        this.pinnedPreviews.delete(noteId);
+      } else {
+        // Pin: create new pinned preview
+        const noteContent = noteObj.element.querySelector('.note-content').textContent;
+        
+        const pinnedElement = document.createElement('div');
+        pinnedElement.className = 'notes-highlight-preview pinned';
+        pinnedElement.textContent = noteContent;
+        document.body.appendChild(pinnedElement);
+        
+        // Position near the highlight
+        const rect = highlightElement.getBoundingClientRect();
+        pinnedElement.style.left = `${rect.left}px`;
+        pinnedElement.style.top = `${rect.bottom + 10}px`;
+        
+        // Adjust if goes off screen
+        setTimeout(() => {
+          const previewRect = pinnedElement.getBoundingClientRect();
+          if (previewRect.right > window.innerWidth) {
+            pinnedElement.style.left = `${window.innerWidth - previewRect.width - 20}px`;
+          }
+          if (previewRect.bottom > window.innerHeight) {
+            pinnedElement.style.top = `${rect.top - previewRect.height - 10}px`;
+          }
+          pinnedElement.classList.add('show');
+        }, 10);
+        
+        this.pinnedPreviews.set(noteId, pinnedElement);
+        
+        // Remove hover preview if showing
+        hidePreview();
+      }
+    };
+    
+    highlightElement.addEventListener('mouseenter', showPreview);
+    highlightElement.addEventListener('mouseleave', hidePreview);
+    highlightElement.addEventListener('click', togglePin);
+    
+    // Add double-click to open notes and edit
+    highlightElement.addEventListener('dblclick', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      
+      // Open notes if not already open
+      if (!this.isActive) {
+        this.open();
+      }
+      
+      // Switch to text mode
+      this.setMode('text');
+      
+      // Find and focus the note
+      const noteId = noteObj.id;
+      const note = this.textNotes.find(n => n.id === noteId);
+      if (note && note.element) {
+        const contentDiv = note.element.querySelector('.note-content');
+        if (contentDiv) {
+          contentDiv.focus();
+          // Place cursor at end
+          const range = document.createRange();
+          const sel = window.getSelection();
+          range.selectNodeContents(contentDiv);
+          range.collapse(false);
+          sel.removeAllRanges();
+          sel.addRange(range);
+        }
+      }
+    });
+  }
+
+  /**
+   * Clear all text highlights
+   */
+  clearTextHighlights() {
+    this.textHighlights.forEach(highlight => {
+      if (highlight.element) {
+        // Check if it's a span we created or an element we styled
+        if (highlight.element.tagName === 'SPAN' && highlight.element.classList.contains('notes-highlight')) {
+          // It's a span we created - replace with text content
+          if (highlight.element.parentNode) {
+            const parent = highlight.element.parentNode;
+            const textContent = highlight.element.textContent;
+            parent.replaceChild(document.createTextNode(textContent), highlight.element);
+            parent.normalize();
+          }
+        } else {
+          // It's an element we styled - remove the styles
+          highlight.element.style.background = '';
+          highlight.element.style.borderBottom = '';
+          highlight.element.style.padding = '';
+          highlight.element.style.cursor = '';
+          highlight.element.style.transition = '';
+          highlight.element.style.position = '';
+          highlight.element.style.boxShadow = '';
+          highlight.element.removeAttribute('data-highlight-id');
+          highlight.element.removeAttribute('data-note-id');
+          highlight.element.classList.remove('notes-highlight');
+        }
+      }
+    });
+    this.textHighlights = [];
+    
+    // Clear all pinned previews
+    this.pinnedPreviews.forEach((previewElement) => {
+      if (previewElement && previewElement.parentNode) {
+        previewElement.parentNode.removeChild(previewElement);
+      }
+    });
+    this.pinnedPreviews.clear();
+    
+    // Also remove any orphaned highlight previews
+    document.querySelectorAll('.notes-highlight-preview').forEach(el => el.remove());
+  }
+
+  /**
+   * Create position marker on the slide
+   */
+  createPositionMarker(x, y, markerId, noteObj) {
+    const currentSlide = window.Reveal ? Reveal.getCurrentSlide() : null;
+    if (!currentSlide) return null;
+    
+    // Check if marker already exists
+    const existingMarker = document.querySelector(`[data-marker-id="${markerId}"]`);
+    if (existingMarker) return existingMarker;
+    
+    const marker = document.createElement('div');
+    marker.className = 'notes-position-marker';
+    marker.setAttribute('data-marker-id', markerId);
+    marker.setAttribute('data-note-id', noteObj.id);
+    marker.innerHTML = '<i class="fas fa-map-pin"></i>';
+    
+    // Position relative to the slide
+    marker.style.left = `${x}px`;
+    marker.style.top = `${y}px`;
+    
+    currentSlide.appendChild(marker);
+    
+    // Store reference
+    this.positionMarkers.push({
+      element: marker,
+      noteId: noteObj.id,
+      markerId: markerId,
+      position: { x, y }
+    });
+    
+    // Add hover event to show note preview
+    this.attachMarkerHoverEvent(marker, noteObj);
+    
+    return marker;
+  }
+
+  /**
+   * Attach hover event to marker to show note preview
+   */
+  attachMarkerHoverEvent(markerElement, noteObj) {
+    let previewTimeout = null;
+    let hoverPreviewElement = null;
+    const noteId = noteObj.id;
+    
+    const showPreview = (e) => {
+      // Don't show hover preview if already pinned
+      if (this.pinnedPreviews.has(noteId)) return;
+      
+      previewTimeout = setTimeout(() => {
+        const noteContent = noteObj.element.querySelector('.note-content').textContent;
+        
+        hoverPreviewElement = document.createElement('div');
+        hoverPreviewElement.className = 'notes-marker-preview';
+        hoverPreviewElement.textContent = noteContent;
+        document.body.appendChild(hoverPreviewElement);
+        
+        // Position near the marker
+        const rect = markerElement.getBoundingClientRect();
+        hoverPreviewElement.style.left = `${rect.right + 10}px`;
+        hoverPreviewElement.style.top = `${rect.top}px`;
+        
+        // Adjust if goes off screen
+        setTimeout(() => {
+          const previewRect = hoverPreviewElement.getBoundingClientRect();
+          if (previewRect.right > window.innerWidth) {
+            hoverPreviewElement.style.left = `${rect.left - previewRect.width - 10}px`;
+          }
+          if (previewRect.bottom > window.innerHeight) {
+            hoverPreviewElement.style.top = `${window.innerHeight - previewRect.height - 20}px`;
+          }
+          hoverPreviewElement.classList.add('show');
+        }, 10);
+      }, 300);
+    };
+    
+    const hidePreview = () => {
+      if (previewTimeout) {
+        clearTimeout(previewTimeout);
+        previewTimeout = null;
+      }
+      if (hoverPreviewElement) {
+        hoverPreviewElement.classList.remove('show');
+        setTimeout(() => {
+          if (hoverPreviewElement && hoverPreviewElement.parentNode) {
+            hoverPreviewElement.parentNode.removeChild(hoverPreviewElement);
+          }
+          hoverPreviewElement = null;
+        }, 200);
+      }
+    };
+    
+    const togglePin = (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      
+      if (this.pinnedPreviews.has(noteId)) {
+        // Unpin: remove existing pinned preview
+        const pinnedElement = this.pinnedPreviews.get(noteId);
+        pinnedElement.classList.remove('show');
+        setTimeout(() => {
+          if (pinnedElement && pinnedElement.parentNode) {
+            pinnedElement.parentNode.removeChild(pinnedElement);
+          }
+        }, 200);
+        this.pinnedPreviews.delete(noteId);
+      } else {
+        // Pin: create new pinned preview
+        const noteContent = noteObj.element.querySelector('.note-content').textContent;
+        
+        const pinnedElement = document.createElement('div');
+        pinnedElement.className = 'notes-marker-preview pinned';
+        pinnedElement.textContent = noteContent;
+        document.body.appendChild(pinnedElement);
+        
+        // Position near the marker
+        const rect = markerElement.getBoundingClientRect();
+        pinnedElement.style.left = `${rect.right + 10}px`;
+        pinnedElement.style.top = `${rect.top}px`;
+        
+        // Adjust if goes off screen
+        setTimeout(() => {
+          const previewRect = pinnedElement.getBoundingClientRect();
+          if (previewRect.right > window.innerWidth) {
+            pinnedElement.style.left = `${rect.left - previewRect.width - 10}px`;
+          }
+          if (previewRect.bottom > window.innerHeight) {
+            pinnedElement.style.top = `${window.innerHeight - previewRect.height - 20}px`;
+          }
+          pinnedElement.classList.add('show');
+        }, 10);
+        
+        this.pinnedPreviews.set(noteId, pinnedElement);
+        
+        // Remove hover preview if showing
+        hidePreview();
+      }
+    };
+    
+    markerElement.addEventListener('mouseenter', showPreview);
+    markerElement.addEventListener('mouseleave', hidePreview);
+    markerElement.addEventListener('click', togglePin);
+    
+    // Add double-click to open notes and edit
+    markerElement.addEventListener('dblclick', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      
+      // Open notes if not already open
+      if (!this.isActive) {
+        this.open();
+      }
+      
+      // Switch to text mode
+      this.setMode('text');
+      
+      // Find and focus the note
+      const noteId = noteObj.id;
+      const note = this.textNotes.find(n => n.id === noteId);
+      if (note && note.element) {
+        const contentDiv = note.element.querySelector('.note-content');
+        if (contentDiv) {
+          contentDiv.focus();
+          // Place cursor at end
+          const range = document.createRange();
+          const sel = window.getSelection();
+          range.selectNodeContents(contentDiv);
+          range.collapse(false);
+          sel.removeAllRanges();
+          sel.addRange(range);
+        }
+      }
+    });
+  }
+
+  /**
+   * Clear all position markers
+   */
+  clearPositionMarkers() {
+    this.positionMarkers.forEach(marker => {
+      if (marker.element && marker.element.parentNode) {
+        marker.element.parentNode.removeChild(marker.element);
+      }
+    });
+    this.positionMarkers = [];
+    
+    // Clear all pinned previews
+    this.pinnedPreviews.forEach((previewElement) => {
+      if (previewElement && previewElement.parentNode) {
+        previewElement.parentNode.removeChild(previewElement);
+      }
+    });
+    this.pinnedPreviews.clear();
+    
+    // Also remove any orphaned marker previews
+    document.querySelectorAll('.notes-marker-preview').forEach(el => el.remove());
   }
 
   /**
@@ -202,6 +869,9 @@ class NotesManager {
     this.canvas.className = 'notes-canvas';
     this.ctx = this.canvas.getContext('2d');
     this.overlay.appendChild(this.canvas);
+
+    // Create opacity slider (vertical, left side)
+    this.createOpacitySlider();
 
     // Create toolbar
     this.toolbar = document.createElement('div');
@@ -256,16 +926,6 @@ class NotesManager {
       </div>
       
       <div class="notes-toolbar-group">
-        <button class="notes-btn" id="notes-opacity-down-btn" title="More Transparent (-)">
-          <i class="fas fa-eye-slash"></i>
-        </button>
-        <span id="notes-opacity-value" class="notes-opacity-display" title="Background Transparency">95%</span>
-        <button class="notes-btn" id="notes-opacity-up-btn" title="Less Transparent (+)">
-          <i class="fas fa-eye"></i>
-        </button>
-      </div>
-      
-      <div class="notes-toolbar-group">
         <button class="notes-btn notes-close-btn" id="notes-close-btn" title="Close (Esc)">
           <i class="fas fa-times"></i>
         </button>
@@ -281,6 +941,284 @@ class NotesManager {
     // Resize canvas to match window
     this.resizeCanvas();
     window.addEventListener('resize', () => this.resizeCanvas());
+  }
+
+  /**
+   * Create vertical opacity slider on the left side
+   */
+  createOpacitySlider() {
+    const sliderContainer = document.createElement('div');
+    sliderContainer.className = 'notes-opacity-slider-container';
+    sliderContainer.innerHTML = `
+      <div class="notes-opacity-slider-label">
+        <i class="fas fa-eye"></i>
+        <span id="notes-slider-opacity-value">95%</span>
+      </div>
+      <div class="notes-opacity-slider-track">
+        <div class="notes-opacity-slider-fill" id="notes-opacity-slider-fill"></div>
+        <div class="notes-opacity-slider-thumb" id="notes-opacity-slider-thumb"></div>
+      </div>
+      <div class="notes-opacity-slider-label-bottom">
+        <i class="fas fa-eye-slash"></i>
+      </div>
+    `;
+    
+    this.overlay.appendChild(sliderContainer);
+    
+    // Get elements after appending to DOM
+    const thumb = sliderContainer.querySelector('.notes-opacity-slider-thumb');
+    const track = sliderContainer.querySelector('.notes-opacity-slider-track');
+    
+    const startDrag = (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      this.isSliderDragging = true;
+      updateOpacityFromPosition(e);
+    };
+    
+    const updateOpacityFromPosition = (e) => {
+      if (!this.isSliderDragging && e.type !== 'pointerdown') return;
+      
+      const rect = track.getBoundingClientRect();
+      const clientY = e.type.startsWith('touch') ? e.touches[0].clientY : e.clientY;
+      let relativeY = clientY - rect.top;
+      
+      // Clamp to track bounds
+      relativeY = Math.max(0, Math.min(rect.height, relativeY));
+      
+      // Convert Y position to opacity (top = max opacity, bottom = min opacity)
+      const opacityPercent = 1 - (relativeY / rect.height);
+      this.overlayOpacity = this.minOpacity + (opacityPercent * (this.maxOpacity - this.minOpacity));
+      
+      // Clamp to bounds
+      this.overlayOpacity = Math.max(this.minOpacity, Math.min(this.maxOpacity, this.overlayOpacity));
+      
+      this.updateOverlayOpacity();
+      this.updateSliderPosition();
+    };
+    
+    const stopDrag = (e) => {
+      if (this.isSliderDragging) {
+        e.preventDefault();
+        e.stopPropagation();
+        this.isSliderDragging = false;
+      }
+    };
+    
+    // Mouse/pointer events
+    thumb.addEventListener('pointerdown', startDrag);
+    track.addEventListener('pointerdown', startDrag);
+    document.addEventListener('pointermove', (e) => {
+      if (this.isSliderDragging) {
+        e.preventDefault();
+        e.stopPropagation();
+        updateOpacityFromPosition(e);
+      }
+    });
+    document.addEventListener('pointerup', stopDrag);
+    
+    // Touch events
+    thumb.addEventListener('touchstart', (e) => {
+      e.preventDefault();
+      startDrag(e);
+    }, { passive: false });
+    
+    track.addEventListener('touchstart', (e) => {
+      e.preventDefault();
+      startDrag(e);
+    }, { passive: false });
+    
+    document.addEventListener('touchmove', (e) => {
+      if (this.isSliderDragging) {
+        e.preventDefault();
+        updateOpacityFromPosition(e);
+      }
+    }, { passive: false });
+    
+    document.addEventListener('touchend', stopDrag);
+    
+    // Initialize slider position
+    this.updateSliderPosition();
+  }
+
+  /**
+   * Update slider thumb and fill position based on current opacity
+   */
+  updateSliderPosition() {
+    const thumb = document.getElementById('notes-opacity-slider-thumb');
+    const fill = document.getElementById('notes-opacity-slider-fill');
+    
+    if (!thumb || !fill) return;
+    
+    // Calculate position (0% at top = max opacity, 100% at bottom = min opacity)
+    const opacityPercent = (this.overlayOpacity - this.minOpacity) / (this.maxOpacity - this.minOpacity);
+    const positionPercent = (1 - opacityPercent) * 100;
+    
+    thumb.style.top = `${positionPercent}%`;
+    fill.style.height = `${100 - positionPercent}%`;
+  }
+
+  /**
+   * Create context menu for selected text
+   */
+  createContextMenu() {
+    this.contextMenu = document.createElement('div');
+    this.contextMenu.id = 'notes-context-menu';
+    this.contextMenu.className = 'notes-context-menu';
+    this.contextMenu.style.display = 'none';
+    this.contextMenu.innerHTML = `
+      <button class="notes-context-menu-btn" id="notes-create-from-selection">
+        <i class="fas fa-sticky-note"></i>
+        <span>Create Note</span>
+      </button>
+    `;
+    
+    document.body.appendChild(this.contextMenu);
+    
+    // Add click handler for the menu button
+    const createBtn = document.getElementById('notes-create-from-selection');
+    createBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      this.createNoteFromSelection();
+      this.hideContextMenu();
+    });
+    
+    // Hide menu when clicking elsewhere
+    document.addEventListener('click', (e) => {
+      if (!this.contextMenu.contains(e.target)) {
+        this.hideContextMenu();
+      }
+    });
+  }
+
+  /**
+   * Show context menu at position
+   */
+  showContextMenu(x, y) {
+    this.contextMenu.style.left = `${x}px`;
+    this.contextMenu.style.top = `${y}px`;
+    this.contextMenu.style.display = 'block';
+    
+    // Adjust position if menu goes off screen
+    setTimeout(() => {
+      const rect = this.contextMenu.getBoundingClientRect();
+      if (rect.right > window.innerWidth) {
+        this.contextMenu.style.left = `${x - rect.width}px`;
+      }
+      if (rect.bottom > window.innerHeight) {
+        this.contextMenu.style.top = `${y - rect.height}px`;
+      }
+    }, 0);
+  }
+
+  /**
+   * Hide context menu
+   */
+  hideContextMenu() {
+    this.contextMenu.style.display = 'none';
+  }
+
+  /**
+   * Create note from selected text or position marker
+   */
+  createNoteFromSelection() {
+    // Open notes mode if not already open
+    if (!this.isActive) {
+      this.open();
+    }
+    
+    // Switch to text mode
+    this.setMode('text');
+    
+    // Create note at the context menu position
+    const noteX = this.contextMenuPosition.x;
+    const noteY = this.contextMenuPosition.y;
+    
+    let noteElement;
+    let noteObj;
+    
+    if (this.selectedText) {
+      // Create note with selected text and highlight
+      const highlightId = `highlight-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+      
+      // Create the note with empty content but track the source text for highlighting
+      noteElement = this.createTextNote('', noteX, noteY, null, this.selectedText, highlightId);
+      
+      // Find the note object we just created
+      noteObj = this.textNotes[this.textNotes.length - 1];
+      
+      // Highlight the source text in the slide
+      this.highlightTextInSlide(this.selectedText, highlightId, noteObj);
+      
+      // Show feedback
+      this.showNotification('📝 Note created from selection!', 'success');
+      
+      // Ensure focus is on the note content after all operations
+      setTimeout(() => {
+        if (noteElement) {
+          const contentDiv = noteElement.querySelector('.note-content');
+          if (contentDiv) {
+            contentDiv.focus();
+            this.setActiveNote(noteElement);
+          }
+        }
+      }, 100);
+    } else {
+      // Create note with position marker
+      const markerId = `marker-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+      
+      // Get position relative to the current slide
+      const currentSlide = window.Reveal ? Reveal.getCurrentSlide() : null;
+      if (!currentSlide) return;
+      
+      // Calculate position as percentage of slide dimensions for better scaling
+      const slideRect = currentSlide.getBoundingClientRect();
+      const slideWidth = currentSlide.offsetWidth;
+      const slideHeight = currentSlide.offsetHeight;
+      
+      // Get click position relative to slide's actual content (not transformed)
+      const markerX = ((this.contextMenuPosition.x - slideRect.left) / slideRect.width) * slideWidth;
+      const markerY = ((this.contextMenuPosition.y - slideRect.top) / slideRect.height) * slideHeight;
+      
+      // Create the note with marker position information
+      noteElement = this.createTextNote('', noteX, noteY, null, null, null, markerId, { x: markerX, y: markerY });
+      
+      // Find the note object we just created
+      noteObj = this.textNotes[this.textNotes.length - 1];
+      
+      // Create position marker on the slide
+      this.createPositionMarker(markerX, markerY, markerId, noteObj);
+      
+      // Show feedback
+      this.showNotification('� Note created at position!', 'success');
+    }
+    
+    // Save immediately to persist the highlight/marker
+    this.saveCurrentSlideNotes();
+    
+    // Clear selection
+    this.selectedText = '';
+    
+    // Ensure focus is on the note content after all operations complete
+    // Use requestAnimationFrame for more reliable timing
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        if (noteElement) {
+          const contentDiv = noteElement.querySelector('.note-content');
+          if (contentDiv) {
+            this.setActiveNote(noteElement);
+            contentDiv.focus();
+            // Force cursor to be visible
+            const range = document.createRange();
+            const sel = window.getSelection();
+            range.setStart(contentDiv, 0);
+            range.collapse(true);
+            sel.removeAllRanges();
+            sel.addRange(range);
+          }
+        }
+      });
+    });
   }
 
   /**
@@ -405,15 +1343,6 @@ class NotesManager {
       this.exportNotes();
     });
 
-    // Opacity buttons
-    document.getElementById('notes-opacity-up-btn')?.addEventListener('click', () => {
-      this.increaseOpacity();
-    });
-
-    document.getElementById('notes-opacity-down-btn')?.addEventListener('click', () => {
-      this.decreaseOpacity();
-    });
-
     // Close button
     document.getElementById('notes-close-btn')?.addEventListener('click', () => {
       this.close();
@@ -482,48 +1411,6 @@ class NotesManager {
       }
     });
 
-    // Mouse wheel for opacity
-    this.overlay.addEventListener('wheel', (e) => {
-      if (this.isActive && e.ctrlKey) {
-        e.preventDefault();
-        if (e.deltaY < 0) {
-          this.increaseOpacity();
-        } else {
-          this.decreaseOpacity();
-        }
-      }
-    }, { passive: false });
-
-    // Touch gestures for opacity (pinch)
-    this.overlay.addEventListener('touchstart', (e) => {
-      if (e.touches.length === 2) {
-        this.lastPinchDistance = this.getPinchDistance(e.touches);
-      }
-    });
-
-    this.overlay.addEventListener('touchmove', (e) => {
-      if (e.touches.length === 2 && this.lastPinchDistance !== null) {
-        e.preventDefault();
-        const currentDistance = this.getPinchDistance(e.touches);
-        const delta = currentDistance - this.lastPinchDistance;
-        
-        if (Math.abs(delta) > 10) { // Threshold to avoid jitter
-          if (delta > 0) {
-            this.increaseOpacity();
-          } else {
-            this.decreaseOpacity();
-          }
-          this.lastPinchDistance = currentDistance;
-        }
-      }
-    }, { passive: false });
-
-    this.overlay.addEventListener('touchend', (e) => {
-      if (e.touches.length < 2) {
-        this.lastPinchDistance = null;
-      }
-    });
-
     // Reveal.js slide change event
     if (window.Reveal) {
       Reveal.addEventListener('slidechanged', (event) => {
@@ -532,14 +1419,34 @@ class NotesManager {
         this.updateToggleButtonBadge();
       });
 
-      // Get initial slide
+      // Get initial slide and show highlights
       const currentSlide = Reveal.getCurrentSlide();
       if (currentSlide) {
         const slideId = currentSlide.id || `slide-${Reveal.getIndices().h}-${Reveal.getIndices().v}`;
         this.setCurrentSlide(slideId);
         this.updateToggleButtonBadge();
+        // Show highlights immediately on page load
+        this.showHighlightsForCurrentSlide();
       }
     }
+
+    // Context menu for creating notes from selected text (only when notes mode is NOT active)
+    document.addEventListener('contextmenu', (e) => {
+      // Don't show context menu if notes mode is active or if right-clicking on notes elements
+      if (this.isActive || e.target.closest('.notes-overlay') || e.target.closest('.notes-context-menu')) {
+        return;
+      }
+
+      // Get selected text
+      const selection = window.getSelection();
+      const selectedText = selection.toString().trim();
+
+      // Prevent default context menu and show our custom menu
+      e.preventDefault();
+      this.selectedText = selectedText;
+      this.contextMenuPosition = { x: e.clientX, y: e.clientY };
+      this.showContextMenu(e.clientX, e.clientY);
+    });
   }
 
   /**
@@ -591,8 +1498,18 @@ class NotesManager {
     
     this.isDrawing = true;
     const rect = this.canvas.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    
+    // Start new stroke vector
+    this.currentStroke = {
+      points: [{x, y}],
+      color: this.currentColor,
+      width: this.currentWidth
+    };
+    
     this.ctx.beginPath();
-    this.ctx.moveTo(e.clientX - rect.left, e.clientY - rect.top);
+    this.ctx.moveTo(x, y);
   }
 
   /**
@@ -602,7 +1519,15 @@ class NotesManager {
     if (!this.isDrawing || this.mode !== 'draw') return;
     
     const rect = this.canvas.getBoundingClientRect();
-    this.ctx.lineTo(e.clientX - rect.left, e.clientY - rect.top);
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    
+    // Add point to current stroke
+    if (this.currentStroke) {
+      this.currentStroke.points.push({x, y});
+    }
+    
+    this.ctx.lineTo(x, y);
     this.ctx.stroke();
   }
 
@@ -612,8 +1537,141 @@ class NotesManager {
   stopDrawing() {
     if (this.isDrawing) {
       this.isDrawing = false;
+      
+      // Save completed stroke to array
+      if (this.currentStroke && this.currentStroke.points.length > 1) {
+        // Simplify stroke to reduce point count
+        const simplified = this.simplifyStroke(this.currentStroke.points, 2);
+        
+        // Encode to compact format
+        this.currentStroke.points = this.encodePoints(simplified);
+        
+        this.currentStrokes.push(this.currentStroke);
+      }
+      this.currentStroke = null;
+      
       this.saveCurrentSlideNotes();
     }
+  }
+
+  /**
+   * Replay all saved strokes on canvas
+   */
+  replayStrokes() {
+    if (!this.canvas || !this.ctx) return;
+    
+    // Clear canvas first
+    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    
+    // Replay each stroke
+    this.currentStrokes.forEach(stroke => {
+      if (!stroke.points || stroke.points.length < 2) return;
+      
+      // Decode points if in compact format
+      const points = this.decodePoints(stroke.points);
+      if (points.length < 2) return;
+      
+      // Set stroke style
+      this.ctx.strokeStyle = stroke.color;
+      this.ctx.lineWidth = stroke.width;
+      this.ctx.lineCap = 'round';
+      this.ctx.lineJoin = 'round';
+      
+      // Draw the stroke
+      this.ctx.beginPath();
+      this.ctx.moveTo(points[0].x, points[0].y);
+      
+      for (let i = 1; i < points.length; i++) {
+        this.ctx.lineTo(points[i].x, points[i].y);
+      }
+      
+      this.ctx.stroke();
+    });
+    
+    // Restore current drawing settings
+    this.ctx.strokeStyle = this.currentColor;
+    this.ctx.lineWidth = this.currentWidth;
+  }
+
+  /**
+   * Simplify stroke by removing redundant points (Douglas-Peucker algorithm)
+   */
+  simplifyStroke(points, tolerance = 2) {
+    if (points.length <= 2) return points;
+    
+    // Find the point with maximum distance from line segment
+    let maxDist = 0;
+    let index = 0;
+    const end = points.length - 1;
+    
+    for (let i = 1; i < end; i++) {
+      const dist = this.perpendicularDistance(points[i], points[0], points[end]);
+      if (dist > maxDist) {
+        maxDist = dist;
+        index = i;
+      }
+    }
+    
+    // If max distance is greater than tolerance, recursively simplify
+    if (maxDist > tolerance) {
+      const left = this.simplifyStroke(points.slice(0, index + 1), tolerance);
+      const right = this.simplifyStroke(points.slice(index), tolerance);
+      return left.slice(0, -1).concat(right);
+    } else {
+      return [points[0], points[end]];
+    }
+  }
+
+  /**
+   * Calculate perpendicular distance from point to line segment
+   */
+  perpendicularDistance(point, lineStart, lineEnd) {
+    const dx = lineEnd.x - lineStart.x;
+    const dy = lineEnd.y - lineStart.y;
+    const mag = Math.sqrt(dx * dx + dy * dy);
+    
+    if (mag === 0) {
+      const pdx = point.x - lineStart.x;
+      const pdy = point.y - lineStart.y;
+      return Math.sqrt(pdx * pdx + pdy * pdy);
+    }
+    
+    const u = ((point.x - lineStart.x) * dx + (point.y - lineStart.y) * dy) / (mag * mag);
+    const clampedU = Math.max(0, Math.min(1, u));
+    const closestX = lineStart.x + clampedU * dx;
+    const closestY = lineStart.y + clampedU * dy;
+    const pdx = point.x - closestX;
+    const pdy = point.y - closestY;
+    
+    return Math.sqrt(pdx * pdx + pdy * pdy);
+  }
+
+  /**
+   * Encode points array to compact format [x1,y1,x2,y2,...]
+   */
+  encodePoints(points) {
+    const encoded = [];
+    for (const p of points) {
+      encoded.push(Math.round(p.x), Math.round(p.y));
+    }
+    return encoded;
+  }
+
+  /**
+   * Decode points from compact format to [{x,y},...]
+   */
+  decodePoints(points) {
+    // Check if already in object format
+    if (points.length > 0 && typeof points[0] === 'object') {
+      return points;
+    }
+    
+    // Decode from compact array format
+    const decoded = [];
+    for (let i = 0; i < points.length; i += 2) {
+      decoded.push({x: points[i], y: points[i + 1]});
+    }
+    return decoded;
   }
 
   /**
@@ -625,17 +1683,13 @@ class NotesManager {
     const isTextNote = clickedElement && clickedElement.closest('.text-note');
     
     if (isTextNote) {
-      console.log('Clicked on existing text note, not starting timer');
       return;
     }
     
     this.pressStartX = e.clientX;
     this.pressStartY = e.clientY;
     
-    console.log('Press-and-hold started at:', e.clientX, e.clientY);
-    
     this.pressTimer = setTimeout(() => {
-      console.log('Press-and-hold threshold reached, creating text note');
       // Place text note at press position, slightly offset so it's not under cursor
       this.createTextNote('', e.clientX - 100, e.clientY - 30);
       this.pressTimer = null;
@@ -647,7 +1701,6 @@ class NotesManager {
    */
   cancelPressAndHold() {
     if (this.pressTimer) {
-      console.log('Press-and-hold cancelled');
       clearTimeout(this.pressTimer);
       this.pressTimer = null;
     }
@@ -656,7 +1709,7 @@ class NotesManager {
   /**
    * Create text note
    */
-  createTextNote(content = '', x = 100, y = 100, id = null) {
+  createTextNote(content = '', x = 100, y = 100, id = null, sourceText = null, highlightId = null, markerId = null, markerPosition = null) {
     const noteId = id || `note-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
     
     const noteElement = document.createElement('div');
@@ -672,7 +1725,7 @@ class NotesManager {
           <i class="fas fa-times"></i>
         </button>
       </div>
-      <div class="note-content" contenteditable="true">${content || 'Enter note...'}</div>
+      <div class="note-content" contenteditable="true">${content}</div>
     `;
 
     // Delete button - prevent dragging when clicking
@@ -681,6 +1734,34 @@ class NotesManager {
       e.stopPropagation(); // Prevent drag from starting
       const index = this.textNotes.findIndex(n => n.id === noteId);
       if (index > -1) {
+        const noteData = this.textNotes[index];
+        
+        // Remove associated highlight
+        if (noteData.highlightId) {
+          const highlightIndex = this.textHighlights.findIndex(h => h.highlightId === noteData.highlightId);
+          if (highlightIndex > -1) {
+            const highlight = this.textHighlights[highlightIndex];
+            if (highlight.element && highlight.element.parentNode) {
+              const parent = highlight.element.parentNode;
+              parent.replaceChild(document.createTextNode(highlight.element.textContent), highlight.element);
+              parent.normalize();
+            }
+            this.textHighlights.splice(highlightIndex, 1);
+          }
+        }
+        
+        // Remove associated position marker
+        if (noteData.markerId) {
+          const markerIndex = this.positionMarkers.findIndex(m => m.markerId === noteData.markerId);
+          if (markerIndex > -1) {
+            const marker = this.positionMarkers[markerIndex];
+            if (marker.element && marker.element.parentNode) {
+              marker.element.parentNode.removeChild(marker.element);
+            }
+            this.positionMarkers.splice(markerIndex, 1);
+          }
+        }
+        
         this.textNotes.splice(index, 1);
         noteElement.remove();
         this.saveCurrentSlideNotes();
@@ -698,17 +1779,21 @@ class NotesManager {
       this.saveCurrentSlideNotes();
     });
     contentDiv.addEventListener('focus', () => {
-      if (contentDiv.textContent === 'Notiz eingeben...') {
+      if (contentDiv.textContent === 'Enter Note...') {
         contentDiv.textContent = '';
       }
+      // Mark note as active when focused
+      this.setActiveNote(noteElement);
+    });
+    
+    // Mark note as active when clicked
+    noteElement.addEventListener('click', (e) => {
+      e.stopPropagation();
+      this.setActiveNote(noteElement);
     });
     
     // Prevent all pointer events from bubbling to canvas
     noteElement.addEventListener('pointerdown', (e) => {
-      e.stopPropagation();
-    });
-    
-    noteElement.addEventListener('click', (e) => {
       e.stopPropagation();
     });
 
@@ -716,14 +1801,33 @@ class NotesManager {
     this.makeDraggable(noteElement);
 
     this.overlay.appendChild(noteElement);
-    this.textNotes.push({ id: noteId, element: noteElement });
-
-    // Focus on new notes
-    if (!content) {
-      contentDiv.focus();
-    }
+    this.textNotes.push({ 
+      id: noteId, 
+      element: noteElement,
+      sourceText: sourceText,
+      highlightId: highlightId,
+      markerId: markerId,
+      markerPosition: markerPosition
+    });
 
     return noteElement;
+  }
+
+  /**
+   * Set active note (highlight with purple/pink)
+   */
+  setActiveNote(noteElement) {
+    // Remove active class from all notes
+    this.textNotes.forEach(note => {
+      if (note.element) {
+        note.element.classList.remove('active');
+      }
+    });
+    
+    // Add active class to the clicked note
+    if (noteElement) {
+      noteElement.classList.add('active');
+    }
   }
 
   /**
@@ -811,6 +1915,7 @@ class NotesManager {
     this.isActive = true;
     this.overlay.style.display = 'block';
     this.updateOverlayOpacity(); // Apply saved opacity
+    this.updateSliderPosition(); // Update slider position
     this.loadCurrentSlideNotes();
     
     // Pause Reveal.js keyboard
@@ -836,6 +1941,11 @@ class NotesManager {
     
     document.getElementById('notes-toggle-btn')?.classList.remove('active');
     this.updateToggleButtonBadge();
+    
+    // Keep highlights visible after closing notes mode
+    // Clear the overlay-based highlights and recreate lightweight ones
+    this.clearTextHighlights();
+    this.showHighlightsForCurrentSlide();
   }
 
   /**
@@ -932,10 +2042,13 @@ class NotesManager {
       this.notes.presentation = this.notes.presentation || window.location.pathname;
       
       this.saveNotes();
-      this.loadCurrentSlideNotes();
       
-      console.log('Notes imported successfully');
-      console.log('Total slides with notes:', Object.keys(this.notes.notes).length);
+      // If notes mode is active, load notes; otherwise just show highlights
+      if (this.isActive) {
+        this.loadCurrentSlideNotes();
+      } else {
+        this.showHighlightsForCurrentSlide();
+      }
       
       return true;
     } catch (error) {
@@ -945,39 +2058,14 @@ class NotesManager {
   }
 
   /**
-   * Get distance between two touch points (for pinch gesture)
-   */
-  getPinchDistance(touches) {
-    const dx = touches[0].clientX - touches[1].clientX;
-    const dy = touches[0].clientY - touches[1].clientY;
-    return Math.sqrt(dx * dx + dy * dy);
-  }
-
-  /**
-   * Increase overlay opacity (less transparent)
-   */
-  increaseOpacity() {
-    this.overlayOpacity = Math.min(this.maxOpacity, this.overlayOpacity + this.opacityStep);
-    this.updateOverlayOpacity();
-  }
-
-  /**
-   * Decrease overlay opacity (more transparent)
-   */
-  decreaseOpacity() {
-    this.overlayOpacity = Math.max(this.minOpacity, this.overlayOpacity - this.opacityStep);
-    this.updateOverlayOpacity();
-  }
-
-  /**
    * Update overlay background opacity
    */
   updateOverlayOpacity() {
     if (this.overlay) {
       this.overlay.style.background = `rgba(26, 35, 64, ${this.overlayOpacity})`;
       
-      // Update display
-      const opacityDisplay = document.getElementById('notes-opacity-value');
+      // Update displays
+      const opacityDisplay = document.getElementById('notes-slider-opacity-value');
       if (opacityDisplay) {
         opacityDisplay.textContent = `${Math.round(this.overlayOpacity * 100)}%`;
       }
