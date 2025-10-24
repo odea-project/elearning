@@ -65,6 +65,70 @@
 }
 
 /* ========================================
+   Performance Mode Toggle Button
+   ======================================== */
+.performance-mode-toggle-btn {
+  position: fixed;
+  left: 80px;
+  top: 20px;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #1a1a2e 0%, #0f0f1e 100%);
+  border: 2px solid #ffcc00;
+  color: #ffcc00;
+  font-size: 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 10px rgba(255, 204, 0, 0.4), 0 4px 12px rgba(0, 0, 0, 0.5);
+  transition: all 0.3s ease;
+  z-index: 999;
+}
+
+.performance-mode-toggle-btn:hover {
+  background: linear-gradient(135deg, #2a2a3e 0%, #1f1f2e 100%);
+  box-shadow: 0 0 20px rgba(255, 204, 0, 0.6), 0 6px 16px rgba(0, 0, 0, 0.6);
+  transform: scale(1.1);
+}
+
+.performance-mode-toggle-btn.active {
+  background: linear-gradient(135deg, #ffcc00 0%, #ff9900 100%);
+  color: #000000;
+  border-color: #ffcc00;
+  box-shadow: 0 0 25px rgba(255, 204, 0, 0.8), 0 4px 12px rgba(0, 0, 0, 0.5);
+}
+
+/* Performance mode override for buttons */
+body.performance-mode .notes-toggle-btn,
+body.performance-mode .performance-mode-toggle-btn {
+  background: #ffffff !important;
+  border: 3px solid #000000 !important;
+  color: #000000 !important;
+  box-shadow: none !important;
+  transition: none !important;
+}
+
+body.performance-mode .notes-toggle-btn:hover,
+body.performance-mode .performance-mode-toggle-btn:hover {
+  background: #f0f0f0 !important;
+  transform: none !important;
+}
+
+body.performance-mode .notes-toggle-btn.active {
+  background: #000000 !important;
+  color: #ffffff !important;
+  border: 3px solid #000000 !important;
+}
+
+body.performance-mode .performance-mode-toggle-btn.active {
+  background: #000000 !important;
+  color: #ffffff !important;
+  border: 3px solid #000000 !important;
+}
+
+/* ========================================
    Overlay (Full Screen)
    ======================================== */
 .notes-overlay {
@@ -765,11 +829,33 @@
 @media print {
   .notes-overlay,
   .notes-toggle-btn,
+  .performance-mode-toggle-btn,
   .notes-notification,
   .notes-context-menu,
   .notes-highlight,
   .notes-highlight-preview {
     display: none !important;
+  }
+}
+
+/* ========================================
+   Mobile Responsive Styles
+   ======================================== */
+@media (max-width: 768px) {
+  .notes-toggle-btn,
+  .performance-mode-toggle-btn {
+    width: 45px;
+    height: 45px;
+    font-size: 18px;
+    top: 15px;
+  }
+
+  .notes-toggle-btn {
+    left: 15px;
+  }
+
+  .performance-mode-toggle-btn {
+    left: 70px;
   }
 }
 
@@ -788,6 +874,12 @@
   display: block !important;
   opacity: 1 !important;
   visibility: visible !important;
+}
+
+/* Performance mode: hide rain effects */
+body.performance-mode .rain-canvas,
+body.performance-mode .matrix-rain-canvas {
+  display: none !important;
 }
 
 /* ========================================

@@ -1,0 +1,503 @@
+/**
+ * Performance Mode - High Contrast Theme
+ * Bright, clear styling with all visual effects disabled
+ * Optimized for accessibility and performance
+ */
+
+/* ========================================
+   PERFORMANCE MODE ACTIVE CLASS
+   ======================================== */
+body.performance-mode {
+  /* Disable all animations globally */
+  *, *::before, *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* ========================================
+   OVERRIDE ROOT VARIABLES
+   ======================================== */
+body.performance-mode {
+  --r-background-color: #ffffff;
+  --r-main-color: #000000;
+  --r-heading-color: #000000;
+  --r-link-color: #0000ee;
+  --r-link-color-hover: #0000cc;
+  --r-selection-background-color: #b3d4fc;
+  --r-selection-color: #000000;
+}
+
+/* ========================================
+   REVEAL VIEWPORT & BACKGROUND
+   ======================================== */
+body.performance-mode .reveal-viewport {
+  background: #ffffff !important;
+}
+
+body.performance-mode .reveal {
+  color: #000000 !important;
+}
+
+/* ========================================
+   SLIDES SECTION - REMOVE DARK BACKGROUND
+   ======================================== */
+body.performance-mode .reveal .slides section {
+  background-color: transparent !important;
+  background: transparent !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  padding: 20px !important;
+  margin: 20px !important;
+}
+
+/* Remove neon border pseudo-element */
+body.performance-mode .reveal .slides section::before {
+  content: none !important;
+  display: none !important;
+  border: none !important;
+  box-shadow: none !important;
+  animation: none !important;
+}
+
+/* ========================================
+   DISABLE PARALLAX LAYERS
+   ======================================== */
+body.performance-mode .parallax-layer {
+  display: none !important;
+}
+
+/* ========================================
+   TASKBAR - REMOVE BACKGROUND
+   ======================================== */
+body.performance-mode .taskbar {
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  border: none !important;
+}
+
+/* Remove taskbar scanline effect */
+body.performance-mode .taskbar::after {
+  content: none !important;
+  display: none !important;
+  background-image: none !important;
+}
+
+/* ========================================
+   HEADINGS - HIGH CONTRAST
+   ======================================== */
+body.performance-mode .reveal h1,
+body.performance-mode .reveal h2,
+body.performance-mode .reveal h3,
+body.performance-mode .reveal h4,
+body.performance-mode .reveal h5,
+body.performance-mode .reveal h6 {
+  color: #000000 !important;
+  text-shadow: none !important;
+  border-bottom: 3px solid #000000;
+  padding-bottom: 0.3em;
+}
+
+/* ========================================
+   STRONG/BOLD/EMPHASIS - DARKER TEAL
+   ======================================== */
+body.performance-mode .reveal strong,
+body.performance-mode .reveal b,
+body.performance-mode .reveal .slides strong,
+body.performance-mode .reveal .slides b,
+body.performance-mode .reveal .slides em,
+body.performance-mode .reveal .slides i {
+  color: #008080 !important;
+}
+
+/* Post-it strip and strong elements - light gray background */
+body.performance-mode .post-it-strip,
+body.performance-mode .reveal .slides strong {
+  background-color: #e0e0e0 !important;
+  color: #000000 !important;
+  box-shadow: none !important;
+  transform: none !important;
+  border: 1px solid #999999 !important;
+}
+
+/* ========================================
+   HORIZONTAL RULES - DARK PURPLE
+   ======================================== */
+body.performance-mode .reveal hr {
+  background-image: none !important;
+  background: #4b0082 !important;
+  border: none !important;
+  height: 4px !important;
+}
+
+/* ========================================
+   LINKS - SIMPLE & ACCESSIBLE
+   ======================================== */
+body.performance-mode .reveal a {
+  color: #0000ee !important;
+  text-decoration: underline;
+  box-shadow: none !important;
+}
+
+body.performance-mode .reveal a:hover {
+  color: #0000cc !important;
+  background: #e0e0e0 !important;
+  text-decoration: underline;
+  box-shadow: none !important;
+}
+
+/* ========================================
+   REMOVE ALL GLOW/SHADOW EFFECTS
+   ======================================== */
+body.performance-mode .reveal *,
+body.performance-mode * {
+  box-shadow: none !important;
+  text-shadow: none !important;
+  filter: none !important;
+}
+
+/* ========================================
+   BUTTONS - HIGH CONTRAST
+   ======================================== */
+body.performance-mode button,
+body.performance-mode .reveal button {
+  background: #000000 !important;
+  color: #ffffff !important;
+  border: 2px solid #000000 !important;
+  box-shadow: none !important;
+  cursor: pointer;
+}
+
+body.performance-mode button:hover,
+body.performance-mode .reveal button:hover {
+  background: #333333 !important;
+  color: #ffffff !important;
+}
+
+body.performance-mode button:active {
+  background: #666666 !important;
+}
+
+/* ========================================
+   CODE BLOCKS - HIGH CONTRAST
+   ======================================== */
+body.performance-mode .reveal pre,
+body.performance-mode .reveal code {
+  background: #f5f5f5 !important;
+  color: #000000 !important;
+  border: 2px solid #000000 !important;
+  box-shadow: none !important;
+}
+
+body.performance-mode .reveal pre code {
+  background: #f5f5f5 !important;
+  color: #000000 !important;
+}
+
+/* ========================================
+   KATEX MATH - DARK ORANGE
+   ======================================== */
+body.performance-mode .katex,
+body.performance-mode .katex * {
+  color: #cc5500 !important;
+  border-color: #cc5500 !important;
+}
+
+/* ========================================
+   TABLES - CLEAR BORDERS
+   ======================================== */
+body.performance-mode .reveal table {
+  border-collapse: collapse;
+  border: 2px solid #000000 !important;
+}
+
+body.performance-mode .reveal table th,
+body.performance-mode .reveal table td {
+  border: 1px solid #000000 !important;
+  background: #ffffff !important;
+  color: #000000 !important;
+  padding: 0.5em;
+}
+
+body.performance-mode .reveal table th {
+  background: #e0e0e0 !important;
+  font-weight: bold;
+}
+
+/* ========================================
+   BLOCKQUOTES - SIMPLE STYLE
+   ======================================== */
+body.performance-mode .reveal blockquote {
+  background: #f5f5f5 !important;
+  border-left: 5px solid #000000 !important;
+  color: #000000 !important;
+  box-shadow: none !important;
+  padding: 1em;
+  margin: 1em 0;
+}
+
+/* ========================================
+   IMAGES - SIMPLE BORDERS
+   ======================================== */
+body.performance-mode .reveal img {
+  border: 2px solid #000000 !important;
+  box-shadow: none !important;
+  background: #ffffff !important;
+}
+
+/* ========================================
+   LISTS - CLEAR MARKERS
+   ======================================== */
+body.performance-mode .reveal ul,
+body.performance-mode .reveal ol {
+  color: #000000 !important;
+}
+
+body.performance-mode .reveal li {
+  color: #000000 !important;
+}
+
+/* ========================================
+   TUTORIAL GRID - HIGH CONTRAST
+   ======================================== */
+body.performance-mode .tutorialGrid .card {
+  background: #ffffff !important;
+  border: 2px solid #000000 !important;
+  color: #000000 !important;
+  box-shadow: none !important;
+}
+
+body.performance-mode .tutorialGrid .card:hover {
+  background: #f0f0f0 !important;
+  transform: none !important;
+}
+
+body.performance-mode .tutorialGrid .card h3 {
+  color: #000000 !important;
+  border-bottom: 2px solid #000000 !important;
+}
+
+/* ========================================
+   PROGRESS BAR
+   ======================================== */
+body.performance-mode .reveal .progress {
+  background: #e0e0e0 !important;
+  height: 4px;
+}
+
+body.performance-mode .reveal .progress span {
+  background: #000000 !important;
+}
+
+/* ========================================
+   CONTROLS
+   ======================================== */
+body.performance-mode .reveal .controls {
+  color: #000000 !important;
+}
+
+body.performance-mode .reveal .controls button {
+  background: transparent !important;
+  border: 2px solid #000000 !important;
+}
+
+/* ========================================
+   SLIDE NUMBERS
+   ======================================== */
+body.performance-mode .reveal .slide-number {
+  background: #ffffff !important;
+  color: #000000 !important;
+  border: 2px solid #000000 !important;
+}
+
+/* ========================================
+   INPUT FIELDS - HIGH CONTRAST
+   ======================================== */
+body.performance-mode input,
+body.performance-mode textarea,
+body.performance-mode select {
+  background: #ffffff !important;
+  color: #000000 !important;
+  border: 2px solid #000000 !important;
+  box-shadow: none !important;
+}
+
+body.performance-mode input:focus,
+body.performance-mode textarea:focus,
+body.performance-mode select:focus {
+  outline: 3px solid #000000 !important;
+  outline-offset: 2px;
+}
+
+/* ========================================
+   SEARCH BAR
+   ======================================== */
+body.performance-mode #search {
+  background: #ffffff !important;
+  color: #000000 !important;
+  border: 2px solid #000000 !important;
+  box-shadow: none !important;
+}
+
+/* ========================================
+   NEON EFFECTS - DISABLED
+   ======================================== */
+body.performance-mode .neon,
+body.performance-mode .neon-border,
+body.performance-mode [class*="neon"] {
+  animation: none !important;
+  box-shadow: none !important;
+  text-shadow: none !important;
+}
+
+/* ========================================
+   BACKGROUND IMAGES - REDUCED OPACITY
+   ======================================== */
+body.performance-mode #bg {
+  opacity: 0.3 !important;
+  filter: grayscale(100%) !important;
+}
+
+/* Intro slide background logo - grayscale */
+body.performance-mode #intro-bg {
+  filter: grayscale(100%) !important;
+}
+
+/* ========================================
+   MODAL/OVERLAY ELEMENTS
+   ======================================== */
+body.performance-mode .modal,
+body.performance-mode .overlay {
+  background: rgba(255, 255, 255, 0.95) !important;
+  border: 3px solid #000000 !important;
+  box-shadow: none !important;
+}
+
+/* ========================================
+   FOCUS INDICATORS - ENHANCED
+   ======================================== */
+body.performance-mode *:focus {
+  outline: 3px solid #000000 !important;
+  outline-offset: 2px;
+}
+
+/* ========================================
+   SLIDE BACKGROUNDS
+   ======================================== */
+body.performance-mode .reveal .slide-background {
+  background: #ffffff !important;
+}
+
+/* ========================================
+   NOTES SYSTEM - HIGH CONTRAST
+   ======================================== */
+body.performance-mode .notes-overlay {
+  background: rgba(255, 255, 255, 0.95) !important;
+}
+
+body.performance-mode .notes-toolbar {
+  background: #e0e0e0 !important;
+  border: 2px solid #000000 !important;
+}
+
+body.performance-mode .notes-btn {
+  background: #ffffff !important;
+  color: #000000 !important;
+  border: 1px solid #000000 !important;
+}
+
+body.performance-mode .notes-btn:hover {
+  background: #f0f0f0 !important;
+}
+
+body.performance-mode .notes-btn.active {
+  background: #000000 !important;
+  color: #ffffff !important;
+}
+
+body.performance-mode .text-note {
+  background: #ffffff !important;
+  border: 2px solid #000000 !important;
+  box-shadow: none !important;
+}
+
+body.performance-mode .note-header {
+  background: #e0e0e0 !important;
+  border-bottom: 2px solid #000000 !important;
+}
+
+/* Note drag indicator - dark gray instead of cyan */
+body.performance-mode .note-drag-indicator {
+  color: #4a4a4a !important;
+  text-shadow: none !important;
+}
+
+/* Note content - dark gray instead of cyan */
+body.performance-mode .note-content {
+  color: #333333 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+body.performance-mode .note-content:focus {
+  background: #f0f0f0 !important;
+  box-shadow: 0 0 0 2px #4a4a4a !important;
+}
+
+body.performance-mode .note-content:empty::before {
+  color: #999999 !important;
+}
+
+/* Scrollbar styling for note content */
+body.performance-mode .note-content::-webkit-scrollbar-track {
+  background: #e0e0e0 !important;
+}
+
+body.performance-mode .note-content::-webkit-scrollbar-thumb {
+  background: #4a4a4a !important;
+}
+
+body.performance-mode .note-content::-webkit-scrollbar-thumb:hover {
+  background: #333333 !important;
+}
+
+/* Override all cyan (#00ffff) colors in notes system to dark gray */
+body.performance-mode .notes-toggle-btn {
+  border-color: #4a4a4a !important;
+  color: #4a4a4a !important;
+}
+
+body.performance-mode .notes-toggle-btn.active {
+  border-color: #4a4a4a !important;
+  background: #4a4a4a !important;
+}
+
+body.performance-mode .notes-color-btn,
+body.performance-mode .notes-width-btn,
+body.performance-mode .notes-mode-btn,
+body.performance-mode .notes-divider,
+body.performance-mode .notes-toolbar-group button {
+  border-color: #4a4a4a !important;
+}
+
+body.performance-mode .notes-canvas {
+  border-color: #4a4a4a !important;
+}
+
+body.performance-mode .notes-notification-success,
+body.performance-mode .notes-notification-info {
+  background: #4a4a4a !important;
+  border-color: #4a4a4a !important;
+  color: #ffffff !important;
+}
+
+/* ========================================
+   DISABLE VIDEO/IFRAME EFFECTS
+   ======================================== */
+body.performance-mode video,
+body.performance-mode iframe {
+  border: 2px solid #000000 !important;
+  box-shadow: none !important;
+}

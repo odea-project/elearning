@@ -22,6 +22,9 @@
 
 	<!-- Notes System -->
 	<link rel="stylesheet" href="css/notes-system.css">
+
+	<!-- Performance Mode -->
+	<link rel="stylesheet" href="css/performance-mode.css">
 </head>
 
 <body>
@@ -30,14 +33,13 @@
 		<div class="parallax-layer layer-front"></div>
 		<!-- <div class="parallax-layer layer-very-front"></div> -->
 		<div class="slides">
-			<section id="intro-slide" data-markdown>
-				![ODEA Logo](resources/misc/odea_edu_logo_dark2_small.jpg)
-
-				#### Analytical data management, processing, evaluation, and visualization
+			<section id="intro-slide" style="height: 90%; width: 100%;">
+				<div id="intro-bg" style="position: absolute; top: 100px; left: 50%; transform: translateX(-50%); width: 70%; height: 70%; z-index: -1; background-image: url('resources/misc/odea_edu_logo_dark2_small.webp'); background-size: contain; background-position: center; background-repeat: no-repeat; opacity: 1.0;"></div>
+				<h4>Analytical data management, processing, evaluation, and visualization</h4>
 			</section>
 			<!-- Slide 1: Themen-Auswahl -->
 			<section data-state="mosaic" style="height: 90%; width: 100%;" id="load-tutorial">
-				<div id="bg" style="position: absolute; top: -130px; left: 0; width: 100%; height: 126%; z-index: -1; background-image: url('resources/misc/book.jpg'); background-size: contain; background-position: center; background-repeat: no-repeat; opacity: 1.0;"></div>
+				<div id="bg" style="position: absolute; top: -130px; left: 0; width: 100%; height: 126%; z-index: -1; background-image: url('resources/misc/book.webp'); background-size: contain; background-position: center; background-repeat: no-repeat; opacity: 1.0;"></div>
 				<div class="tutorialGrid" id="tutorialGrid"></div>
 				<input id="search" placeholder="Filter by keyword(s)..." style="position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%);">
 			</section>
@@ -97,6 +99,8 @@
 	<script src="resources/js/utils/d3_utils.js"></script>
 	<!-- Notes System -->
 	<script src="resources/js/notes-system.js"></script>
+	<!-- Performance Mode -->
+	<script src="resources/js/performance-mode.js"></script>
 	<!-- iPad Text Selection Fix -->
 	<script src="resources/js/ipad-text-selection-fix.js"></script>
 	<!-- <script src="resources/js/utils/code_examples.js"></script> -->
