@@ -79,20 +79,6 @@
 }
 
 /* ========================================
-   Canvas (Drawing Layer)
-   ======================================== */
-.notes-canvas {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  cursor: crosshair;
-  z-index: 100;
-  pointer-events: auto;
-}
-
-/* ========================================
    Opacity Slider (Vertical, Left Side)
    ======================================== */
 .notes-opacity-slider-container {
@@ -189,16 +175,6 @@
   transform: translate(-50%, -50%) scale(1.1);
 }
 
-/* Text mode cursor */
-.notes-overlay.text-mode .notes-canvas {
-  cursor: copy;
-  pointer-events: auto;
-}
-
-.notes-overlay.text-mode .notes-canvas:active {
-  cursor: copy;
-}
-
 /* ========================================
    Toolbar (Top Bar)
    ======================================== */
@@ -278,39 +254,6 @@
   color: #000;
   border-color: #00ffff;
   box-shadow: 0 0 20px rgba(0, 255, 255, 0.7);
-}
-
-/* Color buttons */
-.notes-color-btn {
-  width: 30px;
-  height: 30px;
-  min-width: 30px;
-  padding: 0;
-  border-radius: 50%;
-  border: 2px solid transparent;
-  transition: all 0.2s ease;
-}
-
-.notes-color-btn:hover {
-  transform: scale(1.15);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
-}
-
-.notes-color-btn.active {
-  border-color: #00ffff;
-  box-shadow: 0 0 0 3px rgba(0, 255, 255, 0.4), 0 0 15px rgba(0, 255, 255, 0.3);
-}
-
-/* Width buttons */
-.notes-width-btn {
-  width: 36px;
-  color: #00ffff;
-}
-
-.notes-width-btn.active {
-  background: #00ffff;
-  color: #000;
-  box-shadow: 0 0 20px rgba(0, 255, 255, 0.6);
 }
 
 /* Close button */
@@ -878,7 +821,6 @@
   .notes-btn,
   .notes-toggle-btn,
   .text-note,
-  .notes-color-btn,
   .notes-highlight,
   .notes-highlight-preview {
     transition: none;

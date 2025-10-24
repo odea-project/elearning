@@ -12,16 +12,6 @@ class NotesManager {
     this.isActive = false;
     this.overlay = null;
     this.toolbar = null;
-    this.mode = 'text'; // 'text' or 'draw'
-    
-    // Drawing state
-    this.canvas = null;
-    this.ctx = null;
-    this.isDrawing = false;
-    this.currentColor = '#E5C07B'; // Monokai yellow
-    this.currentWidth = 3;
-    this.currentStrokes = []; // Store vector strokes for current slide
-    this.currentStroke = null; // Current stroke being drawn
     
     // Text notes
     this.textNotes = [];
@@ -160,13 +150,6 @@ class NotesManager {
       markerPosition: note.markerPosition || null
     }));
 
-    // Save drawings as vector strokes (much more efficient than images)
-    if (this.canvas && this.currentStrokes.length > 0) {
-      slideNotes.drawings = this.currentStrokes;
-    } else {
-      slideNotes.drawings = [];
-    }
-
     slideNotes.timestamp = new Date().toISOString();
     
     this.saveNotes();
@@ -187,24 +170,6 @@ class NotesManager {
     slideNotes.text.forEach(note => {
       this.createTextNote(note.content, note.x, note.y, note.id, note.sourceText, note.highlightId, note.markerId, note.markerPosition);
     });
-
-    // Load drawings - replay vector strokes
-    this.currentStrokes = [];
-    if (slideNotes.drawings.length > 0 && this.canvas) {
-      // Check if drawings are in new vector format or old image format
-      if (Array.isArray(slideNotes.drawings) && slideNotes.drawings[0] && typeof slideNotes.drawings[0] === 'object' && slideNotes.drawings[0].points) {
-        // New vector format
-        this.currentStrokes = slideNotes.drawings;
-        this.replayStrokes();
-      } else if (typeof slideNotes.drawings[0] === 'string' && slideNotes.drawings[0].startsWith('data:image')) {
-        // Old image format - load as image
-        const img = new Image();
-        img.onload = () => {
-          this.ctx.drawImage(img, 0, 0);
-        };
-        img.src = slideNotes.drawings[0];
-      }
-    }
     
     // Restore text highlights
     this.restoreTextHighlights();
@@ -221,12 +186,6 @@ class NotesManager {
       }
     });
     this.textNotes = [];
-
-    // Clear canvas and strokes
-    if (this.canvas && this.ctx) {
-      this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-      this.currentStrokes = [];
-    }
     
     // Clear text highlights
     this.clearTextHighlights();
@@ -590,9 +549,6 @@ class NotesManager {
         this.open();
       }
       
-      // Switch to text mode
-      this.setMode('text');
-      
       // Find and focus the note
       const noteId = noteObj.id;
       const note = this.textNotes.find(n => n.id === noteId);
@@ -809,9 +765,6 @@ class NotesManager {
         this.open();
       }
       
-      // Switch to text mode
-      this.setMode('text');
-      
       // Find and focus the note
       const noteId = noteObj.id;
       const note = this.textNotes.find(n => n.id === noteId);
@@ -863,12 +816,6 @@ class NotesManager {
     this.overlay.id = 'notes-overlay';
     this.overlay.className = 'notes-overlay';
     this.overlay.style.display = 'none';
-    
-    // Create canvas for drawing
-    this.canvas = document.createElement('canvas');
-    this.canvas.className = 'notes-canvas';
-    this.ctx = this.canvas.getContext('2d');
-    this.overlay.appendChild(this.canvas);
 
     // Create opacity slider (vertical, left side)
     this.createOpacitySlider();
@@ -877,42 +824,6 @@ class NotesManager {
     this.toolbar = document.createElement('div');
     this.toolbar.className = 'notes-toolbar';
     this.toolbar.innerHTML = `
-      <div class="notes-toolbar-group">
-        <button class="notes-btn notes-mode-btn" data-mode="text" title="Text Note (T)">
-          <i class="fas fa-font"></i>
-        </button>
-        <button class="notes-btn notes-mode-btn active" data-mode="draw" title="Draw (D)">
-          <i class="fas fa-pen"></i>
-        </button>
-      </div>
-      
-      <div class="notes-toolbar-group" id="draw-tools">
-        <button class="notes-btn notes-color-btn" data-color="#E5C07B" style="background: #E5C07B;" title="Yellow"></button>
-        <button class="notes-btn notes-color-btn" data-color="#61AFEF" style="background: #61AFEF;" title="Blue"></button>
-        <button class="notes-btn notes-color-btn" data-color="#98C379" style="background: #98C379;" title="Green"></button>
-        <button class="notes-btn notes-color-btn" data-color="#E06C75" style="background: #E06C75;" title="Red"></button>
-        <button class="notes-btn notes-color-btn" data-color="#C678DD" style="background: #C678DD;" title="Purple"></button>
-        <button class="notes-btn notes-color-btn" data-color="#FFFFFF" style="background: #FFFFFF; border: 1px solid #666;" title="White"></button>
-        
-        <div class="notes-divider"></div>
-        
-        <button class="notes-btn notes-width-btn" data-width="2" title="Thin">
-          <i class="fas fa-circle" style="font-size: 8px;"></i>
-        </button>
-        <button class="notes-btn notes-width-btn active" data-width="3" title="Medium">
-          <i class="fas fa-circle" style="font-size: 12px;"></i>
-        </button>
-        <button class="notes-btn notes-width-btn" data-width="5" title="Thick">
-          <i class="fas fa-circle" style="font-size: 16px;"></i>
-        </button>
-        
-        <div class="notes-divider"></div>
-        
-        <button class="notes-btn" id="notes-eraser-btn" title="Eraser (E)">
-          <i class="fas fa-eraser"></i>
-        </button>
-      </div>
-      
       <div class="notes-toolbar-group">
         <button class="notes-btn" id="notes-clear-btn" title="Clear All">
           <i class="fas fa-trash"></i>
@@ -927,7 +838,7 @@ class NotesManager {
       
       <div class="notes-toolbar-group">
         <button class="notes-btn notes-close-btn" id="notes-close-btn" title="Close (Esc)">
-          <i class="fas fa-times"></i>
+          <i class="fas fa-sign-out-alt"></i>
         </button>
       </div>
     `;
@@ -937,10 +848,6 @@ class NotesManager {
 
     // Create toggle button for reveal controls
     this.createToggleButton();
-    
-    // Resize canvas to match window
-    this.resizeCanvas();
-    window.addEventListener('resize', () => this.resizeCanvas());
   }
 
   /**
@@ -1127,9 +1034,6 @@ class NotesManager {
       this.open();
     }
     
-    // Switch to text mode
-    this.setMode('text');
-    
     // Create note at the context menu position
     const noteX = this.contextMenuPosition.x;
     const noteY = this.contextMenuPosition.y;
@@ -1261,66 +1165,10 @@ class NotesManager {
   /**
    * Resize canvas to match window
    */
-  resizeCanvas() {
-    if (!this.canvas) return;
-    
-    // Save current drawing
-    const imageData = this.ctx.getImageData(0, 0, this.canvas.width, this.canvas.height);
-    
-    // Resize
-    this.canvas.width = window.innerWidth;
-    this.canvas.height = window.innerHeight;
-    
-    // Restore drawing
-    this.ctx.putImageData(imageData, 0, 0);
-    
-    // Reset drawing style
-    this.ctx.lineCap = 'round';
-    this.ctx.lineJoin = 'round';
-    this.ctx.strokeStyle = this.currentColor;
-    this.ctx.lineWidth = this.currentWidth;
-  }
-
   /**
    * Attach event listeners
    */
   attachEventListeners() {
-    // Mode buttons
-    document.querySelectorAll('.notes-mode-btn').forEach(btn => {
-      btn.addEventListener('click', (e) => {
-        const mode = e.currentTarget.dataset.mode;
-        this.setMode(mode);
-      });
-    });
-
-    // Color buttons
-    document.querySelectorAll('.notes-color-btn').forEach(btn => {
-      btn.addEventListener('click', (e) => {
-        this.currentColor = e.currentTarget.dataset.color;
-        this.ctx.strokeStyle = this.currentColor;
-        document.querySelectorAll('.notes-color-btn').forEach(b => b.classList.remove('active'));
-        e.currentTarget.classList.add('active');
-      });
-    });
-
-    // Width buttons
-    document.querySelectorAll('.notes-width-btn').forEach(btn => {
-      btn.addEventListener('click', (e) => {
-        this.currentWidth = parseInt(e.currentTarget.dataset.width);
-        this.ctx.lineWidth = this.currentWidth;
-        document.querySelectorAll('.notes-width-btn').forEach(b => b.classList.remove('active'));
-        e.currentTarget.classList.add('active');
-      });
-    });
-
-    // Eraser button
-    document.getElementById('notes-eraser-btn')?.addEventListener('click', () => {
-      this.currentColor = '#1a2340'; // Background color
-      this.ctx.strokeStyle = this.currentColor;
-      this.currentWidth = 20;
-      this.ctx.lineWidth = this.currentWidth;
-    });
-
     // Clear button
     document.getElementById('notes-clear-btn')?.addEventListener('click', () => {
       if (confirm('Delete all notes on this slide?')) {
@@ -1348,46 +1196,6 @@ class NotesManager {
       this.close();
     });
 
-    // Canvas events - handle both drawing and text placement
-    this.canvas.addEventListener('pointerdown', (e) => {
-      if (this.mode === 'draw') {
-        this.startDrawing(e);
-      } else if (this.mode === 'text') {
-        // Start press-and-hold timer for text note creation
-        this.startPressAndHold(e);
-      }
-    });
-    
-    this.canvas.addEventListener('pointermove', (e) => {
-      if (this.mode === 'draw') {
-        this.draw(e);
-      } else if (this.mode === 'text' && this.pressTimer) {
-        // Check if user moved too much - cancel text note creation
-        const dx = Math.abs(e.clientX - this.pressStartX);
-        const dy = Math.abs(e.clientY - this.pressStartY);
-        if (dx > this.moveThreshold || dy > this.moveThreshold) {
-          this.cancelPressAndHold();
-        }
-      }
-    });
-    
-    this.canvas.addEventListener('pointerup', () => {
-      if (this.mode === 'draw') {
-        this.stopDrawing();
-      } else if (this.mode === 'text') {
-        // Cancel press-and-hold if user releases before threshold
-        this.cancelPressAndHold();
-      }
-    });
-    
-    this.canvas.addEventListener('pointerout', () => {
-      if (this.mode === 'draw') {
-        this.stopDrawing();
-      } else if (this.mode === 'text') {
-        this.cancelPressAndHold();
-      }
-    });
-
     // Keyboard shortcuts
     document.addEventListener('keydown', (e) => {
       if (e.key === 'n' && !e.ctrlKey && !e.metaKey && !this.isTyping()) {
@@ -1395,13 +1203,7 @@ class NotesManager {
       } else if (e.key === 'Escape' && this.isActive) {
         this.close();
       } else if (this.isActive) {
-        if (e.key === 't' && !this.isTyping()) {
-          this.setMode('text');
-        } else if (e.key === 'd' && !this.isTyping()) {
-          this.setMode('draw');
-        } else if (e.key === 'e' && !this.isTyping()) {
-          document.getElementById('notes-eraser-btn')?.click();
-        } else if ((e.key === '+' || e.key === '=') && !this.isTyping()) {
+        if ((e.key === '+' || e.key === '=') && !this.isTyping()) {
           e.preventDefault();
           this.increaseOpacity();
         } else if ((e.key === '-' || e.key === '_') && !this.isTyping()) {
@@ -1460,253 +1262,6 @@ class NotesManager {
   }
 
   /**
-   * Set mode (text or draw)
-   */
-  setMode(mode) {
-    this.mode = mode;
-    
-    // Update button states
-    document.querySelectorAll('.notes-mode-btn').forEach(btn => {
-      if (btn.dataset.mode === mode) {
-        btn.classList.add('active');
-      } else {
-        btn.classList.remove('active');
-      }
-    });
-
-    // Toggle draw tools visibility
-    const drawTools = document.getElementById('draw-tools');
-    if (drawTools) {
-      drawTools.style.display = mode === 'draw' ? 'flex' : 'none';
-    }
-
-    // Change cursor based on mode
-    if (mode === 'draw') {
-      this.canvas.style.cursor = 'crosshair';
-      this.overlay.classList.remove('text-mode');
-    } else {
-      this.canvas.style.cursor = 'copy'; // Indicates "place text here"
-      this.overlay.classList.add('text-mode');
-    }
-  }
-
-  /**
-   * Start drawing
-   */
-  startDrawing(e) {
-    if (this.mode !== 'draw') return;
-    
-    this.isDrawing = true;
-    const rect = this.canvas.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-    
-    // Start new stroke vector
-    this.currentStroke = {
-      points: [{x, y}],
-      color: this.currentColor,
-      width: this.currentWidth
-    };
-    
-    this.ctx.beginPath();
-    this.ctx.moveTo(x, y);
-  }
-
-  /**
-   * Draw
-   */
-  draw(e) {
-    if (!this.isDrawing || this.mode !== 'draw') return;
-    
-    const rect = this.canvas.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-    
-    // Add point to current stroke
-    if (this.currentStroke) {
-      this.currentStroke.points.push({x, y});
-    }
-    
-    this.ctx.lineTo(x, y);
-    this.ctx.stroke();
-  }
-
-  /**
-   * Stop drawing
-   */
-  stopDrawing() {
-    if (this.isDrawing) {
-      this.isDrawing = false;
-      
-      // Save completed stroke to array
-      if (this.currentStroke && this.currentStroke.points.length > 1) {
-        // Simplify stroke to reduce point count
-        const simplified = this.simplifyStroke(this.currentStroke.points, 2);
-        
-        // Encode to compact format
-        this.currentStroke.points = this.encodePoints(simplified);
-        
-        this.currentStrokes.push(this.currentStroke);
-      }
-      this.currentStroke = null;
-      
-      this.saveCurrentSlideNotes();
-    }
-  }
-
-  /**
-   * Replay all saved strokes on canvas
-   */
-  replayStrokes() {
-    if (!this.canvas || !this.ctx) return;
-    
-    // Clear canvas first
-    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-    
-    // Replay each stroke
-    this.currentStrokes.forEach(stroke => {
-      if (!stroke.points || stroke.points.length < 2) return;
-      
-      // Decode points if in compact format
-      const points = this.decodePoints(stroke.points);
-      if (points.length < 2) return;
-      
-      // Set stroke style
-      this.ctx.strokeStyle = stroke.color;
-      this.ctx.lineWidth = stroke.width;
-      this.ctx.lineCap = 'round';
-      this.ctx.lineJoin = 'round';
-      
-      // Draw the stroke
-      this.ctx.beginPath();
-      this.ctx.moveTo(points[0].x, points[0].y);
-      
-      for (let i = 1; i < points.length; i++) {
-        this.ctx.lineTo(points[i].x, points[i].y);
-      }
-      
-      this.ctx.stroke();
-    });
-    
-    // Restore current drawing settings
-    this.ctx.strokeStyle = this.currentColor;
-    this.ctx.lineWidth = this.currentWidth;
-  }
-
-  /**
-   * Simplify stroke by removing redundant points (Douglas-Peucker algorithm)
-   */
-  simplifyStroke(points, tolerance = 2) {
-    if (points.length <= 2) return points;
-    
-    // Find the point with maximum distance from line segment
-    let maxDist = 0;
-    let index = 0;
-    const end = points.length - 1;
-    
-    for (let i = 1; i < end; i++) {
-      const dist = this.perpendicularDistance(points[i], points[0], points[end]);
-      if (dist > maxDist) {
-        maxDist = dist;
-        index = i;
-      }
-    }
-    
-    // If max distance is greater than tolerance, recursively simplify
-    if (maxDist > tolerance) {
-      const left = this.simplifyStroke(points.slice(0, index + 1), tolerance);
-      const right = this.simplifyStroke(points.slice(index), tolerance);
-      return left.slice(0, -1).concat(right);
-    } else {
-      return [points[0], points[end]];
-    }
-  }
-
-  /**
-   * Calculate perpendicular distance from point to line segment
-   */
-  perpendicularDistance(point, lineStart, lineEnd) {
-    const dx = lineEnd.x - lineStart.x;
-    const dy = lineEnd.y - lineStart.y;
-    const mag = Math.sqrt(dx * dx + dy * dy);
-    
-    if (mag === 0) {
-      const pdx = point.x - lineStart.x;
-      const pdy = point.y - lineStart.y;
-      return Math.sqrt(pdx * pdx + pdy * pdy);
-    }
-    
-    const u = ((point.x - lineStart.x) * dx + (point.y - lineStart.y) * dy) / (mag * mag);
-    const clampedU = Math.max(0, Math.min(1, u));
-    const closestX = lineStart.x + clampedU * dx;
-    const closestY = lineStart.y + clampedU * dy;
-    const pdx = point.x - closestX;
-    const pdy = point.y - closestY;
-    
-    return Math.sqrt(pdx * pdx + pdy * pdy);
-  }
-
-  /**
-   * Encode points array to compact format [x1,y1,x2,y2,...]
-   */
-  encodePoints(points) {
-    const encoded = [];
-    for (const p of points) {
-      encoded.push(Math.round(p.x), Math.round(p.y));
-    }
-    return encoded;
-  }
-
-  /**
-   * Decode points from compact format to [{x,y},...]
-   */
-  decodePoints(points) {
-    // Check if already in object format
-    if (points.length > 0 && typeof points[0] === 'object') {
-      return points;
-    }
-    
-    // Decode from compact array format
-    const decoded = [];
-    for (let i = 0; i < points.length; i += 2) {
-      decoded.push({x: points[i], y: points[i + 1]});
-    }
-    return decoded;
-  }
-
-  /**
-   * Start press-and-hold timer for text note creation
-   */
-  startPressAndHold(e) {
-    // Check if click was on a text note element
-    const clickedElement = document.elementFromPoint(e.clientX, e.clientY);
-    const isTextNote = clickedElement && clickedElement.closest('.text-note');
-    
-    if (isTextNote) {
-      return;
-    }
-    
-    this.pressStartX = e.clientX;
-    this.pressStartY = e.clientY;
-    
-    this.pressTimer = setTimeout(() => {
-      // Place text note at press position, slightly offset so it's not under cursor
-      this.createTextNote('', e.clientX - 100, e.clientY - 30);
-      this.pressTimer = null;
-    }, this.pressThreshold);
-  }
-
-  /**
-   * Cancel press-and-hold timer
-   */
-  cancelPressAndHold() {
-    if (this.pressTimer) {
-      clearTimeout(this.pressTimer);
-      this.pressTimer = null;
-    }
-  }
-
-  /**
    * Create text note
    */
   createTextNote(content = '', x = 100, y = 100, id = null, sourceText = null, highlightId = null, markerId = null, markerPosition = null) {
@@ -1722,7 +1277,7 @@ class NotesManager {
           <i class="fas fa-grip-horizontal"></i> Move
         </span>
         <button class="note-delete-btn" title="Delete">
-          <i class="fas fa-times"></i>
+          <i class="fas fa-trash-alt"></i>
         </button>
       </div>
       <div class="note-content" contenteditable="true">${content}</div>
@@ -1775,9 +1330,7 @@ class NotesManager {
 
     // Content editing
     const contentDiv = noteElement.querySelector('.note-content');
-    contentDiv.addEventListener('blur', () => {
-      this.saveCurrentSlideNotes();
-    });
+    
     contentDiv.addEventListener('focus', () => {
       if (contentDiv.textContent === 'Enter Note...') {
         contentDiv.textContent = '';
@@ -1786,16 +1339,16 @@ class NotesManager {
       this.setActiveNote(noteElement);
     });
     
-    // Mark note as active when clicked
+    // Mark note as active when clicked (use passive listener for better performance)
     noteElement.addEventListener('click', (e) => {
       e.stopPropagation();
       this.setActiveNote(noteElement);
-    });
+    }, { passive: false });
     
-    // Prevent all pointer events from bubbling to canvas
+    // Prevent all pointer events from bubbling to canvas (use passive for better scrolling)
     noteElement.addEventListener('pointerdown', (e) => {
       e.stopPropagation();
-    });
+    }, { passive: false });
 
     // Make draggable
     this.makeDraggable(noteElement);
@@ -1817,9 +1370,14 @@ class NotesManager {
    * Set active note (highlight with purple/pink)
    */
   setActiveNote(noteElement) {
+    // Skip if already active (performance optimization)
+    if (noteElement && noteElement.classList.contains('active')) {
+      return;
+    }
+    
     // Remove active class from all notes
     this.textNotes.forEach(note => {
-      if (note.element) {
+      if (note.element && note.element !== noteElement) {
         note.element.classList.remove('active');
       }
     });
@@ -1845,16 +1403,37 @@ class NotesManager {
 
     const handle = element.querySelector('.note-handle');
 
+    const getEventCoordinates = (e) => {
+      // Handle both mouse and touch events
+      if (e.touches && e.touches.length > 0) {
+        return { x: e.touches[0].clientX, y: e.touches[0].clientY };
+      } else if (e.changedTouches && e.changedTouches.length > 0) {
+        return { x: e.changedTouches[0].clientX, y: e.changedTouches[0].clientY };
+      } else {
+        return { x: e.clientX, y: e.clientY };
+      }
+    };
+
     const pointerDownHandler = (e) => {
+      // Don't start drag if clicking on delete button
+      if (e.target.closest('.note-delete-btn')) {
+        return;
+      }
+      
       e.stopPropagation(); // Prevent creating new note when clicking handle
+      
+      const coords = getEventCoordinates(e);
       isDragging = true;
       hasMoved = false;
-      startX = e.clientX;
-      startY = e.clientY;
-      initialX = e.clientX - element.offsetLeft;
-      initialY = e.clientY - element.offsetTop;
+      startX = coords.x;
+      startY = coords.y;
+      initialX = coords.x - element.offsetLeft;
+      initialY = coords.y - element.offsetTop;
       element.style.zIndex = '1002';
       handle.style.cursor = 'grabbing';
+      
+      // Prevent text selection during drag
+      e.preventDefault();
     };
 
     const pointerMoveHandler = (e) => {
@@ -1862,15 +1441,17 @@ class NotesManager {
         e.preventDefault();
         e.stopPropagation();
         
+        const coords = getEventCoordinates(e);
+        
         // Check if actually moved (more than 5px to avoid accidental drags)
-        const dx = Math.abs(e.clientX - startX);
-        const dy = Math.abs(e.clientY - startY);
+        const dx = Math.abs(coords.x - startX);
+        const dy = Math.abs(coords.y - startY);
         if (dx > 5 || dy > 5) {
           hasMoved = true;
         }
         
-        currentX = e.clientX - initialX;
-        currentY = e.clientY - initialY;
+        currentX = coords.x - initialX;
+        currentY = coords.y - initialY;
         element.style.left = `${currentX}px`;
         element.style.top = `${currentY}px`;
       }
@@ -1883,18 +1464,20 @@ class NotesManager {
         element.style.zIndex = '1001';
         handle.style.cursor = 'grab';
         
-        if (hasMoved) {
-          this.saveCurrentSlideNotes();
-        }
-        
         hasMoved = false;
       }
     };
 
-    handle.addEventListener('pointerdown', pointerDownHandler);
-    document.addEventListener('pointermove', pointerMoveHandler);
-    document.addEventListener('pointerup', pointerUpHandler);
-    document.addEventListener('pointercancel', pointerUpHandler);
+    // Mouse events
+    handle.addEventListener('mousedown', pointerDownHandler);
+    document.addEventListener('mousemove', pointerMoveHandler);
+    document.addEventListener('mouseup', pointerUpHandler);
+    
+    // Touch events for tablets
+    handle.addEventListener('touchstart', pointerDownHandler, { passive: false });
+    document.addEventListener('touchmove', pointerMoveHandler, { passive: false });
+    document.addEventListener('touchend', pointerUpHandler);
+    document.addEventListener('touchcancel', pointerUpHandler);
   }
 
   /**
