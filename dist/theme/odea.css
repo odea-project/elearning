@@ -1346,7 +1346,7 @@ input:checked+.slider:before {
 }
 
 .layer-back {
-  background-image: url('../../resources/misc/bg2.jpg');
+  background-image: url('../../resources/misc/bg2.webp');
   background-repeat: repeat-x;
   background-size: auto 100%;
   background-position-x: 0px;
@@ -1357,25 +1357,11 @@ input:checked+.slider:before {
 
 
 .layer-front {
-  background: url('../../resources/misc/fg.png') repeat-x;
+  background: url('../../resources/misc/fg.webp') repeat-x;
   background-repeat: repeat-x;
   background-size: auto 100%;
   background-position-x: 0px;
   z-index: 0; /* höher als layer-back */
-  position: absolute;
-  top: 0; left: 0;
-  width: 100vw;
-  height: 100vh;
-  pointer-events: none;
-  transition: background-position-x 1s ease;
-}
-
-.layer-very-front {
-  background: url('../../resources/misc/ffg.png') repeat-x;
-  background-repeat: repeat-x;
-  background-size: auto 100%;
-  background-position-x: 0px;
-  z-index: 1001; /* höher als layer-front */
   position: absolute;
   top: 0; left: 0;
   width: 100vw;
