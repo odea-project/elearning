@@ -1,0 +1,71 @@
+<svg viewBox="0 0 800 300" xmlns="http://www.w3.org/2000/svg">
+  <!-- Title -->
+  <text x="400" y="35" font-size="24" font-weight="bold" fill="#9efcff" text-anchor="middle">CSV Data Format for Analysis</text>
+  
+  <!-- CSV Section -->
+  <g id="csv-section">
+    <!-- CSV Document -->
+    <rect x="80" y="80" width="200" height="180" fill="none" stroke="#61AFEF" stroke-width="3" rx="8"/>
+    <text x="180" y="110" font-size="18" font-weight="bold" fill="#61AFEF" text-anchor="middle">CSV File</text>
+    
+    <!-- CSV Content lines -->
+    <text x="100" y="140" font-size="12" fill="#ABB2BF" font-family="monospace">name,age,salary</text>
+    <line x1="95" y1="148" x2="265" y2="148" stroke="#98C379" stroke-width="1"/>
+    <text x="100" y="165" font-size="11" fill="#E5C07B" font-family="monospace">Alice,28,55000</text>
+    <text x="100" y="185" font-size="11" fill="#E5C07B" font-family="monospace">Bob,35,62000</text>
+    <text x="100" y="205" font-size="11" fill="#E5C07B" font-family="monospace">Charlie,42,58000</text>
+    <text x="100" y="225" font-size="11" fill="#E5C07B" font-family="monospace">Diana,31,51000</text>
+    
+    <!-- CSV icon -->
+    <circle cx="180" cy="245" r="15" fill="#61AFEF" opacity="0.3"/>
+    <text x="180" y="252" font-size="16" font-weight="bold" fill="#61AFEF" text-anchor="middle">📊</text>
+  </g>
+  
+  <!-- Arrow to Data Frame -->
+  <path d="M 290 170 L 380 170" stroke="#E5C07B" stroke-width="4" marker-end="url(#arrow)"/>
+  <text x="335" y="160" font-size="16" font-weight="bold" fill="#E5C07B" text-anchor="middle">read.csv()</text>
+  
+  <!-- Data Frame -->
+  <g id="dataframe">
+    <rect x="400" y="60" width="340" height="200" fill="none" stroke="#98C379" stroke-width="3" rx="8"/>
+    <text x="570" y="95" font-size="20" font-weight="bold" fill="#98C379" text-anchor="middle">Data Frame in R</text>
+    
+    <!-- Table grid -->
+    <rect x="420" y="115" width="300" height="125" fill="none" stroke="#56B6C2" stroke-width="2"/>
+    <line x1="420" y1="140" x2="720" y2="140" stroke="#56B6C2" stroke-width="2"/>
+    <line x1="520" y1="115" x2="520" y2="240" stroke="#56B6C2" stroke-width="1"/>
+    <line x1="620" y1="115" x2="620" y2="240" stroke="#56B6C2" stroke-width="1"/>
+    
+    <!-- Header -->
+    <text x="470" y="133" font-size="12" font-weight="bold" fill="#61AFEF" text-anchor="middle">name</text>
+    <text x="570" y="133" font-size="12" font-weight="bold" fill="#61AFEF" text-anchor="middle">age</text>
+    <text x="670" y="133" font-size="12" font-weight="bold" fill="#61AFEF" text-anchor="middle">salary</text>
+    
+    <!-- Data rows -->
+    <text x="470" y="162" font-size="11" fill="#E5C07B" text-anchor="middle">Alice</text>
+    <text x="570" y="162" font-size="11" fill="#E5C07B" text-anchor="middle">28</text>
+    <text x="670" y="162" font-size="11" fill="#E5C07B" text-anchor="middle">55000</text>
+    
+    <text x="470" y="185" font-size="11" fill="#E5C07B" text-anchor="middle">Bob</text>
+    <text x="570" y="185" font-size="11" fill="#E5C07B" text-anchor="middle">35</text>
+    <text x="670" y="185" font-size="11" fill="#E5C07B" text-anchor="middle">62000</text>
+    
+    <text x="470" y="208" font-size="11" fill="#E5C07B" text-anchor="middle">Charlie</text>
+    <text x="570" y="208" font-size="11" fill="#E5C07B" text-anchor="middle">42</text>
+    <text x="670" y="208" font-size="11" fill="#E5C07B" text-anchor="middle">58000</text>
+    
+    <text x="470" y="231" font-size="11" fill="#E5C07B" text-anchor="middle">Diana</text>
+    <text x="570" y="231" font-size="11" fill="#E5C07B" text-anchor="middle">31</text>
+    <text x="670" y="231" font-size="11" fill="#E5C07B" text-anchor="middle">51000</text>
+  </g>
+  
+  <!-- Bottom text -->
+  <text x="400" y="285" font-size="14" fill="#ABB2BF" text-anchor="middle">Use mean(), sd(), summary() for statistical analysis!</text>
+  
+  <!-- Arrow marker definition -->
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#E5C07B" />
+    </marker>
+  </defs>
+</svg>

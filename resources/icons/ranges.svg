@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <defs>
+    <linearGradient id="bg" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0%" stop-color="#09414d" />
+      <stop offset="100%" stop-color="#1a2340" />
+    </linearGradient>
+  </defs>
+  <rect x="0" y="0" width="200" height="200" rx="16" fill="url(#bg)" />
+
+  <!-- Range bracket -->
+  <line x1="40" y1="140" x2="160" y2="140" stroke="#9efcff" stroke-width="4" stroke-linecap="round" />
+  <line x1="40" y1="130" x2="40" y2="150" stroke="#9efcff" stroke-width="4" />
+  <line x1="160" y1="130" x2="160" y2="150" stroke="#9efcff" stroke-width="4" />
+  <text x="100" y="164" font-size="16" fill="#9efcff" text-anchor="middle">Range</text>
+
+  <!-- Quantile markers -->
+  <line x1="60" y1="80" x2="60" y2="40" stroke="#00dee6" stroke-width="3" />
+  <line x1="100" y1="80" x2="100" y2="30" stroke="#00dee6" stroke-width="3" />
+  <line x1="140" y1="80" x2="140" y2="40" stroke="#00dee6" stroke-width="3" />
+  <circle cx="60" cy="90" r="6" fill="#9efcff" />
+  <circle cx="100" cy="90" r="6" fill="#9efcff" />
+  <circle cx="140" cy="90" r="6" fill="#9efcff" />
+  <text x="60" y="108" font-size="12" fill="#9efcff" text-anchor="middle">Q1</text>
+  <text x="100" y="108" font-size="12" fill="#9efcff" text-anchor="middle">Q2</text>
+  <text x="140" y="108" font-size="12" fill="#9efcff" text-anchor="middle">Q3</text>
+
+  <!-- Boxplot silhouette -->
+  <rect x="70" y="120" width="60" height="30" fill="none" stroke="#00dee6" stroke-width="3" />
+  <line x1="100" y1="120" x2="100" y2="150" stroke="#00dee6" stroke-width="3" />
+  <line x1="70" y1="135" x2="40" y2="135" stroke="#00dee6" stroke-width="3" />
+  <line x1="130" y1="135" x2="160" y2="135" stroke="#00dee6" stroke-width="3" />
+</svg>

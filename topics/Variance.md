@@ -325,7 +325,6 @@ $$SE = \frac{s}{\sqrt{n}}$$
 
 <!-- .slide:id="example-symmetric" -->
 ## Example: Dissolved Oxygen (Near-Symmetric Data)
-<div id="do-editor" class="code-editor-container" style="border: 1px solid #2d3a66; border-radius: 8px; margin: 20px; display: none; text-align: left;"></div>
 <!-- layout={rows: 1, columns: 2} -->
 <!-- position={row: 1, column: 1} -->
 *Scenario*
@@ -347,26 +346,11 @@ $$SE = \frac{s}{\sqrt{n}}$$
 
 <!-- /position -->
 <!-- position={row: 1, column: 2} -->
-<div style="display: flex; flex-direction: column; gap: 10px; width: 100%;">
-  <div style="display: flex; gap: 10px;">
-    <button id="toggle-do-code" style="padding: 8px 16px; background: #2d3a66; color: #9efcff; border: 1px solid #2d3a66; border-radius: 6px; cursor: pointer; font-size: 0.9em;">
-      <i class="fas fa-code"></i> Show Code
-    </button>
-    <button id="run-do-btn" style="padding: 8px 16px; background: #1a2340; color: #9efcff; border: 1px solid #2d3a66; border-radius: 6px; cursor: pointer; font-size: 0.9em;">
-      <i class="fas fa-play"></i> Calculate
-    </button>
-  </div>
-  <div id="do-output" style="border: 1px solid #2d3a66; border-radius: 8px; overflow: hidden; min-height: 80px;"></div>
-</div>
+<div id="do-container"></div>
 
 <script>
 (function() {
-  const initDO = async () => {
-    if (!window.EditorView || !window.EditorState || !window.basicSetup) {
-      setTimeout(initDO, 100);
-      return;
-    }
-
+  const init = async () => {
     const code = `# Dissolved oxygen (mg/L)
 do_data <- c(7.8, 8.2, 7.9, 8.1, 8.0, 7.7, 8.3, 7.9, 8.0, 8.1)
 
@@ -381,128 +365,28 @@ print(paste("SD:", round(sd_do, 3), "mg/L"))
 print(paste("SE:", round(se_do, 3), "mg/L"))
 print(paste("n =", n))`;
 
-    let rLang = [];
-    if (window.rLanguageSupport) {
-      rLang = window.rLanguageSupport;
-    }
-
-    const fontSizeTheme = window.EditorView.theme({
-      "&": { fontSize: "1.5em" },
-      ".cm-content": { fontSize: "1.5em" },
-      ".cm-gutters": { fontSize: "1.5em" }
-    });
-
-    const editorParent = document.getElementById('do-editor');
-    if (!editorParent || editorParent.querySelector('.cm-editor')) return;
-
-    const editorExtensions = [window.basicSetup];
-    if (rLang.length) editorExtensions.push(rLang);
-    editorExtensions.push(window.monokai, fontSizeTheme);
-
-    const editor = new window.EditorView({
-      state: window.EditorState.create({
-        doc: code,
-        extensions: editorExtensions
-      }),
-      parent: editorParent
-    });
-
-    const outputParent = document.getElementById('do-output');
-    if (!outputParent) return;
-
-    const outputExtensions = [
-      window.basicSetup,
-      window.monokai,
-      fontSizeTheme,
-      window.EditorView.editable.of(false)
-    ];
-    if (rLang.length) outputExtensions.splice(1, 0, rLang);
-
-    const outputEditor = new window.EditorView({
-      state: window.EditorState.create({
-        doc: '',
-        extensions: outputExtensions
-      }),
-      parent: outputParent
-    });
-
-    const slide = document.getElementById('example-symmetric');
-    let columnElements = null;
-    
-    const findColumns = () => {
-      if (slide) {
-        return Array.from(slide.querySelectorAll('div')).filter(el => {
-          const style = el.getAttribute('style') || '';
-          return style.includes('grid-column: 1') || style.includes('grid-area: 1 / 1') || style.includes('grid-area: 1/1');
-        });
-      }
-      return [];
+    const fallback = () => {
+      const data = [7.8, 8.2, 7.9, 8.1, 8.0, 7.7, 8.3, 7.9, 8.0, 8.1];
+      const mean = data.reduce((a, b) => a + b, 0) / data.length;
+      const variance = data.reduce((sum, val) => sum + Math.pow(val - mean, 2), 0) / (data.length - 1);
+      const sd = Math.sqrt(variance);
+      const se = sd / Math.sqrt(data.length);
+      return `[Simulated in JavaScript]\nMean: ${mean.toFixed(2)} mg/L\nSD: ${sd.toFixed(3)} mg/L\nSE: ${se.toFixed(3)} mg/L\nn = ${data.length}`;
     };
 
-    const toggleBtn = document.getElementById('toggle-do-code');
-    if (toggleBtn) {
-      toggleBtn.onclick = () => {
-        const isHidden = editorParent.style.display === 'none';
-        editorParent.style.display = isHidden ? 'block' : 'none';
-        toggleBtn.innerHTML = isHidden ? '<i class="fas fa-code"></i> Hide Code' : '<i class="fas fa-code"></i> Show Code';
-        
-        columnElements = findColumns();
-        columnElements.forEach(col => {
-          col.style.display = isHidden ? 'none' : 'block';
-        });
-        
-        if (window.Reveal) {
-          setTimeout(() => window.Reveal.layout(), 50);
-        }
-      };
-    }
-
-    const runBtn = document.getElementById('run-do-btn');
-    if (runBtn) {
-      runBtn.onclick = async () => {
-        const codeText = editor.state.doc.toString();
-        outputEditor.dispatch({
-          changes: { from: 0, to: outputEditor.state.doc.length, insert: "Computing..." }
-        });
-
-        try {
-          const mod = await import('https://webr.r-wasm.org/latest/webr.mjs');
-          const webR = new mod.WebR();
-          await webR.init();
-
-          const r = await webR.evalR(`
-            paste(capture.output({
-              tryCatch({
-                ${codeText}
-              }, error = function(e) {
-                message("Error: ", conditionMessage(e))
-              })
-            }), collapse="\\n")
-          `);
-          let output = await r.toString();
-          output = output.replace(/^\[\d+\]\s*/gm, '');
-          outputEditor.dispatch({
-            changes: { from: 0, to: outputEditor.state.doc.length, insert: output.trim() || "[No output]" }
-          });
-        } catch (err) {
-          const data = [7.8, 8.2, 7.9, 8.1, 8.0, 7.7, 8.3, 7.9, 8.0, 8.1];
-          const mean = data.reduce((a, b) => a + b, 0) / data.length;
-          const variance = data.reduce((sum, val) => sum + Math.pow(val - mean, 2), 0) / (data.length - 1);
-          const sd = Math.sqrt(variance);
-          const se = sd / Math.sqrt(data.length);
-          const output = `[Simulated in JavaScript]\nMean: ${mean.toFixed(2)} mg/L\nSD: ${sd.toFixed(3)} mg/L\nSE: ${se.toFixed(3)} mg/L\nn = ${data.length}`;
-          outputEditor.dispatch({
-            changes: { from: 0, to: outputEditor.state.doc.length, insert: output }
-          });
-        }
-      };
-    }
+    await window.webRHelper.initInteractiveSection({
+      containerId: 'do-container',
+      code: code,
+      slideId: 'example-symmetric',
+      fallback: fallback,
+      runLabel: 'Calculate'
+    });
   };
 
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initDO);
+    document.addEventListener('DOMContentLoaded', init);
   } else {
-    initDO();
+    init();
   }
 })();
 </script>
@@ -763,7 +647,6 @@ B: mean = 20 mg/L, SD = 1.0 -> CV = 5%<br>
 
 <!-- .slide:id="r-snippets" -->
 ## Calculating Variance and SD in R
-<div id="r-snippets-editor" class="code-editor-container" style="border: 1px solid #2d3a66; border-radius: 8px; margin: 20px; display: none; text-align: left;"></div>
 <!-- layout={rows: 1, columns: 2} -->
 <!-- position={row: 1, column: 1} -->
 -! Essential **R** functions for variance and spread:
@@ -851,26 +734,11 @@ exp(sd(log(x)))
 
 <!-- /position -->
 <!-- position={row: 1, column: 2} -->
-<div style="display: flex; flex-direction: column; gap: 10px; width: 100%;">
-  <div style="display: flex; gap: 10px;">
-    <button id="toggle-snippets-code" style="padding: 8px 16px; background: #2d3a66; color: #9efcff; border: 1px solid #2d3a66; border-radius: 6px; cursor: pointer; font-size: 0.9em;">
-      <i class="fas fa-code"></i> Show Code
-    </button>
-    <button id="run-snippets-btn" style="padding: 8px 16px; background: #1a2340; color: #9efcff; border: 1px solid #2d3a66; border-radius: 6px; cursor: pointer; font-size: 0.9em;">
-      <i class="fas fa-play"></i> Run Examples
-    </button>
-  </div>
-  <div id="r-snippets-output" style="border: 1px solid #2d3a66; border-radius: 8px; overflow: hidden; min-height: 120px;"></div>
-</div>
+<div id="r-snippets-container"></div>
 
 <script>
 (function() {
-  const initSnippets = async () => {
-    if (!window.EditorView || !window.EditorState || !window.basicSetup) {
-      setTimeout(initSnippets, 100);
-      return;
-    }
-
+  const init = async () => {
     const code = `# Example data
 x <- c(10, 20, 50, 100, 200)
 
@@ -888,134 +756,35 @@ print(paste("SD(log x):", round(sd(log(x)), 3)))
 h <- 1/mean(1/x)
 print(paste("Harmonic mean:", round(h, 2)))`;
 
-    let rLang = [];
-    if (window.rLanguageSupport) {
-      rLang = window.rLanguageSupport;
-    }
-
-    const fontSizeTheme = window.EditorView.theme({
-      "&": { fontSize: "1.3em" },
-      ".cm-content": { fontSize: "1.3em" },
-      ".cm-gutters": { fontSize: "1.3em" }
-    });
-
-    const editorParent = document.getElementById('r-snippets-editor');
-    if (!editorParent || editorParent.querySelector('.cm-editor')) return;
-
-    const editorExtensions = [window.basicSetup];
-    if (rLang.length) editorExtensions.push(rLang);
-    editorExtensions.push(window.monokai, fontSizeTheme);
-
-    const editor = new window.EditorView({
-      state: window.EditorState.create({
-        doc: code,
-        extensions: editorExtensions
-      }),
-      parent: editorParent
-    });
-
-    const outputParent = document.getElementById('r-snippets-output');
-    if (!outputParent) return;
-
-    const outputExtensions = [
-      window.basicSetup,
-      window.monokai,
-      fontSizeTheme,
-      window.EditorView.editable.of(false)
-    ];
-    if (rLang.length) outputExtensions.splice(1, 0, rLang);
-
-    const outputEditor = new window.EditorView({
-      state: window.EditorState.create({
-        doc: '',
-        extensions: outputExtensions
-      }),
-      parent: outputParent
-    });
-
-    const slide = document.getElementById('r-snippets');
-    let columnElements = null;
-    
-    const findColumns = () => {
-      if (slide) {
-        return Array.from(slide.querySelectorAll('div')).filter(el => {
-          const style = el.getAttribute('style') || '';
-          return style.includes('grid-column: 1') || style.includes('grid-area: 1 / 1') || style.includes('grid-area: 1/1');
-        });
-      }
-      return [];
+    const fallback = () => {
+      const x = [10, 20, 50, 100, 200];
+      const meanArith = x.reduce((a, b) => a + b, 0) / x.length;
+      const variance = x.reduce((sum, val) => sum + Math.pow(val - meanArith, 2), 0) / (x.length - 1);
+      const sd = Math.sqrt(variance);
+      const se = sd / Math.sqrt(x.length);
+      const logX = x.map(v => Math.log(v));
+      const meanLog = logX.reduce((a, b) => a + b, 0) / logX.length;
+      const geom = Math.exp(meanLog);
+      const varLog = logX.reduce((sum, val) => sum + Math.pow(val - meanLog, 2), 0) / (logX.length - 1);
+      const sdLog = Math.sqrt(varLog);
+      const harm = x.length / x.reduce((sum, val) => sum + 1 / val, 0);
+      return `[Simulated in JavaScript]\nArithmetic mean: ${meanArith.toFixed(2)}\nSD: ${sd.toFixed(2)}\nSE: ${se.toFixed(2)}\nGeometric mean: ${geom.toFixed(2)}\nSD(log x): ${sdLog.toFixed(3)}\nHarmonic mean: ${harm.toFixed(2)}`;
     };
 
-    const toggleBtn = document.getElementById('toggle-snippets-code');
-    if (toggleBtn) {
-      toggleBtn.onclick = () => {
-        const isHidden = editorParent.style.display === 'none';
-        editorParent.style.display = isHidden ? 'block' : 'none';
-        toggleBtn.innerHTML = isHidden ? '<i class="fas fa-code"></i> Hide Code' : '<i class="fas fa-code"></i> Show Code';
-        
-        columnElements = findColumns();
-        columnElements.forEach(col => {
-          col.style.display = isHidden ? 'none' : 'block';
-        });
-        
-        if (window.Reveal) {
-          setTimeout(() => window.Reveal.layout(), 50);
-        }
-      };
-    }
-
-    const runBtn = document.getElementById('run-snippets-btn');
-    if (runBtn) {
-      runBtn.onclick = async () => {
-        const codeText = editor.state.doc.toString();
-        outputEditor.dispatch({
-          changes: { from: 0, to: outputEditor.state.doc.length, insert: "Computing..." }
-        });
-
-        try {
-          const mod = await import('https://webr.r-wasm.org/latest/webr.mjs');
-          const webR = new mod.WebR();
-          await webR.init();
-
-          const r = await webR.evalR(`
-            paste(capture.output({
-              tryCatch({
-                ${codeText}
-              }, error = function(e) {
-                message("Error: ", conditionMessage(e))
-              })
-            }), collapse="\\n")
-          `);
-          let output = await r.toString();
-          output = output.replace(/^\[\d+\]\s*/gm, '');
-          outputEditor.dispatch({
-            changes: { from: 0, to: outputEditor.state.doc.length, insert: output.trim() || "[No output]" }
-          });
-        } catch (err) {
-          const x = [10, 20, 50, 100, 200];
-          const mean_arith = x.reduce((a, b) => a + b) / x.length;
-          const variance = x.reduce((sum, val) => sum + Math.pow(val - mean_arith, 2), 0) / (x.length - 1);
-          const sd = Math.sqrt(variance);
-          const se = sd / Math.sqrt(x.length);
-          const log_x = x.map(v => Math.log(v));
-          const mean_log = log_x.reduce((a, b) => a + b) / log_x.length;
-          const geom = Math.exp(mean_log);
-          const var_log = log_x.reduce((sum, val) => sum + Math.pow(val - mean_log, 2), 0) / (log_x.length - 1);
-          const sd_log = Math.sqrt(var_log);
-          const harm = x.length / x.reduce((sum, val) => sum + 1/val, 0);
-          const output = `[Simulated in JavaScript]\nArithmetic mean: ${mean_arith.toFixed(2)}\nSD: ${sd.toFixed(2)}\nSE: ${se.toFixed(2)}\nGeometric mean: ${geom.toFixed(2)}\nSD(log x): ${sd_log.toFixed(3)}\nHarmonic mean: ${harm.toFixed(2)}`;
-          outputEditor.dispatch({
-            changes: { from: 0, to: outputEditor.state.doc.length, insert: output }
-          });
-        }
-      };
-    }
+    await window.webRHelper.initInteractiveSection({
+      containerId: 'r-snippets-container',
+      code: code,
+      slideId: 'r-snippets',
+      fallback: fallback,
+      runLabel: 'Run Examples',
+      minHeight: '120px'
+    });
   };
 
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initSnippets);
+    document.addEventListener('DOMContentLoaded', init);
   } else {
-    initSnippets();
+    init();
   }
 })();
 </script>

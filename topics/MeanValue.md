@@ -7,35 +7,6 @@ description: "Different types of mean values and their applications"
 ---
 <!-- End of metadata -->
 
-<!--
-Red Thread:
-- Rolling five dice experiment calculating the sum multiple times
-- Calculate arithmetic mean of sums considering the probability of each sum
-    + Exercise in R
-- Introduce the concept of expected value
-- Calulate the arithmetic mean of the sums by rolling the five dice 5 times
-    + Exercise in R
-- Calculate the arithmetic mean of the sums by rolling the five dice 50 times
-    + Exercise in R
-- Calculate the arithmetic mean of the sums by rolling the five dice 50e6 times
-    + Exercise in R
-- Examples where the arithmetic mean is used in water science
-- give an example where arithmetic mean is not appropriate but geometric mean is
-- introduce geometric mean
-    + Exercise in R
-- Examples where the geometric mean is used in water science
-- give an example where arithmetic mean is not appropriate but harmonic mean is
-- introduce harmonic mean
-    + Exercise in R
-- Examples where the harmonic mean is used in water science
-- give an example where arithmetic mean is not appropriate but median is
-- introduce median
-    + Exercise in R
-- Examples where the median is used in water science
-- Summary of the different types of mean values and their applications
-
--->
-
 <!-- .slide:id="requirements" -->
 ## Requirements
 - Random Variables
@@ -65,146 +36,26 @@ Red Thread:
 <!-- /position -->
 <!-- position={row: 1, column: 2} -->
 Roll five dice and calculate the sum:
-<div style="display: flex; flex-direction: column; gap: 10px; width: 100%;">
-  <div style="display: flex; gap: 10px;">
-    <button id="toggle-five-dice-code" style="padding: 8px 16px; background: #2d3a66; color: #9efcff; border: 1px solid #2d3a66; border-radius: 6px; cursor: pointer; font-size: 0.9em;">
-      <i class="fas fa-code"></i> Show Code
-    </button>
-    <button id="run-five-dice-btn" style="padding: 8px 16px; background: #1a2340; color: #9efcff; border: 1px solid #2d3a66; border-radius: 6px; cursor: pointer; font-size: 0.9em;">
-      <i class="fas fa-play"></i> Roll Five Dice
-    </button>
-  </div>
-  <div id="five-dice-output" style="border: 1px solid #2d3a66; border-radius: 8px; overflow: hidden; min-height: 60px;"></div>
-</div>
+<div id="five-dice-container"></div>
 
 <script>
 (function() {
   const initFiveDice = async () => {
-    if (!window.EditorView || !window.EditorState || !window.basicSetup) {
-      setTimeout(initFiveDice, 100);
-      return;
-    }
+    const code = `sum(sample(1:6, 5, replace = TRUE))`;
 
-    const diceCode = `sum(sample(1:6, 5, replace = TRUE))`;
-
-    let rLang = [];
-    if (window.rLanguageSupport) {
-      console.log("R language support detected");
-      rLang = window.rLanguageSupport;
-    }
-
-    const fontSizeTheme = window.EditorView.theme({
-      "&": { fontSize: "2em" },
-      ".cm-content": { fontSize: "2em" },
-      ".cm-gutters": { fontSize: "2em" }
-    });
-
-    const editorParent = document.getElementById('five-dice-editor');
-    if (!editorParent || editorParent.querySelector('.cm-editor')) return;
-
-    const editorExtensions = [window.basicSetup];
-    if (rLang.length) editorExtensions.push(rLang);
-    editorExtensions.push(window.monokai, fontSizeTheme);
-
-    const diceEditor = new window.EditorView({
-      state: window.EditorState.create({
-        doc: diceCode,
-        extensions: editorExtensions
-      }),
-      parent: editorParent
-    });
-
-    const outputParent = document.getElementById('five-dice-output');
-    if (!outputParent) return;
-
-    const outputExtensions = [
-      window.basicSetup,
-      window.monokai,
-      fontSizeTheme,
-      window.EditorView.editable.of(false)
-    ];
-    if (rLang.length) outputExtensions.splice(1, 0, rLang);
-
-    const outputEditor = new window.EditorView({
-      state: window.EditorState.create({
-        doc: '',
-        extensions: outputExtensions
-      }),
-      parent: outputParent
-    });
-
-    // Store reference to first column elements
-    const slide = document.getElementById('initial-thoughts-mean');
-    let columnElements = null;
-    
-    const findColumns = () => {
-      if (slide) {
-        return Array.from(slide.querySelectorAll('div')).filter(el => {
-          const style = el.getAttribute('style') || '';
-          return style.includes('grid-column: 1') || style.includes('grid-area: 1 / 1') || style.includes('grid-area: 1/1');
-        });
-      }
-      return [];
+    const fallback = () => {
+      const dice = Array.from({length: 5}, () => Math.floor(Math.random() * 6) + 1);
+      const sum = dice.reduce((a, b) => a + b, 0);
+      return `[Simulated in JavaScript]\nDice: ${dice.join(", ")}\nSum: ${sum}`;
     };
 
-    // Toggle code visibility
-    const toggleBtn = document.getElementById('toggle-five-dice-code');
-    if (toggleBtn) {
-      toggleBtn.onclick = () => {
-        const isHidden = editorParent.style.display === 'none';
-        editorParent.style.display = isHidden ? 'block' : 'none';
-        toggleBtn.innerHTML = isHidden ? '<i class="fas fa-code"></i> Hide Code' : '<i class="fas fa-code"></i> Show Code';
-        
-        // Hide/show first column (opposite of code visibility)
-        columnElements = findColumns();
-        columnElements.forEach(col => {
-          col.style.display = isHidden ? 'none' : 'block';
-        });
-        
-        // Re-center slide after content change
-        if (window.Reveal) {
-          setTimeout(() => window.Reveal.layout(), 50);
-        }
-      };
-    }
-
-    const runBtn = document.getElementById('run-five-dice-btn');
-    if (runBtn) {
-      runBtn.onclick = async () => {
-        const code = diceEditor.state.doc.toString();
-        outputEditor.dispatch({
-          changes: { from: 0, to: outputEditor.state.doc.length, insert: "Rolling..." }
-        });
-
-        try {
-          const mod = await import('https://webr.r-wasm.org/latest/webr.mjs');
-          const webR = new mod.WebR();
-          await webR.init();
-
-          const r = await webR.evalR(`
-            paste(capture.output({
-              tryCatch({
-                ${code}
-              }, error = function(e) {
-                message("Error: ", conditionMessage(e))
-              })
-            }), collapse="\\n")
-          `);
-          let output = await r.toString();
-          output = output.replace(/^\[\d+\]\s*/gm, '');
-          outputEditor.dispatch({
-            changes: { from: 0, to: outputEditor.state.doc.length, insert: output.trim() || "[No output]" }
-          });
-        } catch (err) {
-          const dice = Array.from({length: 5}, () => Math.floor(Math.random() * 6) + 1);
-          const sum = dice.reduce((a, b) => a + b, 0);
-          const output = `[Simulated in JavaScript]\nDice: ${dice.join(", ")}\nSum: ${sum}`;
-          outputEditor.dispatch({
-            changes: { from: 0, to: outputEditor.state.doc.length, insert: output }
-          });
-        }
-      };
-    }
+    await window.webRHelper.initInteractiveSection({
+      containerId: 'five-dice-container',
+      code: code,
+      slideId: 'initial-thoughts-mean',
+      fallback: fallback,
+      runLabel: 'Roll Five Dice'
+    });
   };
 
   if (document.readyState === 'loading') {
@@ -237,26 +88,11 @@ $$\bar{x} = \frac{1}{n} \sum_{i=1}^{n} x_{i}$$
 <!-- /position -->
 <!-- position={row: 1, column: 2} -->
 Calculate mean of 5 rolls:
-<div style="display: flex; flex-direction: column; gap: 10px; width: 100%;">
-  <div style="display: flex; gap: 10px;">
-    <button id="toggle-mean-5-code" style="padding: 8px 16px; background: #2d3a66; color: #9efcff; border: 1px solid #2d3a66; border-radius: 6px; cursor: pointer; font-size: 0.9em;">
-      <i class="fas fa-code"></i> Show Code
-    </button>
-    <button id="run-mean-5-btn" style="padding: 8px 16px; background: #1a2340; color: #9efcff; border: 1px solid #2d3a66; border-radius: 6px; cursor: pointer; font-size: 0.9em;">
-      <i class="fas fa-play"></i> Run Experiment (5 times)
-    </button>
-  </div>
-  <div id="mean-5-output" style="border: 1px solid #2d3a66; border-radius: 8px; overflow: hidden; min-height: 60px;"></div>
-</div>
+<div id="mean-5-container"></div>
 
 <script>
 (function() {
   const initMean5 = async () => {
-    if (!window.EditorView || !window.EditorState || !window.basicSetup) {
-      setTimeout(initMean5, 100);
-      return;
-    }
-
     const code = `n_experiments <- 5
 sums <- replicate(n_experiments, sum(sample(1:6, 5, replace = TRUE)))
 mean_value <- mean(sums)
@@ -264,126 +100,22 @@ mean_value <- mean(sums)
 print(paste("Sums:", paste(sums, collapse = ", ")))
 print(paste("Arithmetic Mean:", round(mean_value, 2)))`;
 
-    let rLang = [];
-    if (window.rLanguageSupport) {
-      rLang = window.rLanguageSupport;
-    }
-
-    const fontSizeTheme = window.EditorView.theme({
-      "&": { fontSize: "2em" },
-      ".cm-content": { fontSize: "2em" },
-      ".cm-gutters": { fontSize: "2em" }
-    });
-
-    const editorParent = document.getElementById('mean-5-editor');
-    if (!editorParent || editorParent.querySelector('.cm-editor')) return;
-
-    const editorExtensions = [window.basicSetup];
-    if (rLang.length) editorExtensions.push(rLang);
-    editorExtensions.push(window.monokai, fontSizeTheme);
-
-    const editor = new window.EditorView({
-      state: window.EditorState.create({
-        doc: code,
-        extensions: editorExtensions
-      }),
-      parent: editorParent
-    });
-
-    const outputParent = document.getElementById('mean-5-output');
-    if (!outputParent) return;
-
-    const outputExtensions = [
-      window.basicSetup,
-      window.monokai,
-      fontSizeTheme,
-      window.EditorView.editable.of(false)
-    ];
-    if (rLang.length) outputExtensions.splice(1, 0, rLang);
-
-    const outputEditor = new window.EditorView({
-      state: window.EditorState.create({
-        doc: '',
-        extensions: outputExtensions
-      }),
-      parent: outputParent
-    });
-
-    // Store reference to first column elements
-    const slide = document.getElementById('arithmetic-mean-intro');
-    let columnElements = null;
-    
-    const findColumns = () => {
-      if (slide) {
-        return Array.from(slide.querySelectorAll('div')).filter(el => {
-          const style = el.getAttribute('style') || '';
-          return style.includes('grid-column: 1') || style.includes('grid-area: 1 / 1') || style.includes('grid-area: 1/1');
-        });
-      }
-      return [];
+    const fallback = () => {
+      const sums = Array.from({length: 5}, () => {
+        const dice = Array.from({length: 5}, () => Math.floor(Math.random() * 6) + 1);
+        return dice.reduce((a, b) => a + b, 0);
+      });
+      const mean = sums.reduce((a, b) => a + b, 0) / sums.length;
+      return `[Simulated in JavaScript]\nSums: ${sums.join(", ")}\nArithmetic Mean: ${mean.toFixed(2)}`;
     };
 
-    // Toggle code visibility
-    const toggleBtn = document.getElementById('toggle-mean-5-code');
-    if (toggleBtn) {
-      toggleBtn.onclick = () => {
-        const isHidden = editorParent.style.display === 'none';
-        editorParent.style.display = isHidden ? 'block' : 'none';
-        toggleBtn.innerHTML = isHidden ? '<i class="fas fa-code"></i> Hide Code' : '<i class="fas fa-code"></i> Show Code';
-        
-        // Hide/show first column (opposite of code visibility)
-        columnElements = findColumns();
-        columnElements.forEach(col => {
-          col.style.display = isHidden ? 'none' : 'block';
-        });
-        
-        // Re-center slide after content change
-        if (window.Reveal) {
-          setTimeout(() => window.Reveal.layout(), 50);
-        }
-      };
-    }
-
-    const runBtn = document.getElementById('run-mean-5-btn');
-    if (runBtn) {
-      runBtn.onclick = async () => {
-        const codeText = editor.state.doc.toString();
-        outputEditor.dispatch({
-          changes: { from: 0, to: outputEditor.state.doc.length, insert: "Computing..." }
-        });
-
-        try {
-          const mod = await import('https://webr.r-wasm.org/latest/webr.mjs');
-          const webR = new mod.WebR();
-          await webR.init();
-
-          const r = await webR.evalR(`
-            paste(capture.output({
-              tryCatch({
-                ${codeText}
-              }, error = function(e) {
-                message("Error: ", conditionMessage(e))
-              })
-            }), collapse="\\n")
-          `);
-          let output = await r.toString();
-          output = output.replace(/^\[\d+\]\s*/gm, '');
-          outputEditor.dispatch({
-            changes: { from: 0, to: outputEditor.state.doc.length, insert: output.trim() || "[No output]" }
-          });
-        } catch (err) {
-          const sums = Array.from({length: 5}, () => {
-            const dice = Array.from({length: 5}, () => Math.floor(Math.random() * 6) + 1);
-            return dice.reduce((a, b) => a + b, 0);
-          });
-          const mean = sums.reduce((a, b) => a + b, 0) / sums.length;
-          const output = `[Simulated in JavaScript]\nSums: ${sums.join(", ")}\nArithmetic Mean: ${mean.toFixed(2)}\nExpected Value: 17.5`;
-          outputEditor.dispatch({
-            changes: { from: 0, to: outputEditor.state.doc.length, insert: output }
-          });
-        }
-      };
-    }
+    await window.webRHelper.initInteractiveSection({
+      containerId: 'mean-5-container',
+      code: code,
+      slideId: 'arithmetic-mean-intro',
+      fallback: fallback,
+      runLabel: 'Run Experiment (5 times)'
+    });
   };
 
   if (document.readyState === 'loading') {
@@ -712,149 +444,24 @@ $$\bar{x} = \frac{1}{n} \sum_{i=1}^{n} x_{i} \approx E[X]$$
 
 Calculate the arithmetic mean of Fe concentrations:
 
-<div style="display: flex; flex-direction: column; gap: 10px; width: 100%;">
-  <div style="display: flex; gap: 10px;">
-    <button id="toggle-water-mean-code" style="padding: 8px 16px; background: #2d3a66; color: #9efcff; border: 1px solid #2d3a66; border-radius: 6px; cursor: pointer; font-size: 0.9em;">
-      <i class="fas fa-code"></i> Show Code
-    </button>
-    <button id="run-water-mean-btn" style="padding: 8px 16px; background: #1a2340; color: #9efcff; border: 1px solid #2d3a66; border-radius: 6px; cursor: pointer; font-size: 0.9em;">
-      <i class="fas fa-play"></i> Calculate Mean
-    </button>
-  </div>
-  <div id="water-mean-output" style="border: 1px solid #2d3a66; border-radius: 8px; overflow: hidden; min-height: 60px;"></div>
-</div>
+<div id="water-mean-container"></div>
 
 <script>
 (function() {
   const initWaterMean = async () => {
-    if (!window.EditorView || !window.EditorState || !window.basicSetup) {
-      setTimeout(initWaterMean, 100);
-      return;
-    }
-
     const code = `# Fe concentrations in mg/L
 fe_conc <- c(5.2, 4.8, 5.1, 5.0, 4.9)
 mean_fe <- mean(fe_conc)
 print(paste("Fe concentrations:", paste(fe_conc, collapse = ", ")))
 print(paste("Arithmetic Mean:", round(mean_fe, 2), "mg/L"))`;
 
-    let rLang = [];
-    if (window.rLanguageSupport) {
-      rLang = window.rLanguageSupport;
-    }
-
-    const fontSizeTheme = window.EditorView.theme({
-      "&": { fontSize: "1.5em" },
-      ".cm-content": { fontSize: "1.5em" },
-      ".cm-gutters": { fontSize: "1.5em" }
-    });
-
-    const editorParent = document.getElementById('water-mean-editor');
-    if (!editorParent || editorParent.querySelector('.cm-editor')) return;
-
-    const editorExtensions = [window.basicSetup];
-    if (rLang.length) editorExtensions.push(rLang);
-    editorExtensions.push(window.monokai, fontSizeTheme);
-
-    const editor = new window.EditorView({
-      state: window.EditorState.create({
-        doc: code,
-        extensions: editorExtensions
-      }),
-      parent: editorParent
-    });
-
-    const outputParent = document.getElementById('water-mean-output');
-    if (!outputParent) return;
-
-    const outputExtensions = [
-      window.basicSetup,
-      window.monokai,
-      fontSizeTheme,
-      window.EditorView.editable.of(false)
-    ];
-    if (rLang.length) outputExtensions.splice(1, 0, rLang);
-
-    const outputEditor = new window.EditorView({
-      state: window.EditorState.create({
-        doc: '',
-        extensions: outputExtensions
-      }),
-      parent: outputParent
-    });
-
-    // Store reference to first column elements
-    const slide = document.getElementById('arithmetic-mean-water-science');
-    let columnElements = null;
-    
-    const findColumns = () => {
-      if (slide) {
-        return Array.from(slide.querySelectorAll('div')).filter(el => {
-          const style = el.getAttribute('style') || '';
-          return style.includes('grid-column: 1') || style.includes('grid-area: 1 / 1') || style.includes('grid-area: 1/1');
-        });
-      }
-      return [];
+    const fallback = () => {
+      const feConc = [5.2, 4.8, 5.1, 5.0, 4.9];
+      const mean = feConc.reduce((a, b) => a + b, 0) / feConc.length;
+      return `[Simulated in JavaScript]\\nFe concentrations: ${feConc.join(", ")}\\nArithmetic Mean: ${mean.toFixed(2)} mg/L`;
     };
 
-    // Toggle code visibility
-    const toggleBtn = document.getElementById('toggle-water-mean-code');
-    if (toggleBtn) {
-      toggleBtn.onclick = () => {
-        const isHidden = editorParent.style.display === 'none';
-        editorParent.style.display = isHidden ? 'block' : 'none';
-        toggleBtn.innerHTML = isHidden ? '<i class="fas fa-code"></i> Hide Code' : '<i class="fas fa-code"></i> Show Code';
-        
-        // Hide/show first column (opposite of code visibility)
-        columnElements = findColumns();
-        columnElements.forEach(col => {
-          col.style.display = isHidden ? 'none' : 'block';
-        });
-        
-        // Re-center slide after content change
-        if (window.Reveal) {
-          setTimeout(() => window.Reveal.layout(), 50);
-        }
-      };
-    }
-
-    const runBtn = document.getElementById('run-water-mean-btn');
-    if (runBtn) {
-      runBtn.onclick = async () => {
-        const codeText = editor.state.doc.toString();
-        outputEditor.dispatch({
-          changes: { from: 0, to: outputEditor.state.doc.length, insert: "Computing..." }
-        });
-
-        try {
-          const mod = await import('https://webr.r-wasm.org/latest/webr.mjs');
-          const webR = new mod.WebR();
-          await webR.init();
-
-          const r = await webR.evalR(`
-            paste(capture.output({
-              tryCatch({
-                ${codeText}
-              }, error = function(e) {
-                message("Error: ", conditionMessage(e))
-              })
-            }), collapse="\\n")
-          `);
-          let output = await r.toString();
-          output = output.replace(/^\[\d+\]\s*/gm, '');
-          outputEditor.dispatch({
-            changes: { from: 0, to: outputEditor.state.doc.length, insert: output.trim() || "[No output]" }
-          });
-        } catch (err) {
-          const feConc = [5.2, 4.8, 5.1, 5.0, 4.9];
-          const mean = feConc.reduce((a, b) => a + b, 0) / feConc.length;
-          const output = `[Simulated in JavaScript]\nFe concentrations: ${feConc.join(", ")}\nArithmetic Mean: ${mean.toFixed(2)} mg/L`;
-          outputEditor.dispatch({
-            changes: { from: 0, to: outputEditor.state.doc.length, insert: output }
-          });
-        }
-      };
-    }
+    await window.webRHelper.quickSetup('water-mean-container', code, 'arithmetic-mean-water-science', fallback);
   };
 
   if (document.readyState === 'loading') {
@@ -969,26 +576,11 @@ $$= exp\left(\frac{1}{n}\sum_{i=1}^{n}ln(x_{i})\right)$$
 -! Compare arithmetic vs geometric mean!
 <!-- /position -->
 <!-- position={row: 1, column: 2} -->
-<div style="display: flex; flex-direction: column; gap: 10px; width: 100%;">
-  <div style="display: flex; gap: 10px;">
-    <button id="toggle-geom-mean-code" style="padding: 8px 16px; background: #2d3a66; color: #9efcff; border: 1px solid #2d3a66; border-radius: 6px; cursor: pointer; font-size: 0.9em;">
-      <i class="fas fa-code"></i> Show Code
-    </button>
-    <button id="run-geom-mean-btn" style="padding: 8px 16px; background: #1a2340; color: #9efcff; border: 1px solid #2d3a66; border-radius: 6px; cursor: pointer; font-size: 0.9em;">
-      <i class="fas fa-play"></i> Calculate
-    </button>
-  </div>
-  <div id="geom-mean-output" style="border: 1px solid #2d3a66; border-radius: 8px; overflow: hidden; min-height: 80px;"></div>
-</div>
+<div id="geom-mean-container"></div>
 
 <script>
 (function() {
   const initGeomMean = async () => {
-    if (!window.EditorView || !window.EditorState || !window.basicSetup) {
-      setTimeout(initGeomMean, 100);
-      return;
-    }
-
     const code = `# Bacterial growth factors over 3 days
 growth_factors <- c(2, 8, 4)
 
@@ -1002,124 +594,20 @@ print(paste("Growth factors:", paste(growth_factors, collapse = ", ")))
 print(paste("Arithmetic Mean:", round(arith_mean, 2)))
 print(paste("Geometric Mean:", round(geom_mean, 2)))`;
 
-    let rLang = [];
-    if (window.rLanguageSupport) {
-      rLang = window.rLanguageSupport;
-    }
-
-    const fontSizeTheme = window.EditorView.theme({
-      "&": { fontSize: "1.5em" },
-      ".cm-content": { fontSize: "1.5em" },
-      ".cm-gutters": { fontSize: "1.5em" }
-    });
-
-    const editorParent = document.getElementById('geom-mean-editor');
-    if (!editorParent || editorParent.querySelector('.cm-editor')) return;
-
-    const editorExtensions = [window.basicSetup];
-    if (rLang.length) editorExtensions.push(rLang);
-    editorExtensions.push(window.monokai, fontSizeTheme);
-
-    const editor = new window.EditorView({
-      state: window.EditorState.create({
-        doc: code,
-        extensions: editorExtensions
-      }),
-      parent: editorParent
-    });
-
-    const outputParent = document.getElementById('geom-mean-output');
-    if (!outputParent) return;
-
-    const outputExtensions = [
-      window.basicSetup,
-      window.monokai,
-      fontSizeTheme,
-      window.EditorView.editable.of(false)
-    ];
-    if (rLang.length) outputExtensions.splice(1, 0, rLang);
-
-    const outputEditor = new window.EditorView({
-      state: window.EditorState.create({
-        doc: '',
-        extensions: outputExtensions
-      }),
-      parent: outputParent
-    });
-
-    // Store reference to first column elements
-    const slide = document.getElementById('geometric-mean-exercise');
-    let columnElements = null;
-    
-    const findColumns = () => {
-      if (slide) {
-        return Array.from(slide.querySelectorAll('div')).filter(el => {
-          const style = el.getAttribute('style') || '';
-          return style.includes('grid-column: 1') || style.includes('grid-area: 1 / 1') || style.includes('grid-area: 1/1');
-        });
-      }
-      return [];
+    const fallback = () => {
+      const factors = [2, 8, 4];
+      const arith = factors.reduce((a, b) => a + b, 0) / factors.length;
+      const geom = Math.exp(factors.reduce((sum, val) => sum + Math.log(val), 0) / factors.length);
+      return `[Simulated in JavaScript]\nGrowth factors: ${factors.join(", ")}\nArithmetic Mean: ${arith.toFixed(2)}\nGeometric Mean: ${geom.toFixed(2)}`;
     };
 
-    // Toggle code visibility
-    const toggleBtn = document.getElementById('toggle-geom-mean-code');
-    if (toggleBtn) {
-      toggleBtn.onclick = () => {
-        const isHidden = editorParent.style.display === 'none';
-        editorParent.style.display = isHidden ? 'block' : 'none';
-        toggleBtn.innerHTML = isHidden ? '<i class="fas fa-code"></i> Hide Code' : '<i class="fas fa-code"></i> Show Code';
-        
-        // Hide/show first column (opposite of code visibility)
-        columnElements = findColumns();
-        columnElements.forEach(col => {
-          col.style.display = isHidden ? 'none' : 'block';
-        });
-        
-        // Re-center slide after content change
-        if (window.Reveal) {
-          setTimeout(() => window.Reveal.layout(), 50);
-        }
-      };
-    }
-
-    const runBtn = document.getElementById('run-geom-mean-btn');
-    if (runBtn) {
-      runBtn.onclick = async () => {
-        const codeText = editor.state.doc.toString();
-        outputEditor.dispatch({
-          changes: { from: 0, to: outputEditor.state.doc.length, insert: "Computing..." }
-        });
-
-        try {
-          const mod = await import('https://webr.r-wasm.org/latest/webr.mjs');
-          const webR = new mod.WebR();
-          await webR.init();
-
-          const r = await webR.evalR(`
-            paste(capture.output({
-              tryCatch({
-                ${codeText}
-              }, error = function(e) {
-                message("Error: ", conditionMessage(e))
-              })
-            }), collapse="\\n")
-          `);
-          let output = await r.toString();
-          output = output.replace(/^\[\d+\]\s*/gm, '');
-          outputEditor.dispatch({
-            changes: { from: 0, to: outputEditor.state.doc.length, insert: output.trim() || "[No output]" }
-          });
-        } catch (err) {
-          const factors = [2, 8, 4];
-          const arith = factors.reduce((a, b) => a + b, 0) / factors.length;
-          const geom = Math.exp(factors.reduce((sum, val) => sum + Math.log(val), 0) / factors.length);
-          const output = `[Simulated in JavaScript]\nGrowth factors: ${factors.join(", ")}\nArithmetic Mean: ${arith.toFixed(2)}\nGeometric Mean: ${geom.toFixed(2)}`;
-          outputEditor.dispatch({
-            changes: { from: 0, to: outputEditor.state.doc.length, insert: output }
-          });
-        }
-      };
-    }
+    await window.webRHelper.initInteractiveSection({
+      containerId: 'geom-mean-container',
+      code: code,
+      slideId: 'geometric-mean-exercise',
+      fallback: fallback,
+      runLabel: 'Execute R Code'
+    });
   };
 
   if (document.readyState === 'loading') {
@@ -1316,7 +804,6 @@ $$
 
 <!-- .slide:id="harmonic-mean-exercise" -->
 ## Harmonic Mean - R Exercise
-<div id="harm-mean-editor" class="code-editor-container" style="border: 1px solid #2d3a66; border-radius: 8px; margin: 20px; display: none; text-align: left;"></div>
 <!-- layout={rows: 1, columns: 2} -->
 <!-- position={row: 1, column: 1} -->
 ### Calculate Harmonic Mean
@@ -1325,17 +812,7 @@ $$
 
 <!-- /position -->
 <!-- position={row: 1, column: 2} -->
-<div style="display: flex; flex-direction: column; gap: 10px; width: 100%;">
-  <div style="display: flex; gap: 10px;">
-    <button id="toggle-harm-mean-code" style="padding: 8px 16px; background: #2d3a66; color: #9efcff; border: 1px solid #2d3a66; border-radius: 6px; cursor: pointer; font-size: 0.9em;">
-      <i class="fas fa-code"></i> Show Code
-    </button>
-    <button id="run-harm-mean-btn" style="padding: 8px 16px; background: #1a2340; color: #9efcff; border: 1px solid #2d3a66; border-radius: 6px; cursor: pointer; font-size: 0.9em;">
-      <i class="fas fa-play"></i> Calculate
-    </button>
-  </div>
-  <div id="harm-mean-output" style="border: 1px solid #2d3a66; border-radius: 8px; overflow: hidden; min-height: 80px;"></div>
-</div>
+<div id="harm-mean-container"></div>
 
 <script>
 (function() {
@@ -1358,124 +835,20 @@ print(paste("Flow rates:", paste(flow_rates, collapse = ", "), "L/min"))
 print(paste("Arithmetic Mean:", round(arith_mean, 2), "L/min"))
 print(paste("Harmonic Mean:", round(harm_mean, 2), "L/min"))`;
 
-    let rLang = [];
-    if (window.rLanguageSupport) {
-      rLang = window.rLanguageSupport;
-    }
-
-    const fontSizeTheme = window.EditorView.theme({
-      "&": { fontSize: "1.5em" },
-      ".cm-content": { fontSize: "1.5em" },
-      ".cm-gutters": { fontSize: "1.5em" }
-    });
-
-    const editorParent = document.getElementById('harm-mean-editor');
-    if (!editorParent || editorParent.querySelector('.cm-editor')) return;
-
-    const editorExtensions = [window.basicSetup];
-    if (rLang.length) editorExtensions.push(rLang);
-    editorExtensions.push(window.monokai, fontSizeTheme);
-
-    const editor = new window.EditorView({
-      state: window.EditorState.create({
-        doc: code,
-        extensions: editorExtensions
-      }),
-      parent: editorParent
-    });
-
-    const outputParent = document.getElementById('harm-mean-output');
-    if (!outputParent) return;
-
-    const outputExtensions = [
-      window.basicSetup,
-      window.monokai,
-      fontSizeTheme,
-      window.EditorView.editable.of(false)
-    ];
-    if (rLang.length) outputExtensions.splice(1, 0, rLang);
-
-    const outputEditor = new window.EditorView({
-      state: window.EditorState.create({
-        doc: '',
-        extensions: outputExtensions
-      }),
-      parent: outputParent
-    });
-
-    // Store reference to first column elements
-    const slide = document.getElementById('harmonic-mean-exercise');
-    let columnElements = null;
-    
-    const findColumns = () => {
-      if (slide) {
-        return Array.from(slide.querySelectorAll('div')).filter(el => {
-          const style = el.getAttribute('style') || '';
-          return style.includes('grid-column: 1') || style.includes('grid-area: 1 / 1') || style.includes('grid-area: 1/1');
-        });
-      }
-      return [];
+    const fallback = () => {
+      const rates = [10, 2, 5];
+      const arith = rates.reduce((a, b) => a + b, 0) / rates.length;
+      const harm = rates.length / rates.reduce((sum, val) => sum + 1/val, 0);
+      return `[Simulated in JavaScript]\nFlow rates: ${rates.join(", ")} L/min\nArithmetic Mean: ${arith.toFixed(2)} L/min\nHarmonic Mean: ${harm.toFixed(2)} L/min`;
     };
 
-    // Toggle code visibility
-    const toggleBtn = document.getElementById('toggle-harm-mean-code');
-    if (toggleBtn) {
-      toggleBtn.onclick = () => {
-        const isHidden = editorParent.style.display === 'none';
-        editorParent.style.display = isHidden ? 'block' : 'none';
-        toggleBtn.innerHTML = isHidden ? '<i class="fas fa-code"></i> Hide Code' : '<i class="fas fa-code"></i> Show Code';
-        
-        // Hide/show first column (opposite of code visibility)
-        columnElements = findColumns();
-        columnElements.forEach(col => {
-          col.style.display = isHidden ? 'none' : 'block';
-        });
-        
-        // Re-center slide after content change
-        if (window.Reveal) {
-          setTimeout(() => window.Reveal.layout(), 50);
-        }
-      };
-    }
-
-    const runBtn = document.getElementById('run-harm-mean-btn');
-    if (runBtn) {
-      runBtn.onclick = async () => {
-        const codeText = editor.state.doc.toString();
-        outputEditor.dispatch({
-          changes: { from: 0, to: outputEditor.state.doc.length, insert: "Computing..." }
-        });
-
-        try {
-          const mod = await import('https://webr.r-wasm.org/latest/webr.mjs');
-          const webR = new mod.WebR();
-          await webR.init();
-
-          const r = await webR.evalR(`
-            paste(capture.output({
-              tryCatch({
-                ${codeText}
-              }, error = function(e) {
-                message("Error: ", conditionMessage(e))
-              })
-            }), collapse="\\n")
-          `);
-          let output = await r.toString();
-          output = output.replace(/^\[\d+\]\s*/gm, '');
-          outputEditor.dispatch({
-            changes: { from: 0, to: outputEditor.state.doc.length, insert: output.trim() || "[No output]" }
-          });
-        } catch (err) {
-          const rates = [10, 2, 5];
-          const arith = rates.reduce((a, b) => a + b, 0) / rates.length;
-          const harm = rates.length / rates.reduce((sum, val) => sum + 1/val, 0);
-          const output = `[Simulated in JavaScript]\nFlow rates: ${rates.join(", ")} L/min\nArithmetic Mean: ${arith.toFixed(2)} L/min\nHarmonic Mean: ${harm.toFixed(2)} L/min`;
-          outputEditor.dispatch({
-            changes: { from: 0, to: outputEditor.state.doc.length, insert: output }
-          });
-        }
-      };
-    }
+    await window.webRHelper.initInteractiveSection({
+      containerId: 'harm-mean-container',
+      code: code,
+      slideId: 'harmonic-mean-exercise',
+      fallback: fallback,
+      runLabel: 'Calculate'
+    });
   };
 
   if (document.readyState === 'loading') {
@@ -1628,7 +1001,6 @@ e.g., [2.0, **2.1, 2.2**, 2.3]
 
 <!-- .slide:id="median-exercise" -->
 ## Median - R Exercise
-<div id="median-editor" class="code-editor-container" style="border: 1px solid #2d3a66; border-radius: 8px; margin: 20px; display: none; text-align: left;"></div>
 <!-- layout={rows: 1, columns: 2} -->
 <!-- position={row: 1, column: 1} -->
 *Calculate Median*
@@ -1641,17 +1013,7 @@ e.g., [2.0, **2.1, 2.2**, 2.3]
 
 <!-- /position -->
 <!-- position={row: 1, column: 2} -->
-<div style="display: flex; flex-direction: column; gap: 10px; width: 100%;">
-  <div style="display: flex; gap: 10px;">
-    <button id="toggle-median-code" style="padding: 8px 16px; background: #2d3a66; color: #9efcff; border: 1px solid #2d3a66; border-radius: 6px; cursor: pointer; font-size: 0.9em;">
-      <i class="fas fa-code"></i> Show Code
-    </button>
-    <button id="run-median-btn" style="padding: 8px 16px; background: #1a2340; color: #9efcff; border: 1px solid #2d3a66; border-radius: 6px; cursor: pointer; font-size: 0.9em;">
-      <i class="fas fa-play"></i> Calculate
-    </button>
-  </div>
-  <div id="median-output" style="border: 1px solid #2d3a66; border-radius: 8px; overflow: hidden; min-height: 80px;"></div>
-</div>
+<div id="median-container"></div>
 
 <script>
 (function() {
@@ -1673,121 +1035,15 @@ print(paste("Arithmetic Mean:", round(mean_val, 2), "NTU"))
 print(paste("Median:", round(median_val, 2), "NTU"))
 print("Median is more representative!")`;
 
-    let rLang = [];
-    if (window.rLanguageSupport) {
-      rLang = window.rLanguageSupport;
-    }
-
-    const fontSizeTheme = window.EditorView.theme({
-      "&": { fontSize: "1.5em" },
-      ".cm-content": { fontSize: "1.5em" },
-      ".cm-gutters": { fontSize: "1.5em" }
-    });
-
-    const editorParent = document.getElementById('median-editor');
-    if (!editorParent || editorParent.querySelector('.cm-editor')) return;
-
-    const editorExtensions = [window.basicSetup];
-    if (rLang.length) editorExtensions.push(rLang);
-    editorExtensions.push(window.monokai, fontSizeTheme);
-
-    const editor = new window.EditorView({
-      state: window.EditorState.create({
-        doc: code,
-        extensions: editorExtensions
-      }),
-      parent: editorParent
-    });
-
-    const outputParent = document.getElementById('median-output');
-    if (!outputParent) return;
-
-    const outputExtensions = [
-      window.basicSetup,
-      window.monokai,
-      fontSizeTheme,
-      window.EditorView.editable.of(false)
-    ];
-    if (rLang.length) outputExtensions.splice(1, 0, rLang);
-
-    const outputEditor = new window.EditorView({
-      state: window.EditorState.create({
-        doc: '',
-        extensions: outputExtensions
-      }),
-      parent: outputParent
-    });
-
-    const slide = document.getElementById('median-exercise');
-    let columnElements = null;
-    
-    const findColumns = () => {
-      if (slide) {
-        return Array.from(slide.querySelectorAll('div')).filter(el => {
-          const style = el.getAttribute('style') || '';
-          return style.includes('grid-column: 1') || style.includes('grid-area: 1 / 1') || style.includes('grid-area: 1/1');
-        });
-      }
-      return [];
+    const fallback = () => {
+      const turb = [2.1, 2.3, 2.0, 2.2, 45.0];
+      const mean = turb.reduce((a, b) => a + b, 0) / turb.length;
+      const sorted = turb.slice().sort((a, b) => a - b);
+      const median = sorted[Math.floor(sorted.length / 2)];
+      return `[Simulated in JavaScript]\nTurbidity: ${turb.join(", ")} NTU\nArithmetic Mean: ${mean.toFixed(2)} NTU\nMedian: ${median.toFixed(2)} NTU\nMedian is more representative!`;
     };
 
-    const toggleBtn = document.getElementById('toggle-median-code');
-    if (toggleBtn) {
-      toggleBtn.onclick = () => {
-        const isHidden = editorParent.style.display === 'none';
-        editorParent.style.display = isHidden ? 'block' : 'none';
-        toggleBtn.innerHTML = isHidden ? '<i class="fas fa-code"></i> Hide Code' : '<i class="fas fa-code"></i> Show Code';
-        
-        columnElements = findColumns();
-        columnElements.forEach(col => {
-          col.style.display = isHidden ? 'none' : 'block';
-        });
-        
-        if (window.Reveal) {
-          setTimeout(() => window.Reveal.layout(), 50);
-        }
-      };
-    }
-
-    const runBtn = document.getElementById('run-median-btn');
-    if (runBtn) {
-      runBtn.onclick = async () => {
-        const codeText = editor.state.doc.toString();
-        outputEditor.dispatch({
-          changes: { from: 0, to: outputEditor.state.doc.length, insert: "Computing..." }
-        });
-
-        try {
-          const mod = await import('https://webr.r-wasm.org/latest/webr.mjs');
-          const webR = new mod.WebR();
-          await webR.init();
-
-          const r = await webR.evalR(`
-            paste(capture.output({
-              tryCatch({
-                ${codeText}
-              }, error = function(e) {
-                message("Error: ", conditionMessage(e))
-              })
-            }), collapse="\\n")
-          `);
-          let output = await r.toString();
-          output = output.replace(/^\[\d+\]\s*/gm, '');
-          outputEditor.dispatch({
-            changes: { from: 0, to: outputEditor.state.doc.length, insert: output.trim() || "[No output]" }
-          });
-        } catch (err) {
-          const turb = [2.1, 2.3, 2.0, 2.2, 45.0];
-          const mean = turb.reduce((a, b) => a + b, 0) / turb.length;
-          const sorted = turb.slice().sort((a, b) => a - b);
-          const median = sorted[Math.floor(sorted.length / 2)];
-          const output = `[Simulated in JavaScript]\nTurbidity: ${turb.join(", ")} NTU\nArithmetic Mean: ${mean.toFixed(2)} NTU\nMedian: ${median.toFixed(2)} NTU\nMedian is more representative!`;
-          outputEditor.dispatch({
-            changes: { from: 0, to: outputEditor.state.doc.length, insert: output }
-          });
-        }
-      };
-    }
+    await window.webRHelper.quickSetup('median-container', code, 'median-exercise', fallback);
   };
 
   if (document.readyState === 'loading') {
