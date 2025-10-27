@@ -49,7 +49,8 @@ Roll five dice and calculate the sum:
       return `[Simulated in JavaScript]\nDice: ${dice.join(", ")}\nSum: ${sum}`;
     };
 
-    await window.webRHelper.initInteractiveSection({
+    const helper = await window.ensureWebRHelper();
+    await helper.initInteractiveSection({
       containerId: 'five-dice-container',
       code: code,
       slideId: 'initial-thoughts-mean',
@@ -109,7 +110,8 @@ print(paste("Arithmetic Mean:", round(mean_value, 2)))`;
       return `[Simulated in JavaScript]\nSums: ${sums.join(", ")}\nArithmetic Mean: ${mean.toFixed(2)}`;
     };
 
-    await window.webRHelper.initInteractiveSection({
+    const helper = await window.ensureWebRHelper();
+    await helper.initInteractiveSection({
       containerId: 'mean-5-container',
       code: code,
       slideId: 'arithmetic-mean-intro',
@@ -461,7 +463,8 @@ print(paste("Arithmetic Mean:", round(mean_fe, 2), "mg/L"))`;
       return `[Simulated in JavaScript]\\nFe concentrations: ${feConc.join(", ")}\\nArithmetic Mean: ${mean.toFixed(2)} mg/L`;
     };
 
-    await window.webRHelper.quickSetup('water-mean-container', code, 'arithmetic-mean-water-science', fallback);
+    const helper = await window.ensureWebRHelper();
+    await helper.quickSetup('water-mean-container', code, 'arithmetic-mean-water-science', fallback);
   };
 
   if (document.readyState === 'loading') {
@@ -601,7 +604,8 @@ print(paste("Geometric Mean:", round(geom_mean, 2)))`;
       return `[Simulated in JavaScript]\nGrowth factors: ${factors.join(", ")}\nArithmetic Mean: ${arith.toFixed(2)}\nGeometric Mean: ${geom.toFixed(2)}`;
     };
 
-    await window.webRHelper.initInteractiveSection({
+    const helper = await window.ensureWebRHelper();
+    await helper.initInteractiveSection({
       containerId: 'geom-mean-container',
       code: code,
       slideId: 'geometric-mean-exercise',
@@ -842,7 +846,8 @@ print(paste("Harmonic Mean:", round(harm_mean, 2), "L/min"))`;
       return `[Simulated in JavaScript]\nFlow rates: ${rates.join(", ")} L/min\nArithmetic Mean: ${arith.toFixed(2)} L/min\nHarmonic Mean: ${harm.toFixed(2)} L/min`;
     };
 
-    await window.webRHelper.initInteractiveSection({
+    const helper = await window.ensureWebRHelper();
+    await helper.initInteractiveSection({
       containerId: 'harm-mean-container',
       code: code,
       slideId: 'harmonic-mean-exercise',
@@ -1043,7 +1048,8 @@ print("Median is more representative!")`;
       return `[Simulated in JavaScript]\nTurbidity: ${turb.join(", ")} NTU\nArithmetic Mean: ${mean.toFixed(2)} NTU\nMedian: ${median.toFixed(2)} NTU\nMedian is more representative!`;
     };
 
-    await window.webRHelper.quickSetup('median-container', code, 'median-exercise', fallback);
+    const helper = await window.ensureWebRHelper();
+    await helper.quickSetup('median-container', code, 'median-exercise', fallback);
   };
 
   if (document.readyState === 'loading') {

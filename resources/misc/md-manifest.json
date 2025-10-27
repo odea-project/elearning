@@ -54,5 +54,35 @@
     "requirements": [
       "Mean Values"
     ]
+  },
+  {
+    "filename": "Quantiles.md",
+    "title": "Quantiles",
+    "keywords": [
+      "quantiles",
+      "percentiles",
+      "quartiles",
+      "median",
+      "interquartile range"
+    ],
+    "thumbnail": "resources/icons/ranges.svg",
+    "requirements": [
+      "Mean Values"
+    ]
+  },
+  {
+    "filename": "Distributions.md",
+    "title": "Distributions",
+    "keywords": [
+      "histogram",
+      "pdf",
+      "cdf",
+      "log-normal",
+      "kolmogorov-smirnov"
+    ],
+    "thumbnail": "resources/icons/dataHandling.svg",
+    "requirements": [
+      "Quantiles"
+    ]
   }
 ]

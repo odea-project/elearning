@@ -77,7 +77,8 @@ df <- read.csv(text = csv_data) |> print()`;
       return `[Simulated Output]\n  name age salary\n1 Alice  28  55000\n2   Bob  35  62000\n3 Charlie  42  58000\n\n'data.frame': 3 obs. of 3 variables:\n $ name  : chr  "Alice" "Bob" "Charlie"\n $ age   : int  28 35 42\n $ salary: int  55000 62000 58000`;
     };
 
-    await window.webRHelper.quickSetup('csv-intro-container', code, 'csv-intro', fallback);
+    const helper = await window.ensureWebRHelper();
+    await helper.quickSetup('csv-intro-container', code, 'csv-intro', fallback);
   };
 
   if (document.readyState === 'loading') {
@@ -132,7 +133,8 @@ df$age |> sd() |> round(2) |> paste("<- is age standard deviation") |> print()`;
       return `[Simulated Output]\nAge: Mean = 35 SD = 7\nSalary: Mean = 57000 SD = 3605.55`;
     };
 
-    await window.webRHelper.initInteractiveSection({
+    const helper = await window.ensureWebRHelper();
+    await helper.initInteractiveSection({
       containerId: 'csv-stats-container',
       code: code,
       slideId: 'csv-statistics',
@@ -202,7 +204,8 @@ summary(df) |> print()`;
       return `[Simulated Output]\\nAges:\\n28 35 42 31 29\\n\\nPeople over 30:\\n    name age salary\\n2    Bob  35  62000\\n3 Charlie  42  58000\\n4  Diana  31  51000\\n\\nSummary:\\n     name       age         salary    \\nAlice  :1   Min.   :28   Min.   :51000  \\nBob    :1   Mean   :33   Mean   :57000  \\nCharlie:1   Max.   :42   Max.   :62000`;
     };
 
-    await window.webRHelper.quickSetup('df-ops-container', code, 'data-frame-operations', fallback);
+    const helper = await window.ensureWebRHelper();
+    await helper.quickSetup('df-ops-container', code, 'data-frame-operations', fallback);
   };
 
   if (document.readyState === 'loading') {

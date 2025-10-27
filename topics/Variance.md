@@ -374,7 +374,8 @@ print(paste("n =", n))`;
       return `[Simulated in JavaScript]\nMean: ${mean.toFixed(2)} mg/L\nSD: ${sd.toFixed(3)} mg/L\nSE: ${se.toFixed(3)} mg/L\nn = ${data.length}`;
     };
 
-    await window.webRHelper.initInteractiveSection({
+    const helper = await window.ensureWebRHelper();
+    await helper.initInteractiveSection({
       containerId: 'do-container',
       code: code,
       slideId: 'example-symmetric',
@@ -771,7 +772,8 @@ print(paste("Harmonic mean:", round(h, 2)))`;
       return `[Simulated in JavaScript]\nArithmetic mean: ${meanArith.toFixed(2)}\nSD: ${sd.toFixed(2)}\nSE: ${se.toFixed(2)}\nGeometric mean: ${geom.toFixed(2)}\nSD(log x): ${sdLog.toFixed(3)}\nHarmonic mean: ${harm.toFixed(2)}`;
     };
 
-    await window.webRHelper.initInteractiveSection({
+    const helper = await window.ensureWebRHelper();
+    await helper.initInteractiveSection({
       containerId: 'r-snippets-container',
       code: code,
       slideId: 'r-snippets',

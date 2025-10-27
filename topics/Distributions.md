@@ -66,6 +66,60 @@ description: "How to characterize, model, and test water quality distributions."
 
 ---
 
+<!-- .slide:id="bin_rules_practice" -->
+## Choosing Histogram Bin Rules
+<!-- layout={rows: 1, columns: 2} -->
+<!-- position={row: 1, column: 1} -->
+-! Freedman-Diaconis: bin width <br> $= \frac{2\cdot IQR}{n^{1/3}}$ balances resolution and noise.
+-! Scott&rsquo;s rule: $\frac{3.5\cdot\sigma}{n^{1/3}}$ works well if the data are roughly normal.
+-: Square-root rule ($\sqrt{n}$ bins) is quick for dashboards but can miss structure.
+
+***
+
+-< Always sanity-check the histogram: adjust bins if important features disappear or look noisy.
+<!-- /position -->
+<!-- position={row: 1, column: 2} -->
+<div id="bin-rules-visual" style="width: 100%; min-height: 300px; border: 0px solid #2d3a66; border-radius: 8px; padding: 8px; background: rgba(17, 25, 46, 0.0);"></div>
+<button id="bin-rules-expand" style="margin-top: 12px; padding: 8px 16px; background: #0f172a; color: #9efcff; border: 1px solid #2d3a66; border-radius: 6px; cursor: pointer; font-size: 0.9em; font-weight: 600;">
+  <i class="fas fa-expand"></i> View Fullscreen
+</button>
+<script src="../resources/figures/bin-rules.js"></script>
+<script src="../resources/figures/bin-rules-modal.js"></script>
+<!-- /position -->
+<!-- /layout -->
+
+---
+
+<!-- .slide:id="histogram_r" -->
+## Histograms in R
+<!-- layout={rows: 1, columns: 2} -->
+<!-- position={row: 1, column: 1} -->
+```r
+set.seed(1)
+x <- rlnorm(1000)
+
+x |>
+  (\(z) hist(z,
+             breaks = "FD",   # sensible automatic binning
+             col = "blue",
+             border = "white",
+             main = "Histogram of x",
+             xlab = "x"))()
+```
+<!-- /position -->
+<!-- position={row: 1, column: 2} -->
+<div style="display: flex; align-items: center; justify-content: center; height: 100%;">
+  <a href="https://webr.sh/#code=eJxljj0KwkAQhfucYojNLqhJerUSsRbsBJk1o1ncH9mdYBA7T%2BAd7LyBtbfxEiadP6%2Bb9733mOvl5tDSfelYs6GyGC5uB%2BTqkVXeUnYkta4jheyTl8j4fEXiYSQqRSGTBkYDCMb5YEWR57lMWus8SQDESpwkVDqyOPXb%2B0MqEO4jjCGdTdN%2Ba%2FQgkotaGQKs2VtkvQGlndNu913deNP1lKkp%2FV31oaTQ0WOl%2BQ9b1K6D8%2FYjvwtowW%2Bh%2BU01BlWXalIphUzeG4JSeg%3D%3D"
+     style="padding: 12px 18px; background: #1a2340; border: 1px solid #2d3a66; border-radius: 6px; color: #9efcff; font-weight: 600; text-decoration: none;"
+     target="_blank" rel="noopener">
+    Try it in webR ↗
+  </a>
+</div>
+<!-- /position -->
+<!-- /layout -->
+
+---
+
 <!-- .slide:id="pdf_cdf_concept" -->
 ## Probability Density Function (PDF) and Cumulative Distribution Function (CDF)
 <!-- layout={rows: 1, columns: 2} -->
@@ -291,14 +345,9 @@ $$F_{\text{norm}}(x) = \frac{1}{2}\left[1 + \operatorname{erf}\left(\frac{x - \m
 <!-- layout={rows: 1, columns: 2} -->
 <!-- position={row: 1, column: 1} -->
 -! Positive-only support; arises when multiplicative effects dominate.
--! Parameters $\mu_{\log}$ and $\sigma_{\log}$ describe the log-values.
--: Captures right-skewed concentration data with episodic spikes.
-<!-- /position -->
-<!-- .slide:id="lognormal_model" -->
-## Log-normal Distribution
-<!-- layout={rows: 1, columns: 2} -->
-<!-- position={row: 1, column: 1} -->
--! Positive-only support; arises when multiplicative effects dominate.
+
+***
+
 -! Parameters $\mu_{\log}$ and $\sigma_{\log}$ describe the log-values.
 -: Captures right-skewed concentration data with episodic spikes.
 <!-- /position -->
@@ -373,169 +422,19 @@ $$
 <!-- layout={rows: 1, columns: 2} -->
 <!-- position={row: 1, column: 1} -->
 -! Estimate parameters from data: $\mu = \text{mean}(\ln x)$, $\sigma = \text{sd}(\ln x)$ for a log-normal.
+
+***
+
 -! Compare empirical curves with the fitted theoretical distribution.
 -: Visual diagnostics (histogram + CDF) help confirm whether the model is plausible.
 <!-- /position -->
 <!-- position={row: 1, column: 2} -->
-<div id="fit-distribution-plot" style="width: 100%; min-height: 320px; border: 1px solid #2d3a66; border-radius: 8px; padding: 8px; background: rgba(17, 25, 46, 0.32);"></div>
-<button id="fit-distribution-expand" style="margin-top: 12px; padding: 8px 16px; background: #0f172a; color: #9efcff; border: 1px solid #2d3a66; border-radius: 6px; cursor: pointer; font-size: 0.9em; font-weight: 600;">
+<div id="fit-distribution-plot" style="width: 100%; min-height: 320px; border: 0px solid #2d3a66; border-radius: 8px; padding: 8px; background: rgba(17, 25, 46, 0.32);"></div>
+<button id="fit-distribution-expand" style="margin-top: 12px; padding: 8px 16px; background: #0f172a; color: #9efcff; border: 0px solid #2d3a66; border-radius: 6px; cursor: pointer; font-size: 0.9em; font-weight: 600;">
   <i class="fas fa-expand"></i> View Fullscreen
 </button>
 <script src="../resources/figures/fit-distribution.js"></script>
-<script>
-(function() {
-  const containerId = 'fit-distribution-plot';
-  const slideId = 'fit_to_distribution';
-  const expandButtonId = 'fit-distribution-expand';
-  const overlayId = 'fit-distribution-overlay';
-  const overlayPlotId = 'fit-distribution-overlay-plot';
-  let previousBodyOverflow = null;
-
-  const renderVisualization = () => {
-    if (typeof d3 === 'undefined' || !window.initFitDistributionDemo) {
-      setTimeout(renderVisualization, 120);
-      return;
-    }
-    window.initFitDistributionDemo(containerId);
-  };
-  const maybeRender = (slide) => {
-    if (!slide) return;
-    const id = slide.getAttribute('id');
-    if (id === slideId) {
-      renderVisualization();
-    }
-  };
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => maybeRender(document.getElementById(slideId)), { once: true });
-  } else {
-    maybeRender(document.getElementById(slideId));
-  }
-  if (window.Reveal && typeof window.Reveal.on === 'function') {
-    window.Reveal.on('ready', event => maybeRender(event && event.currentSlide));
-    window.Reveal.on('slidechanged', event => maybeRender(event && event.currentSlide));
-  }
-
-  const teardownOverlay = () => {
-    const overlay = document.getElementById(overlayId);
-    if (overlay) {
-      overlay.remove();
-    }
-    if (previousBodyOverflow !== null) {
-      document.body.style.overflow = previousBodyOverflow;
-      previousBodyOverflow = null;
-    } else {
-      document.body.style.overflow = '';
-    }
-    document.removeEventListener('keydown', handleKeydown, true);
-  };
-
-  const ensureRenderOverlay = () => {
-    if (typeof d3 === 'undefined' || !window.initFitDistributionDemo) {
-      setTimeout(ensureRenderOverlay, 120);
-      return;
-    }
-    requestAnimationFrame(() => window.initFitDistributionDemo(overlayPlotId));
-  };
-
-  const handleKeydown = (event) => {
-    if (event.key === 'Escape') {
-      teardownOverlay();
-    }
-  };
-
-  const createOverlay = () => {
-    if (document.getElementById(overlayId)) {
-      ensureRenderOverlay();
-      return;
-    }
-    const overlay = document.createElement('div');
-    overlay.id = overlayId;
-    overlay.style.cssText = [
-      'position: fixed',
-      'inset: 0',
-      'z-index: 1200',
-      'background: rgba(9, 12, 24, 0.88)',
-      'display: flex',
-      'align-items: center',
-      'justify-content: center',
-      'padding: 32px 24px'
-    ].join(';');
-
-    const panel = document.createElement('div');
-    panel.style.cssText = [
-      'background: #0b152c',
-      'border: 1px solid #26406d',
-      'border-radius: 12px',
-      'box-shadow: 0 18px 46px rgba(8, 10, 24, 0.65)',
-      'width: min(1100px, 92vw)',
-      'height: min(90vh, 760px)',
-      'padding: 24px 24px 20px',
-      'display: flex',
-      'flex-direction: column',
-      'gap: 16px'
-    ].join(';');
-
-    const actionBar = document.createElement('div');
-    actionBar.style.cssText = [
-      'display: flex',
-      'justify-content: flex-end'
-    ].join(';');
-
-    const closeButton = document.createElement('button');
-    closeButton.type = 'button';
-    closeButton.setAttribute('aria-label', 'Close diagram');
-    closeButton.style.cssText = [
-      'background: transparent',
-      'color: #9efcff',
-      'border: 1px solid #2d3a66',
-      'border-radius: 999px',
-      'padding: 6px 14px',
-      'cursor: pointer',
-      'font-size: 0.9em',
-      'font-weight: 600'
-    ].join(';');
-    closeButton.innerHTML = '<i class="fas fa-times"></i> Close';
-    closeButton.addEventListener('click', teardownOverlay);
-
-    const overlayPlot = document.createElement('div');
-    overlayPlot.id = overlayPlotId;
-    overlayPlot.style.cssText = [
-      'flex: 1 1 auto',
-      'width: 100%',
-      'min-height: 60vh',
-      'border: 1px solid #2d3a66',
-      'border-radius: 8px',
-      'padding: 12px',
-      'background: rgba(17, 25, 46, 0.45)',
-      'overflow: hidden'
-    ].join(';');
-
-    actionBar.appendChild(closeButton);
-    panel.appendChild(actionBar);
-    panel.appendChild(overlayPlot);
-    overlay.appendChild(panel);
-    overlay.addEventListener('click', (event) => {
-      if (event.target === overlay) {
-        teardownOverlay();
-      }
-    });
-
-    previousBodyOverflow = document.body.style.overflow;
-    document.body.style.overflow = 'hidden';
-    document.body.appendChild(overlay);
-    document.addEventListener('keydown', handleKeydown, true);
-    ensureRenderOverlay();
-  };
-
-  const expandButton = document.getElementById(expandButtonId);
-  if (expandButton) {
-    expandButton.addEventListener('click', createOverlay);
-  }
-  if (window.Reveal && typeof window.Reveal.on === 'function') {
-    window.Reveal.on('slidechanged', teardownOverlay);
-  }
-})();
-</script>
+<script src="../resources/figures/fit-distribution-modal.js"></script>
 <!-- /position -->
 <!-- /layout -->
 
@@ -546,12 +445,18 @@ $$
 <!-- layout={rows: 1, columns: 2} -->
 <!-- position={row: 1, column: 1} -->
 -! Compares an empirical CDF with a reference CDF.
+
+***
+
 -! Test statistic \(D\) is the maximum vertical distance between the curves.
 -: Large \(D\) highlights where the model under- or overestimates probability.
+
+***
+
 -< Works for any continuous reference distribution (no binning required).
 <!-- /position -->
 <!-- position={row: 1, column: 2} -->
-<div id="ks-illustration" style="min-height: 260px; border: 1px solid #2d3a66; border-radius: 8px; padding: 8px; display: flex; align-items: center; justify-content: center;"></div>
+<div id="ks-illustration" style="min-height: 260px; border: 0px solid #2d3a66; border-radius: 8px; padding: 8px; display: flex; align-items: center; justify-content: center;"></div>
 <script src="../resources/figures/ks-illustration.js"></script>
 <script>
 (function() {
@@ -591,10 +496,13 @@ $$
 <!-- position={row: 1, column: 1} -->
 -! $D_n$ follows a distribution that tightens with larger sample size $n$.
 -: Critical values come from the CDF ($D_n \leq d$).
+
+***
+
 -< Higher $n$ makes large deviations increasingly unlikely.
 <!-- /position -->
 <!-- position={row: 1, column: 2} -->
-<div id="ks-distribution-chart" style="min-height: 260px; border: 1px solid #2d3a66; border-radius: 8px; padding: 8px; display: flex; align-items: center; justify-content: center;"></div>
+<div id="ks-distribution-chart" style="min-height: 260px; border: 0px solid #2d3a66; border-radius: 8px; padding: 8px; display: flex; align-items: center; justify-content: center;"></div>
 <script src="../resources/figures/ks-distribution.js"></script>
 <script>
 (function() {
@@ -634,9 +542,17 @@ $$
 <!-- layout={rows: 1, columns: 2} -->
 <!-- position={row: 1, column: 1} -->
 -! Null hypothesis: sample follows reference CDF $F_0(x)$.
--! Statistic: $D = \\sup_x \\lvert F_{emp}(x) - F_0(x) \\rvert$.
--: Small $D$ => accept model; large $D$ => reject.
--< Sensitive to both shifts and shape differences.
+
+***
+
+-! Statistic: 
+$$D = sup_x \lvert F_{emp}(x) - F_0(x) \rvert$$
+-: $sup$ = supremum (maximum over all $x$)
+-: Small $D$ => accept model; large $D$ => reject
+
+***
+
+-< Sensitive to both shifts and shape differences
 <!-- /position -->
 <!-- position={row: 1, column: 2} -->
 <div style="margin-bottom: 12px; font-weight: 600; color: #5b6a8a;">Log-normal reference</div>
@@ -692,13 +608,94 @@ ks.test(NO3_norm, "pnorm", mean = 0, sd = 1)
 
 ---
 
+<!-- .slide:id="hypothesis_intro" -->
+## Statistical Hypothesis Tests
+<!-- layout={rows: 1, columns: 2} -->
+<!-- position={row: 1, column: 1} -->
+-! Start with a *null hypothesis* $H_0$: baseline claim (e.g., no difference between rivers).
+-! Define the *alternative hypothesis* $H_1$: what we would conclude if data strongly contradict $H_0$.
+-: Choose a test statistic whose distribution under $H_0$ is known or can be approximated.
+-< Decision rule: reject $H_0$ when the statistic falls in the critical region (equivalently, when p-value < $\alpha$).
+<!-- /position -->
+<!-- position={row: 1, column: 2} -->
+<div style="display: flex; flex-direction: column; gap: 12px; border: 0px solid #2d3a66; border-radius: 10px; padding: 18px; background: rgba(17, 25, 46, 0.28);">
+  <div style="display: flex; flex-direction: column; gap: 6px;">
+    <div style="font-size: 0.9em; color: #9efcff; letter-spacing: 0.04em;">Null hypothesis $H_0$</div>
+    <div style="font-weight: 700; color: #e0e6ff;">Model fits / rivers share same distribution.</div>
+    <div style="font-size: 0.75em; color: #98a2c3;">Assumed true for computing sampling distribution.</div>
+  </div>
+  <hr style="border: none; border-top: 1px dashed #2d3a66; margin: 4px 0;">
+  <div style="display: flex; flex-direction: column; gap: 6px;">
+    <div style="font-size: 0.9em; color: #ffb703; letter-spacing: 0.04em;">Alternative hypothesis $H_1$</div>
+    <div style="font-weight: 700; color: #ffd166;">Distributions differ (location/shape/tails).</div>
+    <div style="font-size: 0.75em; color: #f1dca7;">Evidence accumulates when the test statistic is extreme.</div>
+  </div>
+  <div style="margin-top: 8px; font-size: 0.75em; color: #9aa6d3;">
+    Threshold $\alpha = 0.05$ → reject $H_0$ if p-value < 0.05.
+  </div>
+</div>
+<!-- /position -->
+<!-- /layout -->
+
+---
+
+<!-- .slide:id="pvalue_concept" -->
+## Interpreting the p-value
+<!-- layout={rows: 1, columns: 2} -->
+<!-- position={row: 1, column: 1} -->
+-! p-value = probability of observing a test statistic at least as extreme as the sample, assuming the null hypothesis is true.
+-! Small p-values imply the observed difference is unlikely under the null → evidence against $H_0$.
+-: Two-sided tests double the tail area (extreme in either direction).
+-< p-values are not definitive; "significant" does not equal "important".
+<!-- /position -->
+<!-- position={row: 1, column: 2} -->
+<div id="pvalue-visual" style="min-height: 280px; border: 0px solid #2d3a66; border-radius: 8px; padding: 8px; display: flex; align-items: center; justify-content: center;"></div>
+<script src="../resources/figures/pvalue-visual.js"></script>
+<script>
+(function() {
+  const slideId = 'pvalue_concept';
+  const renderPlot = () => {
+    if (typeof d3 === 'undefined' || !window.initPValueVisual) {
+      setTimeout(renderPlot, 120);
+      return;
+    }
+    window.initPValueVisual('pvalue-visual');
+  };
+  const maybeRender = (slide) => {
+    if (!slide) return;
+    if (slide.getAttribute('id') === slideId) {
+      renderPlot();
+    }
+  };
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => maybeRender(document.getElementById(slideId)), { once: true });
+  } else {
+    maybeRender(document.getElementById(slideId));
+  }
+  if (window.Reveal && typeof window.Reveal.on === 'function') {
+    window.Reveal.on('ready', event => maybeRender(event && event.currentSlide));
+    window.Reveal.on('slidechanged', event => maybeRender(event && event.currentSlide));
+  }
+})();
+</script>
+<!-- /position -->
+<!-- /layout -->
+
+---
+
 <!-- .slide:id="ks_test_two_sample" -->
 ## Comparing Two Empirical Distributions
+<!-- layout={rows: 1, columns: 2} -->
+<!-- position={row: 1, column: 1} -->
 -! Two-sample KS test: does River A share the same distribution as River B?
--! \(D = \sup_{x} \lvert F_{\text{A}}(x) - F_{\text{B}}(x)\rvert\) using both empirical CDFs.
+-! $D = \sup_{x} \lvert F_{\text{A}}(x) - F_{\text{B}}(x)\rvert$ using both empirical CDFs.
 -: Sensitive to shifts in median, spread, or tail behaviour simultaneously.
--< Ideal for water quality comparisons when no parametric model is trusted.
 
+***
+
+-< Ideal for water quality comparisons when no parametric model is trusted.
+<!-- /position -->
+<!-- position={row: 1, column: 2} -->
 <div id="ks-two-sample" style="margin-top: 16px;"></div>
 <script>
 (function() {
@@ -728,29 +725,9 @@ ks.test(NO3_riverA, NO3_riverB)
   }
 })();
 </script>
+<!-- /position -->
+<!-- /layout -->
 
----
-
-<!-- .slide:id="distribution_summary" -->
-## Summary: Understanding and Testing Distributions
-| Concept | Purpose | Typical Tool in R | Water Science Example |
-|---------|---------|-------------------|-----------------------|
-| Histogram | Visualize empirical distribution | `hist()` | Nitrate variability after rainfall |
-| PDF/CDF | Theoretical description | `dnorm()`, `pnorm()` | Model pollutant exceedance probabilities |
-| Empirical PDF/CDF | Non-parametric estimate | `density()`, `ecdf()` | Sensor data with unknown shape |
-| Normal vs. Log-normal | Shape models | `rnorm()`, `rlnorm()` | Decide on transformations |
-| KS test (1-sample) | Goodness-of-fit | `ks.test()` | Check log-normal assumption |
-| KS test (2-sample) | Compare datasets | `ks.test(x, y)` | Urban vs. rural nitrate profiles |
-
----
-
-<!-- .slide:id="distribution_wrapup" -->
-## Key Takeaways
--! Distributions summarise how water quality data spread and accumulate probability.
--! PDFs and CDFs underpin hypothesis testing and risk estimates.
--! Environmental concentrations often follow log-normal patterns-inspect before assuming normality.
--! KS tests offer a distribution-free way to validate models or compare sites.
--? Next session: quantify shape numerically using skewness and kurtosis.
 
 
 

@@ -10,6 +10,19 @@ class WebRHelper {
   }
 
   /**
+   * Ensure a WebR instance is available and initialized.
+   * @returns {Promise<object>} Initialized WebR instance
+   */
+  async ensureWebR() {
+    if (!this.webRInstance) {
+      const mod = await import('https://webr.r-wasm.org/latest/webr.mjs');
+      this.webRInstance = new mod.WebR();
+      await this.webRInstance.init();
+    }
+    return this.webRInstance;
+  }
+
+  /**
    * Generate unique ID for a section
    * @returns {string} Unique section ID
    */
@@ -111,13 +124,9 @@ class WebRHelper {
    */
   async executeR(code) {
     try {
-      if (!this.webRInstance) {
-        const mod = await import('https://webr.r-wasm.org/latest/webr.mjs');
-        this.webRInstance = new mod.WebR();
-        await this.webRInstance.init();
-      }
+      const webR = await this.ensureWebR();
 
-      const r = await this.webRInstance.evalR(`
+      const r = await webR.evalR(`
         paste(capture.output({
           tryCatch({
             ${code}
@@ -287,6 +296,130 @@ class WebRHelper {
       slideId,
       fallback
     });
+  }
+
+  /**
+   * Render an R plot into a target container by capturing it as a PNG.
+   * @param {Object} config - Plot configuration
+   * @param {string} config.containerId - Target container ID for the plot
+   * @param {string} config.code - R code that produces a plot
+   * @param {number} [config.width=640] - Plot width in pixels
+   * @param {number} [config.height=480] - Plot height in pixels
+   * @param {number} [config.res=96] - Plot resolution (dpi)
+   * @param {string} [config.background='transparent'] - Plot background color
+   * @param {string} [config.altText='R plot generated via WebR'] - Alt text for the rendered image
+   * @param {string} [config.loadingMessage='Generating plot...'] - Loading message while plot is rendered
+   * @param {string} [config.errorMessage='Failed to generate plot.'] - Error message shown on failure
+   * @returns {Promise<string|null>} Object URL of the generated plot image or null on failure
+   */
+  async renderPlot(config = {}) {
+    const {
+      containerId,
+      code,
+      width = 640,
+      height = 480,
+      res = 96,
+      background = 'transparent',
+      altText = 'R plot generated via WebR',
+      loadingMessage = 'Generating plot...',
+      errorMessage = 'Failed to generate plot.'
+    } = config;
+
+    if (!containerId || !code) {
+      console.error('[WebRHelper] renderPlot requires containerId and code.');
+      return null;
+    }
+
+    const container = document.getElementById(containerId);
+    if (!container) {
+      console.error(`[WebRHelper] Container "${containerId}" not found.`);
+      return null;
+    }
+
+    // Clean up previous plot URL if present
+    const previousUrl = container.dataset.webrPlotUrl;
+    if (previousUrl) {
+      URL.revokeObjectURL(previousUrl);
+      delete container.dataset.webrPlotUrl;
+    }
+
+    container.innerHTML = `<div class="webr-loading" style="padding: 1.2em; color: #9efcff; font-weight: 600;">${loadingMessage}</div>`;
+
+    try {
+      const webR = await this.ensureWebR();
+
+      const plotScript = `
+        webr_capture_plot <- function() {
+          plot_file <- tempfile(fileext = ".png")
+          on.exit(unlink(plot_file), add = TRUE)
+
+          png(
+            filename = plot_file,
+            width = ${width},
+            height = ${height},
+            res = ${res},
+            bg = "${background}"
+          )
+
+          on.exit({
+            try(dev.off(), silent = TRUE)
+          }, add = TRUE)
+
+          ${code}
+
+          if (!identical(dev.cur(), 1L)) {
+            dev.off()
+          }
+
+          size <- file.info(plot_file)$size
+          if (is.na(size) || size <= 0) {
+            stop("Plot file is empty.")
+          }
+
+          readBin(plot_file, "raw", size)
+        }
+
+        tryCatch(
+          webr_capture_plot(),
+          error = function(e) {
+            if (!identical(dev.cur(), 1L)) {
+              try(dev.off(), silent = TRUE)
+            }
+            stop(e)
+          }
+        )
+      `;
+
+      const rawResult = await webR.evalRRaw(plotScript);
+      const plotBytes = rawResult instanceof Uint8Array ? rawResult : new Uint8Array(rawResult || []);
+      const byteLength = plotBytes.length;
+      if (!byteLength) {
+        throw new Error('Plot generation returned empty data.');
+      }
+
+      const blob = new Blob([plotBytes], { type: 'image/png' });
+      const objectUrl = URL.createObjectURL(blob);
+
+      container.innerHTML = '';
+      const img = document.createElement('img');
+      img.src = objectUrl;
+      img.alt = altText;
+      img.style.maxWidth = '100%';
+      img.style.height = 'auto';
+      img.style.display = 'block';
+      img.style.margin = '0 auto';
+      img.style.borderRadius = '8px';
+      container.appendChild(img);
+
+      container.dataset.webrPlotUrl = objectUrl;
+
+      return objectUrl;
+    } catch (err) {
+      // eslint-disable-next-line no-console
+      console.error('[WebRHelper] renderPlot failed:', err);
+      container.innerHTML = `<div style="color:#ef476f;font-weight:bold;">${errorMessage}</div>`;
+      return null;
+    }
   }
 }
 

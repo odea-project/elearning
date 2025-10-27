@@ -64,7 +64,9 @@ print(sd_geom_nested)`;
       return `[Simulated]\nsd_geom_nested: ${sdGeom.toFixed(3)}`;
     };
 
-    await window.webRHelper.initInteractiveSection({
+    const helper = await window.ensureWebRHelper();
+
+    await helper.initInteractiveSection({
       containerId: 'pipe-why-step-container',
       code: stepCode,
       slideId: 'why-pipes',
@@ -73,7 +75,7 @@ print(sd_geom_nested)`;
       minHeight: '120px'
     });
 
-    await window.webRHelper.initInteractiveSection({
+    await helper.initInteractiveSection({
       containerId: 'pipe-why-nested-container',
       code: nestedCode,
       slideId: 'why-pipes',
@@ -118,7 +120,8 @@ print(sd_geom_nested)`;
       return `[Simulated]\nsd_geom_pipe: ${sdGeom.toFixed(3)}`;
     };
 
-    await window.webRHelper.initInteractiveSection({
+    const helper = await window.ensureWebRHelper();
+    await helper.initInteractiveSection({
       containerId: 'pipe-why-pipe-container',
       code: pipeCode,
       slideId: 'pipe-highlight',
@@ -263,7 +266,8 @@ print(result)`;
       return `[Simulated]\nexp_sd_log: ${expSd.toFixed(3)}\nscaled: ${scaled.map(v => v.toFixed(3)).join(", ")}`;
     };
 
-    await window.webRHelper.quickSetup('pipe-basic-container', code, 'base-pipe-example', fallback);
+    const helper = await window.ensureWebRHelper();
+    await helper.quickSetup('pipe-basic-container', code, 'base-pipe-example', fallback);
   };
 
   if (document.readyState === 'loading') {
@@ -319,7 +323,8 @@ print(summary_tbl)`;
       return `[Simulated]\n  samples mean_turbidity mean_flow\n1       2            4.25      1.45`;
     };
 
-    await window.webRHelper.initInteractiveSection({
+    const helper = await window.ensureWebRHelper();
+    await helper.initInteractiveSection({
       containerId: 'pipe-df-container',
       code: code,
       slideId: 'dataset-pipe',
