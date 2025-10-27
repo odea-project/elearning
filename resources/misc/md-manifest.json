@@ -80,9 +80,25 @@
       "log-normal",
       "kolmogorov-smirnov"
     ],
-    "thumbnail": "resources/icons/dataHandling.svg",
+    "thumbnail": "resources/icons/distribution.svg",
     "requirements": [
       "Quantiles"
+    ]
+  },
+  {
+    "filename": "Moments.md",
+    "title": "Moments",
+    "keywords": [
+      "moments",
+      "skewness",
+      "kurtosis",
+      "shape",
+      "asymmetry"
+    ],
+    "thumbnail": "resources/icons/moments.svg",
+    "requirements": [
+      "Variance",
+      "Mean Values"
     ]
   }
 ]
