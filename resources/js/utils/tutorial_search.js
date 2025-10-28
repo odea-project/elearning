@@ -27,7 +27,8 @@ function renderGrid(items) {
   // Split items into groups of 6 (2 columns × 3 rows per outer column)
   const itemsPerOuterColumn = 6;
   const numOuterColumns = Math.ceil(items.length / itemsPerOuterColumn);
-  
+  let entryCounter = 1;
+
   for (let outerCol = 0; outerCol < numOuterColumns; outerCol++) {
     const innerGrid = document.createElement('div');
     innerGrid.style.display = 'grid';
@@ -53,6 +54,10 @@ function renderGrid(items) {
       tile.style.flexDirection = 'column';
       tile.style.alignItems = 'center';
       tile.style.justifyContent = 'center';
+
+      // Add a tape strip label with the entry number
+      const tapeStrip = createTapeStrip(entryCounter++);
+      tile.appendChild(tapeStrip);
 
       if (item.thumbnail) {
         // Create polaroid-style colored div with SVG icon overlay
@@ -196,6 +201,33 @@ function adjustColorBrightness(color, percent) {
   b = Math.max(0, Math.min(255, b));
   
   return '#' + ((r << 16) | (g << 8) | b).toString(16).padStart(6, '0');
+}
+
+// Create a tape strip element with random placement and rotation
+function createTapeStrip(number) {
+  const tape = document.createElement('div');
+  const side = Math.random() < 0.5 ? 'left' : 'right';
+  const angle = Math.random() * (55 - 35) + 35;
+
+  tape.textContent = number;
+  tape.style.position = 'absolute';
+  tape.style.top = '15px';
+  tape.style[side] = '5px';
+  tape.style.padding = '6px 24px';
+  tape.style.background = 'linear-gradient(120deg, rgba(255, 248, 189, 0.92) 0%, rgba(235, 223, 150, 0.88) 100%)';
+  tape.style.boxShadow = '0 4px 6px rgba(0, 0, 0, 0.25)';
+  tape.style.transform = `rotate(${side === 'left' ? -angle : angle}deg)`;
+  tape.style.transformOrigin = 'center';
+  tape.style.fontWeight = '600';
+  tape.style.fontSize = '16px';
+  tape.style.color = '#4a3f2b';
+  tape.style.borderRadius = '3px';
+  tape.style.letterSpacing = '1px';
+  tape.style.textAlign = 'center';
+  tape.style.pointerEvents = 'none';
+  tape.style.zIndex = '5';
+
+  return tape;
 }
 
 
