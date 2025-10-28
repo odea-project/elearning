@@ -1,7 +1,7 @@
 (function () {
   const COLOR_AXIS = '#ff139dff';
   const COLOR_LINE_PDF = '#06d6a0';
-  const COLOR_LINE_CDF = '#118ab2';
+  const COLOR_LINE_CDF = '#dda900ff';
   const COLOR_FILL = '#06d6a022';
   const COLOR_DOT_FILL = '#ffd60a';
   const COLOR_DOT_STROKE = '#ff6b35';

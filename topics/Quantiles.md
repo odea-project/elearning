@@ -370,7 +370,7 @@ but IQR remains stable!`;
 -> Median line: horizontal line inside box (Q2), middle value
 -> Mean: diamond marker, average value (can differ from median)
 -> Whiskers: extend to min/max within 1.5×IQR
--> Outliers: individual points beyond whiskers, unusual values
+-> Outliers/extreme values: individual points beyond whiskers, unusual values
 
 
 <!-- /position -->

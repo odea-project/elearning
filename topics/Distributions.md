@@ -256,7 +256,7 @@ x <= 8 : 4/4 = 1.00
 <!-- position={row: 1, column: 2} -->
 **Common choices:**
 -! Normal distribution
--: symmetric, often assumed, but sensitive to outliers and negative values.
+-: symmetric, often assumed, but sensitive to outliers/extreme values and negative values.
 $$
 X \sim N(\mu, \sigma^2)
 $$
