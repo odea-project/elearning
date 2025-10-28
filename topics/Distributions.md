@@ -536,6 +536,65 @@ $$
 
 ---
 
+<!-- .slide:id="ks_lookup_tables" -->
+## K-S Critical Values Tables
+<!-- layout={rows: 1, columns: 2} -->
+<!-- position={row: 1, column: 1} -->
+-! Before calculators, analysts used lookup tables for $D\_{\alpha}$.
+-: Tables list the maximum allowable $D$ for each sample size ($n$) and significance level.
+-> Compare the observed $D$ with the tabulated $D\_{\alpha}$ for your $n$.
+-> If $D < D\_{\alpha}$ keep $H\_0$; if $D \ge D\_{\alpha}$ reject $H\_0$.
+<!-- /position -->
+<!-- position={row: 1, column: 2} -->
+<table style="font-size: 0.6em; width: 100%; border-collapse: collapse;">
+  <thead>
+    <tr style="background: #1a2340; color: #9efcff;">
+      <th style="padding: 6px; text-align: left;">Sample size (n)</th>
+      <th style="padding: 6px; text-align: left;">&alpha; = 0.10</th>
+      <th style="padding: 6px; text-align: left;">&alpha; = 0.05</th>
+      <th style="padding: 6px; text-align: left;">&alpha; = 0.01</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="padding: 6px;">10</td>
+      <td style="padding: 6px;">0.387</td>
+      <td style="padding: 6px;">0.430</td>
+      <td style="padding: 6px;">0.516</td>
+    </tr>
+    <tr style="background: rgba(154, 207, 255, 0.08);">
+      <td style="padding: 6px;">25</td>
+      <td style="padding: 6px;">0.244</td>
+      <td style="padding: 6px;">0.272</td>
+      <td style="padding: 6px;">0.326</td>
+    </tr>
+    <tr>
+      <td style="padding: 6px;">50</td>
+      <td style="padding: 6px;">0.173</td>
+      <td style="padding: 6px;">0.192</td>
+      <td style="padding: 6px;">0.231</td>
+    </tr>
+    <tr style="background: rgba(154, 207, 255, 0.08);">
+      <td style="padding: 6px;">100</td>
+      <td style="padding: 6px;">0.122</td>
+      <td style="padding: 6px;">0.136</td>
+      <td style="padding: 6px;">0.163</td>
+    </tr>
+  </tbody>
+</table>
+<div style="margin-top: 10px; font-size: 0.55em; color: #5b6a8a;">
+  Compare your observed $D$ with the row matching $n$ (or nearest) and column for chosen $\alpha$.
+</div>
+
+-! Exact tables cover small $n$ where discrete CDF steps matter.
+-: For large $n$, use the asymptotic rule $D\_{\alpha} \approx K\_{\alpha}/\sqrt{n}$.
+-: Example constants: $K\_{0.10}=1.22$, $K\_{0.05}=1.36$, $K\_{0.01}=1.63$.
+-: Reading the table mirrors looking up quantiles of the test statistic.
+
+<!-- /position -->
+<!-- /layout -->
+
+---
 
 <!-- .slide:id="ks_test_one_sample" -->
 ## Kolmogorov-Smirnov Test (1-Sample)
