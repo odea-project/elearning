@@ -24,7 +24,7 @@ description: "Understanding range, quantiles, and robust spread measures for wat
 </div>
 <div id="quantiles-intro-container" style="width: 100%; height: 820px;"></div>
 
-<script src="../resources/figures/quantiles-intro-plot.js"></script>
+<script src="resources/figures/quantiles-intro-plot.js"></script>
 <script>
 (function() {
   const initPlot = () => {
@@ -295,7 +295,7 @@ but IQR remains stable!`;
 </div>
 <div id="pesticide-quantiles-container" style="width: 100%; height: 820px;"></div>
 
-<script src="../resources/figures/pesticide-quantiles-plot.js"></script>
+<script src="resources/figures/pesticide-quantiles-plot.js"></script>
 <script>
 (function() {
   const initPlot = () => {
@@ -341,7 +341,7 @@ but IQR remains stable!`;
 <!-- position={row: 1, column: 1} -->
 <div id="boxplot-water-quality-container" style="width: 100%; height: 600px; display: flex; justify-content: center; align-items: center;"></div>
 
-<script src="../resources/figures/boxplot-water-quality.js"></script>
+<script src="resources/figures/boxplot-water-quality.js"></script>
 <script>
 (function() {
   const initPlot = () => {
@@ -383,7 +383,7 @@ but IQR remains stable!`;
 
 <div id="boxplot-distributions-container" style="width: 100%; height: 900px; display: flex; justify-content: center; align-items: center;"></div>
 
-<script src="../resources/figures/boxplot-distributions.js"></script>
+<script src="resources/figures/boxplot-distributions.js"></script>
 <script>
 (function() {
   const initPlot = () => {
