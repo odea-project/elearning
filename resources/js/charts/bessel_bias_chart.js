@@ -116,35 +116,37 @@ function createBesselBiasChart(container) {
     .range([innerHeight, 0]);
 
   // X axis
-  g.append('g')
+  const xAxisGroup = g.append('g')
     .attr('transform', `translate(0,${innerHeight})`)
     .call(d3.axisBottom(xScale))
-    .style('color', '#ffffff')
-    .selectAll('text')
-    .style('fill', '#ffffff');
+    .classed('d3-axis', true);
+
+  xAxisGroup.selectAll('text')
+    .style('font-size', '12px');
 
   g.append('text')
     .attr('x', innerWidth / 2)
     .attr('y', innerHeight + 45)
     .style('text-anchor', 'middle')
-    .style('fill', '#ffffff')
-    .style('font-size', '14px')
+    .classed('d3-axis-label', true)
+    .classed('d3-axis-label--small', true)
     .text('Variance Estimate');
 
   // Y axis
-  g.append('g')
+  const yAxisGroup = g.append('g')
     .call(d3.axisLeft(yScale))
-    .style('color', '#ffffff')
-    .selectAll('text')
-    .style('fill', '#ffffff');
+    .classed('d3-axis', true);
+
+  yAxisGroup.selectAll('text')
+    .style('font-size', '12px');
 
   g.append('text')
     .attr('transform', 'rotate(-90)')
     .attr('x', -innerHeight / 2)
     .attr('y', -45)
     .style('text-anchor', 'middle')
-    .style('fill', '#ffffff')
-    .style('font-size', '14px')
+    .classed('d3-axis-label', true)
+    .classed('d3-axis-label--small', true)
     .text('Density');
 
   // Create area generator

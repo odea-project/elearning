@@ -1,0 +1,41 @@
+:root {
+  --d3-axis-text-color: rgb(0, 255, 220);
+  --d3-axis-label-text-color: rgb(255, 0, 149);
+  --d3-axis-line-color: rgb(0, 255, 220);
+  --d3-axis-font-family: 'Montserrat', Helvetica, sans-serif;
+  --d3-axis-font-weight: 900;
+  --d3-axis-font-size: 20px;
+  --d3-axis-label-font-size: 25px;
+  --d3-axis-label-font-weight: 900;
+}
+
+.d3-axis text {
+  fill: var(--d3-axis-text-color);
+  font-family: var(--d3-axis-font-family);
+  font-weight: var(--d3-axis-font-weight);
+  font-size: var(--d3-axis-font-size);
+  letter-spacing: 0.015em;
+}
+
+.d3-axis line,
+.d3-axis path {
+  stroke: var(--d3-axis-line-color);
+  stroke-width: 1.3;
+  shape-rendering: crispEdges;
+}
+
+.d3-axis-label {
+  fill: var(--d3-axis-label-text-color);
+  font-family: var(--d3-axis-font-family);
+  font-weight: var(--d3-axis-label-font-weight);
+  font-size: var(--d3-axis-label-font-size);
+  letter-spacing: 0.02em;
+}
+
+.d3-axis-label--small {
+  font-size: calc(var(--d3-axis-label-font-size) * 0.85);
+}
+
+.d3-axis-label--large {
+  font-size: calc(var(--d3-axis-label-font-size) * 1.2);
+}

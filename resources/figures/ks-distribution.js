@@ -75,45 +75,35 @@
           .curve(d3.curveMonotoneX));
     });
 
-    svg.append('g')
+    const xAxisGroup = svg.append('g')
       .attr('transform', `translate(0,${height})`)
       .call(d3.axisBottom(xScale).ticks(7))
-      .call(g => g.selectAll('text')
-        .attr('fill', COLOR_AXIS)
-        .attr('font-size', 14)
-        .attr('font-weight', 700))
-      .call(g => g.selectAll('line, path')
-        .attr('stroke', COLOR_AXIS)
-        .attr('stroke-width', 1.6));
+      .classed('d3-axis', true);
+    xAxisGroup.selectAll('text')
+      .attr('font-size', 14)
+      .attr('font-weight', 700);
 
-    svg.append('g')
+    const yAxisGroup = svg.append('g')
       .call(d3.axisLeft(yScale).ticks(6))
-      .call(g => g.selectAll('text')
-        .attr('fill', COLOR_AXIS)
-        .attr('font-size', 14)
-        .attr('font-weight', 700))
-      .call(g => g.selectAll('line, path')
-        .attr('stroke', COLOR_AXIS)
-        .attr('stroke-width', 1.6));
+      .classed('d3-axis', true);
+    yAxisGroup.selectAll('text')
+      .attr('font-size', 14)
+      .attr('font-weight', 700);
 
-    svg.append('text')
-      .attr('x', width / 2)
-      .attr('y', height + 40)
-      .attr('text-anchor', 'middle')
-      .attr('fill', COLOR_AXIS)
-      .attr('font-size', 16)
-      .attr('font-weight', 700)
-      .text('D (maximum CDF difference)');
+  svg.append('text')
+    .attr('x', width / 2)
+    .attr('y', height + 40)
+    .attr('text-anchor', 'middle')
+    .classed('d3-axis-label', true)
+    .text('D (maximum CDF difference)');
 
-    svg.append('text')
-      .attr('transform', 'rotate(-90)')
-      .attr('x', -(height / 2))
-      .attr('y', -44)
-      .attr('text-anchor', 'middle')
-      .attr('fill', COLOR_AXIS)
-      .attr('font-size', 16)
-      .attr('font-weight', 700)
-      .text('CDF: P(D_n <= D)');
+  svg.append('text')
+    .attr('transform', 'rotate(-90)')
+    .attr('x', -(height / 2))
+    .attr('y', -44)
+    .attr('text-anchor', 'middle')
+    .classed('d3-axis-label', true)
+    .text('CDF: P(D_n <= D)');
 
     const legend = svg.append('g')
       .attr('transform', `translate(${width - 150}, 10)`);

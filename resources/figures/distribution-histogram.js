@@ -267,35 +267,30 @@
     });
 
     // Achsen
-    svg.append('g')
+    const xAxisGroup = svg.append('g')
       .attr('transform', `translate(0,${height})`)
       .call(d3.axisBottom(xScale).ticks(8))
-      .call(g => g.selectAll('text')
-        .attr('fill', '#ff139dff')
-        .attr('font-size', 14)
-        .attr('font-weight', 700))
-      .call(g => g.selectAll('line, path')
-        .attr('stroke', '#ff139dff')
-        .attr('stroke-width', 1.6));
+      .classed('d3-axis', true);
 
-    svg.append('g')
+    xAxisGroup.selectAll('text')
+      .attr('font-size', 14)
+      .attr('font-weight', 700);
+
+    const yAxisGroup = svg.append('g')
       .call(d3.axisLeft(yScale).ticks(6))
-      .call(g => g.selectAll('text')
-        .attr('fill', '#ff139dff')
-        .attr('font-size', 14)
-        .attr('font-weight', 700))
-      .call(g => g.selectAll('line, path')
-        .attr('stroke', '#ff139dff')
-        .attr('stroke-width', 1.6));
+      .classed('d3-axis', true);
+
+    yAxisGroup.selectAll('text')
+      .attr('font-size', 14)
+      .attr('font-weight', 700);
 
     // Labels & Titel
     svg.append('text')
       .attr('x', width / 2)
       .attr('y', height + 42)
       .attr('text-anchor', 'middle')
-      .attr('fill', '#ff139dff')
-      .attr('font-size', 16)
-      .attr('font-weight', 800)
+      .classed('d3-axis-label', true)
+      .classed('d3-axis-label--small', true)
       .text('Measurement value');
 
     svg.append('text')
@@ -303,9 +298,8 @@
       .attr('x', -(height / 2))
       .attr('y', -48)
       .attr('text-anchor', 'middle')
-      .attr('fill', '#ff139dff')
-      .attr('font-size', 14)
-      .attr('font-weight', 700)
+      .classed('d3-axis-label', true)
+      .classed('d3-axis-label--small', true)
       .text('Probability density');
 
     // Legende

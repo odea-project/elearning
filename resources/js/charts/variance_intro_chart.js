@@ -41,27 +41,27 @@
       .padding(0.3);
 
     // Axes
-    svg.append('g')
+    const xAxisGroup = svg.append('g')
       .attr('transform', `translate(0,${height})`)
       .call(d3.axisBottom(xScale))
-      .selectAll('text')
-      .style('font-size', '14px')
-      .style('fill', '#ffffff');
+      .classed('d3-axis', true);
+    xAxisGroup.selectAll('text')
+      .style('font-size', '14px');
 
-    svg.append('g')
+    const yAxisGroup = svg.append('g')
       .call(d3.axisLeft(yScale))
-      .selectAll('text')
-      .style('font-size', '14px')
-      .style('fill', '#ffffff');
+      .classed('d3-axis', true);
+    yAxisGroup.selectAll('text')
+      .style('font-size', '14px');
 
-    // Axes labels
-    svg.append('text')
-      .attr('x', width / 2)
-      .attr('y', height + 35)
-      .style('text-anchor', 'middle')
-      .style('fill', '#ffffff')
-      .style('font-size', '14px')
-      .text('Dissolved Oxygen (mg/L)');
+  // Axes labels
+  svg.append('text')
+    .attr('x', width / 2)
+    .attr('y', height + 35)
+    .style('text-anchor', 'middle')
+    .classed('d3-axis-label', true)
+    .classed('d3-axis-label--small', true)
+    .text('Dissolved Oxygen (mg/L)');
 
     // Mean line
     svg.append('line')

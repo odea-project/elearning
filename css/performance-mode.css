@@ -26,6 +26,8 @@ body.performance-mode {
   --r-link-color-hover: #0000cc;
   --r-selection-background-color: #b3d4fc;
   --r-selection-color: #000000;
+  --d3-axis-text-color: rgb(0, 122, 126);
+  --d3-axis-line-color: rgb(0, 122, 126);
 }
 
 /* ========================================

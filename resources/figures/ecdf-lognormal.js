@@ -108,32 +108,24 @@
       .attr('stroke', '#ff6b35')
       .attr('stroke-width', 1.8);
 
-    svg.append('g')
+    const xAxisGroup = svg.append('g')
       .attr('transform', `translate(0,${height})`)
       .call(d3.axisBottom(xScale).ticks(8))
-      .call(g => g.selectAll('text')
-        .attr('fill', '#ff139dff')
-        .attr('font-size', 16))
-      .call(g => g.selectAll('line, path')
-        .attr('stroke', '#ff139dff')
-        .attr('stroke-width', 1.6));
+      .classed('d3-axis', true);
+    xAxisGroup.selectAll('text')
+      .attr('font-size', 16);
 
-    svg.append('g')
+    const yAxisGroup = svg.append('g')
       .call(d3.axisLeft(yScale).ticks(6))
-      .call(g => g.selectAll('text')
-        .attr('fill', '#ff139dff')
-        .attr('font-size', 16))
-      .call(g => g.selectAll('line, path')
-        .attr('stroke', '#ff139dff')
-        .attr('stroke-width', 1.6));
+      .classed('d3-axis', true);
+    yAxisGroup.selectAll('text')
+      .attr('font-size', 16);
 
     svg.append('text')
       .attr('x', width / 2)
       .attr('y', height + 40)
       .attr('text-anchor', 'middle')
-      .attr('fill', '#ff139dff')
-      .attr('font-size', 16)
-      .attr('font-weight', 700)
+      .classed('d3-axis-label', true)
       .text('[NO3-] mg/L');
 
     svg.append('text')
@@ -141,9 +133,7 @@
       .attr('x', -(height / 2))
       .attr('y', -46)
       .attr('text-anchor', 'middle')
-      .attr('fill', '#ff139dff')
-      .attr('font-size', 16)
-      .attr('font-weight', 700)
+      .classed('d3-axis-label', true)
       .text('F(x)');
 
     svg.append('text')

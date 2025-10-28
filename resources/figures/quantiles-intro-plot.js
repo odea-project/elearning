@@ -117,48 +117,45 @@
     const xAxis = d3.axisBottom(xScale).ticks(7);
     const yAxis = d3.axisLeft(yScale).ticks(6);
 
-    svg.append('g')
+    const xAxisGroup = svg.append('g')
       .attr('class', 'x-axis')
       .attr('transform', `translate(0,${innerHeight})`)
       .call(xAxis)
-      .selectAll('text')
-      .style('fill', '#ff00eaff')
+      .classed('d3-axis', true);
+
+    xAxisGroup.selectAll('text')
       .style('font-size', '20px');
 
     svg.selectAll('.x-axis line, .x-axis path')
-      .style('stroke', '#ff00eaff')
       .style('stroke-width', '2px');
 
-    svg.append('g')
+    const yAxisGroup = svg.append('g')
       .attr('class', 'y-axis')
       .call(yAxis)
-      .selectAll('text')
-      .style('fill', '#ff00eaff')
+      .classed('d3-axis', true);
+
+    yAxisGroup.selectAll('text')
       .style('font-size', '20px');
 
     svg.selectAll('.y-axis line, .y-axis path')
-      .style('stroke', '#ff00eaff')
       .style('stroke-width', '2px');
 
     // Labels
     svg.append('text')
-      .attr('class', 'raw-x-label')
+      .attr('class', 'raw-x-label d3-axis-label d3-axis-label--large')
       .attr('x', innerWidth / 2)
       .attr('y', innerHeight + 48)
       .style('text-anchor', 'middle')
-      .style('fill', '#ff00eaff')
-      .style('font-size', '25px')
-      .style('font-weight', '600')
+      .classed('d3-axis-label', true)
+      .classed('d3-axis-label--large', true)
       .text('Measurement Index');
 
     svg.append('text')
+      .attr('class', 'mean-x-label d3-axis-label d3-axis-label--large')
       .attr('transform', 'rotate(-90)')
       .attr('x', -innerHeight / 2)
       .attr('y', -42)
       .style('text-anchor', 'middle')
-      .style('fill', '#ff00eaff')
-      .style('font-size', '25px')
-      .style('font-weight', '600')
       .text('NO₃ (mg/L)');
 
     svg.append('text')
@@ -251,28 +248,27 @@
       // Create categorical x-axis
       const categoryAxis = d3.axisBottom(categoryScale);
 
-      meanGroup.append('g')
+      const meanXAxis = meanGroup.append('g')
         .attr('class', 'mean-x-axis')
         .attr('transform', `translate(0,${innerHeight})`)
         .call(categoryAxis)
-        .selectAll('text')
-        .style('fill', '#ff00eaff')
+        .classed('d3-axis', true);
+
+      meanXAxis.selectAll('text')
         .style('font-size', '20px')
         .style('font-weight', '600');
 
       meanGroup.selectAll('.mean-x-axis line, .mean-x-axis path')
-        .style('stroke', '#ff00eaff')
         .style('stroke-width', '2px');
 
       // X-axis label
       meanGroup.append('text')
-        .attr('class', 'mean-x-label')
+        .attr('class', 'mean-x-label d3-axis-label d3-axis-label--large')
         .attr('x', innerWidth / 2)
         .attr('y', innerHeight + 48)
         .style('text-anchor', 'middle')
-        .style('fill', '#ff00eaff')
-        .style('font-size', '25px')
-        .style('font-weight', '600')
+        .classed('d3-axis-label', true)
+        .classed('d3-axis-label--large', true)
         .text('River');
 
       const bands = [
@@ -351,38 +347,35 @@
       const qXAxis = d3.axisBottom(qXScale).ticks(10).tickFormat(d => (d * 100).toFixed(0) + '%');
       const qYAxis = d3.axisLeft(qYScale).ticks(6);
 
-      quantGroup.append('g')
+      const quantXAxis = quantGroup.append('g')
         .attr('class', 'qx-axis')
         .attr('transform', `translate(0,${innerHeight})`)
         .call(qXAxis)
-        .selectAll('text')
-        .style('fill', '#ff00eaff')
+        .classed('d3-axis', true);
+
+      quantXAxis.selectAll('text')
         .style('font-size', '25px');
 
       quantGroup.selectAll('.qx-axis line, .qx-axis path')
-        .style('stroke', '#ff00eaff')
         .style('stroke-width', '2px');
 
-      quantGroup.append('g')
+      const quantYAxis = quantGroup.append('g')
         .attr('class', 'qy-axis')
         .call(qYAxis)
-        .selectAll('text')
-        .style('fill', '#ff00eaff')
+        .classed('d3-axis', true);
+
+      quantYAxis.selectAll('text')
         .style('font-size', '25px');
 
       quantGroup.selectAll('.qy-axis line, .qy-axis path')
-        .style('stroke', '#ff00eaff')
         .style('stroke-width', '2px');
 
       // Axis labels for quantile view
       quantGroup.append('text')
-        .attr('class', 'quant-x-label')
+        .attr('class', 'quant-x-label d3-axis-label d3-axis-label--large')
         .attr('x', innerWidth / 2)
         .attr('y', innerHeight + 48)
         .style('text-anchor', 'middle')
-        .style('fill', '#ff00eaff')
-        .style('font-size', '25px')
-        .style('font-weight', '600')
         .text('Percentile');
 
       quantGroup.append('text')
@@ -390,9 +383,6 @@
         .attr('x', -innerHeight / 2)
         .attr('y', -42)
         .style('text-anchor', 'middle')
-        .style('fill', '#ff00eaff')
-        .style('font-size', '25px')
-        .style('font-weight', '600')
         .text('NO₃ (mg/L)');
 
       // Draw quantile curves for each river

@@ -1,5 +1,4 @@
 (function() {
-  const COLOR_AXIS = '#ff139dff';
   const PANEL_BG = 'rgba(13, 20, 38, 0.05)';
   const COLORS = {
     coarse: '#ef476f',
@@ -149,6 +148,8 @@
         .attr('x', panelWidth / 2)
         .attr('y', -2)
         .attr('text-anchor', 'middle')
+        .classed('d3-axis-label', true)
+        .classed('d3-axis-label--small', true)
         .attr('fill', COLORS[hist.key] || '#9efcff')
         .attr('font-size', 15)
         .attr('font-weight', 800)
@@ -182,28 +183,14 @@
 
       const axisGroup = panel.append('g')
         .attr('transform', `translate(0,${height})`)
-        .call(d3.axisBottom(panelXScale).ticks(4));
-
-      axisGroup.selectAll('text')
-        .attr('fill', COLOR_AXIS)
-        .attr('font-size', 11)
-        .attr('font-weight', 600);
-      axisGroup.selectAll('line, path')
-        .attr('stroke', '#38446d')
-        .attr('stroke-width', 1.1);
+        .call(d3.axisBottom(panelXScale).ticks(4))
+        .classed('d3-axis', true);
 
       if (index === 0) {
         const yAxis = d3.axisLeft(yScale).ticks(4).tickFormat(d3.format('.0%'));
         panel.append('g')
           .call(yAxis)
-          .selectAll('text')
-          .attr('fill', COLOR_AXIS)
-          .attr('font-size', 10)
-          .attr('font-weight', 600);
-        panel.selectAll('g')
-          .selectAll('line, path')
-          .attr('stroke', '#38446d')
-          .attr('stroke-width', 1);
+          .classed('d3-axis', true);
       } else {
         panel.append('g')
           .call(d3.axisRight(yScale).ticks(4).tickFormat(() => '').tickSize(0))
@@ -212,20 +199,11 @@
 
       panel.append('text')
         .attr('x', panelWidth / 2)
-        .attr('y', height + 32)
+        .attr('y', height + 50)
         .attr('text-anchor', 'middle')
-        .attr('fill', '#94a3d1')
-        .attr('font-size', 11)
-        .attr('font-weight', 600)
-        .text('Bin midpoint →');
+        .text('Bin midpoint →')
+        .classed('d3-axis-label', true)
+        .classed('d3-axis-label--small', true);
     });
-
-    svg.append('text')
-      .attr('x', margin.left)
-      .attr('y', 18)
-      .attr('fill', '#9aa6d3')
-      .attr('font-size', 12)
-      .attr('font-weight', 600)
-      .text(`n = ${n} log-normal samples`);
   };
 })();

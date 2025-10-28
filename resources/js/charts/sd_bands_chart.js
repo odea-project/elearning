@@ -102,36 +102,38 @@
     });
 
     // Axes
-    svg.append('g')
+    const xAxisGroup = svg.append('g')
       .attr('transform', `translate(0,${height})`)
       .call(d3.axisBottom(xScale).ticks(7))
-      .selectAll('text')
-      .style('font-size', '12px')
-      .style('fill', '#ffffff');
+      .classed('d3-axis', true);
 
-    svg.append('g')
+    xAxisGroup.selectAll('text')
+      .style('font-size', '12px');
+
+    const yAxisGroup = svg.append('g')
       .call(d3.axisLeft(yScale).ticks(5))
-      .selectAll('text')
-      .style('font-size', '12px')
-      .style('fill', '#ffffff');
+      .classed('d3-axis', true);
 
-    // Axes labels
-    svg.append('text')
-      .attr('x', width / 2)
-      .attr('y', height + 35)
-      .style('text-anchor', 'middle')
-      .style('fill', '#ffffff')
-      .style('font-size', '14px')
-      .text('Value');
+    yAxisGroup.selectAll('text')
+      .style('font-size', '12px');
 
-    svg.append('text')
-      .attr('transform', 'rotate(-90)')
-      .attr('x', -height / 2)
-      .attr('y', -35)
-      .style('text-anchor', 'middle')
-      .style('fill', '#ffffff')
-      .style('font-size', '14px')
-      .text('Observation #');
+  // Axes labels
+  svg.append('text')
+    .attr('x', width / 2)
+    .attr('y', height + 35)
+    .style('text-anchor', 'middle')
+    .classed('d3-axis-label', true)
+    .classed('d3-axis-label--small', true)
+    .text('Value');
+
+  svg.append('text')
+    .attr('transform', 'rotate(-90)')
+    .attr('x', -height / 2)
+    .attr('y', -35)
+    .style('text-anchor', 'middle')
+    .classed('d3-axis-label', true)
+    .classed('d3-axis-label--small', true)
+    .text('Observation #');
 
     // Labels
     svg.append('text')
@@ -172,11 +174,6 @@
       .style('fill', '#9efcff')
       .style('font-size', '13px')
       .text(`${percentage}% within ±1 SD`);
-
-    // Style axes
-    svg.selectAll('.domain, .tick line')
-      .style('stroke', '#ffffff')
-      .style('stroke-width', 1);
   }
 
   if (document.readyState === 'loading') {

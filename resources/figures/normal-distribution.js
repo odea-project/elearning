@@ -106,34 +106,26 @@
       .attr('font-weight', 700)
       .text(`mean = ${mean}`);
 
-    svg.append('g')
+    const xAxisGroup = svg.append('g')
       .attr('transform', `translate(0,${height})`)
       .call(d3.axisBottom(xScale).ticks(7))
-      .call(g => g.selectAll('text')
-        .attr('fill', COLOR_AXIS)
-        .attr('font-size', 14)
-        .attr('font-weight', 700))
-      .call(g => g.selectAll('line, path')
-        .attr('stroke', COLOR_AXIS)
-        .attr('stroke-width', 1.7));
+      .classed('d3-axis', true);
+    xAxisGroup.selectAll('text')
+      .attr('font-size', 14)
+      .attr('font-weight', 700);
 
-    svg.append('g')
+    const yAxisGroup = svg.append('g')
       .call(d3.axisLeft(yScale).ticks(5))
-      .call(g => g.selectAll('text')
-        .attr('fill', COLOR_AXIS)
-        .attr('font-size', 14)
-        .attr('font-weight', 700))
-      .call(g => g.selectAll('line, path')
-        .attr('stroke', COLOR_AXIS)
-        .attr('stroke-width', 1.7));
+      .classed('d3-axis', true);
+    yAxisGroup.selectAll('text')
+      .attr('font-size', 14)
+      .attr('font-weight', 700);
 
     svg.append('text')
       .attr('x', width / 2)
       .attr('y', height + 42)
       .attr('text-anchor', 'middle')
-      .attr('fill', COLOR_AXIS)
-      .attr('font-size', 16)
-      .attr('font-weight', 700)
+      .classed('d3-axis-label', true)
       .text('x');
 
     svg.append('text')
@@ -141,9 +133,7 @@
       .attr('x', -(height / 2))
       .attr('y', -38)
       .attr('text-anchor', 'middle')
-      .attr('fill', COLOR_AXIS)
-      .attr('font-size', 16)
-      .attr('font-weight', 700)
+      .classed('d3-axis-label', true)
       .text('f(x)');
   }
 
@@ -197,34 +187,26 @@
       .attr('font-weight', 700)
       .text(d => `F(${d.toFixed(1)}) = ${normalCdf(d, mean, sd).toFixed(2)}`);
 
-    svg.append('g')
+    const cdfXAxisGroup = svg.append('g')
       .attr('transform', `translate(0,${height})`)
       .call(d3.axisBottom(xScale).ticks(7))
-      .call(g => g.selectAll('text')
-        .attr('fill', COLOR_AXIS)
-        .attr('font-size', 14)
-        .attr('font-weight', 700))
-      .call(g => g.selectAll('line, path')
-        .attr('stroke', COLOR_AXIS)
-        .attr('stroke-width', 1.7));
+      .classed('d3-axis', true);
+    cdfXAxisGroup.selectAll('text')
+      .attr('font-size', 14)
+      .attr('font-weight', 700);
 
-    svg.append('g')
+    const cdfYAxisGroup = svg.append('g')
       .call(d3.axisLeft(yScale).ticks(5))
-      .call(g => g.selectAll('text')
-        .attr('fill', COLOR_AXIS)
-        .attr('font-size', 14)
-        .attr('font-weight', 700))
-      .call(g => g.selectAll('line, path')
-        .attr('stroke', COLOR_AXIS)
-        .attr('stroke-width', 1.7));
+      .classed('d3-axis', true);
+    cdfYAxisGroup.selectAll('text')
+      .attr('font-size', 14)
+      .attr('font-weight', 700);
 
     svg.append('text')
       .attr('x', width / 2)
       .attr('y', height + 42)
       .attr('text-anchor', 'middle')
-      .attr('fill', COLOR_AXIS)
-      .attr('font-size', 16)
-      .attr('font-weight', 700)
+      .classed('d3-axis-label', true)
       .text('x');
 
     svg.append('text')
@@ -232,9 +214,7 @@
       .attr('x', -(height / 2))
       .attr('y', -40)
       .attr('text-anchor', 'middle')
-      .attr('fill', COLOR_AXIS)
-      .attr('font-size', 16)
-      .attr('font-weight', 700)
+      .classed('d3-axis-label', true)
       .text('F(x)');
   }
 

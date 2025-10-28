@@ -429,7 +429,7 @@ $$
 -: Visual diagnostics (histogram + CDF) help confirm whether the model is plausible.
 <!-- /position -->
 <!-- position={row: 1, column: 2} -->
-<div id="fit-distribution-plot" style="width: 100%; min-height: 320px; border: 0px solid #2d3a66; border-radius: 8px; padding: 8px; background: rgba(17, 25, 46, 0.32);"></div>
+<div id="fit-distribution-plot" style="width: 100%; min-height: 320px; border: 0px solid #2d3a66; border-radius: 8px; padding: 8px; background: rgba(17, 25, 46, 0.0);"></div>
 <button id="fit-distribution-expand" style="margin-top: 12px; padding: 8px 16px; background: #0f172a; color: #9efcff; border: 0px solid #2d3a66; border-radius: 6px; cursor: pointer; font-size: 0.9em; font-weight: 600;">
   <i class="fas fa-expand"></i> View Fullscreen
 </button>

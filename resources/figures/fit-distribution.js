@@ -187,34 +187,29 @@
         .text(`Sample mean ≈ ${sampleMean.toFixed(2)} mg/L`);
     }
 
-    histGroup.append('g')
+    const histXAxis = histGroup.append('g')
       .attr('transform', `translate(0,${panelHeight})`)
       .call(d3.axisBottom(histXScale).ticks(6))
-      .call(g => g.selectAll('text')
-        .attr('fill', COLOR_AXIS)
-        .attr('font-size', 14)
-        .attr('font-weight', 700))
-      .call(g => g.selectAll('line, path')
-        .attr('stroke', COLOR_AXIS)
-        .attr('stroke-width', 1.6));
+      .classed('d3-axis', true);
 
-    histGroup.append('g')
+    histXAxis.selectAll('text')
+      .attr('font-size', 14)
+      .attr('font-weight', 700);
+
+    const histYAxis = histGroup.append('g')
       .call(d3.axisLeft(histYScale).ticks(6))
-      .call(g => g.selectAll('text')
-        .attr('fill', COLOR_AXIS)
-        .attr('font-size', 14)
-        .attr('font-weight', 700))
-      .call(g => g.selectAll('line, path')
-        .attr('stroke', COLOR_AXIS)
-        .attr('stroke-width', 1.6));
+      .classed('d3-axis', true);
+
+    histYAxis.selectAll('text')
+      .attr('font-size', 14)
+      .attr('font-weight', 700);
 
     histGroup.append('text')
       .attr('x', panelWidth / 2)
       .attr('y', panelHeight + 44)
       .attr('text-anchor', 'middle')
-      .attr('fill', COLOR_AXIS)
-      .attr('font-size', 15)
-      .attr('font-weight', 800)
+      .classed('d3-axis-label', true)
+      .classed('d3-axis-label--small', true)
       .text('[NO3-] concentration (mg/L)');
 
     histGroup.append('text')
@@ -222,9 +217,8 @@
       .attr('x', -(panelHeight / 2))
       .attr('y', -48)
       .attr('text-anchor', 'middle')
-      .attr('fill', COLOR_AXIS)
-      .attr('font-size', 14)
-      .attr('font-weight', 700)
+      .classed('d3-axis-label', true)
+      .classed('d3-axis-label--small', true)
       .text('Probability density');
 
     const sorted = [...samples].sort((a, b) => a - b);
@@ -284,34 +278,29 @@
       .attr('stroke-dasharray', '6,3')
       .attr('d', cdfLine);
 
-    cdfGroup.append('g')
+    const cdfXAxis = cdfGroup.append('g')
       .attr('transform', `translate(0,${panelHeight})`)
       .call(d3.axisBottom(cdfXScale).ticks(6))
-      .call(g => g.selectAll('text')
-        .attr('fill', COLOR_AXIS)
-        .attr('font-size', 14)
-        .attr('font-weight', 700))
-      .call(g => g.selectAll('line, path')
-        .attr('stroke', COLOR_AXIS)
-        .attr('stroke-width', 1.6));
+      .classed('d3-axis', true);
 
-    cdfGroup.append('g')
+    cdfXAxis.selectAll('text')
+      .attr('font-size', 14)
+      .attr('font-weight', 700);
+
+    const cdfYAxis = cdfGroup.append('g')
       .call(d3.axisLeft(cdfYScale).ticks(6))
-      .call(g => g.selectAll('text')
-        .attr('fill', COLOR_AXIS)
-        .attr('font-size', 14)
-        .attr('font-weight', 700))
-      .call(g => g.selectAll('line, path')
-        .attr('stroke', COLOR_AXIS)
-        .attr('stroke-width', 1.6));
+      .classed('d3-axis', true);
+
+    cdfYAxis.selectAll('text')
+      .attr('font-size', 14)
+      .attr('font-weight', 700);
 
     cdfGroup.append('text')
       .attr('x', panelWidth / 2)
       .attr('y', panelHeight + 44)
       .attr('text-anchor', 'middle')
-      .attr('fill', COLOR_AXIS)
-      .attr('font-size', 15)
-      .attr('font-weight', 800)
+      .classed('d3-axis-label', true)
+      .classed('d3-axis-label--small', true)
       .text('Cumulative probability F(x)');
 
     cdfGroup.append('text')
@@ -319,9 +308,8 @@
       .attr('x', -(panelHeight / 2))
       .attr('y', -48)
       .attr('text-anchor', 'middle')
-      .attr('fill', COLOR_AXIS)
-      .attr('font-size', 14)
-      .attr('font-weight', 700)
+      .classed('d3-axis-label', true)
+      .classed('d3-axis-label--small', true)
       .text('Probability');
 
     // Legend and title intentionally omitted to keep the diagram minimal.

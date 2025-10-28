@@ -122,28 +122,28 @@
     const xAxis = d3.axisBottom(xScale);
     const yAxis = d3.axisLeft(yScale).ticks(8);
     
-    svg.append('g')
+    const xAxisGroup = svg.append('g')
       .attr('class', 'x-axis')
       .attr('transform', `translate(0,${innerHeight})`)
       .call(xAxis)
-      .selectAll('text')
-      .style('fill', '#ff139dff')
+      .classed('d3-axis', true);
+
+    xAxisGroup.selectAll('text')
       .style('font-size', '16px')
       .style('font-weight', '600');
-    
+
     svg.selectAll('.x-axis line, .x-axis path')
-      .style('stroke', '#ff139dff')
       .style('stroke-width', '2px');
-    
-    svg.append('g')
+
+    const yAxisGroup = svg.append('g')
       .attr('class', 'y-axis')
       .call(yAxis)
-      .selectAll('text')
-      .style('fill', '#ff139dff')
+      .classed('d3-axis', true);
+
+    yAxisGroup.selectAll('text')
       .style('font-size', '16px');
-    
+
     svg.selectAll('.y-axis line, .y-axis path')
-      .style('stroke', '#ff139dff')
       .style('stroke-width', '2px');
     
     // Labels
@@ -151,9 +151,7 @@
       .attr('x', innerWidth / 2)
       .attr('y', innerHeight + 60)
       .style('text-anchor', 'middle')
-      .style('fill', '#ff139dff')
-      .style('font-size', '20px')
-      .style('font-weight', '600')
+      .classed('d3-axis-label', true)
       .text('Monitoring Site');
     
     svg.append('text')
@@ -161,9 +159,7 @@
       .attr('x', -innerHeight / 2)
       .attr('y', -55)
       .style('text-anchor', 'middle')
-      .style('fill', '#ff139dff')
-      .style('font-size', '20px')
-      .style('font-weight', '600')
+      .classed('d3-axis-label', true)
       .text('Nitrate Concentration (mg/L)');
     
     // Title

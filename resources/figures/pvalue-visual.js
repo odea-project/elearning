@@ -113,43 +113,35 @@
 
     const axisBottom = g.append('g')
       .attr('transform', `translate(0,${height})`)
-      .call(d3.axisBottom(xScale).ticks(7));
+      .call(d3.axisBottom(xScale).ticks(7))
+      .classed('d3-axis', true);
     axisBottom.selectAll('text')
-      .attr('fill', COLOR_AXIS)
       .attr('font-size', 14)
       .attr('font-weight', 700);
-    axisBottom.selectAll('line, path')
-      .attr('stroke', COLOR_AXIS)
-      .attr('stroke-width', 1.4);
 
     const axisLeft = g.append('g')
-      .call(d3.axisLeft(yScale).ticks(5));
+      .call(d3.axisLeft(yScale).ticks(5))
+      .classed('d3-axis', true);
     axisLeft.selectAll('text')
-      .attr('fill', COLOR_AXIS)
       .attr('font-size', 14)
       .attr('font-weight', 700);
-    axisLeft.selectAll('line, path')
-      .attr('stroke', COLOR_AXIS)
-      .attr('stroke-width', 1.4);
 
-    g.append('text')
-      .attr('x', width / 2)
-      .attr('y', height + 44)
-      .attr('text-anchor', 'middle')
-      .attr('fill', COLOR_AXIS)
-      .attr('font-size', 15)
-      .attr('font-weight', 800)
-      .text('Standardized test statistic z');
+  g.append('text')
+    .attr('x', width / 2)
+    .attr('y', height + 44)
+    .attr('text-anchor', 'middle')
+    .classed('d3-axis-label', true)
+    .classed('d3-axis-label--small', true)
+    .text('Standardized test statistic z');
 
-    g.append('text')
-      .attr('transform', 'rotate(-90)')
-      .attr('x', -(height / 2))
-      .attr('y', -44)
-      .attr('text-anchor', 'middle')
-      .attr('fill', COLOR_AXIS)
-      .attr('font-size', 14)
-      .attr('font-weight', 700)
-      .text('Probability density');
+  g.append('text')
+    .attr('transform', 'rotate(-90)')
+    .attr('x', -(height / 2))
+    .attr('y', -44)
+    .attr('text-anchor', 'middle')
+    .classed('d3-axis-label', true)
+    .classed('d3-axis-label--small', true)
+    .text('Probability density');
 
     g.append('text')
       .attr('x', width * 0.57)
@@ -169,4 +161,3 @@
       .text('Two-sided p ≈ 0.10');
   };
 })();
-

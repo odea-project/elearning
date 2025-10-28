@@ -135,28 +135,28 @@
       .attr('stroke-width', 4);
 
     // Axes
-    svg.append('g')
+    const xAxisGroup = svg.append('g')
       .attr('transform', `translate(0,${height})`)
       .call(d3.axisBottom(xScale))
-      .selectAll('text')
-      .style('font-size', '13px')
-      .style('fill', '#ffffff');
+      .classed('d3-axis', true);
+    xAxisGroup.selectAll('text')
+      .style('font-size', '13px');
 
-    svg.append('g')
+    const yAxisGroup = svg.append('g')
       .call(d3.axisLeft(yScale))
-      .selectAll('text')
-      .style('font-size', '12px')
-      .style('fill', '#ffffff');
+      .classed('d3-axis', true);
+    yAxisGroup.selectAll('text')
+      .style('font-size', '12px');
 
-    // Y-axis label
-    svg.append('text')
-      .attr('transform', 'rotate(-90)')
-      .attr('x', -height / 2)
-      .attr('y', -40)
-      .style('text-anchor', 'middle')
-      .style('fill', '#ffffff')
-      .style('font-size', '14px')
-      .text('Value');
+  // Y-axis label
+  svg.append('text')
+    .attr('transform', 'rotate(-90)')
+    .attr('x', -height / 2)
+    .attr('y', -40)
+    .style('text-anchor', 'middle')
+    .classed('d3-axis-label', true)
+    .classed('d3-axis-label--small', true)
+    .text('Value');
 
     // Legend
     const legend = svg.append('g')
@@ -202,11 +202,6 @@
       .style('fill', '#9efcff')
       .style('font-size', '14px')
       .text('Same Data, Different Error Bars');
-
-    // Style axes
-    svg.selectAll('.domain, .tick line')
-      .style('stroke', '#ffffff')
-      .style('stroke-width', 1);
   }
 
   if (document.readyState === 'loading') {
