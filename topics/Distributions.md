@@ -27,7 +27,7 @@ description: "How to characterize, model, and test water quality distributions."
 <!-- /position -->
 <!-- position={row: 1, column: 2} -->
 <div id="distribution-histogram-container" style="width: 100%; min-height: 360px; border: 0px solid #2d3a66; border-radius: 8px; padding: 8px; display: flex; align-items: center; justify-content: center;"></div>
-<script src="../resources/figures/distribution-histogram.js"></script>
+<script src="resources/figures/distribution-histogram.js"></script>
 <script>
 (function() {
   const containerId = 'distribution-histogram-container';
@@ -83,8 +83,8 @@ description: "How to characterize, model, and test water quality distributions."
 <button id="bin-rules-expand" style="margin-top: 12px; padding: 8px 16px; background: #0f172a; color: #9efcff; border: 1px solid #2d3a66; border-radius: 6px; cursor: pointer; font-size: 0.9em; font-weight: 600;">
   <i class="fas fa-expand"></i> View Fullscreen
 </button>
-<script src="../resources/figures/bin-rules.js"></script>
-<script src="../resources/figures/bin-rules-modal.js"></script>
+<script src="resources/figures/bin-rules.js"></script>
+<script src="resources/figures/bin-rules-modal.js"></script>
 <!-- /position -->
 <!-- /layout -->
 
@@ -173,7 +173,7 @@ x <= 8 : 4/4 = 1.00
 ```
 
 <div id="ecdf-sample-visual" style="width: 100%; min-height: 320px; border: 0px solid #2d3a66; border-radius: 8px; padding: 8px; display: flex; align-items: center; justify-content: center;"></div>
-<script src="../resources/figures/ecdf-sample.js"></script>
+<script src="resources/figures/ecdf-sample.js"></script>
 <script>
 (function() {
   const containerId = 'ecdf-sample-visual';
@@ -210,7 +210,7 @@ x <= 8 : 4/4 = 1.00
 <!-- .slide:id="ecdf_comparison" -->
 ## ECDF Example: Log-normal Data
 <div id="ecdf-visual" style="width: 100%; min-height: 320px; border: 0px solid #2d3a66; border-radius: 8px; padding: 8px; display: flex; align-items: center; justify-content: center;"></div>
-<script src="../resources/figures/ecdf-lognormal.js"></script>
+<script src="resources/figures/ecdf-lognormal.js"></script>
 <script>
 (function() {
   const containerId = 'ecdf-visual';
@@ -305,7 +305,7 @@ $$F_{\text{norm}}(x) = \frac{1}{2}\left[1 + \operatorname{erf}\left(\frac{x - \m
 <!-- position={row: 1, column: 2} -->
 ### Cumulative Distribution Function (CDF)
 <div id="normal-cdf-container" style="min-height: 260px; border: 0px solid #2d3a66; border-radius: 8px; padding: 8px; display: flex; align-items: center; justify-content: center;"></div>
-<script src="../resources/figures/normal-distribution.js"></script>
+<script src="resources/figures/normal-distribution.js"></script>
 <script>
 (function() {
   const slideId = 'normal_model_plots';
@@ -383,7 +383,7 @@ $$
 <!-- position={row: 1, column: 2} -->
 ### Cumulative Distribution Function (CDF)
 <div id="lognormal-cdf-container" style="min-height: 260px; border: 0px solid #2d3a66; border-radius: 8px; padding: 8px; display: flex; align-items: center; justify-content: center;"></div>
-<script src="../resources/figures/lognormal-distribution.js"></script>
+<script src="resources/figures/lognormal-distribution.js"></script>
 <script>
 (function() {
   const slideId = 'lognormal_model_plots';
@@ -433,8 +433,8 @@ $$
 <button id="fit-distribution-expand" style="margin-top: 12px; padding: 8px 16px; background: #0f172a; color: #9efcff; border: 0px solid #2d3a66; border-radius: 6px; cursor: pointer; font-size: 0.9em; font-weight: 600;">
   <i class="fas fa-expand"></i> View Fullscreen
 </button>
-<script src="../resources/figures/fit-distribution.js"></script>
-<script src="../resources/figures/fit-distribution-modal.js"></script>
+<script src="resources/figures/fit-distribution.js"></script>
+<script src="resources/figures/fit-distribution-modal.js"></script>
 <!-- /position -->
 <!-- /layout -->
 
@@ -457,7 +457,7 @@ $$
 <!-- /position -->
 <!-- position={row: 1, column: 2} -->
 <div id="ks-illustration" style="min-height: 260px; border: 0px solid #2d3a66; border-radius: 8px; padding: 8px; display: flex; align-items: center; justify-content: center;"></div>
-<script src="../resources/figures/ks-illustration.js"></script>
+<script src="resources/figures/ks-illustration.js"></script>
 <script>
 (function() {
   const slideId = 'ks_intro';
@@ -503,7 +503,7 @@ $$
 <!-- /position -->
 <!-- position={row: 1, column: 2} -->
 <div id="ks-distribution-chart" style="min-height: 260px; border: 0px solid #2d3a66; border-radius: 8px; padding: 8px; display: flex; align-items: center; justify-content: center;"></div>
-<script src="../resources/figures/ks-distribution.js"></script>
+<script src="resources/figures/ks-distribution.js"></script>
 <script>
 (function() {
   const slideId = 'ks_distribution_shapes';
@@ -650,7 +650,7 @@ ks.test(NO3_norm, "pnorm", mean = 0, sd = 1)
 <!-- /position -->
 <!-- position={row: 1, column: 2} -->
 <div id="pvalue-visual" style="min-height: 280px; border: 0px solid #2d3a66; border-radius: 8px; padding: 8px; display: flex; align-items: center; justify-content: center;"></div>
-<script src="../resources/figures/pvalue-visual.js"></script>
+<script src="resources/figures/pvalue-visual.js"></script>
 <script>
 (function() {
   const slideId = 'pvalue_concept';
