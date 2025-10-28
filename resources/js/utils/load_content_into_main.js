@@ -318,12 +318,41 @@ function createTaskbar(headerData) {
   const taskbar = document.createElement('div');
   taskbar.classList.add('taskbar');
   const left = document.createElement('div');
+  left.classList.add('taskbar__left');
   left.style.flex = '0';
   left.style.paddingLeft = '12px';
   left.style.fontSize = '0.5em';
-  left.textContent = `${headerData.title || ''} by ${headerData.author || ''}`;
+  const title = headerData.title || '';
+  const author = headerData.author || '';
+  left.textContent = author ? `${title} by ${author}` : title;
   taskbar.appendChild(left);
-  // For right-aligned slide number, add here if needed.
+
+  const center = document.createElement('div');
+  center.classList.add('taskbar__center');
+  center.style.position = 'absolute';
+  center.style.left = '50%';
+  center.style.top = '50%';
+  center.style.transform = 'translate(-50%, -50%)';
+  center.style.display = 'flex';
+  center.style.justifyContent = 'center';
+  center.style.alignItems = 'center';
+  center.style.fontSize = '0.5em';
+  center.style.pointerEvents = 'none';
+
+  const slideNumber = document.createElement('div');
+  slideNumber.classList.add('taskbar__slide-number');
+  slideNumber.style.pointerEvents = 'auto';
+  center.appendChild(slideNumber);
+  taskbar.appendChild(center);
+
+  const right = document.createElement('div');
+  right.classList.add('taskbar__right');
+  right.style.display = 'flex';
+  right.style.alignItems = 'center';
+  right.style.marginLeft = 'auto';
+  right.style.gap = '12px';
+  right.style.paddingRight = '12px';
+  taskbar.appendChild(right);
   return taskbar;
 }
 

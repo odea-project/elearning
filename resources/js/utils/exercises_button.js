@@ -11,8 +11,10 @@ function addExerciseButtonToTaskbar(section, exercisesMeta) {
     section.appendChild(taskbar);
   }
 
+  const rightSlot = ensureTaskbarRightSlot(taskbar);
+
   // Remove any previous exercise button
-  const prevBtn = taskbar.querySelector('.exercise-btn');
+  const prevBtn = rightSlot.querySelector('.exercise-btn');
   if (prevBtn) prevBtn.remove();
 
   // Add exercise button if exercises exist
@@ -35,9 +37,65 @@ function addExerciseButtonToTaskbar(section, exercisesMeta) {
         </div>
       `;
     };
-    // Align button right in taskbar if needed
-    btn.style.marginLeft = 'auto';
-    btn.style.marginRight = '16px';
-    taskbar.appendChild(btn);
+
+    btn.style.marginRight = '4px';
+    rightSlot.appendChild(btn);
   }
+}
+
+/**
+ * Ensures the taskbar has a right-hand container with a slide number slot.
+ * @param {HTMLElement} taskbar
+ * @returns {HTMLElement} Right-hand flex container.
+ */
+function ensureTaskbarRightSlot(taskbar) {
+  ensureTaskbarCenterSlot(taskbar);
+
+  let right = taskbar.querySelector('.taskbar__right');
+  if (!right) {
+    right = document.createElement('div');
+    right.className = 'taskbar__right';
+    right.style.display = 'flex';
+    right.style.alignItems = 'center';
+    right.style.marginLeft = 'auto';
+    right.style.gap = '12px';
+    right.style.paddingRight = '12px';
+    taskbar.appendChild(right);
+  }
+  return right;
+}
+
+/**
+ * Ensures the taskbar has a centered slide number slot.
+ * @param {HTMLElement} taskbar
+ * @returns {HTMLElement} Center flex container.
+ */
+function ensureTaskbarCenterSlot(taskbar) {
+  let center = taskbar.querySelector('.taskbar__center');
+  if (!center) {
+    center = document.createElement('div');
+    center.className = 'taskbar__center';
+    center.style.position = 'absolute';
+    center.style.left = '50%';
+    center.style.top = '50%';
+    center.style.transform = 'translate(-50%, -50%)';
+    center.style.display = 'flex';
+    center.style.justifyContent = 'center';
+    center.style.alignItems = 'center';
+    center.style.fontSize = '0.5em';
+    center.style.pointerEvents = 'none';
+
+    const right = taskbar.querySelector('.taskbar__right');
+    if (right) taskbar.insertBefore(center, right);
+    else taskbar.appendChild(center);
+  }
+
+  if (!center.querySelector('.taskbar__slide-number')) {
+    const slideNumber = document.createElement('div');
+    slideNumber.className = 'taskbar__slide-number';
+    slideNumber.style.pointerEvents = 'auto';
+    center.appendChild(slideNumber);
+  }
+
+  return center;
 }
