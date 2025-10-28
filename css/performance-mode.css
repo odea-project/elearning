@@ -503,3 +503,7 @@ body.performance-mode iframe {
   border: 2px solid #000000 !important;
   box-shadow: none !important;
 }
+
+body.performance-mode .title {
+  background-color: rgba(255, 255, 255, 0.7)!important;
+}
