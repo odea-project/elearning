@@ -170,58 +170,43 @@
       .call(xAxis)
       .classed('d3-axis', true);
 
-    xAxisGroup.selectAll('text')
-      .style('font-size', '18px')
-      .style('font-weight', '600');
-
-    svg.selectAll('.x-axis line, .x-axis path')
-      .style('stroke-width', '2px');
-
     const yAxisGroup = svg.append('g')
       .attr('class', 'y-axis')
       .call(yAxis)
       .classed('d3-axis', true);
-
-    yAxisGroup.selectAll('text')
-      .style('font-size', '16px');
-
-    svg.selectAll('.y-axis line, .y-axis path')
-      .style('stroke-width', '2px');
     
     // Labels
     svg.append('text')
       .attr('x', innerWidth / 2)
       .attr('y', innerHeight + 70)
-      .style('text-anchor', 'middle')
+      .attr('text-anchor', 'middle')
       .classed('d3-axis-label', true)
       .classed('d3-axis-label--large', true)
       .text('Distribution Type');
-    
+
     svg.append('text')
       .attr('transform', 'rotate(-90)')
       .attr('x', -innerHeight / 2)
       .attr('y', -55)
-      .style('text-anchor', 'middle')
+      .attr('text-anchor', 'middle')
       .classed('d3-axis-label', true)
       .classed('d3-axis-label--large', true)
       .text('Value');
-    
+
     // Title
     svg.append('text')
       .attr('x', innerWidth / 2)
       .attr('y', -45)
-      .style('text-anchor', 'middle')
-      .style('fill', '#ff139dff')
-      .style('font-size', '28px')
-      .style('font-weight', 'bold')
+      .attr('text-anchor', 'middle')
+      .classed('d3-chart-title', true)
+      .classed('d3-chart-title--large', true)
       .text('How Different Distributions Appear in Boxplots');
-    
+
     svg.append('text')
       .attr('x', innerWidth / 2)
       .attr('y', -18)
-      .style('text-anchor', 'middle')
-      .style('fill', '#ffd60a')
-      .style('font-size', '18px')
+      .attr('text-anchor', 'middle')
+      .classed('d3-chart-subtitle', true)
       .text('Understanding distribution shape through boxplot characteristics');
     
     // Draw boxplots

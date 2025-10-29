@@ -101,25 +101,18 @@
     svg.append('text')
       .attr('x', xScale(mean) + 6)
       .attr('y', yScale(normalPdf(mean, mean, sd)) - 10)
+      .classed('d3-chart-body-text', true)
       .attr('fill', COLOR_LINE_PDF)
-      .attr('font-size', 14)
-      .attr('font-weight', 700)
       .text(`mean = ${mean}`);
 
     const xAxisGroup = svg.append('g')
       .attr('transform', `translate(0,${height})`)
       .call(d3.axisBottom(xScale).ticks(7))
       .classed('d3-axis', true);
-    xAxisGroup.selectAll('text')
-      .attr('font-size', 14)
-      .attr('font-weight', 700);
 
     const yAxisGroup = svg.append('g')
       .call(d3.axisLeft(yScale).ticks(5))
       .classed('d3-axis', true);
-    yAxisGroup.selectAll('text')
-      .attr('font-size', 14)
-      .attr('font-weight', 700);
 
     svg.append('text')
       .attr('x', width / 2)
@@ -182,25 +175,18 @@
       .attr('class', 'cdf-label')
       .attr('x', d => xScale(d) + 6)
       .attr('y', d => yScale(normalCdf(d, mean, sd)) - 6)
+      .classed('d3-chart-body-text', true)
       .attr('fill', COLOR_AXIS)
-      .attr('font-size', 13)
-      .attr('font-weight', 700)
       .text(d => `F(${d.toFixed(1)}) = ${normalCdf(d, mean, sd).toFixed(2)}`);
 
     const cdfXAxisGroup = svg.append('g')
       .attr('transform', `translate(0,${height})`)
       .call(d3.axisBottom(xScale).ticks(7))
       .classed('d3-axis', true);
-    cdfXAxisGroup.selectAll('text')
-      .attr('font-size', 14)
-      .attr('font-weight', 700);
 
     const cdfYAxisGroup = svg.append('g')
       .call(d3.axisLeft(yScale).ticks(5))
       .classed('d3-axis', true);
-    cdfYAxisGroup.selectAll('text')
-      .attr('font-size', 14)
-      .attr('font-weight', 700);
 
     svg.append('text')
       .attr('x', width / 2)

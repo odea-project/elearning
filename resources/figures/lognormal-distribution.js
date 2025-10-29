@@ -93,25 +93,18 @@
     svg.append('text')
       .attr('x', xScale(meanValue) + 6)
       .attr('y', yScale(logNormalPdf(meanValue, meanLog, sdLog)) - 10)
+      .classed('d3-chart-body-text', true)
       .attr('fill', COLOR_LINE_PDF)
-      .attr('font-size', 14)
-      .attr('font-weight', 700)
       .text(`mean approx ${meanValue.toFixed(2)}`);
 
     const xAxisGroup = svg.append('g')
       .attr('transform', `translate(0,${height})`)
       .call(d3.axisBottom(xScale).ticks(6))
       .classed('d3-axis', true);
-    xAxisGroup.selectAll('text')
-      .attr('font-size', 14)
-      .attr('font-weight', 700);
 
     const yAxisGroup = svg.append('g')
       .call(d3.axisLeft(yScale).ticks(5))
       .classed('d3-axis', true);
-    yAxisGroup.selectAll('text')
-      .attr('font-size', 14)
-      .attr('font-weight', 700);
 
     svg.append('text')
       .attr('x', width / 2)
@@ -179,25 +172,18 @@
       .attr('class', 'ln-cdf-label')
       .attr('x', d => xScale(d.value) + 6)
       .attr('y', d => yScale(logNormalCdf(d.value, meanLog, sdLog)) - 6)
+      .classed('d3-chart-body-text', true)
       .attr('fill', COLOR_AXIS)
-      .attr('font-size', 13)
-      .attr('font-weight', 700)
       .text(d => `${d.label}`);
 
     const cdfXAxisGroup = svg.append('g')
       .attr('transform', `translate(0,${height})`)
       .call(d3.axisBottom(xScale).ticks(6))
       .classed('d3-axis', true);
-    cdfXAxisGroup.selectAll('text')
-      .attr('font-size', 14)
-      .attr('font-weight', 700);
 
     const cdfYAxisGroup = svg.append('g')
       .call(d3.axisLeft(yScale).ticks(5))
       .classed('d3-axis', true);
-    cdfYAxisGroup.selectAll('text')
-      .attr('font-size', 14)
-      .attr('font-weight', 700);
 
     svg.append('text')
       .attr('x', width / 2)

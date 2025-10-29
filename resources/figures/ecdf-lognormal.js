@@ -37,9 +37,8 @@
       row.append('text')
         .attr('x', 32)
         .attr('y', 4)
-        .attr('fill', '#06d6a0')
-        .attr('font-size', 16)
-        .attr('font-weight', 700)
+        .classed('d3-legend-text', true)
+        .attr('fill', item.color)
         .text(item.label);
     });
   }
@@ -112,14 +111,10 @@
       .attr('transform', `translate(0,${height})`)
       .call(d3.axisBottom(xScale).ticks(8))
       .classed('d3-axis', true);
-    xAxisGroup.selectAll('text')
-      .attr('font-size', 16);
 
     const yAxisGroup = svg.append('g')
       .call(d3.axisLeft(yScale).ticks(6))
       .classed('d3-axis', true);
-    yAxisGroup.selectAll('text')
-      .attr('font-size', 16);
 
     svg.append('text')
       .attr('x', width / 2)
@@ -139,8 +134,8 @@
     svg.append('text')
       .attr('x', width - 220)
       .attr('y', height - 44)
+      .classed('d3-chart-body-text', true)
       .attr('fill', '#ff139dff')
-      .attr('font-size', 16)
       .text(`Sample size: ${data.length}`);
 
     formatLegend(svg, [

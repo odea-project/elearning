@@ -128,48 +128,33 @@
       .call(xAxis)
       .classed('d3-axis', true);
 
-    xAxisGroup.selectAll('text')
-      .style('font-size', '16px')
-      .style('font-weight', '600');
-
-    svg.selectAll('.x-axis line, .x-axis path')
-      .style('stroke-width', '2px');
-
     const yAxisGroup = svg.append('g')
       .attr('class', 'y-axis')
       .call(yAxis)
       .classed('d3-axis', true);
-
-    yAxisGroup.selectAll('text')
-      .style('font-size', '16px');
-
-    svg.selectAll('.y-axis line, .y-axis path')
-      .style('stroke-width', '2px');
     
     // Labels
     svg.append('text')
       .attr('x', innerWidth / 2)
       .attr('y', innerHeight + 60)
-      .style('text-anchor', 'middle')
+      .attr('text-anchor', 'middle')
       .classed('d3-axis-label', true)
       .text('Monitoring Site');
-    
+
     svg.append('text')
       .attr('transform', 'rotate(-90)')
       .attr('x', -innerHeight / 2)
       .attr('y', -55)
-      .style('text-anchor', 'middle')
+      .attr('text-anchor', 'middle')
       .classed('d3-axis-label', true)
       .text('Nitrate Concentration (mg/L)');
-    
+
     // Title
     svg.append('text')
       .attr('x', innerWidth / 2)
       .attr('y', -30)
-      .style('text-anchor', 'middle')
-      .style('fill', '#ff139dff')
-      .style('font-size', '24px')
-      .style('font-weight', 'bold')
+      .attr('text-anchor', 'middle')
+      .classed('d3-chart-title', true)
       .text('Water Quality Comparison Across Monitoring Sites');
     
     // Draw boxplots
@@ -283,8 +268,7 @@
     legend.append('text')
       .attr('x', 35)
       .attr('y', 10)
-      .style('fill', '#fff')
-      .style('font-size', '14px')
+      .classed('d3-legend-text', true)
       .text('Median');
     
     // Mean diamond
@@ -301,8 +285,7 @@
     legend.append('text')
       .attr('x', 35)
       .attr('y', 35)
-      .style('fill', '#fff')
-      .style('font-size', '14px')
+      .classed('d3-legend-text', true)
       .text('Mean');
     
     // Outlier
@@ -317,8 +300,7 @@
     legend.append('text')
       .attr('x', 35)
       .attr('y', 55)
-      .style('fill', '#fff')
-      .style('font-size', '14px')
+      .classed('d3-legend-text', true)
       .text('Outlier');
   };
 })();

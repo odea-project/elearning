@@ -79,25 +79,18 @@
       .attr('class', 'ecdf-label')
       .attr('x', d => xScale(d.x) + 6)
       .attr('y', d => yScale(d.y) - 6)
+      .classed('d3-chart-body-text', true)
       .attr('fill', COLOR_AXIS)
-      .attr('font-size', 13)
-      .attr('font-weight', 700)
       .text(d => `${(d.y * 100).toFixed(0)}%`);
 
     const xAxisGroup = svg.append('g')
       .attr('transform', `translate(0,${height})`)
       .call(d3.axisBottom(xScale).ticks(SAMPLE_VALUES.length + 1))
       .classed('d3-axis', true);
-    xAxisGroup.selectAll('text')
-      .attr('font-size', 16)
-      .attr('font-weight', 700);
 
     const yAxisGroup = svg.append('g')
       .call(d3.axisLeft(yScale).ticks(5))
       .classed('d3-axis', true);
-    yAxisGroup.selectAll('text')
-      .attr('font-size', 16)
-      .attr('font-weight', 700);
 
     svg.append('text')
       .attr('x', width / 2)
@@ -117,9 +110,9 @@
     svg.append('text')
       .attr('x', Math.min(width - 160, width * 0.4))
       .attr('y', 0)
+      .classed('d3-chart-title', true)
+      .classed('d3-chart-title--small', true)
       .attr('fill', COLOR_AXIS)
-      .attr('font-size', 16)
-      .attr('font-weight', 700)
       .text('Empirical CDF for [2, 3, 5, 8]');
   };
 })();

@@ -24,13 +24,13 @@
       
       // Create rainfall events on specific days (peaks)
       if ([5, 6, 15, 23, 24].includes(i)) {
-        // Rainfall event: high concentration (1-2 µg/L)
+        // Rainfall event: high concentration (1-2 ug/L)
         concentration = 1.0 + rng() * 1.0;
       } else if ([4, 7, 14, 16, 22, 25].includes(i)) {
-        // Pre/post rainfall: moderate increase (0.2-0.5 µg/L)
+        // Pre/post rainfall: moderate increase (0.2-0.5 ug/L)
         concentration = 0.2 + rng() * 0.3;
       } else {
-        // Normal conditions: low baseline (0.01-0.08 µg/L)
+        // Normal conditions: low baseline (0.01-0.08 ug/L)
         concentration = 0.01 + rng() * 0.07;
       }
       
@@ -63,7 +63,7 @@
     const q99 = getQuantile(0.99);
     
     // EU water quality threshold (example)
-    const euThreshold = 0.5; // µg/L
+    const euThreshold = 0.5; // ug/L
     
     const width = 800;
     const height = 820;
@@ -100,28 +100,16 @@
       .call(xAxis)
       .classed('d3-axis', true);
 
-    xAxisGroup.selectAll('text')
-      .style('font-size', '16px');
-
-    svg.selectAll('.x-axis line, .x-axis path')
-      .style('stroke-width', '2px');
-
     const yAxisGroup = svg.append('g')
       .attr('class', 'y-axis')
       .call(yAxis)
       .classed('d3-axis', true);
 
-    yAxisGroup.selectAll('text')
-      .style('font-size', '18px');
-
-    svg.selectAll('.y-axis line, .y-axis path')
-      .style('stroke-width', '2px');
-    
     // Labels
     svg.append('text')
       .attr('x', innerWidth / 2)
       .attr('y', innerHeight + 60)
-      .style('text-anchor', 'middle')
+      .attr('text-anchor', 'middle')
       .classed('d3-axis-label', true)
       .classed('d3-axis-label--large', true)
       .text('Day of Month');
@@ -130,19 +118,19 @@
       .attr('transform', 'rotate(-90)')
       .attr('x', -innerHeight / 2)
       .attr('y', -65)
-      .style('text-anchor', 'middle')
+      .attr('text-anchor', 'middle')
       .classed('d3-axis-label', true)
       .classed('d3-axis-label--large', true)
-      .text('Terbuthylazine Concentration (µg/L)');
+      .text('Terbuthylazine Concentration (ug/L)');
     
     // Title
     svg.append('text')
       .attr('x', innerWidth / 2)
       .attr('y', -50)
-      .style('text-anchor', 'middle')
-      .style('fill', '#ff139dff')
-      .style('font-size', '26px')
-      .style('font-weight', 'bold')
+      .attr('text-anchor', 'middle')
+      .classed('d3-chart-title', true)
+      .classed('d3-chart-title--large', true)
+      .attr('fill', '#ff139dff')
       .text('Pesticide Monitoring (30 Days)');
     
     // EU Threshold line
@@ -158,11 +146,10 @@
     svg.append('text')
       .attr('x', innerWidth - 10)
       .attr('y', yScale(euThreshold) - 8)
-      .style('text-anchor', 'end')
-      .style('fill', '#ef476f')
-      .style('font-size', '16px')
-      .style('font-weight', '600')
-      .text('EU Threshold (0.5 µg/L)');
+      .attr('text-anchor', 'end')
+      .classed('d3-chart-body-text', true)
+      .attr('fill', '#ef476f')
+      .text('EU Threshold (0.5 ug/L)');
     
     // Rainfall event highlights (background)
     const rainfallDays = [5, 6, 15, 23, 24];
@@ -224,11 +211,10 @@
         
         tooltip.append('text')
           .attr('y', -10)
-          .style('text-anchor', 'middle')
-          .style('fill', '#ff139dff')
-          .style('font-size', '14px')
-          .style('font-weight', '600')
-          .text(`Day ${d.day}: ${d.concentration.toFixed(3)} µg/L`);
+          .attr('text-anchor', 'middle')
+          .classed('d3-chart-body-text', true)
+          .attr('fill', '#ff139dff')
+          .text(`Day ${d.day}: ${d.concentration.toFixed(3)} ug/L`);
       })
       .on('mouseout', function(event, d) {
         d3.select(this)
@@ -254,11 +240,10 @@
       .attr('class', 'mean-label')
       .attr('x', 10)
       .attr('y', yScale(mean) - 8)
-      .style('fill', '#9d4edd')
-      .style('font-size', '15px')
-      .style('font-weight', '600')
+      .classed('d3-chart-body-text', true)
+      .attr('fill', '#9d4edd')
       .style('display', 'none')
-      .text(`Mean (${mean.toFixed(3)} µg/L)`);
+      .text(`Mean (${mean.toFixed(3)} ug/L)`);
     
     // Quantile lines (initially hidden)
     const quantileLines = svg.append('g')
@@ -286,9 +271,8 @@
       quantileLines.append('text')
         .attr('x', innerWidth * 0.8 + 10)
         .attr('y', yScale(q.value) + 4)
-        .style('fill', q.color)
-        .style('font-size', '13px')
-        .style('font-weight', '600')
+        .classed('d3-chart-body-text', true)
+        .attr('fill', q.color)
         .text(`${q.label} (${q.value.toFixed(3)})`);
     });
     
@@ -318,8 +302,8 @@
     legend.append('text')
       .attr('x', 12)
       .attr('y', 5)
-      .style('fill', '#ffffffff')
-      .style('font-size', '14px')
+      .classed('d3-legend-text', true)
+      .attr('fill', '#ffffff')
       .text('Normal Conditions');
     
     legend.append('circle')
@@ -333,8 +317,8 @@
     legend.append('text')
       .attr('x', 12)
       .attr('y', 35)
-      .style('fill', '#ffffffff')
-      .style('font-size', '14px')
+      .classed('d3-legend-text', true)
+      .attr('fill', '#ffffff')
       .text('Rainfall Event');
     
     legend.append('rect')
@@ -348,8 +332,8 @@
     legend.append('text')
       .attr('x', 12)
       .attr('y', 65)
-      .style('fill', '#ffffffff')
-      .style('font-size', '14px')
+      .classed('d3-legend-text', true)
+      .attr('fill', '#ffffff')
       .text('Rain Period');
     
     // Button handlers

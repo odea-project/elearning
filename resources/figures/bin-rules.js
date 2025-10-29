@@ -148,11 +148,9 @@
         .attr('x', panelWidth / 2)
         .attr('y', -2)
         .attr('text-anchor', 'middle')
-        .classed('d3-axis-label', true)
-        .classed('d3-axis-label--small', true)
+        .classed('d3-chart-title', true)
+        .classed('d3-chart-title--small', true)
         .attr('fill', COLORS[hist.key] || '#9efcff')
-        .attr('font-size', 15)
-        .attr('font-weight', 800)
         .text(hist.label);
 
       // panel.append('text')

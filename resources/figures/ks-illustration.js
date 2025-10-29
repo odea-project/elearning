@@ -113,25 +113,18 @@
     svg.append('text')
       .attr('x', xScale(data.maxDiff.x) + 8)
       .attr('y', yScale((data.maxDiff.emp + data.maxDiff.theo) / 2))
+      .classed('d3-chart-body-text', true)
       .attr('fill', COLOR_HIGHLIGHT)
-      .attr('font-size', 16)
-      .attr('font-weight', 700)
       .text(`D = ${data.maxDiff.diff.toFixed(2)}`);
 
     const xAxisGroup = svg.append('g')
       .attr('transform', `translate(0,${height})`)
       .call(d3.axisBottom(xScale).ticks(6))
       .classed('d3-axis', true);
-    xAxisGroup.selectAll('text')
-      .attr('font-size', 16)
-      .attr('font-weight', 700);
 
     const yAxisGroup = svg.append('g')
       .call(d3.axisLeft(yScale).ticks(5))
       .classed('d3-axis', true);
-    yAxisGroup.selectAll('text')
-      .attr('font-size', 16)
-      .attr('font-weight', 700);
 
     svg.append('text')
       .attr('x', width / 2)
@@ -171,9 +164,7 @@
       row.append('text')
         .attr('x', 32)
         .attr('y', 4)
-        .attr('fill', COLOR_AXIS)
-        .attr('font-size', 16)
-        .attr('font-weight', 700)
+        .classed('d3-legend-text', true)
         .text(item.label);
     });
   };

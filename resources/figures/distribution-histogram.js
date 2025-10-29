@@ -66,9 +66,7 @@
     group.append('text')
       .attr('x', 34)
       .attr('y', 5)
-      .attr('fill', '#ff139dff')
-      .attr('font-size', 16)
-      .attr('font-weight', 800)
+      .classed('d3-legend-text', true)
       .text(label);
   }
 
@@ -260,9 +258,8 @@
       svg.append('text')
         .attr('x', xScale(meanValue) + 6)
         .attr('y', 24 + index * 14)
+        .classed('d3-chart-body-text', true)
         .attr('fill', dataset.key === 'lognormal' ? '#06d6a0' : '#ff6b35')
-        .attr('font-size', 14)
-        .attr('font-weight', 700)
         .text(`${dataset.key === 'lognormal' ? 'NO3-' : 'Temp'} mean ${meanValue.toFixed(2)}`);
     });
 
@@ -272,17 +269,9 @@
       .call(d3.axisBottom(xScale).ticks(8))
       .classed('d3-axis', true);
 
-    xAxisGroup.selectAll('text')
-      .attr('font-size', 14)
-      .attr('font-weight', 700);
-
     const yAxisGroup = svg.append('g')
       .call(d3.axisLeft(yScale).ticks(6))
       .classed('d3-axis', true);
-
-    yAxisGroup.selectAll('text')
-      .attr('font-size', 14)
-      .attr('font-weight', 700);
 
     // Labels & Titel
     svg.append('text')

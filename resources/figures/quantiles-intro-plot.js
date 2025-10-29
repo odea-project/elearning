@@ -123,31 +123,17 @@
       .call(xAxis)
       .classed('d3-axis', true);
 
-    xAxisGroup.selectAll('text')
-      .style('font-size', '20px');
-
-    svg.selectAll('.x-axis line, .x-axis path')
-      .style('stroke-width', '2px');
-
     const yAxisGroup = svg.append('g')
       .attr('class', 'y-axis')
       .call(yAxis)
       .classed('d3-axis', true);
 
-    yAxisGroup.selectAll('text')
-      .style('font-size', '20px');
-
-    svg.selectAll('.y-axis line, .y-axis path')
-      .style('stroke-width', '2px');
-
-    // Labels
+        // Labels
     svg.append('text')
       .attr('class', 'raw-x-label d3-axis-label d3-axis-label--large')
       .attr('x', innerWidth / 2)
       .attr('y', innerHeight + 48)
-      .style('text-anchor', 'middle')
-      .classed('d3-axis-label', true)
-      .classed('d3-axis-label--large', true)
+      .attr('text-anchor', 'middle')
       .text('Measurement Index');
 
     svg.append('text')
@@ -155,25 +141,25 @@
       .attr('transform', 'rotate(-90)')
       .attr('x', -innerHeight / 2)
       .attr('y', -42)
-      .style('text-anchor', 'middle')
-      .text('NO₃ (mg/L)');
+      .attr('text-anchor', 'middle')
+      .text('NO3- (mg/L)');
 
     svg.append('text')
       .attr('x', innerWidth / 2)
       .attr('y', -30)
-      .style('text-anchor', 'middle')
-      .style('fill', '#ff00eaff')
-      .style('font-size', '25px')
-      .style('font-weight', 'bold')
+      .attr('text-anchor', 'middle')
+      .classed('d3-chart-title', true)
+      .classed('d3-chart-title--large', true)
+      .attr('fill', '#ff00eaff')
       .text('Three Rivers - Nitrate Monitoring');
 
     svg.append('text')
       .attr('x', innerWidth / 2)
       .attr('y', -8)
-      .style('text-anchor', 'middle')
-      .style('fill', '#ff00eaff')
-      .style('font-size', '20px')
-      .text('EU Threshold: 50 mg/L  •  River A: 100 samples  •  River B: 400 samples  •  River C: 1400 samples');
+      .attr('text-anchor', 'middle')
+      .classed('d3-chart-subtitle', true)
+      .attr('fill', '#ff00eaff')
+      .text('EU Threshold: 50 mg/L | River A: 100 samples | River B: 400 samples | River C: 1400 samples');
 
     // Threshold line
     svg.append('line')
@@ -188,10 +174,9 @@
     svg.append('text')
       .attr('x', innerWidth - 10)
       .attr('y', yScale(threshold) - 8)
-      .style('text-anchor', 'end')
-      .style('fill', '#ffd60a')
-      .style('font-size', '13px')
-      .style('font-weight', '600')
+      .attr('text-anchor', 'end')
+      .classed('d3-chart-body-text', true)
+      .attr('fill', '#ffd60a')
       .text('EU Threshold (50 mg/L)');
 
     // Legend
@@ -209,9 +194,8 @@
       legend.append('text')
         .attr('x', 15)
         .attr('y', i * 30 + 5)
-        .style('fill', '#ff00eaff')
-        .style('font-size', '20px')
-        .style('font-weight', '600')
+        .classed('d3-legend-text', true)
+        .attr('fill', '#ff00eaff')
         .text(`River ${river} (n=${samples})`);
     });
 
@@ -254,21 +238,12 @@
         .call(categoryAxis)
         .classed('d3-axis', true);
 
-      meanXAxis.selectAll('text')
-        .style('font-size', '20px')
-        .style('font-weight', '600');
-
-      meanGroup.selectAll('.mean-x-axis line, .mean-x-axis path')
-        .style('stroke-width', '2px');
-
       // X-axis label
       meanGroup.append('text')
         .attr('class', 'mean-x-label d3-axis-label d3-axis-label--large')
         .attr('x', innerWidth / 2)
         .attr('y', innerHeight + 48)
-        .style('text-anchor', 'middle')
-        .classed('d3-axis-label', true)
-        .classed('d3-axis-label--large', true)
+        .attr('text-anchor', 'middle')
         .text('River');
 
       const bands = [
@@ -306,11 +281,10 @@
         meanGroup.append('text')
           .attr('x', xStart + categoryWidth / 2)
           .attr('y', yScale(b.stats.mean) - 10)
-          .style('text-anchor', 'middle')
-          .style('fill', colors[b.river])
-          .style('font-size', '12px')
-          .style('font-weight', '700')
-          .text(`μ=${b.stats.mean.toFixed(1)}, σ=${b.stats.sd.toFixed(1)}`);
+          .attr('text-anchor', 'middle')
+          .classed('d3-chart-body-text', true)
+          .attr('fill', colors[b.river])
+          .text(`mean=${b.stats.mean.toFixed(1)}, sd=${b.stats.sd.toFixed(1)}`);
       });
     };
 
@@ -353,36 +327,26 @@
         .call(qXAxis)
         .classed('d3-axis', true);
 
-      quantXAxis.selectAll('text')
-        .style('font-size', '25px');
-
-      quantGroup.selectAll('.qx-axis line, .qx-axis path')
-        .style('stroke-width', '2px');
 
       const quantYAxis = quantGroup.append('g')
         .attr('class', 'qy-axis')
         .call(qYAxis)
         .classed('d3-axis', true);
 
-      quantYAxis.selectAll('text')
-        .style('font-size', '25px');
-
-      quantGroup.selectAll('.qy-axis line, .qy-axis path')
-        .style('stroke-width', '2px');
 
       // Axis labels for quantile view
       quantGroup.append('text')
         .attr('class', 'quant-x-label d3-axis-label d3-axis-label--large')
         .attr('x', innerWidth / 2)
         .attr('y', innerHeight + 48)
-        .style('text-anchor', 'middle')
+        .attr('text-anchor', 'middle')
         .text('Percentile');
 
       quantGroup.append('text')
         .attr('transform', 'rotate(-90)')
         .attr('x', -innerHeight / 2)
         .attr('y', -42)
-        .style('text-anchor', 'middle')
+        .attr('text-anchor', 'middle')
         .text('NO₃ (mg/L)');
 
       // Draw quantile curves for each river
@@ -444,9 +408,8 @@
         qLegend.append('text')
           .attr('x', 25)
           .attr('y', i * 25 + 5)
-          .style('fill', '#ff00eaff')
-          .style('font-size', '25px')
-          .style('font-weight', '600')
+          .classed('d3-legend-text', true)
+          .attr('fill', '#ff00eaff')
           .text(`River ${river}`);
       });
     };

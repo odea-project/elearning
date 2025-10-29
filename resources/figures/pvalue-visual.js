@@ -102,9 +102,8 @@
         .attr('x', xPos + (value > 0 ? 6 : -6))
         .attr('y', yScale(normalPdf(value)) - 10)
         .attr('text-anchor', value > 0 ? 'start' : 'end')
+        .classed('d3-chart-body-text', true)
         .attr('fill', COLOR_AXIS)
-        .attr('font-size', 13)
-        .attr('font-weight', 700)
         .text(label);
     };
 
@@ -115,16 +114,10 @@
       .attr('transform', `translate(0,${height})`)
       .call(d3.axisBottom(xScale).ticks(7))
       .classed('d3-axis', true);
-    axisBottom.selectAll('text')
-      .attr('font-size', 14)
-      .attr('font-weight', 700);
 
     const axisLeft = g.append('g')
       .call(d3.axisLeft(yScale).ticks(5))
       .classed('d3-axis', true);
-    axisLeft.selectAll('text')
-      .attr('font-size', 14)
-      .attr('font-weight', 700);
 
   g.append('text')
     .attr('x', width / 2)
@@ -146,18 +139,16 @@
     g.append('text')
       .attr('x', width * 0.57)
       .attr('y', yScale(normalPdf(observed)) - 36)
+      .classed('d3-chart-body-text', true)
       .attr('fill', COLOR_FILL)
-      .attr('font-size', 13)
-      .attr('font-weight', 700)
       .text('Shaded tails = p-value');
 
     g.append('text')
       .attr('x', width - 10)
       .attr('y', 20)
       .attr('text-anchor', 'end')
+      .classed('d3-chart-body-text', true)
       .attr('fill', COLOR_AXIS)
-      .attr('font-size', 12)
-      .attr('font-weight', 600)
-      .text('Two-sided p ≈ 0.10');
+      .text('Two-sided p ~= 0.10');
   };
 })();

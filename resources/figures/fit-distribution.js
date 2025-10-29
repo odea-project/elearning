@@ -181,9 +181,8 @@
       histGroup.append('text')
         .attr('x', meanX + 6)
         .attr('y', 18)
+        .classed('d3-chart-body-text', true)
         .attr('fill', COLOR_EMPIRICAL)
-        .attr('font-size', 14)
-        .attr('font-weight', 700)
         .text(`Sample mean ≈ ${sampleMean.toFixed(2)} mg/L`);
     }
 
@@ -192,17 +191,9 @@
       .call(d3.axisBottom(histXScale).ticks(6))
       .classed('d3-axis', true);
 
-    histXAxis.selectAll('text')
-      .attr('font-size', 14)
-      .attr('font-weight', 700);
-
     const histYAxis = histGroup.append('g')
       .call(d3.axisLeft(histYScale).ticks(6))
       .classed('d3-axis', true);
-
-    histYAxis.selectAll('text')
-      .attr('font-size', 14)
-      .attr('font-weight', 700);
 
     histGroup.append('text')
       .attr('x', panelWidth / 2)
@@ -283,17 +274,9 @@
       .call(d3.axisBottom(cdfXScale).ticks(6))
       .classed('d3-axis', true);
 
-    cdfXAxis.selectAll('text')
-      .attr('font-size', 14)
-      .attr('font-weight', 700);
-
     const cdfYAxis = cdfGroup.append('g')
       .call(d3.axisLeft(cdfYScale).ticks(6))
       .classed('d3-axis', true);
-
-    cdfYAxis.selectAll('text')
-      .attr('font-size', 14)
-      .attr('font-weight', 700);
 
     cdfGroup.append('text')
       .attr('x', panelWidth / 2)

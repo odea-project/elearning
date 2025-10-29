@@ -27,7 +27,12 @@ body.performance-mode {
   --r-selection-background-color: #b3d4fc;
   --r-selection-color: #000000;
   --d3-axis-text-color: rgb(0, 122, 126);
+  --d3-axis-label-text-color: rgb(0, 122, 126);
   --d3-axis-line-color: rgb(0, 122, 126);
+  --d3-title-color: #000000;
+  --d3-subtitle-color: #333333;
+  --d3-legend-text-color: #000000;
+  --d3-body-text-color: #000000;
 }
 
 /* ========================================

@@ -79,16 +79,10 @@
       .attr('transform', `translate(0,${height})`)
       .call(d3.axisBottom(xScale).ticks(7))
       .classed('d3-axis', true);
-    xAxisGroup.selectAll('text')
-      .attr('font-size', 14)
-      .attr('font-weight', 700);
 
     const yAxisGroup = svg.append('g')
       .call(d3.axisLeft(yScale).ticks(6))
       .classed('d3-axis', true);
-    yAxisGroup.selectAll('text')
-      .attr('font-size', 14)
-      .attr('font-weight', 700);
 
   svg.append('text')
     .attr('x', width / 2)
@@ -121,9 +115,7 @@
       row.append('text')
         .attr('x', 34)
         .attr('y', 4)
-        .attr('fill', COLOR_AXIS)
-        .attr('font-size', 14)
-        .attr('font-weight', 700)
+        .classed('d3-legend-text', true)
         .text(`n = ${series.n}`);
     });
   };

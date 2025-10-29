@@ -7,6 +7,18 @@
   --d3-axis-font-size: 20px;
   --d3-axis-label-font-size: 25px;
   --d3-axis-label-font-weight: 900;
+  --d3-title-color: #9efcff;
+  --d3-title-font-size: 24px;
+  --d3-title-font-weight: 800;
+  --d3-subtitle-color: #ffd166;
+  --d3-subtitle-font-size: 18px;
+  --d3-subtitle-font-weight: 600;
+  --d3-legend-text-color: #ffffff;
+  --d3-legend-font-size: 13px;
+  --d3-legend-font-weight: 700;
+  --d3-body-text-color: #9efcff;
+  --d3-body-font-size: 14px;
+  --d3-body-font-weight: 600;
 }
 
 .d3-axis text {
@@ -38,4 +50,52 @@
 
 .d3-axis-label--large {
   font-size: calc(var(--d3-axis-label-font-size) * 1.2);
+}
+
+.d3-chart-title {
+  fill: var(--d3-title-color);
+  font-family: var(--d3-axis-font-family);
+  font-weight: var(--d3-title-font-weight);
+  font-size: var(--d3-title-font-size);
+  letter-spacing: 0.02em;
+}
+
+.d3-chart-title--small {
+  font-size: calc(var(--d3-title-font-size) * 0.75);
+}
+
+.d3-chart-title--large {
+  font-size: calc(var(--d3-title-font-size) * 1.3);
+}
+
+.d3-chart-subtitle {
+  fill: var(--d3-subtitle-color);
+  font-family: var(--d3-axis-font-family);
+  font-weight: var(--d3-subtitle-font-weight);
+  font-size: var(--d3-subtitle-font-size);
+  letter-spacing: 0.015em;
+}
+
+.d3-chart-subtitle--small {
+  font-size: calc(var(--d3-subtitle-font-size) * 0.85);
+}
+
+.d3-chart-subtitle--large {
+  font-size: calc(var(--d3-subtitle-font-size) * 1.2);
+}
+
+.d3-legend-text {
+  fill: var(--d3-legend-text-color);
+  font-family: var(--d3-axis-font-family);
+  font-weight: var(--d3-legend-font-weight);
+  font-size: var(--d3-legend-font-size);
+  letter-spacing: 0.01em;
+}
+
+.d3-chart-body-text {
+  fill: var(--d3-body-text-color);
+  font-family: var(--d3-axis-font-family);
+  font-weight: var(--d3-body-font-weight);
+  font-size: var(--d3-body-font-size);
+  letter-spacing: 0.01em;
 }
