@@ -256,5 +256,5 @@ grid.addEventListener('click', function(event) {
   history.pushState({}, '', newUrl);
 
   // Load the markdown file as slides
-  loadMarkdownAsSlides(mdUrl);
+  loadMarkdownAsSlides(mdUrl, { resetToFirstSlide: true });
 });
