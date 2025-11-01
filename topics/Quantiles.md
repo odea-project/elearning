@@ -430,9 +430,82 @@ boxplot(value ~ group, data = df)
 
 <!-- /position -->
 <!-- position={row: 1, column: 2} -->
-<a href="https://webr.sh/#code=eJxdUD1PwzAQFWt%2BxcldbCmk%2BShRBzrRtQvQGTnxhViK7chxVbqw8Av4DxULCzMjEv8LxxRaGE7ye7737t09P%2B01V%2Fi61k66DkWWXO977tr3aWsUTrdY3W0GtNPTf8Ed%2Fzx7mcAtqh4tdxuLMJLQWKPAtRYRlNHSGSv1PQyOO2n0EA3okgFR0FnOIufFA1yeB2XSWJ%2BCRhA8YQE1tdpYRYs0hmweQ85iODK5r%2BIPk5W%2BkgvGYu9x8z3Q21jsaU3Juh%2BcRa5IDGQlxREszVYfkLdDXrdeVKQsYlFUmYe%2BM%2B431OOP7zgirLuAsMSIa9OF1GSSlqLk6Wg%2BaRqRlWV4ZtmcVzkJ8SpjBVrf7mmeFzPf7FnF5ZiYnB51KX04WW3CNtUOVsejHrIE6a7j1X8p%2FXi7YiRiXzinljY%3D" target="_blank">Open in WebR</a>
+<div style="display: flex; flex-direction: column; gap: 12px;">
+  <div id="boxplot-in-r-interactive"></div>
+  <div id="boxplot-in-r-plot" style="border: 0px solid #2d3a66; border-radius: 8px; min-height: 220px; display: flex; align-items: center; justify-content: center; color: #9efcffcc; font-size: 0.9em; text-align: center; padding: 12px;">
+    Run the WebR example to preview the boxplot.
+  </div>
+  <button id="boxplot-in-r-open-plot" style="padding: 8px 16px; background: #0f172a; color: #9efcff; border: 1px solid #2d3a66; border-radius: 6px; cursor: pointer; font-size: 0.85em; font-weight: 600; display: none; align-self: flex-start;">
+    <i class="fas fa-external-link-alt"></i> Popout Plot
+  </button>
+</div>
 
+<script>
+(function() {
+  const containerId = 'boxplot-in-r-interactive';
+  const plotContainerId = 'boxplot-in-r-plot';
+  const openBtnId = 'boxplot-in-r-open-plot';
+  const slideId = 'boxplot-in-r';
 
+  const code = `# Synthetic turbidity measurements for three river sites
+set.seed(42)
+df <- data.frame(
+  site = rep(c("Upstream", "Midstream", "Downstream"), each = 30),
+  turbidity = c(
+    rnorm(30, mean = 2.1, sd = 0.35),
+    rnorm(30, mean = 3.0, sd = 0.45),
+    rnorm(30, mean = 5.2, sd = 0.60)
+  )
+)
+
+boxplot(
+  turbidity ~ site,
+  data = df,
+  col = c("#1ca9c9", "#fc5185", "#f9a826"),
+  main = "River Turbidity by Site",
+  ylab = "Turbidity (NTU)",
+  xlab = ""
+)`;
+
+  const fallbackOutput = `[Simulated]
+             Upstream Midstream Downstream
+Min             1.420     2.110      3.950
+Q1              1.860     2.690      4.730
+Median          2.080     3.050      5.140
+Q3              2.320     3.330      5.570
+Max             2.890     3.940      6.340
+IQR             0.460     0.640      0.840`;
+
+  const initBoxplot = async () => {
+    const helper = await window.ensureWebRHelper();
+    await helper.initCodeAndPlotSection({
+      containerId,
+      plotContainerId,
+      code,
+      slideId,
+      fallback: () => fallbackOutput,
+      runLabel: 'Generate Boxplot (WebR)',
+      minHeight: '30px',
+      renderOptions: {
+        width: 640,
+        height: 420,
+        background: '#ffffff',
+        altText: 'Boxplot generated in WebR',
+        loadingMessage: 'Rendering boxplot...',
+        errorMessage: 'Plot rendering unavailable in offline mode.',
+        initialPlotMessage: 'Run the example to render the boxplot.'
+      },
+      popupButtonId: openBtnId
+    });
+  };
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initBoxplot, { once: true });
+  } else {
+    initBoxplot();
+  }
+})();
+</script>
 
 <!-- /position -->
 <!-- /layout -->

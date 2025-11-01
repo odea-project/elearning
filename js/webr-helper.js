@@ -7,6 +7,8 @@ class WebRHelper {
   constructor() {
     this.webRInstance = null;
     this.sectionCounter = 0;
+    this.plotSupportReady = false;
+    this.plotSupportPromise = null;
   }
 
   /**
@@ -20,6 +22,48 @@ class WebRHelper {
       await this.webRInstance.init();
     }
     return this.webRInstance;
+  }
+
+  /**
+   * Lazily ensure plotting support packages are installed and loaded.
+   * For the slim WebR build we only fetch grDevices/graphics when needed.
+   */
+  async ensurePlotSupport() {
+    if (this.plotSupportReady) {
+      return true;
+    }
+
+    if (!this.plotSupportPromise) {
+      this.plotSupportPromise = (async () => {
+        const webR = await this.ensureWebR();
+
+        try {
+          await webR.evalRVoid(`
+            for (pkg in c("grDevices", "graphics")) {
+              if (!pkg %in% loadedNamespaces()) {
+                base::loadNamespace(pkg)
+              }
+            }
+          `);
+        } catch (err) {
+          // eslint-disable-next-line no-console
+          console.warn('[WebRHelper] Loading plotting namespaces failed:', err);
+          throw err;
+        }
+
+        this.plotSupportReady = true;
+        return true;
+      })();
+
+      this.plotSupportPromise.catch(() => {
+        this.plotSupportReady = false;
+        this.plotSupportPromise = null;
+      });
+    }
+
+    await this.plotSupportPromise;
+    this.plotSupportPromise = null;
+    return this.plotSupportReady;
   }
 
   /**
@@ -56,7 +100,7 @@ class WebRHelper {
 
     container.innerHTML = `
       <div style="display: flex; flex-direction: column; gap: 10px; width: 100%;">
-        <div id="${editorId}" class="code-editor-container" style="border: 1px solid #2d3a66; border-radius: 8px; margin: 20px; display: none; text-align: left;"></div>
+        <div id="${editorId}" class="code-editor-container" style="border: 0px solid #2d3a66; border-radius: 8px; margin: 20px; display: none; text-align: left;"></div>
         <div style="display: flex; gap: 10px;">
           <button id="${toggleBtnId}" style="padding: 8px 16px; background: #2d3a66; color: #9efcff; border: 1px solid #2d3a66; border-radius: 6px; cursor: pointer; font-size: 0.9em;">
             <i class="fas fa-code"></i> Show Code
@@ -65,7 +109,7 @@ class WebRHelper {
             <i class="fas fa-play"></i> ${runLabel}
           </button>
         </div>
-        <div id="${outputId}" style="border: 1px solid #2d3a66; border-radius: 8px; overflow: hidden; min-height: ${minHeight};"></div>
+        <div id="${outputId}" style="border: 0px solid #2d3a66; border-radius: 8px; overflow: hidden; min-height: ${minHeight};"></div>
       </div>
     `;
 
@@ -100,12 +144,28 @@ class WebRHelper {
       ".cm-gutters": { fontSize: fontSize }
     });
 
+    const scrollTheme = window.EditorView.theme({
+      "&": {
+        maxHeight: "16.5em"
+      },
+      "& .cm-scroller": {
+        overflowY: "auto",
+        scrollbarWidth: "none",
+        overscrollBehavior: "contain"
+      },
+      "& .cm-scroller::-webkit-scrollbar": {
+        display: "none"
+      }
+    });
+
     const editorExtensions = [window.basicSetup];
     if (rLang.length) editorExtensions.push(rLang);
     editorExtensions.push(window.monokai, fontSizeTheme);
     
     if (!editable) {
       editorExtensions.push(window.EditorView.editable.of(false));
+    } else {
+      editorExtensions.push(scrollTheme);
     }
 
     return new window.EditorView({
@@ -271,14 +331,25 @@ class WebRHelper {
     // Create editors
     const codeEditor = this.createEditor(ids.editorId, config.code, true);
     const outputEditor = this.createEditor(ids.outputId, '', false);
+    const runBtn = document.getElementById(ids.runBtnId);
+    const toggleBtn = document.getElementById(ids.toggleBtnId);
 
     if (!codeEditor || !outputEditor) return null;
 
     // Setup buttons
     this.setupToggleButton(ids.toggleBtnId, ids.editorId, config.slideId);
-    this.setupRunButton(ids.runBtnId, codeEditor, outputEditor, config.fallback);
+    if (config.autoRun !== false) {
+      this.setupRunButton(ids.runBtnId, codeEditor, outputEditor, config.fallback);
+    }
 
-    return { codeEditor, outputEditor };
+    return {
+      codeEditor,
+      outputEditor,
+      runButton: runBtn,
+      runBtnId: ids.runBtnId,
+      toggleButton: toggleBtn,
+      toggleBtnId: ids.toggleBtnId
+    };
   }
 
   /**
@@ -299,7 +370,173 @@ class WebRHelper {
   }
 
   /**
-   * Render an R plot into a target container by capturing it as a PNG.
+   * Initialise an interactive section that executes R code and renders a plot.
+   * @param {Object} config - Configuration for the interactive section.
+   * @param {string} config.containerId - ID of the container for the interactive section.
+   * @param {string} config.plotContainerId - ID of the container that should display the plot.
+   * @param {string} config.code - R code to preload into the editor.
+   * @param {string} [config.slideId] - Reveal.js slide ID.
+   * @param {function} [config.fallback] - Fallback output generator on error.
+   * @param {string} [config.runLabel] - Custom label for the run button.
+   * @param {string} [config.minHeight] - Minimum height for the output editor.
+   * @param {Object} [config.renderOptions] - Options for renderPlot and UI behaviour.
+   * @param {string} [config.popupButtonId] - ID of a button that opens the plot in a popup.
+   * @returns {Promise<Object|null>} Interactive section handles or null on failure.
+   */
+  async initCodeAndPlotSection(config = {}) {
+    const {
+      containerId,
+      plotContainerId,
+      code,
+      slideId = null,
+      fallback = null,
+      runLabel,
+      minHeight,
+      renderOptions = {},
+      popupButtonId = null
+    } = config;
+
+    if (!containerId || !plotContainerId) {
+      console.error('[WebRHelper] initCodeAndPlotSection requires containerId and plotContainerId.');
+      return null;
+    }
+
+    const plotContainer = document.getElementById(plotContainerId);
+    if (!plotContainer) {
+      console.error(`[WebRHelper] Plot container "${plotContainerId}" not found.`);
+      return null;
+    }
+
+    const {
+      width,
+      height,
+      res,
+      background,
+      altText,
+      loadingMessage: plotLoadingMessage,
+      errorMessage: plotErrorMessage,
+      initialPlotMessage = 'Run the example to render the plot.',
+      fallbackPlotMessage = 'Plot rendering unavailable in offline mode.',
+      popupWindowFeatures = 'width=760,height=560',
+      popupTemplate = null
+    } = renderOptions || {};
+
+    plotContainer.innerHTML = `<div style="color:#ff8f00fc;">${initialPlotMessage}</div>`;
+
+    const interactive = await this.initInteractiveSection({
+      containerId,
+      code,
+      slideId,
+      fallback,
+      runLabel,
+      minHeight,
+      autoRun: false
+    });
+
+    if (!interactive) return null;
+
+    const { codeEditor, outputEditor, runButton, runBtnId } = interactive;
+    const runBtn = runButton || (runBtnId ? document.getElementById(runBtnId) : null);
+
+    if (!runBtn) {
+      console.warn('[WebRHelper] Run button not found for interactive section', containerId);
+      return interactive;
+    }
+
+    const popupBtn = popupButtonId ? document.getElementById(popupButtonId) : null;
+    if (popupBtn) {
+      popupBtn.style.display = 'none';
+    }
+
+    let latestPlotUrl = null;
+    const defaultLabel = runBtn.innerHTML;
+
+    const setOutput = (text) => {
+      const docLength = outputEditor.state.doc.length;
+      outputEditor.dispatch({
+        changes: { from: 0, to: docLength, insert: text }
+      });
+    };
+
+    runBtn.onclick = async () => {
+      const userCode = codeEditor.state.doc.toString();
+      runBtn.disabled = true;
+      runBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Running...';
+
+      if (popupBtn) {
+        popupBtn.style.display = 'none';
+      }
+
+      try {
+        const output = await this.executeR(userCode);
+        setOutput(output && output.trim().length ? output : '[No output]');
+
+        let plotUrl = null;
+        try {
+          plotUrl = await this.renderPlot({
+            containerId: plotContainerId,
+            code: userCode,
+            width,
+            height,
+            res,
+            background,
+            altText,
+            loadingMessage: plotLoadingMessage,
+            errorMessage: plotErrorMessage
+          });
+        } catch (plotErr) {
+          latestPlotUrl = null;
+          if (popupBtn) popupBtn.style.display = 'none';
+          // eslint-disable-next-line no-console
+          console.error('[WebRHelper] Plot rendering failed:', plotErr);
+        }
+
+        if (plotUrl) {
+          latestPlotUrl = plotUrl;
+          if (popupBtn) {
+            popupBtn.style.display = 'inline-flex';
+          }
+        } else if (!plotContainer.dataset.webrPlotUrl) {
+          plotContainer.innerHTML = `<div style="color:#ef476f;font-weight:600;">${plotErrorMessage || fallbackPlotMessage}</div>`;
+        }
+      } catch (err) {
+        if (typeof fallback === 'function') {
+          setOutput(fallback());
+        } else {
+          setOutput(`Error: ${err.message}`);
+        }
+        plotContainer.innerHTML = `<div style="color:#ef476f;font-weight:600;">${plotErrorMessage || fallbackPlotMessage}</div>`;
+        latestPlotUrl = null;
+      } finally {
+        runBtn.disabled = false;
+        runBtn.innerHTML = defaultLabel;
+      }
+    };
+
+    if (popupBtn) {
+      popupBtn.addEventListener('click', () => {
+        if (!latestPlotUrl) return;
+        const popup = window.open('', '_blank', popupWindowFeatures);
+        if (!popup) return;
+        popup.document.open();
+        const template = popupTemplate
+          ? popupTemplate(latestPlotUrl)
+          : '<!doctype html><html><head><title>WebR Plot</title></head>' +
+            '<body style="margin:0;background:#0d1329;display:flex;align-items:center;justify-content:center;height:100vh;">' +
+            `<img src="${latestPlotUrl}" alt="WebR plot" style="max-width:95%;height:auto;border-radius:12px;box-shadow:0 0 24px rgba(30,200,255,0.35);" />` +
+            '</body></html>';
+        popup.document.write(template);
+        popup.document.close();
+        popup.opener = null;
+        popup.focus();
+      });
+    }
+
+    return { codeEditor, outputEditor, runButton: runBtn };
+  }
+
+  /**
+   * Render an R plot into a target container by capturing it as an SVG.
    * @param {Object} config - Plot configuration
    * @param {string} config.containerId - Target container ID for the plot
    * @param {string} config.code - R code that produces a plot
@@ -324,6 +561,8 @@ class WebRHelper {
       loadingMessage = 'Generating plot...',
       errorMessage = 'Failed to generate plot.'
     } = config;
+    const svgWidthInches = (width / res).toFixed(2);
+    const svgHeightInches = (height / res).toFixed(2);
 
     if (!containerId || !code) {
       console.error('[WebRHelper] renderPlot requires containerId and code.');
@@ -343,21 +582,21 @@ class WebRHelper {
       delete container.dataset.webrPlotUrl;
     }
 
-    container.innerHTML = `<div class="webr-loading" style="padding: 1.2em; color: #9efcff; font-weight: 600;">${loadingMessage}</div>`;
+    container.innerHTML = `<div class="webr-loading" style="padding: 1.2em; color: #ff8f00fc; font-weight: 600;">${loadingMessage}</div>`;
 
     try {
+      await this.ensurePlotSupport();
       const webR = await this.ensureWebR();
 
       const plotScript = `
         webr_capture_plot <- function() {
-          plot_file <- tempfile(fileext = ".png")
+          plot_file <- tempfile(fileext = ".svg")
           on.exit(unlink(plot_file), add = TRUE)
 
-          png(
+          svg(
             filename = plot_file,
-            width = ${width},
-            height = ${height},
-            res = ${res},
+            width = ${svgWidthInches},
+            height = ${svgHeightInches},
             bg = "${background}"
           )
 
@@ -371,12 +610,12 @@ class WebRHelper {
             dev.off()
           }
 
-          size <- file.info(plot_file)$size
-          if (is.na(size) || size <= 0) {
+          svg_text <- paste(readLines(plot_file, warn = FALSE), collapse = "\n")
+          if (!nzchar(svg_text)) {
             stop("Plot file is empty.")
           }
 
-          readBin(plot_file, "raw", size)
+          svg_text
         }
 
         tryCatch(
@@ -390,14 +629,12 @@ class WebRHelper {
         )
       `;
 
-      const rawResult = await webR.evalRRaw(plotScript);
-      const plotBytes = rawResult instanceof Uint8Array ? rawResult : new Uint8Array(rawResult || []);
-      const byteLength = plotBytes.length;
-      if (!byteLength) {
+      const svgString = (await webR.evalRString(plotScript) || '').trim();
+      if (!svgString) {
         throw new Error('Plot generation returned empty data.');
       }
 
-      const blob = new Blob([plotBytes], { type: 'image/png' });
+      const blob = new Blob([svgString], { type: 'image/svg+xml' });
       const objectUrl = URL.createObjectURL(blob);
 
       container.innerHTML = '';
