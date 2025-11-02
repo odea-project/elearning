@@ -94,27 +94,91 @@ description: "How to characterize, model, and test water quality distributions."
 ## Histograms in R
 <!-- layout={rows: 1, columns: 2} -->
 <!-- position={row: 1, column: 1} -->
+**Using the `hist()` Function**
+
+-! R provides `hist()` to create histograms with automatic binning
+-! `breaks = "FD"` uses Freedman-Diaconis rule for optimal bin width
+
+***
+
+**Syntax:**
 ```r
+hist(x, breaks = "FD", col = "blue")
+```
+
+-: `breaks`: binning method ("FD", "Scott", "Sturges", or number)
+-: `col`, `border`: customize colors
+
+***
+
+<!-- /position -->
+<!-- position={row: 1, column: 2} -->
+<div style="display: flex; flex-direction: column; gap: 12px;">
+  <div id="histogram-in-r-interactive"></div>
+  <div id="histogram-in-r-plot" style="border: 0px solid #2d3a66; border-radius: 8px; min-height: 220px; display: flex; align-items: center; justify-content: center; color: #9efcffcc; font-size: 0.9em; text-align: center; padding: 12px;">
+    Run the WebR example to preview the histogram.
+  </div>
+  <button id="histogram-in-r-open-plot" style="padding: 8px 16px; background: #0f172a; color: #9efcff; border: 1px solid #2d3a66; border-radius: 6px; cursor: pointer; font-size: 0.85em; font-weight: 600; display: none; align-self: flex-start;">
+    <i class="fas fa-external-link-alt"></i> Popout Plot
+  </button>
+</div>
+
+<script>
+(function() {
+  const containerId = 'histogram-in-r-interactive';
+  const plotContainerId = 'histogram-in-r-plot';
+  const openBtnId = 'histogram-in-r-open-plot';
+  const slideId = 'histogram_r';
+
+  const code = `# Generate log-normal data and create histogram
 set.seed(1)
 x <- rlnorm(1000)
 
-x |>
-  (\(z) hist(z,
-             breaks = "FD",   # sensible automatic binning
-             col = "blue",
-             border = "white",
-             main = "Histogram of x",
-             xlab = "x"))()
-```
-<!-- /position -->
-<!-- position={row: 1, column: 2} -->
-<div style="display: flex; align-items: center; justify-content: center; height: 100%;">
-  <a href="https://webr.sh/#code=eJxljj0KwkAQhfucYojNLqhJerUSsRbsBJk1o1ncH9mdYBA7T%2BAd7LyBtbfxEiadP6%2Bb9733mOvl5tDSfelYs6GyGC5uB%2BTqkVXeUnYkta4jheyTl8j4fEXiYSQqRSGTBkYDCMb5YEWR57lMWus8SQDESpwkVDqyOPXb%2B0MqEO4jjCGdTdN%2Ba%2FQgkotaGQKs2VtkvQGlndNu913deNP1lKkp%2FV31oaTQ0WOl%2BQ9b1K6D8%2FYjvwtowW%2Bh%2BU01BlWXalIphUzeG4JSeg%3D%3D"
-     style="padding: 12px 18px; background: #1a2340; border: 1px solid #2d3a66; border-radius: 6px; color: #9efcff; font-weight: 600; text-decoration: none;"
-     target="_blank" rel="noopener">
-    Try it in webR ↗
-  </a>
-</div>
+hist(x,
+     breaks = "FD",
+     col = "blue",
+     border = "white",
+     main = "Histogram of x",
+     xlab = "x")`;
+
+  const fallbackOutput = `[Simulated]
+Histogram with Freedman-Diaconis breaks:
+Bins: ~25-30 bins
+Range: 0.1 to 20+
+Peak: around 1-2
+Right-skewed distribution`;
+
+  const initHistogram = async () => {
+    const helper = await window.ensureWebRHelper();
+    await helper.initCodeAndPlotSection({
+      containerId,
+      plotContainerId,
+      code,
+      slideId,
+      fallback: () => fallbackOutput,
+      runLabel: 'Generate Histogram (WebR)',
+      minHeight: '30px',
+      renderOptions: {
+        width: 640,
+        height: 420,
+        background: '#ffffff',
+        altText: 'Histogram generated in WebR',
+        loadingMessage: 'Rendering histogram...',
+        errorMessage: 'Plot rendering unavailable in offline mode.',
+        initialPlotMessage: 'Run the example to render the histogram.'
+      },
+      popupButtonId: openBtnId
+    });
+  };
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initHistogram, { once: true });
+  } else {
+    initHistogram();
+  }
+})();
+</script>
+
 <!-- /position -->
 <!-- /layout -->
 
