@@ -512,3 +512,56 @@ body.performance-mode iframe {
 body.performance-mode .title {
   background-color: rgba(255, 255, 255, 0.7)!important;
 }
+
+/* ========================================
+   BLUE DIV BOXES - CONVERT TO TEAL
+   Override #1a4d7a (dark blue) with #008080 (teal)
+   ======================================== */
+
+/* Solid blue backgrounds → solid teal backgrounds */
+body.performance-mode div[style*="background: #1a4d7a"],
+body.performance-mode div[style*="background:#1a4d7a"] {
+  background: #008080 !important;
+}
+
+/* Blue backgrounds with transparency → teal with transparency */
+body.performance-mode div[style*="background: #1a4d7a67"],
+body.performance-mode div[style*="background:#1a4d7a67"] {
+  background: rgba(0, 128, 128, 0.4) !important;
+}
+
+/* Blue borders → teal borders */
+body.performance-mode div[style*="border: 2px solid #1a4d7a"],
+body.performance-mode div[style*="border:2px solid #1a4d7a"],
+body.performance-mode div[style*="border-left: 4px solid #1a4d7a"],
+body.performance-mode div[style*="border-left:4px solid #1a4d7a"] {
+  border-color: #008080 !important;
+}
+
+/* Rgba backgrounds with blue → rgba with teal */
+body.performance-mode div[style*="background: rgba(26, 77, 122, 0.2)"],
+body.performance-mode div[style*="background:rgba(26, 77, 122, 0.2)"],
+body.performance-mode div[style*="background: rgba(26,77,122,0.2)"],
+body.performance-mode div[style*="background:rgba(26,77,122,0.2)"] {
+  background: rgba(0, 128, 128, 0.15) !important;
+}
+
+/* Ensure text remains readable on teal background */
+body.performance-mode div[style*="background: #1a4d7a"] *,
+body.performance-mode div[style*="background:#1a4d7a"] *,
+body.performance-mode div[style*="background: rgba(26, 77, 122"] * {
+  color: #000000 !important;
+}
+
+/* Keep white text for solid teal backgrounds with explicit white text */
+body.performance-mode div[style*="background: #1a4d7a"][style*="color: #ffffff"],
+body.performance-mode div[style*="background:#1a4d7a"][style*="color:#ffffff"],
+body.performance-mode div[style*="background: #1a4d7a"][style*="color:#ffffff"] {
+  color: #ffffff !important;
+}
+
+body.performance-mode div[style*="background: #1a4d7a"][style*="color: #ffffff"] *,
+body.performance-mode div[style*="background:#1a4d7a"][style*="color:#ffffff"] *,
+body.performance-mode div[style*="background: #1a4d7a"][style*="color:#ffffff"] * {
+  color: #ffffff !important;
+}

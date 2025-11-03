@@ -178,6 +178,155 @@ class WebRHelper {
   }
 
   /**
+   * Create and show an overlay for large output
+   * @param {string} content - Output content to display
+   * @param {string} overlayId - Unique ID for the overlay
+   */
+  showOutputOverlay(content, overlayId = 'webr-output-overlay') {
+    // Remove existing overlay if present
+    const existing = document.getElementById(overlayId);
+    if (existing) {
+      existing.remove();
+    }
+
+    // Create overlay
+    const overlay = document.createElement('div');
+    overlay.id = overlayId;
+    overlay.style.cssText = `
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      z-index: 10000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      animation: fadeIn 0.2s ease-in;
+    `;
+
+    // Create content container
+    const container = document.createElement('div');
+    container.style.cssText = `
+      background: #1a2340;
+      border: 2px solid #2d3a66;
+      border-radius: 12px;
+      padding: 20px;
+      max-width: 80%;
+      max-height: 80%;
+      overflow: auto;
+      position: relative;
+      box-shadow: 0 4px 20px rgba(0, 255, 255, 0.3);
+    `;
+
+    // Create close button
+    const closeBtn = document.createElement('button');
+    closeBtn.innerHTML = '<i class="fas fa-times"></i>';
+    closeBtn.style.cssText = `
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: #ef476f;
+      color: #ffffff;
+      border: none;
+      border-radius: 50%;
+      width: 32px;
+      height: 32px;
+      font-size: 16px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1;
+      transition: background 0.2s;
+    `;
+    closeBtn.onmouseover = () => closeBtn.style.background = '#d93d5a';
+    closeBtn.onmouseout = () => closeBtn.style.background = '#ef476f';
+    closeBtn.onclick = () => overlay.remove();
+
+    // Create output display
+    const outputDiv = document.createElement('div');
+    outputDiv.style.cssText = `
+      font-family: 'Fira Code', 'Courier New', monospace;
+      font-size: 1em;
+      color: #9efcff;
+      background: #0d1329;
+      padding: 15px;
+      border-radius: 8px;
+      white-space: pre-wrap;
+      word-break: break-word;
+      margin-top: 20px;
+      line-height: 1.5;
+    `;
+    outputDiv.textContent = content;
+
+    // Create title
+    const title = document.createElement('h3');
+    title.textContent = 'Output';
+    title.style.cssText = `
+      color: #9efcff;
+      margin: 0 40px 10px 0;
+      font-size: 1.3em;
+    `;
+
+    // Assemble overlay
+    container.appendChild(closeBtn);
+    container.appendChild(title);
+    container.appendChild(outputDiv);
+    overlay.appendChild(container);
+    document.body.appendChild(overlay);
+
+    // Close on background click
+    overlay.onclick = (e) => {
+      if (e.target === overlay) {
+        overlay.remove();
+      }
+    };
+
+    // Close on ESC key
+    const escHandler = (e) => {
+      if (e.key === 'Escape') {
+        overlay.remove();
+        document.removeEventListener('keydown', escHandler);
+      }
+    };
+    document.addEventListener('keydown', escHandler);
+
+    // Add fade-in animation if not already defined
+    if (!document.getElementById('webr-overlay-style')) {
+      const style = document.createElement('style');
+      style.id = 'webr-overlay-style';
+      style.textContent = `
+        @keyframes fadeIn {
+          from { opacity: 0; }
+          to { opacity: 1; }
+        }
+      `;
+      document.head.appendChild(style);
+    }
+  }
+
+  /**
+   * Count lines in text content
+   * @param {string} text - Text to count lines in
+   * @returns {number} Number of lines
+   */
+  countLines(text) {
+    if (!text) return 0;
+    return text.split('\n').length;
+  }
+
+  /**
+   * Check if output should be shown in overlay (more than 5 lines)
+   * @param {string} output - Output text to check
+   * @returns {boolean} True if should show in overlay
+   */
+  shouldShowOverlay(output) {
+    return this.countLines(output) > 5;
+  }
+
+  /**
    * Execute R code using WebR
    * @param {string} code - R code to execute
    * @returns {Promise<string>} Output from R execution
@@ -272,23 +421,59 @@ class WebRHelper {
 
       try {
         const output = await this.executeR(code);
-        outputEditor.dispatch({
-          changes: { 
-            from: 0, 
-            to: outputEditor.state.doc.length, 
-            insert: output 
-          }
-        });
-      } catch (err) {
-        if (fallbackFn) {
-          const fallbackOutput = fallbackFn(code);
+        
+        // Check if output is too large
+        if (this.shouldShowOverlay(output)) {
+          // Show preview in editor
+          const lines = output.split('\n');
+          const preview = lines.slice(0, 3).join('\n') + 
+                         `\n... (${lines.length} lines total - click to view full output)`;
           outputEditor.dispatch({
             changes: { 
               from: 0, 
               to: outputEditor.state.doc.length, 
-              insert: fallbackOutput 
+              insert: preview
             }
           });
+          
+          // Show full output in overlay
+          this.showOutputOverlay(output, `webr-output-overlay-${runBtnId}`);
+        } else {
+          // Show normally for small outputs
+          outputEditor.dispatch({
+            changes: { 
+              from: 0, 
+              to: outputEditor.state.doc.length, 
+              insert: output 
+            }
+          });
+        }
+      } catch (err) {
+        if (fallbackFn) {
+          const fallbackOutput = fallbackFn(code);
+          
+          // Check if fallback output is too large
+          if (this.shouldShowOverlay(fallbackOutput)) {
+            const lines = fallbackOutput.split('\n');
+            const preview = lines.slice(0, 3).join('\n') + 
+                           `\n... (${lines.length} lines total - click to view full output)`;
+            outputEditor.dispatch({
+              changes: { 
+                from: 0, 
+                to: outputEditor.state.doc.length, 
+                insert: preview 
+              }
+            });
+            this.showOutputOverlay(fallbackOutput, `webr-output-overlay-${runBtnId}`);
+          } else {
+            outputEditor.dispatch({
+              changes: { 
+                from: 0, 
+                to: outputEditor.state.doc.length, 
+                insert: fallbackOutput 
+              }
+            });
+          }
         } else {
           outputEditor.dispatch({
             changes: { 
@@ -469,7 +654,18 @@ class WebRHelper {
 
       try {
         const output = await this.executeR(userCode);
-        setOutput(output && output.trim().length ? output : '[No output]');
+        const finalOutput = output && output.trim().length ? output : '[No output]';
+        
+        // Check if output is too large
+        if (this.shouldShowOverlay(finalOutput)) {
+          const lines = finalOutput.split('\n');
+          const preview = lines.slice(0, 3).join('\n') + 
+                         `\n... (${lines.length} lines total - click to view full output)`;
+          setOutput(preview);
+          this.showOutputOverlay(finalOutput, `webr-output-overlay-${runBtnId}`);
+        } else {
+          setOutput(finalOutput);
+        }
 
         let plotUrl = null;
         try {
@@ -500,11 +696,24 @@ class WebRHelper {
           plotContainer.innerHTML = `<div style="color:#ef476f;font-weight:600;">${plotErrorMessage || fallbackPlotMessage}</div>`;
         }
       } catch (err) {
+        let errorOutput;
         if (typeof fallback === 'function') {
-          setOutput(fallback());
+          errorOutput = fallback();
         } else {
-          setOutput(`Error: ${err.message}`);
+          errorOutput = `Error: ${err.message}`;
         }
+        
+        // Check if error/fallback output is too large
+        if (this.shouldShowOverlay(errorOutput)) {
+          const lines = errorOutput.split('\n');
+          const preview = lines.slice(0, 3).join('\n') + 
+                         `\n... (${lines.length} lines total - click to view full output)`;
+          setOutput(preview);
+          this.showOutputOverlay(errorOutput, `webr-output-overlay-${runBtnId}`);
+        } else {
+          setOutput(errorOutput);
+        }
+        
         plotContainer.innerHTML = `<div style="color:#ef476f;font-weight:600;">${plotErrorMessage || fallbackPlotMessage}</div>`;
         latestPlotUrl = null;
       } finally {
@@ -662,3 +871,11 @@ class WebRHelper {
 
 // Create global instance
 window.webRHelper = new WebRHelper();
+
+/**
+ * Convenience function to ensure WebR helper is available
+ * @returns {Promise<WebRHelper>} WebR helper instance
+ */
+window.ensureWebRHelper = async function() {
+  return window.webRHelper;
+};

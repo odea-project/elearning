@@ -100,5 +100,43 @@
       "Variance",
       "Mean Values"
     ]
+  },
+  {
+    "filename": "HypothesisTesting.md",
+    "title": "Hypothesis Testing",
+    "keywords": [
+      "hypothesis testing", 
+      "p-value", 
+      "significance level", 
+      "null hypothesis", 
+      "alternative hypothesis", 
+      "type I error", 
+      "type II error"
+    ],
+    "thumbnail": "resources/icons/hypothesis-testing.svg",
+    "requirements": [
+      "Distributions",
+      "Mean Values",
+      "Variance"
+    ]
+  },
+  {
+    "filename": "tTest.md",
+    "title": "t-Test",
+    "keywords": [
+      "t-test", 
+      "t-distribution", 
+      "one-sample t-test", 
+      "two-sample t-test", 
+      "paired t-test", 
+      "dependent samples", 
+      "degrees of freedom"
+    ],
+    "thumbnail": "resources/icons/t-test.svg",
+    "requirements": [
+      "Hypothesis Testing",
+      "Mean Values",
+      "Variance"
+    ]
   }
 ]
