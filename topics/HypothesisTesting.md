@@ -735,7 +735,7 @@ Declare water safe when it's contaminated<br>
 
 *Example: pH Difference*
 
-<div style="background: #1a2340; padding: 12px; border-radius: 8px; margin: 10px 0; font-size: 0.85em;">
+<div style="background: #1a4d7a; color: #ffffff; padding: 12px; border-radius: 8px; margin: 10px 0; font-size: 0.85em;">
 Study with n=10,000 samples:<br>
 Site A: pH = 7.02<br>
 Site B: pH = 7.01<br>
@@ -836,7 +836,7 @@ p < 0.001 (highly significant!)<br><br>
 <!-- position={row: 1, column: 2} -->
 **Example Report**
 
-<div style="background: #1a2340; padding: 15px; border-radius: 8px; margin: 10px 0; font-size: 0.8em; line-height: 1.6;">
+<div style="background: #1a4d7a; color: #ffffff; padding: 15px; border-radius: 8px; margin: 10px 0; font-size: 0.8em; line-height: 1.6;">
 "We tested whether mean nitrate concentrations differed between upstream and downstream sites (two-sample t-test, α = 0.05).<br><br>
 
 <b>H₀:</b> μ_up = μ_down<br>
