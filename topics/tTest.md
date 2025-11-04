@@ -1372,6 +1372,78 @@ where:
 
 ---
 
+<!-- .slide:id="power-visualization" -->
+## Visualizing Statistical Power: Alpha, Beta, and Effect Size
+<!-- layout={rows: 1, columns: 1} -->
+<!-- position={row: 1, column: 1} -->
+
+<div style="margin-bottom: 15px; background: rgba(26, 77, 122, 0.15); padding: 12px; border-radius: 8px; border-left: 4px solid #1a4d7a; font-size: 0.65em;">
+<b>Understanding the Relationship:</b> This visualization shows how the null hypothesis (H₀) and alternative hypothesis (H₁) distributions overlap. Adjust effect size and sample size to see how they affect Type I error (α), Type II error (β), and statistical power (1-β).
+</div>
+
+<div id="power-viz-chart" style="width: 100%; min-height: 400px;"></div>
+
+<div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 1px;">
+  
+  <div style="background: linear-gradient(135deg, #ff9100ff 0%, #ff9100aa 100%); padding: 12px; border-radius: 10px; text-align: center;">
+    <div style="font-size: 0.8em; color: #ffffff; opacity: 0.95; margin-bottom: 4px; font-weight: 600;">Type I Error (α)</div>
+    <div style="font-size: 0.8em; font-weight: bold; color: #ffffff;">0.05</div>
+    <div style="font-size: 0.7em; color: #ffffff; opacity: 0.85; margin-top: 2px;">Fixed at 5%</div>
+  </div>
+
+  <div style="background: linear-gradient(135deg, #06d6a0 0%, #06d6a0aa 100%); padding: 12px; border-radius: 10px; text-align: center;">
+    <div style="font-size: 0.8em; color: #ffffff; opacity: 0.95; margin-bottom: 4px; font-weight: 600;">Type II Error (β)</div>
+    <div id="beta-display" style="font-size: 0.8em; font-weight: bold; color: #ffffff;">...</div>
+    <div style="font-size: 0.7em; color: #ffffff; opacity: 0.85; margin-top: 2px;">Decreases with n and d</div>
+  </div>
+
+  <div style="background: linear-gradient(135deg, #f77f00 0%, #f77f00aa 100%); padding: 12px; border-radius: 10px; text-align: center;">
+    <div style="font-size: 0.8em; color: #ffffff; opacity: 0.95; margin-bottom: 4px; font-weight: 600;">Power (1-β)</div>
+    <div id="power-display" style="font-size: 0.8em; font-weight: bold; color: #ffffff;">...</div>
+    <div style="font-size: 0.7em; color: #ffffff; opacity: 0.85; margin-top: 2px;">Target: ≥ 0.80</div>
+  </div>
+
+</div>
+
+<script src="resources/figures/power-visualization.js"></script>
+<script>
+(function() {
+  const containerId = 'power-viz-chart';
+  const slideId = 'power-visualization';
+  
+  const renderPlot = () => {
+    if (typeof d3 === 'undefined' || !window.initPowerVisualization) {
+      setTimeout(renderPlot, 120);
+      return;
+    }
+    window.initPowerVisualization(containerId);
+  };
+  
+  const maybeRender = (slide) => {
+    if (!slide) return;
+    if (slide.getAttribute('id') === slideId) {
+      renderPlot();
+    }
+  };
+  
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => maybeRender(document.getElementById(slideId)));
+  } else {
+    maybeRender(document.getElementById(slideId));
+  }
+  
+  if (window.Reveal && typeof window.Reveal.on === 'function') {
+    window.Reveal.on('ready', event => maybeRender(event && event.currentSlide));
+    window.Reveal.on('slidechanged', event => maybeRender(event && event.currentSlide));
+  }
+})();
+</script>
+
+<!-- /position -->
+<!-- /layout -->
+
+---
+
 <!-- .slide:id="practical-workflow" -->
 ## Practical Workflow for t-Tests
 <!-- layout={rows: 1, columns: 2} -->
