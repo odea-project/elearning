@@ -1,0 +1,135 @@
+/**
+ * Custom PDF Print Formats
+ * Handles A4 Landscape and 16:9 presentation formats
+ */
+
+/* Hide UI elements during PDF export (print-pdf mode) */
+html.reveal-print #clock,
+html[data-pdf-format] #clock,
+html.reveal-print .notes-toggle-btn,
+html[data-pdf-format] .notes-toggle-btn,
+html.reveal-print .performance-mode-toggle-btn,
+html[data-pdf-format] .performance-mode-toggle-btn,
+html.reveal-print .pdf-export-button,
+html[data-pdf-format] .pdf-export-button,
+html.reveal-print .notes-overlay,
+html[data-pdf-format] .notes-overlay,
+html.reveal-print .taskbar,
+html[data-pdf-format] .taskbar {
+    display: none !important;
+    visibility: hidden !important;
+}
+
+/* Hide rain effects and parallax layers */
+html.reveal-print .rain-canvas,
+html[data-pdf-format] .rain-canvas,
+html.reveal-print .matrix-rain-canvas,
+html[data-pdf-format] .matrix-rain-canvas,
+html.reveal-print .parallax-layer,
+html[data-pdf-format] .parallax-layer {
+    display: none !important;
+}
+
+/* Hide excluded system slides by ID */
+html.reveal-print #intro-slide,
+html[data-pdf-format] #intro-slide,
+html.reveal-print #load-tutorial,
+html[data-pdf-format] #load-tutorial,
+html.reveal-print #dynamic-tutorial,
+html[data-pdf-format] #dynamic-tutorial,
+html.reveal-print section[data-excluded-from-pdf],
+html[data-pdf-format] section[data-excluded-from-pdf],
+html.reveal-print .pdf-excluded,
+html[data-pdf-format] .pdf-excluded {
+    display: none !important;
+    visibility: hidden !important;
+    height: 0 !important;
+    width: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    page-break-after: avoid !important;
+    position: absolute !important;
+    left: -9999px !important;
+}
+
+/* A4 Landscape Format (297mm x 210mm) */
+@media print {
+    @page {
+        margin: 0;
+    }
+    
+    /* When pdfFormat=a4-landscape is set */
+    html[data-pdf-format="a4-landscape"] {
+        @page {
+            size: 297mm 210mm;
+            margin: 0;
+        }
+    }
+    
+    /* When pdfFormat=16x9 is set */
+    html[data-pdf-format="16x9"] {
+        @page {
+            size: 1920px 1080px;
+            margin: 0;
+        }
+    }
+}
+
+/* A4 Landscape specific adjustments */
+html[data-pdf-format="a4-landscape"].reveal-print {
+    .pdf-page {
+        width: 297mm !important;
+        height: 210mm !important;
+        box-sizing: border-box !important;
+    }
+    
+    .reveal .slides section {
+        /* Optimize for A4 landscape - generous padding to prevent cropping */
+        max-width: 270mm !important;
+        max-height: 185mm !important;
+        padding: 12mm !important;
+        margin: 0 auto !important;
+        box-sizing: border-box !important;
+        
+        /* Ensure content scales properly */
+        font-size: 0.9em !important;
+    }
+    
+    /* Scale down content to fit better within margins */
+    .reveal .slides {
+        zoom: 0.9;
+    }
+    
+    /* Ensure images don't overflow */
+    .reveal .slides section img {
+        max-width: 100% !important;
+        max-height: 150mm !important;
+        object-fit: contain !important;
+    }
+    
+    /* Ensure tables fit */
+    .reveal .slides section table {
+        font-size: 0.85em !important;
+        max-width: 100% !important;
+    }
+    
+    /* Ensure code blocks fit */
+    .reveal .slides section pre {
+        max-width: 100% !important;
+        font-size: 0.7em !important;
+    }
+}
+
+/* 16:9 format specific adjustments */
+html[data-pdf-format="16x9"].reveal-print {
+    .pdf-page {
+        width: 1920px !important;
+        height: 1080px !important;
+    }
+    
+    .reveal .slides section {
+        /* Optimize for 16:9 */
+        max-width: 1880px !important;
+        max-height: 1040px !important;
+    }
+}

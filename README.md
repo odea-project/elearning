@@ -4,6 +4,20 @@
 
 This repository contains elearning materials of the Open Data Evaluation Algorithms (ODEA) project.
 
+## Features
+
+### 📄 PDF Export (16:9 Format)
+
+The presentation system includes a streamlined PDF export feature:
+
+- **16:9 Presentation** (1920px × 1080px) - Optimized for digital presentations and screen sharing
+- **Smart Filtering** - Automatically excludes system slides (first 2 + last slide)
+- **Clean Output** - High-contrast styling with all UI elements hidden
+- **One-Click Export** - Simple button, automatic print dialog
+
+Look for the red "Export to PDF" button in the bottom-right corner of any presentation.
+
+📖 [Read the detailed PDF Export Guide](PDF_EXPORT_GUIDE.md)
 
 ---
 ---
