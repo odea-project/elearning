@@ -134,7 +134,7 @@ body.performance-mode .reveal .slides strong {
    ======================================== */
 body.performance-mode .reveal hr {
   background-image: none !important;
-  background: #4b0082 !important;
+  background: linear-gradient(to right, #4b0082, #ffffff) !important;
   border: none !important;
   height: 4px !important;
 }

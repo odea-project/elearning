@@ -564,13 +564,21 @@ function getSlideIndices(slide) {
 }
 
 /**
- * Reads the ?file=... parameter from the current location.
+ * Reads the ?file=... or ?manualmd=... parameter from the current location.
  * @param {string} search
  * @returns {string}
  */
 function getMarkdownFileFromUrl(search = window.location.search) {
   try {
     const params = new URLSearchParams(search);
+    // First check for manualmd parameter (takes precedence)
+    const manualMdParam = params.get('manualmd');
+    if (manualMdParam) {
+      const trimmed = manualMdParam.trim();
+      // If it doesn't start with 'topics/', add that prefix
+      return trimmed.startsWith('topics/') ? trimmed : `topics/${trimmed}`;
+    }
+    // Fall back to file parameter
     const fileParam = params.get('file');
     return fileParam ? fileParam.trim() : '';
   } catch (err) {
