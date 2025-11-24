@@ -1,0 +1,210 @@
+/**
+ * Timer-Locked Spoiler Component Styles
+ */
+
+.timer-locked-spoiler {
+  margin: 20px auto;
+  max-width: 800px;
+  border: 2px solid #3498db;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #f8f9fa;
+}
+
+.timer-locked-spoiler .spoiler-header {
+  padding: 15px 20px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: all 0.3s ease;
+  user-select: none;
+}
+
+.timer-locked-spoiler .spoiler-header:hover {
+  background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+}
+
+.timer-locked-spoiler .spoiler-header.locked {
+  background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+  cursor: not-allowed;
+}
+
+.timer-locked-spoiler .spoiler-header.locked:hover {
+  background: linear-gradient(135deg, #c0392b 0%, #e74c3c 100%);
+}
+
+.timer-locked-spoiler .spoiler-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.timer-locked-spoiler .spoiler-icon {
+  font-size: 1.2em;
+}
+
+.timer-locked-spoiler .spoiler-title-text {
+  font-weight: bold;
+  font-size: 1.1em;
+}
+
+.timer-locked-spoiler .countdown-timer {
+  font-family: 'Courier New', monospace;
+  font-size: 0.9em;
+  background: rgba(0,0,0,0.3);
+  padding: 5px 10px;
+  border-radius: 4px;
+  white-space: nowrap;
+}
+
+/* Overlay Modal Styles */
+.spoiler-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(5px);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 10000;
+  animation: fadeIn 0.3s ease;
+}
+
+.spoiler-overlay.visible {
+  display: flex;
+}
+
+.spoiler-modal {
+  position: relative;
+  background: white;
+  border-radius: 12px;
+  max-width: 90%;
+  max-height: 85vh;
+  width: 700px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+  animation: slideIn 0.3s ease;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.spoiler-close {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: rgba(231, 76, 60, 0.9);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 35px;
+  height: 35px;
+  font-size: 24px;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  z-index: 10;
+  font-weight: bold;
+  padding: 0;
+}
+
+.spoiler-close:hover {
+  background: rgba(192, 57, 43, 1);
+  transform: scale(1.1);
+}
+
+.spoiler-close:active {
+  transform: scale(0.95);
+}
+
+.spoiler-modal-content {
+  padding: 40px 30px 30px 30px;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.spoiler-modal-content h3 {
+  margin-top: 0;
+  color: #2c3e50;
+}
+
+.spoiler-modal-content p,
+.spoiler-modal-content ul,
+.spoiler-modal-content ol {
+  color: #34495e;
+  line-height: 1.6;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-50px) scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.timer-locked-spoiler .shake {
+  animation: shake 0.5s;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-10px); }
+  75% { transform: translateX(10px); }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .timer-locked-spoiler {
+    margin: 15px 10px;
+  }
+  
+  .timer-locked-spoiler .spoiler-header {
+    flex-direction: column;
+    gap: 10px;
+    align-items: flex-start;
+  }
+  
+  .timer-locked-spoiler .countdown-timer {
+    align-self: flex-end;
+  }
+  
+  .spoiler-modal {
+    max-width: 95%;
+    max-height: 90vh;
+    width: auto;
+  }
+  
+  .spoiler-modal-content {
+    padding: 35px 20px 20px 20px;
+  }
+  
+  .spoiler-close {
+    top: 10px;
+    right: 10px;
+    width: 30px;
+    height: 30px;
+    font-size: 20px;
+  }
+}

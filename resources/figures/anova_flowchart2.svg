@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="731"
+   height="810"
+   viewBox="0 0 193.41041 214.3125"
+   version="1.1"
+   id="svg5"
+   inkscape:version="1.2.2 (732a01da63, 2022-12-09)"
+   sodipodi:docname="anova_flowchart2.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview7"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="mm"
+     showgrid="false"
+     inkscape:zoom="1.0444209"
+     inkscape:cx="315.96456"
+     inkscape:cy="511.28811"
+     inkscape:window-width="2560"
+     inkscape:window-height="1009"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1" />
+  <defs
+     id="defs2" />
+  <g
+     inkscape:label="Ebene 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <rect
+       style="fill:#c64600;fill-opacity:1;stroke-width:0.264999;stroke-linecap:round;stroke-linejoin:bevel"
+       id="rect11730"
+       width="6.5865846"
+       height="36.986206"
+       x="-88.918892"
+       y="108.67865"
+       rx="3.9408927"
+       ry="3.9408927"
+       transform="rotate(-90)" />
+    <rect
+       style="fill:#c64600;fill-opacity:1;stroke-width:0.264999;stroke-linecap:round;stroke-linejoin:bevel"
+       id="rect11521"
+       width="6.5865846"
+       height="36.986206"
+       x="-88.918892"
+       y="44.839447"
+       rx="3.9408927"
+       ry="3.9408927"
+       transform="rotate(-90)" />
+    <rect
+       style="fill:#1c71d8;fill-opacity:1;stroke-width:0.264999;stroke-linecap:round;stroke-linejoin:bevel"
+       id="rect11312"
+       width="6.5865846"
+       height="36.986206"
+       x="93.985497"
+       y="29.892962"
+       rx="3.9408927"
+       ry="3.9408927" />
+    <rect
+       style="fill:#1c71d8;fill-opacity:1;stroke-width:0.264999;stroke-linecap:round;stroke-linejoin:bevel"
+       id="rect234"
+       width="83.475273"
+       height="25.43667"
+       x="57.322075"
+       y="7.1652532"
+       ry="3.9408927"
+       rx="3.9408927" />
+    <text
+       xml:space="preserve"
+       style="font-weight:bold;font-size:7.05556px;line-height:1.05;font-family:Arial;-inkscape-font-specification:'Arial Bold';fill:#ffffff;fill-opacity:1;stroke-width:0.264999;stroke-linecap:round;stroke-linejoin:bevel"
+       x="70.936073"
+       y="17.913149"
+       id="text1680"><tspan
+         sodipodi:role="line"
+         id="tspan1678"
+         style="fill:#ffffff;stroke-width:0.265"
+         x="70.936073"
+         y="17.913149">One-Way ANOVA</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-weight:bold;font-size:7.05556px;line-height:1.05;font-family:Arial;-inkscape-font-specification:'Arial Bold';fill:#113f78;fill-opacity:1;stroke-width:0.264999;stroke-linecap:round;stroke-linejoin:bevel"
+       x="77.743073"
+       y="26.869722"
+       id="text3238"><tspan
+         sodipodi:role="line"
+         id="tspan3236"
+         style="fill:#113f78;fill-opacity:1;stroke-width:0.265"
+         x="77.743073"
+         y="26.869722">global F-Test</tspan></text>
+    <rect
+       style="fill:#c64600;fill-opacity:1;stroke-width:0.264999;stroke-linecap:round;stroke-linejoin:bevel"
+       id="rect4486"
+       width="34.672623"
+       height="35.677628"
+       x="111.35542"
+       y="-26.198713"
+       ry="3.9408927"
+       rx="3.9408927"
+       transform="rotate(45)" />
+    <text
+       xml:space="preserve"
+       style="font-weight:bold;font-size:7.05556px;line-height:1.05;font-family:Arial;-inkscape-font-specification:'Arial Bold';fill:#ffffff;fill-opacity:1;stroke-width:0.264999;stroke-linecap:round;stroke-linejoin:bevel"
+       x="78.53598"
+       y="88.085602"
+       id="text5216"><tspan
+         sodipodi:role="line"
+         id="tspan5214"
+         style="fill:#ffffff;stroke-width:0.265"
+         x="78.53598"
+         y="88.085602">p &lt; alpha ?</tspan></text>
+    <rect
+       style="fill:#9a9996;fill-opacity:1;stroke-width:0.264999;stroke-linecap:round;stroke-linejoin:bevel"
+       id="rect6772"
+       width="57.128933"
+       height="25.43667"
+       x="4.8827286"
+       y="72.271111"
+       ry="3.9408927"
+       rx="3.9408927" />
+    <text
+       xml:space="preserve"
+       style="font-weight:bold;font-size:7.05556px;line-height:1.05;font-family:Arial;-inkscape-font-specification:'Arial Bold';fill:#ffffff;fill-opacity:1;stroke-width:0.264999;stroke-linecap:round;stroke-linejoin:bevel"
+       x="24.829983"
+       y="82.259018"
+       id="text6776"><tspan
+         sodipodi:role="line"
+         id="tspan6774"
+         style="fill:#ffffff;stroke-width:0.265"
+         x="24.829983"
+         y="82.259018">Stop</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-weight:bold;font-size:7.05556px;line-height:1.05;font-family:Arial;-inkscape-font-specification:'Arial Bold';fill:#241f31;fill-opacity:1;stroke-width:0.264999;stroke-linecap:round;stroke-linejoin:bevel"
+       x="8.5839348"
+       y="92.228905"
+       id="text6780"><tspan
+         sodipodi:role="line"
+         id="tspan6778"
+         style="fill:#241f31;fill-opacity:1;stroke-width:0.265"
+         x="8.5839348"
+         y="92.228905">no differences</tspan></text>
+    <rect
+       style="fill:#813d9c;fill-opacity:1;stroke-width:0.264999;stroke-linecap:round;stroke-linejoin:bevel"
+       id="rect9696"
+       width="57.128933"
+       height="25.43667"
+       x="131.80115"
+       y="72.271111"
+       ry="3.9408927"
+       rx="3.9408927" />
+    <text
+       xml:space="preserve"
+       style="font-weight:bold;font-size:7.05556px;line-height:1.05;font-family:Arial;-inkscape-font-specification:'Arial Bold';fill:#ffffff;fill-opacity:1;stroke-width:0.264999;stroke-linecap:round;stroke-linejoin:bevel"
+       x="146.93512"
+       y="82.259018"
+       id="text9700"><tspan
+         sodipodi:role="line"
+         id="tspan9698"
+         style="fill:#ffffff;stroke-width:0.265"
+         x="146.93512"
+         y="82.259018">Post-Hoc</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-weight:bold;font-size:7.05556px;line-height:1.05;font-family:Arial;-inkscape-font-specification:'Arial Bold';fill:#371e4a;fill-opacity:1;stroke-width:0.264999;stroke-linecap:round;stroke-linejoin:bevel"
+       x="152.72881"
+       y="92.228905"
+       id="text9704"><tspan
+         sodipodi:role="line"
+         id="tspan9702"
+         style="fill:#371e4a;fill-opacity:1;stroke-width:0.265"
+         x="152.72881"
+         y="92.228905">Tests</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-weight:bold;font-size:7.05556px;line-height:1.05;font-family:Arial;-inkscape-font-specification:'Arial Bold';fill:#241f31;fill-opacity:1;stroke-width:0.264999;stroke-linecap:round;stroke-linejoin:bevel"
+       x="68.116524"
+       y="77.535744"
+       id="text11734"><tspan
+         sodipodi:role="line"
+         id="tspan11732"
+         style="fill:#241f31;fill-opacity:1;stroke-width:0.265"
+         x="68.116524"
+         y="77.535744">no</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-weight:bold;font-size:7.05556px;line-height:1.05;font-family:Arial;-inkscape-font-specification:'Arial Bold';fill:#241f31;fill-opacity:1;stroke-width:0.264999;stroke-linecap:round;stroke-linejoin:bevel"
+       x="116.75591"
+       y="77.029091"
+       id="text11738"><tspan
+         sodipodi:role="line"
+         id="tspan11736"
+         style="fill:#241f31;fill-opacity:1;stroke-width:0.265"
+         x="116.75591"
+         y="77.029091">yes</tspan></text>
+  </g>
+</svg>

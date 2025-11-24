@@ -1,0 +1,580 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   width="658.06451"
+   height="313.64764"
+   viewBox="0 0 164.51613 78.411911"
+   version="1.1"
+   id="svg388"
+   sodipodi:docname="hydra.svg"
+   inkscape:version="1.2.2 (732a01da63, 2022-12-09)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs392" />
+  <sodipodi:namedview
+     id="namedview390"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     showgrid="false"
+     inkscape:zoom="1.0075"
+     inkscape:cx="234.24318"
+     inkscape:cy="121.09181"
+     inkscape:window-width="2560"
+     inkscape:window-height="1009"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg388" />
+  <!-- Hintergrund -->
+  <rect
+     x="0"
+     y="0"
+     width="164.51613"
+     height="78.411911"
+     fill="#f8fafc00"
+     id="rect288"
+     style="stroke-width:0.999992" />
+  <!-- Bodenschatten unter Hydra -->
+  <ellipse
+     cx="57.344913"
+     cy="58.411911"
+     rx="32"
+     ry="7"
+     fill="#d0d7e2"
+     opacity="0.6"
+     id="ellipse290" />
+  <!-- Hydra-Körper (Flat, abgerundet) -->
+  <rect
+     x="32.344913"
+     y="38.411911"
+     width="50"
+     height="20"
+     rx="10"
+     ry="10"
+     fill="#4ade80"
+     id="rect292" />
+  <!-- Bauch (hellere Unterseite) -->
+  <rect
+     x="35.344913"
+     y="44.411911"
+     width="44"
+     height="11"
+     rx="6"
+     ry="6"
+     fill="#86efac"
+     id="rect294" />
+  <!-- Schwanz (einfach, geschwungene Form) -->
+  <path
+     d="m 32.344913,46.411911 c -10,-2 -19,-4 -25.0000005,-8 -4,-4 -3,-8 2,-9 7.0000005,0 14.0000005,4 20.0000005,7"
+     fill="none"
+     stroke="#22c55e"
+     stroke-width="4"
+     stroke-linecap="round"
+     id="path296" />
+  <!-- Rücken-Kamm (flache Dreiecke) -->
+  <polygon
+     points="52,60 55,55 58,60 "
+     fill="#22c55e"
+     id="polygon298"
+     transform="translate(-14.019852,-20.099255)" />
+  <polygon
+     points="60,59 63,54 66,59 "
+     fill="#22c55e"
+     id="polygon300"
+     transform="translate(-12.531018,-20.471464)" />
+  <polygon
+     points="68,58 71,53 74,58 "
+     fill="#22c55e"
+     id="polygon302"
+     transform="translate(-12.655087,-19.106699)" />
+  <polygon
+     points="76,59 79,54 82,59 "
+     fill="#22c55e"
+     id="polygon304"
+     transform="translate(-13.647643,-19.851116)" />
+  <!-- Vorderbeine -->
+  <rect
+     x="44.344913"
+     y="54.411911"
+     width="5"
+     height="9"
+     rx="2"
+     ry="2"
+     fill="#4ade80"
+     id="rect306" />
+  <rect
+     x="65.34491"
+     y="54.411911"
+     width="5"
+     height="9"
+     rx="2"
+     ry="2"
+     fill="#4ade80"
+     id="rect308" />
+  <!-- Klauen -->
+  <polygon
+     points="62,85 57,85 59.5,88 "
+     fill="#0f172a"
+     id="polygon310"
+     transform="translate(-12.655087,-21.588089)" />
+  <polygon
+     points="83,85 78,85 80.5,88 "
+     fill="#0f172a"
+     id="polygon312"
+     transform="translate(-12.655087,-21.588089)" />
+  <!-- ===== Hals & Kopf 1 (Hauptkopf) ===== -->
+  <!-- Hals -->
+  <path
+     d="m 67.344913,38.411911 c 8,-8 6.198511,-18.451613 16.198511,-20.451613"
+     fill="none"
+     stroke="#22c55e"
+     stroke-width="4"
+     stroke-linecap="round"
+     id="path314"
+     sodipodi:nodetypes="cc" />
+  <!-- Kopf (runde, einfache Form) -->
+  <circle
+     cx="88.923073"
+     cy="14.580647"
+     r="8"
+     fill="#4ade80"
+     id="circle316" />
+  <!-- Schnauze (Unterkiefer) -->
+  <rect
+     x="85.325058"
+     y="14.952854"
+     width="9"
+     height="4"
+     rx="2"
+     ry="2"
+     fill="#22c55e"
+     id="rect318" />
+  <!-- Augen (Flat, mit „Lid“-Strich) -->
+  <circle
+     cx="93.863518"
+     cy="12.704716"
+     r="1.4"
+     fill="#0f172a"
+     id="circle320" />
+  <circle
+     cx="87.56575"
+     cy="12.580647"
+     r="1.4"
+     fill="#0f172a"
+     id="circle322" />
+  <line
+     x1="92.363518"
+     y1="11.504715"
+     x2="95.363518"
+     y2="11.004715"
+     stroke="#0f172a"
+     stroke-width="0.6"
+     stroke-linecap="round"
+     id="line324" />
+  <line
+     x1="86.06575"
+     y1="10.880646"
+     x2="89.06575"
+     y2="11.380646"
+     stroke="#0f172a"
+     stroke-width="0.6"
+     stroke-linecap="round"
+     id="line326" />
+  <!-- Zähne (kleine Dreiecke) -->
+  <polygon
+     points="117,48 118,46 116,46 "
+     fill="#f9fafb"
+     id="polygon328"
+     transform="translate(-26.674938,-27.047146)" />
+  <polygon
+     points="115,48 116,46 114,46 "
+     fill="#f9fafb"
+     id="polygon330"
+     transform="translate(-26.674938,-27.047146)" />
+  <!-- ===== Hals & Kopf 2 (neuer nachwachsender Kopf) ===== -->
+  <!-- Hals -->
+  <path
+     d="m 51.344913,40.411911 c -8,-6 -14,-12 -19,-16"
+     fill="none"
+     stroke="#22c55e"
+     stroke-width="3.5"
+     stroke-linecap="round"
+     id="path332" />
+  <!-- Kopf (kleiner, wachsend) -->
+  <circle
+     cx="28.344913"
+     cy="20.411911"
+     r="6"
+     fill="#4ade80"
+     id="circle334" />
+  <!-- Schnauze -->
+  <rect
+     x="26.483871"
+     y="20.784119"
+     width="6"
+     height="3"
+     rx="1.5"
+     ry="1.5"
+     fill="#22c55e"
+     id="rect336" />
+  <!-- Augen (klein, doppelte Lid-Linien angedeutet) -->
+  <circle
+     cx="30.691067"
+     cy="18.411911"
+     r="1.1"
+     fill="#0f172a"
+     id="circle338" />
+  <line
+     x1="29.491066"
+     y1="17.511909"
+     x2="31.891068"
+     y2="17.111912"
+     stroke="#0f172a"
+     stroke-width="0.45"
+     stroke-linecap="round"
+     id="line340" />
+  <line
+     x1="29.491066"
+     y1="19.111912"
+     x2="31.891068"
+     y2="19.511909"
+     stroke="#0f172a"
+     stroke-width="0.45"
+     stroke-linecap="round"
+     id="line342" />
+  <!-- Zahn -->
+  <polygon
+     points="45,45 45.8,46.7 46.6,45.5 "
+     fill="#f9fafb"
+     id="polygon344"
+     transform="translate(-14.51613,-21.215881)" />
+  <!-- ===== Abgetrennter Hals-Stumpf an der Hydra ===== -->
+  <path
+     d="m 71.344913,38.411911 c 10,-6 19,-8 28,-9"
+     fill="none"
+     stroke="#22c55e"
+     stroke-width="4"
+     stroke-linecap="round"
+     id="path346" />
+  <!-- Schnittstelle -->
+  <circle
+     cx="101.34491"
+     cy="29.411911"
+     r="3"
+     fill="#ef4444"
+     id="circle348" />
+  <circle
+     cx="101.34491"
+     cy="29.411911"
+     r="2"
+     fill="#f97373"
+     id="circle350" />
+  <!-- Kleiner Blutstropfen -->
+  <path
+     d="m 102.84491,31.411911 c 1,2 0.5,4 -0.5,5"
+     fill="none"
+     stroke="#ef4444"
+     stroke-width="1.2"
+     stroke-linecap="round"
+     id="path352" />
+  <!-- ===== Abgetrennter Kopf am Boden ===== -->
+  <!-- Schatten -->
+  <ellipse
+     cx="137.34491"
+     cy="60.411911"
+     rx="11"
+     ry="3.5"
+     fill="#fecaca"
+     opacity="0.7"
+     id="ellipse354" />
+  <!-- Kopf-Form -->
+  <circle
+     cx="135.34491"
+     cy="54.411911"
+     r="8"
+     fill="#4ade80"
+     id="circle356" />
+  <!-- Unterkiefer auf dem Boden -->
+  <rect
+     x="133.34491"
+     y="56.411911"
+     width="10"
+     height="4"
+     rx="2"
+     ry="2"
+     fill="#22c55e"
+     id="rect358" />
+  <!-- Hals-Stumpf am Kopf -->
+  <circle
+     cx="128.34491"
+     cy="50.411911"
+     r="3"
+     fill="#ef4444"
+     id="circle360" />
+  <circle
+     cx="128.34491"
+     cy="50.411911"
+     r="2"
+     fill="#f97373"
+     id="circle362" />
+  <!-- „toter“ Blick (X-Augen) -->
+  <line
+     x1="132.34491"
+     y1="51.411911"
+     x2="134.34491"
+     y2="53.411911"
+     stroke="#0f172a"
+     stroke-width="0.7"
+     stroke-linecap="round"
+     id="line364" />
+  <line
+     x1="134.34491"
+     y1="51.411911"
+     x2="132.34491"
+     y2="53.411911"
+     stroke="#0f172a"
+     stroke-width="0.7"
+     stroke-linecap="round"
+     id="line366" />
+  <line
+     x1="138.34491"
+     y1="51.411911"
+     x2="140.34491"
+     y2="53.411911"
+     stroke="#0f172a"
+     stroke-width="0.7"
+     stroke-linecap="round"
+     id="line368" />
+  <line
+     x1="140.34491"
+     y1="51.411911"
+     x2="138.34491"
+     y2="53.411911"
+     stroke="#0f172a"
+     stroke-width="0.7"
+     stroke-linecap="round"
+     id="line370" />
+  <!-- Zähne im Unterkiefer -->
+  <polygon
+     points="152,82 150,82 151,84 "
+     fill="#f9fafb"
+     id="polygon372"
+     transform="translate(-12.655087,-21.588089)" />
+  <polygon
+     points="154,82 152,82 153,84 "
+     fill="#f9fafb"
+     id="polygon374"
+     transform="translate(-12.655087,-21.588089)" />
+  <!-- Blut-Pfütze -->
+  <ellipse
+     cx="136.34491"
+     cy="63.911911"
+     rx="9"
+     ry="2.8"
+     fill="#f97373"
+     opacity="0.8"
+     id="ellipse376" />
+  <!-- ===== Schwert im abgetrennten Kopf ===== -->
+  <!-- Klinge -->
+  <rect
+     x="125.34491"
+     y="34.411911"
+     width="3"
+     height="18"
+     rx="1.2"
+     ry="1.2"
+     fill="#e5e7eb"
+     id="rect378" />
+  <!-- Klingen-Reflex -->
+  <rect
+     x="126.34491"
+     y="35.411911"
+     width="1"
+     height="14"
+     rx="0.5"
+     ry="0.5"
+     fill="#f9fafb"
+     opacity="0.9"
+     id="rect380" />
+  <!-- Griff-Knauf -->
+  <rect
+     x="124.84491"
+     y="30.411911"
+     width="4"
+     height="4"
+     rx="1"
+     ry="1"
+     fill="#fbbf24"
+     id="rect382" />
+  <!-- Quergriff -->
+  <rect
+     x="121.34491"
+     y="32.411911"
+     width="11"
+     height="1.8"
+     rx="0.89999998"
+     ry="0.89999998"
+     fill="#9ca3af"
+     id="rect384" />
+  <!-- Schwert in Kopf „verankert“ (liegt vor dem Kopf) -->
+  <rect
+     x="127.34491"
+     y="44.411911"
+     width="3"
+     height="7"
+     rx="1.2"
+     ry="1.2"
+     fill="#e5e7eb"
+     id="rect386" />
+  <circle
+     cx="-26.224564"
+     cy="18.411911"
+     r="1.1"
+     fill="#0f172a"
+     id="circle598"
+     transform="scale(-1,1)" />
+  <line
+     x1="27.424564"
+     y1="17.511909"
+     x2="25.024563"
+     y2="17.111912"
+     stroke="#0f172a"
+     stroke-width="0.45"
+     stroke-linecap="round"
+     id="line600" />
+  <line
+     x1="27.424564"
+     y1="19.111912"
+     x2="25.024563"
+     y2="19.511909"
+     stroke="#0f172a"
+     stroke-width="0.45"
+     stroke-linecap="round"
+     id="line602" />
+  <polygon
+     points="45.8,46.7 46.6,45.5 45,45 "
+     fill="#f9fafb"
+     id="polygon604"
+     transform="translate(-16.74938,-21.33995)" />
+  <polygon
+     points="60,59 63,54 66,59 "
+     fill="#22c55e"
+     id="polygon606"
+     transform="matrix(0.55658212,-0.24249315,0.24084129,0.55279069,-23.823571,-1.391089)"
+     style="stroke-width:1.65278" />
+  <polygon
+     points="60,59 63,54 66,59 "
+     fill="#22c55e"
+     id="polygon608"
+     transform="matrix(0.58657126,0.15659099,-0.1555243,0.58257555,3.1183725,-28.636001)"
+     style="stroke-width:1.65278" />
+  <polygon
+     points="63,54 66,59 60,59 "
+     fill="#22c55e"
+     id="polygon610"
+     transform="matrix(0.55658212,-0.24249315,0.24084129,0.55279069,36.722335,-9.083397)"
+     style="stroke-width:1.65278" />
+  <polygon
+     points="63,54 66,59 60,59 "
+     fill="#22c55e"
+     id="polygon612"
+     transform="matrix(0.58657126,0.15659099,-0.1555243,0.58257555,63.664279,-36.328309)"
+     style="stroke-width:1.65278" />
+  <polygon
+     points="66,59 60,59 63,54 "
+     fill="#22c55e"
+     id="polygon614"
+     transform="matrix(0.55658212,-0.24249315,0.24084129,0.55279069,28.161541,2.206926)"
+     style="stroke-width:1.65278" />
+  <polygon
+     points="66,59 60,59 63,54 "
+     fill="#22c55e"
+     id="polygon616"
+     transform="matrix(0.36146907,-0.4877773,0.48445457,0.35900675,21.997759,34.912728)"
+     style="stroke-width:1.65278" />
+  <polygon
+     points="66,59 60,59 63,54 "
+     fill="#22c55e"
+     id="polygon618"
+     transform="matrix(0.4579958,0.39853034,-0.39581556,0.45487594,37.313286,-20.137548)"
+     style="stroke-width:1.65278" />
+  <polygon
+     points="60,59 63,54 66,59 "
+     fill="#22c55e"
+     id="polygon620"
+     transform="matrix(0.4579958,0.39853034,-0.39581556,0.45487594,31.48202,-25.100327)"
+     style="stroke-width:1.65278" />
+  <rect
+     style="fill:#1b5db3;fill-opacity:0.901961;stroke-width:0.250392;stroke-linecap:round;stroke-linejoin:bevel"
+     id="rect1353"
+     width="33.746899"
+     height="6.8238215"
+     x="120.40313"
+     y="46.22477"
+     rx="0"
+     ry="0"
+     transform="rotate(-9.9684026)" />
+  <text
+     xml:space="preserve"
+     style="font-weight:bold;font-stretch:semi-condensed;font-size:6.66668px;line-height:1.05;font-family:'Aptos Narrow';-inkscape-font-specification:'Aptos Narrow Bold Semi-Condensed';fill:#ffffff;fill-opacity:0.901961;stroke-width:0.250392;stroke-linecap:round;stroke-linejoin:bevel"
+     x="122.88451"
+     y="51.68383"
+     id="text1409"
+     transform="rotate(-9.9684026)"><tspan
+       sodipodi:role="line"
+       id="tspan1407"
+       style="fill:#ffffff;stroke-width:0.250394"
+       x="122.88451"
+       y="51.68383">Bonferroni</tspan></text>
+  <rect
+     style="fill:#c01c28;fill-opacity:0.901961;stroke-width:0.250392;stroke-linecap:round;stroke-linejoin:bevel"
+     id="rect1513"
+     width="33.746899"
+     height="6.8238215"
+     x="96.716965"
+     y="51.095428"
+     rx="0"
+     ry="0"
+     transform="rotate(2.7981655)" />
+  <text
+     xml:space="preserve"
+     style="font-weight:bold;font-stretch:semi-condensed;font-size:4.47246px;line-height:1.05;font-family:'Aptos Narrow';-inkscape-font-specification:'Aptos Narrow Bold Semi-Condensed';fill:#ffffff;fill-opacity:0.901961;stroke-width:0.250392;stroke-linecap:round;stroke-linejoin:bevel"
+     x="99.829659"
+     y="56.08297"
+     id="text1517"
+     transform="rotate(2.7981657)"><tspan
+       sodipodi:role="line"
+       id="tspan1515"
+       style="fill:#ffffff;stroke-width:0.250394"
+       x="99.829659"
+       y="56.08297">Error 1 Inflation</tspan></text>
+  <rect
+     style="fill:#c061cb;fill-opacity:0.901961;stroke-width:0.250392;stroke-linecap:round;stroke-linejoin:bevel"
+     id="rect1621"
+     width="33.746899"
+     height="6.8238215"
+     x="44.804844"
+     y="10.653405"
+     rx="0"
+     ry="0"
+     transform="rotate(2.7981655)" />
+  <text
+     xml:space="preserve"
+     style="font-weight:bold;font-stretch:semi-condensed;font-size:4.47246px;line-height:1.05;font-family:'Aptos Narrow';-inkscape-font-specification:'Aptos Narrow Bold Semi-Condensed';fill:#ffffff;fill-opacity:0.901961;stroke-width:0.250392;stroke-linecap:round;stroke-linejoin:bevel"
+     x="47.917538"
+     y="15.64095"
+     id="text1625"
+     transform="rotate(2.7981657)"><tspan
+       sodipodi:role="line"
+       id="tspan1623"
+       style="fill:#ffffff;stroke-width:0.250394"
+       x="47.917538"
+       y="15.64095">Error 2 Inflation</tspan></text>
+</svg>

@@ -565,3 +565,16 @@ body.performance-mode div[style*="background:#1a4d7a"][style*="color:#ffffff"] *
 body.performance-mode div[style*="background: #1a4d7a"][style*="color:#ffffff"] * {
   color: #ffffff !important;
 }
+
+/* ========================================
+   SVG TEXT COLORS
+   ======================================== */
+/* Normal mode: svg-text-primary is white */
+.svg-text-primary {
+  fill: #ffffff;
+}
+
+/* Performance mode: svg-text-primary becomes black */
+body.performance-mode .svg-text-primary {
+  fill: #000000 !important;
+}

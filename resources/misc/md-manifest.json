@@ -138,5 +138,25 @@
       "Mean Values",
       "Variance"
     ]
+  },
+  {
+    "filename": "anova1.md",
+    "title": "one-way ANOVA",
+    "keywords": [
+      "ANOVA", 
+      "analysis of variance", 
+      "one-way ANOVA", 
+      "F-distribution", 
+      "between-group variance", 
+      "within-group variance", 
+      "degrees of freedom"
+    ],
+    "thumbnail": "resources/icons/anova1.svg",
+    "requirements": [
+      "Hypothesis Testing",
+      "Mean Values",
+      "Variance",
+      "t-Tests"
+    ]
   }
 ]

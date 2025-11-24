@@ -1,0 +1,245 @@
+/**
+ * Burger Menu Styles
+ */
+
+/* Burger Button */
+.burger-menu-button {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  width: 50px;
+  height: 50px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  padding: 0;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s ease;
+}
+
+.burger-menu-button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+}
+
+.burger-menu-button.active {
+  background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+}
+
+.burger-line {
+  width: 25px;
+  height: 3px;
+  background: white;
+  border-radius: 2px;
+  transition: all 0.3s ease;
+}
+
+.burger-menu-button.active .burger-line:nth-child(1) {
+  transform: translateY(8px) rotate(45deg);
+}
+
+.burger-menu-button.active .burger-line:nth-child(2) {
+  opacity: 0;
+}
+
+.burger-menu-button.active .burger-line:nth-child(3) {
+  transform: translateY(-8px) rotate(-45deg);
+}
+
+/* Menu Overlay */
+.burger-menu {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(5px);
+  z-index: 9998;
+  display: none;
+  animation: fadeIn 0.3s ease;
+}
+
+.burger-menu.open {
+  display: block;
+}
+
+/* Menu Panel */
+.burger-menu::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 375px;
+  height: 100%;
+  background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+  box-shadow: 4px 0 20px rgba(0, 0, 0, 0.5);
+  transform: translateX(-100%);
+  transition: transform 0.3s ease;
+}
+
+.burger-menu.open::before {
+  transform: translateX(0);
+}
+
+.burger-menu-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 260px;
+  padding: 25px 25px 25px 90px;
+  background: rgba(0, 0, 0, 0.2);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  z-index: 9999;
+  transform: translateX(-100%);
+  transition: transform 0.3s ease;
+}
+
+.burger-menu.open .burger-menu-header {
+  transform: translateX(0);
+}
+
+.burger-menu-header h3 {
+  margin: 0;
+  color: white;
+  font-size: 24px;
+  font-weight: 600;
+}
+
+/* Menu Content */
+.burger-menu-content {
+  position: fixed;
+  top: 90px;
+  left: 0;
+  width: 350px;
+  height: calc(100% - 90px);
+  overflow-y: auto;
+  padding: 20px;
+  z-index: 9999;
+  transform: translateX(-100%);
+  transition: transform 0.3s ease;
+}
+
+.burger-menu.open .burger-menu-content {
+  transform: translateX(0);
+}
+
+/* Menu Items */
+.burger-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 18px 20px;
+  margin-bottom: 12px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  user-select: none;
+}
+
+.burger-menu-item:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.3);
+  transform: translateX(5px);
+}
+
+.burger-menu-item:active {
+  transform: translateX(5px) scale(0.98);
+}
+
+.burger-menu-item i {
+  font-size: 20px;
+  width: 30px;
+  text-align: center;
+}
+
+.burger-menu-item span:nth-child(2) {
+  flex: 1;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+/* Menu Item Badge (for notes indicator) */
+.menu-item-badge {
+  display: none;
+  width: 8px;
+  height: 8px;
+  background: #e74c3c;
+  border-radius: 50%;
+  box-shadow: 0 0 10px rgba(231, 76, 60, 0.8);
+}
+
+/* Menu Item Toggle (for performance mode) */
+.menu-item-toggle {
+  padding: 4px 12px;
+  background: rgba(149, 165, 166, 0.3);
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: bold;
+  color: #bdc3c7;
+  transition: all 0.3s ease;
+}
+
+.menu-item-toggle.active {
+  background: rgba(46, 204, 113, 0.3);
+  color: #2ecc71;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .burger-menu-button {
+    top: 15px;
+    left: 15px;
+    width: 45px;
+    height: 45px;
+  }
+
+  .burger-menu::before,
+  .burger-menu-header,
+  .burger-menu-content {
+    width: 280px;
+  }
+
+  .burger-menu-item {
+    padding: 15px;
+    font-size: 14px;
+  }
+
+  .burger-menu-item i {
+    font-size: 18px;
+  }
+}
+
+/* Print mode - hide burger menu */
+@media print {
+  .burger-menu-button,
+  .burger-menu {
+    display: none !important;
+  }
+}
+
+/* PDF export - hide burger menu */
+html.reveal-print .burger-menu-button,
+html.reveal-print .burger-menu {
+  display: none !important;
+}

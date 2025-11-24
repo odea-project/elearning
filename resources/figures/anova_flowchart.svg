@@ -1,0 +1,416 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   width="332.5"
+   height="345.34299"
+   viewBox="0 0 332.5 345.34299"
+   version="1.1"
+   id="svg358"
+   sodipodi:docname="anova_flowchart.svg"
+   inkscape:version="1.2.2 (732a01da63, 2022-12-09)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs362" />
+  <sodipodi:namedview
+     id="namedview360"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     showgrid="false"
+     inkscape:zoom="2.1210526"
+     inkscape:cx="-16.972705"
+     inkscape:cy="171.61291"
+     inkscape:window-width="2560"
+     inkscape:window-height="1009"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="g332" />
+  <!-- Multiple grouped samples at top -->
+  <g
+     id="samples"
+     transform="translate(-23.861664,-12.594738)">
+    <text
+       x="194.35484"
+       y="29.243176"
+       fill="#00d4ff"
+       font-size="16px"
+       font-weight="bold"
+       text-anchor="middle"
+       id="text273"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:Arial;-inkscape-font-specification:'Arial Bold'">Multiple Grouped Samples</text>
+    <!-- Group boxes -->
+    <g
+       transform="translate(50,40)"
+       id="g281">
+      <!-- White background -->
+      <rect
+         x="0"
+         y="0"
+         width="80"
+         height="60"
+         fill="#ffffff"
+         rx="5"
+         ry="5"
+         id="rect185" />
+      <rect
+         x="0"
+         y="0"
+         width="80"
+         height="60"
+         fill="rgba(0,255,136,0.2)"
+         stroke="#00ff88"
+         stroke-width="2"
+         rx="5"
+         id="rect275"
+         ry="5" />
+      <text
+         x="40"
+         y="25"
+         fill="#00ff88"
+         font-size="14px"
+         font-weight="bold"
+         text-anchor="middle"
+         id="text277"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:Arial;-inkscape-font-specification:'Arial Bold'">Group 1</text>
+      <text
+         x="40"
+         y="45"
+         class="svg-text-primary"
+         font-size="11px"
+         text-anchor="middle"
+         id="text279"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Arial;-inkscape-font-specification:Arial">x₁₁, x₁₂, ...</text>
+    </g>
+    <g
+       transform="translate(150,40)"
+       id="g289">
+      <!-- White background -->
+      <rect
+         x="0"
+         y="0"
+         width="80"
+         height="60"
+         fill="#ffffff"
+         rx="5"
+         ry="5"
+         id="rect191" />
+      <rect
+         x="0"
+         y="0"
+         width="80"
+         height="60"
+         fill="rgba(0,212,255,0.2)"
+         stroke="#00d4ff"
+         stroke-width="2"
+         rx="5"
+         id="rect283"
+         ry="5" />
+      <text
+         x="40"
+         y="25"
+         fill="#00d4ff"
+         font-size="14px"
+         font-weight="bold"
+         text-anchor="middle"
+         id="text285"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:Arial;-inkscape-font-specification:'Arial Bold'">Group 2</text>
+      <text
+         x="40"
+         y="45"
+         class="svg-text-primary"
+         font-size="11px"
+         text-anchor="middle"
+         id="text287"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Arial;-inkscape-font-specification:Arial">x₂₁, x₂₂, ...</text>
+    </g>
+    <g
+       transform="translate(250,40)"
+       id="g297">
+      <!-- White background -->
+      <rect
+         x="0"
+         y="0"
+         width="80"
+         height="60"
+         fill="#ffffff"
+         rx="5"
+         ry="5"
+         id="rect197" />
+      <rect
+         x="0"
+         y="0"
+         width="80"
+         height="60"
+         fill="rgba(255,107,53,0.2)"
+         stroke="#ff6b35"
+         stroke-width="2"
+         rx="5"
+         id="rect291"
+         ry="5" />
+      <text
+         x="40"
+         y="25"
+         fill="#ff6b35"
+         font-size="14px"
+         font-weight="bold"
+         text-anchor="middle"
+         id="text293"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:Arial;-inkscape-font-specification:'Arial Bold'">Group k</text>
+      <text
+         x="40"
+         y="45"
+         class="svg-text-primary"
+         font-size="11px"
+         text-anchor="middle"
+         id="text295"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Arial;-inkscape-font-specification:Arial">xₖ₁, xₖ₂, ...</text>
+    </g>
+    <!-- Dots between groups -->
+    <g
+       transform="translate(235,70)"
+       id="g305">
+      <circle
+         cx="0"
+         cy="0"
+         r="2"
+         class="svg-text-primary"
+         id="circle299" />
+      <circle
+         cx="6"
+         cy="0"
+         r="2"
+         class="svg-text-primary"
+         id="circle301" />
+      <circle
+         cx="12"
+         cy="0"
+         r="2"
+         class="svg-text-primary"
+         id="circle303" />
+    </g>
+  </g>
+  <!-- Arrow down -->
+  <g
+     transform="translate(164.36414,89.961092)"
+     id="g312">
+    <line
+       x1="0"
+       y1="0"
+       x2="0"
+       y2="40"
+       stroke="#00d4ff"
+       stroke-width="3"
+       id="line308" />
+    <polygon
+       points="6,35 0,45 -6,35 "
+       fill="#00d4ff"
+       id="polygon310" />
+  </g>
+  <!-- ANOVA box -->
+  <g
+     transform="translate(165.30707,164.76258)"
+     id="g320">
+    <!-- White background -->
+    <rect
+       x="-80"
+       y="-25"
+       width="160"
+       height="50"
+       fill="#ffffff"
+       rx="8"
+       id="rect211"
+       ry="8" />
+    <rect
+       x="-80"
+       y="-25"
+       width="160"
+       height="50"
+       fill="rgba(0,212,255,0.3)"
+       stroke="#00d4ff"
+       stroke-width="3"
+       rx="8"
+       id="rect314"
+       ry="8" />
+    <text
+       x="0"
+       y="-2"
+       fill="#00d4ff"
+       font-size="18px"
+       font-weight="bold"
+       text-anchor="middle"
+       id="text316"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:Arial;-inkscape-font-specification:'Arial Bold'">ANOVA</text>
+    <text
+       x="0"
+       y="15"
+       class="svg-text-primary"
+       font-size="12px"
+       text-anchor="middle"
+       id="text318"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Arial;-inkscape-font-specification:Arial">F-Test</text>
+  </g>
+  <!-- Arrow down splitting -->
+  <g
+     transform="translate(159.36414,192.21916)"
+     id="g332">
+    <line
+       x1="5"
+       y1="5"
+       x2="5"
+       y2="30"
+       stroke="#00d4ff"
+       stroke-width="3"
+       id="line322" />
+    <!-- Split to two branches -->
+    <line
+       x1="5"
+       y1="30"
+       x2="-85"
+       y2="55"
+       stroke="#00d4ff"
+       stroke-width="2.5"
+       id="line324" />
+    <line
+       x1="5"
+       y1="30"
+       x2="95"
+       y2="55"
+       stroke="#00d4ff"
+       stroke-width="2.5"
+       id="line326" />
+    <polygon
+       points="-90,55 -93,45 -87,45 "
+       fill="#00d4ff"
+       id="polygon328"
+       transform="translate(5.6667508,8.8338172)" />
+    <polygon
+       points="90,55 87,45 93,45 "
+       fill="#00d4ff"
+       id="polygon330"
+       transform="translate(5,8.6671295)" />
+  </g>
+  <!-- Outcome A: All the same (H₀) -->
+  <g
+     transform="translate(76.25,289.0926)"
+     id="g344">
+    <!-- White background -->
+    <rect
+       x="-70"
+       y="-30"
+       width="140"
+       height="80"
+       fill="#ffffff"
+       rx="8"
+       ry="8"
+       id="rect223" />
+    <rect
+       x="-70"
+       y="-30"
+       width="140"
+       height="80"
+       fill="rgba(0,255,136,0.2)"
+       stroke="#00ff88"
+       stroke-width="2.5"
+       rx="8"
+       id="rect334"
+       ry="8" />
+    <text
+       x="0"
+       y="-10"
+       fill="#00ff88"
+       font-size="15px"
+       font-weight="bold"
+       text-anchor="middle"
+       id="text336"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:Arial;-inkscape-font-specification:'Arial Bold'">Accept H₀</text>
+    <text
+       x="0"
+       y="10"
+       class="svg-text-primary"
+       font-size="13px"
+       text-anchor="middle"
+       id="text338"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:arial;-inkscape-font-specification:arial">All means are</text>
+    <text
+       x="0"
+       y="28"
+       class="svg-text-primary"
+       font-size="13px"
+       text-anchor="middle"
+       id="text340"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:arial;-inkscape-font-specification:arial">equal</text>
+    <text
+       x="0"
+       y="40"
+       fill="#006837ff"
+       font-size="11px"
+       text-anchor="middle"
+       id="text342">μ₁ = μ₂ = ... = μₖ</text>
+  </g>
+  <!-- Outcome B: At least one different (H₁) -->
+  <g
+     transform="translate(256.25,289.0926)"
+     id="g356">
+    <!-- White background -->
+    <rect
+       x="-70"
+       y="-30"
+       width="140"
+       height="80"
+       fill="#ffffff"
+       rx="8"
+       ry="8"
+       id="rect231" />
+    <rect
+       x="-70"
+       y="-30"
+       width="140"
+       height="80"
+       fill="rgba(255,107,53,0.2)"
+       stroke="#ff6b35"
+       stroke-width="2.5"
+       rx="8"
+       id="rect346"
+       ry="8" />
+    <text
+       x="0"
+       y="-10"
+       fill="#ff6b35"
+       font-size="15px"
+       font-weight="bold"
+       text-anchor="middle"
+       id="text348"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:Arial;-inkscape-font-specification:'Arial Bold'">Reject H₀</text>
+    <text
+       x="0"
+       y="10"
+       class="svg-text-primary"
+       font-size="13px"
+       text-anchor="middle"
+       id="text350"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Arial;-inkscape-font-specification:Arial">At least one</text>
+    <text
+       x="0"
+       y="28"
+       class="svg-text-primary"
+       font-size="13px"
+       text-anchor="middle"
+       id="text352"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:arial;-inkscape-font-specification:arial">mean differs</text>
+    <text
+       x="0"
+       y="40"
+       fill="#ff6b35"
+       font-size="11px"
+       text-anchor="middle"
+       id="text354"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Arial;-inkscape-font-specification:Arial">→ Post-hoc tests</text>
+  </g>
+</svg>
