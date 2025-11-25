@@ -225,6 +225,23 @@ $$\gamma_1 = \frac{E[(X - \mu)^3]}{\sigma^3}$$
 -! Define `skew_sample <- function(x) {...}` to avoid extra packages.
 -: Center on `mean(x)` and scale by `sd(x)^3` to make it dimensionless.
 -< Evaluate skewness alongside histograms or `summary(x)` before reporting.
+
+***
+
+-! Note: we use the empirical formula for sample skewness here.
+
+<div style="font-size: 0.8em;">
+
+$$
+\text{Sample Skewness} =
+$$
+
+$$
+\frac{n}{(n-1)(n-2)} \sum \left(\frac{x_i - \bar{x}}{s}\right)^3
+$$
+
+</div>
+
 <!-- /position -->
 <!-- position={row: 1, column: 2} -->
 <div id="skewness-moment-container"></div>
@@ -315,6 +332,23 @@ $$\gamma_2 = \frac{E[(X - \mu)^4]}{\sigma^4}$$
 -! `kurtosis_sample <- function(x) {...}` returns excess kurtosis.
 -: Multiply-tail events drive `> 0` values; normal baseline sits near 0.
 -< Report with quantiles or max/min so stakeholders grasp tail behaviour.
+
+***
+
+-! Note: we use the empirical formula for sample kurtosis here.
+
+<div style="font-size: 0.7em;">
+
+$$
+\text{Excess Kurtosis} = 
+$$
+
+$$
+\frac{n(n+1)}{(n-1)(n-2)(n-3)} \sum \left(\frac{x_i - \bar{x}}{s}\right)^4 - \frac{3(n-1)^2}{(n-2)(n-3)}
+$$
+
+</div>
+
 <!-- /position -->
 <!-- position={row: 1, column: 2} -->
 <div id="kurtosis-moment-container"></div>
