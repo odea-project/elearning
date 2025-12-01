@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="620" viewBox="0 0 900 620">
+  <style>
+    .math-text { font-family: 'KaTeX_Math', 'Times New Roman', serif; font-style: italic; font-size: 40px; }
+    .math-normal { font-family: 'KaTeX_Main', 'Times New Roman', serif; font-size: 40px; }
+    .step-text { font-family: 'Montserrat', Helvetica, sans-serif; font-weight: 600; font-size: 40px; }
+    .highlight { fill: #ff6600ff; }
+    .formula { fill: #000000ff; }
+    .step-label { fill: #bb006dff; }
+  </style>
+  
+  <!-- Background -->
+  <rect width="900" height="620" fill="transparent"/>
+  
+  <!-- Step 1: Substitute σ²I -->
+  <text x="20" y="40" class="step-text step-label" font-size="16">Step 1: Substitute Var(ε) = σ²I</text>
+  <text x="40" y="100" class="math-normal formula" font-size="20">
+    Var(<tspan class="math-text">β̂</tspan>) = (<tspan class="math-text">X</tspan><tspan font-size="40" baseline-shift="super">⊤</tspan><tspan class="math-text">X</tspan>)<tspan font-size="40" baseline-shift="super">−1</tspan> <tspan class="math-text">X</tspan><tspan font-size="40" baseline-shift="super">⊤</tspan> <tspan class="highlight">σ²I</tspan> <tspan class="math-text">X</tspan> (<tspan class="math-text">X</tspan><tspan font-size="40" baseline-shift="super">⊤</tspan><tspan class="math-text">X</tspan>)<tspan font-size="40" baseline-shift="super">−1</tspan>
+  </text>
+  
+  <!-- Step 2: Factor out σ² -->
+  <text x="20" y="170" class="step-text step-label" font-size="16">Step 2: Factor out σ² (scalar constant)</text>
+  <text x="40" y="230" class="math-normal formula" font-size="20">
+    Var(<tspan class="math-text">β̂</tspan>) = <tspan class="highlight">σ²</tspan> (<tspan class="math-text">X</tspan><tspan font-size="40" baseline-shift="super">⊤</tspan><tspan class="math-text">X</tspan>)<tspan font-size="40" baseline-shift="super">−1</tspan> <tspan class="math-text">X</tspan><tspan font-size="40" baseline-shift="super">⊤</tspan> <tspan class="highlight">I</tspan> <tspan class="math-text">X</tspan> (<tspan class="math-text">X</tspan><tspan font-size="40" baseline-shift="super">⊤</tspan><tspan class="math-text">X</tspan>)<tspan font-size="40" baseline-shift="super">−1</tspan>
+  </text>
+  
+  <!-- Step 3: Simplify X⊤IX = X⊤X -->
+  <text x="20" y="300" class="step-text step-label" font-size="16">Step 3: Since X⊤IX = X⊤X (identity property)</text>
+  <text x="40" y="360" class="math-normal formula" font-size="20">
+    Var(<tspan class="math-text">β̂</tspan>) = σ² (<tspan class="math-text">X</tspan><tspan font-size="40" baseline-shift="super">⊤</tspan><tspan class="math-text">X</tspan>)<tspan font-size="40" baseline-shift="super">−1</tspan> <tspan class="highlight">X<tspan font-size="40" baseline-shift="super">⊤</tspan>X</tspan> (<tspan class="math-text">X</tspan><tspan font-size="40" baseline-shift="super">⊤</tspan><tspan class="math-text">X</tspan>)<tspan font-size="40" baseline-shift="super">−1</tspan>
+  </text>
+  
+  <!-- Step 4: Cancel inverse -->
+  <text x="20" y="430" class="step-text step-label" font-size="16">Step 4: (X⊤X)⁻¹(X⊤X) = I cancels out</text>
+  <text x="40" y="490" class="math-normal formula" font-size="22" font-weight="bold">
+    <tspan class="highlight">Var(<tspan class="math-text">β̂</tspan>) = σ² (<tspan class="math-text">X</tspan><tspan font-size="40" baseline-shift="super">⊤</tspan><tspan class="math-text">X</tspan>)<tspan font-size="40" baseline-shift="super">−1</tspan></tspan>
+  </text>
+</svg>

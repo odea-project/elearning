@@ -158,5 +158,30 @@
       "Variance",
       "t-Tests"
     ]
+  },
+  {
+    "filename": "linearRegression.md",
+    "title": "Linear Regression",
+    "keywords": [
+      "linear regression",
+      "ordinary least squares",
+      "OLS",
+      "design matrix",
+      "normal equation",
+      "coefficient of determination",
+      "R-squared",
+      "confidence interval",
+      "prediction interval",
+      "calibration curve",
+      "F-test",
+      "multiple regression",
+      "ANOVA connection"
+    ],
+    "thumbnail": "resources/icons/linear-regression.svg",
+    "requirements": [
+      "Variance",
+      "Hypothesis Testing",
+      "one-way ANOVA"
+    ]
   }
 ]
