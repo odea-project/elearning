@@ -1196,6 +1196,8 @@ createTimerLockedSpoiler('var_beta_spoiler', {
 
 $$\text{SE}(b_i) = \sqrt{\text{diag}(\text{Var}({\boldsymbol{\beta}\_{hat}}))}$$
 
+-: where $\text{diag}(\cdot)$ extracts diagonal elements
+
 ***
 
 -! *t-statistic* for each coefficient:
@@ -1212,7 +1214,7 @@ $$t_i = \frac{b_i}{\text{SE}(b_i)}$$
 ***
 
 -! Compare $t_i$ to the critical value from the t-distribution:
--: Degrees of freedom: $n - p - 1$
+-: Degrees of freedom: $n - p$
 -: If $|t_i| > t_{\text{critical}}$ → coefficient is significant
 
 <!-- /position -->
@@ -1385,7 +1387,7 @@ $$R^2 = 1 - \frac{\text{SSE}}{\text{SST}}$$
 
 *Adjusted $R^2$*
 
-$$R^2_{\text{adj}} = 1 - \frac{\text{SSE}/(n - p - 1)}{\text{SST}/(n - 1)}$$
+$$R^2_{\text{adj}} = 1 - \frac{\text{SSE}/(n - p)}{\text{SST}/(n - 1)}$$
 
 -: Adjusts for number of predictors
 -: Better for model comparison
@@ -1396,7 +1398,7 @@ $$R^2_{\text{adj}} = 1 - \frac{\text{SSE}/(n - p - 1)}{\text{SST}/(n - 1)}$$
 
 -! *RMSE* (Root Mean Squared Error):
 
-$$\text{RMSE} = \sqrt{\frac{\text{SSE}}{n - p - 1}}$$
+$$\text{RMSE} = \sqrt{\frac{\text{SSE}}{n - p}}$$
 
 -: Average prediction error in original units
 
