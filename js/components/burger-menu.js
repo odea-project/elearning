@@ -9,13 +9,18 @@ class BurgerMenu {
     this.timerInterval = null;
     this.remainingSeconds = 0;
     this.timerElements = {};
+    this.bookmarks = [];
+    this.BOOKMARKS_KEY = 'revealjs-bookmarks';
     this.init();
   }
 
   init() {
+    this.loadBookmarks();
     this.createBurgerButton();
+    this.createNavigationButtons();
     this.createMenu();
     this.createTimerConfigModal();
+    this.createBookmarksOverlay();
     this.attachEventListeners();
     this.hideOriginalButtons();
     
@@ -34,6 +39,29 @@ class BurgerMenu {
       <span class="burger-line"></span>
     `;
     document.body.appendChild(button);
+  }
+
+  createNavigationButtons() {
+    const container = document.createElement('div');
+    container.id = 'nav-buttons-container';
+    container.className = 'nav-buttons-container';
+    container.innerHTML = `
+      <button id="nav-home-btn" class="nav-button" aria-label="Home - Save bookmark and go to chapter selection" title="Home">
+        <i class="fas fa-home"></i>
+      </button>
+      <button id="nav-bookmark-btn" class="nav-button" aria-label="Save current slide as bookmark" title="Save Bookmark">
+        <i class="fas fa-bookmark"></i>
+      </button>
+      <button id="nav-goto-btn" class="nav-button" aria-label="Go to saved bookmarks" title="View Bookmarks">
+        <i class="fas fa-th-large"></i>
+      </button>
+    `;
+    document.body.appendChild(container);
+    
+    // Attach navigation button events
+    document.getElementById('nav-home-btn').addEventListener('click', () => this.handleHomeClick());
+    document.getElementById('nav-bookmark-btn').addEventListener('click', () => this.handleBookmarkClick());
+    document.getElementById('nav-goto-btn').addEventListener('click', () => this.handleGotoBookmarksClick());
   }
 
   createMenu() {
@@ -309,6 +337,371 @@ class BurgerMenu {
     this.timerElements.timerBackdrop = null;
     this.timerElements.timerDisplay = null;
     this.remainingSeconds = 0;
+  }
+
+  // ==================== BOOKMARK SYSTEM ====================
+  
+  loadBookmarks() {
+    try {
+      const stored = localStorage.getItem(this.BOOKMARKS_KEY);
+      this.bookmarks = stored ? JSON.parse(stored) : [];
+    } catch (e) {
+      console.error('Error loading bookmarks:', e);
+      this.bookmarks = [];
+    }
+  }
+
+  saveBookmarks() {
+    try {
+      localStorage.setItem(this.BOOKMARKS_KEY, JSON.stringify(this.bookmarks));
+    } catch (e) {
+      console.error('Error saving bookmarks:', e);
+    }
+  }
+
+  getCurrentSlideInfo() {
+    const url = window.location.href;
+    const urlParams = new URLSearchParams(window.location.search);
+    const file = urlParams.get('file') || '';
+    const hash = window.location.hash || '';
+    
+    // Extract chapter from file parameter
+    let chapter = '';
+    const fileMatch = file.match(/topics%2F([^.]+)\.md|topics\/([^.]+)\.md/);
+    if (fileMatch) {
+      chapter = fileMatch[1] || fileMatch[2];
+    }
+    
+    // Get slide title from current slide
+    let title = 'Untitled Slide';
+    const currentSlide = document.querySelector('.reveal .slides section.present');
+    if (currentSlide) {
+      const h2 = currentSlide.querySelector('h2');
+      const h3 = currentSlide.querySelector('h3');
+      const h1 = currentSlide.querySelector('h1');
+      if (h2) title = h2.textContent.trim();
+      else if (h3) title = h3.textContent.trim();
+      else if (h1) title = h1.textContent.trim();
+    }
+    
+    // Get slide ID for unique identification
+    const slideId = currentSlide?.id || hash.replace('#/', '');
+    
+    return {
+      url: url,
+      file: file,
+      chapter: chapter,
+      hash: hash,
+      title: title,
+      slideId: slideId,
+      timestamp: Date.now()
+    };
+  }
+
+  async captureSlideThumb() {
+    // Capture actual slide screenshot using html2canvas
+    try {
+      const currentSlide = document.querySelector('.reveal .slides section.present');
+      if (!currentSlide) return null;
+      
+      // Check if html2canvas is available
+      if (typeof html2canvas === 'undefined') {
+        console.log('html2canvas not available');
+        return null;
+      }
+      
+      // Get the slide's background color
+      const bgColor = getComputedStyle(document.documentElement).getPropertyValue('--r-background-color')?.trim() || '#1a1a2e';
+      
+      // Capture the slide with lower scale for speed
+      // Performance mode is only applied to the CLONE, not the real DOM
+      const canvas = await html2canvas(currentSlide, {
+        scale: 0.25,
+        logging: false,
+        useCORS: true,
+        allowTaint: true,
+        backgroundColor: bgColor,
+        imageTimeout: 0,
+        removeContainer: true,
+        onclone: (clonedDoc) => {
+          // Apply performance mode ONLY to clone (no animations, simpler rendering)
+          clonedDoc.body.classList.add('performance-mode');
+          
+          // Style the cloned slide for clean capture
+          const clonedSlide = clonedDoc.querySelector('.reveal .slides section.present');
+          if (clonedSlide) {
+            clonedSlide.style.cssText = 'transform:none;opacity:1;position:relative;top:0;left:0;margin:0;padding:20px;display:block;visibility:visible;';
+          }
+          
+          // Hide UI elements in clone
+          const hideSelectors = ['.burger-menu-button', '.nav-buttons-container', '.reveal .controls', '.reveal .progress'];
+          hideSelectors.forEach(sel => {
+            clonedDoc.querySelectorAll(sel).forEach(el => el.style.display = 'none');
+          });
+        }
+      });
+      
+      // Resize to thumbnail dimensions
+      const thumbCanvas = document.createElement('canvas');
+      const ctx = thumbCanvas.getContext('2d');
+      thumbCanvas.width = 200;
+      thumbCanvas.height = 120;
+      
+      // Fill with background color first
+      ctx.fillStyle = bgColor;
+      ctx.fillRect(0, 0, thumbCanvas.width, thumbCanvas.height);
+      
+      // Calculate scaling to fit the entire slide into thumbnail
+      const scale = Math.min(thumbCanvas.width / canvas.width, thumbCanvas.height / canvas.height);
+      const destWidth = canvas.width * scale;
+      const destHeight = canvas.height * scale;
+      const destX = (thumbCanvas.width - destWidth) / 2;
+      const destY = (thumbCanvas.height - destHeight) / 2;
+      
+      // Draw the entire canvas scaled to fit
+      ctx.drawImage(canvas, 0, 0, canvas.width, canvas.height, destX, destY, destWidth, destHeight);
+      
+      return thumbCanvas.toDataURL('image/jpeg', 0.6);
+    } catch (e) {
+      console.log('Thumbnail capture error:', e);
+      return null;
+    }
+  }
+
+  async addBookmark(goHome = false) {
+    const slideInfo = this.getCurrentSlideInfo();
+    
+    // Show immediate feedback
+    const btn = document.getElementById('nav-bookmark-btn');
+    btn.classList.add('bookmark-saved');
+    
+    // Check if bookmark already exists
+    const existingIndex = this.bookmarks.findIndex(b => 
+      b.file === slideInfo.file && b.hash === slideInfo.hash
+    );
+    
+    if (existingIndex >= 0) {
+      // Update existing bookmark - don't re-capture thumbnail
+      this.bookmarks[existingIndex] = {
+        ...this.bookmarks[existingIndex],
+        ...slideInfo,
+        timestamp: Date.now()
+      };
+      this.showNotification('Bookmark updated: ' + slideInfo.title);
+      this.saveBookmarks();
+    } else {
+      // Show notification immediately, capture thumbnail in background
+      this.showNotification('Bookmark saved: ' + slideInfo.title);
+      
+      // Add bookmark immediately with placeholder
+      const bookmarkId = 'bm-' + Date.now();
+      const newBookmark = {
+        ...slideInfo,
+        thumbnail: null,
+        id: bookmarkId
+      };
+      this.bookmarks.push(newBookmark);
+      this.saveBookmarks();
+      
+      // Capture thumbnail asynchronously (non-blocking)
+      this.captureSlideThumb().then(thumbnail => {
+        const idx = this.bookmarks.findIndex(b => b.id === bookmarkId);
+        if (idx >= 0 && thumbnail) {
+          this.bookmarks[idx].thumbnail = thumbnail;
+          this.saveBookmarks();
+          // Update overlay if visible
+          if (document.getElementById('bookmarks-overlay')?.classList.contains('visible')) {
+            this.updateBookmarksOverlay();
+          }
+        }
+      });
+    }
+    
+    setTimeout(() => btn.classList.remove('bookmark-saved'), 600);
+    
+    if (goHome) {
+      setTimeout(() => {
+        window.location.href = './#/load-tutorial';
+      }, 300);
+    }
+  }
+
+  deleteBookmark(bookmarkId) {
+    this.bookmarks = this.bookmarks.filter(b => b.id !== bookmarkId);
+    this.saveBookmarks();
+    this.updateBookmarksOverlay();
+    this.showNotification('Bookmark deleted');
+  }
+
+  handleHomeClick() {
+    // Save current slide as bookmark, then go home
+    this.addBookmark(true);
+  }
+
+  handleBookmarkClick() {
+    // Save current slide as bookmark
+    this.addBookmark(false);
+  }
+
+  handleGotoBookmarksClick() {
+    this.openBookmarksOverlay();
+  }
+
+  showNotification(message) {
+    // Remove existing notification
+    const existing = document.querySelector('.bookmark-notification');
+    if (existing) existing.remove();
+    
+    const notification = document.createElement('div');
+    notification.className = 'bookmark-notification';
+    notification.innerHTML = `<i class="fas fa-bookmark"></i> ${message}`;
+    document.body.appendChild(notification);
+    
+    setTimeout(() => notification.classList.add('show'), 10);
+    setTimeout(() => {
+      notification.classList.remove('show');
+      setTimeout(() => notification.remove(), 300);
+    }, 2500);
+  }
+
+  createBookmarksOverlay() {
+    const overlay = document.createElement('div');
+    overlay.id = 'bookmarks-overlay';
+    overlay.className = 'bookmarks-overlay';
+    overlay.innerHTML = `
+      <div class="bookmarks-dialog">
+        <div class="bookmarks-header">
+          <h3><i class="fas fa-bookmark"></i> Bookmarks</h3>
+          <button class="bookmarks-close" aria-label="Close">&times;</button>
+        </div>
+        <div class="bookmarks-content" id="bookmarks-content">
+          <!-- Bookmarks will be rendered here -->
+        </div>
+      </div>
+    `;
+    document.body.appendChild(overlay);
+    
+    // Close handlers
+    overlay.querySelector('.bookmarks-close').addEventListener('click', () => this.closeBookmarksOverlay());
+    overlay.addEventListener('click', (e) => {
+      if (e.target === overlay) this.closeBookmarksOverlay();
+    });
+    
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && overlay.classList.contains('visible')) {
+        this.closeBookmarksOverlay();
+      }
+    });
+  }
+
+  async getChapterInfo(chapter) {
+    try {
+      const response = await fetch('./resources/misc/md-manifest.json');
+      const manifest = await response.json();
+      const entry = manifest.find(m => m.filename.replace('.md', '') === chapter);
+      return entry || { title: chapter, thumbnail: null };
+    } catch (e) {
+      return { title: chapter, thumbnail: null };
+    }
+  }
+
+  async updateBookmarksOverlay() {
+    const content = document.getElementById('bookmarks-content');
+    if (!content) return;
+    
+    if (this.bookmarks.length === 0) {
+      content.innerHTML = `
+        <div class="bookmarks-empty">
+          <i class="fas fa-bookmark"></i>
+          <p>No bookmarks yet</p>
+          <small>Click the bookmark icon to save slides</small>
+        </div>
+      `;
+      return;
+    }
+    
+    // Group bookmarks by chapter
+    const grouped = {};
+    for (const bookmark of this.bookmarks) {
+      const chapter = bookmark.chapter || 'Other';
+      if (!grouped[chapter]) {
+        grouped[chapter] = {
+          bookmarks: [],
+          info: await this.getChapterInfo(chapter)
+        };
+      }
+      grouped[chapter].bookmarks.push(bookmark);
+    }
+    
+    let html = '';
+    for (const [chapter, data] of Object.entries(grouped)) {
+      html += `
+        <div class="bookmarks-chapter">
+          <div class="chapter-header">
+            <span class="chapter-title">${data.info.title || chapter}</span>
+            <span class="chapter-count">${data.bookmarks.length}</span>
+          </div>
+          <div class="bookmarks-grid">
+      `;
+      
+      for (const bookmark of data.bookmarks) {
+        const thumbStyle = bookmark.thumbnail 
+          ? `background-image: url('${bookmark.thumbnail}')` 
+          : 'background: linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
+        
+        html += `
+          <div class="bookmark-card" data-url="${bookmark.url}" data-id="${bookmark.id}">
+            <div class="bookmark-thumb" style="${thumbStyle}">
+              <button class="bookmark-delete" data-id="${bookmark.id}" aria-label="Delete bookmark">
+                <i class="fas fa-trash-alt"></i>
+              </button>
+            </div>
+            <div class="bookmark-info">
+              <span class="bookmark-title">${bookmark.title}</span>
+            </div>
+          </div>
+        `;
+      }
+      
+      html += `
+          </div>
+        </div>
+      `;
+    }
+    
+    content.innerHTML = html;
+    
+    // Attach click handlers
+    content.querySelectorAll('.bookmark-card').forEach(card => {
+      card.addEventListener('click', (e) => {
+        if (!e.target.closest('.bookmark-delete')) {
+          window.location.href = card.dataset.url;
+          this.closeBookmarksOverlay();
+        }
+      });
+    });
+    
+    content.querySelectorAll('.bookmark-delete').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        this.deleteBookmark(btn.dataset.id);
+      });
+    });
+  }
+
+  openBookmarksOverlay() {
+    const overlay = document.getElementById('bookmarks-overlay');
+    if (overlay) {
+      this.updateBookmarksOverlay();
+      overlay.classList.add('visible');
+    }
+  }
+
+  closeBookmarksOverlay() {
+    const overlay = document.getElementById('bookmarks-overlay');
+    if (overlay) {
+      overlay.classList.remove('visible');
+    }
   }
 
   updateMenuItems() {
