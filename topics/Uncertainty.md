@@ -65,6 +65,37 @@ If measured = 48 ± 5 mg/L → compliant?
 
 ---
 
+<!-- .slide:id="uncertainty-vs-error" -->
+## Uncertainty vs. Error
+<!-- layout={rows: 1, columns: 2} -->
+<!-- position={row: 1, column: 1} -->
+-! **Error**:
+-: The difference between a measured and true value
+-: Can be positive or negative
+-: Unknown in practice (true value is unknown)
+
+<div style="background: #8b1a1a; color: #ffffff; padding: 12px; border-radius: 8px; margin: 10px 0;">
+Error quantifies how wrong a measurement is. It is based on the true value.
+</div>
+
+<!-- /position -->
+<!-- position={row: 1, column: 2} -->
+-! **Uncertainty**:
+-: The range within the true value is estimated to lie
+-: Always positive or zero
+-: Quantifiable through statistical methods
+
+<div style="background: #0d6b47; color: #ffffff; padding: 12px; border-radius: 8px; margin: 10px 0;">
+Uncertainty quantifies wrong a measurement could be. It is based on measurement data.
+</div>
+
+-< In statistics, we mostly deal with *uncertainty*, since the true value is unknown.
+
+<!-- /position -->
+<!-- /layout -->
+
+---
+
 <!-- .slide:id="types-of-uncertainty" -->
 ## Types of Uncertainty
 <!-- layout={rows: 1, columns: 2} -->
@@ -94,8 +125,6 @@ If measured = 48 ± 5 mg/L → compliant?
 <div id="uncertainty-types-chart" style="width: 100%; min-height: 550px;"></div>
 
 <script src="resources/js/charts/uncertainty_types_demo.js"></script>
-
-***
 
 *Key Distinctions*
 
@@ -158,19 +187,19 @@ $$\sigma = \sqrt{\frac{\sum_{i=1}^{n}(x_{i} - \bar{x})^2}{n-1}}$$
 <!-- position={row: 1, column: 1} -->
 *Sources in Water Analysis*
 
--! **Calibration bias**
+-! e.g., **Calibration bias**
 -: Incorrect standard concentrations
 -: Matrix mismatch
 
 ***
 
--! **Method bias**
+-! e.g., **Method bias**
 -: Incomplete extraction/digestion
 -: Interferences
 
 ***
 
--! **Instrument drift**
+-! e.g., **Instrument drift**
 -: Baseline shifts over time
 -: Degradation of components
 
@@ -197,6 +226,15 @@ $$\sigma = \sqrt{\frac{\sum_{i=1}^{n}(x_{i} - \bar{x})^2}{n-1}}$$
 
 <!-- /position -->
 <!-- /layout -->
+
+---
+
+<!-- .slide:id="standard-sample-standard-approach" -->
+## Standard Sample Standard Approach (Example)
+
+<div id="sss-demo-chart" style="width: 100%; min-height: 700px;"></div>
+
+<script src="resources/js/charts/standard_sample_standard_demo.js"></script>
 
 ---
 
@@ -386,13 +424,9 @@ cat("DO =", round(mean_do, 2), "±", round(se_do, 3), "mg/L (SE, n=10)")`;
 
 $$z = f(x_1, x_2, \ldots, x_n)$$
 
-***
+-: And each $x_i$ has uncertainty $\sigma_{x_i}$
 
--! And each $x_i$ has uncertainty $\sigma_{x_i}$
-
-***
-
--! What is the uncertainty $\sigma_z$ of the result?
+-? What is the uncertainty $\sigma_z$ of the result?
 
 ***
 
@@ -403,6 +437,16 @@ $$z = f(x_1, x_2, \ldots, x_n)$$
 
 <!-- /position -->
 <!-- /layout -->
+
+---
+
+<!-- .slide:id="error-propagation-example" -->
+## Introducing Problem
+-! Given a function for calculating the peak area from absorbance (Gaussian peak):
+$$A = h \cdot \sigma \cdot \sqrt{2\pi}$$
+
+-? What is the uncertainty in $A$ (called $\sigma_A$)? 
+-? What do we need to know?
 
 ---
 
@@ -446,7 +490,7 @@ $$\sigma_z = \sqrt{\sum_{i=1}^{n} \left( \frac{\partial f}{\partial x_i} \cdot \
 ---
 
 <!-- .slide:id="propagation-simple-rules" -->
-## Simple Propagation Rules
+## Simple Propagation Rules, A Helpful Shortcut
 <!-- layout={rows: 1, columns: 2} -->
 <!-- position={row: 1, column: 1} -->
 *Addition and Subtraction*
@@ -668,19 +712,18 @@ $$= \sqrt{0.000719} = 0.0268 = 2.68\%$$
 ---
 
 <!-- .slide:id="chromatography-example" -->
-## Example 2: HPLC Peak Area Integration
+## Example 2: Internal Standard Method in HPLC
 <!-- layout={rows: 1, columns: 2} -->
 <!-- position={row: 1, column: 1} -->
 *Concentration from Peak Area*
 
-$$c_{sample} = c_{std} \cdot \frac{A_{sample}}{A_{std}} \cdot \frac{V_{std}}{V_{sample}}$$
+$$c_{sample} = c_{std} \cdot \frac{A_{sample}}{A_{std}}$$
 
 ***
 
 -! Uncertainties in:
 -: Standard concentration ($c_{std}$)
 -: Peak areas ($A_{sample}$, $A_{std}$)
--: Injection volumes ($V_{std}$, $V_{sample}$), assumed equal
 
 ***
 
@@ -688,7 +731,7 @@ $$c_{sample} = c_{std} \cdot \frac{A_{sample}}{A_{std}} \cdot \frac{V_{std}}{V_{
 -: $c_{std} = 100.0 \pm 1.0$ µg/L
 -: $A_{sample} = 45280 \pm 450$
 -: $A_{std} = 52100 \pm 520$
--: $V_{std} = V_{sample} = x \pm 0 $ ml
+
 
 <!-- /position -->
 <!-- position={row: 1, column: 2} -->
@@ -833,6 +876,54 @@ $$\text{PI}(y_{\text{new}}) = y\_{hat} \pm t_{\text{crit}} \cdot \sqrt{\mathbf{x
 -: PLUS residual variance ($\sigma\_{hat}^2$)
 <!-- /position -->
 <!-- /layout -->
+
+---
+
+<!-- .slide:id="from-uncertainty-to-bands" -->
+## From Uncertainty to Bands: Understanding the Matrix Formula
+<!-- layout={rows: 1, columns: 2} -->
+<!-- position={row: 1, column: 1} -->
+*Breaking Down the Formula*
+$$\sqrt{\mathbf{x}^\top \text{Var}(\boldsymbol{\beta}\_{hat}) \mathbf{x}}$$
+-: This is the matrix equivalent of the general error propagation formula
+-: Captures how uncertainty in coefficients propagates to predictions
+
+***
+
+$$\sigma_y = \sqrt{\mathbf{x}^\top \text{Var}(\boldsymbol{\beta}\_{hat}) \mathbf{x}} = \sqrt{\sum_{i=0}^{p} \left( \frac{\partial y}{\partial \beta_i} \cdot \sigma_{\beta_i} \right)^2}$$
+
+<!-- /position -->
+<!-- position={row: 1, column: 2} -->
+*Final Confidence Interval Expression*
+$$ CI(y\_{hat}) = y\_{hat} \pm t_{\text{crit}} \cdot \sigma_y $$
+<!-- /position -->
+<!-- /layout -->
+
+---
+
+<!-- .slide:id="when-analytical-fails" -->
+## When Analytical Propagation Fails
+-! Given a function:
+
+$$ z = median(x_1, x_2, \ldots, x_n) $$
+-: The median function is non-linear and non-differentiable at certain points
+-: Analytical propagation using partial derivatives is not feasible
+
+--- OR ---
+
+-! Given a complex model (e.g., machine learning model)
+
+$$ z = isContaminated(features) $$
+-: The model may not have a closed-form expression
+-: Analytical propagation is impractical
+
+---
+
+<!-- .slide:id="bootstrap-intro-animation" -->
+## Bootstrapping: Idea
+
+<div id="bootstrap-idea-chart" style="width:100%; display:flex; justify-content:center; margin-top:-20px;"></div>
+<script src="resources/js/charts/bootstrap_idea_animation.js"></script>
 
 ---
 
@@ -1057,49 +1148,76 @@ cat("\\n95% CI for slope: [",
 
 ---
 
+<!-- .slide:id="monte-carlo-intro-problem" -->
+## When bootstrap is not applicable
+-! Bootstrap resamples existing data
+
+-? But what if we don't have data yet?
+
+***
+
+-! Example scenarios:
+-: Testing a new peak detection algorithm
+-: Evaluating sensor performance under varying conditions
+-: Studying system behavior with controlled input variations
+
+---
+
+<!-- .slide:id="monte-carlo-idea-animation" -->
+## Monte Carlo: Idea
+-? How can we find the limits for our peak detection algorithm?
+-? More concretely, at what S/N ratio will it detect peaks 95% of the time?
+
+<div id="monte-carlo-idea-chart" style="width:100%; display:flex; justify-content:center; margin-top:-20px;"></div>
+<script src="resources/js/charts/monte_carlo_idea_animation.js"></script>
+
+---
+
 <!-- .slide:id="monte-carlo-intro" -->
 ## Monte Carlo Simulation
 <!-- layout={rows: 1, columns: 2} -->
 <!-- position={row: 1, column: 1} -->
 *What is Monte Carlo?*
 
--! Simulate random processes to estimate outcomes
+-! Simulate experiments by generating **synthetic** data
 
 ***
 
--! For uncertainty propagation:
--: Define distributions for all inputs
+-! The MC approach:
+-: Define probability distributions for all inputs
 -: Randomly sample from each distribution
--: Calculate result for each sample
--: Distribution of results = uncertainty
+-: Run your analysis on synthetic data
+-: Repeat thousands of times → get distribution of results
 
-***
+<div style="font-size: 0.75em;">
 
--! Key difference from bootstrap:
--: Bootstrap resamples existing data
--: Monte Carlo generates new data from distributions
+| Bootstrap | Monte Carlo |
+|-----------|-------------|
+| Resamples **existing** data | Generates **new** data |
+| "How variable is my estimate?" | "What happens under different conditions?" |
+
+</div>
 
 <!-- /position -->
 <!-- position={row: 1, column: 2} -->
-*When to Use Monte Carlo?*
+*Why Monte Carlo?*
 
--! Preferred when:
--: Analytical propagation is too complex
--: Non-linear relationships
--: Many correlated variables
--: Need full output distribution
+-! Answer questions that can't be measured directly:
+-: "At what S/N will my peak detector work 95% of the time?"
+-: "How does baseline drift affect my quantification?"
+-: "What's the probability of a false positive?"
 
 ***
 
--! Examples:
--: Complex measurement equations
--: Limit of detection estimation
--: Risk assessment
+-! Control individual factors:
+-: Isolate effect of noise vs. peak width vs. baseline
+-: Test edge cases systematically
+-: Understand system behavior before real experiments
 
 ***
 
 <div style="background: #1a588bff; color: #ffffff; padding: 12px; border-radius: 8px; margin: 10px 0;">
-<b>Rule:</b> Monte Carlo can handle ANY uncertainty propagation problem!
+<b>Power of MC:</b> Test thousands of scenarios in seconds!
 </div>
 
 <!-- /position -->
@@ -1111,207 +1229,255 @@ cat("\\n95% CI for slope: [",
 ## Monte Carlo Algorithm
 <!-- layout={rows: 1, columns: 2} -->
 <!-- position={row: 1, column: 1} -->
-*Step-by-Step*
+*General Framework*
 
-1. **Define input distributions**
-   - Mean and SD for each input
-   - Choose distribution type (normal, uniform, etc.)
+1. Define input distributions
+-: What parameters vary?
+-: What are their distributions?
 
-2. **Generate random samples**
-   - N = 10,000 or more
-   - Sample from each input distribution
+2. Generate synthetic data
+-: Sample from distributions
+-: Create realistic data (signal + noise)
 
-3. **Calculate result for each sample**
-   - Apply measurement equation
+3. Apply your method
+-: Run detection/quantification/analysis
 
-4. **Analyze output distribution**
-   - Mean, SD, percentiles
+4. Collect results
+-: Did it work? What was the result?
+
+5. Analyze statistics
+-: Success rate, bias, variance
 
 <!-- /position -->
 <!-- position={row: 1, column: 2} -->
-*Example Structure*
+*Peak Detection Example* (Pseudocode)
 
+```python
+for i in 1 to N:
+  # 1. Sample parameters
+  signal ~ Normal(100, 10)
+  noise_sd ~ Normal(20, 5)
+  width ~ Normal(0.5, 0.05)
+  # 2. Generate synthetic peak
+  peak = gaussian(signal, width)
+  data = peak + noise(noise_sd)
+  # 3. Apply detection algorithm
+  detected = detect_peak(data)
+  # 4. Store result
+  results[i] = detected
+# 5. Calculate detection rate
+detection_rate = mean(results)
 ```
-For i = 1 to N:
-  # Sample inputs
-  A_i ~ Normal(0.542, 0.008)
-  ε_i ~ Normal(15000, 300)
-  l_i ~ Normal(1.00, 0.01)
-  
-  # Calculate result
-  c_i = A_i / (ε_i * l_i)
 
-# Analyze c_1, c_2, ..., c_N
-mean(c), sd(c), quantile(c, 0.025)
-```
-
-***
-
--! This gives the full uncertainty distribution!
+-! This tells us: probability of detection for given parameter distributions!
 
 <!-- /position -->
 <!-- /layout -->
 
 ---
 
-<!-- .slide:id="monte-carlo-peak-area" -->
-## MC Example: Noisy Chromatographic Peak
+<!-- .slide:id="mc-peak-detection-problem" -->
+## MC Case Study: Peak Detection Reliability
 <!-- layout={rows: 1, columns: 2} -->
 <!-- position={row: 1, column: 1} -->
-*The Problem*
+*The Real-World Problem*
 
--! Peak area integration with noise:
--: Baseline uncertainty
--: Integration limits uncertainty
--: Peak shape variability
+-! You develop a peak detection algorithm
+
+-! **Critical question:**
+> "At what Signal-to-Noise ratio will peaks be detected in **95% of cases**?"
 
 ***
 
--! Analytical propagation is complex!
+-! This cannot be answered by:
+-: Single measurement (too variable)
+-: Analytical calculation (too complex)
+-: Bootstrap (need synthetic data with known truth)
 
--! Monte Carlo is the practical solution.
+***
+
+-! **Monte Carlo is the solution!**
 
 <!-- /position -->
 <!-- position={row: 1, column: 2} -->
-<div id="mc-peak-area-container"></div>
+*What Affects Peak Detection?*
 
-<script>
-(function() {
-  const init = async () => {
-    const code = `# Monte Carlo for peak area uncertainty
-set.seed(42)
-N <- 10000
+-! **Primary factors:**
+-: Signal-to-Noise ratio (S/N)
+-: Peak width (narrow peaks harder)
+-: Noise characteristics (white vs. colored)
 
-# True parameters (with uncertainties)
-peak_height_mean <- 1000    # AU
-peak_height_sd <- 25
-peak_width_mean <- 0.5      # min
-peak_width_sd <- 0.02
-baseline_mean <- 50         # AU
-baseline_sd <- 10
+***
 
-# Monte Carlo simulation
-peak_heights <- rnorm(N, peak_height_mean, peak_height_sd)
-peak_widths <- rnorm(N, peak_width_mean, peak_width_sd)
-baselines <- rnorm(N, baseline_mean, baseline_sd)
+-! **Secondary factors:**
+-: Baseline drift
+-: Peak shape (tailing, fronting)
+-: Sampling rate (points per peak)
+-: Detection algorithm parameters
 
-# Gaussian peak area: A = height * width * sqrt(2*pi) / 2.35
-# Corrected for baseline
-areas <- (peak_heights - baselines) * peak_widths * sqrt(2*pi) / 2.35
+***
 
-cat("=== Monte Carlo Peak Area Uncertainty ===\\n")
-cat("Mean area:", round(mean(areas), 1), "AU·min\\n")
-cat("SD:", round(sd(areas), 1), "AU·min\\n")
-cat("95% CI: [", round(quantile(areas, 0.025), 1), ",",
-    round(quantile(areas, 0.975), 1), "]\\n")
-cat("Relative uncertainty:", round(sd(areas)/mean(areas)*100, 1), "%")`;
+-! MC lets us **isolate and study each factor**!
 
-    const fallback = () => {
-      return `[Simulated]\nMean area: 506.8 AU·min\nSD: 16.4 AU·min\n95% CI: [474.8, 539.2]\nRelative uncertainty: 3.2%`;
-    };
-
-    const helper = await window.ensureWebRHelper();
-    await helper.initInteractiveSection({
-      containerId: 'mc-peak-area-container',
-      code: code,
-      slideId: 'monte-carlo-peak-area',
-      fallback: fallback,
-      runLabel: 'Run Monte Carlo'
-    });
-  };
-
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', init);
-  } else {
-    init();
-  }
-})();
-</script>
+<div style="background: #2d5016; color: #ffffff; padding: 10px; border-radius: 8px; margin: 10px 0;">
+<b>Strategy:</b> Vary one factor, hold others constant → understand its impact
+</div>
 
 <!-- /position -->
 <!-- /layout -->
 
 ---
 
-<!-- .slide:id="monte-carlo-lod" -->
-## MC Example: Limit of Detection
+<!-- .slide:id="mc-ftest-detection" -->
+## Peak Detection: The F-Test Approach
 <!-- layout={rows: 1, columns: 2} -->
 <!-- position={row: 1, column: 1} -->
-*LoD Estimation with Uncertainty*
+*Statistical Peak Detection*
 
--! Classical LoD: $$\frac{3\cdot s_{blank}}{sensitivity}$$
+-! Simple threshold (Signal > 3σ) is **naive**!
 
--: $s_{blank}$ : standard deviation of blank
--: ${sensitivity}$ : calibration slope
--: $3$ : IUPAC factor (Currie would use 3.29)
+-! Better approach: **Global F-test**
 
 ***
 
--! But what about uncertainty in:
--: Blank standard deviation?
--: Calibration slope?
+*Concept:*
+1. **Null model:** Data = Baseline only
+   - $y = a + bt$ (linear baseline)
+   
+2. **Full model:** Data = Baseline + Peak
+   - $y = a + bt + h \cdot e^{-\frac{(t-\mu)^2}{2\sigma^2}}$
 
-***
-
--! Monte Carlo propagates all uncertainties!
+3. **F-test:** Is the peak model significantly better?
 
 <!-- /position -->
 <!-- position={row: 1, column: 2} -->
-<div id="mc-lod-container"></div>
+*The F-Statistic*
 
-<script>
-(function() {
-  const init = async () => {
-    const code = `# Monte Carlo LoD estimation
-set.seed(42)
-N <- 10000
+$$F = \frac{(RSS_{null} - RSS_{full}) / \Delta df}{RSS_{full} / df_{full}}$$
 
-# Blank measurements (10 replicates)
-blanks <- c(0.012, 0.018, 0.008, 0.015, 0.011, 
-            0.020, 0.014, 0.009, 0.016, 0.013)
-s_blank <- sd(blanks)
+-: $RSS$ = Residual Sum of Squares
+-: $\Delta df$ = extra parameters in peak model (≈2)
+-: $df_{full}$ = degrees of freedom of full model
 
-# Calibration slope with uncertainty
-slope_mean <- 0.102   # Signal per µg/L
-slope_se <- 0.005
+***
 
-# Monte Carlo simulation
-# Sample s_blank from chi-squared scaled distribution
-s_blanks_mc <- s_blank * sqrt(rchisq(N, 9) / 9)
-slopes_mc <- rnorm(N, slope_mean, slope_se)
+-! **Decision:**
+-: If $F > F_{crit}(\alpha=0.05)$ → Peak detected!
+-: Otherwise → No significant peak
 
-# LoD = 3 * s_blank / slope
-lod_mc <- 3 * s_blanks_mc / slopes_mc
+***
 
-cat("=== Monte Carlo LoD Estimation ===\\n")
-cat("Classical LoD:", round(3*s_blank/slope_mean, 3), "µg/L\\n")
-cat("\\nMC Results:\\n")
-cat("Mean LoD:", round(mean(lod_mc), 3), "µg/L\\n")
-cat("SD:", round(sd(lod_mc), 4), "µg/L\\n")
-cat("95% CI: [", round(quantile(lod_mc, 0.025), 3), ",",
-    round(quantile(lod_mc, 0.975), 3), "] µg/L")`;
+<div style="background: #1a588bff; color: #ffffff; padding: 10px; border-radius: 8px;">
+<b>Advantage:</b> Accounts for noise level, peak shape, and baseline automatically!
+</div>
 
-    const fallback = () => {
-      return `[Simulated]\nClassical LoD: 0.108 µg/L\n\nMC Results:\nMean LoD: 0.112 µg/L\nSD: 0.0215 µg/L\n95% CI: [0.076, 0.162] µg/L`;
-    };
+<!-- /position -->
+<!-- /layout -->
 
-    const helper = await window.ensureWebRHelper();
-    await helper.initInteractiveSection({
-      containerId: 'mc-lod-container',
-      code: code,
-      slideId: 'monte-carlo-lod',
-      fallback: fallback,
-      runLabel: 'Estimate LoD'
-    });
-  };
+---
 
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', init);
-  } else {
-    init();
-  }
-})();
-</script>
+## MC Simulation: Peak Detection
+
+<div id="mc-peak-detection-chart" style="width:100%; display:flex; justify-content:center;"></div>
+<script src="resources/js/charts/mc_peak_detection_simulation.js"></script>
+
+---
+
+<!-- .slide:id="mc-sensitivity-analysis" -->
+## MC: Sensitivity Analysis
+<!-- layout={rows: 1, columns: 2} -->
+<!-- position={row: 1, column: 1} -->
+*Which Factor Matters Most?*
+
+-! MC lets us isolate individual factors:
+
+***
+
+**Experiment 1:** Vary S/N only
+- Hold width, baseline constant
+- → Direct impact of noise
+
+**Experiment 2:** Vary peak width only  
+- Hold S/N, baseline constant
+- → Impact of chromatographic resolution
+
+**Experiment 3:** Vary baseline drift only
+- Hold S/N, width constant
+- → Impact of detector stability
+
+<!-- /position -->
+<!-- position={row: 1, column: 2} -->
+*Typical Findings*
+
+-! **S/N dominates** for detection probability
+
+-! But secondary factors matter for:
+-: **Peak width**: Narrow peaks need higher S/N
+-: **Baseline drift**: Shifts effective threshold
+-: **Sampling rate**: Too few points miss narrow peaks
+
+***
+
+<div style="background: #2d5016; color: #ffffff; padding: 12px; border-radius: 8px; margin: 10px 0;">
+<b>MC Insight:</b> Understanding factor importance guides method optimization!
+</div>
+
+***
+
+-! This is why MC is powerful:
+-: One simulation → answer ONE question
+-: Systematic MC → understand the SYSTEM
+
+<!-- /position -->
+<!-- /layout -->
+
+---
+
+<!-- .slide:id="mc-vs-analytical" -->
+## When to Use Monte Carlo?
+<!-- layout={rows: 1, columns: 2} -->
+<!-- position={row: 1, column: 1} -->
+*MC is Preferred When:*
+
+-! **System is complex**
+-: Many interacting factors
+-: Non-linear relationships
+-: No closed-form solution
+
+***
+
+-! **You need probabilities**
+-: "What's the chance of detection?"
+-: "How often will we get false positives?"
+-: "What's the 95th percentile?"
+
+***
+
+-! **Testing edge cases**
+-: What if noise doubles?
+-: What if baseline drifts?
+-: Systematic exploration
+
+<!-- /position -->
+<!-- position={row: 1, column: 2} -->
+*MC vs. Other Methods*
+
+| Scenario | Best Method |
+|----------|-------------|
+| Simple formula | Analytical propagation |
+| Have real data | Bootstrap |
+| Complex system | **Monte Carlo** |
+| Need probabilities | **Monte Carlo** |
+| Sensitivity analysis | **Monte Carlo** |
+
+***
+
+<div style="background: #8b1a1a; color: #ffffff; padding: 12px; border-radius: 8px; margin: 10px 0;">
+<b>Remember:</b> MC requires knowing the underlying distributions!
+</div>
+
+-! If distributions unknown → Bootstrap
+-! If distributions known → Monte Carlo
 
 <!-- /position -->
 <!-- /layout -->
