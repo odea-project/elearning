@@ -183,5 +183,30 @@
       "Hypothesis Testing",
       "one-way ANOVA"
     ]
+  },
+  {
+    "filename": "Uncertainty.md",
+    "title": "Uncertainty & Error Analysis",
+    "keywords": [
+      "uncertainty",
+      "error analysis",
+      "GUM",
+      "error propagation",
+      "confidence interval",
+      "prediction interval",
+      "bootstrap",
+      "method validation",
+      "LOD",
+      "LOQ",
+      "trueness",
+      "precision",
+      "bias"
+    ],
+    "thumbnail": "resources/icons/uncertainty.svg",
+    "requirements": [
+      "Variance",
+      "Linear Regression",
+      "Distributions"
+    ]
   }
 ]

@@ -1284,8 +1284,8 @@ detection_rate = mean(results)
 
 -! You develop a peak detection algorithm
 
--! **Critical question:**
-> "At what Signal-to-Noise ratio will peaks be detected in **95% of cases**?"
+-! Critical question:
+-? "At what Signal-to-Noise ratio will peaks be detected in **95%** of cases?"
 
 ***
 
@@ -1294,81 +1294,27 @@ detection_rate = mean(results)
 -: Analytical calculation (too complex)
 -: Bootstrap (need synthetic data with known truth)
 
-***
-
--! **Monte Carlo is the solution!**
-
 <!-- /position -->
 <!-- position={row: 1, column: 2} -->
 *What Affects Peak Detection?*
 
--! **Primary factors:**
+-! Primary factors:
 -: Signal-to-Noise ratio (S/N)
 -: Peak width (narrow peaks harder)
--: Noise characteristics (white vs. colored)
 
 ***
 
--! **Secondary factors:**
+-! Secondary factors:
 -: Baseline drift
 -: Peak shape (tailing, fronting)
 -: Sampling rate (points per peak)
--: Detection algorithm parameters
 
 ***
 
--! MC lets us **isolate and study each factor**!
+-! MC lets us isolate and study each factor!
 
 <div style="background: #2d5016; color: #ffffff; padding: 10px; border-radius: 8px; margin: 10px 0;">
 <b>Strategy:</b> Vary one factor, hold others constant → understand its impact
-</div>
-
-<!-- /position -->
-<!-- /layout -->
-
----
-
-<!-- .slide:id="mc-ftest-detection" -->
-## Peak Detection: The F-Test Approach
-<!-- layout={rows: 1, columns: 2} -->
-<!-- position={row: 1, column: 1} -->
-*Statistical Peak Detection*
-
--! Simple threshold (Signal > 3σ) is **naive**!
-
--! Better approach: **Global F-test**
-
-***
-
-*Concept:*
-1. **Null model:** Data = Baseline only
-   - $y = a + bt$ (linear baseline)
-   
-2. **Full model:** Data = Baseline + Peak
-   - $y = a + bt + h \cdot e^{-\frac{(t-\mu)^2}{2\sigma^2}}$
-
-3. **F-test:** Is the peak model significantly better?
-
-<!-- /position -->
-<!-- position={row: 1, column: 2} -->
-*The F-Statistic*
-
-$$F = \frac{(RSS_{null} - RSS_{full}) / \Delta df}{RSS_{full} / df_{full}}$$
-
--: $RSS$ = Residual Sum of Squares
--: $\Delta df$ = extra parameters in peak model (≈2)
--: $df_{full}$ = degrees of freedom of full model
-
-***
-
--! **Decision:**
--: If $F > F_{crit}(\alpha=0.05)$ → Peak detected!
--: Otherwise → No significant peak
-
-***
-
-<div style="background: #1a588bff; color: #ffffff; padding: 10px; border-radius: 8px;">
-<b>Advantage:</b> Accounts for noise level, peak shape, and baseline automatically!
 </div>
 
 <!-- /position -->
@@ -1383,370 +1329,36 @@ $$F = \frac{(RSS_{null} - RSS_{full}) / \Delta df}{RSS_{full} / df_{full}}$$
 
 ---
 
-<!-- .slide:id="mc-sensitivity-analysis" -->
-## MC: Sensitivity Analysis
-<!-- layout={rows: 1, columns: 2} -->
-<!-- position={row: 1, column: 1} -->
-*Which Factor Matters Most?*
-
--! MC lets us isolate individual factors:
-
-***
-
-**Experiment 1:** Vary S/N only
-- Hold width, baseline constant
-- → Direct impact of noise
-
-**Experiment 2:** Vary peak width only  
-- Hold S/N, baseline constant
-- → Impact of chromatographic resolution
-
-**Experiment 3:** Vary baseline drift only
-- Hold S/N, width constant
-- → Impact of detector stability
-
-<!-- /position -->
-<!-- position={row: 1, column: 2} -->
-*Typical Findings*
-
--! **S/N dominates** for detection probability
-
--! But secondary factors matter for:
--: **Peak width**: Narrow peaks need higher S/N
--: **Baseline drift**: Shifts effective threshold
--: **Sampling rate**: Too few points miss narrow peaks
-
-***
-
-<div style="background: #2d5016; color: #ffffff; padding: 12px; border-radius: 8px; margin: 10px 0;">
-<b>MC Insight:</b> Understanding factor importance guides method optimization!
-</div>
-
-***
-
--! This is why MC is powerful:
--: One simulation → answer ONE question
--: Systematic MC → understand the SYSTEM
-
-<!-- /position -->
-<!-- /layout -->
-
----
-
-<!-- .slide:id="mc-vs-analytical" -->
-## When to Use Monte Carlo?
-<!-- layout={rows: 1, columns: 2} -->
-<!-- position={row: 1, column: 1} -->
-*MC is Preferred When:*
-
--! **System is complex**
--: Many interacting factors
--: Non-linear relationships
--: No closed-form solution
-
-***
-
--! **You need probabilities**
--: "What's the chance of detection?"
--: "How often will we get false positives?"
--: "What's the 95th percentile?"
-
-***
-
--! **Testing edge cases**
--: What if noise doubles?
--: What if baseline drifts?
--: Systematic exploration
-
-<!-- /position -->
-<!-- position={row: 1, column: 2} -->
-*MC vs. Other Methods*
-
-| Scenario | Best Method |
-|----------|-------------|
-| Simple formula | Analytical propagation |
-| Have real data | Bootstrap |
-| Complex system | **Monte Carlo** |
-| Need probabilities | **Monte Carlo** |
-| Sensitivity analysis | **Monte Carlo** |
-
-***
-
-<div style="background: #8b1a1a; color: #ffffff; padding: 12px; border-radius: 8px; margin: 10px 0;">
-<b>Remember:</b> MC requires knowing the underlying distributions!
-</div>
-
--! If distributions unknown → Bootstrap
--! If distributions known → Monte Carlo
-
-<!-- /position -->
-<!-- /layout -->
-
----
-
-<!-- .slide:id="sampling-uncertainty" -->
-## Sampling Uncertainty
-<!-- layout={rows: 1, columns: 2} -->
-<!-- position={row: 1, column: 1} -->
-*The Overlooked Giant*
-
--! Often **larger** than measurement uncertainty!
-
-***
-
--! Sources:
--: Spatial heterogeneity
--: Temporal variability
--: Sample handling/preservation
-
-***
-
-<div style="background: #8b1a1a; color: #ffffff; padding: 12px; border-radius: 8px; margin: 10px 0;">
-<b>Reality check:</b> A perfect measurement of a bad sample is still wrong!
-</div>
-
-<!-- /position -->
-<!-- position={row: 1, column: 2} -->
-*Example: River Monitoring*
-
--! Nitrate concentration varies:
--: Across the channel (±10%)
--: Over the day (±20%)
--: Between sampling events (±50%)
-
-***
-
--! Measurement precision: ±2%
-
-***
-
--? Where should we focus to reduce total uncertainty?
-
-***
-
--= More samples often beats better instruments!
-
-<!-- /position -->
-<!-- /layout -->
-
----
-
-<!-- .slide:id="composite-samples" -->
-## Composite Samples
-<!-- layout={rows: 1, columns: 2} -->
-<!-- position={row: 1, column: 1} -->
-*Strategy to Reduce Sampling Uncertainty*
-
--! Combine multiple grab samples into one
-
-***
-
--! Advantages:
--: Averages spatial/temporal variability
--: Reduces number of analyses
--: Cost-effective
-
-***
-
--! Disadvantages:
--: Lose information about variability
--: Can't detect hotspots
--: Dilution effects
-
-<!-- /position -->
-<!-- position={row: 1, column: 2} -->
-*Uncertainty Considerations*
-
--! Composite of n subsamples:
-
-$$\sigma_{composite} = \frac{\sigma_{grab}}{\sqrt{n}}$$
-
-***
-
--! BUT: Total uncertainty now dominated by:
--: Analytical uncertainty
--: Subsampling representativeness
-
-***
-
--? When is composite sampling appropriate?
--: Regulatory compliance (mean concentrations)
--: NOT for peak detection or variability assessment
-
-<!-- /position -->
-<!-- /layout -->
-
----
-
-<!-- .slide:id="detection-limit-uncertainty" -->
-## Uncertainty Near Detection Limits
-<!-- layout={rows: 1, columns: 2} -->
-<!-- position={row: 1, column: 1} -->
-*The Low-Concentration Problem*
-
--! Near LoD:
--: Relative uncertainty is VERY high
--: Distribution may be truncated
--: "Non-detects" are common
-
-***
-
-<div style="font-size: 0.8em;">
-
-| True Conc | Measured | Rel. Uncertainty |
-|:---------:|:--------:|:----------------:|
-| 10 × LoD | 10.2 | 10% |
-| 2 × LoD | 1.8 | 50% |
-| 1 × LoD | 0.9 | 100% |
-| 0.5 × LoD | <LoD | — |
-
-</div>
-
-<!-- /position -->
-<!-- position={row: 1, column: 2} -->
-*Handling Non-Detects*
-
--! Common approaches:
--: Report as <LoD
--: Substitute with LoD/2 (biased!)
--: Use statistical methods (MLE)
-
-***
-
--! Best practice:
--: Report detection frequency
--: Use appropriate statistical methods
--: Don't over-interpret low values
-
-***
-
-<div style="background: #1a588bff; color: #ffffff; padding: 12px; border-radius: 8px; margin: 10px 0; font-size: 0.85em;">
-<b>Rule:</b> Measurements within 2× LoD should be interpreted with caution!
-</div>
-
-<!-- /position -->
-<!-- /layout -->
-
----
-
-<!-- .slide:id="calibration-transfer" -->
-## Calibration Transfer Uncertainty
-<!-- layout={rows: 1, columns: 2} -->
-<!-- position={row: 1, column: 1} -->
-*Between-Instrument Comparability*
-
--! Same method, different instruments:
--: Response factors differ
--: Matrix effects vary
--: Calibration drift
-
-***
-
--! Between-laboratory comparisons:
--: Different standards
--: Environmental conditions
--: Operator effects
-
-<!-- /position -->
-<!-- position={row: 1, column: 2} -->
-*Quantifying Transfer Uncertainty*
-
--! Round-robin tests reveal:
--: Reproducibility SD (between labs)
--: Repeatability SD (within lab)
-
-***
-
-$$\sigma_{total}^2 = \sigma_{repeatability}^2 + \sigma_{reproducibility}^2$$
-
-***
-
--! Typical ratios:
--: $\sigma_R / \sigma_r \approx 2-5$ for routine methods
--: Higher for complex matrices
-
-***
-
--? Inter-laboratory comparisons are essential for method validation!
-
-<!-- /position -->
-<!-- /layout -->
-
----
-
-<!-- .slide:id="method-comparison" -->
-## When to Use Which Method?
-<!-- layout={rows: 1, columns: 2} -->
-<!-- position={row: 1, column: 1} -->
-*Analytical Error Propagation*
-
-✓ Simple functions (+ - × ÷)
-✓ Few variables
-✓ Independent uncertainties
-✓ Linear relationships
-✓ Quick calculations
-
-✗ Complex equations
-✗ Correlated variables
-✗ Non-linear effects
-
-<!-- /position -->
-<!-- position={row: 1, column: 2} -->
-*Bootstrap*
-
-✓ Non-parametric (no distribution assumptions)
-✓ Small samples
-✓ Complex statistics (median, percentiles)
-✓ Correlation preserved in data
-
-✗ Requires representative original sample
-✗ Computationally intensive
-
-***
-
-*Monte Carlo*
-
-✓ ANY function complexity
-✓ Full output distributions
-✓ Correlated inputs (with care)
-✓ Non-linear propagation
-
-✗ Need to specify input distributions
-✗ Computationally intensive
-
-<!-- /position -->
-<!-- /layout -->
-
----
-
-<!-- .slide:id="decision-flowchart" -->
-## Decision Guide for Uncertainty Methods
-
-<div id="uncertainty-method-flowchart" style="width: 100%; min-height: 500px;"></div>
-
-<script src="resources/js/charts/uncertainty_method_flowchart.js"></script>
-
----
-
 <!-- .slide:id="reporting-uncertainty" -->
 ## Reporting Uncertainties
 <!-- layout={rows: 1, columns: 2} -->
 <!-- position={row: 1, column: 1} -->
 *Formats*
 
--! Standard format:
+-! Standard uncertainty ($u$):
 
 $$x \pm u$$
 
--: Example: $12.34 \pm 0.15$ mg/L
+-: Example: $12.34 \pm 0.15$ mg/L ($u$, $k=1$, 68%)
 
 ***
 
--! Parentheses notation:
+-! Expanded uncertainty ($U = k \cdot u$):
+
+$$x \pm U \quad (k=2)$$
+
+-: Example: $12.34 \pm 0.30$ mg/L ($U$, $k=2$, 95%)
+
+<!-- /position -->
+<!-- position={row: 1, column: 2} -->
+
+*Formats (cont.)*
+
+-! Parentheses notation (standard uncertainty only):
 
 $$x(u)$$
 
--: Example: $12.34(15)$ = $12.34 \pm 0.15$
+-: Example: $12.34(15)$ means $12.34 \pm 0.15$
 
 ***
 
@@ -1754,122 +1366,402 @@ $$x(u)$$
 
 $$x_{-u_1}^{+u_2}$$
 
--: Example: $12.34_{-0.12}^{+0.18}$ mg/L
+-: For non-symmetric distributions or non-linear propagation
 
 <!-- /position -->
-<!-- position={row: 1, column: 2} -->
-*Rules*
+<!-- /layout -->
 
--! Uncertainty: 1-2 significant figures
+---
 
--! Value: Match decimal places to uncertainty
+<!-- .slide:id="reporting-rules" -->
+## Reporting Uncertainty: Best Practices
+<!-- layout={rows: 1, columns: 2} -->
+<!-- position={row: 1, column: 1} -->
+*Rules (GUM-compliant)*
+-: GUM: Guide to the Expression of Uncertainty in Measurement
+
+-! Uncertainty: typically 1–2 significant figures
+
+-! Value: round to match decimal places of uncertainty
 
 ***
 
 <div style="background: #0d6b47; color: #ffffff; padding: 12px; border-radius: 8px; margin: 10px 0;">
-<b>Good:</b> 12.34 ± 0.15 mg/L<br>
-<b>Bad:</b> 12.3421 ± 0.1534 mg/L
+<b>Good:</b> 12.34 ± 0.15 mg/L (U, k=2)<br>
+</div>
+
+<div style="background: #8b1a1a; color: #ffffff; padding: 12px; border-radius: 8px; margin: 10px 0;">
+<b>Bad:</b> 12.34567 ± 0.15324 mg/L
+</div>
+
+<!-- /position -->
+<!-- position={row: 1, column: 2} -->
+
+-! Always specify:
+-: Type: **standard** ($u$) or **expanded** ($U$)
+-: Coverage factor ($k$) and coverage probability
+-: Method used (GUM / Monte Carlo / Bootstrap)
+-: Number of repetitions
+
+<!-- /position -->
+<!-- /layout -->
+
+---
+
+<!-- .slide:id="validation-uncertainty" -->
+## Method Validation & Uncertainty
+<!-- layout={rows: 1, columns: 2} -->
+<!-- position={row: 1, column: 1} -->
+*Direct Uncertainty Parameters*
+
+<div style="font-size: 0.85em;">
+
+| Parameter | Contributes to |
+|:----------|:---------------|
+| Precision | Random uncertainty |
+| Trueness/Bias | Systematic uncertainty |
+| Calibration | Model uncertainty |
+| Matrix effects | Method uncertainty |
+| Stability | Time-dependent uncertainty |
+
+</div>
+
+<!-- /position -->
+<!-- position={row: 1, column: 2} -->
+*Indirect Uncertainty Parameters*
+
+<div style="font-size: 0.85em;">
+
+| Parameter | Relevance |
+|:----------|:----------|
+| LOD/LOQ | Defines reliable measurement range |
+| Robustness | Sensitivity to small changes |
+
 </div>
 
 ***
 
--! Always specify:
--: Type of uncertainty (SD, SE, expanded)
--: Coverage factor (k=2 for 95%)
--: Sample size if relevant
+<div style="background: #1a588bff; color: #ffffff; padding: 12px; border-radius: 8px; margin: 10px 0; font-size: 0.85em;">
+<b>Key insight:</b> Each validation parameter feeds into the total uncertainty budget!
+</div>
+
+***
+
+-= A validated method is the foundation for realistic uncertainty estimation!
 
 <!-- /position -->
 <!-- /layout -->
 
 ---
 
-<!-- .slide:id="summary" -->
-## Summary: Key Insights
+<!-- .slide:id="validation-precision" -->
+## Validation: Precision
 <!-- layout={rows: 1, columns: 2} -->
 <!-- position={row: 1, column: 1} -->
-*Types of Uncertainty*
+*What is Precision?*
 
--! **Random**: Reduces with replication
--! **Systematic**: Requires correction
--! **Model**: Needs validation
+-! Closeness of agreement between repeated measurements
+
+-! Two levels:
+-: Repeatability ($\sigma_r$): same conditions, short time
+-: Reproducibility ($\sigma_R$): different conditions/labs
 
 ***
 
-*Key Metrics*
+*How to Determine*
 
--! SD → Data spread
--! SE → Mean precision
--! CI → Regression line uncertainty
--! PI → New observation uncertainty
+-! Repeatability: $n \geq 6$ replicates at 2–3 concentration levels
+
+-! Reproducibility: Inter-laboratory studies or different days/analysts
 
 <!-- /position -->
 <!-- position={row: 1, column: 2} -->
-*Methods*
+*Example: Nitrate in Water*
 
-| Method | When to Use |
-|:-------|:------------|
-| Analytical | Simple functions |
-| Bootstrap | Small samples, non-parametric |
-| Monte Carlo | Complex, any situation |
+<div style="font-size: 0.85em;">
+
+| Level | Mean (mg/L) | SD | RSD |
+|:------|:-----------:|:--:|:---:|
+| Low (5) | 5.12 | 0.18 | 3.5% |
+| Mid (25) | 24.8 | 0.52 | 2.1% |
+| High (50) | 49.5 | 0.89 | 1.8% |
+
+</div>
 
 ***
 
-*Water Science Considerations*
+*Contribution to Uncertainty*
 
--! Sampling often dominates measurement uncertainty
--! Near LoD → high relative uncertainty
--! Report uncertainties with results!
+$$u_{\text{precision}} = \frac{\sigma_r}{\sqrt{n}}$$
 
 <!-- /position -->
 <!-- /layout -->
 
 ---
 
-<!-- .slide:id="summary-visual" -->
-## Visual Summary
+<!-- .slide:id="validation-trueness" -->
+## Validation: Trueness & Bias
+<!-- layout={rows: 1, columns: 2} -->
+<!-- position={row: 1, column: 1} -->
+*What is Trueness?*
 
-<div id="summary-uncertainty-chart" style="width: 100%; min-height: 600px;"></div>
+-! Closeness of mean to true value
 
-<script src="resources/js/charts/uncertainty_summary_chart.js"></script>
+-! Bias = systematic deviation
+
+$$\text{Bias} = \bar{x}\_{\text{measured}} - x\_{\text{true}}$$
+
+***
+
+*How to Determine*
+
+-! Certified Reference Materials (CRM)
+-: Compare measured vs. certified value
+
+-! Spike Recovery
+-: Add known amount, measure recovery %
+
+-! Method Comparison
+-: Compare with reference method
+
+<!-- /position -->
+<!-- position={row: 1, column: 2} -->
+*Example: CRM Analysis*
+
+<div style="font-size: 0.75em;">
+
+| CRM | Certified | Measured | Bias |
+|:----|:---------:|:--------:|:----:|
+| Cd | 5.00 ± 0.15 | 4.85 ± 0.12 | −3.0% |
+| Pb | 12.5 ± 0.4 | 12.8 ± 0.3 | +2.4% |
+
+</div>
+
+***
+
+*Contribution to Uncertainty*
+
+-: If bias is **corrected**: include correction uncertainty
+
+-: If bias is **not corrected**: include as uncertainty component
+
+$$u_{\text{bias}} = \sqrt{u_{\text{CRM}}^2 + \left(\frac{\text{bias}}{\sqrt{3}}\right)^2}$$
+
+-: Division by $\sqrt{3}$: rectangular distribution assumption
+
+<!-- /position -->
+<!-- /layout -->
 
 ---
 
-<!-- .slide:id="reflection-questions" -->
-## Reflection Questions
+<!-- .slide:id="validation-calibration" -->
+## Validation: Calibration Uncertainty
+<!-- layout={rows: 1, columns: 2} -->
+<!-- position={row: 1, column: 1} -->
+*Sources of Calibration Uncertainty*
 
--? What are the three main types of uncertainty, and how do they differ in their behavior when measurements are repeated?
+-! Standard preparation
+-: Weighing, dilution, purity
 
-***
-
--? Why is the prediction interval always wider than the confidence interval in regression?
-
-***
-
--? When would you choose Monte Carlo simulation over analytical error propagation?
-
-***
-
--? In water quality monitoring, why might sampling uncertainty often exceed measurement uncertainty?
+-! Regression uncertainty
+-: Slope and intercept uncertainty
 
 ***
 
--? How would you determine the dominant source of uncertainty in a complex measurement procedure?
+*How to Determine*
+
+-! Regression: calculate $u(\beta\_{0,hat})$, $u(\beta\_{1,hat})$
+
+-! Back-calculation: predict concentration, assess scatter
+
+<!-- /position -->
+<!-- position={row: 1, column: 2} -->
+*Example: Calibration Curve*
+
+<div style="font-size: 0.75em;">
+
+| Parameter | Value | Uncertainty |
+|:----------|:-----:|:-----------:|
+| Slope | 0.0523 | 0.0012 |
+| Intercept | 0.015 | 0.008 |
+| $R^2$ | 0.9987 | — |
+
+</div>
+
+***
+
+*Contribution to Uncertainty*
+
+$$u_{\text{cal}}(x_0) = MSE \cdot \sqrt{\mathbf{x}_0^\top (\mathbf{X}^\top \mathbf{X})^{-1} \mathbf{x}_0 + 1}$$
+
+-: $\mathbf{x}_0$ = predictor vector for unknown sample
+-: Same formula as **PI** (includes $+1$ for new observation!)
+-: Larger uncertainty far from $\bar{x}$!
+
+<!-- /position -->
+<!-- /layout -->
 
 ---
 
-<!-- .slide:id="further-reading" -->
-## Further Reading & Resources
+<!-- .slide:id="validation-matrix" -->
+## Validation: Matrix Effects
+<!-- layout={rows: 1, columns: 2} -->
+<!-- position={row: 1, column: 1} -->
+*Matrix Effects*
 
--! **GUM**: Guide to the Expression of Uncertainty in Measurement (ISO/IEC Guide 98-3)
+-! Sample matrix ≠ calibration matrix
 
--! **Eurachem/CITAC Guide**: Quantifying Uncertainty in Analytical Measurement
-
--! **EPA Methods**: Quality Assurance/Quality Control guidance documents
+-! Effects: signal enhancement/suppression
 
 ***
 
-*Interactive Practice:*
+*How to Determine*
 
-<div id="practice-uncertainty-container"></div>
+-! Recovery experiments in different matrices
 
-<script src="resources/js/charts/uncertainty_practice_quiz.js"></script>
+$$\text{Recovery} = \frac{c_{\text{measured}}}{c_{\text{spiked}}} \times 100\%$$
+
+-! Or compare slopes:
+
+$$\text{Matrix Factor} = \frac{\text{Slope}\_{\text{matrix}}}{\text{Slope}\_{\text{solvent}}}$$
+
+<!-- /position -->
+<!-- position={row: 1, column: 2} -->
+
+*Contribution to Uncertainty*
+
+$$u_{\text{matrix}} = \frac{s_{\text{Recovery}}}{\sqrt{n}}$$
+
+-: $s_{\text{Recovery}}$ = SD of recovery experiments
+-: If bias not corrected: add 
+$$\frac{\|100\% - \bar{R}\|}{\sqrt{3}}$$
+
+<!-- /position -->
+<!-- /layout -->
+
+---
+
+<!-- .slide:id="validation-stability" -->
+## Validation: Stability
+<!-- layout={rows: 1, columns: 2} -->
+<!-- position={row: 1, column: 1} -->
+*Stability*
+
+-! Analyte degradation over time
+
+-! Types:
+-: Short-term (autosampler)
+-: Long-term (storage)
+-: Freeze-thaw cycles
+
+***
+
+*How to Determine*
+
+-! Measure same sample at $t_0$, $t_1$, $t_2$, ...
+
+<!-- /position -->
+<!-- position={row: 1, column: 2} -->
+
+*Contribution to Uncertainty*
+
+-! If drift is **random** (no trend):
+
+$$u_{\text{stab}} = s_{\text{measurements}}$$
+
+-! If drift is **systematic** (trend):
+
+$$u_{\text{stab}} = \frac{|x_{t_{\text{max}}} - x_{t_0}|}{\sqrt{3}}$$
+
+-: Rectangular distribution over storage time
+-: Only include if drift > measurement precision!
+
+<!-- /position -->
+<!-- /layout -->
+
+---
+
+<!-- .slide:id="validation-lod-robustness" -->
+## Validation: LOD/LOQ
+<!-- layout={rows: 1, columns: 2, widths: [35, 65]} -->
+<!-- position={row: 1, column: 1} -->
+*Detection Theory*
+
+-! **LOD**: Limit of Detection
+-: Lowest detectable signal (qualitative)
+-: $x_{\text{LOD}} = \mu_{\text{blank}} + 3.29 \cdot \sigma_{\text{blank}}$
+
+-! **LOQ**: Limit of Quantification
+-: Lowest quantifiable amount
+-: $x_{\text{LOQ}} = \mu_{\text{blank}} + 10 \cdot \sigma_{\text{blank}}$
+
+***
+
+*Error Types*
+
+-! **α-Error** (false positive): Blank misclassified as detection
+-! **β-Error** (false negative): Signal missed as blank
+<!-- /position -->
+<!-- position={row: 1, column: 2} -->
+
+<div id="lod-loq-chart" style="width: 100%; display: flex; justify-content: center;"></div>
+<script src="resources/js/charts/lod_loq_visualization.js"></script>
+
+<!-- /position -->
+<!-- /layout -->
+
+---
+
+<!-- .slide:id="uncertainty-budget" -->
+## Uncertainty Budget: Putting It Together
+<!-- layout={rows: 1, columns: 2} -->
+<!-- position={row: 1, column: 1} -->
+*Combining Validation Parameters*
+
+-! Each validation parameter → uncertainty component
+
+$$u_c = \sqrt{u_{\text{precision}}^2 + u_{\text{bias}}^2 + u_{\text{cal}}^2 + u_{\text{matrix}}^2 + ...}$$
+
+***
+
+*Example: Heavy Metal Analysis*
+
+<div style="font-size: 0.8em;">
+
+| Source | $u_i$ (rel.) | $u_i^2$ |
+|:-------|:------------:|:-------:|
+| Precision | 2.1% | 4.41 |
+| Bias (CRM) | 1.5% | 2.25 |
+| Calibration | 1.8% | 3.24 |
+| Matrix | 2.5% | 6.25 |
+| **Combined** | **4.0%** | 16.15 |
+
+</div>
+
+<!-- /position -->
+<!-- position={row: 1, column: 2} -->
+*Expanded Uncertainty*
+
+$$U = k \cdot u_c$$
+
+-: $k = 2$ for 95% coverage (normal distribution)
+
+***
+
+*For our example:*
+
+$$U = 2 \times 4.0\% = 8.0\%$$
+
+***
+
+<div style="background: #1a588bff; color: #ffffff; padding: 12px; border-radius: 8px; margin: 10px 0;">
+<b>Result:</b> Cd = 5.12 ± 0.41 mg/kg<br>
+(U, k=2, 95% coverage)
+</div>
+
+***
+
+-= The uncertainty budget shows which component dominates → optimize there!
+
+<!-- /position -->
+<!-- /layout -->

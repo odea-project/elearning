@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="512" height="512" aria-label="Uncertainty" role="img">
+  <rect x="2" y="2" width="124" height="124" rx="12" ry="12" fill="#fbbf24ff" stroke="#111827" stroke-width="2"/>
+  
+  <!-- Axes -->
+  <line x1="16" y1="28" x2="16" y2="104" stroke="#78350fff" stroke-width="2" stroke-linecap="round"/>
+  <line x1="16" y1="104" x2="112" y2="104" stroke="#78350fff" stroke-width="2" stroke-linecap="round"/>
+  
+  <!-- Data points with error bars -->
+  <!-- Point 1 -->
+  <line x1="32" y1="52" x2="32" y2="76" stroke="#b45309ff" stroke-width="2.5" stroke-linecap="round"/>
+  <line x1="27" y1="52" x2="37" y2="52" stroke="#b45309ff" stroke-width="2" stroke-linecap="round"/>
+  <line x1="27" y1="76" x2="37" y2="76" stroke="#b45309ff" stroke-width="2" stroke-linecap="round"/>
+  <circle cx="32" cy="64" r="4" fill="#d97706ff"/>
+  
+  <!-- Point 2 -->
+  <line x1="52" y1="44" x2="52" y2="72" stroke="#b45309ff" stroke-width="2.5" stroke-linecap="round"/>
+  <line x1="47" y1="44" x2="57" y2="44" stroke="#b45309ff" stroke-width="2" stroke-linecap="round"/>
+  <line x1="47" y1="72" x2="57" y2="72" stroke="#b45309ff" stroke-width="2" stroke-linecap="round"/>
+  <circle cx="52" cy="58" r="4" fill="#d97706ff"/>
+  
+  <!-- Point 3 -->
+  <line x1="72" y1="38" x2="72" y2="62" stroke="#b45309ff" stroke-width="2.5" stroke-linecap="round"/>
+  <line x1="67" y1="38" x2="77" y2="38" stroke="#b45309ff" stroke-width="2" stroke-linecap="round"/>
+  <line x1="67" y1="62" x2="77" y2="62" stroke="#b45309ff" stroke-width="2" stroke-linecap="round"/>
+  <circle cx="72" cy="50" r="4" fill="#d97706ff"/>
+  
+  <!-- Point 4 -->
+  <line x1="92" y1="32" x2="92" y2="60" stroke="#b45309ff" stroke-width="2.5" stroke-linecap="round"/>
+  <line x1="87" y1="32" x2="97" y2="32" stroke="#b45309ff" stroke-width="2" stroke-linecap="round"/>
+  <line x1="87" y1="60" x2="97" y2="60" stroke="#b45309ff" stroke-width="2" stroke-linecap="round"/>
+  <circle cx="92" cy="46" r="4" fill="#d97706ff"/>
+  
+  <!-- Trend line with confidence band -->
+  <path d="M24 72 Q 60 52, 100 38" fill="none" stroke="#92400eff" stroke-width="2.5" stroke-linecap="round"/>
+  
+  <!-- Confidence band (subtle) -->
+  <path d="M24 80 Q 60 62, 100 50 L100 26 Q 60 42, 24 64 Z" fill="#fcd34dff" fill-opacity="0.35" stroke="none"/>
+  
+  <!-- Plus/minus symbol suggestion -->
+  <circle cx="100" cy="88" r="12" fill="#f59e0bff" stroke="#92400eff" stroke-width="1.5"/>
+  <line x1="94" y1="88" x2="106" y2="88" stroke="#78350fff" stroke-width="2.5" stroke-linecap="round"/>
+  <line x1="100" y1="82" x2="100" y2="94" stroke="#78350fff" stroke-width="2.5" stroke-linecap="round"/>
+</svg>
