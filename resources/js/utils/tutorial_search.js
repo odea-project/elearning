@@ -3,6 +3,10 @@
  * then filters client-side to keep navigation snappy.
  */
 let mdData = [];
+let currentPage = 1;
+let filteredData = [];
+const ITEMS_PER_PAGE = 12; // 2 pages × 2 columns × 3 rows = 12 items per double page
+
 const grid = document.getElementById('tutorialGrid');
 const searchInput = document.getElementById('search');
 
@@ -10,36 +14,53 @@ fetch('resources/misc/md-manifest.json')
   .then(res => res.json())
   .then(data => {
     mdData = data;
-    renderGrid(mdData);
+    filteredData = data;
+    renderGrid(filteredData);
   });
 
 function renderGrid(items) {
+  filteredData = items;
   grid.innerHTML = '';
   
-  // Create outer grid container with 2 columns
-  grid.style.display = 'grid';
-  grid.style.gridTemplateColumns = 'repeat(2, 1fr)';
-  grid.style.gap = '20px';
-  grid.style.width = '70%';
-  grid.style.paddingLeft = '13%';
-  grid.style.paddingTop = '20px';
+  // Calculate pagination
+  const totalPages = Math.max(1, Math.ceil(items.length / ITEMS_PER_PAGE));
+  if (currentPage > totalPages) currentPage = totalPages;
   
-  // Split items into groups of 6 (2 columns × 3 rows per outer column)
-  const itemsPerOuterColumn = 6;
-  const numOuterColumns = Math.ceil(items.length / itemsPerOuterColumn);
-  let entryCounter = 1;
+  // Get items for current page
+  const startIdx = (currentPage - 1) * ITEMS_PER_PAGE;
+  const endIdx = Math.min(startIdx + ITEMS_PER_PAGE, items.length);
+  const pageItems = items.slice(startIdx, endIdx);
+  
+  // Create main container with book and bookmarks
+  const bookContainer = document.createElement('div');
+  bookContainer.style.position = 'relative';
+  bookContainer.style.width = '100%';
+  
+  // Create outer grid container with 2 columns (double page spread)
+  const pageContent = document.createElement('div');
+  pageContent.style.display = 'grid';
+  pageContent.style.gridTemplateColumns = 'repeat(2, 1fr)';
+  pageContent.style.gap = '20px';
+  pageContent.style.width = '70%';
+  pageContent.style.paddingLeft = '13%';
+  pageContent.style.paddingTop = '20px';
+  pageContent.style.paddingRight = '40px'; // Space for bookmarks
+  
+  // Split items into groups of 6 (2 columns × 3 rows per page)
+  const itemsPerPage = 6;
+  let entryCounter = startIdx + 1;
 
-  for (let outerCol = 0; outerCol < numOuterColumns; outerCol++) {
+  for (let pageIdx = 0; pageIdx < 2; pageIdx++) {
     const innerGrid = document.createElement('div');
     innerGrid.style.display = 'grid';
     innerGrid.style.gridTemplateColumns = 'repeat(2, 1fr)';
     innerGrid.style.gridTemplateRows = 'repeat(3, 1fr)';
     innerGrid.style.gap = '15px';
     
-    // Get items for this outer column (6 items max)
-    const startIdx = outerCol * itemsPerOuterColumn;
-    const endIdx = Math.min(startIdx + itemsPerOuterColumn, items.length);
-    const columnItems = items.slice(startIdx, endIdx);
+    // Get items for this page (6 items max)
+    const pageStartIdx = pageIdx * itemsPerPage;
+    const pageEndIdx = Math.min(pageStartIdx + itemsPerPage, pageItems.length);
+    const columnItems = pageItems.slice(pageStartIdx, pageEndIdx);
     
     columnItems.forEach(item => {
       const tile = document.createElement('div');
@@ -170,8 +191,122 @@ function renderGrid(items) {
       innerGrid.appendChild(tile);
     });
     
-    grid.appendChild(innerGrid);
+    pageContent.appendChild(innerGrid);
   }
+  
+  bookContainer.appendChild(pageContent);
+  
+  // Create bookmark tabs container (only if more than one page)
+  if (totalPages > 0) {
+    const bookmarksContainer = createBookmarkTabs(totalPages, currentPage);
+    bookContainer.appendChild(bookmarksContainer);
+  }
+  
+  grid.appendChild(bookContainer);
+}
+
+// Create post-it bookmark tabs
+function createBookmarkTabs(totalPages, activePage) {
+  const container = document.createElement('div');
+  container.style.position = 'absolute';
+  container.style.left = '160px';
+  container.style.top = '80px';
+  container.style.display = 'flex';
+  container.style.flexDirection = 'column';
+  container.style.gap = '8px';
+  container.style.zIndex = '100';
+  
+  // Post-it colors for variety
+  const postItColors = [
+    { bg: 'linear-gradient(135deg, #ffeb3b 0%, #fdd835 100%)', shadow: '#c9a600' },  // Yellow
+    { bg: 'linear-gradient(135deg, #ff9800 0%, #f57c00 100%)', shadow: '#b35600' },  // Orange
+    { bg: 'linear-gradient(135deg, #4caf50 0%, #388e3c 100%)', shadow: '#1b5e20' },  // Green
+    { bg: 'linear-gradient(135deg, #2196f3 0%, #1976d2 100%)', shadow: '#0d47a1' },  // Blue
+    { bg: 'linear-gradient(135deg, #e91e63 0%, #c2185b 100%)', shadow: '#880e4f' },  // Pink
+    { bg: 'linear-gradient(135deg, #9c27b0 0%, #7b1fa2 100%)', shadow: '#4a148c' },  // Purple
+  ];
+  
+  for (let page = 1; page <= totalPages; page++) {
+    const isActive = page === activePage;
+    const colorIdx = (page - 1) % postItColors.length;
+    const color = postItColors[colorIdx];
+    
+    const bookmark = document.createElement('div');
+    bookmark.className = 'bookmark-tab';
+    bookmark.setAttribute('data-page', page);
+    
+    // Base styles
+    bookmark.style.width = isActive ? '55px' : '45px';
+    bookmark.style.height = '50px';
+    bookmark.style.background = color.bg;
+    bookmark.style.borderRadius = '3px 0 0 3px';
+    bookmark.style.boxShadow = isActive 
+      ? `0 4px 12px rgba(0,0,0,0.4), inset -2px 0 4px rgba(0,0,0,0.1)` 
+      : `0 2px 6px rgba(0,0,0,0.25), inset -2px 0 4px rgba(0,0,0,0.1)`;
+    bookmark.style.display = 'flex';
+    bookmark.style.alignItems = 'center';
+    bookmark.style.justifyContent = 'center';
+    bookmark.style.cursor = 'pointer';
+    bookmark.style.transition = 'all 0.25s ease';
+    bookmark.style.marginLeft = isActive ? '0' : '10px';
+    bookmark.style.position = 'relative';
+    bookmark.style.transform = isActive ? 'scale(1.05)' : 'scale(1)';
+    
+    // Folded corner effect
+    const foldedCorner = document.createElement('div');
+    foldedCorner.style.position = 'absolute';
+    foldedCorner.style.bottom = '0';
+    foldedCorner.style.left = '0';
+    foldedCorner.style.width = '0';
+    foldedCorner.style.height = '0';
+    foldedCorner.style.borderStyle = 'solid';
+    foldedCorner.style.borderWidth = '8px 8px 0 0';
+    foldedCorner.style.borderColor = `${color.shadow} transparent transparent transparent`;
+    foldedCorner.style.transform = 'rotate(180deg)';
+    bookmark.appendChild(foldedCorner);
+    
+    // Page number
+    const pageNum = document.createElement('span');
+    pageNum.textContent = page;
+    pageNum.style.fontWeight = 'bold';
+    pageNum.style.fontSize = isActive ? '20px' : '16px';
+    pageNum.style.color = '#333';
+    pageNum.style.textShadow = '0 1px 1px rgba(255,255,255,0.5)';
+    pageNum.style.fontFamily = "'Segoe UI', Arial, sans-serif";
+    bookmark.appendChild(pageNum);
+    
+    // Hover effects
+    bookmark.addEventListener('mouseenter', () => {
+      if (!isActive) {
+        bookmark.style.width = '60px';
+        bookmark.style.marginLeft = '-5px';
+        bookmark.style.transformOrigin = 'right center';
+        bookmark.style.transform = 'scaleX(1.08)';
+        bookmark.style.boxShadow = `0 6px 16px rgba(0,0,0,0.35), inset -2px 0 4px rgba(0,0,0,0.1)`;
+      }
+    });
+    
+    bookmark.addEventListener('mouseleave', () => {
+      if (!isActive) {
+        bookmark.style.width = '45px';
+        bookmark.style.marginLeft = '10px';
+        bookmark.style.transform = 'scale(1)';
+        bookmark.style.boxShadow = `0 2px 6px rgba(0,0,0,0.25), inset -2px 0 4px rgba(0,0,0,0.1)`;
+      }
+    });
+    
+    // Click to change page
+    bookmark.addEventListener('click', () => {
+      if (page !== currentPage) {
+        currentPage = page;
+        renderGrid(filteredData);
+      }
+    });
+    
+    container.appendChild(bookmark);
+  }
+  
+  return container;
 }
 
 // Utility function to generate a random color (hex)
@@ -233,6 +368,7 @@ function createTapeStrip(number) {
 
 searchInput.addEventListener('input', () => {
   const val = searchInput.value.toLowerCase().trim();
+  currentPage = 1; // Reset to first page on search
   if (!val) return renderGrid(mdData);
   const terms = val.split(/\s+/);
   renderGrid(mdData.filter(item =>

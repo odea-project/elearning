@@ -162,6 +162,19 @@ OFAT finds a <b>local optimum</b>, not the true best conditions!
 
 ---
 
+<!-- .slide:id="ofat-3d-visualization" -->
+## OFAT in the Design Space: A Visual Demonstration
+
+<div id="chart-ofat-vs-global-3d" style="width: 100%; height: 620px; margin: 0 auto;"></div>
+
+<script src="resources/js/charts/ofat_vs_global_3d.js"></script>
+
+***
+
+-! The surface shows a response with **interaction** and **curvature** — OFAT finds a **local**, not the **global maximum**!
+
+---
+
 <!-- .slide:id="design-space" -->
 ## The Experimental Design Space
 <!-- layout={rows: 1, columns: 2} -->
@@ -196,57 +209,6 @@ OFAT finds a <b>local optimum</b>, not the true best conditions!
 
 ---
 
-<!-- .slide:id="ofat-vs-space" -->
-## What OFAT Explores (and Misses)
-<!-- layout={rows: 1, columns: 2} -->
-
-<!-- position={row: 1, column: 1} -->
-*OFAT's Path Through the Design Space*
-
--! OFAT only explores **thin slices** of the design space!
-
-<div id="chart-ofat-path" style="width: 100%; height: 250px; margin: 10px auto;"></div>
-
-<!-- PLACEHOLDER: D3.js showing OFAT path as lines along axes -->
-<script src="resources/js/charts/ofat_path_chart.js"></script>
-
-***
-
--! The path depends on the *starting point*, i.e., a different start may give a different "optimum"!
-
-<!-- /position -->
-
-<!-- position={row: 1, column: 2} -->
-*The Vast Unexplored Region*
-
--! Consider 3 factors, each at 5 levels:
-
-<div style="font-size: 0.7em;">
-
-| Exploration | Experiments | Coverage |
-|:------------|:-----------:|:--------:|
-| OFAT path | 15 | 12% |
-| Full space | 125 | 100% |
-
-</div>
-
-***
-
-<div style="background: #8B0000; color: #ffffff; padding: 12px; border-radius: 8px; margin: 10px 0; font-size: 0.85em;">
-<b>⚠️ The Problem:</b><br>
-OFAT ignores <b>88%</b> of the design space!
-Interactions and the true optimum may lie in unexplored regions.
-</div>
-
-***
-
--? How can we explore more of the space without 125 experiments?
-
-<!-- /position -->
-<!-- /layout -->
-
----
-
 <!-- .slide:id="doe-solution" -->
 ## Design of Experiments (DoE): A Systematic Solution
 <!-- layout={rows: 1, columns: 2} -->
@@ -272,6 +234,9 @@ Strategic placement of experiments gives <b>maximum information</b> with <b>mini
 
 <!-- position={row: 1, column: 2} -->
 
+<div id="chart-factorial-cube-3d" style="width: 100%; height: 680px; margin: 0 auto;"></div>
+
+<script src="resources/js/charts/factorial_cube_3d.js"></script>
 
 <!-- /position -->
 <!-- /layout -->
@@ -305,13 +270,6 @@ Test <b>all combinations</b> of factor levels systematically.
 
 <!-- position={row: 1, column: 2} -->
 *Why Corners?*
-
-<div id="chart-factorial-corners" style="width: 100%; height: 250px; margin: 10px auto;"></div>
-
-<!-- PLACEHOLDER: D3.js showing factorial points at corners vs OFAT path -->
-<script src="resources/js/charts/factorial_corners_chart.js"></script>
-
-***
 
 -! Corner points maximize contrast:
 -: Low vs. High gives biggest signal
@@ -377,57 +335,6 @@ Test <b>all combinations</b> of factor levels systematically.
 
 ---
 
-<!-- .slide:id="two-main-tasks" -->
-## Two Main Tasks of Experimental Design
-<!-- layout={rows: 1, columns: 2} -->
-
-<!-- position={row: 1, column: 1} -->
-*Task 1: Screening*
-
--! Which factors matter?
-
--: Many potential factors
--: Limited resources
--: Need to identify the important ones
-
-***
-
-<div style="background: #2d5016; color: #ffffff; padding: 12px; border-radius: 8px; margin: 10px 0; font-size: 0.85em;">
-<b>Goal:</b> Separate significant from insignificant factors
-</div>
-
-***
-
--! Often use 2-level factorial designs
--: Efficient for screening many factors
-
-<!-- /position -->
-
-<!-- position={row: 1, column: 2} -->
-*Task 2: Optimization*
-
--! Find the best conditions!
-
--: Factors already identified
--: Need precise optimum
--: May need curvature detection
-
-***
-
-<div style="background: #2d5016; color: #ffffff; padding: 12px; border-radius: 8px; margin: 10px 0; font-size: 0.85em;">
-<b>Goal:</b> Maximize (or minimize) the response
-</div>
-
-***
-
--! May require center points or 3-level designs
--: To detect curved relationships
-
-<!-- /position -->
-<!-- /layout -->
-
----
-
 <!-- .slide:id="full-factorial-intro" -->
 ## Full Factorial Design: The Concept
 <!-- layout={rows: 1, columns: 2} -->
@@ -458,7 +365,7 @@ $n$ = number of factors<br><br>
 <!-- position={row: 1, column: 2} -->
 *Visualizing 2² Design*
 
-<div id="chart-factorial-grid" style="width: 100%; height: 320px; margin: 10px auto;"></div>
+<div id="chart-factorial-grid" style="width: 100%; height: 580px; margin: 10px auto;"></div>
 
 <!-- PLACEHOLDER: D3.js visualization showing 2x2 factorial grid -->
 <!-- Shows the 4 corner points of a 2-factor design -->
@@ -528,27 +435,6 @@ $$X_{coded} = \frac{X_{real} - X_{center}}{(X_{high} - X_{low})/2}$$
 <!-- /position -->
 <!-- /layout -->
 
----
-
-<!-- .slide:id="example-transition" -->
-## Applying Factorial Design: A Worked Example
-
--! We've established the microplastic removal problem with **4 factors**.
-
--: For learning the mathematical foundations, we'll use a **simpler 2-factor example**.
--: The principles apply directly to larger designs!
-
-***
-
-<div style="background: #1a4d7a; color: #ffffff; padding: 14px; border-radius: 8px; margin: 15px 0; font-size: 0.9em;">
-<b>Learning Strategy:</b><br><br>
-<b>2² Design</b> (2 factors) → Master calculations, effects, interactions<br><br>
-<b>Then scale up</b> to 2³ (3 factors) and beyond → Apply to microplastic problem
-</div>
-
-***
-
--= Let's work through a **nitrate degradation** example step by step!
 
 ---
 
@@ -723,7 +609,7 @@ $$\mathbf{Y} = \begin{bmatrix} 12.3 \\ 18.7 \\ 15.1 \\ 28.9 \end{bmatrix}$$
 <!-- position={row: 1, column: 2} -->
 *Visualizing the Results*
 
-<div id="chart-results-visualization" style="width: 100%; height: 280px; margin: 10px auto;"></div>
+<div id="chart-results-visualization" style="width: 100%; height: 480px; margin: 10px auto;"></div>
 
 <!-- PLACEHOLDER: D3.js visualization showing 2x2 grid with response values at corners -->
 <script src="resources/js/charts/factorial_results_chart.js"></script>
@@ -841,6 +727,19 @@ $$\boldsymbol{\beta}\_{hat} = \begin{bmatrix} b_0 \\\\ b_1 \\\\ b_2 \\\\ b_{12} 
 
 ---
 
+<!-- .slide:id="response-surface-visualization" -->
+## The Fitted Response Surface
+
+<div id="chart-response-surface-3d" style="width: 100%; height: 680px; margin: 0 auto;"></div>
+
+<script src="resources/js/charts/response_surface_3d.js"></script>
+
+***
+
+-! The 4 design points define a **tilted plane** through the response space.
+
+---
+
 <!-- .slide:id="interpreting-coefficients" -->
 ## Interpreting the Regression Coefficients
 <!-- layout={rows: 1, columns: 2} -->
@@ -933,51 +832,6 @@ $$28.9 - 15.1 = 13.8 \approx 2 \times 6.9$$
 High temperature + high carbon gives a <b>boost beyond</b> the sum of individual effects!<br><br>
 This interaction would be <b>missed by OFAT</b>!
 </div>
-
-<!-- /position -->
-<!-- /layout -->
-
----
-
-<!-- .slide:id="interaction-plot" -->
-## Interaction Plot: Visualizing the Effect
-<!-- layout={rows: 1, columns: 2} -->
-
-<!-- position={row: 1, column: 1} -->
-*Reading an Interaction Plot*
-
-<div id="chart-interaction-plot" style="width: 100%; height: 300px; margin: 10px auto;"></div>
-
-<!-- PLACEHOLDER: D3.js interaction plot with two lines (low/high X2) -->
-<script src="resources/js/charts/interaction_plot_chart.js"></script>
-
-***
-
--! Parallel lines → No interaction
--! Non-parallel lines → Interaction present
-
-<!-- /position -->
-
-<!-- position={row: 1, column: 2} -->
-*Interpreting Our Results*
-
--! The two lines show temperature effect at each carbon level:
-
--: Blue line ($X_2 = -1$): Shallow slope → small temp effect
--: Red line ($X_2 = +1$): Steep slope → large temp effect
-
-***
-
-<div style="background: #702914ff; color: #ffffff; padding: 12px; border-radius: 8px; margin: 10px 0; font-size: 0.85em;">
-<b>Types of Interactions:</b><br>
-• <b>Synergistic</b>: Lines diverge (our case!)<br>
-• <b>Antagonistic</b>: Lines converge<br>
-• <b>Crossover</b>: Lines cross → effect reverses!
-</div>
-
-***
-
--= Interaction plots make complex relationships intuitive!
 
 <!-- /position -->
 <!-- /layout -->

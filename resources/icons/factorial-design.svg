@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg"
+     viewBox="0 0 128 128"
+     width="512"
+     height="512"
+     aria-label="Factorial Design"
+     role="img">
+
+  <!-- Background with rounded corners -->
+  <rect x="2" y="2" width="124" height="124" rx="12" ry="12"
+        fill="#fde68aff" stroke="#111827" stroke-width="2"/>
+
+  <!-- 3D Cube wireframe (back edges, dashed) -->
+  <g stroke="#92400eff" stroke-width="1.5" stroke-dasharray="4,3" opacity="0.5">
+    <line x1="38" y1="28" x2="78" y2="28"/>
+    <line x1="78" y1="28" x2="78" y2="68"/>
+    <line x1="38" y1="28" x2="38" y2="68"/>
+    <line x1="38" y1="28" x2="58" y2="48"/>
+  </g>
+
+  <!-- 3D Cube wireframe (front edges, solid) -->
+  <g stroke="#92400eff" stroke-width="2" fill="none">
+    <!-- Bottom face -->
+    <line x1="58" y1="48" x2="98" y2="48"/>
+    <line x1="98" y1="48" x2="98" y2="88"/>
+    <line x1="98" y1="88" x2="58" y2="88"/>
+    <line x1="58" y1="88" x2="58" y2="48"/>
+    <!-- Connecting edges -->
+    <line x1="78" y1="28" x2="98" y2="48"/>
+    <line x1="78" y1="68" x2="98" y2="88"/>
+    <line x1="38" y1="68" x2="58" y2="88"/>
+  </g>
+
+  <!-- Design points at cube corners (8 points for 2³) -->
+  <!-- Back face corners -->
+  <circle cx="38" cy="28" r="6" fill="#f59e0bff" stroke="#ffffff" stroke-width="2"/>
+  <circle cx="78" cy="28" r="6" fill="#f59e0bff" stroke="#ffffff" stroke-width="2"/>
+  <circle cx="38" cy="68" r="6" fill="#f59e0bff" stroke="#ffffff" stroke-width="2"/>
+  <circle cx="78" cy="68" r="6" fill="#f59e0bff" stroke="#ffffff" stroke-width="2"/>
+  
+  <!-- Front face corners -->
+  <circle cx="58" cy="48" r="6" fill="#dc2626ff" stroke="#ffffff" stroke-width="2"/>
+  <circle cx="98" cy="48" r="6" fill="#dc2626ff" stroke="#ffffff" stroke-width="2"/>
+  <circle cx="58" cy="88" r="6" fill="#dc2626ff" stroke="#ffffff" stroke-width="2"/>
+  <circle cx="98" cy="88" r="6" fill="#dc2626ff" stroke="#ffffff" stroke-width="2"/>
+
+  <!-- Center point -->
+  <circle cx="68" cy="58" r="5" fill="#16a34aff" stroke="#ffffff" stroke-width="2"/>
+
+  <!-- Axis indicators (small arrows) -->
+  <g stroke="#78350fff" stroke-width="2" fill="#78350fff">
+    <!-- X axis arrow -->
+    <line x1="14" y1="108" x2="36" y2="108" stroke-linecap="round"/>
+    <path d="M36 108 l-6 -3 l0 6 z"/>
+    
+    <!-- Y axis arrow -->
+    <line x1="14" y1="108" x2="14" y2="86" stroke-linecap="round"/>
+    <path d="M14 86 l-3 6 l6 0 z"/>
+    
+    <!-- Z axis arrow (diagonal) -->
+    <line x1="14" y1="108" x2="28" y2="94" stroke-linecap="round"/>
+    <path d="M28 94 l-7 1 l1 6 z"/>
+  </g>
+
+</svg>

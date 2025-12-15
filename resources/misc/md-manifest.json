@@ -208,5 +208,23 @@
       "Linear Regression",
       "Distributions"
     ]
+  },
+  {
+    "filename": "FullFactorialDesign.md",
+    "title": "Full Factorial Design",
+    "keywords": [
+      "design of experiments",
+      "DOE",
+      "full factorial design",
+      "factorial experiment",
+      "response surface",
+      "interaction effects",
+      "ANOVA"
+    ],
+    "thumbnail": "resources/icons/factorial-design.svg",
+    "requirements": [
+      "one-way ANOVA",
+      "Linear Regression"
+    ]
   }
 ]
