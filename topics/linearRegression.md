@@ -1290,7 +1290,7 @@ $$t = \frac{0.85}{0.12} = 7.08$$
 
 -! F-statistic:
 
-$$F = \frac{\text{SSR} / p}{\text{SSE} / (n - p - 1)}$$
+$$F = \frac{\text{SSR} / (p - 1)}{\text{SSE} / (n - p)}$$
 
 -: $p$ = number of all predictors
 -: $n$ = number of observations
