@@ -1106,43 +1106,45 @@ Add 3-5 center points to a 2² design
 
 -! Each coefficient is tested against zero:
 
-$$t = \frac{b_i}{SE(b_i)}$$
+$$t_i = \frac{b_i}{SE(b_i)}$$
 
 ***
 
--! Standard error of coefficients:
+-! Standard error from covariance matrix:
 
-$$SE(b_i) = \frac{s}{\sqrt{n}}$$
+$$SE(b_i) = \sqrt{C_{ii}}$$
 
-where $s$ = root mean square error
+-: where $\mathbf{C} = (\mathbf{X}^T\mathbf{X})^{-1} \cdot MSE$
 
 ***
 
--! Compare $|t|$ to $t_{crit}$ at $\alpha$
+-! Compare $|t_i|$ to $t_{crit}$ at significance level $\alpha$
 
 <!-- /position -->
 
 <!-- position={row: 1, column: 2} -->
-*Example Analysis*
+*Example: 2² Design (4 corner points)*
 
--! Assume $s = 0.45$ from replicates, $n = 8$ runs:
+-! For orthogonal design: $(\mathbf{X}^T\mathbf{X})^{-1} = \frac{1}{4}\mathbf{I}$
 
-$$SE(b_i) = \frac{0.45}{\sqrt{8}} = 0.159$$
+-: With $MSE = 0.20$:
+
+$$SE(b_i) = \sqrt{\frac{0.20}{4}} = 0.224$$
 
 <div style="font-size: 0.7em;">
 
-| Coef. | Value | t | Significant? |
+| Coef. | Value | $t_i$ | Significant? |
 |:------|:-----:|:---:|:------------:|
-| $b_1$ | 5.05 | 31.8 | ✓ Yes |
-| $b_2$ | 3.25 | 20.4 | ✓ Yes |
-| $b_{12}$ | 1.85 | 11.6 | ✓ Yes |
+| $b_1$ | 5.05 | 22.5 | ✓ Yes |
+| $b_2$ | 3.25 | 14.5 | ✓ Yes |
+| $b_{12}$ | 1.85 | 8.3 | ✓ Yes |
 
 </div>
 
 ***
 
--! All effects are highly significant!
--: ($t_{crit} \approx 2.78$ for $\alpha = 0.05$, df = 4)
+-! All effects significant at $\alpha = 0.05$
+-: ($t_{crit} \approx 4.30$ for df = 2 with replicates)
 
 <!-- /position -->
 <!-- /layout -->
