@@ -1,6 +1,6 @@
 ---
 title: "Advanced Experimental Design"
-author: "Chemometrics – Master of Water Science"
+author: "Gerrit Renner"
 keywords: ["DOE", "fractional factorial", "Plackett-Burman", "response surface", "CCD", "Box-Behnken", "screening", "optimization"]
 requirements: ["Full Factorial Design"]
 description: "From full factorial design to efficient screening and optimization strategies"
@@ -20,17 +20,163 @@ description: "From full factorial design to efficient screening and optimization
 <!-- position={row: 1, column: 1} -->
 -! Imagine you're optimizing a *water treatment process* with 7 factors:
 -: pH, temperature, coagulant dose, mixing speed, settling time, polymer type, aeration rate
-
-***
-
--? How many experiments would a **full factorial design** require?
-
-***
-
--! Each added factor **doubles** the number of runs.
-
 <!-- /position -->
 <!-- position={row: 1, column: 2} -->
+<svg viewBox="0 0 400 300" style="max-width: 100%; height: auto;">
+  <!-- Water Treatment Tank -->
+  <rect x="100" y="80" width="200" height="150" rx="10" fill="#e3f2fd" stroke="#1976d2" stroke-width="3"/>
+  <ellipse cx="200" cy="80" rx="100" ry="15" fill="#bbdefb" stroke="#1976d2" stroke-width="3"/>
+  <!-- Water waves -->
+  <path d="M110 130 Q130 120 150 130 Q170 140 190 130 Q210 120 230 130 Q250 140 270 130 Q290 120 290 130" fill="none" stroke="#42a5f5" stroke-width="2" opacity="0.7"/>
+  <path d="M110 150 Q130 140 150 150 Q170 160 190 150 Q210 140 230 150 Q250 160 270 150 Q290 140 290 150" fill="none" stroke="#42a5f5" stroke-width="2" opacity="0.5"/>
+  <!-- Mixer -->
+  <rect x="190" y="40" width="20" height="50" fill="#78909c" rx="3"/>
+  <line x1="200" y1="90" x2="200" y2="180" stroke="#546e7a" stroke-width="4"/>
+  <path d="M170 170 L200 180 L230 170" fill="none" stroke="#546e7a" stroke-width="4"/>
+  <!-- Input pipe -->
+  <rect x="30" y="100" width="70" height="20" fill="#90a4ae" rx="5"/>
+  <circle cx="40" cy="110" r="12" fill="#4caf50" stroke="#2e7d32" stroke-width="2"/>
+  <text x="40" y="114" text-anchor="middle" fill="white" font-size="10" font-weight="bold">pH</text>
+  <!-- Output pipe -->
+  <rect x="300" y="180" width="70" height="20" fill="#90a4ae" rx="5"/>
+  <!-- Temperature indicator -->
+  <rect x="310" y="90" width="15" height="50" rx="7" fill="#fff" stroke="#f44336" stroke-width="2"/>
+  <rect x="313" y="110" width="9" height="27" rx="4" fill="#f44336"/>
+  <circle cx="317" cy="133" r="8" fill="#f44336"/>
+  <text x="340" y="120" fill="#f44336" font-size="10" font-weight="bold">T°</text>
+  <!-- Bubbles (aeration) -->
+  <circle cx="130" cy="200" r="5" fill="#81d4fa" opacity="0.7"/>
+  <circle cx="150" cy="190" r="4" fill="#81d4fa" opacity="0.6"/>
+  <circle cx="145" cy="210" r="6" fill="#81d4fa" opacity="0.8"/>
+  <circle cx="250" cy="195" r="5" fill="#81d4fa" opacity="0.7"/>
+  <circle cx="265" cy="205" r="4" fill="#81d4fa" opacity="0.6"/>
+  <!-- Labels -->
+  <text x="200" y="270" text-anchor="middle" fill="#1565c0" font-size="14" font-weight="bold">Water Treatment System</text>
+  <!-- Factor labels with connectors -->
+  <circle cx="65" cy="60" r="25" fill="#fff3e0" stroke="#ff9800" stroke-width="2"/>
+  <text x="65" y="58" text-anchor="middle" fill="#e65100" font-size="8" font-weight="bold">Coag.</text>
+  <text x="65" y="68" text-anchor="middle" fill="#e65100" font-size="8" font-weight="bold">Dose</text>
+  <line x1="85" y1="75" x2="100" y2="90" stroke="#ff9800" stroke-width="2" stroke-dasharray="4"/>
+  <circle cx="335" cy="60" r="25" fill="#e8f5e9" stroke="#4caf50" stroke-width="2"/>
+  <text x="335" y="58" text-anchor="middle" fill="#2e7d32" font-size="8" font-weight="bold">Mix</text>
+  <text x="335" y="68" text-anchor="middle" fill="#2e7d32" font-size="8" font-weight="bold">Speed</text>
+  <line x1="315" y1="75" x2="210" y2="50" stroke="#4caf50" stroke-width="2" stroke-dasharray="4"/>
+  <circle cx="65" cy="260" r="25" fill="#fce4ec" stroke="#e91e63" stroke-width="2"/>
+  <text x="65" y="258" text-anchor="middle" fill="#c2185b" font-size="8" font-weight="bold">Settle</text>
+  <text x="65" y="268" text-anchor="middle" fill="#c2185b" font-size="8" font-weight="bold">Time</text>
+  <line x1="90" y1="250" x2="110" y2="220" stroke="#e91e63" stroke-width="2" stroke-dasharray="4"/>
+  <circle cx="335" cy="260" r="25" fill="#e1f5fe" stroke="#03a9f4" stroke-width="2"/>
+  <text x="335" y="258" text-anchor="middle" fill="#0277bd" font-size="8" font-weight="bold">Aer.</text>
+  <text x="335" y="268" text-anchor="middle" fill="#0277bd" font-size="8" font-weight="bold">Rate</text>
+  <line x1="310" y1="255" x2="270" y2="210" stroke="#03a9f4" stroke-width="2" stroke-dasharray="4"/>
+</svg>
+<!-- /position -->
+<!-- /layout -->
+
+---
+
+<!-- .slide:id="initial-problem-2" -->
+## The Scaling Problem (cont.)
+
+<!-- layout={rows: 1, columns: 2} -->
+<!-- position={row: 1, column: 1} -->
+<svg viewBox="0 0 300 200" style="max-width: 100%; height: auto;">
+  <style>
+    @keyframes wiggle { 0%, 100% { transform: rotate(-5deg); } 50% { transform: rotate(5deg); } }
+    .wiggle { animation: wiggle 1.5s ease-in-out infinite; transform-origin: center; }
+  </style>
+  <!-- Question Mark -->
+  <g class="wiggle" style="animation-delay: 0s;">
+    <circle cx="70" cy="100" r="45" fill="#fff9c4" stroke="#fbc02d" stroke-width="3"/>
+    <text x="70" y="115" text-anchor="middle" fill="#f57f17" font-size="50" font-weight="bold">?</text>
+  </g>
+  <!-- Money/Dollar -->
+  <g class="wiggle" style="animation-delay: 0.15s;">
+    <circle cx="150" cy="100" r="45" fill="#c8e6c9" stroke="#43a047" stroke-width="3"/>
+    <text x="150" y="118" text-anchor="middle" fill="#2e7d32" font-size="50" font-weight="bold">$</text>
+  </g>
+  <!-- Clock -->
+  <g class="wiggle" style="animation-delay: 0.15s;">
+    <circle cx="230" cy="100" r="45" fill="#e3f2fd" stroke="#1976d2" stroke-width="3"/>
+    <circle cx="230" cy="100" r="35" fill="white" stroke="#1976d2" stroke-width="2"/>
+    <line x1="230" y1="100" x2="230" y2="75" stroke="#1976d2" stroke-width="3" stroke-linecap="round"/>
+    <line x1="230" y1="100" x2="250" y2="100" stroke="#1976d2" stroke-width="3" stroke-linecap="round"/>
+    <circle cx="230" cy="100" r="4" fill="#1976d2"/>
+  </g>
+  <!-- Labels -->
+  <text x="70" y="165" text-anchor="middle" fill="#f57f17" font-size="12" font-weight="bold">How many?</text>
+  <text x="150" y="165" text-anchor="middle" fill="#2e7d32" font-size="12" font-weight="bold">Cost?</text>
+  <text x="230" y="165" text-anchor="middle" fill="#1976d2" font-size="12" font-weight="bold">Time?</text>
+</svg>
+<!-- /position -->
+<!-- position={row: 1, column: 2} -->
+-? How many experiments would a **full factorial design** require?
+<!-- /position -->
+<!-- /layout -->
+
+---
+
+<!-- .slide:id="initial-problem-3" -->
+## The Scaling Problem (cont.)
+
+<!-- layout={rows: 1, columns: 2} -->
+<!-- position={row: 1, column: 1} -->
+-! Each added factor **doubles** the number of runs.
+<!-- /position -->
+<!-- position={row: 1, column: 2} -->
+<svg viewBox="0 0 350 250" style="max-width: 100%; height: auto;">
+  <!-- Background grid -->
+  <defs>
+    <pattern id="grid" width="30" height="30" patternUnits="userSpaceOnUse">
+      <path d="M 30 0 L 0 0 0 30" fill="none" stroke="#e0e0e0" stroke-width="0.5"/>
+    </pattern>
+  </defs>
+  <rect x="50" y="20" width="280" height="180" fill="url(#grid)"/>
+  <!-- Axes -->
+  <line x1="50" y1="200" x2="330" y2="200" stroke="#455a64" stroke-width="2"/>
+  <line x1="50" y1="200" x2="50" y2="20" stroke="#455a64" stroke-width="2"/>
+  <!-- Arrow heads -->
+  <polygon points="330,200 320,195 320,205" fill="#455a64"/>
+  <polygon points="50,20 45,30 55,30" fill="#455a64"/>
+  <!-- Exponential curve -->
+  <path d="M70 195 Q100 190 130 180 Q160 165 190 140 Q220 100 250 50" 
+        fill="none" stroke="#e53935" stroke-width="4" stroke-linecap="round"/>
+  <!-- Data points -->
+  <circle cx="70" cy="195" r="8" fill="#ffcdd2" stroke="#e53935" stroke-width="2"/>
+  <circle cx="130" cy="180" r="8" fill="#ffcdd2" stroke="#e53935" stroke-width="2"/>
+  <circle cx="160" cy="165" r="8" fill="#ffcdd2" stroke="#e53935" stroke-width="2"/>
+  <circle cx="190" cy="140" r="8" fill="#ffcdd2" stroke="#e53935" stroke-width="2"/>
+  <circle cx="220" cy="100" r="8" fill="#ffcdd2" stroke="#e53935" stroke-width="2"/>
+  <circle cx="250" cy="50" r="8" fill="#ffcdd2" stroke="#e53935" stroke-width="2"/>
+  <!-- Labels on points -->
+  <text x="70" y="215" text-anchor="middle" fill="#455a64" font-size="10">2</text>
+  <text x="130" y="215" text-anchor="middle" fill="#455a64" font-size="10">3</text>
+  <text x="160" y="215" text-anchor="middle" fill="#455a64" font-size="10">4</text>
+  <text x="190" y="215" text-anchor="middle" fill="#455a64" font-size="10">5</text>
+  <text x="220" y="215" text-anchor="middle" fill="#455a64" font-size="10">6</text>
+  <text x="250" y="215" text-anchor="middle" fill="#455a64" font-size="10">7</text>
+  <!-- Value labels -->
+  <text x="70" y="188" text-anchor="middle" fill="#e53935" font-size="9" font-weight="bold">4</text>
+  <text x="130" y="173" text-anchor="middle" fill="#e53935" font-size="9" font-weight="bold">8</text>
+  <text x="160" y="158" text-anchor="middle" fill="#e53935" font-size="9" font-weight="bold">16</text>
+  <text x="190" y="133" text-anchor="middle" fill="#e53935" font-size="9" font-weight="bold">32</text>
+  <text x="220" y="93" text-anchor="middle" fill="#e53935" font-size="9" font-weight="bold">64</text>
+  <text x="250" y="43" text-anchor="middle" fill="#e53935" font-size="9" font-weight="bold">128</text>
+  <!-- Axis labels -->
+  <text x="190" y="240" text-anchor="middle" fill="#1565c0" font-size="14" font-weight="bold">Number of Factors (k)</text>
+  <text x="20" y="110" text-anchor="middle" fill="#1565c0" font-size="14" font-weight="bold" transform="rotate(-90, 20, 110)">Runs (2ᵏ)</text>
+  <!-- Formula box -->
+  <rect x="240" y="100" width="90" height="35" rx="5" fill="#fff3e0" stroke="#ff9800" stroke-width="2"/>
+  <text x="285" y="122" text-anchor="middle" fill="#e65100" font-size="16" font-weight="bold">runs = 2ᵏ</text>
+</svg>
+<!-- /position -->
+<!-- /layout -->
+
+---
+
+<!-- .slide:id="initial-problem-4" -->
+## The Scaling Problem (cont.)
+
 <div style="font-size: 0.7em;">
 
 | Factors | Runs ($2^k$) |
@@ -44,12 +190,11 @@ description: "From full factorial design to efficient screening and optimization
 </div>
 
 -= This exponential growth quickly becomes **impractical** in real laboratories.
-<!-- /position -->
-<!-- /layout -->
+
 <div id="run-calculator" style="background: #1a2340; padding: 15px; border-radius: 8px; margin-top: 20px;">
   <div style="display: flex; align-items: center; gap: 15px;">
     <label style="color: #9efcff; font-weight: bold;">Factors (k):</label>
-    <input type="range" id="factor-slider" min="2" max="12" value="4" style="flex: 1;">
+    <input type="range" id="factor-slider" min="2" max="20" value="4" style="flex: 1;">
     <span id="factor-display" style="color: #9efcff; font-weight: bold; min-width: 30px;">4</span>
   </div>
   <div style="margin-top: 10px; text-align: center;">
@@ -102,9 +247,11 @@ description: "From full factorial design to efficient screening and optimization
 
 -! *High Cost* : each factor doubles workload
 -! *Scalability* : equipment, reagents become limiting
--! *Redundancy* : most interactions are negligible
+-! **Redundancy** : most interactions are negligible
 
--= We need designs that give **most information** with **less effort**.
+***
+
+-= We need designs that give most information with less effort.
 <!-- /position -->
 <!-- /layout -->
 
@@ -113,22 +260,126 @@ description: "From full factorial design to efficient screening and optimization
 <!-- .slide:id="why-alternatives" -->
 ## Why We Need Smarter Designs
 
--! **Key insight:** In most real systems, only a few factors truly matter.
--: Many interactions are negligible.
+-! In most real systems, only a few factors truly matter.
 -: Testing every combination wastes resources on unimportant effects.
 
-***
+| Run | A | B | C | D | E | F | G | H | Response |
+|:---|:---|:---|:---|:---|:---|:---|:---|:---|:--------|
+| 1 | -1 | -1 | -1 | -1 | -1 | -1 | -1 | -1 | 10 |
+| 2 | +1 | -1 | -1 | -1 | -1 | -1 | -1 | +1 | 12 |
+| 3 | -1 | +1 | -1 | -1 | -1 | -1 | +1 | -1 | 11 |
+| ... | ... | ... | ... | ... | ... | ... | ... | ... | ... |
+| 256 | +1 | +1 | +1 | +1 | +1 | +1 | +1 | +1 | 13 |
 
+-= Running all 256 combinations is not to describe factors but to describe factors and interactions.
+
+-? But what if most interactions and/or factors are negligible?
+
+---
+
+<!-- .slide:id="why-alternatives-2" -->
+## Why We Need Smarter Designs (cont.)
+<!-- layout={rows: 1, columns: 2} -->
+<!-- position={row: 1, column: 1} -->
 -! **The solution:** Sacrifice completeness for efficiency.
 -: Intentionally omit or add certain runs
 -: Balance information gained versus effort spent
-
-***
-
+<!-- /position -->
+<!-- position={row: 1, column: 2} -->
 -! *Three design families* address these weaknesses:
 -: *Fractional Factorials* : run only a fraction of combinations.
 -: *Plackett–Burman* : highly efficient screening for many factors.
 -: *Response Surface Designs* : model curvature for optimization.
+<!-- /position -->
+<!-- /layout -->
+
+---
+
+<!-- .slide:id="fractional-factorial-intro" -->
+## Fractional Factorial Designs
+
+<!-- layout={rows: 1, columns: 2} -->
+<!-- position={row: 1, column: 1} -->
+<svg viewBox="0 0 280 260" style="max-width: 100%; height: auto;">
+  <!-- Cube edges - back face -->
+  <line x1="80" y1="60" x2="220" y2="60" stroke="#90a4ae" stroke-width="2" stroke-dasharray="5,3"/>
+  <line x1="80" y1="60" x2="80" y2="180" stroke="#90a4ae" stroke-width="2" stroke-dasharray="5,3"/>
+  <line x1="80" y1="60" x2="40" y2="100" stroke="#90a4ae" stroke-width="2" stroke-dasharray="5,3"/>
+  <!-- Cube edges - front face -->
+  <line x1="40" y1="100" x2="180" y2="100" stroke="#1976d2" stroke-width="2"/>
+  <line x1="40" y1="100" x2="40" y2="220" stroke="#1976d2" stroke-width="2"/>
+  <line x1="180" y1="100" x2="180" y2="220" stroke="#1976d2" stroke-width="2"/>
+  <line x1="40" y1="220" x2="180" y2="220" stroke="#1976d2" stroke-width="2"/>
+  <!-- Cube edges - connecting -->
+  <line x1="180" y1="100" x2="220" y2="60" stroke="#1976d2" stroke-width="2"/>
+  <line x1="180" y1="220" x2="220" y2="180" stroke="#1976d2" stroke-width="2"/>
+  <line x1="220" y1="60" x2="220" y2="180" stroke="#1976d2" stroke-width="2"/>
+  <line x1="80" y1="180" x2="220" y2="180" stroke="#90a4ae" stroke-width="2" stroke-dasharray="5,3"/>
+  <line x1="80" y1="180" x2="40" y2="220" stroke="#1976d2" stroke-width="2"/>
+  <!-- All 8 vertices (runs) -->
+  <circle cx="40" cy="220" r="12" fill="#e3f2fd" stroke="#1976d2" stroke-width="3"/>
+  <circle cx="180" cy="220" r="12" fill="#e3f2fd" stroke="#1976d2" stroke-width="3"/>
+  <circle cx="40" cy="100" r="12" fill="#e3f2fd" stroke="#1976d2" stroke-width="3"/>
+  <circle cx="180" cy="100" r="12" fill="#e3f2fd" stroke="#1976d2" stroke-width="3"/>
+  <circle cx="80" cy="180" r="12" fill="#e3f2fd" stroke="#1976d2" stroke-width="3"/>
+  <circle cx="220" cy="180" r="12" fill="#e3f2fd" stroke="#1976d2" stroke-width="3"/>
+  <circle cx="80" cy="60" r="12" fill="#e3f2fd" stroke="#1976d2" stroke-width="3"/>
+  <circle cx="220" cy="60" r="12" fill="#e3f2fd" stroke="#1976d2" stroke-width="3"/>
+  <!-- Axis labels -->
+  <text x="110" y="245" text-anchor="middle" fill="#1565c0" font-size="14" font-weight="bold">Factor A</text>
+  <text x="15" y="160" text-anchor="middle" fill="#1565c0" font-size="14" font-weight="bold" transform="rotate(-90, 15, 160)">Factor B</text>
+  <text x="250" y="130" text-anchor="middle" fill="#1565c0" font-size="14" font-weight="bold" transform="rotate(-45, 250, 130)">Factor C</text>
+  <!-- Run count -->
+  <rect x="90" y="5" width="100" height="30" rx="5" fill="#e8f5e9" stroke="#4caf50" stroke-width="2"/>
+  <text x="140" y="25" text-anchor="middle" fill="#2e7d32" font-size="14" font-weight="bold">Full</text>
+</svg>
+<!-- /position -->
+<!-- position={row: 1, column: 2} -->
+<svg viewBox="0 0 280 260" style="max-width: 100%; height: auto;">
+  <!-- Cube edges - back face -->
+  <line x1="80" y1="60" x2="220" y2="60" stroke="#e0e0e0" stroke-width="2" stroke-dasharray="5,3"/>
+  <line x1="80" y1="60" x2="80" y2="180" stroke="#e0e0e0" stroke-width="2" stroke-dasharray="5,3"/>
+  <line x1="80" y1="60" x2="40" y2="100" stroke="#e0e0e0" stroke-width="2" stroke-dasharray="5,3"/>
+  <!-- Cube edges - front face (faded) -->
+  <line x1="40" y1="100" x2="180" y2="100" stroke="#bdbdbd" stroke-width="2"/>
+  <line x1="40" y1="100" x2="40" y2="220" stroke="#bdbdbd" stroke-width="2"/>
+  <line x1="180" y1="100" x2="180" y2="220" stroke="#bdbdbd" stroke-width="2"/>
+  <line x1="40" y1="220" x2="180" y2="220" stroke="#bdbdbd" stroke-width="2"/>
+  <!-- Cube edges - connecting -->
+  <line x1="180" y1="100" x2="220" y2="60" stroke="#bdbdbd" stroke-width="2"/>
+  <line x1="180" y1="220" x2="220" y2="180" stroke="#bdbdbd" stroke-width="2"/>
+  <line x1="220" y1="60" x2="220" y2="180" stroke="#bdbdbd" stroke-width="2"/>
+  <line x1="80" y1="180" x2="220" y2="180" stroke="#e0e0e0" stroke-width="2" stroke-dasharray="5,3"/>
+  <line x1="80" y1="180" x2="40" y2="220" stroke="#bdbdbd" stroke-width="2"/>
+  <!-- Diagonal lines connecting selected points -->
+  <line x1="40" y1="220" x2="180" y2="100" stroke="#e53935" stroke-width="3" stroke-dasharray="8,4"/>
+  <line x1="180" y1="100" x2="220" y2="180" stroke="#e53935" stroke-width="3" stroke-dasharray="8,4"/>
+  <line x1="220" y1="180" x2="80" y2="60" stroke="#e53935" stroke-width="3" stroke-dasharray="8,4"/>
+  <line x1="80" y1="60" x2="40" y2="220" stroke="#e53935" stroke-width="3" stroke-dasharray="8,4"/>
+  <!-- Non-selected vertices (faded) -->
+  <circle cx="180" cy="220" r="10" fill="#f5f5f5" stroke="#bdbdbd" stroke-width="2"/>
+  <circle cx="40" cy="100" r="10" fill="#f5f5f5" stroke="#bdbdbd" stroke-width="2"/>
+  <circle cx="80" cy="180" r="10" fill="#f5f5f5" stroke="#bdbdbd" stroke-width="2"/>
+  <circle cx="220" cy="60" r="10" fill="#f5f5f5" stroke="#bdbdbd" stroke-width="2"/>
+  <!-- Selected 4 vertices (half-fraction) - highlighted -->
+  <circle cx="40" cy="220" r="14" fill="#ffcdd2" stroke="#e53935" stroke-width="4"/>
+  <text x="40" y="225" text-anchor="middle" fill="#b71c1c" font-size="12" font-weight="bold">1</text>
+  <circle cx="180" cy="100" r="14" fill="#ffcdd2" stroke="#e53935" stroke-width="4"/>
+  <text x="180" y="105" text-anchor="middle" fill="#b71c1c" font-size="12" font-weight="bold">2</text>
+  <circle cx="80" cy="60" r="14" fill="#ffcdd2" stroke="#e53935" stroke-width="4"/>
+  <text x="80" y="65" text-anchor="middle" fill="#b71c1c" font-size="12" font-weight="bold">3</text>
+  <circle cx="220" cy="180" r="14" fill="#ffcdd2" stroke="#e53935" stroke-width="4"/>
+  <text x="220" y="185" text-anchor="middle" fill="#b71c1c" font-size="12" font-weight="bold">4</text>
+  <!-- Axis labels -->
+  <text x="110" y="245" text-anchor="middle" fill="#757575" font-size="14" font-weight="bold">Factor A</text>
+  <text x="15" y="160" text-anchor="middle" fill="#757575" font-size="14" font-weight="bold" transform="rotate(-90, 15, 160)">Factor B</text>
+  <text x="250" y="130" text-anchor="middle" fill="#757575" font-size="14" font-weight="bold" transform="rotate(-45, 250, 130)">Factor C</text>
+  <!-- Run count -->
+  <rect x="90" y="5" width="100" height="30" rx="5" fill="#ffebee" stroke="#e53935" stroke-width="2"/>
+  <text x="140" y="25" text-anchor="middle" fill="#c62828" font-size="14" font-weight="bold">Fractional</text>
+</svg>
+<!-- /position -->
+<!-- /layout -->
 
 ---
 
@@ -136,49 +387,628 @@ description: "From full factorial design to efficient screening and optimization
 ## Fractional Factorial: The Core Idea
 <!-- layout={rows: 1, columns: 2} -->
 <!-- position={row: 1, column: 1} -->
-**The Problem**
+**The Scenario**
 
--! **4 factors** in water treatment: full factorial = 16 runs
+-! *4 factors* in water treatment
+-: full factorial = 16 runs
+
+***
+
 -! Resources allow only **8 runs**
 
 -? Can you still learn about all four factors?
 
--! **Yes** — accept a trade-off: run half, lose some info
+***
+
+-! **Yes**, accept a trade-off: run half, lose some info
 -! **Notation:** $2^{k-p}$ uses $\frac{1}{2^p}$ fraction
--: $2^{4-1}$ = half of $2^4$ = **8 runs**
+-: $2^{4-1}$ = half of $2^4$ = 8 runs
 <!-- /position -->
 <!-- position={row: 1, column: 2} -->
 **The Idea: Strategic Selection**
 
--! Fractional factorial **carefully selects** combinations preserving key info
--! Choose the **most informative subset**:
+-! Fractional factorial carefully selects combinations preserving key info
+
+***
+
+-! Choose the most informative subset:
 -: Main effects still estimable
 -: Some interactions become entangled
 
--= 8 runs instead of 16 — but something must be sacrificed.
+***
+
+-= 8 runs instead of 16, but something must be sacrificed.
 <!-- /position -->
 <!-- /layout -->
 
 ---
 
-<!-- .slide:id="aliasing-concept" -->
-## What Do We Sacrifice? — Aliasing
+<!-- .slide:id="interactive-aliasing-explorer" -->
+## Interactive: Explore Aliasing
 
--! **Key concept:** When we use fewer runs, some effects become **inseparable**.
+<div id="aliasing-explorer" style="font-size: 0.55em;">
+  <div style="display: flex; gap: 20px; align-items: flex-start;">
+    <!-- LEFT: MATRIX -->
+    <div style="flex: 1;">
+      <div style="margin-bottom: 10px; display: flex; gap: 10px; align-items: center;">
+        <button id="analyze-btn"
+                onclick="analyzeSelection()"
+                style="background: #e53935; color: white; border: none; padding: 8px 16px; border-radius: 5px; cursor: pointer; font-weight: bold;">
+          Analyze Selection
+        </button>
+        <button id="reset-btn"
+                onclick="resetDesign()"
+                style="background: #1976d2; color: white; border: none; padding: 8px 16px; border-radius: 5px; cursor: pointer; font-weight: bold;">
+          Reset
+        </button>
+        <span id="selected-count" style="color: #9efcff; font-weight: bold;">Selected: 0 / 16</span>
+      </div>
+      <table id="design-matrix" style="border-collapse: collapse; width: 100%; background: #1a2340;">
+        <thead>
+          <tr style="background: #2d3a5a;">
+            <th style="padding: 6px; border: 1px solid #4a5568; color: #9efcff;">Run</th>
+            <th class="col-A"  style="padding: 6px; border: 1px solid #4a5568; color: #61afef;">A</th>
+            <th class="col-B"  style="padding: 6px; border: 1px solid #4a5568; color: #c678dd;">B</th>
+            <th class="col-C"  style="padding: 6px; border: 1px solid #4a5568; color: #98c379;">C</th>
+            <th class="col-D"  style="padding: 6px; border: 1px solid #4a5568; color: #e5c07b;">D</th>
+            <th class="col-AB" style="padding: 6px; border: 1px solid #4a5568; color: #abb2bf;">AB</th>
+            <th class="col-AC" style="padding: 6px; border: 1px solid #4a5568; color: #abb2bf;">AC</th>
+            <th class="col-AD" style="padding: 6px; border: 1px solid #4a5568; color: #abb2bf;">AD</th>
+            <th class="col-BC" style="padding: 6px; border: 1px solid #4a5568; color: #abb2bf;">BC</th>
+            <th class="col-BD" style="padding: 6px; border: 1px solid #4a5568; color: #abb2bf;">BD</th>
+            <th class="col-CD" style="padding: 6px; border: 1px solid #4a5568; color: #abb2bf;">CD</th>
+          </tr>
+        </thead>
+        <tbody id="matrix-body"></tbody>
+      </table>
+    </div>
+    <!-- RIGHT: PANEL -->
+    <div id="design-check"
+         style="flex: 0 0 720px; background: #1a2340; padding: 15px; border-radius: 8px; border: 2px solid #4a5568;">
+      <h4 style="color: #9efcff; margin: 0 0 10px 0;">Design Check</h4>
+      <div id="alias-content" style="color: #abb2bf; font-size: 0.95em;">
+        <p style="color: #98c379;">✓ Ready</p>
+        <p style="color: #6a7280; font-style: italic;">Select rows, then click “Analyze Selection”.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function() {
+  // Full 2^4 factorial design
+  const fullDesign = [
+    {run: 1,  A: -1, B: -1, C: -1, D: -1},
+    {run: 2,  A:  1, B: -1, C: -1, D: -1},
+    {run: 3,  A: -1, B:  1, C: -1, D: -1},
+    {run: 4,  A:  1, B:  1, C: -1, D: -1},
+    {run: 5,  A: -1, B: -1, C:  1, D: -1},
+    {run: 6,  A:  1, B: -1, C:  1, D: -1},
+    {run: 7,  A: -1, B:  1, C:  1, D: -1},
+    {run: 8,  A:  1, B:  1, C:  1, D: -1},
+    {run: 9,  A: -1, B: -1, C: -1, D:  1},
+    {run: 10, A:  1, B: -1, C: -1, D:  1},
+    {run: 11, A: -1, B:  1, C: -1, D:  1},
+    {run: 12, A:  1, B:  1, C: -1, D:  1},
+    {run: 13, A: -1, B: -1, C:  1, D:  1},
+    {run: 14, A:  1, B: -1, C:  1, D:  1},
+    {run: 15, A: -1, B:  1, C:  1, D:  1},
+    {run: 16, A:  1, B:  1, C:  1, D:  1}
+  ];
+
+  const cols = ['A','B','C','D','AB','AC','AD','BC','BD','CD'];
+  const mainCols = ['A','B','C','D'];
+
+  let selectedRows = new Set();
+  let isAnalyzed = false;
+
+  const aliasColors = [
+    '#61afef', '#c678dd', '#98c379', '#e5c07b', '#e06c75',
+    '#56b6c2', '#d19a66', '#ff6b9d', '#a9dc76', '#78dce8'
+  ];
+
+  function computeInteractions(row) {
+    return {
+      ...row,
+      AB: row.A * row.B,
+      AC: row.A * row.C,
+      AD: row.A * row.D,
+      BC: row.B * row.C,
+      BD: row.B * row.D,
+      CD: row.C * row.D
+    };
+  }
+
+  function getSelectedData() {
+    return fullDesign.filter(r => selectedRows.has(r.run));
+  }
+
+  function toggleRow(runNum) {
+    if (isAnalyzed) return;
+    if (selectedRows.has(runNum)) selectedRows.delete(runNum);
+    else selectedRows.add(runNum);
+    updateSelectedCount();
+    renderMatrix(fullDesign, null, null, false);
+  }
+
+  function updateSelectedCount() {
+    const el = document.getElementById('selected-count');
+    if (el) el.textContent = `Selected: ${selectedRows.size} / 16`;
+  }
+
+  // ---------- helpers ----------
+  function sum(u) {
+    let s = 0;
+    for (let i = 0; i < u.length; i++) s += u[i];
+    return s;
+  }
+
+  function columnVector(data, col) {
+    return data.map(r => computeInteractions(r)[col]);
+  }
+
+  function corr(u, v) {
+    const n = u.length;
+    const mu = sum(u) / n;
+    const mv = sum(v) / n;
+    let num = 0, du = 0, dv = 0;
+    for (let i = 0; i < n; i++) {
+      const a = u[i] - mu;
+      const b = v[i] - mv;
+      num += a * b;
+      du += a * a;
+      dv += b * b;
+    }
+    if (du === 0 || dv === 0) return NaN;
+    return num / Math.sqrt(du * dv);
+  }
+
+  function patternString(data, col, negate = false) {
+    return data.map(r => {
+      const v = computeInteractions(r)[col];
+      return negate ? -v : v;
+    }).join(',');
+  }
+
+  function canonicalPattern(data, col) {
+    const p = patternString(data, col, false);
+    const n = patternString(data, col, true);
+    return (p < n) ? p : n;
+  }
+
+  /**
+   * Detailed pattern groups:
+   *  - groups[key].cols = [col1,col2,...]
+   *  - groups[key].pat[col] = actual pattern string (not canonical)
+   */
+  function findPatternGroupsDetailed(data) {
+    const groups = {};
+    cols.forEach(col => {
+      const key = canonicalPattern(data, col);
+      if (!groups[key]) groups[key] = { cols: [], pat: {} };
+      groups[key].cols.push(col);
+      groups[key].pat[col] = patternString(data, col, false);
+    });
+    return groups;
+  }
+
+  function buildColorGroupsFromAliases(groups) {
+    const colorGroups = {};
+    let colorIdx = 0;
+    Object.values(groups).forEach(g => {
+      if (g.cols.length > 1) {
+        const c = aliasColors[colorIdx % aliasColors.length];
+        g.cols.forEach(col => colorGroups[col] = c);
+        colorIdx++;
+      }
+    });
+    return colorGroups;
+  }
+
+  // ---------- RANK (identifiability) ----------
+  function buildXMatrix(data, modelCols) {
+    const X = [];
+    data.forEach(r => {
+      const fr = computeInteractions(r);
+      const row = [1];
+      modelCols.forEach(c => row.push(fr[c]));
+      X.push(row);
+    });
+    return X;
+  }
+
+  function matrixRank(A, eps = 1e-10) {
+    const m = A.length;
+    if (m === 0) return 0;
+    const n = A[0].length;
+    const M = A.map(r => r.slice());
+
+    let rank = 0;
+    let row = 0;
+    for (let col = 0; col < n && row < m; col++) {
+      let pivot = row;
+      for (let i = row; i < m; i++) {
+        if (Math.abs(M[i][col]) > Math.abs(M[pivot][col])) pivot = i;
+      }
+      if (Math.abs(M[pivot][col]) < eps) continue;
+
+      [M[row], M[pivot]] = [M[pivot], M[row]];
+      const piv = M[row][col];
+
+      for (let j = col; j < n; j++) M[row][j] /= piv;
+
+      for (let i = 0; i < m; i++) {
+        if (i === row) continue;
+        const f = M[i][col];
+        if (Math.abs(f) < eps) continue;
+        for (let j = col; j < n; j++) M[i][j] -= f * M[row][j];
+      }
+
+      rank++;
+      row++;
+    }
+    return rank;
+  }
+
+  // ---------- Diagnostics ----------
+  function analyzeDesign(data) {
+    const n = data.length;
+    const issues = {
+      n,
+      balanceProblems: [],  // {col, msg}
+      orthProblems: [],     // {a,b,corr,msg}
+      rank: null
+    };
+    if (n === 0) return issues;
+
+    // (1) Balance: sum must be 0 for main effects in balanced 2-level DOE
+    mainCols.forEach(col => {
+      const v = columnVector(data, col);
+      const plus = v.filter(x => x === 1).length;
+      const minus = v.filter(x => x === -1).length;
+
+      if (plus === 0 || minus === 0) {
+        issues.balanceProblems.push({
+          col,
+          msg: `Factor ${col} is constant (${plus === 0 ? 'always −' : 'always +'}) → main effect not estimable.`
+        });
+      } else if (plus !== minus) {
+        issues.balanceProblems.push({
+          col,
+          msg: `Factor ${col} is unbalanced (${plus}×‘+’, ${minus}×‘−’) → estimates become biased/less stable.`
+        });
+      }
+    });
+
+    // (2) Orthogonality main vs main
+    for (let i = 0; i < mainCols.length; i++) {
+      for (let j = i + 1; j < mainCols.length; j++) {
+        const a = mainCols[i], b = mainCols[j];
+        const va = columnVector(data, a);
+        const vb = columnVector(data, b);
+        const c = corr(va, vb);
+        if (!Number.isFinite(c)) continue;
+        if (Math.abs(c) > 1e-9) {
+          issues.orthProblems.push({
+            a, b, corr: c,
+            msg: `${a} and ${b} are not orthogonal (corr=${c.toFixed(2)}) → effects are confounded.`
+          });
+        }
+      }
+    }
+
+    // (3) Rank check for intercept + A..D
+    const X = buildXMatrix(data, mainCols);
+    const r = matrixRank(X);
+    const p = 1 + mainCols.length;
+
+    issues.rank = {
+      rank: r,
+      p,
+      msg: (r < p)
+        ? `Design matrix rank=${r} < ${p} (Intercept + A..D) → not all main effects identifiable.`
+        : `Design matrix full rank for (Intercept + A..D): rank=${r}/${p} → main effects identifiable.`
+    };
+
+    return issues;
+  }
+
+  // ---------- Rendering (with optional Σ row) ----------
+  function renderMatrix(data, colorGroups = null, highlightIssues = null, appendSumRow = false) {
+    const tbody = document.getElementById('matrix-body');
+    if (!tbody) return;
+    tbody.innerHTML = '';
+
+    // Data rows
+    data.forEach(row => {
+      const fullRow = computeInteractions(row);
+      const tr = document.createElement('tr');
+
+      tr.style.cursor = isAnalyzed ? 'default' : 'pointer';
+      tr.style.background = selectedRows.has(row.run) ? '#3d4f6f' : 'transparent';
+      if (!isAnalyzed) tr.onclick = () => toggleRow(row.run);
+
+      const runTd = document.createElement('td');
+      runTd.style.cssText = 'padding: 5px 8px; border: 1px solid #4a5568; text-align: center; color: #9efcff; font-weight: bold;';
+      runTd.textContent = row.run;
+      tr.appendChild(runTd);
+
+      cols.forEach(col => {
+        const td = document.createElement('td');
+        td.style.cssText = 'padding: 5px 8px; border: 1px solid #4a5568; text-align: center; font-weight: bold;';
+        td.textContent = fullRow[col] === 1 ? '+' : '−';
+        td.style.color = fullRow[col] === 1 ? '#98c379' : '#e06c75';
+
+        if (colorGroups && colorGroups[col]) {
+          td.style.background = colorGroups[col];
+          td.style.color = '#1a2340';
+        }
+
+        tr.appendChild(td);
+      });
+
+      tbody.appendChild(tr);
+    });
+
+    // Σ row (column sums)
+    if (appendSumRow) {
+      const sumTr = document.createElement('tr');
+      sumTr.style.background = '#2d3a5a';
+
+      const labelTd = document.createElement('td');
+      labelTd.style.cssText = 'padding: 5px 8px; border: 1px solid #4a5568; text-align: center; color: #9efcff; font-weight: bold;';
+      labelTd.textContent = 'Σ';
+      sumTr.appendChild(labelTd);
+
+      cols.forEach(col => {
+        const v = columnVector(data, col);
+        const s = sum(v);
+
+        const td = document.createElement('td');
+        td.style.cssText = 'padding: 5px 8px; border: 1px solid #4a5568; text-align: center; font-weight: bold;';
+        td.textContent = String(s);
+
+        // For main effects, Σ must be 0 (balanced). For interactions: informative.
+        const mustBeZero = mainCols.includes(col);
+        if (mustBeZero) {
+          td.style.color = (s === 0) ? '#98c379' : '#e06c75';
+        } else {
+          td.style.color = (s === 0) ? '#abb2bf' : '#e5c07b';
+        }
+
+        sumTr.appendChild(td);
+      });
+
+      tbody.appendChild(sumTr);
+    }
+
+    // Header highlighting for problematic columns
+    if (highlightIssues && highlightIssues.col) {
+      cols.forEach(col => {
+        const th = document.querySelector(`.col-${col}`);
+        if (!th) return;
+        th.style.background = highlightIssues.col.has(col) ? '#4b2a2a' : '';
+        th.style.borderColor = highlightIssues.col.has(col) ? '#e06c75' : '#4a5568';
+      });
+    } else {
+      cols.forEach(col => {
+        const th = document.querySelector(`.col-${col}`);
+        if (!th) return;
+        th.style.background = '';
+        th.style.borderColor = '#4a5568';
+      });
+    }
+  }
+
+  // ---------- Signed alias text ----------
+  function formatSignedAliasGroup(group) {
+    // group: { cols:[...], pat:{col:patternString} }
+    const rep = group.cols[0];
+    const repPat = group.pat[rep];
+    const repNeg = repPat.split(',').map(x => String(-parseInt(x,10))).join(',');
+
+    // Build expression like: A ≡ −AD ≡ +BC ...
+    // First term is just rep (implicitly +)
+    const parts = [rep];
+
+    for (let i = 1; i < group.cols.length; i++) {
+      const c = group.cols[i];
+      const p = group.pat[c];
+      const sign = (p === repPat) ? '+' : (p === repNeg ? '−' : '?'); // '?' should not occur
+      parts.push(`${sign}${c}`);
+    }
+
+    // Use ≡ for aliasing up to sign, but show sign explicitly
+    return parts.join(' ≡ ');
+  }
+
+  function updateDesignCheckUI(diag, groupsDetailed) {
+    const content = document.getElementById('alias-content');
+    if (!content) return;
+
+    const okBalance = diag.balanceProblems.length === 0;
+    const okOrth = diag.orthProblems.length === 0;
+    const okRank = diag.rank && diag.rank.rank >= diag.rank.p;
+
+    const statusColor = (okBalance && okOrth && okRank) ? '#98c379' : '#e06c75';
+    const statusText  = (okBalance && okOrth && okRank)
+      ? '✓ Selection is structurally valid (for main effects).'
+      : '⚠ Selection has structural problems.';
+
+    let html = '';
+    html += `<p style="color:${statusColor}; margin:0 0 8px 0;"><strong>${statusText}</strong></p>`;
+    html += `<p style="color:#abb2bf; margin:0 0 10px 0;">Runs selected: <strong>${diag.n}</strong></p>`;
+
+    html += `<p style="margin:10px 0 6px 0; color:#9efcff;"><strong>1) Level balance (A–D)</strong></p>`;
+    html += `<p style="margin:0 0 6px 0; color:#6a7280; font-size:0.9em;">Tip: Check the Σ row in the table — for A–D it should be 0.</p>`;
+    if (diag.balanceProblems.length === 0) {
+      html += `<p style="margin:0; color:#98c379;">✓ Balanced (no constants, equal +/−).</p>`;
+    } else {
+      html += `<ul style="margin:0; padding-left:18px;">`;
+      diag.balanceProblems.forEach(p => html += `<li style="margin:4px 0; color:#e06c75;">${p.msg}</li>`);
+      html += `</ul>`;
+    }
+
+    html += `<p style="margin:12px 0 6px 0; color:#9efcff;"><strong>2) Orthogonality (main vs main)</strong></p>`;
+    if (diag.orthProblems.length === 0) {
+      html += `<p style="margin:0; color:#98c379;">✓ Orthogonal main effects.</p>`;
+    } else {
+      html += `<ul style="margin:0; padding-left:18px;">`;
+      diag.orthProblems.forEach(p => html += `<li style="margin:4px 0; color:#e06c75;">${p.msg}</li>`);
+      html += `</ul>`;
+    }
+
+    html += `<p style="margin:12px 0 6px 0; color:#9efcff;"><strong>3) Identifiability (rank)</strong></p>`;
+    if (diag.rank) {
+      const c = (diag.rank.rank >= diag.rank.p) ? '#98c379' : '#e06c75';
+      html += `<p style="margin:0; color:${c};">${diag.rank.msg}</p>`;
+    }
+
+    html += `<p style="margin:12px 0 6px 0; color:#9efcff;"><strong>4) Aliasing (showing the sign)</strong></p>`;
+    const aliasGroups = Object.values(groupsDetailed).filter(g => g.cols.length > 1);
+    if (aliasGroups.length === 0) {
+      html += `<p style="margin:0; color:#98c379;">✓ No identical/negated patterns detected among shown columns.</p>`;
+    } else {
+      html += `<p style="margin:0 0 6px 0; color:#e5c07b;">Same color = aliased. The “−” sign matters: e.g., if D is constant −1 then AD = −A (not A).</p>`;
+      html += `<ul style="margin:0; padding-left:18px;">`;
+      let colorIdx = 0;
+      aliasGroups.forEach(g => {
+        const color = aliasColors[colorIdx % aliasColors.length];
+        html += `<li style="margin:4px 0; color:${color};"><strong>${formatSignedAliasGroup(g)}</strong></li>`;
+        colorIdx++;
+      });
+      html += `</ul>`;
+    }
+
+    content.innerHTML = html;
+  }
+
+  // ---------- Public handlers ----------
+  window.analyzeSelection = function() {
+    if (selectedRows.size === 0) {
+      alert('Please select at least one row first!');
+      return;
+    }
+
+    isAnalyzed = true;
+    const data = getSelectedData();
+
+    const diag = analyzeDesign(data);
+    const groupsDetailed = findPatternGroupsDetailed(data);
+    const colorGroups = buildColorGroupsFromAliases(groupsDetailed);
+
+    const highlightIssues = { col: new Set() };
+    diag.balanceProblems.forEach(p => highlightIssues.col.add(p.col));
+
+    // NOTE: appendSumRow = true
+    renderMatrix(data, colorGroups, highlightIssues, true);
+    updateDesignCheckUI(diag, groupsDetailed);
+
+    const el = document.getElementById('selected-count');
+    if (el) el.textContent = `Runs: ${data.length}`;
+  };
+
+  window.resetDesign = function() {
+    selectedRows.clear();
+    isAnalyzed = false;
+    updateSelectedCount();
+    renderMatrix(fullDesign, null, null, false);
+
+    const content = document.getElementById('alias-content');
+    if (content) {
+      content.innerHTML = `
+        <p style="color: #98c379;">✓ Ready</p>
+        <p style="color: #6a7280; font-style: italic;">Select rows, then click “Analyze Selection”.</p>
+      `;
+    }
+  };
+
+  // Reveal hook
+  if (typeof Reveal !== 'undefined') {
+    Reveal.on('slidechanged', event => {
+      if (event.currentSlide.querySelector('#aliasing-explorer')) {
+        resetDesign();
+      }
+    });
+  }
+
+  // Initial render
+  setTimeout(() => {
+    renderMatrix(fullDesign, null, null, false);
+    updateSelectedCount();
+  }, 100);
+})();
+</script>
+
+
+---
+<!-- .slide:id="aliasing-intro" -->
+## What Do We Sacrifice? — Aliasing
+<!-- layout={rows: 1, columns: 2} -->
+<!-- position={row: 1, column: 1} -->
+-! **Key concept:** When we use fewer runs, some effects become inseparable.
 -: We cannot distinguish them from our data.
 -: This phenomenon is called **aliasing**.
 
 ***
 
--! **Metaphor:** Effects "travel together" like passengers sharing a car.
--: If you only see the car arrive, you cannot tell who was driving.
--: The effects are **confounded** — combined in a single estimate.
-
-***
-
--? What gets aliased depends on **which fraction** we choose.
+-< What gets aliased depends on which fraction we choose.
 -: The choice of runs determines which effects we can distinguish.
 -: Smart designs minimize aliasing of the effects we care about most.
+
+<!-- /position -->
+<!-- position={row: 1, column: 2} -->
+
+-! **Metaphor:** Effects "travel together" like passengers sharing a car.
+-: If you only see the car arrive, you cannot tell who was driving.
+-: The effects are **confounded**, i.e., combined in a single estimate.
+
+<svg viewBox="0 0 320 200" style="max-width: 100%; height: auto;">
+  <!-- Road -->
+  <rect x="0" y="140" width="320" height="60" fill="#455a64"/>
+  <line x1="0" y1="170" x2="320" y2="170" stroke="#ffd54f" stroke-width="3" stroke-dasharray="20,15"/>
+  
+  <!-- Car body -->
+  <rect x="80" y="95" width="160" height="50" rx="8" fill="#42a5f5" stroke="#1976d2" stroke-width="3"/>
+  <!-- Car roof/cabin -->
+  <path d="M105 95 L125 60 L215 60 L235 95" fill="#90caf9" stroke="#1976d2" stroke-width="3"/>
+  <!-- Windows -->
+  <rect x="130" y="65" width="35" height="25" rx="3" fill="#e3f2fd" stroke="#1976d2" stroke-width="2"/>
+  <rect x="175" y="65" width="35" height="25" rx="3" fill="#e3f2fd" stroke="#1976d2" stroke-width="2"/>
+  
+  <!-- Wheels -->
+  <circle cx="115" cy="145" r="18" fill="#37474f" stroke="#263238" stroke-width="3"/>
+  <circle cx="115" cy="145" r="8" fill="#78909c"/>
+  <circle cx="205" cy="145" r="18" fill="#37474f" stroke="#263238" stroke-width="3"/>
+  <circle cx="205" cy="145" r="8" fill="#78909c"/>
+  
+  <!-- Headlights -->
+  <rect x="235" y="108" width="12" height="10" rx="2" fill="#fff59d" stroke="#fbc02d" stroke-width="2"/>
+  
+  <!-- Passenger 1 (Effect A) - in back window -->
+  <circle cx="147" cy="72" r="10" fill="#ffcdd2" stroke="#e53935" stroke-width="2"/>
+  <circle cx="145" cy="70" r="2" fill="#37474f"/>
+  <circle cx="150" cy="70" r="2" fill="#37474f"/>
+  <path d="M143 75 Q147 78 151 75" fill="none" stroke="#37474f" stroke-width="1.5"/>
+  
+  <!-- Passenger 2 (Effect B) - in front window -->
+  <circle cx="192" cy="72" r="10" fill="#c8e6c9" stroke="#43a047" stroke-width="2"/>
+  <circle cx="190" cy="70" r="2" fill="#37474f"/>
+  <circle cx="195" cy="70" r="2" fill="#37474f"/>
+  <path d="M188 75 Q192 78 196 75" fill="none" stroke="#37474f" stroke-width="1.5"/>
+  
+  <!-- Labels for passengers -->
+  <rect x="125" y="30" width="30" height="20" rx="4" fill="#ffcdd2" stroke="#e53935" stroke-width="2"/>
+  <text x="140" y="44" text-anchor="middle" fill="#c62828" font-size="11" font-weight="bold">A</text>
+  <line x1="140" y1="50" x2="145" y2="62" stroke="#e53935" stroke-width="2"/>
+  
+  <rect x="180" y="30" width="30" height="20" rx="4" fill="#c8e6c9" stroke="#43a047" stroke-width="2"/>
+  <text x="195" y="44" text-anchor="middle" fill="#2e7d32" font-size="11" font-weight="bold">B</text>
+  <line x1="195" y1="50" x2="192" y2="62" stroke="#43a047" stroke-width="2"/>
+</svg>
+
+<!-- /position -->
+<!-- /layout -->
 
 ---
 
@@ -225,19 +1055,17 @@ description: "From full factorial design to efficient screening and optimization
 ---
 
 <!-- .slide:id="aliasing-example-details" -->
-## Aliasing – Detailed Structure
-
-**How half-fractions work:**
+## Aliasing: How half-fractions work
 
 -! Full $2^3$ needs 8 runs; half-fraction uses only 4
 -! Define generator $C = A \times B$; only run combinations where C equals A×B product
--! **Consequence:** C's main effect aliased with A×B — cannot separate from data alone
+-! **Consequence:** C's main effect aliased with A×B, i.e., cannot separate from data alone
 -! **Practical rule:** If 2-factor interactions negligible, main effect estimates remain valid
 
 <!-- layout={rows: 1, columns: 2} -->
 <!-- position={row: 1, column: 1} -->
 
-**$2^{3-1}$ Design Matrix**
+*$2^{3-1}$ Design Matrix*
 
 <div style="font-size: 0.7em;">
 
@@ -254,7 +1082,7 @@ description: "From full factorial design to efficient screening and optimization
 -: C level determined by A×B product
 <!-- /position -->
 <!-- position={row: 1, column: 2} -->
-**Geometric View**
+*Geometric View*
 
 <svg viewBox="0 0 200 150" xmlns="http://www.w3.org/2000/svg" style="max-width:450px;background:transparent;">
 <polygon points="40,105 100,125 160,105 100,85" fill="none" stroke="#555" stroke-width="1"/>
@@ -285,35 +1113,37 @@ description: "From full factorial design to efficient screening and optimization
 <!-- .slide:id="resolution-intro" -->
 ## Design Resolution: How Much Confounding?
 
--! **Design quality varies:** Not all fractional designs have the same aliasing severity.
+<!-- layout={rows: 1, columns: 2} -->
+<!-- position={row: 1, column: 1} -->
+
+-! Design quality varies: Not all fractional designs have the same aliasing severity.
 -: Some keep main effects clean; others mix them with interactions.
 -: **Resolution** quantifies this confounding severity.
 
-***
+<!-- /position -->
+<!-- position={row: 1, column: 2} -->
 
--! **Formal definition:** Resolution = length of the shortest word in the defining relation.
+-! Formal definition: Resolution = length of the shortest word in the alias defining relation.
 -: Higher resolution → less severe confounding
 
 ***
 
--! **Resolution III:** Main effects aliased with 2-factor interactions.
--: Risky if 2-factor interactions exist.
--: Suitable only for rough initial screening.
-
--! **Resolution IV:** Main effects aliased with 3-factor interactions.
--: Safer — main effects unbiased by 2-factor interactions.
-
--! **Resolution V:** Main effects and 2-factor interactions estimable cleanly.
--: Requires more runs, but provides reliable estimates of both.
-
-***
-
--= Higher resolution means less confounding — but costs more runs.
+-< Word: A product of factor letters in the alias defining relation.
+-: Example: $D = ABC$ has word "DABC" of length 4 → Resolution IV
+-: However, if there was also $C = AB$, shortest word would be "CAB" of length 3 → Resolution III
+<!-- /position -->
+<!-- /layout -->
 
 ---
 
+
 <!-- .slide:id="resolution-table" -->
-## Resolution Summary
+## Resolution Levels & Use Cases
+
+<!-- layout={rows: 1, columns: 2} -->
+<!-- position={row: 1, column: 1} -->
+
+<div style="font-size: 0.7em;">
 
 | Resolution | Main Effects Aliased With | 2FI Aliased With | Use Case |
 |:----------:|:------------------------:|:----------------:|:---------|
@@ -321,14 +1151,20 @@ description: "From full factorial design to efficient screening and optimization
 | **IV** | 3-factor interactions | Each other | Standard screening |
 | **V** | 4-factor interactions | 3-factor interactions | Interaction study |
 
-***
+</div>
 
--! **Notation convention:** Resolution is written as Roman numerals.
+<!-- /position -->
+<!-- position={row: 1, column: 2} -->
+
+-! **Notation:** Resolution is written as Roman numerals.
 -: Example: $2^{5-2}_{III}$ = 5 factors, quarter-fraction, Resolution III
 
 ***
 
 -! **Design decision:** For screening, Resolution IV is usually the minimum acceptable.
+
+<!-- /position -->
+<!-- /layout -->
 
 ---
 
@@ -352,6 +1188,11 @@ description: "From full factorial design to efficient screening and optimization
 
 -! 3-factor interactions negligible → main effects OK
 -! 50% savings; can augment later
+
+***
+
+-? Can you create the design matrix?
+
 <!-- /position -->
 <!-- /layout -->
 
@@ -360,6 +1201,8 @@ description: "From full factorial design to efficient screening and optimization
 <!-- .slide:id="fractional-when" -->
 ## When to Use Fractional Factorials
 
+<!-- layout={rows: 1, columns: 2} -->
+<!-- position={row: 1, column: 1} -->
 -! **Design decision:**
 -: 2–4 factors: Full factorial is usually feasible.
 -: 5+ factors: Consider a fractional design.
@@ -371,19 +1214,28 @@ description: "From full factorial design to efficient screening and optimization
 -: Quick identification of important factors.
 -: Can augment with more detailed experiments later.
 
-***
+<!-- /position -->
+<!-- position={row: 1, column: 2} -->
 
 -! **Costs:**
 -: Cannot estimate all interactions.
 -: Must assume some effects are negligible.
 -: Risk of aliased effects misleading conclusions.
 
--= Fractional factorials are ideal for **screening** — finding which factors matter before investing in detailed study.
+***
+
+-= Fractional factorials are ideal for *screening*, i.e., finding which factors matter before investing in detailed study.
+
+<!-- /position -->
+<!-- /layout -->
 
 ---
 
 <!-- .slide:id="pb-intro-problem" -->
 ## Beyond Powers of Two: The Gap Problem
+
+<!-- layout={rows: 1, columns: 2} -->
+<!-- position={row: 1, column: 1} -->
 
 -! Fractional factorials have run counts in powers of two: 4, 8, 16, 32...
 -: What if these sizes don't fit your situation?
@@ -392,16 +1244,46 @@ description: "From full factorial design to efficient screening and optimization
 
 -! **Example problem:**
 -: You have **11 factors** to screen.
--: 8 runs is too few — you can only fit 7 factors.
--: 16 runs seems wasteful — you only need to screen, not characterize.
+-: 8 runs is too few, you can only fit 7 factors.
+-: 16 runs seems wasteful, you only need to screen, not characterize.
 
-***
+<!-- /position -->
+<!-- position={row: 1, column: 2} -->
 
 -? Is there a design with **12 runs** for 11 factors?
 
--! **Yes** — this is exactly what **Plackett–Burman designs** provide.
+***
+
+-! **Yes**, this is exactly what **Plackett–Burman** designs provide.
 -: Run counts in multiples of 4: 12, 20, 24, 28...
 -: They fill the gaps between powers of two.
+
+<!-- /position -->
+<!-- /layout -->
+
+---
+
+<!-- .slide:id="pb-intro-12-run-design" -->
+## 12-Run Plackett–Burman Design Example
+
+<div style="font-size: 0.65em;">
+
+| Run | A | B | C | D | E | F | G | H | I | J | K |
+|:---:|:--:|:--:|:--:|:--:|:--:|:--:|:--:|:--:|:--:|:--:|:--:|
+| 1 | **+** | **+** | **+** | **+** | **+** | **+** | **+** | **+** | **+** | **+** | **+** |
+| 2 | *-* | **+** | *-* | **+** | **+** | **+** | *-* | *-* | *-* | **+** | *-* |
+| 3 | *-* | *-* | **+** | *-* | **+** | **+** | **+** | *-* | *-* | *-* | **+** |
+| 4 | **+** | *-* | *-* | **+** | *-* | **+** | **+** | **+** | *-* | *-* | *-* |
+| 5 | *-* | **+** | *-* | *-* | **+** | *-* | **+** | **+** | **+** | *-* | *-* |
+| 6 | *-* | *-* | **+** | *-* | *-* | **+** | *-* | **+** | **+** | **+** | *-* |
+| 7 | *-* | *-* | *-* | **+** | *-* | *-* | **+** | *-* | **+** | **+** | **+** |
+| 8 | **+** | *-* | *-* | *-* | **+** | *-* | *-* | **+** | *-* | **+** | **+** |
+| 9 | **+** | **+** | *-* | *-* | *-* | **+** | *-* | *-* | **+** | *-* | **+** |
+| 10 | **+** | **+** | **+** | *-* | *-* | *-* | **+** | *-* | *-* | **+** | *-* |
+| 11 | *-* | **+** | **+** | **+** | *-* | *-* | *-* | **+** | *-* | *-* | **+** |
+| 12 | **+** | *-* | **+** | **+** | **+** | *-* | *-* | *-* | **+** | *-* | *-* |
+
+</div>
 
 ---
 
@@ -411,7 +1293,7 @@ description: "From full factorial design to efficient screening and optimization
 <!-- position={row: 1, column: 1} -->
 **Flexible Run Counts**
 
--! Runs in **multiples of 4:** 12, 20, 24, 28...
+-! Runs in *multiples of 4:* 12, 20, 24, 28...
 -! Match design size to resources (not locked to powers of 2)
 <!-- /position -->
 <!-- position={row: 1, column: 2} -->
@@ -437,7 +1319,7 @@ description: "From full factorial design to efficient screening and optimization
 <!-- position={row: 1, column: 1} -->
 **Orthogonality**
 
--! PB designs are **orthogonal**:
+-! PB designs are orthogonal:
 -: Each factor is at high and low levels equally often.
 -: Any two columns are uncorrelated.
 
@@ -448,11 +1330,11 @@ description: "From full factorial design to efficient screening and optimization
 -: No main effect "masks" another main effect.
 <!-- /position -->
 <!-- position={row: 1, column: 2} -->
-**Resolution III — Main Effects Only**
+**Resolution III** Main Effects Only
 
--! PB designs are **Resolution III**:
+-! PB designs are Resolution III:
 -: Main effects are confounded with 2-factor interactions.
--: Interactions are completely intertwined — cannot be separated.
+-: Interactions are completely intertwined, cannot be separated.
 
 ***
 
@@ -460,7 +1342,9 @@ description: "From full factorial design to efficient screening and optimization
 -: Interactions are negligible.
 -: We only care about identifying which factors have any effect.
 
--= PB designs answer: "Which factors matter?" — not "How do they interact?"
+***
+
+-= PB designs answer: "Which factors matter?", not "How do they interact?"
 <!-- /position -->
 <!-- /layout -->
 
@@ -472,21 +1356,76 @@ description: "From full factorial design to efficient screening and optimization
 <!-- position={row: 1, column: 1} -->
 **The Scenario**
 
--! Studying **pollutant removal** with 10 potential variables:
+-! Studying *pollutant removal* with 10 potential variables:
 -: pH, temperature, coagulant type/dose, mixing rate
 -: Settling time, turbidity, catalyst, aeration, polymer
--! Resources allow only **12 experiments**
+
+***
+
+-! Resources allow only *12 experiments*
 -: Full factorial = 1024 runs; fractional = 16+ runs
 <!-- /position -->
 <!-- position={row: 1, column: 2} -->
 **The PB Solution**
 
--! Use a **12-run Plackett–Burman** design
+-! Use a *12-run Plackett–Burman* design
 -: Assign 10 factors to 10 columns
 -: Leave one column as dummy for error
--! **Typical outcome:** pH and dose show large effects; others negligible
 
--= Narrowed 10 candidates to 2–3 key factors in just 12 runs
+***
+
+-! *Examplary outcome:* pH and dose show large effects; others negligible
+
+***
+
+-= PB narrowed 10 candidates to 2–3 key factors in just 12 runs
+<!-- /position -->
+<!-- /layout -->
+
+---
+
+<!-- .slide:id="pb-12-run-design" -->
+## Wasn't PB-12 used for 11 factors? Now only 10?
+<!-- layout={rows: 1, columns: 2} -->
+<!-- position={row: 1, column: 1} -->
+**Design Flexibility**
+-! PB designs can screen *up to* N−1 factors in N runs.
+-: You can use fewer factors if desired.
+-: Extra columns can be left unused or assigned as dummies.
+
+***
+
+**Dummy Variables**
+-! Dummy columns help estimate experimental error.
+-: Effects estimated for dummies should be near zero.
+-: Large dummy effects indicate noise or model issues.
+
+<!-- /position -->
+<!-- position={row: 1, column: 2} -->
+
+<div style="font-size: 0.45em;">
+
+| Run | A | B | C | D | E | F | G | H | I | J | K |
+|:---:|:--:|:--:|:--:|:--:|:--:|:--:|:--:|:--:|:--:|:--:|:--:|
+| 1 | **+** | **+** | **+** | **+** | **+** | **+** | **+** | **+** | **+** | **+** | **+** |
+| 2 | *-* | **+** | *-* | **+** | **+** | **+** | *-* | *-* | *-* | **+** | *-* |
+| 3 | *-* | *-* | **+** | *-* | **+** | **+** | **+** | *-* | *-* | *-* | **+** |
+| 4 | **+** | *-* | *-* | **+** | *-* | **+** | **+** | **+** | *-* | *-* | *-* |
+| 5 | *-* | **+** | *-* | *-* | **+** | *-* | **+** | **+** | **+** | *-* | *-* |
+| 6 | *-* | *-* | **+** | *-* | *-* | **+** | *-* | **+** | **+** | **+** | *-* |
+| 7 | *-* | *-* | *-* | **+** | *-* | *-* | **+** | *-* | **+** | **+** | **+** |
+| 8 | **+** | *-* | *-* | *-* | **+** | *-* | *-* | **+** | *-* | **+** | **+** |
+| 9 | **+** | **+** | *-* | *-* | *-* | **+** | *-* | *-* | **+** | *-* | **+** |
+| 10 | **+** | **+** | **+** | *-* | *-* | *-* | **+** | *-* | *-* | **+** | *-* |
+| 11 | *-* | **+** | **+** | **+** | *-* | *-* | *-* | **+** | *-* | *-* | **+** |
+| 12 | **+** | *-* | **+** | **+** | **+** | *-* | *-* | *-* | **+** | *-* | *-* |
+
+</div>
+
+<div style="text-align: right; font-size: 0.8em; color: #00a6e7ff; margin-right: 20px; margin-left: auto;">
+Unused column can describe the noise: <strong> Dummy ⬆</strong>
+</div>
+
 <!-- /position -->
 <!-- /layout -->
 
@@ -495,63 +1434,30 @@ description: "From full factorial design to efficient screening and optimization
 <!-- .slide:id="pb-limitations" -->
 ## PB Limitations and Strategy
 
--! **What PB designs cannot do:**
+<!-- layout={rows: 1, columns: 2} -->
+<!-- position={row: 1, column: 1} -->
+
+-! What PB designs cannot do:
 -: Detect or estimate interactions.
 -: Detect curvature in the response.
 -: Provide internal replication for error estimation.
 
 ***
 
--! **Strategic role:** Use PB as **Phase 1 only**.
+-! **Strategic role:** Use PB as Phase 1 only.
 -: Screen many factors to find the vital few.
 -: Then switch to a more detailed design for those factors.
 
-***
+<!-- /position -->
+<!-- position={row: 1, column: 2} -->
 
 -! **Example workflow:**
 -: PB screening identifies pH, dose, and mixing speed as important.
 -: Follow up with a factorial or response surface design on those 3 factors.
 
--= PB designs are the **wide net** — other designs provide the **fine detail**.
-
----
-
-<!-- .slide:id="screening-vs-optimization" -->
-## Screening vs. Optimization: Two Different Goals
-<!-- layout={rows: 1, columns: 2} -->
-<!-- position={row: 1, column: 1} -->
-**Screening**
-
--! **Question:** Which factors have any effect?
-
 ***
 
--! **Characteristics:**
--: Many factors, few runs
--: Focus on main effects
--: Accept aliasing and confounding
--: Goal is to **eliminate** unimportant factors
-
-***
-
--! **Designs:** Fractional factorials, Plackett–Burman
-<!-- /position -->
-<!-- position={row: 1, column: 2} -->
-**Optimization**
-
--! **Question:** What are the best settings?
-
-***
-
--! **Characteristics:**
--: Few factors (already screened)
--: Need to find the optimum, not just direction
--: Must detect curvature in the response
--: Goal is to **locate** the best operating conditions
-
-***
-
--! **Designs:** Response Surface Methods (CCD, BBD)
+-= PB designs are the *wide net*, i.e., other designs provide the *fine detail*.
 <!-- /position -->
 <!-- /layout -->
 
@@ -559,25 +1465,6 @@ description: "From full factorial design to efficient screening and optimization
 
 <!-- .slide:id="curvature-problem" -->
 ## The Curvature Problem
-
--! **Key limitation:** Two-level designs only reveal direction, not shape.
--: "Higher pH is better" or "Lower pH is better."
--: But what if the optimum is **in between**?
-
-***
-
--! **Water science example:**
--: Many treatment processes have an optimal pH.
--: Too low or too high pH both reduce efficiency.
--: The response is curved — it doesn't just go up or down.
-
-***
-
--? A 2-level factorial would only test extreme pH values.
--: It might say "high pH is better than low pH."
--: But miss the fact that **medium pH is best**.
-
--= To find optima inside the factor range, we need more than two levels.
 
 <svg viewBox="0 0 500 180" xmlns="http://www.w3.org/2000/svg" style="max-width: 100%; margin-top: 15px; background: transparent;">
   <!-- Axes -->
@@ -596,15 +1483,46 @@ description: "From full factorial design to efficient screening and optimization
   <!-- Points -->
   <circle cx="50" cy="120" r="8" fill="#e06c75"/>
   <circle cx="450" cy="120" r="8" fill="#e06c75"/>
-  <circle cx="250" cy="30" r="8" fill="#98c379"/>
+  <circle cx="250" cy="65" r="8" fill="#98c379"/>
   <!-- Legend -->
   <line x1="320" y1="25" x2="350" y2="25" stroke="#61AFEF" stroke-width="3"/>
   <text x="355" y="29" font-size="11" fill="#61AFEF">True response</text>
   <line x1="320" y1="45" x2="350" y2="45" stroke="#e06c75" stroke-width="2" stroke-dasharray="8,4"/>
   <text x="355" y="49" font-size="11" fill="#e06c75">2-level view</text>
   <!-- Annotation -->
-  <text x="250" y="55" font-size="11" fill="#98c379" text-anchor="middle">← Optimum missed!</text>
+  <text x="250" y="55" font-size="11" fill="#98c379" text-anchor="middle">Optimum missed!</text>
 </svg>
+
+---
+
+<!-- .slide:id="curvature-problem-2" -->
+## The Curvature Problem (cont.)
+<!-- layout={rows: 1, columns: 2} -->
+<!-- position={row: 1, column: 1} -->
+-! Two-level designs only reveal direction, not shape.
+-: "Higher pH is better" or "Lower pH is better."
+-: But what if the optimum is *in between*?
+
+***
+
+**Water science example:**
+-: Many treatment processes have an optimal pH.
+-: Too low or too high pH both reduce efficiency.
+-: The response is curved, i.e., it doesn't just go up or down.
+
+<!-- /position -->
+<!-- position={row: 1, column: 2} -->
+
+-? A 2-level factorial would only test extreme pH values.
+-: It might say "high pH is better than low pH."
+-: But miss the fact that **medium pH is best**.
+
+***
+
+-= To find optima inside the factor range, we need more than two levels.
+
+<!-- /position -->
+<!-- /layout -->
 
 ---
 
@@ -615,34 +1533,52 @@ description: "From full factorial design to efficient screening and optimization
 **The Simple Test**
 
 -! Add runs at the **center** (all factors at midpoint)
+
+***
+
 -! Typically 3–5 replicate center runs
--! **Compare:** corner average vs. center average
+
+***
+
+-! *Compare:* corner average vs. center average
 <!-- /position -->
 <!-- position={row: 1, column: 2} -->
 **Interpreting the Result**
 
--! **Center = corners:** linear response, 2-level OK
--! **Center ≠ corners:** curvature exists → use RSM
--! **Test:** $(\bar{y}_{center} - \bar{y}_{factorial})$ significant?
+-! *Center = corners:* linear response, 2-level OK
+-! *Center ≠ corners:* curvature exists → use Response Surface Methodology
+-: i.e., a design with quadratic terms
+-! *Test:* $(\bar{y}\_{center} - \bar{y}\_{factorial})$ significant?
+
+***
 
 -= Center points are your early warning for curvature.
+
 <!-- /position -->
 <!-- /layout -->
+
+---
+
+<!-- .slide:id="curvature-test-statistic" -->
+## Curvature Test Statistic
+$$t = \frac{|\bar{y}\_{center} - \bar{y}\_{factorial}|}{s\_{center} \sqrt{\frac{1}{n\_{center}} + \frac{1}{n\_{factorial}}}}$$
+
+-: $s\_{center}$ : standard deviation of center runs
+-: $n\_{center}$ : number of center runs
+-: $n\_{factorial}$ : number of factorial runs
+-: $df = n\_{center} - 1$ for t-test
 
 ---
 
 <!-- .slide:id="rsm-intro" -->
 ## Response Surface Methodology
 
+<!-- layout={rows: 1, columns: 2} -->
+<!-- position={row: 1, column: 1} -->
+
 -! **Goal:** Model the response as a curved surface, then find the optimum.
 -: Fit a quadratic model with squared terms.
 -: Capture peaks, valleys, and ridges in the response.
-
-***
-
--! **Why "response surface"?**
--: With 2 factors, the response can be visualized as a 3D surface.
--: The optimum is the highest (or lowest) point on that surface.
 
 ***
 
@@ -654,214 +1590,19 @@ $$y = \beta_0 + \sum \beta_i x_i + \sum \beta_{ii} x_i^2 + \sum \beta_{ij} x_i x
 -: Squared terms ($\beta_{ii}$): curvature
 -: Cross terms ($\beta_{ij}$): interactions
 
-***
+<!-- /position -->
+<!-- position={row: 1, column: 2} -->
 
 -! **Two main RSM designs:**
--: **Central Composite Design (CCD)** — builds on a factorial base.
--: **Box–Behnken Design (BBD)** — avoids extreme combinations.
+-: *Central Composite Design (CCD)*, builds on a factorial base. (not part of this lecture)
+-: *Box–Behnken Design (BBD)*, avoids extreme combinations.
 
----
+***
 
-<!-- .slide:id="ccd-structure" -->
-## Central Composite Design (CCD)
-<!-- layout={rows: 1, columns: 2} -->
-<!-- position={row: 1, column: 1} -->
-**Three Components**
+-? Why not using Full Factorials with 3 levels?
 
--! **Factorial:** $2^k$ corner runs (main effects + interactions)
--! **Axial:** $2k$ star points along axes (curvature)
--! **Center:** $n_c$ replicates at midpoint (error + lack-of-fit)
-
--! **Total:** $2^k + 2k + n_c$ runs
--: k=3 → 8+6+6 = 20 runs
-
-<button onclick="document.getElementById('modal-ccd-detail').style.display='flex'" style="margin-top:6px;padding:4px 10px;font-size:0.8em;cursor:pointer;background:#61AFEF;color:#1a2340;border:none;border-radius:4px;">Why this structure?</button>
-<!-- /position -->
-<!-- position={row: 1, column: 2} -->
-**Geometry**
-
-<svg viewBox="0 0 200 140" xmlns="http://www.w3.org/2000/svg" style="width:100%;background:transparent;">
-<polygon points="40,100 90,115 140,100 90,85" fill="none" stroke="#555" stroke-width="1"/>
-<polygon points="40,55 90,70 140,55 90,40" fill="none" stroke="#555" stroke-width="1"/>
-<line x1="40" y1="55" x2="40" y2="100" stroke="#555" stroke-width="1"/>
-<line x1="90" y1="40" x2="90" y2="85" stroke="#555" stroke-width="1"/>
-<line x1="140" y1="55" x2="140" y2="100" stroke="#555" stroke-width="1"/>
-<line x1="90" y1="70" x2="90" y2="115" stroke="#555" stroke-width="1"/>
-<circle cx="40" cy="55" r="5" fill="#61AFEF"/><circle cx="140" cy="55" r="5" fill="#61AFEF"/>
-<circle cx="40" cy="100" r="5" fill="#61AFEF"/><circle cx="140" cy="100" r="5" fill="#61AFEF"/>
-<circle cx="90" cy="40" r="5" fill="#61AFEF"/><circle cx="90" cy="85" r="5" fill="#61AFEF"/>
-<circle cx="90" cy="70" r="5" fill="#61AFEF"/><circle cx="90" cy="115" r="5" fill="#61AFEF"/>
-<circle cx="15" cy="77" r="5" fill="#C678DD"/><circle cx="165" cy="77" r="5" fill="#C678DD"/>
-<circle cx="90" cy="20" r="5" fill="#C678DD"/><circle cx="90" cy="135" r="5" fill="#C678DD"/>
-<circle cx="90" cy="77" r="6" fill="#98c379"/>
-<line x1="15" y1="77" x2="165" y2="77" stroke="#C678DD" stroke-width="1" stroke-dasharray="3,2"/>
-<line x1="90" y1="20" x2="90" y2="135" stroke="#C678DD" stroke-width="1" stroke-dasharray="3,2"/>
-<circle cx="12" cy="8" r="3" fill="#61AFEF"/><text x="18" y="11" font-size="7" fill="#61AFEF">Factorial</text>
-<circle cx="70" cy="8" r="3" fill="#C678DD"/><text x="76" y="11" font-size="7" fill="#C678DD">Axial</text>
-<circle cx="115" cy="8" r="3" fill="#98c379"/><text x="121" y="11" font-size="7" fill="#98c379">Center</text>
-</svg>
-
--= Cube corners + axis spikes + center → full quadratic model
 <!-- /position -->
 <!-- /layout -->
-
-<div id="modal-ccd-detail" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.9);justify-content:center;align-items:center;z-index:9999;" onclick="this.style.display='none'">
-<div style="background:#1e2a4a;padding:20px;border-radius:10px;max-width:500px;" onclick="event.stopPropagation()">
-<div style="color:#9efcff;font-weight:bold;font-size:1.1em;margin-bottom:10px;">Why This CCD Structure?</div>
-<div style="color:#abb2bf;font-size:0.95em;line-height:1.5;">
-<p><strong>Factorial points (corners):</strong> Capture main effects and all two-factor interactions, just like a standard 2-level factorial.</p>
-<p><strong>Axial points (star):</strong> Extend along each axis beyond the cube. These provide the additional information needed to estimate squared (quadratic) terms for curvature.</p>
-<p><strong>Center points:</strong> Replicated runs at the design center allow estimation of pure experimental error and testing whether the quadratic model fits adequately (lack-of-fit test).</p>
-<p><strong>Together:</strong> The combination of all three point types provides enough data to fit a complete second-order polynomial model.</p>
-</div>
-<button onclick="document.getElementById('modal-ccd-detail').style.display='none'" style="margin-top:12px;padding:6px 18px;cursor:pointer;background:#e06c75;color:white;border:none;border-radius:4px;">Close</button>
-</div>
-</div>
-
----
-
-<!-- .slide:id="ccd-axial" -->
-## Axial Points and Rotatability
-<!-- layout={rows: 1, columns: 2} -->
-<!-- position={row: 1, column: 1} -->
-**The Axial Distance**
-
--! Axial points at distance $\alpha$ from center
--! **Rotatability:** $\alpha = (2^k)^{1/4}$
-
-| k | α |
-|:-:|:---:|
-| 2 | 1.414 |
-| 3 | 1.682 |
-| 4 | 2.000 |
-
--! Larger α → wider region but may exceed limits
-<!-- /position -->
-<!-- position={row: 1, column: 2} -->
-**Rotatability**
-
--! Equal prediction quality in all directions
--! Variance depends only on distance from center
--! **Why it matters:** optimum could be anywhere
-
--= Ensures no directional bias in predictions.
-<!-- /position -->
-<!-- /layout -->
-
----
-
-<!-- .slide:id="ccd-variants" -->
-## CCD Variants
-
-| Variant | $\alpha$ | Levels | Rotatability | Factor Range |
-|:--------|:--------:|:------:|:------------:|:-------------|
-| **Circumscribed** | $> 1$ | 5 | Yes | Exceeds original |
-| **Face-Centered** | $= 1$ | 3 | No | Within original |
-| **Inscribed** | $< 1$ | 5 | Yes | Smaller than original |
-
-***
-
--! **Circumscribed:** Best prediction quality, but axial points may be impractical.
-
--! **Face-Centered:** All runs within bounds, but loses rotatability.
-
--! **Inscribed:** Stays safe, but explores smaller region.
-
--= **Key takeaway:** Choose the variant based on practical constraints, not just statistical elegance.
-
----
-
-<!-- .slide:id="ccd-advantages" -->
-## CCD: Advantages
-
--! **Sequential augmentation**
--: Already completed a factorial? Just add axial and center points.
--: Your existing data becomes part of the CCD.
--: No experiments wasted.
-
-***
-
--! **High-quality predictions**
--: Rotatable CCDs give uniform prediction variance.
--: Good for mapping the entire response surface.
-
-***
-
--! **Lack-of-fit testing**
--: Center point replicates allow testing model adequacy.
--: Verify whether the quadratic model is sufficient.
-
--= CCD is flexible, efficient, and builds naturally on prior factorial work.
-
----
-
-<!-- .slide:id="ccd-example" -->
-## Example: Optimizing Pollutant Degradation
-<!-- layout={rows: 1, columns: 2} -->
-<!-- position={row: 1, column: 1} -->
-**Scenario**
-
--! Two factors remain: **pH**, **catalyst dose**
--! Curvature detected → need quadratic model
-<!-- /position -->
-<!-- position={row: 1, column: 2} -->
-**CCD Solution**
-
--! 4 factorial + 4 axial + 5 center = **13 runs**
--! **Result:** Optimal pH ≈ 6.5 (missed by 2-level)
-
--? See next slide for full matrix
-<!-- /position -->
-<!-- /layout -->
-
----
-
-<!-- .slide:id="ccd-example-details" -->
-## CCD Example – Design Matrix (k=2)
-
-<!-- layout={rows: 1, columns: 2} -->
-<!-- position={row: 1, column: 1} -->
-**Factorial + Axial**
-
-| Run | x₁ | x₂ |
-|:---:|:---:|:---:|
-| 1–4 | ±1 | ±1 |
-| 5–6 | ±1.414 | 0 |
-| 7–8 | 0 | ±1.414 |
-<!-- /position -->
-<!-- position={row: 1, column: 2} -->
-**Center Points**
-
-| Run | x₁ | x₂ |
-|:---:|:---:|:---:|
-| 9–13 | 0 | 0 |
-
--! 4 factorial + 4 axial + 5 center = **13 runs**
--! α = 1.414 (rotatable)
-<!-- /position -->
-<!-- /layout -->
-
----
-
-<!-- .slide:id="bbd-intro-problem" -->
-## Box–Behnken: Avoiding Extreme Combinations
-
--! **CCD has a potential problem:**
--: Factorial points test all factors at extremes simultaneously.
--: The combination of highest temperature, highest dose, and highest pH might be unsafe.
--: Equipment failure, side reactions, or wasted materials.
-
-***
-
--? What if we could model curvature **without testing extreme corners**?
-
-***
-
--! **Box–Behnken designs** solve this problem:
--: Never test all factors at their extremes together.
--: Every run has at least one factor at its center level.
-
--= BBD lets you optimize while staying within safe operating bounds.
 
 ---
 
@@ -871,8 +1612,520 @@ $$y = \beta_0 + \sum \beta_i x_i + \sum \beta_{ii} x_i^2 + \sum \beta_{ij} x_i x
 <!-- position={row: 1, column: 1} -->
 **Edge Midpoints, Not Corners**
 
--! Points at **edge midpoints** (2 factors at extremes, 1 at center)
--! Rotate through all factor pairs + **center points**
+-! Points at *edge midpoints* (2 factors at extremes, 1 at center)
+-! Rotate through all factor pairs + *center points*
+
+<div id="bbd-table-trigger"
+     style="font-size: 0.35em; cursor: pointer; border: 2px solid transparent; border-radius: 8px; padding: 5px; transition: all 0.3s;"
+     onclick="BBDOverlay.open()"
+     onmouseover="this.style.borderColor='#61afef'; this.style.background='rgba(97,175,239,0.1)'"
+     onmouseout="this.style.borderColor='transparent'; this.style.background='transparent'">
+
+| Run | A | B | C |
+|:---:|:--:|:--:|:--:|
+| 1 | − | − | 0 |
+| 2 | + | − | 0 |
+| 3 | − | + | 0 |
+| 4 | + | + | 0 |
+| 5 | − | 0 | − |
+| 6 | + | 0 | − |
+| 7 | − | 0 | + |
+| 8 | + | 0 | + |
+| 9 | 0 | − | − |
+| 10 | 0 | + | − |
+| 11 | 0 | − | + |
+| 12 | 0 | + | + |
+| 13-15 | 0 | 0 | 0 |
+
+<div style="text-align: center; color: #61afef; font-size: 1.8em; margin-top: 5px;">🔍 Click to enlarge</div>
+</div>
+
+<!-- Overlay markup: can live inside the slide; JS will move it to <body> on open() -->
+<div id="bbd-overlay"
+     aria-hidden="true"
+     style="
+       display:none;
+       position:fixed;
+       inset:0;
+       width:100vw;
+       height:100dvh;                 /* 'dvh' is more robust than 'vh' on some browsers */
+       background:rgba(10, 15, 30, 0.95);
+       z-index:2147483647;            /* go above Reveal UI layers */
+       box-sizing:border-box;
+       padding:18px;
+       pointer-events:auto;
+     ">
+  <!-- Shell: fixed viewport height, grid rows for deterministic layout -->
+  <div id="bbd-shell"
+       style="
+         height:100%;
+         width:100%;
+         display:grid;
+         grid-template-rows:auto 1fr auto; /* header / table / footer */
+         gap:12px;
+         min-height:0;                    /* IMPORTANT: allow the middle row to shrink */
+       ">
+    <!-- Header row -->
+    <div style="display:flex; align-items:center; justify-content:space-between; gap:12px;">
+      <h2 style="color:#9efcff; margin:0; font-size:1.4em; line-height:1.2;">
+        Box–Behnken Design Matrix (3 Factors)
+      </h2>
+      <button type="button"
+              onclick="BBDOverlay.close()"
+              aria-label="Close"
+              style="
+                background:#e53935;
+                color:white;
+                border:none;
+                width:40px;
+                height:40px;
+                border-radius:50%;
+                font-size:20px;
+                cursor:pointer;
+                font-weight:bold;
+                box-shadow:0 4px 15px rgba(229, 57, 53, 0.4);
+              ">✕</button>
+    </div>
+    <!-- Middle row: table container (no scrollbars; content is scaled to fit) -->
+    <div id="bbd-fitbox"
+         style="
+           min-height:0;                 /* IMPORTANT: allow proper shrinking in grid */
+           border-radius:12px;
+           border:2px solid #4a5568;
+           background:#1a2340;
+           box-shadow:0 10px 40px rgba(0,0,0,0.5);
+           overflow:hidden;              /* hard requirement: no overflow/scrollbars */
+           display:grid;
+           grid-template-rows:auto 1fr;  /* header table + body area */
+         ">
+      <!-- Fixed header (separate table to keep header always visible) -->
+      <table style="border-collapse:collapse; width:100%; table-layout:fixed; font-size:1em;">
+        <colgroup>
+          <col style="width:10%;">  <!-- Run -->
+          <col style="width:9%;">   <!-- I -->
+          <col style="width:9%;">   <!-- A -->
+          <col style="width:9%;">   <!-- B -->
+          <col style="width:9%;">   <!-- C -->
+          <col style="width:9%;">   <!-- AB -->
+          <col style="width:9%;">   <!-- AC -->
+          <col style="width:9%;">   <!-- BC -->
+          <col style="width:9%;">   <!-- AA -->
+          <col style="width:9%;">   <!-- BB -->
+          <col style="width:9%;">   <!-- CC -->
+        </colgroup>
+        <thead>
+          <tr style="background:#2d3a5a;">
+            <th style="padding:10px 8px; border:1px solid #4a5568; color:#9efcff; text-align:center;">Run</th>
+            <th style="padding:10px 8px; border:1px solid #4a5568; color:#9efcff; text-align:center;">I</th>
+            <th style="padding:10px 8px; border:1px solid #4a5568; color:#61afef; text-align:center;">A</th>
+            <th style="padding:10px 8px; border:1px solid #4a5568; color:#c678dd; text-align:center;">B</th>
+            <th style="padding:10px 8px; border:1px solid #4a5568; color:#98c379; text-align:center;">C</th>
+            <th style="padding:10px 8px; border:1px solid #4a5568; color:#abb2bf; text-align:center;">AB</th>
+            <th style="padding:10px 8px; border:1px solid #4a5568; color:#abb2bf; text-align:center;">AC</th>
+            <th style="padding:10px 8px; border:1px solid #4a5568; color:#abb2bf; text-align:center;">BC</th>
+            <th style="padding:10px 8px; border:1px solid #4a5568; color:#ffd166; text-align:center;">AA</th>
+            <th style="padding:10px 8px; border:1px solid #4a5568; color:#ffd166; text-align:center;">BB</th>
+            <th style="padding:10px 8px; border:1px solid #4a5568; color:#ffd166; text-align:center;">CC</th>
+          </tr>
+        </thead>
+      </table>
+      <!-- Body area: the content inside is scaled down to fit this box -->
+      <div id="bbd-body-area"
+           style="
+             min-height:0;                 /* IMPORTANT */
+             padding:10px;
+             box-sizing:border-box;
+             display:grid;
+             place-items:center;           /* center the scaled table block */
+             overflow:hidden;              /* IMPORTANT: no scrollbars */
+           ">
+        <!-- Scaler wrapper: JS adjusts transform:scale(...) so it never overflows -->
+        <div id="bbd-scale"
+             style="transform-origin:top center; width:100%;">
+          <!-- Body table (only rows; keep col widths identical to header) -->
+          <!-- BBD (3 factors) table body adapted to your full model matrix:
+     Columns: I, A, B, C, AB, AC, BC, AA, BB, CC
+     Notes:
+     - Use table-layout: fixed and explicit col widths to keep everything aligned.
+     - Colors follow your existing scheme: +1 green, -1 red, 0 grey, I/AA/BB/CC neutral.
+-->
+
+<table style="border-collapse:collapse; width:100%; table-layout:fixed; font-size:1.2em; background:#1a2340;">
+  <colgroup>
+    <col style="width:10%;">  <!-- Run -->
+    <col style="width:9%;">   <!-- I -->
+    <col style="width:9%;">   <!-- A -->
+    <col style="width:9%;">   <!-- B -->
+    <col style="width:9%;">   <!-- C -->
+    <col style="width:9%;">   <!-- AB -->
+    <col style="width:9%;">   <!-- AC -->
+    <col style="width:9%;">   <!-- BC -->
+    <col style="width:9%;">   <!-- AA -->
+    <col style="width:9%;">   <!-- BB -->
+    <col style="width:9%;">   <!-- CC -->
+  </colgroup>
+  <tbody>
+    <!-- Helper styles (applied inline): 
+         +1 => green (#98c379), -1 => red (#e06c75), 0 => grey (#abb2bf), constants/quadratics => light (#9efcff/#ffd166)
+    -->
+    <!-- 1:  I=1, A=-1, B=-1, C=0,  AB=+1, AC=0,  BC=0,  AA=1, BB=1, CC=0 -->
+    <tr style="background:#1a2340;">
+      <td style="padding:8px 8px; border:1px solid #4a5568; color:#9efcff; text-align:center;">1</td>
+      <td style="padding:8px 8px; border:1px solid #4a5568; color:#9efcff; text-align:center; font-weight:bold;">1</td>
+      <td style="padding:8px 8px; border:1px solid #4a5568; color:#e06c75; text-align:center; font-weight:bold;">−1</td>
+      <td style="padding:8px 8px; border:1px solid #4a5568; color:#e06c75; text-align:center; font-weight:bold;">−1</td>
+      <td style="padding:8px 8px; border:1px solid #4a5568; color:#abb2bf; text-align:center;">0</td>
+      <td style="padding:8px 8px; border:1px solid #4a5568; color:#98c379; text-align:center; font-weight:bold;">+1</td>
+      <td style="padding:8px 8px; border:1px solid #4a5568; color:#abb2bf; text-align:center;">0</td>
+      <td style="padding:8px 8px; border:1px solid #4a5568; color:#abb2bf; text-align:center;">0</td>
+      <td style="padding:8px 8px; border:1px solid #4a5568; color:#ffd166; text-align:center; font-weight:bold;">1</td>
+      <td style="padding:8px 8px; border:1px solid #4a5568; color:#ffd166; text-align:center; font-weight:bold;">1</td>
+      <td style="padding:8px 8px; border:1px solid #4a5568; color:#abb2bf; text-align:center;">0</td>
+    </tr>
+    <!-- 2 -->
+    <tr style="background:#212b45;">
+      <td style="padding:8px 8px; border:1px solid #4a5568; color:#9efcff; text-align:center;">2</td>
+      <td style="padding:8px 8px; border:1px solid #4a5568; color:#9efcff; text-align:center; font-weight:bold;">1</td>
+      <td style="padding:8px 8px; border:1px solid #4a5568; color:#98c379; text-align:center; font-weight:bold;">+1</td>
+      <td style="padding:8px 8px; border:1px solid #4a5568; color:#e06c75; text-align:center; font-weight:bold;">−1</td>
+      <td style="padding:8px 8px; border:1px solid #4a5568; color:#abb2bf; text-align:center;">0</td>
+      <td style="padding:8px 8px; border:1px solid #4a5568; color:#e06c75; text-align:center; font-weight:bold;">−1</td>
+      <td style="padding:8px 8px; border:1px solid #4a5568; color:#abb2bf; text-align:center;">0</td>
+      <td style="padding:8px 8px; border:1px solid #4a5568; color:#abb2bf; text-align:center;">0</td>
+      <td style="padding:8px 8px; border:1px solid #4a5568; color:#ffd166; text-align:center; font-weight:bold;">1</td>
+      <td style="padding:8px 8px; border:1px solid #4a5568; color:#ffd166; text-align:center; font-weight:bold;">1</td>
+      <td style="padding:8px 8px; border:1px solid #4a5568; color:#abb2bf; text-align:center;">0</td>
+    </tr>
+    <!-- 3 -->
+    <tr style="background:#1a2340;">
+      <td style="padding:8px 8px; border:1px solid #4a5568; color:#9efcff; text-align:center;">3</td>
+      <td style="padding:8px 8px; border:1px solid #4a5568; color:#9efcff; text-align:center; font-weight:bold;">1</td>
+      <td style="padding:8px 8px; border:1px solid #4a5568; color:#e06c75; text-align:center; font-weight:bold;">−1</td>
+      <td style="padding:8px 8px; border:1px solid #4a5568; color:#98c379; text-align:center; font-weight:bold;">+1</td>
+      <td style="padding:8px 8px; border:1px solid #4a5568; color:#abb2bf; text-align:center;">0</td>
+      <td style="padding:8px 8px; border:1px solid #4a5568; color:#e06c75; text-align:center; font-weight:bold;">−1</td>
+      <td style="padding:8px 8px; border:1px solid #4a5568; color:#abb2bf; text-align:center;">0</td>
+      <td style="padding:8px 8px; border:1px solid #4a5568; color:#abb2bf; text-align:center;">0</td>
+      <td style="padding:8px 8px; border:1px solid #4a5568; color:#ffd166; text-align:center; font-weight:bold;">1</td>
+      <td style="padding:8px 8px; border:1px solid #4a5568; color:#ffd166; text-align:center; font-weight:bold;">1</td>
+      <td style="padding:8px 8px; border:1px solid #4a5568; color:#abb2bf; text-align:center;">0</td>
+    </tr>
+    <!-- 4 -->
+    <tr style="background:#212b45;">
+      <td style="padding:8px 8px; border:1px solid #4a5568; color:#9efcff; text-align:center;">4</td>
+      <td style="padding:8px 8px; border:1px solid #4a5568; color:#9efcff; text-align:center; font-weight:bold;">1</td>
+      <td style="padding:8px 8px; border:1px solid #4a5568; color:#98c379; text-align:center; font-weight:bold;">+1</td>
+      <td style="padding:8px 8px; border:1px solid #4a5568; color:#98c379; text-align:center; font-weight:bold;">+1</td>
+      <td style="padding:8px 8px; border:1px solid #4a5568; color:#abb2bf; text-align:center;">0</td>
+      <td style="padding:8px 8px; border:1px solid #4a5568; color:#98c379; text-align:center; font-weight:bold;">+1</td>
+      <td style="padding:8px 8px; border:1px solid #4a5568; color:#abb2bf; text-align:center;">0</td>
+      <td style="padding:8px 8px; border:1px solid #4a5568; color:#abb2bf; text-align:center;">0</td>
+      <td style="padding:8px 8px; border:1px solid #4a5568; color:#ffd166; text-align:center; font-weight:bold;">1</td>
+      <td style="padding:8px 8px; border:1px solid #4a5568; color:#ffd166; text-align:center; font-weight:bold;">1</td>
+      <td style="padding:8px 8px; border:1px solid #4a5568; color:#abb2bf; text-align:center;">0</td>
+    </tr>
+    <!-- 5 -->
+    <tr style="background:#1a2340;">
+      <td style="padding:8px 8px; border:1px solid #4a5568; color:#9efcff; text-align:center;">5</td>
+      <td style="padding:8px 8px; border:1px solid #4a5568; color:#9efcff; text-align:center; font-weight:bold;">1</td>
+      <td style="padding:8px 8px; border:1px solid #4a5568; color:#e06c75; text-align:center; font-weight:bold;">−1</td>
+      <td style="padding:8px 8px; border:1px solid #4a5568; color:#abb2bf; text-align:center;">0</td>
+      <td style="padding:8px 8px; border:1px solid #4a5568; color:#e06c75; text-align:center; font-weight:bold;">−1</td>
+      <td style="padding:8px 8px; border:1px solid #4a5568; color:#abb2bf; text-align:center;">0</td>
+      <td style="padding:8px 8px; border:1px solid #4a5568; color:#98c379; text-align:center; font-weight:bold;">+1</td>
+      <td style="padding:8px 8px; border:1px solid #4a5568; color:#abb2bf; text-align:center;">0</td>
+      <td style="padding:8px 8px; border:1px solid #4a5568; color:#ffd166; text-align:center; font-weight:bold;">1</td>
+      <td style="padding:8px 8px; border:1px solid #4a5568; color:#abb2bf; text-align:center;">0</td>
+      <td style="padding:8px 8px; border:1px solid #4a5568; color:#ffd166; text-align:center; font-weight:bold;">1</td>
+    </tr>
+    <!-- 6 -->
+    <tr style="background:#212b45;">
+      <td style="padding:8px 8px; border:1px solid #4a5568; color:#9efcff; text-align:center;">6</td>
+      <td style="padding:8px 8px; border:1px solid #4a5568; color:#9efcff; text-align:center; font-weight:bold;">1</td>
+      <td style="padding:8px 8px; border:1px solid #4a5568; color:#98c379; text-align:center; font-weight:bold;">+1</td>
+      <td style="padding:8px 8px; border:1px solid #4a5568; color:#abb2bf; text-align:center;">0</td>
+      <td style="padding:8px 8px; border:1px solid #4a5568; color:#e06c75; text-align:center; font-weight:bold;">−1</td>
+      <td style="padding:8px 8px; border:1px solid #4a5568; color:#abb2bf; text-align:center;">0</td>
+      <td style="padding:8px 8px; border:1px solid #4a5568; color:#e06c75; text-align:center; font-weight:bold;">−1</td>
+      <td style="padding:8px 8px; border:1px solid #4a5568; color:#abb2bf; text-align:center;">0</td>
+      <td style="padding:8px 8px; border:1px solid #4a5568; color:#ffd166; text-align:center; font-weight:bold;">1</td>
+      <td style="padding:8px 8px; border:1px solid #4a5568; color:#abb2bf; text-align:center;">0</td>
+      <td style="padding:8px 8px; border:1px solid #4a5568; color:#ffd166; text-align:center; font-weight:bold;">1</td>
+    </tr>
+    <!-- 7 -->
+    <tr style="background:#1a2340;">
+      <td style="padding:8px 8px; border:1px solid #4a5568; color:#9efcff; text-align:center;">7</td>
+      <td style="padding:8px 8px; border:1px solid #4a5568; color:#9efcff; text-align:center; font-weight:bold;">1</td>
+      <td style="padding:8px 8px; border:1px solid #4a5568; color:#e06c75; text-align:center; font-weight:bold;">−1</td>
+      <td style="padding:8px 8px; border:1px solid #4a5568; color:#abb2bf; text-align:center;">0</td>
+      <td style="padding:8px 8px; border:1px solid #4a5568; color:#98c379; text-align:center; font-weight:bold;">+1</td>
+      <td style="padding:8px 8px; border:1px solid #4a5568; color:#abb2bf; text-align:center;">0</td>
+      <td style="padding:8px 8px; border:1px solid #4a5568; color:#e06c75; text-align:center; font-weight:bold;">−1</td>
+      <td style="padding:8px 8px; border:1px solid #4a5568; color:#abb2bf; text-align:center;">0</td>
+      <td style="padding:8px 8px; border:1px solid #4a5568; color:#ffd166; text-align:center; font-weight:bold;">1</td>
+      <td style="padding:8px 8px; border:1px solid #4a5568; color:#abb2bf; text-align:center;">0</td>
+      <td style="padding:8px 8px; border:1px solid #4a5568; color:#ffd166; text-align:center; font-weight:bold;">1</td>
+    </tr>
+    <!-- 8 -->
+    <tr style="background:#212b45;">
+      <td style="padding:8px 8px; border:1px solid #4a5568; color:#9efcff; text-align:center;">8</td>
+      <td style="padding:8px 8px; border:1px solid #4a5568; color:#9efcff; text-align:center; font-weight:bold;">1</td>
+      <td style="padding:8px 8px; border:1px solid #4a5568; color:#98c379; text-align:center; font-weight:bold;">+1</td>
+      <td style="padding:8px 8px; border:1px solid #4a5568; color:#abb2bf; text-align:center;">0</td>
+      <td style="padding:8px 8px; border:1px solid #4a5568; color:#98c379; text-align:center; font-weight:bold;">+1</td>
+      <td style="padding:8px 8px; border:1px solid #4a5568; color:#abb2bf; text-align:center;">0</td>
+      <td style="padding:8px 8px; border:1px solid #4a5568; color:#98c379; text-align:center; font-weight:bold;">+1</td>
+      <td style="padding:8px 8px; border:1px solid #4a5568; color:#abb2bf; text-align:center;">0</td>
+      <td style="padding:8px 8px; border:1px solid #4a5568; color:#ffd166; text-align:center; font-weight:bold;">1</td>
+      <td style="padding:8px 8px; border:1px solid #4a5568; color:#abb2bf; text-align:center;">0</td>
+      <td style="padding:8px 8px; border:1px solid #4a5568; color:#ffd166; text-align:center; font-weight:bold;">1</td>
+    </tr>
+    <!-- 9 -->
+    <tr style="background:#1a2340;">
+      <td style="padding:8px 8px; border:1px solid #4a5568; color:#9efcff; text-align:center;">9</td>
+      <td style="padding:8px 8px; border:1px solid #4a5568; color:#9efcff; text-align:center; font-weight:bold;">1</td>
+      <td style="padding:8px 8px; border:1px solid #4a5568; color:#abb2bf; text-align:center;">0</td>
+      <td style="padding:8px 8px; border:1px solid #4a5568; color:#e06c75; text-align:center; font-weight:bold;">−1</td>
+      <td style="padding:8px 8px; border:1px solid #4a5568; color:#e06c75; text-align:center; font-weight:bold;">−1</td>
+      <td style="padding:8px 8px; border:1px solid #4a5568; color:#abb2bf; text-align:center;">0</td>
+      <td style="padding:8px 8px; border:1px solid #4a5568; color:#abb2bf; text-align:center;">0</td>
+      <td style="padding:8px 8px; border:1px solid #4a5568; color:#98c379; text-align:center; font-weight:bold;">+1</td>
+      <td style="padding:8px 8px; border:1px solid #4a5568; color:#abb2bf; text-align:center;">0</td>
+      <td style="padding:8px 8px; border:1px solid #4a5568; color:#ffd166; text-align:center; font-weight:bold;">1</td>
+      <td style="padding:8px 8px; border:1px solid #4a5568; color:#ffd166; text-align:center; font-weight:bold;">1</td>
+    </tr>
+    <!-- 10 -->
+    <tr style="background:#212b45;">
+      <td style="padding:8px 8px; border:1px solid #4a5568; color:#9efcff; text-align:center;">10</td>
+      <td style="padding:8px 8px; border:1px solid #4a5568; color:#9efcff; text-align:center; font-weight:bold;">1</td>
+      <td style="padding:8px 8px; border:1px solid #4a5568; color:#abb2bf; text-align:center;">0</td>
+      <td style="padding:8px 8px; border:1px solid #4a5568; color:#98c379; text-align:center; font-weight:bold;">+1</td>
+      <td style="padding:8px 8px; border:1px solid #4a5568; color:#e06c75; text-align:center; font-weight:bold;">−1</td>
+      <td style="padding:8px 8px; border:1px solid #4a5568; color:#abb2bf; text-align:center;">0</td>
+      <td style="padding:8px 8px; border:1px solid #4a5568; color:#abb2bf; text-align:center;">0</td>
+      <td style="padding:8px 8px; border:1px solid #4a5568; color:#e06c75; text-align:center; font-weight:bold;">−1</td>
+      <td style="padding:8px 8px; border:1px solid #4a5568; color:#abb2bf; text-align:center;">0</td>
+      <td style="padding:8px 8px; border:1px solid #4a5568; color:#ffd166; text-align:center; font-weight:bold;">1</td>
+      <td style="padding:8px 8px; border:1px solid #4a5568; color:#ffd166; text-align:center; font-weight:bold;">1</td>
+    </tr>
+    <!-- 11 -->
+    <tr style="background:#1a2340;">
+      <td style="padding:8px 8px; border:1px solid #4a5568; color:#9efcff; text-align:center;">11</td>
+      <td style="padding:8px 8px; border:1px solid #4a5568; color:#9efcff; text-align:center; font-weight:bold;">1</td>
+      <td style="padding:8px 8px; border:1px solid #4a5568; color:#abb2bf; text-align:center;">0</td>
+      <td style="padding:8px 8px; border:1px solid #4a5568; color:#e06c75; text-align:center; font-weight:bold;">−1</td>
+      <td style="padding:8px 8px; border:1px solid #4a5568; color:#98c379; text-align:center; font-weight:bold;">+1</td>
+      <td style="padding:8px 8px; border:1px solid #4a5568; color:#abb2bf; text-align:center;">0</td>
+      <td style="padding:8px 8px; border:1px solid #4a5568; color:#abb2bf; text-align:center;">0</td>
+      <td style="padding:8px 8px; border:1px solid #4a5568; color:#e06c75; text-align:center; font-weight:bold;">−1</td>
+      <td style="padding:8px 8px; border:1px solid #4a5568; color:#abb2bf; text-align:center;">0</td>
+      <td style="padding:8px 8px; border:1px solid #4a5568; color:#ffd166; text-align:center; font-weight:bold;">1</td>
+      <td style="padding:8px 8px; border:1px solid #4a5568; color:#ffd166; text-align:center; font-weight:bold;">1</td>
+    </tr>
+    <!-- 12 -->
+    <tr style="background:#212b45;">
+      <td style="padding:8px 8px; border:1px solid #4a5568; color:#9efcff; text-align:center;">12</td>
+      <td style="padding:8px 8px; border:1px solid #4a5568; color:#9efcff; text-align:center; font-weight:bold;">1</td>
+      <td style="padding:8px 8px; border:1px solid #4a5568; color:#abb2bf; text-align:center;">0</td>
+      <td style="padding:8px 8px; border:1px solid #4a5568; color:#98c379; text-align:center; font-weight:bold;">+1</td>
+      <td style="padding:8px 8px; border:1px solid #4a5568; color:#98c379; text-align:center; font-weight:bold;">+1</td>
+      <td style="padding:8px 8px; border:1px solid #4a5568; color:#abb2bf; text-align:center;">0</td>
+      <td style="padding:8px 8px; border:1px solid #4a5568; color:#abb2bf; text-align:center;">0</td>
+      <td style="padding:8px 8px; border:1px solid #4a5568; color:#98c379; text-align:center; font-weight:bold;">+1</td>
+      <td style="padding:8px 8px; border:1px solid #4a5568; color:#abb2bf; text-align:center;">0</td>
+      <td style="padding:8px 8px; border:1px solid #4a5568; color:#ffd166; text-align:center; font-weight:bold;">1</td>
+      <td style="padding:8px 8px; border:1px solid #4a5568; color:#ffd166; text-align:center; font-weight:bold;">1</td>
+    </tr>
+    <!-- Center point: all zeros except intercept -->
+    <tr style="background:#2d3a5a;">
+      <td style="padding:8px 8px; border:1px solid #4a5568; color:#9efcff; text-align:center;">13-15</td>
+      <td style="padding:8px 8px; border:1px solid #4a5568; color:#9efcff; text-align:center; font-weight:bold;">1</td>
+      <td style="padding:8px 8px; border:1px solid #4a5568; color:#abb2bf; text-align:center;">0</td>
+      <td style="padding:8px 8px; border:1px solid #4a5568; color:#abb2bf; text-align:center;">0</td>
+      <td style="padding:8px 8px; border:1px solid #4a5568; color:#abb2bf; text-align:center;">0</td>
+      <td style="padding:8px 8px; border:1px solid #4a5568; color:#abb2bf; text-align:center;">0</td>
+      <td style="padding:8px 8px; border:1px solid #4a5568; color:#abb2bf; text-align:center;">0</td>
+      <td style="padding:8px 8px; border:1px solid #4a5568; color:#abb2bf; text-align:center;">0</td>
+      <td style="padding:8px 8px; border:1px solid #4a5568; color:#abb2bf; text-align:center;">0</td>
+      <td style="padding:8px 8px; border:1px solid #4a5568; color:#abb2bf; text-align:center;">0</td>
+      <td style="padding:8px 8px; border:1px solid #4a5568; color:#abb2bf; text-align:center;">0</td>
+    </tr>
+    <!-- If you have multiple center replicates, duplicate the row above (14,15,...) -->
+  </tbody>
+</table>
+        </div>
+      </div>
+    </div>
+    <!-- Footer row -->
+    <div style="display:flex; justify-content:space-between; align-items:center; gap:12px; color:#abb2bf; font-size:0.95em;">
+      <div style="display:flex; gap:18px; flex-wrap:wrap;">
+        <span><span style="color:#98c379; font-weight:bold;">+1</span> = High</span>
+        <span><span style="color:#e06c75; font-weight:bold;">−1</span> = Low</span>
+        <span><span style="color:#abb2bf;">0</span> = Center</span>
+      </div>
+      <div style="color:#6a7280; font-size:0.9em;">
+        Press <kbd style="background:#4a5568; padding:2px 6px; border-radius:4px;">Esc</kbd> or click ✕ to close
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+/**
+ * BBDOverlay
+ * ==========
+ * A Reveal.js-safe fullscreen overlay.
+ *
+ * Why this is needed:
+ * - Reveal.js often applies CSS transforms (scale/translate) to slide containers.
+ * - If an element with position:fixed is inside a transformed ancestor, the "fixed"
+ *   positioning becomes relative to that ancestor (NOT the browser viewport).
+ * - Result: overlays no longer cover the visible window reliably.
+ *
+ * Fix:
+ * - On open(): move the overlay element to document.body, so it is no longer inside
+ *   the transformed slide tree. Then position:fixed truly uses the viewport.
+ *
+ * Fit-to-box:
+ * - The table body is scaled down using transform:scale(...) so it fits into the
+ *   available space between header and footer without any overflow.
+ */
+window.BBDOverlay = (function() {
+  const overlayId = 'bbd-overlay';
+  const bodyAreaId = 'bbd-body-area';
+  const scaleId = 'bbd-scale';
+
+  // Remember original DOM position so we can restore the overlay on close
+  let originalParent = null;
+  let originalNextSibling = null;
+
+  function $(id) { return document.getElementById(id); }
+
+  /**
+   * Move overlay into <body> to avoid being inside Reveal's transformed containers.
+   */
+  function moveOverlayToBody() {
+    const overlay = $(overlayId);
+    if (!overlay) return;
+
+    // Store original location exactly once
+    if (!originalParent) {
+      originalParent = overlay.parentNode;
+      originalNextSibling = overlay.nextSibling;
+    }
+
+    // Append to body if not already there
+    if (overlay.parentNode !== document.body) {
+      document.body.appendChild(overlay);
+    }
+  }
+
+  /**
+   * Restore overlay back to where it was in the slide DOM (optional cleanup).
+   */
+  function restoreOverlayPosition() {
+    const overlay = $(overlayId);
+    if (!overlay || !originalParent) return;
+
+    if (originalNextSibling && originalNextSibling.parentNode === originalParent) {
+      originalParent.insertBefore(overlay, originalNextSibling);
+    } else {
+      originalParent.appendChild(overlay);
+    }
+  }
+
+  /**
+   * Scale the table body so it fits into the available body area without overflow.
+   * This intentionally NEVER scales up; it only scales down when required.
+   */
+  function fitTableNoOverflow() {
+    const bodyArea = $(bodyAreaId);
+    const scaler = $(scaleId);
+    if (!bodyArea || !scaler) return;
+
+    // Reset scaling to measure natural size
+    scaler.style.transform = 'scale(1)';
+
+    // Available pixels inside the body area
+    const availW = bodyArea.clientWidth;
+    const availH = bodyArea.clientHeight;
+
+    // Natural (unscaled) content size
+    const naturalW = scaler.scrollWidth;
+    const naturalH = scaler.scrollHeight;
+
+    if (!naturalW || !naturalH) return;
+
+    const sx = availW / naturalW;
+    const sy = availH / naturalH;
+
+    // Choose the smallest scale that fits, but never upscale above 1
+    const s = Math.min(1, sx, sy);
+
+    scaler.style.transform = `scale(${s})`;
+  }
+
+  /**
+   * Open the overlay fullscreen.
+   */
+  function open() {
+    const overlay = $(overlayId);
+    if (!overlay) return;
+
+    moveOverlayToBody();
+
+    overlay.style.display = 'block';
+    overlay.setAttribute('aria-hidden', 'false');
+
+    // Prevent background scrolling while overlay is open
+    document.documentElement.style.overflow = 'hidden';
+    document.body.style.overflow = 'hidden';
+
+    // Fit after render; two frames is often more stable inside Reveal
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => fitTableNoOverflow());
+    });
+  }
+
+  /**
+   * Close the overlay and restore page scroll state.
+   */
+  function close() {
+    const overlay = $(overlayId);
+    if (!overlay) return;
+
+    overlay.style.display = 'none';
+    overlay.setAttribute('aria-hidden', 'true');
+
+    document.documentElement.style.overflow = '';
+    document.body.style.overflow = '';
+
+    restoreOverlayPosition();
+  }
+
+  // Close on ESC key
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') close();
+  });
+
+  // Close when clicking the dark background (but not when clicking inside content)
+  document.addEventListener('click', (e) => {
+    const overlay = $(overlayId);
+    if (!overlay || overlay.style.display === 'none') return;
+    if (e.target === overlay) close();
+  });
+
+  // Re-fit on resize (window size, device rotation, Reveal scaling changes)
+  window.addEventListener('resize', () => {
+    const overlay = $(overlayId);
+    if (overlay && overlay.style.display !== 'none') fitTableNoOverflow();
+  });
+
+  return { open, close, fit: fitTableNoOverflow };
+})();
+</script>
+
+
 <!-- /position -->
 <!-- position={row: 1, column: 2} -->
 <svg viewBox="0 0 180 130" xmlns="http://www.w3.org/2000/svg" style="width:100%;background:transparent;">
@@ -914,12 +2167,11 @@ $$y = \beta_0 + \sum \beta_i x_i + \sum \beta_{ii} x_i^2 + \sum \beta_{ij} x_i x
 <!-- position={row: 1, column: 1} -->
 **Design Characteristics**
 
--! **Three levels** per factor (−1, 0, +1)
--! **No corners** — safer for sensitive processes
--! **Nearly rotatable** — uniform prediction variance
+-! *Three levels* per factor (−1, 0, +1)
+-! *No corners*, i.e., safer for sensitive processes
 <!-- /position -->
 <!-- position={row: 1, column: 2} -->
-**Efficiency**
+**Efficiency** (number of runs including 3x center points)
 
 | k | BBD | CCD |
 |:-:|:---:|:---:|
@@ -927,8 +2179,8 @@ $$y = \beta_0 + \sum \beta_i x_i + \sum \beta_{ii} x_i^2 + \sum \beta_{ij} x_i x
 | 4 | 27 | 30 |
 | 5 | 46 | 52 |
 
--! **Not augmentable** — plan as standalone
--! **Requires k ≥ 3** — no 2-factor BBD
+-! *Not augmentable*, i.e.,  plan as standalone
+-! *Requires k ≥ 3*, i.e., no 2-factor BBD
 <!-- /position -->
 <!-- /layout -->
 
@@ -942,136 +2194,26 @@ $$y = \beta_0 + \sum \beta_i x_i + \sum \beta_{ii} x_i^2 + \sum \beta_{ij} x_i x
 
 -! Wastewater treatment with 3 factors:
 -: Coagulant dose, Mixing speed, Settling time
--! **Safety:** Max dose + max speed + max time = risky
+
+***
+
+-! **Safety issue:** Max dose + max speed + max time = risky
 <!-- /position -->
 <!-- position={row: 1, column: 2} -->
 **BBD Solution (k=3)**
 
 -! 12 edge runs + 3 center = **15 runs** (no corners!)
--! **Results:** Intermediate mixing optimal; >90% removal
--= Optimum found safely — no risky combinations tested
-
--? See next slide for full design matrix
-<!-- /position -->
-<!-- /layout -->
-
----
-
-<!-- .slide:id="bbd-example-details" -->
-## BBD Example – Design Matrix (k=3)
-
-<!-- layout={rows: 1, columns: 2} -->
-<!-- position={row: 1, column: 1} -->
-| Run | x₁ | x₂ | x₃ |
-|:---:|:--:|:--:|:--:|
-| 1–2 | ±1 | −1 | 0 |
-| 3–4 | ±1 | +1 | 0 |
-| 5–6 | ±1 | 0 | −1 |
-| 7–8 | ±1 | 0 | +1 |
-<!-- /position -->
-<!-- position={row: 1, column: 2} -->
-| Run | x₁ | x₂ | x₃ |
-|:---:|:--:|:--:|:--:|
-| 9–10 | 0 | ±1 | −1 |
-| 11–12 | 0 | ±1 | +1 |
-| 13–15 | 0 | 0 | 0 |
-
--= 12 edge + 3 center = **15 runs**
-<!-- /position -->
-<!-- /layout -->
-
----
-
-<!-- .slide:id="ccd-vs-bbd" -->
-## CCD vs. Box–Behnken: Choosing the Right Design
-
-| Criterion | CCD | BBD |
-|:----------|:---:|:---:|
-| Augments factorial | ✓ | ✗ |
-| Avoids corners | ✗ | ✓ |
-| Rotatable | ✓ | Nearly |
-| Levels per factor | 5 (or 3) | 3 |
-| Fewer runs (3–4 factors) | ✗ | ✓ |
-| Min. factors | 2 | 3 |
 
 ***
 
--! **Choose CCD:** Prior factorial exists, extremes are safe, need wide exploration.
+-! **Results:** Intermediate mixing optimal; >90% removal
 
--! **Choose BBD:** Starting fresh, extremes risky, 3–4 factors, efficiency matters.
+***
 
--= **Key takeaway:** The design choice depends on practical constraints, not just statistical properties.
+-= Optimum found safely without testing risky combinations
 
-<div id="design-selector" style="background: #1a2340; padding: 15px; border-radius: 8px; margin-top: 15px;">
-  <div style="font-weight: bold; color: #9efcff; margin-bottom: 10px;">Quick Design Selector</div>
-  <div style="display: flex; flex-direction: column; gap: 8px;">
-    <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
-      <input type="checkbox" id="chk-prior-factorial" style="cursor: pointer;">
-      <span style="color: #abb2bf; font-size: 0.9em;">Have prior factorial data?</span>
-    </label>
-    <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
-      <input type="checkbox" id="chk-extremes-safe" style="cursor: pointer;">
-      <span style="color: #abb2bf; font-size: 0.9em;">Extreme combinations safe?</span>
-    </label>
-    <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
-      <input type="checkbox" id="chk-two-factors" style="cursor: pointer;">
-      <span style="color: #abb2bf; font-size: 0.9em;">Only 2 factors?</span>
-    </label>
-  </div>
-  <div id="design-recommendation" style="margin-top: 12px; padding: 10px; border-radius: 6px; background: #2d3a66; text-align: center;">
-    <span style="color: #e5c07b; font-weight: bold;">Answer the questions above</span>
-  </div>
-</div>
-
-<script>
-(function() {
-  const initDesignSelector = () => {
-    const chkPrior = document.getElementById('chk-prior-factorial');
-    const chkSafe = document.getElementById('chk-extremes-safe');
-    const chkTwo = document.getElementById('chk-two-factors');
-    const result = document.getElementById('design-recommendation');
-    if (!chkPrior || !chkSafe || !chkTwo || !result) return;
-    
-    const updateRecommendation = () => {
-      const hasPrior = chkPrior.checked;
-      const isSafe = chkSafe.checked;
-      const onlyTwo = chkTwo.checked;
-      
-      let design = '';
-      let color = '#e5c07b';
-      
-      if (onlyTwo) {
-        design = '→ CCD (BBD requires ≥3 factors)';
-        color = '#61AFEF';
-      } else if (hasPrior && isSafe) {
-        design = '→ CCD (augment your factorial)';
-        color = '#61AFEF';
-      } else if (!isSafe) {
-        design = '→ Box–Behnken (avoids corners)';
-        color = '#C678DD';
-      } else if (!hasPrior) {
-        design = '→ Either works; BBD if efficiency matters';
-        color = '#98c379';
-      } else {
-        design = '→ CCD recommended';
-        color = '#61AFEF';
-      }
-      
-      result.innerHTML = '<span style="color: ' + color + '; font-weight: bold;">' + design + '</span>';
-    };
-    
-    chkPrior.addEventListener('change', updateRecommendation);
-    chkSafe.addEventListener('change', updateRecommendation);
-    chkTwo.addEventListener('change', updateRecommendation);
-  };
-  
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initDesignSelector);
-  } else {
-    initDesignSelector();
-  }
-})();
-</script>
+<!-- /position -->
+<!-- /layout -->
 
 ---
 
@@ -1087,7 +2229,6 @@ $$y = \beta_0 + \sum \beta_i x_i + \sum \beta_{ii} x_i^2 + \sum \beta_{ij} x_i x
 <!-- position={row: 1, column: 2} -->
 **Practical Recommendations**
 
--! **CCDs:** 5–6 center points (statistical power, stable variance)
 -! **BBDs:** 3–4 center points (built into standard tables)
 -! **Cost is small:** A few extra runs provide huge validation benefit
 
@@ -1100,30 +2241,37 @@ $$y = \beta_0 + \sum \beta_i x_i + \sum \beta_{ii} x_i^2 + \sum \beta_{ij} x_i x
 <!-- .slide:id="design-strategy" -->
 ## The Experimental Strategy: A 4-Phase Approach
 
--! **Phase 1: Screening**
+<!-- layout={rows: 1, columns: 2} -->
+<!-- position={row: 1, column: 1} -->
+
+-! Phase 1: **Screening**
 -: Many factors, limited resources.
 -: Use fractional factorial or Plackett–Burman.
 -: Goal: identify which factors matter.
 
 ***
 
--! **Phase 2: Factor Reduction**
+-! Phase 2: **Factor Reduction**
 -: Confirm important factors with higher resolution design.
 -: Add center points to check for curvature.
 -: Narrow down to 2–4 key factors.
 
-***
+<!-- /position -->
+<!-- position={row: 1, column: 2} -->
 
--! **Phase 3: Optimization**
+-! Phase 3: **Optimization**
 -: Use CCD or BBD on the key factors.
 -: Fit quadratic model, locate the optimum.
 -: Understand the shape of the response surface.
 
 ***
 
--! **Phase 4: Verification**
+-! Phase 4: **Verification**
 -: Run confirmation experiments at predicted optimum.
 -: Validate that the model predictions are accurate.
+
+<!-- /position -->
+<!-- /layout -->
 
 ---
 
@@ -1148,19 +2296,11 @@ $$y = \beta_0 + \sum \beta_i x_i + \sum \beta_{ii} x_i^2 + \sum \beta_{ij} x_i x
 <!-- position={row: 1, column: 2} -->
 **Optimization Designs**
 
--! **Central Composite Design:**
--: Best when augmenting prior factorials.
--: Good when extremes are safe.
--: Achieves true rotatability.
-
-***
-
 -! **Box–Behnken Design:**
 -: Best when extremes are risky.
 -: More efficient for 3–4 factors.
 -: Cannot augment from factorial.
 
--= Match the design to your experimental phase and practical constraints.
 <!-- /position -->
 <!-- /layout -->
 
@@ -1169,19 +2309,21 @@ $$y = \beta_0 + \sum \beta_i x_i + \sum \beta_{ii} x_i^2 + \sum \beta_{ij} x_i x
 <!-- .slide:id="summary-concepts" -->
 ## Key Concepts to Remember
 
+<div style="font-size:0.8em;">
+
 | Concept | Definition | Why It Matters |
 |:--------|:-----------|:---------------|
 | **Aliasing** | Effects sharing the same estimate | Limits what we can learn |
 | **Resolution** | Severity of confounding (III, IV, V) | Determines reliability |
 | **Curvature** | Non-linear response ($x^2$ terms) | Needed to find optima |
 | **Center Points** | Runs at midpoint of all factors | Error and model checking |
-| **Rotatability** | Uniform prediction variance | Unbiased optimization |
+
+</div>
 
 ***
 
 -! **Key formulas:**
 -: Fractional factorial: $2^{k-p}$ runs for $k$ factors.
--: CCD: $2^k + 2k + n_c$ runs.
 -: PB efficiency: $N$ runs for $N-1$ factors.
 
 ---
