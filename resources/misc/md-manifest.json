@@ -226,5 +226,25 @@
       "one-way ANOVA",
       "Linear Regression"
     ]
+  },
+  {
+    "filename": "advancedDOE.md",
+    "title": "Advanced Experimental Design",
+    "keywords": [
+      "DOE",
+      "fractional factorial",
+      "Plackett-Burman",
+      "response surface",
+      "Box-Behnken",
+      "screening",
+      "optimization",
+      "aliasing",
+      "resolution",
+      "curvature"
+    ],
+    "thumbnail": "resources/icons/advanced-doe.svg",
+    "requirements": [
+      "Full Factorial Design"
+    ]
   }
 ]

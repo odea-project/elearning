@@ -81,10 +81,6 @@ description: "From full factorial design to efficient screening and optimization
 <!-- layout={rows: 1, columns: 2} -->
 <!-- position={row: 1, column: 1} -->
 <svg viewBox="0 0 300 200" style="max-width: 100%; height: auto;">
-  <style>
-    @keyframes wiggle { 0%, 100% { transform: rotate(-5deg); } 50% { transform: rotate(5deg); } }
-    .wiggle { animation: wiggle 1.5s ease-in-out infinite; transform-origin: center; }
-  </style>
   <!-- Question Mark -->
   <g class="wiggle" style="animation-delay: 0s;">
     <circle cx="70" cy="100" r="45" fill="#fff9c4" stroke="#fbc02d" stroke-width="3"/>
@@ -111,64 +107,6 @@ description: "From full factorial design to efficient screening and optimization
 <!-- /position -->
 <!-- position={row: 1, column: 2} -->
 -? How many experiments would a **full factorial design** require?
-<!-- /position -->
-<!-- /layout -->
-
----
-
-<!-- .slide:id="initial-problem-3" -->
-## The Scaling Problem (cont.)
-
-<!-- layout={rows: 1, columns: 2} -->
-<!-- position={row: 1, column: 1} -->
--! Each added factor **doubles** the number of runs.
-<!-- /position -->
-<!-- position={row: 1, column: 2} -->
-<svg viewBox="0 0 350 250" style="max-width: 100%; height: auto;">
-  <!-- Background grid -->
-  <defs>
-    <pattern id="grid" width="30" height="30" patternUnits="userSpaceOnUse">
-      <path d="M 30 0 L 0 0 0 30" fill="none" stroke="#e0e0e0" stroke-width="0.5"/>
-    </pattern>
-  </defs>
-  <rect x="50" y="20" width="280" height="180" fill="url(#grid)"/>
-  <!-- Axes -->
-  <line x1="50" y1="200" x2="330" y2="200" stroke="#455a64" stroke-width="2"/>
-  <line x1="50" y1="200" x2="50" y2="20" stroke="#455a64" stroke-width="2"/>
-  <!-- Arrow heads -->
-  <polygon points="330,200 320,195 320,205" fill="#455a64"/>
-  <polygon points="50,20 45,30 55,30" fill="#455a64"/>
-  <!-- Exponential curve -->
-  <path d="M70 195 Q100 190 130 180 Q160 165 190 140 Q220 100 250 50" 
-        fill="none" stroke="#e53935" stroke-width="4" stroke-linecap="round"/>
-  <!-- Data points -->
-  <circle cx="70" cy="195" r="8" fill="#ffcdd2" stroke="#e53935" stroke-width="2"/>
-  <circle cx="130" cy="180" r="8" fill="#ffcdd2" stroke="#e53935" stroke-width="2"/>
-  <circle cx="160" cy="165" r="8" fill="#ffcdd2" stroke="#e53935" stroke-width="2"/>
-  <circle cx="190" cy="140" r="8" fill="#ffcdd2" stroke="#e53935" stroke-width="2"/>
-  <circle cx="220" cy="100" r="8" fill="#ffcdd2" stroke="#e53935" stroke-width="2"/>
-  <circle cx="250" cy="50" r="8" fill="#ffcdd2" stroke="#e53935" stroke-width="2"/>
-  <!-- Labels on points -->
-  <text x="70" y="215" text-anchor="middle" fill="#455a64" font-size="10">2</text>
-  <text x="130" y="215" text-anchor="middle" fill="#455a64" font-size="10">3</text>
-  <text x="160" y="215" text-anchor="middle" fill="#455a64" font-size="10">4</text>
-  <text x="190" y="215" text-anchor="middle" fill="#455a64" font-size="10">5</text>
-  <text x="220" y="215" text-anchor="middle" fill="#455a64" font-size="10">6</text>
-  <text x="250" y="215" text-anchor="middle" fill="#455a64" font-size="10">7</text>
-  <!-- Value labels -->
-  <text x="70" y="188" text-anchor="middle" fill="#e53935" font-size="9" font-weight="bold">4</text>
-  <text x="130" y="173" text-anchor="middle" fill="#e53935" font-size="9" font-weight="bold">8</text>
-  <text x="160" y="158" text-anchor="middle" fill="#e53935" font-size="9" font-weight="bold">16</text>
-  <text x="190" y="133" text-anchor="middle" fill="#e53935" font-size="9" font-weight="bold">32</text>
-  <text x="220" y="93" text-anchor="middle" fill="#e53935" font-size="9" font-weight="bold">64</text>
-  <text x="250" y="43" text-anchor="middle" fill="#e53935" font-size="9" font-weight="bold">128</text>
-  <!-- Axis labels -->
-  <text x="190" y="240" text-anchor="middle" fill="#1565c0" font-size="14" font-weight="bold">Number of Factors (k)</text>
-  <text x="20" y="110" text-anchor="middle" fill="#1565c0" font-size="14" font-weight="bold" transform="rotate(-90, 20, 110)">Runs (2ᵏ)</text>
-  <!-- Formula box -->
-  <rect x="240" y="100" width="90" height="35" rx="5" fill="#fff3e0" stroke="#ff9800" stroke-width="2"/>
-  <text x="285" y="122" text-anchor="middle" fill="#e65100" font-size="16" font-weight="bold">runs = 2ᵏ</text>
-</svg>
 <!-- /position -->
 <!-- /layout -->
 
@@ -397,10 +335,10 @@ description: "From full factorial design to efficient screening and optimization
 -! Resources allow only **8 runs**
 
 -? Can you still learn about all four factors?
+-: **Yes**, accept a trade-off: run half, lose some info
 
 ***
 
--! **Yes**, accept a trade-off: run half, lose some info
 -! **Notation:** $2^{k-p}$ uses $\frac{1}{2^p}$ fraction
 -: $2^{4-1}$ = half of $2^4$ = 8 runs
 <!-- /position -->
@@ -942,13 +880,19 @@ description: "From full factorial design to efficient screening and optimization
 
 
 ---
+
 <!-- .slide:id="aliasing-intro" -->
 ## What Do We Sacrifice? — Aliasing
 <!-- layout={rows: 1, columns: 2} -->
 <!-- position={row: 1, column: 1} -->
--! **Key concept:** When we use fewer runs, some effects become inseparable.
+-! When we use fewer runs, some effects become inseparable.
 -: We cannot distinguish them from our data.
 -: This phenomenon is called **aliasing**.
+
+***
+
+-! Two effects are **aliased** if they share the same pattern across runs
+-: i.e., identical or negated columns in design matrix
 
 ***
 
@@ -1029,8 +973,6 @@ description: "From full factorial design to efficient screening and optimization
 | C | A×B |
 <!-- /position -->
 <!-- position={row: 1, column: 2} -->
-**Key Insight**
-
 <svg viewBox="0 0 340 70" xmlns="http://www.w3.org/2000/svg" style="width:100%;background:transparent;">
   <defs><marker id="arrA" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#e5c07b"/></marker></defs>
   <rect x="10" y="20" width="60" height="28" rx="4" fill="#61AFEF" opacity="0.3" stroke="#61AFEF" stroke-width="2"/>
@@ -1091,17 +1033,18 @@ description: "From full factorial design to efficient screening and optimization
 <line x1="100" y1="35" x2="100" y2="85" stroke="#555" stroke-width="1"/>
 <line x1="160" y1="55" x2="160" y2="105" stroke="#555" stroke-width="1"/>
 <line x1="100" y1="75" x2="100" y2="125" stroke="#555" stroke-width="1"/>
-<circle cx="40" cy="55" r="7" fill="#98c379"/>
-<circle cx="160" cy="55" r="7" fill="#98c379"/>
-<circle cx="100" cy="125" r="7" fill="#98c379"/>
-<circle cx="100" cy="35" r="7" fill="#98c379"/>
+<circle cx="40" cy="55" r="10" fill="#98c379"/>
+<circle cx="160" cy="55" r="10" fill="#98c379"/>
+<circle cx="100" cy="125" r="10" fill="#98c379"/>
+<circle cx="100" cy="85" r="10" fill="#98c379"/>
 <circle cx="40" cy="105" r="5" fill="none" stroke="#e06c75" stroke-width="2" stroke-dasharray="3,2"/>
 <circle cx="160" cy="105" r="5" fill="none" stroke="#e06c75" stroke-width="2" stroke-dasharray="3,2"/>
 <circle cx="100" cy="75" r="5" fill="none" stroke="#e06c75" stroke-width="2" stroke-dasharray="3,2"/>
-<circle cx="100" cy="85" r="5" fill="none" stroke="#e06c75" stroke-width="2" stroke-dasharray="3,2"/>
-<text x="25" y="60" font-size="10" fill="#abb2bf">A</text>
-<text x="168" y="60" font-size="10" fill="#abb2bf">B</text>
-<text x="100" y="143" font-size="10" fill="#abb2bf" text-anchor="middle">C</text>
+<circle cx="100" cy="35" r="5" fill="none" stroke="#e06c75" stroke-width="2" stroke-dasharray="3,2"/>
+<text x="40" y="60" text-anchor="middle" fill="#1a2340" font-size="12" font-weight="bold">1</text>
+<text x="160" y="60" text-anchor="middle" fill="#1a2340" font-size="12" font-weight="bold">4</text>
+<text x="100" y="130" text-anchor="middle" fill="#1a2340" font-size="12" font-weight="bold">2</text>
+<text x="100" y="90" text-anchor="middle" fill="#1a2340" font-size="12" font-weight="bold">3</text>
 </svg>
 
 <span style="color:#98c379;">●</span> Selected (4) &nbsp; <span style="color:#e06c75;">◌</span> Omitted (4)
@@ -1176,7 +1119,7 @@ description: "From full factorial design to efficient screening and optimization
 
 -! 4 factors: pH, dose, mixing, settling
 -! Full = 16 runs → Half = **8 runs**
--! **Resolution IV:** $2^{4-1}_{IV}$, $I = ABCD$
+-! **Resolution IV:** $2^{4-1}_{IV}$, $A = BCD$
 
 | Effect | Aliased With |
 |:------:|:------------:|
@@ -1228,6 +1171,46 @@ description: "From full factorial design to efficient screening and optimization
 
 <!-- /position -->
 <!-- /layout -->
+
+---
+
+<!-- .slide:id="fractional-example-1" -->
+## Example: $2^{4-1}_{IV}$ Fractional Factorial Design
+
+<div style="font-size: 0.7em;">
+
+| Run | A | B | C | D=ABC | AB = CD | AC = BD | AD = BC |
+|:---:|:--:|:--:|:--:|:-----:|:--:|:--:|:--:|
+| 1 | *-* | *-* | *-* | *-* | **+** | **+** | **+** |
+| 2 | **+** | *-* | *-* | **+** | *-* | *-* | **+** |
+| 3 | *-* | **+** | *-* | **+** | *-* | **+** | *-* |
+| 4 | **+** | **+** | *-* | *-* | **+** | *-* | *-* |
+| 5 | *-* | *-* | **+** | **+** | **+** | *-* | *-* |
+| 6 | **+** | *-* | **+** | *-* | *-* | **+** | *-* |
+| 7 | *-* | **+** | **+** | *-* | *-* | *-* | **+** |
+| 8 | **+** | **+** | **+** | **+** | **+** | **+** | **+** |
+
+</div>
+
+---
+
+<!-- .slide:id="fractional-example-1" -->
+## Example: $2^{5-2}_{III}$ Fractional Factorial Design  ($D=AB$, $E=AC$)
+
+<div style="font-size: 0.7em;">
+
+| Run | A = BD = CE | B = AD | C = AE | D = AB | E = AC | BC = DE | BE = CD |
+|:---:|:-----------:|:------:|:------:|:------:|:------:|:-------:|:-------:|
+| 1 | *-* | *-* | *-* | **+** | **+** | **+** | **+** |
+| 2 | **+** | *-* | *-* | *-* | *-* | **+** | *-* |
+| 3 | *-* | **+** | *-* | *-* | **+** | *-* | **+** |
+| 4 | **+** | **+** | *-* | **+** | *-* | *-* | *-* |
+| 5 | *-* | *-* | **+** | **+** | *-* | *-* | *-* |
+| 6 | **+** | *-* | **+** | *-* | **+** | *-* | **+** |
+| 7 | *-* | **+** | **+** | *-* | *-* | **+** | *-* |
+| 8 | **+** | **+** | **+** | **+** | **+** | **+** | **+** |
+
+</div>
 
 ---
 
@@ -1351,41 +1334,41 @@ description: "From full factorial design to efficient screening and optimization
 ---
 
 <!-- .slide:id="pb-example" -->
-## Example: Screening 10 Water Quality Variables
+## Example: Screening 8 Water Quality Variables
 <!-- layout={rows: 1, columns: 2} -->
 <!-- position={row: 1, column: 1} -->
 **The Scenario**
 
--! Studying *pollutant removal* with 10 potential variables:
--: pH, temperature, coagulant type/dose, mixing rate
--: Settling time, turbidity, catalyst, aeration, polymer
+-! Studying *pollutant removal* with 8 potential variables:
+-: pH, temperature, coagulant type, coagulant dose
+-: Settling time, catalyst, mixing rate, polymer
 
 ***
 
 -! Resources allow only *12 experiments*
--: Full factorial = 1024 runs; fractional = 16+ runs
+-: Full factorial = 256 runs; fractional = 16+ runs
 <!-- /position -->
 <!-- position={row: 1, column: 2} -->
 **The PB Solution**
 
 -! Use a *12-run Plackett–Burman* design
--: Assign 10 factors to 10 columns
--: Leave one column as dummy for error
+-: Assign 8 factors to 8 columns
+-: Use 3 columns as dummies for error estimation
 
 ***
 
--! *Examplary outcome:* pH and dose show large effects; others negligible
+-! *Examplary outcome:* pH, dose, and mixing show large effects; others negligible
 
 ***
 
--= PB narrowed 10 candidates to 2–3 key factors in just 12 runs
+-= PB narrowed 8 candidates to 3 key factors in just 12 runs
 <!-- /position -->
 <!-- /layout -->
 
 ---
 
 <!-- .slide:id="pb-12-run-design" -->
-## Wasn't PB-12 used for 11 factors? Now only 10?
+## Wasn't PB-12 used for 11 factors? Now only 8?
 <!-- layout={rows: 1, columns: 2} -->
 <!-- position={row: 1, column: 1} -->
 **Design Flexibility**
@@ -1396,35 +1379,300 @@ description: "From full factorial design to efficient screening and optimization
 ***
 
 **Dummy Variables**
--! Dummy columns help estimate experimental error.
--: Effects estimated for dummies should be near zero.
--: Large dummy effects indicate noise or model issues.
+-! Multiple dummy columns allow better error estimation.
+-: SE of effects ≈ SD of dummy effects.
+-: With 3 dummies: df = 2 for t-test.
 
 <!-- /position -->
 <!-- position={row: 1, column: 2} -->
 
 <div style="font-size: 0.45em;">
 
-| Run | A | B | C | D | E | F | G | H | I | J | K |
+| Run | A | B | C | D | E | F | G | H | d₁ | d₂ | d₃ |
 |:---:|:--:|:--:|:--:|:--:|:--:|:--:|:--:|:--:|:--:|:--:|:--:|
-| 1 | **+** | **+** | **+** | **+** | **+** | **+** | **+** | **+** | **+** | **+** | **+** |
-| 2 | *-* | **+** | *-* | **+** | **+** | **+** | *-* | *-* | *-* | **+** | *-* |
-| 3 | *-* | *-* | **+** | *-* | **+** | **+** | **+** | *-* | *-* | *-* | **+** |
+| 1 | **+** | **+** | **+** | **+** | **+** | **+** | **+** | **+** | *+* | *+* | *+* |
+| 2 | *-* | **+** | *-* | **+** | **+** | **+** | *-* | *-* | *-* | *+* | *-* |
+| 3 | *-* | *-* | **+** | *-* | **+** | **+** | **+** | *-* | *-* | *-* | *+* |
 | 4 | **+** | *-* | *-* | **+** | *-* | **+** | **+** | **+** | *-* | *-* | *-* |
-| 5 | *-* | **+** | *-* | *-* | **+** | *-* | **+** | **+** | **+** | *-* | *-* |
-| 6 | *-* | *-* | **+** | *-* | *-* | **+** | *-* | **+** | **+** | **+** | *-* |
-| 7 | *-* | *-* | *-* | **+** | *-* | *-* | **+** | *-* | **+** | **+** | **+** |
-| 8 | **+** | *-* | *-* | *-* | **+** | *-* | *-* | **+** | *-* | **+** | **+** |
-| 9 | **+** | **+** | *-* | *-* | *-* | **+** | *-* | *-* | **+** | *-* | **+** |
-| 10 | **+** | **+** | **+** | *-* | *-* | *-* | **+** | *-* | *-* | **+** | *-* |
-| 11 | *-* | **+** | **+** | **+** | *-* | *-* | *-* | **+** | *-* | *-* | **+** |
-| 12 | **+** | *-* | **+** | **+** | **+** | *-* | *-* | *-* | **+** | *-* | *-* |
+| 5 | *-* | **+** | *-* | *-* | **+** | *-* | **+** | **+** | *+* | *-* | *-* |
+| 6 | *-* | *-* | **+** | *-* | *-* | **+** | *-* | **+** | *+* | *+* | *-* |
+| 7 | *-* | *-* | *-* | **+** | *-* | *-* | **+** | *-* | *+* | *+* | *+* |
+| 8 | **+** | *-* | *-* | *-* | **+** | *-* | *-* | **+** | *-* | *+* | *+* |
+| 9 | **+** | **+** | *-* | *-* | *-* | **+** | *-* | *-* | *+* | *-* | *+* |
+| 10 | **+** | **+** | **+** | *-* | *-* | *-* | **+** | *-* | *-* | *+* | *-* |
+| 11 | *-* | **+** | **+** | **+** | *-* | *-* | *-* | **+** | *-* | *-* | *+* |
+| 12 | **+** | *-* | **+** | **+** | **+** | *-* | *-* | *-* | *+* | *-* | *-* |
 
 </div>
 
 <div style="text-align: right; font-size: 0.8em; color: #00a6e7ff; margin-right: 20px; margin-left: auto;">
-Unused column can describe the noise: <strong> Dummy ⬆</strong>
+3 dummy columns for error estimation: <strong> d₁, d₂, d₃ ⬆</strong>
 </div>
+
+<!-- /position -->
+<!-- /layout -->
+
+---
+
+<!-- .slide:id="pb-analysis-example" -->
+## Plackett–Burman Example: Analysis Output
+
+<!-- layout={rows: 1, columns: 2} -->
+<!-- position={row: 1, column: 1} -->
+
+<div style="font-size: 0.42em; margin-top: 5px;">
+<table id="pb-design-table">
+<thead>
+<tr style="background: #2d3748;"><th>Run</th><th>A</th><th>B</th><th>C</th><th>D</th><th>E</th><th>F</th><th>G</th><th>H</th><th style="color:#888;">d₁</th><th style="color:#888;">d₂</th><th style="color:#888;">d₃</th><th style="color:#61afef;">Y</th></tr>
+</thead>
+<tbody id="pb-design-body"></tbody>
+</table>
+</div>
+
+<div style="font-size: 0.6em; color: #888; margin-top: 8px;">
+d₁, d₂, d₃ = Dummy variables &nbsp;|&nbsp; Y = Response (Pollutant Removal %)
+</div>
+
+<!-- /position -->
+<!-- position={row: 1, column: 2} -->
+
+<div style="font-size: 0.48em;">
+<table id="pb-effects-table">
+<thead>
+<tr style="background: #2d3748;"><th>Factor</th><th>Effect</th><th>SE</th><th>t-value</th><th>p-value</th><th>Sig.</th></tr>
+</thead>
+<tbody id="pb-effects-body"></tbody>
+</table>
+</div>
+
+<div style="font-size: 0.6em; color: #abb2bf; margin-top: 10px;">
+<strong>Interpretation:</strong> Factors A (pH), D (Dose), and G (Mixing) are significant (p &lt; 0.05).<br>
+SE estimated from SD of 3 dummy effects (df = 2).
+</div>
+
+<!-- /position -->
+<!-- /layout -->
+
+<script>
+(function() {
+  // PB-12 design matrix (standard Plackett-Burman)
+  // Columns: A-H = 8 factors, d1, d2, d3 = 3 dummies
+  const pbDesign = [
+    { run: 1,  A: 1,  B: 1,  C: 1,  D: 1,  E: 1,  F: 1,  G: 1,  H: 1,  d1: 1,  d2: 1,  d3: 1  },
+    { run: 2,  A:-1,  B: 1,  C:-1,  D: 1,  E: 1,  F: 1,  G:-1,  H:-1,  d1:-1,  d2: 1,  d3:-1 },
+    { run: 3,  A:-1,  B:-1,  C: 1,  D:-1,  E: 1,  F: 1,  G: 1,  H:-1,  d1:-1,  d2:-1,  d3: 1  },
+    { run: 4,  A: 1,  B:-1,  C:-1,  D: 1,  E:-1,  F: 1,  G: 1,  H: 1,  d1:-1,  d2:-1,  d3:-1 },
+    { run: 5,  A:-1,  B: 1,  C:-1,  D:-1,  E: 1,  F:-1,  G: 1,  H: 1,  d1: 1,  d2:-1,  d3:-1 },
+    { run: 6,  A:-1,  B:-1,  C: 1,  D:-1,  E:-1,  F: 1,  G:-1,  H: 1,  d1: 1,  d2: 1,  d3:-1 },
+    { run: 7,  A:-1,  B:-1,  C:-1,  D: 1,  E:-1,  F:-1,  G: 1,  H:-1,  d1: 1,  d2: 1,  d3: 1  },
+    { run: 8,  A: 1,  B:-1,  C:-1,  D:-1,  E: 1,  F:-1,  G:-1,  H: 1,  d1:-1,  d2: 1,  d3: 1  },
+    { run: 9,  A: 1,  B: 1,  C:-1,  D:-1,  E:-1,  F: 1,  G:-1,  H:-1,  d1: 1,  d2:-1,  d3: 1  },
+    { run: 10, A: 1,  B: 1,  C: 1,  D:-1,  E:-1,  F:-1,  G: 1,  H:-1,  d1:-1,  d2: 1,  d3:-1 },
+    { run: 11, A:-1,  B: 1,  C: 1,  D: 1,  E:-1,  F:-1,  G:-1,  H: 1,  d1:-1,  d2:-1,  d3: 1  },
+    { run: 12, A: 1,  B:-1,  C: 1,  D: 1,  E: 1,  F:-1,  G:-1,  H:-1,  d1: 1,  d2:-1,  d3:-1 }
+  ];
+
+  // True effects: A=8, D=6, G=-5 are significant; others ~0
+  // Model: Y = 75 + 4*A + 3*D - 2.5*G + noise
+  const trueIntercept = 75;
+  const trueEffects = { A: 8, B: 0.4, C: -0.3, D: 6, E: 0.5, F: -0.4, G: -5, H: 0.2, d1: 0, d2: 0, d3: 0 };
+  
+  // Generate response values with small random error (seeded for reproducibility)
+  function seededRandom(seed) {
+    return function() {
+      seed = (seed * 9301 + 49297) % 233280;
+      return seed / 233280;
+    };
+  }
+  const rand = seededRandom(40);
+  
+  // Calculate response for each run
+  const realFactors = ['A','B','C','D','E','F','G','H'];
+  const dummies = ['d1','d2','d3'];
+  const allColumns = [...realFactors, ...dummies];
+  
+  pbDesign.forEach(row => {
+    let y = trueIntercept;
+    realFactors.forEach(f => {
+      y += (trueEffects[f] / 2) * row[f];  // Effect = 2 * coefficient
+    });
+    // Add small random error (±0.8)
+    y += (rand() - 0.5) * 1.6;
+    row.Y = Math.round(y * 10) / 10;
+  });
+
+  // Calculate effects using contrast method: Effect = (mean at +) - (mean at -)
+  function calcEffect(data, col) {
+    let sumPlus = 0, sumMinus = 0, nPlus = 0, nMinus = 0;
+    data.forEach(row => {
+      if (row[col] === 1) { sumPlus += row.Y; nPlus++; }
+      else { sumMinus += row.Y; nMinus++; }
+    });
+    return (sumPlus / nPlus) - (sumMinus / nMinus);
+  }
+
+  // Calculate all effects
+  const effects = {};
+  allColumns.forEach(f => {
+    effects[f] = calcEffect(pbDesign, f);
+  });
+
+  // Standard error from SD of dummy effects (df = 2)
+  const dummyEffects = dummies.map(d => effects[d]);
+  const meanDummy = dummyEffects.reduce((a,b) => a+b, 0) / dummyEffects.length;
+  const varDummy = dummyEffects.reduce((s,e) => s + (e - meanDummy)**2, 0) / (dummyEffects.length - 1);
+  const SE = Math.sqrt(varDummy);
+  const df = dummies.length - 1; // df = 2
+
+  // t-distribution p-value using Beta function approximation
+  function pValueFromT(t, df) {
+    const x = df / (df + t * t);
+    // Incomplete beta function approximation for df=2
+    // For df=2: p = (1 + |t|/sqrt(2+t^2))^(-1) * 2 ... simplified
+    // Using more accurate approximation:
+    const absT = Math.abs(t);
+    if (df === 2) {
+      // Exact formula for df=2: p = 1 / sqrt(1 + t^2/2)
+      return 1 / Math.sqrt(1 + (t * t) / df);
+    }
+    // Fallback: normal approximation
+    const a1 = 0.254829592, a2 = -0.284496736, a3 = 1.421413741;
+    const a4 = -1.453152027, a5 = 1.061405429, p = 0.3275911;
+    const xAbs = absT / Math.sqrt(2);
+    const t1 = 1 / (1 + p * xAbs);
+    const erf = 1 - (((((a5 * t1 + a4) * t1) + a3) * t1 + a2) * t1 + a1) * t1 * Math.exp(-xAbs * xAbs);
+    return 2 * (1 - 0.5 * (1 + erf));
+  }
+
+  // Render design table
+  function renderDesignTable() {
+    const tbody = document.getElementById('pb-design-body');
+    if (!tbody) return;
+    
+    let html = '';
+    pbDesign.forEach(row => {
+      html += '<tr>';
+      html += `<td style="font-weight:bold;">${row.run}</td>`;
+      allColumns.forEach(f => {
+        const val = row[f];
+        const color = val === 1 ? '#98c379' : '#e06c75';
+        const symbol = val === 1 ? '+' : '−';
+        const isDummy = dummies.includes(f);
+        const style = isDummy ? `color:${color}; opacity:0.6;` : `color:${color};`;
+        html += `<td style="${style}">${symbol}</td>`;
+      });
+      html += `<td style="color:#61afef; font-weight:bold;">${row.Y.toFixed(1)}</td>`;
+      html += '</tr>';
+    });
+    tbody.innerHTML = html;
+  }
+
+  // Render effects table
+  function renderEffectsTable() {
+    const tbody = document.getElementById('pb-effects-body');
+    if (!tbody) return;
+    
+    // Factor labels for display
+    const labels = {
+      A: 'A (pH)', B: 'B (Temp)', C: 'C (Coag.)', D: 'D (Dose)',
+      E: 'E (Settling)', F: 'F (Catalyst)', G: 'G (Mixing)', H: 'H (Polymer)',
+      d1: 'd₁ (Dummy)', d2: 'd₂ (Dummy)', d3: 'd₃ (Dummy)'
+    };
+    
+    let html = '';
+    allColumns.forEach(f => {
+      const eff = effects[f];
+      const tVal = eff / SE;
+      const pVal = pValueFromT(tVal, df);
+      const isDummy = dummies.includes(f);
+      const sig = !isDummy && pVal < 0.05;
+      
+      const rowStyle = sig ? 'background: rgba(152, 195, 121, 0.15);' : '';
+      const effColor = sig ? '#98c379' : '#abb2bf';
+      const sigSymbol = sig ? '✓' : '';
+      const sigColor = sig ? '#98c379' : '#6a7280';
+      const labelStyle = isDummy ? 'color:#888; font-style:italic;' : '';
+      
+      html += `<tr style="${rowStyle}">`;
+      html += `<td style="${labelStyle}">${labels[f]}</td>`;
+      html += `<td style="color:${effColor}; font-weight:${sig ? 'bold' : 'normal'};">${eff.toFixed(2)}</td>`;
+      html += `<td>${SE.toFixed(2)}</td>`;
+      html += `<td>${tVal.toFixed(2)}</td>`;
+      html += `<td style="color:${isDummy ? '#888' : (pVal < 0.05 ? '#98c379' : '#abb2bf')};">${pVal.toFixed(3)}</td>`;
+      html += `<td style="color:${sigColor}; font-weight:bold;">${sigSymbol}</td>`;
+      html += '</tr>';
+    });
+    tbody.innerHTML = html;
+  }
+
+  // Initialize on slide load
+  function init() {
+    renderDesignTable();
+    renderEffectsTable();
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+
+  // Re-render when Reveal shows the slide
+  if (typeof Reveal !== 'undefined') {
+    Reveal.on('slidechanged', (event) => {
+      if (event.currentSlide && event.currentSlide.id === 'pb-analysis-example') {
+        setTimeout(init, 50);
+      }
+    });
+  }
+})();
+</script>
+
+---
+
+<!-- .slide:id="pb-significant-effects" -->
+## Lenth's Method: Finding Effects Without Dummies
+
+<!-- layout={rows: 1, columns: 2} -->
+<!-- position={row: 1, column: 1} -->
+
+**The Problem**
+-! No replicates → no direct error estimate
+-: But most effects are likely small (inactive)
+-: Use the small effects themselves to estimate noise
+
+***
+
+*Lenth's Pseudo Standard Error (PSE)*
+
+<div style="font-size: 0.8em;">
+
+1. Compute initial estimate $s_0$:
+$$s_0 = 1.5 \cdot \text{median}(|E_j|)$$
+
+2. Trim large effects (keep only $|E_j| < 2.5 \cdot s_0$)
+
+3. Compute PSE from trimmed set:
+$$\text{PSE} = 1.5 \cdot \text{median}(|E_j|_{\text{trimmed}})$$
+
+</div>
+
+<!-- /position -->
+<!-- position={row: 1, column: 2} -->
+
+**Critical Values**
+
+-! Margin of Error (ME): $t_{\alpha/2, df} \cdot \text{PSE}$
+-! Simultaneous ME (SME): $t_{\gamma, df} \cdot \text{PSE}$
+-: where $df \approx m/3$ pseudo degrees of freedom
+-: $m$ = number of effects, $\gamma$ accounts for multiple testing
+-: e.g., $\gamma = 1 - (1 - \alpha)^{1/m}$
+
+***
+
+**Decision Rule**
+-! $|E_j| > \text{ME}$: possibly significant
+-! $|E_j| > \text{SME}$: likely significant (conservative)
 
 <!-- /position -->
 <!-- /layout -->
@@ -2173,13 +2421,19 @@ window.BBDOverlay = (function() {
 <!-- position={row: 1, column: 2} -->
 **Efficiency** (number of runs including 3x center points)
 
-| k | BBD | CCD |
-|:-:|:---:|:---:|
-| 3 | 15 | 20 |
-| 4 | 27 | 30 |
-| 5 | 46 | 52 |
+<div style="font-size:0.8em;">
+
+| k | BBD |
+|:-:|:---:|
+| 3 | 15 |
+| 4 | 27 |
+| 5 | 46 |
+
+</div>
 
 -! *Not augmentable*, i.e.,  plan as standalone
+-: i.e., cannot build up from factorial designs
+
 -! *Requires k ≥ 3*, i.e., no 2-factor BBD
 <!-- /position -->
 <!-- /layout -->
@@ -2214,6 +2468,282 @@ window.BBDOverlay = (function() {
 
 <!-- /position -->
 <!-- /layout -->
+
+---
+
+<!-- .slide:id="bbd-example-analysis" -->
+## Box–Behnken Example: Analysis Output
+
+<!-- layout={rows: 1, columns: 2} -->
+<!-- position={row: 1, column: 1} -->
+
+<div style="font-size: 0.38em; margin-top: 5px;">
+<table id="bbd-design-table">
+<thead>
+<tr style="background: #2d3748;"><th>Run</th><th>A</th><th>B</th><th>C</th><th style="color:#61afef;">Y</th></tr>
+</thead>
+<tbody id="bbd-design-body"></tbody>
+</table>
+</div>
+
+<div style="font-size: 0.55em; color: #888; margin-top: 8px;">
+A = Dose (mg/L) &nbsp;|&nbsp; B = Mixing (rpm) &nbsp;|&nbsp; C = Time (min)<br>
+Y = Turbidity Removal (%)
+</div>
+
+<!-- /position -->
+<!-- position={row: 1, column: 2} -->
+
+<div style="font-size: 0.42em;">
+<table id="bbd-coef-table">
+<thead>
+<tr style="background: #2d3748;"><th>Term</th><th>Coef.</th><th>SE</th><th>t-value</th><th>p-value</th><th>Sig.</th></tr>
+</thead>
+<tbody id="bbd-coef-body"></tbody>
+</table>
+</div>
+
+<div style="font-size: 0.55em; color: #abb2bf; margin-top: 8px;">
+<strong>Model:</strong> $y = \beta_0 + \beta_A A + \beta_B B + \beta_C C + \beta_{AA} A^2 + \beta_{BB} B^2 + \beta_{CC} C^2 + \beta_{AB} AB + ...$<br>
+<span style="color:#98c379;">Quadratic terms</span> indicate curvature → optimum exists within range.
+</div>
+
+<!-- /position -->
+<!-- /layout -->
+
+<script>
+(function() {
+  // Box-Behnken Design for 3 factors (15 runs: 12 edge + 3 center)
+  const bbdDesign = [
+    { run: 1,  A:-1, B:-1, C: 0 },
+    { run: 2,  A: 1, B:-1, C: 0 },
+    { run: 3,  A:-1, B: 1, C: 0 },
+    { run: 4,  A: 1, B: 1, C: 0 },
+    { run: 5,  A:-1, B: 0, C:-1 },
+    { run: 6,  A: 1, B: 0, C:-1 },
+    { run: 7,  A:-1, B: 0, C: 1 },
+    { run: 8,  A: 1, B: 0, C: 1 },
+    { run: 9,  A: 0, B:-1, C:-1 },
+    { run: 10, A: 0, B: 1, C:-1 },
+    { run: 11, A: 0, B:-1, C: 1 },
+    { run: 12, A: 0, B: 1, C: 1 },
+    { run: 13, A: 0, B: 0, C: 0 },
+    { run: 14, A: 0, B: 0, C: 0 },
+    { run: 15, A: 0, B: 0, C: 0 }
+  ];
+
+  // True model: Y = 92 + 3A + 2B + 1C - 4A² - 3B² - 2C² + 1.5AB + 0.5AC - 0.3BC + noise
+  // This creates a maximum around the center with significant curvature
+  const trueCoefs = {
+    intercept: 92,
+    A: 3, B: 2, C: 1,
+    AA: -4, BB: -3, CC: -2,
+    AB: 1.5, AC: 0.5, BC: -0.3
+  };
+
+  // Seeded random for reproducibility
+  function seededRandom(seed) {
+    return function() {
+      seed = (seed * 9301 + 49297) % 233280;
+      return seed / 233280;
+    };
+  }
+  const rand = seededRandom(123);
+
+  // Generate response values
+  bbdDesign.forEach(row => {
+    let y = trueCoefs.intercept
+          + trueCoefs.A * row.A
+          + trueCoefs.B * row.B
+          + trueCoefs.C * row.C
+          + trueCoefs.AA * row.A * row.A
+          + trueCoefs.BB * row.B * row.B
+          + trueCoefs.CC * row.C * row.C
+          + trueCoefs.AB * row.A * row.B
+          + trueCoefs.AC * row.A * row.C
+          + trueCoefs.BC * row.B * row.C;
+    // Add small noise (±1)
+    y += (rand() - 0.5) * 2;
+    row.Y = Math.round(y * 10) / 10;
+  });
+
+  // Build design matrix X for regression (intercept, A, B, C, A², B², C², AB, AC, BC)
+  function buildDesignMatrix(data) {
+    return data.map(row => [
+      1, row.A, row.B, row.C,
+      row.A * row.A, row.B * row.B, row.C * row.C,
+      row.A * row.B, row.A * row.C, row.B * row.C
+    ]);
+  }
+
+  // Matrix operations for least squares: β = (X'X)^(-1) X'y
+  function transpose(M) {
+    const rows = M.length, cols = M[0].length;
+    const T = [];
+    for (let j = 0; j < cols; j++) {
+      T[j] = [];
+      for (let i = 0; i < rows; i++) T[j][i] = M[i][j];
+    }
+    return T;
+  }
+
+  function matMul(A, B) {
+    const rowsA = A.length, colsA = A[0].length, colsB = B[0].length;
+    const C = [];
+    for (let i = 0; i < rowsA; i++) {
+      C[i] = [];
+      for (let j = 0; j < colsB; j++) {
+        let sum = 0;
+        for (let k = 0; k < colsA; k++) sum += A[i][k] * B[k][j];
+        C[i][j] = sum;
+      }
+    }
+    return C;
+  }
+
+  function matVecMul(M, v) {
+    return M.map(row => row.reduce((s, val, i) => s + val * v[i], 0));
+  }
+
+  // Invert matrix using Gaussian elimination (for small matrices)
+  function invert(M) {
+    const n = M.length;
+    const aug = M.map((row, i) => [...row, ...Array(n).fill(0).map((_, j) => i === j ? 1 : 0)]);
+    for (let i = 0; i < n; i++) {
+      let maxRow = i;
+      for (let k = i + 1; k < n; k++) if (Math.abs(aug[k][i]) > Math.abs(aug[maxRow][i])) maxRow = k;
+      [aug[i], aug[maxRow]] = [aug[maxRow], aug[i]];
+      const pivot = aug[i][i];
+      for (let j = 0; j < 2 * n; j++) aug[i][j] /= pivot;
+      for (let k = 0; k < n; k++) {
+        if (k !== i) {
+          const factor = aug[k][i];
+          for (let j = 0; j < 2 * n; j++) aug[k][j] -= factor * aug[i][j];
+        }
+      }
+    }
+    return aug.map(row => row.slice(n));
+  }
+
+  // Fit model
+  const X = buildDesignMatrix(bbdDesign);
+  const y = bbdDesign.map(r => r.Y);
+  const Xt = transpose(X);
+  const XtX = matMul(Xt, X);
+  const XtXinv = invert(XtX);
+  const Xty = matVecMul(Xt, y);
+  const beta = matVecMul(XtXinv, Xty);
+
+  // Calculate residuals and MSE
+  const yHat = matVecMul(X, beta);
+  const residuals = y.map((yi, i) => yi - yHat[i]);
+  const SSE = residuals.reduce((s, r) => s + r * r, 0);
+  const dfResid = bbdDesign.length - beta.length; // 15 - 10 = 5
+  const MSE = SSE / dfResid;
+  const SE_coefs = XtXinv.map((row, i) => Math.sqrt(MSE * row[i]));
+
+  // t-values and p-values
+  function pValueFromT(t, df) {
+    const absT = Math.abs(t);
+    // Approximation for small df
+    if (df <= 5) {
+      // Use simple approximation
+      const x = df / (df + t * t);
+      return Math.pow(x, df / 2);
+    }
+    // Normal approximation for larger df
+    const a1 = 0.254829592, a2 = -0.284496736, a3 = 1.421413741;
+    const a4 = -1.453152027, a5 = 1.061405429, p = 0.3275911;
+    const xAbs = absT / Math.sqrt(2);
+    const t1 = 1 / (1 + p * xAbs);
+    const erf = 1 - (((((a5 * t1 + a4) * t1) + a3) * t1 + a2) * t1 + a1) * t1 * Math.exp(-xAbs * xAbs);
+    return 2 * (1 - 0.5 * (1 + erf));
+  }
+
+  const tValues = beta.map((b, i) => b / SE_coefs[i]);
+  const pValues = tValues.map(t => pValueFromT(t, dfResid));
+
+  // Term labels
+  const termLabels = ['Intercept', 'A (Dose)', 'B (Mixing)', 'C (Time)', 
+                      'A²', 'B²', 'C²', 'A×B', 'A×C', 'B×C'];
+
+  // Render design table
+  function renderDesignTable() {
+    const tbody = document.getElementById('bbd-design-body');
+    if (!tbody) return;
+    
+    let html = '';
+    bbdDesign.forEach(row => {
+      html += '<tr>';
+      html += `<td style="font-weight:bold;">${row.run}</td>`;
+      ['A', 'B', 'C'].forEach(f => {
+        const val = row[f];
+        let color = '#abb2bf';
+        let symbol = '0';
+        if (val === 1) { color = '#98c379'; symbol = '+1'; }
+        else if (val === -1) { color = '#e06c75'; symbol = '−1'; }
+        html += `<td style="color:${color};">${symbol}</td>`;
+      });
+      html += `<td style="color:#61afef; font-weight:bold;">${row.Y.toFixed(1)}</td>`;
+      html += '</tr>';
+    });
+    tbody.innerHTML = html;
+  }
+
+  // Render coefficients table
+  function renderCoefTable() {
+    const tbody = document.getElementById('bbd-coef-body');
+    if (!tbody) return;
+    
+    let html = '';
+    termLabels.forEach((label, i) => {
+      const coef = beta[i];
+      const se = SE_coefs[i];
+      const tVal = tValues[i];
+      const pVal = pValues[i];
+      const isIntercept = i === 0;
+      const isQuadratic = i >= 4 && i <= 6;
+      const sig = !isIntercept && pVal < 0.05;
+      
+      const rowStyle = sig ? 'background: rgba(152, 195, 121, 0.15);' : '';
+      const labelStyle = isQuadratic ? 'color:#c678dd;' : (isIntercept ? 'color:#888;' : '');
+      const coefColor = sig ? '#98c379' : '#abb2bf';
+      const sigSymbol = sig ? '✓' : '';
+      const sigColor = sig ? '#98c379' : '#6a7280';
+      
+      html += `<tr style="${rowStyle}">`;
+      html += `<td style="${labelStyle}">${label}</td>`;
+      html += `<td style="color:${coefColor}; font-weight:${sig ? 'bold' : 'normal'};">${coef.toFixed(2)}</td>`;
+      html += `<td>${se.toFixed(2)}</td>`;
+      html += `<td>${tVal.toFixed(2)}</td>`;
+      html += `<td style="color:${isIntercept ? '#888' : (pVal < 0.05 ? '#98c379' : '#abb2bf')};">${pVal.toFixed(3)}</td>`;
+      html += `<td style="color:${sigColor}; font-weight:bold;">${sigSymbol}</td>`;
+      html += '</tr>';
+    });
+    tbody.innerHTML = html;
+  }
+
+  // Initialize
+  function init() {
+    renderDesignTable();
+    renderCoefTable();
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+
+  if (typeof Reveal !== 'undefined') {
+    Reveal.on('slidechanged', (event) => {
+      if (event.currentSlide && event.currentSlide.id === 'bbd-example-analysis') {
+        setTimeout(init, 50);
+      }
+    });
+  }
+})();
+</script>
 
 ---
 
@@ -2306,48 +2836,35 @@ window.BBDOverlay = (function() {
 
 ---
 
-<!-- .slide:id="summary-concepts" -->
-## Key Concepts to Remember
-
-<div style="font-size:0.8em;">
-
-| Concept | Definition | Why It Matters |
-|:--------|:-----------|:---------------|
-| **Aliasing** | Effects sharing the same estimate | Limits what we can learn |
-| **Resolution** | Severity of confounding (III, IV, V) | Determines reliability |
-| **Curvature** | Non-linear response ($x^2$ terms) | Needed to find optima |
-| **Center Points** | Runs at midpoint of all factors | Error and model checking |
-
-</div>
-
-***
-
--! **Key formulas:**
--: Fractional factorial: $2^{k-p}$ runs for $k$ factors.
--: PB efficiency: $N$ runs for $N-1$ factors.
-
----
-
 <!-- .slide:id="case-scenarios" -->
-## Group Discussion: Which Design Would You Choose?
+## Group Discussion: Case Scenario
 
--! **Scenario A:** You have 12 potential factors affecting membrane fouling. Budget allows 16 experiments.
+**Scenario:**  
+<!-- layout={rows: 1, columns: 1} -->
+<!-- position={row: 1, column: 1} -->
+You are conducting contract research on membrane fouling. A preliminary assessment suggests that 15 potential factors may influence fouling behaviour. Your task is to identify and quantify the most important 3–5 key factors, including possible interaction and quadratic effects, in order to optimize the process.
+<!-- /position -->
+<!-- /layout -->
 
-***
+<!-- layout={rows: 1, columns: 2} -->
+<!-- position={row: 1, column: 1} -->
 
--! **Scenario B:** Screening identified 3 key factors. The combination of maximum temperature, pressure, and flow rate could damage the equipment.
+**Objective:**  
+- Develop an experimental strategy  
+- Provide a transparent and justifiable cost estimate for the client
 
-***
+<!-- /position -->
+<!-- position={row: 1, column: 2} -->
 
--! **Scenario C:** You completed a 2-level factorial on 4 factors. Results suggest curvature, and you want to find the optimum.
+**Experimental Constraints**
+- One experiment (including buffer time): *1 hour*
+- Personnel cost: *40 € per hour*
+- Consumables: *10 € per experiment*
+- Overhead: *50% surcharge*
+- All costs must be stated *net*
 
-***
-
--! **Scenario D:** You need to optimize a process with 2 factors. All factor combinations are safe to test.
-
-***
-
--? For each scenario, identify the most appropriate design type and explain your reasoning.
+<!-- /position -->
+<!-- /layout -->
 
 <!-- ============================================================
      OVERFLOW DEBUG REPORTER (DISABLED BY DEFAULT)
