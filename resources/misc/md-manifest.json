@@ -246,5 +246,27 @@
     "requirements": [
       "Full Factorial Design"
     ]
+  },
+  {
+    "filename": "clusterAnalysis_I.md",
+    "title": "Cluster Analysis",
+    "keywords": [
+      "cluster analysis",
+      "k-means",
+      "hierarchical clustering",
+      "HCA",
+      "dendrogram",
+      "distance matrix",
+      "euclidean distance",
+      "linkage",
+      "silhouette",
+      "unsupervised learning",
+      "pattern recognition"
+    ],
+    "thumbnail": "resources/icons/cluster-analysis.svg",
+    "requirements": [
+      "Variance",
+      "Distributions"
+    ]
   }
 ]
