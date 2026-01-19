@@ -268,5 +268,27 @@
       "Variance",
       "Distributions"
     ]
+  },
+  {
+    "filename": "clusterAnalysis_II.md",
+    "title": "Cluster Analysis II",
+    "keywords": [
+      "PCA",
+      "principal component analysis",
+      "dimensionality reduction",
+      "loadings",
+      "scores",
+      "scree plot",
+      "eigenvalues",
+      "biplot",
+      "PLS-DA",
+      "ASCA"
+    ],
+    "thumbnail": "resources/icons/cluster-analysis-ii.svg",
+    "requirements": [
+      "Cluster Analysis",
+      "Variance",
+      "Distances"
+    ]
   }
 ]
