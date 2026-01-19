@@ -1,0 +1,400 @@
+<!doctype html>
+<html lang="de">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Notizen-System Demo</title>
+
+	<!-- Reveal CSS -->
+	<link rel="stylesheet" href="dist/reset.css">
+	<link rel="stylesheet" href="dist/reveal.css">
+	<link rel="stylesheet" href="dist/theme/ude.css">
+
+	<!-- Font Awesome -->
+	<link rel="stylesheet" href="vendor/fontawesome/css/all.min.css" />
+
+	<style>
+		#peak-intro-1 {
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			gap: 18px;
+		}
+
+		.peak-intro-content {
+			width: 100%;
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			gap: 36px;
+		}
+
+		.peak-intro-chart-wrap {
+			width: 60%;
+			min-width: 520px;
+		}
+
+		.peak-intro-notes {
+			width: 40%;
+			margin: 0;
+			padding: 0 0 0 26px;
+			list-style: disc;
+			text-align: left;
+			color: var(--ude-black);
+			font-size: 0.75em;
+			line-height: 1.45;
+		}
+
+		#peak-intro-1-chart {
+			width: 100%;
+			height: 520px;
+		}
+
+		.peak-axis {
+			font-size: 20px;
+			font-weight: 700;
+			fill: var(--ude-blue);
+		}
+
+		.peak-axis text {
+			font-size: 20px;
+			font-weight: 700;
+			fill: var(--ude-blue);
+		}
+
+		.peak-axis path,
+		.peak-axis line {
+			stroke: var(--ude-blue);
+			stroke-width: 2px;
+		}
+
+		.peak-grid-major line {
+			stroke: var(--ude-lightblue);
+			stroke-width: 2px;
+		}
+
+		.peak-grid-minor line {
+			stroke: rgba(0, 76, 147, 0.2);
+			stroke-width: 1px;
+		}
+
+		.peak-grid-major path,
+		.peak-grid-minor path {
+			stroke: none;
+		}
+
+		.peak-legend text {
+			font-size: 20px;
+			font-weight: 700;
+			fill: var(--ude-blue);
+		}
+
+		@media (max-width: 1100px) {
+			.peak-intro-content {
+				flex-direction: column;
+				align-items: stretch;
+			}
+
+			.peak-intro-chart-wrap,
+			.peak-intro-notes {
+				width: 100%;
+				min-width: 0;
+			}
+		}
+	</style>
+</head>
+
+<body>
+	<div class="reveal">
+		<div class="slides">
+
+			<section id="title-slide">
+				<h1>Advancing data science</h1>
+				
+				<div style="font-size: 0.75em; color: #888; margin-bottom: 20px;">
+					Near future - input talks Toolbox for implementation:<br>Existing AI & data science frameworks
+				</div>
+				<br><br>
+				<div style="font-size: 0.55em; color: #555; text-align: left;">
+					<i class="fa-solid fa-user" style="color: #004c93;"></i> Gerrit Renner, <br>
+					<i class="fa-solid fa-building" style="color: #004c93;"></i> University of Duisburg-Essen, Instrumental Analytical Chemistry, TC Schmidt Lab,<br>
+					<i class="fa-solid fa-envelope" style="color: #004c93;"></i> gerrit.renner@uni-due.de
+				</div>
+
+			</section>
+
+			<section id="workflow-slide" data-auto-animate>
+				<img src="resources/figures/nts-workflow.webp" alt="Workflow without table" style="width: 100%; height: auto;"><br>
+				<div data-id="cap"><span style="font-size: 0.65em; color: #888;"><i>Non-Target Screening in 2022 (Graphic by Gerrit Renner)</i></span></div>
+			</section>
+
+			<section id="workflow-slide-2" data-auto-animate>
+				<div style="display:flex; gap:24px; align-items:flex-end; flex-wrap:wrap;">
+					<!-- Left column: list then image -->
+					<div style="flex:1 1 420px; min-width:280px; display:flex; flex-direction:column; justify-content:flex-end;">
+						<ul style="margin:0 0 12px 0; padding:0; list-style:none; font-size:.7em; color:#004c93; display:flex; flex-direction:column; gap:6px;">
+							<li style="display:flex; align-items:normal; gap:8px;">
+								<i class="fa-solid fa-lightbulb" style="font-size:1em; color:#f5c542;"></i>
+								<span>NTS processing is a multi-step workflow</span>
+							</li>
+							<li style="display:flex; align-items:normal; gap:8px;">
+								<i class="fa-solid fa-lightbulb" style="font-size:1em; color:#f5c542;"></i>
+								<span>For each step, various algorithms available</span>
+							</li>
+							<br>
+							<li style="display:flex; align-items:normal; gap:8px;">
+								<i class="fa-solid fa-bolt" style="font-size:1em; color:#e0a800;"></i>
+								<span>Most steps require user-defined settings/parameters</span>
+							</li>
+							<li style="display:flex; align-items:normal; gap:8px;">
+								<i class="fa-solid fa-bolt" style="font-size:1em; color:#e0a800;"></i>
+								<span>I/o not yet standardized</span>
+							</li>
+						</ul>
+						<img src="resources/figures/nts-workflow.webp" alt="Workflow" style="width:100%; height:auto; border-radius:6px;">
+					</div>
+
+					<!-- Right column: image only -->
+					<div style="flex:1 1 420px; min-width:280px; display:flex; align-items:flex-end; justify-content:center;">
+						<img src="resources/figures/nts-workflow-table.webp" alt="Workflow table" style="width:100%; max-width:520px; height:auto; border-radius:6px;">
+					</div>
+				</div>
+
+				<br>
+				<div data-id="cap">
+					<span style="font-size:0.65em; color:#888;">
+						<i>Non-Target Screening in 2022 (Graphic by Gerrit Renner)</i>
+					</span>
+				</div>
+			</section>
+
+			<section id="peak-intro-1">
+				<h2>Peak detection: still challenging</h2>
+				<div class="peak-intro-content">
+					<div class="peak-intro-chart-wrap">
+						<div id="peak-intro-1-chart"></div>
+					</div>
+					<ul class="peak-intro-notes" style="margin:0 0 12px 0; padding:0; list-style:none; font-size:.7em; color:#004c93; display:flex; flex-direction:column; gap:6px;">
+						<li style="display:flex; align-items:normal; gap:8px;">
+							<i class="fa-solid fa-circle-question" style="font-size:1em; color:#b8103b;"></i>
+							<span>Can we detect peaks?</span>
+						</li>
+						<li style="display:flex; align-items:normal; gap:8px;">
+							<i class="fa-solid fa-circle-question" style="font-size:1em; color:#b8103b;"></i>
+							<span>How reliable are peak detections?</span>
+						</li>
+						<li style="display:flex; align-items:normal; gap:8px;">
+							<i class="fa-solid fa-circle-question" style="font-size:1em; color:#b8103b;"></i>
+							<span>How similar are peaks? (Component grouping)</span>
+						</li>
+						<br><br>
+						<li style="display:flex; align-items:normal; gap:8px;">
+							<i class="fa-solid fa-arrow-right" style="font-size:1em; color:#f5c542;"></i>
+							<span style="font-weight: bold;">Similar challenges for all steps within NTS!</span>
+						</li>
+					</ul>
+				</div>
+				<div data-id="cap">
+					<span style="font-size:0.65em; color:#888;">
+						<i>Examplary generic data</i>
+					</span>
+				</div>
+			</section>
+
+			<section id="qalgorithms-philosophy" data-auto-animate>
+				<h2>Odea-Project: QAlgorithms</h2>
+				<strong>NTS Processing Step</strong>
+				<div style="display: flex; flex-direction: row; align-items: center; gap: 12px; justify-content: center;">
+				<div data-id="data-box" style="height: 150px; width:150px; background: #888; border-radius: 6px;"><i class="fa-solid fa-arrow-right-to-bracket"></i><strong>Data in</strong></div>
+				<div data-id="algorithm-box" style="height: 500px; width: 1000px; border-radius: 6px; border-color: #004c93; border-width: 2px; border-style: solid;"></div>
+				<div data-id="output-box" style="height: 150px; width:150px; background: var(--ude-accent-4); border-radius: 6px;"><i class="fa-solid fa-arrow-right-from-bracket"></i><strong>Data out</strong></div>
+				</div>
+				<div data-id="cap">
+					<span style="font-size: 0.65em; color: #888;"><i>Generic q-algorithm model</i></span>
+				</div>
+			</section>
+
+		</div>
+	</div>
+
+	<script src="https://d3js.org/d3.v7.min.js"></script>
+
+	<!-- Reveal JS -->
+	<script src="dist/reveal.js"></script>
+	<script src="plugin/markdown/markdown.js"></script>
+	<script src="plugin/highlight/highlight.js"></script>
+
+	<!-- Initialize Reveal -->
+	<script>
+		Reveal.initialize({
+			hash: true,
+			plugins: [ RevealMarkdown, RevealHighlight ],
+			center: true,
+			transition: 'slide'
+		});
+
+		function renderPeakIntroChart() {
+			const container = document.getElementById('peak-intro-1-chart');
+			if (!container || !window.d3) {
+				return;
+			}
+
+			container.innerHTML = '';
+
+			const width = Math.min(container.clientWidth || 900, 1000);
+			const height = container.clientHeight || 520;
+			const margin = { top: 30, right: 30, bottom: 90, left: 110 };
+			const innerWidth = width - margin.left - margin.right;
+			const innerHeight = height - margin.top - margin.bottom;
+
+			const svg = d3.select(container)
+				.append('svg')
+				.attr('width', width)
+				.attr('height', height)
+				.attr('viewBox', `0 0 ${width} ${height}`);
+
+			const chart = svg.append('g')
+				.attr('transform', `translate(${margin.left},${margin.top})`);
+
+			const xDomain = [30, 80];
+			const xScale = d3.scaleLinear()
+				.domain(xDomain)
+				.range([0, innerWidth]);
+
+			const mu = 55;
+			const sigmaLeft = 4;
+			const sigmaRight = 10;
+			const xValues = d3.range(30, 80.5, 2.5);
+			const peakShape = xValues.map(x => {
+				const sigma = x < mu ? sigmaLeft : sigmaRight;
+				return { x, peak: Math.exp(-Math.pow((x - mu) / sigma, 2)) };
+			});
+
+			const datasets = [
+				{ scale: 85, baseline: 8, noise: d3.randomNormal(0, 4), color: 'var(--ude-accent-1)' },
+				{ scale: 8.5, baseline: 4.5, noise: d3.randomNormal(0, 2.6), color: 'var(--ude-accent-2)' },
+				{ scale: 25.5, baseline: 6, noise: d3.randomNormal(0, 3.2), color: 'var(--ude-accent-3)' }
+			];
+
+			const series = datasets.map(dataset =>
+				peakShape.map(point => ({
+					x: point.x,
+					y: Math.max(0, dataset.scale * point.peak + dataset.baseline + dataset.noise())
+				}))
+			);
+
+			const yMax = d3.max(series.flat(), d => d.y) * 1.1;
+			const yScale = d3.scaleLinear()
+				.domain([0, yMax])
+				.nice()
+				.range([innerHeight, 0]);
+
+			const xMinorTicks = d3.ticks(xDomain[0], xDomain[1], 24);
+			const yMinorTicks = d3.ticks(0, yMax, 20);
+
+			chart.append('g')
+				.attr('class', 'peak-grid-minor')
+				.attr('transform', `translate(0,${innerHeight})`)
+				.call(d3.axisBottom(xScale)
+					.tickValues(xMinorTicks)
+					.tickSize(-innerHeight)
+					.tickFormat(''));
+
+			chart.append('g')
+				.attr('class', 'peak-grid-minor')
+				.call(d3.axisLeft(yScale)
+					.tickValues(yMinorTicks)
+					.tickSize(-innerWidth)
+					.tickFormat(''));
+
+			chart.append('g')
+				.attr('class', 'peak-grid-major')
+				.attr('transform', `translate(0,${innerHeight})`)
+				.call(d3.axisBottom(xScale)
+					.ticks(6)
+					.tickSize(-innerHeight)
+					.tickFormat(''));
+
+			chart.append('g')
+				.attr('class', 'peak-grid-major')
+				.call(d3.axisLeft(yScale)
+					.ticks(5)
+					.tickSize(-innerWidth)
+					.tickFormat(''));
+
+			chart.append('g')
+				.attr('class', 'peak-axis')
+				.attr('transform', `translate(0,${innerHeight})`)
+				.call(d3.axisBottom(xScale).ticks(6));
+
+			chart.append('g')
+				.attr('class', 'peak-axis')
+				.call(d3.axisLeft(yScale).ticks(5));
+
+			const line = d3.line()
+				.x(d => xScale(d.x))
+				.y(d => yScale(d.y))
+				.curve(d3.curveLinear);
+
+			series.forEach((data, index) => {
+				chart.append('path')
+					.datum(data)
+					.attr('fill', 'none')
+					.attr('stroke', datasets[index].color)
+					.attr('stroke-width', index === 0 ? 4 : 3)
+					.attr('opacity', index === 0 ? 1 : 0.85)
+					.attr('d', line);
+			});
+
+			const legendLabels = ['Signal 1', 'Signal 2', 'Signal 3'];
+			const legend = chart.append('g')
+				.attr('class', 'peak-legend')
+				.attr('transform', `translate(${innerWidth - 360},${10})`);
+
+			legendLabels.forEach((label, index) => {
+				const row = legend.append('g')
+					.attr('transform', `translate(0,${index * 30})`);
+					
+
+				row.append('line')
+					.attr('x1', 0)
+					.attr('x2', 36)
+					.attr('y1', 8)
+					.attr('y2', 8)
+					.attr('stroke', datasets[index].color)
+					.attr('stroke-width', index === 0 ? 4 : 3);
+
+				row.append('text')
+					.attr('x', 48)
+					.attr('y', 14)
+					.text(label);
+			});
+
+			chart.append('text')
+				.attr('class', 'peak-axis')
+				.attr('x', innerWidth / 2)
+				.attr('y', innerHeight + 70)
+				.attr('text-anchor', 'middle')
+				.text('Time or m/z');
+
+			chart.append('text')
+				.attr('class', 'peak-axis')
+				.attr('x', -innerHeight / 2)
+				.attr('y', -70)
+				.attr('transform', 'rotate(-90)')
+				.attr('text-anchor', 'middle')
+				.text('Intensity');
+		}
+
+		window.addEventListener('load', () => {
+			renderPeakIntroChart();
+			Reveal.on('resize', renderPeakIntroChart);
+			Reveal.on('slidechanged', event => {
+				if (event.currentSlide && event.currentSlide.id === 'peak-intro-1') {
+					renderPeakIntroChart();
+				}
+			});
+		});
+	</script>
+</body>
+</html>

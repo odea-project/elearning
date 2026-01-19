@@ -1,0 +1,460 @@
+/* =========================================================
+   UDE THEME (Reveal.js) – ude.css
+   Basis: odea.css (Struktur/Komponenten), aber UDE CI Farben
+   ========================================================= */
+
+/* ---------------------------------------------------------
+   FONTS
+   --------------------------------------------------------- */
+/* Hinweis: In odea.css sind mehrere Fonts eingebunden (Press Start 2P, Humor Sans etc.).
+   Für UDE-Layout ist typischerweise eine nüchterne Sans sinnvoll.
+   Du kannst Montserrat behalten (ist bereits im Projekt). */
+
+@font-face {
+  font-family: 'Montserrat';
+  src: url("./fonts/montserrat/Montserrat-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Montserrat';
+  src: url("./fonts/montserrat/Montserrat-Bold.ttf") format("truetype");
+  font-weight: 700;
+  font-style: normal;
+}
+
+/* ---------------------------------------------------------
+   UDE COLOR SYSTEM (CSS VARIABLES)
+   --------------------------------------------------------- */
+:root {
+  /* Primär/Sekundär/Tertiär/Copy */
+  --ude-blue:      #004c93; /* Uni-Blau */
+  --ude-beige:     #efe4bf; /* Uni-Beige */
+  --ude-lightblue: #dfe4f2; /* Uni-Hellblau */
+  --ude-white:     #ffffff;
+  --ude-black:     #1a171b; /* Copytextfarbe */
+
+  /* Zusatzfarben (nur ergänzend; nicht als Mengentext) */
+  --ude-accent-1: #ec7206; /* orange */
+  --ude-accent-2: #61a27c; /* gruen */
+  --ude-accent-3: #b8103b; /* rot */
+  --ude-accent-4: #feca00; /* gelb */
+
+  /* Zusatzfarben Abstufungen (65% / 45%) */
+  --ude-accent-1-65: rgba(236,114,  6, .65);
+  --ude-accent-1-45: rgba(236,114,  6, .45);
+  --ude-accent-2-65: rgba( 97,162,124, .65);
+  --ude-accent-2-45: rgba( 97,162,124, .45);
+  --ude-accent-3-65: rgba(184, 16, 59, .65);
+  --ude-accent-3-45: rgba(184, 16, 59, .45);
+  --ude-accent-4-65: rgba(254,202,  0, .65);
+  --ude-accent-4-45: rgba(254,202,  0, .45);
+
+  /* Reveal-Variablen */
+  --r-background-color: var(--ude-white);
+  --r-main-font: 'Montserrat', Helvetica, Arial, sans-serif;
+  --r-main-font-size: 2.2em;
+  --r-main-color: var(--ude-black);
+
+  --r-heading-font: 'Montserrat', Helvetica, Arial, sans-serif;
+  --r-heading-font-weight: 700;
+  --r-heading-text-transform: none;
+  --r-heading-letter-spacing: normal;
+  --r-heading-line-height: 1.15;
+
+  --r-heading-color: var(--ude-blue);
+
+  --r-block-margin: 18px;
+  --r-heading-margin: 28px 0 16px 0;
+
+  --r-code-font: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+
+  --r-link-color: var(--ude-blue);
+  --r-link-color-dark: #003a72;
+  --r-link-color-hover: #0063bf;
+
+  --r-selection-background-color: rgba(0,76,147,.25);
+  --r-selection-color: var(--ude-black);
+
+  /* UI */
+  --ude-card-bg: rgba(223,228,242,.55);  /* hellblau als ruhiger Hintergrund */
+  --ude-border: rgba(0,76,147,.25);      /* blau, dezent */
+  --ude-shadow: 0 8px 24px rgba(26,23,27,.08);
+}
+
+/* ---------------------------------------------------------
+   BASE / GLOBAL
+   --------------------------------------------------------- */
+.reveal-viewport {
+  background: var(--r-background-color);
+}
+
+.reveal {
+  font-family: var(--r-main-font);
+  font-size: var(--r-main-font-size);
+  color: var(--r-main-color);
+}
+
+.reveal ::selection,
+.reveal ::-moz-selection {
+  color: var(--r-selection-color);
+  background: var(--r-selection-background-color);
+  text-shadow: none;
+}
+
+.reveal .slides section,
+.reveal .slides section > section {
+  line-height: 1.35;
+  font-weight: 400;
+}
+
+/* Entfernt den harten Versatz aus odea.css */
+.reveal .slides section.present {
+  right: auto !important;
+}
+
+.reveal p {
+  margin: var(--r-block-margin) 0;
+  line-height: 1.35;
+}
+
+.reveal img,
+.reveal video,
+.reveal iframe {
+  max-width: 95%;
+  max-height: 95%;
+}
+
+.reveal img {
+  margin: var(--r-block-margin) 0;
+  border-radius: 10px;
+}
+
+/* Bold/Emphasis: UDE-konform (kein Neon) */
+.reveal strong,
+.reveal b {
+  font-weight: 700;
+  color: var(--ude-black);
+}
+.reveal em,
+.reveal i {
+  font-style: italic;
+}
+
+/* ---------------------------------------------------------
+   HEADINGS
+   --------------------------------------------------------- */
+.reveal h1,
+.reveal h2,
+.reveal h3,
+.reveal h4,
+.reveal h5,
+.reveal h6 {
+  margin: var(--r-heading-margin);
+  color: var(--r-heading-color);
+  font-family: var(--r-heading-font);
+  font-weight: var(--r-heading-font-weight);
+  line-height: var(--r-heading-line-height);
+  letter-spacing: var(--r-heading-letter-spacing);
+  text-transform: var(--r-heading-text-transform);
+  text-shadow: none;
+  word-wrap: break-word;
+}
+
+.reveal h1 { font-size: 1.35em; }
+.reveal h2 { font-size: 1.05em; }
+.reveal h3 { font-size: 0.85em; }
+.reveal h4 { font-size: 0.70em; }
+
+/* ---------------------------------------------------------
+   SLIDE “CARD” LOOK (ruhig, CI-nah)
+   --------------------------------------------------------- */
+.reveal .slides box {
+  position: absolute;
+  background: var(--ude-white);
+  border-radius: 16px;
+  padding: 28px 34px;
+  margin: 18px;
+  box-shadow: var(--ude-shadow);
+  border: 1px solid var(--ude-border);
+}
+
+/* Optional: hellblauer Hintergrund für einzelne Slides */
+.reveal .slides section.ude-bg-light {
+  background: var(--ude-lightblue);
+}
+
+/* ---------------------------------------------------------
+   LISTS
+   --------------------------------------------------------- */
+.reveal ol,
+.reveal dl,
+.reveal ul {
+  display: inline-block;
+  text-align: left;
+  margin: 0 0 0 1.05em;
+}
+
+.reveal ul { list-style-type: disc; }
+.reveal ol { list-style-type: decimal; }
+
+.reveal ul ul { list-style-type: circle; }
+.reveal ul ul ul { list-style-type: square; }
+
+.reveal ul ul,
+.reveal ul ol,
+.reveal ol ol,
+.reveal ol ul {
+  display: block;
+  margin-left: 34px;
+}
+
+/* Marker in Uni-Blau */
+.reveal .slides ul li::marker,
+.reveal .slides ol li::marker {
+  color: var(--ude-blue);
+}
+
+/* Workflow slide list (custom, no markers) */
+.reveal .workflow-list {
+  margin: 0 0 12px 0;
+  padding: 0;
+  list-style: none;
+  font-size: 0.7em;
+  color: var(--ude-blue);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.reveal .workflow-list-item {
+  display: flex;
+  align-items: normal;
+  gap: 8px;
+}
+.reveal .workflow-icon {
+  font-size: 1em;
+}
+.reveal .workflow-icon.idea {
+  color: #f5c542;
+}
+.reveal .workflow-icon.bolt {
+  color: #e0a800;
+}
+
+/* ---------------------------------------------------------
+   BLOCKQUOTES & CODE
+   --------------------------------------------------------- */
+.reveal blockquote {
+  display: block;
+  width: 78%;
+  margin: var(--r-block-margin) auto;
+  padding: 14px 18px;
+  font-style: italic;
+  background: var(--ude-lightblue);
+  border-left: 6px solid var(--ude-blue);
+  border-radius: 12px;
+  box-shadow: none;
+}
+
+.reveal pre {
+  display: block;
+  width: 100%;
+  margin: var(--r-block-margin) auto;
+  text-align: left;
+  font-size: 0.85em;
+  font-family: var(--r-code-font);
+  line-height: 1.25em;
+  word-wrap: break-word;
+}
+
+.reveal code {
+  font-family: var(--r-code-font);
+  text-transform: none;
+  tab-size: 2;
+  color: var(--ude-black);
+  background: rgba(239,228,191,.45); /* Beige, dezent */
+  padding: 0.08em 0.25em;
+  border-radius: 6px;
+}
+
+.reveal pre code {
+  display: block;
+  padding: 14px 16px;
+  overflow: auto;
+  max-height: 420px;
+  background: rgba(223,228,242,.75); /* Hellblau */
+  border: 1px solid rgba(0,76,147,.18);
+  border-radius: 12px;
+  color: var(--ude-black);
+}
+
+/* ---------------------------------------------------------
+   TABLES (UDE-stil, hell + klar)
+   --------------------------------------------------------- */
+.reveal table {
+  margin: auto;
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+.reveal .slides table {
+  width: 86%;
+  margin: 1em auto;
+  border-collapse: separate;
+  border-spacing: 0;
+  color: var(--ude-black);
+  border: 1px solid rgba(0,76,147,.20);
+  border-radius: 12px;
+  overflow: hidden;
+  background: var(--ude-white);
+  box-shadow: none;
+}
+
+.reveal .slides table thead th {
+  background-color: var(--ude-blue);
+  color: var(--ude-white);
+  padding: 0.65em 0.9em;
+  font-weight: 700;
+  border: none;
+}
+
+.reveal .slides table tbody td {
+  background-color: rgba(223,228,242,.35);
+  padding: 0.55em 0.9em;
+  border-top: 1px solid rgba(0,76,147,.12);
+}
+
+.reveal .slides table tbody tr:nth-child(even) td {
+  background-color: rgba(223,228,242,.55);
+}
+
+.reveal .slides table th,
+.reveal .slides table td {
+  text-align: center;
+}
+
+/* ---------------------------------------------------------
+   LINKS
+   --------------------------------------------------------- */
+.reveal a {
+  color: var(--r-link-color);
+  text-decoration: none;
+  border-bottom: 2px solid rgba(0,76,147,.25);
+  transition: color 0.15s ease, border-color 0.15s ease;
+}
+.reveal a:hover {
+  color: var(--r-link-color-hover);
+  border-bottom-color: rgba(0,99,191,.5);
+}
+
+/* ---------------------------------------------------------
+   NAVIGATION & PROGRESS
+   --------------------------------------------------------- */
+.reveal .controls {
+  color: var(--ude-blue);
+}
+.reveal .progress {
+  background: rgba(26,23,27,.08);
+}
+.reveal .progress span {
+  background: var(--ude-blue);
+}
+
+/* ---------------------------------------------------------
+   TASKBAR (Top-Leiste) – UDE-Variante
+   --------------------------------------------------------- */
+.taskbar {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 44px;
+  width: 100%;
+  background: var(--ude-blue);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  border-top-left-radius: 16px;
+  border-top-right-radius: 16px;
+  box-shadow: none;
+  overflow: hidden;
+}
+
+.taskbar,
+.taskbar * {
+  color: var(--ude-white);
+  font-size: 0.55em;
+  font-weight: 700;
+}
+
+/* Optional: Beige-Variante (z. B. für Titel-/Intro-Slides) */
+.taskbar.ude-taskbar-beige {
+  background: var(--ude-beige);
+}
+.taskbar.ude-taskbar-beige,
+.taskbar.ude-taskbar-beige * {
+  color: var(--ude-black);
+}
+
+/* ---------------------------------------------------------
+   FOCUS / INFO BOXES (Zusatzfarben: nur als Akzent)
+   --------------------------------------------------------- */
+.ude-box {
+  display: block;
+  padding: 14px 16px;
+  margin: 12px 0;
+  border-radius: 12px;
+  background: var(--ude-card-bg);
+  border: 1px solid rgba(0,76,147,.18);
+  box-shadow: none;
+  color: var(--ude-black);
+  text-align: left;
+  font-size: 0.8em;
+}
+
+/* Pro Slide idealerweise nur eine Akzentklasse nutzen */
+.ude-accent-1 { border-left: 10px solid var(--ude-accent-1); }
+.ude-accent-2 { border-left: 10px solid var(--ude-accent-2); }
+.ude-accent-3 { border-left: 10px solid var(--ude-accent-3); }
+.ude-accent-4 { border-left: 10px solid var(--ude-accent-4); }
+
+/* Abstufungen 65/45 (z. B. für “mildere” Fokusboxen) */
+.ude-accent-1-65 { border-left: 10px solid var(--ude-accent-1-65); }
+.ude-accent-1-45 { border-left: 10px solid var(--ude-accent-1-45); }
+.ude-accent-2-65 { border-left: 10px solid var(--ude-accent-2-65); }
+.ude-accent-2-45 { border-left: 10px solid var(--ude-accent-2-45); }
+.ude-accent-3-65 { border-left: 10px solid var(--ude-accent-3-65); }
+.ude-accent-3-45 { border-left: 10px solid var(--ude-accent-3-45); }
+.ude-accent-4-65 { border-left: 10px solid var(--ude-accent-4-65); }
+.ude-accent-4-45 { border-left: 10px solid var(--ude-accent-4-45); }
+
+/* ---------------------------------------------------------
+   HORIZONTAL RULES
+   --------------------------------------------------------- */
+.reveal hr {
+  border: none;
+  height: 3px;
+  background: linear-gradient(90deg, var(--ude-blue), rgba(0,76,147,0));
+  margin: 30px 0;
+}
+
+/* ---------------------------------------------------------
+   FOOTER (dezent)
+   --------------------------------------------------------- */
+.footer-global {
+  position: fixed;
+  bottom: 10px;
+  left: 16px;
+  font-size: 12px;
+  color: rgba(26,23,27,.55);
+}
+
+/* ---------------------------------------------------------
+   PRINT
+   --------------------------------------------------------- */
+@media print {
+  .backgrounds,
+  .slide-background {
+    background-color: var(--ude-white) !important;
+    -webkit-print-color-adjust: exact;
+  }
+}
