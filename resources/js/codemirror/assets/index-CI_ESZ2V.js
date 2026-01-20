@@ -21759,6 +21759,40 @@ var __codemirror__ = (() => {
     }
   };
   var rLang = StreamLanguage.define(rExtended);
+  var jsonMode = {
+    name: "json",
+    startState: () => ({}),
+    token: (stream) => {
+      if (stream.eatSpace()) {
+        return null;
+      }
+      const ch = stream.peek();
+      if (ch === '"') {
+        stream.next();
+        let escaped = false;
+        while (!stream.eol()) {
+          const next = stream.next();
+          if (next === '"' && !escaped) {
+            break;
+          }
+          escaped = !escaped && next === "\\";
+        }
+        return "string";
+      }
+      if (stream.match(/-?\d+(\.\d+)?([eE][+-]?\d+)?/)) {
+        return "number";
+      }
+      if (stream.match(/true|false|null/)) {
+        return "atom";
+      }
+      if (stream.match(/[{}\[\],:]/)) {
+        return "punctuation";
+      }
+      stream.next();
+      return null;
+    }
+  };
+  var jsonLang = StreamLanguage.define(jsonMode);
   var basicSetup = [
     lineNumbers(),
     highlightActiveLineGutter(),
@@ -21901,6 +21935,7 @@ var __codemirror__ = (() => {
   window.python = python;
   window.monokai = monokai;
   window.rLanguageSupport = rLanguageSupport;
+  window.jsonLanguageSupport = jsonLang;
   window.createPythonEditor = function(parent, doc2) {
     return new EditorView({
       state: EditorState.create({

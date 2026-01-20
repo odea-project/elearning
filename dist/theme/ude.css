@@ -261,7 +261,7 @@
   width: 100%;
   margin: var(--r-block-margin) auto;
   text-align: left;
-  font-size: 0.85em;
+  font-size: 0.75em;
   font-family: var(--r-code-font);
   line-height: 1.25em;
   word-wrap: break-word;
@@ -457,4 +457,22 @@
     background-color: var(--ude-white) !important;
     -webkit-print-color-adjust: exact;
   }
+}
+
+
+/*---------------------------------------------------
+  CLOCK WIDGET
+---------------------------------------------------*/
+#clock {
+  position: fixed;
+  top: 10px;
+  right: 20px;
+  font-size: 2.5em;
+  font-weight: bold;
+  font-family: 'Montserrat', Source Sans Pro, Helvetica, sans-serif;
+  color: #333;
+  background-color: rgba(255, 255, 255, 0.8);
+  padding: 5px 10px;
+  border-radius: 5px;
+  z-index: 1000;
 }

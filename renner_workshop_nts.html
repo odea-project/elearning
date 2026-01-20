@@ -13,6 +13,9 @@
 	<!-- Font Awesome -->
 	<link rel="stylesheet" href="vendor/fontawesome/css/all.min.css" />
 
+	<!-- Codemirror for code highlighting -->
+	<link rel="stylesheet" href="resources/js/codemirror/assets/index-DEWcn_zU.css">
+
 	<style>
 		#peak-intro-1 {
 			display: flex;
@@ -87,6 +90,163 @@
 			font-size: 20px;
 			font-weight: 700;
 			fill: var(--ude-blue);
+		}
+
+		.algo-flow {
+			height: 500px;
+			width: 1000px;
+			border-radius: 6px;
+			border: 2px solid #004c93;
+			display: flex;
+			align-items: center;
+			justify-content: flex-start;
+			gap: 0;
+			padding: 16px 8px 0 8px;
+			box-sizing: border-box;
+		}
+
+		.algo-flow-small {
+			height: 110px;
+			width: 100px;
+			border-radius: 6px;
+			border: 2px solid #000000;
+			background-color: #000000;
+			display: flex;
+			align-items: center;
+			justify-content: flex-start;
+			gap: 0;
+			padding: 0px 0px 0 0px;
+			box-sizing: border-box;
+		}
+
+		.workflow-stair {
+			display: flex;
+			flex-direction: column;
+			align-items: flex-start;
+			gap: 8px;
+		}
+
+		.workflow-step {
+			display: flex;
+			align-items: center;
+			gap: 2px;
+		}
+
+		.workflow-inout {
+			width: 110px;
+		}
+
+		.workflow-step[data-step="2"] { margin-left: 175px; }
+		.workflow-step[data-step="3"] { margin-left: 400px; }
+		.workflow-step[data-step="4"] { margin-left: 555px; }
+
+		.qr-overlay {
+			position: absolute;
+			top: 50px;
+			right: 24px;
+			z-index: 3;
+			display: inline-flex;
+			flex-direction: column;
+			max-width: 180px;
+		}
+
+		.qr-overlay img {
+			width: 180px;
+			height: 180px;
+			border-radius: 6px;
+			box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
+			background: #ffffff;
+		}
+
+		.algo-step {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			gap: 12px;
+			flex: 0 0 auto;
+		}
+
+		.algo-step-core {
+			display: flex;
+			align-items: center;
+			gap: 0;
+		}
+
+		.algo-path {
+			height: 20px;
+			width: 40px;
+			background: #004c93;
+		}
+
+		.algo-box {
+			height: 200px;
+			width: 200px;
+			border-radius: 6px;
+			font-size: 0.7em;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			text-align: center;
+			color: #ffffff;
+		}
+
+		.in-out-box-small {
+			height: 150px;
+			width: auto;
+			border-radius: 6px;
+			font-size: 0.7em;
+			display: flex;
+			flex-direction: column;
+			gap: 6px;
+			align-items: center;
+			justify-content: center;
+			text-align: center;
+			color: #000000;
+		}
+
+		.algo-box strong {
+			color: inherit;
+		}
+
+		.algo-peakfit-box {
+			width: 220px;
+			height: 140px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			background: transparent;
+			border: none;
+		}
+
+		.algo-peakfit-chart {
+			width: 220px;
+			height: 140px;
+		}
+
+		.algo-peakfit-chart svg {
+			width: 100%;
+			height: 100%;
+		}
+
+		.algo-chart-axis path,
+		.algo-chart-axis line {
+			stroke: #3b3b3b;
+		}
+
+		.algo-chart-axis text {
+			font-size: 8px;
+			fill: #3b3b3b;
+		}
+
+		.qalgo-cm {
+			max-width: 900px;
+			margin: 0 auto;
+		}
+
+		.qalgo-cm .cm-editor {
+			font-size: 0.7em;
+			border-radius: 8px;
+			text-align: left;
 		}
 
 		@media (max-width: 1100px) {
@@ -201,23 +361,263 @@
 				</div>
 			</section>
 
-			<section id="qalgorithms-philosophy" data-auto-animate>
+			<section id="venn-diagram-algorithms">
+				<h2>Algorithm comparison: Limited overlap</h2>
+				<div style="display: flex; gap: 12px; align-items: flex-start; justify-content: center;">
+					<!-- Left column: Venn Diagram (66%) -->
+					<div style="flex: 2; display: flex; justify-content: center;">
+						<svg id="venn-diagram-svg" width="400" height="400" viewBox="50 75 400 300">
+							<!-- Algorithm A circle -->
+							<circle cx="180" cy="180" r="120" fill="var(--ude-accent-1)" fill-opacity="0.5" stroke="var(--ude-accent-1)" stroke-width="3"/>
+							<!-- Algorithm B circle -->
+							<circle cx="320" cy="180" r="120" fill="var(--ude-accent-2)" fill-opacity="0.5" stroke="var(--ude-accent-2)" stroke-width="3"/>
+							<!-- Algorithm C circle -->
+							<circle cx="250" cy="300" r="120" fill="var(--ude-accent-3)" fill-opacity="0.5" stroke="var(--ude-accent-3)" stroke-width="3"/>
+							
+							<!-- Labels -->
+							<text x="120" y="140" font-size="18" font-weight="bold" fill="#004c93">Algorithm A</text>
+							<text x="310" y="140" font-size="18" font-weight="bold" fill="#004c93">Algorithm B</text>
+							<text x="210" y="380" font-size="18" font-weight="bold" fill="#004c93">Algorithm C</text>
+							
+							<!-- Small overlap indicator -->
+							<text x="250" y="220" font-size="14" font-weight="bold" fill="#333" text-anchor="middle">~5-20%</text>
+							<text x="250" y="238" font-size="12" fill="#000" text-anchor="middle">overlap</text>
+						</svg>
+					</div>
+					
+					<!-- Right column: Bullet points (33%) -->
+					<div style="flex: 1; min-width: 280px;">
+						<ul style="margin: 0; padding: 0; list-style: none; font-size: 0.7em; color: #004c93; display: flex; flex-direction: column; gap: 10px;">
+							<li style="display: flex; align-items: flex-start; gap: 8px;">
+								<i class="fa-solid fa-circle-xmark" style="font-size: 1em; color: #b8103b; margin-top: 3px;"></i>
+								<span><strong>Different sets:</strong> Algorithms detect different peaks/features entirely</span>
+							</li>
+							<li style="display: flex; align-items: flex-start; gap: 8px;">
+								<i class="fa-solid fa-circle-xmark" style="font-size: 1em; color: #b8103b; margin-top: 3px;"></i>
+								<span><strong>Different values:</strong> Same features, but different boundaries, intensities, areas</span>
+							</li>
+							<br>
+							<li style="display: flex; align-items: flex-start; gap: 8px;">
+								<i class="fa-solid fa-arrow-right" style="font-size: 1em; color: #f5c542; margin-top: 3px;"></i>
+								<span><strong>Consequence:</strong> Results are often not comparable across studies</span>
+							</li>
+							<li style="display: flex; align-items: flex-start; gap: 8px;">
+								<i class="fa-solid fa-lightbulb" style="font-size: 1em; color: #f5c542; margin-top: 3px;"></i>
+								<span><strong>Need:</strong> Uncertainty information for all reported results</span>
+							</li>
+						</ul>
+					</div>
+				</div>
+				
+				<!-- References footnote -->
+				<div style="margin-top: 24px; font-size: 0.45em; color: #888; text-align: left; padding: 0 20px; position: absolute; bottom: 0px;">
+					<strong>References:</strong><br>
+					<span style="display: block; margin-top: 4px;">a) Renner & Reuschenbach (2023). <i>Anal. Bioanal. Chem.</i>, 415(18), 4111-4123.</span>
+					<span style="display: block;">b) Hohrenk et al. (2019). <i>Anal. Chem.</i>, 92(2), 1898-1907.</span>
+					<span style="display: block;">c) Myers et al. (2017). <i>Anal. Chem.</i>, 89(17), 8696-8703.</span>
+				</div>
+			</section>
+
+			<section id="qalgorithms-philosophy-1" data-auto-animate>
 				<h2>Odea-Project: QAlgorithms</h2>
-				<strong>NTS Processing Step</strong>
+				<strong data-id="nts-processing-step-label">NTS Processing Step</strong>
 				<div style="display: flex; flex-direction: row; align-items: center; gap: 12px; justify-content: center;">
-				<div data-id="data-box" style="height: 150px; width:150px; background: #888; border-radius: 6px;"><i class="fa-solid fa-arrow-right-to-bracket"></i><strong>Data in</strong></div>
-				<div data-id="algorithm-box" style="height: 500px; width: 1000px; border-radius: 6px; border-color: #004c93; border-width: 2px; border-style: solid;"></div>
-				<div data-id="output-box" style="height: 150px; width:150px; background: var(--ude-accent-4); border-radius: 6px;"><i class="fa-solid fa-arrow-right-from-bracket"></i><strong>Data out</strong></div>
+					<div data-id="data-box" class="in-out-box-small" style="background: #888;"><i class="fa-solid fa-arrow-right-to-bracket"></i><strong>Data<br>in</strong></div>
+					<div data-id="algorithm-box" class="algo-flow">
+						<div class="algo-step" data-id="algo-step-1">
+							<div class="algo-peakfit-box" data-id="algo-peakfit-1"></div>
+							<div class="algo-step-core">
+								<div data-id="algo-main-path-1" class="algo-path"></div>
+								<div data-id="algo-box-1" class="algo-box" style="background: var(--ude-accent-1);">
+									<strong>Apply Data Model</strong>
+								</div>
+								<div data-id="algo-main-path-2" class="algo-path"></div>
+							</div>
+						</div>
+						<div class="algo-step" data-id="algo-step-2">
+							<div class="algo-peakfit-box" data-id="algo-peakfit-2"></div>
+							<div class="algo-step-core">
+								<div data-id="algo-main-path-3" class="algo-path"></div>
+								<div data-id="algo-box-2" class="algo-box" style="background: var(--ude-accent-2);">
+									<strong>Validate Model Result(s)</strong>
+								</div>
+								<div data-id="algo-main-path-4" class="algo-path"></div>
+							</div>
+						</div>
+						<div class="algo-step" data-id="algo-step-3">
+							<div class="algo-peakfit-box" data-id="algo-peakfit-3"></div>
+							<div class="algo-step-core">
+								<div data-id="algo-main-path-5" class="algo-path"></div>
+								<div data-id="algo-box-3" class="algo-box" style="background: var(--ude-accent-3);">
+									<strong>Uncertainty Estimation</strong>
+								</div>
+								<div data-id="algo-main-path-6" class="algo-path"></div>
+							</div>
+						</div>
+					</div>
+					<div data-id="output-box" class="in-out-box-small" style="background: var(--ude-accent-4); width: auto;"><i class="fa-solid fa-arrow-right-from-bracket"></i><strong>Data<br>out</strong></div>
 				</div>
 				<div data-id="cap">
-					<span style="font-size: 0.65em; color: #888;"><i>Generic q-algorithm model</i></span>
+					<span style="font-size: 0.65em; color: #888;"><i>Generic q-algorithm step design</i></span>
+				</div>
+			</section>
+
+			<section id="qalgorithms-philosophy-2" data-auto-animate>
+				<h2>Odea-Project: QAlgorithms</h2>
+				<strong data-id="nts-processing-step-label">NTS Processing Step</strong>
+				<div style="display: flex; flex-direction: row; align-items: center; gap: 12px; justify-content: center;">
+					<div data-id="data-box" class="in-out-box-small" style="background: #888;"><i class="fa-solid fa-arrow-right-to-bracket"></i><strong>Data<br>in</strong></div>
+					<div data-id="algorithm-box" class="algo-flow">
+						<div class="algo-step" data-id="algo-step-1">
+							<div class="algo-peakfit-box" data-id="algo-peakfit-1">
+								<div class="algo-peakfit-chart" data-id="algo-peakfit-chart-1" data-chart="peak-fit"></div>
+							</div>
+							<div class="algo-step-core">
+								<div data-id="algo-main-path-1" class="algo-path"></div>
+								<div data-id="algo-box-1" class="algo-box" style="background: var(--ude-accent-1);">
+									<strong>Apply Data Model</strong>
+								</div>
+								<div data-id="algo-main-path-2" class="algo-path"></div>
+							</div>
+						</div>
+						<div class="algo-step" data-id="algo-step-2">
+							<div class="algo-peakfit-box" data-id="algo-peakfit-2">
+								<div class="algo-peakfit-chart" data-id="algo-peakfit-chart-2" data-chart="residuals"></div>
+							</div>
+							<div class="algo-step-core">
+								<div data-id="algo-main-path-3" class="algo-path"></div>
+								<div data-id="algo-box-2" class="algo-box" style="background: var(--ude-accent-2);">
+									<strong>Validate Model Result(s)</strong>
+								</div>
+								<div data-id="algo-main-path-4" class="algo-path"></div>
+							</div>
+						</div>
+						<div class="algo-step" data-id="algo-step-3">
+							<div class="algo-peakfit-box" data-id="algo-peakfit-3">
+								<div class="algo-peakfit-chart" data-id="algo-peakfit-chart-3" data-chart="error-bars"></div>
+							</div>
+							<div class="algo-step-core">
+								<div data-id="algo-main-path-5" class="algo-path"></div>
+								<div data-id="algo-box-3" class="algo-box" style="background: var(--ude-accent-3);">
+									<strong>Uncertainty Estimation</strong>
+								</div>
+								<div data-id="algo-main-path-6" class="algo-path"></div>
+							</div>
+						</div>
+					</div>
+					<div data-id="output-box" class="in-out-box-small" style="background: var(--ude-accent-4); width: auto;"><i class="fa-solid fa-arrow-right-from-bracket"></i><strong>Data<br>out</strong></div>
+				</div>
+				<div data-id="cap">
+					<span style="font-size: 0.65em; color: #888;"><i>Generic q-algorithm step design</i></span>
+				</div>
+			</section>
+
+			<section id="qalgorithms-workflow-over-view" data-auto-animate style="position: relative;">
+				<h2>Odea-Project: QAlgorithms</h2>
+				<strong data-id="nts-processing-step-label">NTS Processing Workflow</strong>
+				<div class="qr-overlay">
+					<a href="https://github.com/odea-project/qAlgorithms" target="_blank" rel="noopener">
+						<img src="resources/figures/qalgorithms-qr.png" alt="QR code: https://github.com/odea-project/qAlgorithms">
+					</a>
+					<p style="font-size: 0.75em; color: #555;">
+						visit QAlgorithms on GitHub
+					</p>
+				</div>
+				<div class="workflow-stair">
+					<div class="workflow-step" data-step="1">
+						<div data-id="data-box" class="in-out-box-small workflow-inout" style="background: #888; height:110px"><i class="fa-solid fa-arrow-right-to-bracket"></i><strong>mzml<br>in</strong></div>
+						<div data-id="algorithm-box" class="algo-flow-small"></div>
+						<div data-id="output-box" class="in-out-box-small workflow-inout" style="background: var(--ude-accent-4); height:110px"><i class="fa-solid fa-arrow-right-from-bracket"></i><strong>centroids<br>out</strong></div>
+					</div>
+					<div class="workflow-step" data-step="2">
+						<div data-id="data-box" class="in-out-box-small workflow-inout" style="background: var(--ude-accent-4); height:110px"><i class="fa-solid fa-arrow-right-to-bracket"></i><strong>centroids<br>in</strong></div>
+						<div data-id="algorithm-box" class="algo-flow-small"></div>
+						<div data-id="output-box" class="in-out-box-small workflow-inout" style="background: var(--ude-accent-3); height:110px"><i class="fa-solid fa-arrow-right-from-bracket"></i><strong>eics<br>out</strong></div>
+					</div>
+					<div class="workflow-step" data-step="3">
+						<div data-id="data-box" class="in-out-box-small workflow-inout" style="background: var(--ude-accent-3); height:110px"><i class="fa-solid fa-arrow-right-to-bracket"></i><strong>eics<br>in</strong></div>
+						<div data-id="algorithm-box" class="algo-flow-small"></div>
+						<div data-id="output-box" class="in-out-box-small workflow-inout" style="background: var(--ude-accent-2); height:110px"><i class="fa-solid fa-arrow-right-from-bracket"></i><strong>features<br>out</strong></div>
+					</div>
+					<div class="workflow-step" data-step="4">
+						<div data-id="data-box" class="in-out-box-small workflow-inout" style="background: var(--ude-accent-2); height:110px"><i class="fa-solid fa-arrow-right-to-bracket"></i><strong>features<br>in</strong></div>
+						<div data-id="algorithm-box" class="algo-flow-small"></div>
+						<div data-id="output-box" class="in-out-box-small workflow-inout" style="background: var(--ude-accent-1); height:110px"><i class="fa-solid fa-arrow-right-from-bracket"></i><strong>components<br>out</strong></div>
+					</div>
+				</div>
+				<div data-id="cap">
+					<span style="font-size: 0.65em; color: #888;"><i>Q-algorithm workflow overview</i></span>
+				</div>
+			</section>
+
+			<section id="qalgorithms-results-1">
+				<h2>QAlgorithms Results</h2>
+				<div data-id="qalgorithms-results-code" class="qalgo-cm">
+					<pre>{
+  "peak_id": "peak_001",
+  "retention_time": 5.23,
+  "m/z": 256.1234,
+  "intensity": 150000,
+  "area": 125482
+}</pre>
+				</div>
+			</section>
+
+			<section id="qalgorithms-results-2">
+				<h2>QAlgorithms Results</h2>
+				<div data-id="qalgorithms-results-code" class="qalgo-cm">
+					<pre>{
+  "peak_id": "peak_001",
+  "retention_time": 5.23,
+  "m/z": 256.1234,
+  "intensity": 150000,
+  "area": 125482,
+  "uncertainty": 
+  {
+    "retention_time": 0.048,
+    "m/z": 0.00021,
+    "intensity": 4582,
+    "area": 3251
+  }
+}</pre>
+				</div>
+			</section>
+
+			<section id="qalgorithms-results-3">
+				<h2>QAlgorithms Results</h2>
+				<div data-id="qalgorithms-results-code" class="qalgo-cm">
+					<pre>{
+  "peak_id": "peak_001",
+  "retention_time": 5.23,
+  "m/z": 256.1234,
+  "intensity": 150000,
+  "area": 125482,
+  "uncertainty": 
+  {
+    "retention_time": 0.048,
+    "m/z": 0.00021,
+    "intensity": 4582,
+    "area": 3251
+  },
+  "quality_metrics": 
+  {
+    "data_quality_score_peak": 0.92,
+    "data_quality_score_bin": 0.98,
+    "data_quality_score_centroid": 0.91
+  }
+}</pre>
 				</div>
 			</section>
 
 		</div>
 	</div>
 
+	<!-- Clock -->
+	<div id="clock">--:--</div>
+
+
 	<script src="https://d3js.org/d3.v7.min.js"></script>
+	<script src="resources/js/codemirror/assets/index-CI_ESZ2V.js"></script>
 
 	<!-- Reveal JS -->
 	<script src="dist/reveal.js"></script>
@@ -386,15 +786,220 @@
 				.text('Intensity');
 		}
 
+		function createMiniChart(container) {
+			const width = Math.max(120, container.clientWidth || 220);
+			const height = Math.max(90, container.clientHeight || 140);
+			const margin = { top: 0, right: 0, bottom: 0, left: 0 };
+			const innerWidth = width - margin.left - margin.right;
+			const innerHeight = height - margin.top - margin.bottom;
+
+			container.innerHTML = '';
+
+			const svg = d3.select(container)
+				.append('svg')
+				.attr('width', width)
+				.attr('height', height)
+				.attr('viewBox', `0 0 ${width} ${height}`);
+
+			const chart = svg.append('g')
+				.attr('transform', `translate(${margin.left},${margin.top})`);
+
+			return { svg, chart, width, height, innerWidth, innerHeight };
+		}
+
+		function renderPeakFitMiniChart(container) {
+			const { chart, innerWidth, innerHeight } = createMiniChart(container);
+			const xScale = d3.scaleLinear().domain([0, 10]).range([0, innerWidth]);
+			const yScale = d3.scaleLinear().domain([0, 1.1]).range([innerHeight, 0]);
+			const noise = d3.randomNormal(0, 0.06);
+
+			const points = d3.range(0, 10.5, 0.7).map(x => {
+				const peak = Math.exp(-Math.pow((x - 5) / 1.7, 2));
+				return { x, y: Math.max(0, peak + noise()) };
+			});
+
+			const fitLine = d3.range(0, 10.1, 0.1).map(x => ({
+				x,
+				y: Math.exp(-Math.pow((x - 5) / 1.7, 2))
+			}));
+
+			chart.append('path')
+				.datum(fitLine)
+				.attr('fill', 'none')
+				.attr('stroke', '#b8103b')
+				.attr('stroke-width', 2)
+				.attr('d', d3.line()
+					.x(d => xScale(d.x))
+					.y(d => yScale(d.y))
+					.curve(d3.curveBasis));
+
+			chart.selectAll('circle')
+				.data(points)
+				.enter()
+				.append('circle')
+				.attr('cx', d => xScale(d.x))
+				.attr('cy', d => yScale(d.y))
+				.attr('r', 2.6)
+				.attr('fill', '#004c93')
+				.attr('opacity', 0.8);
+		}
+
+		function renderResidualMiniChart(container) {
+			const { chart, innerWidth, innerHeight } = createMiniChart(container);
+			const xScale = d3.scaleLinear().domain([0, 10]).range([0, innerWidth]);
+			const yScale = d3.scaleLinear().domain([-0.3, 0.3]).range([innerHeight, 0]);
+			const noise = d3.randomNormal(0, 0.12);
+
+			const points = d3.range(0.5, 10.5, 0.7).map(x => ({ x, y: noise() }));
+
+			chart.append('line')
+				.attr('x1', 0)
+				.attr('x2', innerWidth)
+				.attr('y1', yScale(0))
+				.attr('y2', yScale(0))
+				.attr('stroke', '#004c93')
+				.attr('stroke-dasharray', '3,3')
+				.attr('stroke-width', 1.5);
+
+			chart.selectAll('circle')
+				.data(points)
+				.enter()
+				.append('circle')
+				.attr('cx', d => xScale(d.x))
+				.attr('cy', d => yScale(d.y))
+				.attr('r', 2.4)
+				.attr('fill', '#004c93')
+				.attr('opacity', 0.75);
+		}
+
+		function renderErrorBarMiniChart(container) {
+			const { chart, innerWidth, innerHeight } = createMiniChart(container);
+			const data = [
+				{ x: 1, y: 0.45, err: 0.1 },
+				{ x: 2, y: 0.6, err: 0.14 },
+				{ x: 3, y: 0.52, err: 0.08 },
+				{ x: 4, y: 0.8, err: 0.12 },
+				{ x: 5, y: 0.7, err: 0.1 }
+			];
+
+			const xScale = d3.scaleLinear().domain([0.5, 5.5]).range([0, innerWidth]);
+			const yScale = d3.scaleLinear().domain([0, 1.1]).range([innerHeight, 0]);
+
+			const capWidth = 6;
+
+			const bars = chart.selectAll('.error-bar')
+				.data(data)
+				.enter()
+				.append('g')
+				.attr('class', 'error-bar');
+
+			bars.append('line')
+				.attr('x1', d => xScale(d.x))
+				.attr('x2', d => xScale(d.x))
+				.attr('y1', d => yScale(d.y - d.err))
+				.attr('y2', d => yScale(d.y + d.err))
+				.attr('stroke', '#004c93')
+				.attr('stroke-width', 2)
+				.attr('stroke-linecap', 'round');
+
+			bars.append('line')
+				.attr('x1', d => xScale(d.x) - capWidth)
+				.attr('x2', d => xScale(d.x) + capWidth)
+				.attr('y1', d => yScale(d.y - d.err))
+				.attr('y2', d => yScale(d.y - d.err))
+				.attr('stroke', '#004c93')
+				.attr('stroke-width', 2)
+				.attr('stroke-linecap', 'round');
+
+			bars.append('line')
+				.attr('x1', d => xScale(d.x) - capWidth)
+				.attr('x2', d => xScale(d.x) + capWidth)
+				.attr('y1', d => yScale(d.y + d.err))
+				.attr('y2', d => yScale(d.y + d.err))
+				.attr('stroke', '#004c93')
+				.attr('stroke-width', 2)
+				.attr('stroke-linecap', 'round');
+
+			bars.append('circle')
+				.attr('cx', d => xScale(d.x))
+				.attr('cy', d => yScale(d.y))
+				.attr('r', 3)
+				.attr('fill', '#b8103b');
+		}
+
+		function renderQAlgorithmCharts(slide) {
+			if (!slide || !window.d3) {
+				return;
+			}
+
+			const charts = slide.querySelectorAll('[data-chart]');
+			charts.forEach(container => {
+				const type = container.getAttribute('data-chart');
+				if (type === 'peak-fit') {
+					renderPeakFitMiniChart(container);
+				} else if (type === 'residuals') {
+					renderResidualMiniChart(container);
+				} else if (type === 'error-bars') {
+					renderErrorBarMiniChart(container);
+				}
+			});
+		}
+
+		function initQAlgorithmsResultEditors(root) {
+			if (!window.EditorView || !window.EditorState || !window.jsonLanguageSupport) {
+				return;
+			}
+
+			const scope = root || document;
+			const containers = scope.querySelectorAll('.qalgo-cm');
+			containers.forEach(container => {
+				if (container.dataset.cmReady === 'true') {
+					return;
+				}
+
+				const pre = container.querySelector('pre');
+				if (!pre) {
+					return;
+				}
+
+				const doc = pre.textContent.trim();
+				container.innerHTML = '';
+
+				new window.EditorView({
+					state: window.EditorState.create({
+						doc,
+						extensions: [
+							window.basicSetup,
+							window.jsonLanguageSupport,
+							window.monokai,
+							window.EditorView.editable.of(false)
+						]
+					}),
+					parent: container
+				});
+
+				container.dataset.cmReady = 'true';
+			});
+		}
+
 		window.addEventListener('load', () => {
 			renderPeakIntroChart();
-			Reveal.on('resize', renderPeakIntroChart);
+			renderQAlgorithmCharts(Reveal.getCurrentSlide());
+			initQAlgorithmsResultEditors();
+			Reveal.on('resize', () => {
+				renderPeakIntroChart();
+				renderQAlgorithmCharts(Reveal.getCurrentSlide());
+			});
 			Reveal.on('slidechanged', event => {
 				if (event.currentSlide && event.currentSlide.id === 'peak-intro-1') {
 					renderPeakIntroChart();
 				}
+				renderQAlgorithmCharts(event.currentSlide);
+				initQAlgorithmsResultEditors(event.currentSlide);
 			});
 		});
 	</script>
+
+	<script src="resources/js/utils/clock.js"></script>
 </body>
 </html>
