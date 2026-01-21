@@ -259,11 +259,11 @@
 .reveal pre {
   display: block;
   width: 100%;
-  margin: var(--r-block-margin) auto;
+  margin: 0px;
   text-align: left;
   font-size: 0.75em;
   font-family: var(--r-code-font);
-  line-height: 1.25em;
+  line-height: .75em;
   word-wrap: break-word;
 }
 
@@ -273,19 +273,21 @@
   tab-size: 2;
   color: var(--ude-black);
   background: rgba(239,228,191,.45); /* Beige, dezent */
-  padding: 0.08em 0.25em;
+  padding: 0em 0em;
   border-radius: 6px;
+  text-align: left;
 }
 
 .reveal pre code {
   display: block;
-  padding: 14px 16px;
+  padding: 0px 0px;
   overflow: auto;
-  max-height: 420px;
-  background: rgba(223,228,242,.75); /* Hellblau */
-  border: 1px solid rgba(0,76,147,.18);
+  background: rgba(15,15,15,.85); /* Hellblau */
+  border: 0px solid rgba(0,76,147,.18);
   border-radius: 12px;
   color: var(--ude-black);
+  text-align: left;
+  max-height: 500px;
 }
 
 /* ---------------------------------------------------------
@@ -299,14 +301,14 @@
 
 .reveal .slides table {
   width: 86%;
-  margin: 1em auto;
+  margin: 0em 0em;
   border-collapse: separate;
   border-spacing: 0;
   color: var(--ude-black);
-  border: 1px solid rgba(0,76,147,.20);
+  border: 0px solid rgba(0,0,0,1);
   border-radius: 12px;
   overflow: hidden;
-  background: var(--ude-white);
+  background: rgba(15,15,15,.85);
   box-shadow: none;
 }
 
@@ -319,18 +321,19 @@
 }
 
 .reveal .slides table tbody td {
-  background-color: rgba(223,228,242,.35);
-  padding: 0.55em 0.9em;
-  border-top: 1px solid rgba(0,76,147,.12);
+  background-color: rgba(15,15,15,.85);
+  padding: 0.2em 0.2em;
+  border-top: 0px solid rgba(20,20,20,.85);
 }
 
 .reveal .slides table tbody tr:nth-child(even) td {
-  background-color: rgba(223,228,242,.55);
+  background-color: rgba(15,15,15,.85);
 }
 
 .reveal .slides table th,
 .reveal .slides table td {
-  text-align: center;
+  text-align: left;
+  color: var(--ude-accent-4);
 }
 
 /* ---------------------------------------------------------

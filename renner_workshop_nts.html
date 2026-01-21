@@ -13,8 +13,7 @@
 	<!-- Font Awesome -->
 	<link rel="stylesheet" href="vendor/fontawesome/css/all.min.css" />
 
-	<!-- Codemirror for code highlighting -->
-	<link rel="stylesheet" href="resources/js/codemirror/assets/index-DEWcn_zU.css">
+	<link rel="stylesheet" href="plugin/highlight/monokai.css" />
 
 	<style>
 		#peak-intro-1 {
@@ -238,15 +237,296 @@
 			fill: #3b3b3b;
 		}
 
-		.qalgo-cm {
-			max-width: 900px;
-			margin: 0 auto;
+		#processing-consistency-1 {
+			display: flex;
+			flex-direction: column;
+			gap: 24px;
 		}
 
-		.qalgo-cm .cm-editor {
-			font-size: 0.7em;
-			border-radius: 8px;
+		#processing-consistency-3 {
+			position: relative;
+		}
+
+		.frame-highlight {
+			position: absolute;
+			top: 140px;
+			left: 120px;
+			width: 280px;
+			height: 180px;
+			border: 3px solid var(--ude-accent-4);
+			border-radius: 10px;
+			box-sizing: border-box;
+			pointer-events: none;
+		}
+
+		.pc-grid {
+			display: flex;
+			gap: 28px;
+			align-items: stretch;
+		}
+
+		.pc-schematic {
+			flex: 1.1;
+			min-width: 520px;
+			border: 2px solid rgba(0, 76, 147, 0.2);
+			border-radius: 16px;
+			padding: 18px 20px;
+			background: linear-gradient(120deg, rgba(223, 228, 242, 0.55), rgba(239, 228, 191, 0.35));
+		}
+
+		.pc-notes {
+			flex: 0.9;
+			min-width: 320px;
 			text-align: left;
+			font-size: 0.72em;
+			line-height: 1.45;
+			color: var(--ude-blue);
+		}
+
+		.pc-flow {
+			display: flex;
+			flex-direction: column;
+			gap: 16px;
+		}
+
+		.pc-groups {
+			display: grid;
+			grid-template-columns: repeat(2, minmax(180px, 1fr));
+			gap: 12px;
+			margin-bottom: 18px;
+		}
+
+		.pc-group-card {
+			border-radius: 12px;
+			padding: 10px 12px;
+			font-size: 0.6em;
+			line-height: 1.35;
+			color: var(--ude-blue);
+			border: 2px solid rgba(0, 76, 147, 0.2);
+			background: rgba(223, 228, 242, 0.6);
+		}
+
+		.pc-group-card strong {
+			display: block;
+			font-size: 0.9em;
+			color: var(--ude-accent-3);
+			margin-bottom: 6px;
+		}
+
+		.pc-step {
+			display: grid;
+			grid-template-columns: 160px 1fr;
+			align-items: center;
+			gap: 16px;
+		}
+
+		.pc-step-box {
+			border-radius: 10px;
+			padding: 12px 10px;
+			text-align: center;
+			font-size: 0.7em;
+			font-weight: 700;
+			color: #ffffff;
+			background: var(--ude-blue);
+		}
+
+		.pc-step-box.light {
+			color: var(--ude-blue);
+			background: rgba(223, 228, 242, 0.95);
+			border: 2px solid rgba(0, 76, 147, 0.3);
+		}
+
+		.pc-dist {
+			display: grid;
+			grid-template-columns: 70px 1fr 50px;
+			align-items: center;
+			gap: 10px;
+		}
+
+		.pc-dist-label {
+			font-size: 0.6em;
+			font-weight: 700;
+			color: var(--ude-blue);
+		}
+
+		.pc-dist-bar {
+			height: 14px;
+			border-radius: 999px;
+			background: linear-gradient(90deg, rgba(0, 76, 147, 0.15), rgba(0, 76, 147, 0.45), rgba(184, 16, 59, 0.65));
+			position: relative;
+			overflow: hidden;
+		}
+
+		.pc-dist-bar::after {
+			content: "";
+			position: absolute;
+			top: 2px;
+			left: 22%;
+			width: 22%;
+			height: 10px;
+			border-radius: 999px;
+			background: rgba(236, 114, 6, 0.85);
+		}
+
+		.pc-dist-delta {
+			font-size: 0.6em;
+			font-weight: 700;
+			color: var(--ude-accent-3);
+			text-align: right;
+		}
+
+		.pc-pattern {
+			margin-top: 12px;
+			padding: 10px 12px;
+			border-radius: 10px;
+			background: rgba(254, 202, 0, 0.18);
+			border: 1px dashed rgba(0, 76, 147, 0.25);
+			font-size: 0.6em;
+			color: #004c93;
+		}
+
+		.pc-plots {
+			display: grid;
+			grid-template-columns: 1fr 140px 1fr;
+			align-items: center;
+			gap: 16px;
+			margin-top: 20px;
+		}
+
+		.pc-plot {
+			padding: 4px;
+		}
+
+		.pc-plot-title {
+			font-size: 0.6em;
+			font-weight: 700;
+			color: var(--ude-blue);
+			margin-bottom: 8px;
+		}
+
+		.pc-plot svg {
+			width: 100%;
+			height: 220px;
+			display: block;
+		}
+
+		.pc-plot-label {
+			font-size: 0.55em;
+			color: #3b3b3b;
+		}
+
+		.pc-delta {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			gap: 10px;
+			font-size: 0.62em;
+			color: var(--ude-blue);
+			text-align: center;
+		}
+
+		.pc-delta-cube {
+			width: 370px;
+			height: 370px;
+		}
+
+		.pc-delta-cube-small {
+			width: 270px;
+			height: 270px;
+		}
+
+		.pc-delta-arrow {
+			width: 90px;
+			height: 14px;
+			background: var(--ude-blue);
+			mask: polygon(0 35%, 75% 35%, 75% 0, 100% 50%, 75% 100%, 75% 65%, 0 65%);
+			-webkit-mask: polygon(0 35%, 75% 35%, 75% 0, 100% 50%, 75% 100%, 75% 65%, 0 65%);
+		}
+
+		.pc-arrow {
+			height: 20px;
+			width: 24px;
+			background: var(--ude-blue);
+			mask: polygon(0 40%, 65% 40%, 65% 0, 100% 50%, 65% 100%, 65% 60%, 0 60%);
+			-webkit-mask: polygon(0 40%, 65% 40%, 65% 0, 100% 50%, 65% 100%, 65% 60%, 0 60%);
+			justify-self: center;
+		}
+
+		.ude-ruler {
+			width: 72%;
+			margin: 18px auto;
+		}
+
+		.duckdb-wrap {
+			margin-top: 18px;
+			padding: 16px 18px;
+			border-radius: 14px;
+			border: 2px solid rgba(0, 76, 147, 0.25);
+			background: rgba(223, 228, 242, 0.35);
+		}
+
+		.duckdb-header {
+			background: var(--ude-blue);
+			color: #ffffff;
+			font-weight: 700;
+			padding: 8px 12px;
+			border-radius: 10px;
+			text-align: left;
+			margin-bottom: 12px;
+			font-size: 0.7em;
+		}
+
+		.duckdb-grid {
+			display: grid;
+			grid-template-columns: repeat(4, minmax(160px, 1fr));
+			gap: 12px;
+		}
+
+		.duckdb-table {
+			background: #ffffff;
+			border-radius: 10px;
+			border: 1px solid rgba(0, 76, 147, 0.2);
+			overflow: hidden;
+			font-size: 0.6em;
+			color: var(--ude-black);
+		}
+
+		.duckdb-table-header {
+			padding: 6px 10px;
+			font-weight: 700;
+			color: #000000;
+		}
+
+		.duckdb-table-body {
+			padding: 8px 10px;
+			line-height: 1.4;
+		}
+
+		.duckdb-table-body ul {
+			margin: 0;
+			padding: 0;
+			list-style: none;
+		}
+
+		.duckdb-table-body li {
+			margin: 2px 0;
+		}
+
+		.duckdb-header-samples { background: #f5c542; }
+		.duckdb-header-runs { background: #61a27c; }
+		.duckdb-header-features { background: #b8103b; color: #ffffff; }
+		.duckdb-header-custom { background: #ec7206; }
+
+		@media (max-width: 1100px) {
+			.duckdb-grid {
+				grid-template-columns: repeat(2, minmax(180px, 1fr));
+			}
+		}
+
+		@media (max-width: 700px) {
+			.duckdb-grid {
+				grid-template-columns: 1fr;
+			}
 		}
 
 		@media (max-width: 1100px) {
@@ -259,6 +539,24 @@
 			.peak-intro-notes {
 				width: 100%;
 				min-width: 0;
+			}
+
+			.pc-grid {
+				flex-direction: column;
+			}
+
+			.pc-schematic,
+			.pc-notes {
+				min-width: 0;
+			}
+
+			.pc-plots {
+				grid-template-columns: 1fr;
+			}
+
+			.pc-delta {
+				flex-direction: row;
+				justify-content: center;
 			}
 		}
 	</style>
@@ -548,25 +846,34 @@
 				<div data-id="cap">
 					<span style="font-size: 0.65em; color: #888;"><i>Q-algorithm workflow overview</i></span>
 				</div>
+				<!-- References footnote -->
+				<div style="margin-top: 24px; font-size: 0.45em; color: #888; text-align: left; padding: 0 20px; position: absolute; bottom: 50px; left: -50px">
+					<strong>References:</strong><br>
+					<span style="display: block; margin-top: 4px;">a) Reuschenbach et al. (2022). <i>Anal. Bioanal. Chem.</i>, 414(22), 6635-6645.</span>
+					<span style="display: block;">b) Reuschenbach et al. (2023). <i>Anal. Chem.</i>, 95(37), 13804-13812.</span>
+					<span style="display: block;">c) Reuschenbach et al. (2024). <i>Anal. Chem.</i>, 96(18), 7120-7129.</span>
+				</div>
 			</section>
-
-			<section id="qalgorithms-results-1">
+			
+			<section id="qalgorithms-results-1" data-auto-animate-restart data-auto-animate>
 				<h2>QAlgorithms Results</h2>
-				<div data-id="qalgorithms-results-code" class="qalgo-cm">
-					<pre>{
+					<pre data-id="qalgorithms-results-code-editor">
+						<code data-trim data-noescape data-line-numbers="2-6" class="language-json">
+{
   "peak_id": "peak_001",
   "retention_time": 5.23,
   "m/z": 256.1234,
   "intensity": 150000,
-  "area": 125482
-}</pre>
-				</div>
+  "area": 125482,
+}
+</code></pre>
 			</section>
 
-			<section id="qalgorithms-results-2">
+			<section id="qalgorithms-results-2" data-auto-animate>
 				<h2>QAlgorithms Results</h2>
-				<div data-id="qalgorithms-results-code" class="qalgo-cm">
-					<pre>{
+					<pre data-id="qalgorithms-results-code-editor">
+						<code data-trim data-noescape data-line-numbers="7-13" class="language-json">
+{ 
   "peak_id": "peak_001",
   "retention_time": 5.23,
   "m/z": 256.1234,
@@ -578,15 +885,16 @@
     "m/z": 0.00021,
     "intensity": 4582,
     "area": 3251
-  }
-}</pre>
-				</div>
+  },
+}
+</code></pre>
 			</section>
 
-			<section id="qalgorithms-results-3">
+			<section id="qalgorithms-results-3" data-auto-animate>
 				<h2>QAlgorithms Results</h2>
-				<div data-id="qalgorithms-results-code" class="qalgo-cm">
-					<pre>{
+				<pre data-id="qalgorithms-results-code-editor">
+					<code data-trim data-noescape data-line-numbers="14-19" class="language-json">
+{
   "peak_id": "peak_001",
   "retention_time": 5.23,
   "m/z": 256.1234,
@@ -605,10 +913,307 @@
     "data_quality_score_bin": 0.98,
     "data_quality_score_centroid": 0.91
   }
-}</pre>
+}
+</code></pre>
+			</section>
+
+			<section id="processing-consistency-1" data-auto-animate-restart data-auto-animate>
+				<h2>Processing Consistency Metric</h2>
+				<p data-id="processing-consistency-subhead">NTS data processing workflow can be seen as a series of filtering steps for centroids.</p>
+					<div data-id="centroid-groups" style="display: flex; gap: 12px; margin-top: 1em;">
+							<div class="pc-group-card">
+								<strong>a)</strong>
+								Do not appear in EICs
+							</div>
+							<div class="pc-group-card">
+								<strong>b)</strong>
+								Appear in EICs but not considered for features
+							</div>
+							<div class="pc-group-card">
+								<strong>c)</strong>
+								Appear in EICs, considered for features, but not found in replicates
+							</div>
+							<div class="pc-group-card">
+								<strong>d)</strong>
+								Appear in EICs, considered for features, and found in replicates
+							</div>
+					</div>
+			</section>
+
+			<section id="processing-consistency-2" data-auto-animate>
+				<h2>Processing Consistency Metric</h2>
+				<p data-id="processing-consistency-subhead">NTS data processing workflow can be seen as a series of filtering steps for centroids.</p>
+					<div data-id="centroid-groups" style="display: flex; gap: 12px; margin-top: 1em;">
+							<div class="pc-group-card">
+								<strong>a)</strong>
+								Do not appear in EICs
+							</div>
+							<div class="pc-group-card">
+								<strong>b)</strong>
+								Appear in EICs but not considered for features
+							</div>
+							<div class="pc-group-card">
+								<strong>c)</strong>
+								Appear in EICs, considered for features, but not found in replicates
+							</div>
+							<div class="pc-group-card">
+								<strong>d)</strong>
+								Appear in EICs, considered for features, and found in replicates
+							</div>
+					</div>
+					<div class="pc-plots">
+						<div class="pc-plot" data-pc-plot="replicate-a">
+							<div class="pc-plot-title">Centroid group A</div>
+						</div>
+						<div class="pc-delta">
+							<div><strong>Cliff's delta</strong></div>
+							<div>0.23 ± 0.02</div>
+							<div class="pc-delta-arrow"></div>
+							<div class="pc-plot-label">property, e.g., m/z</div>
+						</div>
+						<div class="pc-plot" data-pc-plot="replicate-b">
+							<div class="pc-plot-title">Centroid group B</div>
+						</div>
+					</div>
+			</section>
+
+			<section id="processing-consistency-3" data-auto-animate>
+				<h2>Processing Consistency Metric</h2>
+				<p data-id="processing-consistency-subhead">NTS data processing workflow can be seen as a series of filtering steps for centroids.</p>
+				<svg class="pc-delta-cube" viewBox="0 0 120 120" aria-hidden="true">
+					<polygon points="60,10 110,40 60,70 10,40" fill="rgba(0,76,147,0.25)" stroke="#004c93" stroke-width="2"/>
+					<polygon points="10,40 60,70 60,115 10,85" fill="rgba(97,162,124,0.35)" stroke="#004c93" stroke-width="2"/>
+					<polygon points="60,70 110,40 110,85 60,115" fill="rgba(184,16,59,0.35)" stroke="#004c93" stroke-width="2"/>
+					<text x="60" y="38" text-anchor="middle" font-size="8" fill="#004c93" font-weight="700">Cliff's Delta</text>
+					<text x="60" y="48" text-anchor="middle" font-size="8" fill="#004c93" font-weight="700">data cube</text>
+					<text x="35" y="108" text-anchor="middle" font-size="8" fill="#004c93" font-weight="700" transform="rotate(31 35 102)">groups</text>
+					<text x="85" y="108" text-anchor="middle" font-size="8" fill="#004c93" font-weight="700" transform="rotate(-31 85 102)">groups</text>
+					<text x="9" y="65" text-anchor="middle" font-size="8" fill="#004c93" font-weight="700" transform="rotate(-90 6 65)">properties</text>
+				</svg>
+				<p data-id="pc-cube-caption">
+					All pairwise groups along all properties form a data cube of Cliff's delta values.
+				</p>
+			</section>
+
+			<section id="processing-consistency-4" data-auto-animate>
+				<h2>Processing Consistency Metric</h2>
+				<p data-id="processing-consistency-subhead">NTS data processing workflow can be seen as a series of filtering steps for centroids.</p>
+				<svg class="pc-delta-cube-small" viewBox="0 0 120 120" aria-hidden="true">
+					<polygon points="60,10 110,40 60,70 10,40" fill="rgba(0,76,147,0.25)" stroke="#004c93" stroke-width="2"/>
+					<polygon points="10,40 60,70 60,115 10,85" fill="rgba(97,162,124,0.35)" stroke="#004c93" stroke-width="2"/>
+					<polygon points="60,70 110,40 110,85 60,115" fill="rgba(184,16,59,0.35)" stroke="#004c93" stroke-width="2"/>
+					<text x="60" y="38" text-anchor="middle" font-size="8" fill="#004c93" font-weight="700">Cliff's Delta</text>
+					<text x="60" y="48" text-anchor="middle" font-size="8" fill="#004c93" font-weight="700">Replicate A</text>
+					<text x="35" y="108" text-anchor="middle" font-size="8" fill="#004c93" font-weight="700" transform="rotate(31 35 102)">groups</text>
+					<text x="85" y="108" text-anchor="middle" font-size="8" fill="#004c93" font-weight="700" transform="rotate(-31 85 102)">groups</text>
+					<text x="9" y="65" text-anchor="middle" font-size="8" fill="#004c93" font-weight="700" transform="rotate(-90 6 65)">properties</text>
+				</svg>
+				<svg class="pc-delta-cube-small" viewBox="0 0 120 120" aria-hidden="true">
+					<polygon points="60,10 110,40 60,70 10,40" fill="rgba(0,76,147,0.25)" stroke="#004c93" stroke-width="2"/>
+					<polygon points="10,40 60,70 60,115 10,85" fill="rgba(97,162,124,0.35)" stroke="#004c93" stroke-width="2"/>
+					<polygon points="60,70 110,40 110,85 60,115" fill="rgba(184,16,59,0.35)" stroke="#004c93" stroke-width="2"/>
+					<text x="60" y="38" text-anchor="middle" font-size="8" fill="#004c93" font-weight="700">Cliff's Delta</text>
+					<text x="60" y="48" text-anchor="middle" font-size="8" fill="#004c93" font-weight="700">Replicate B</text>
+					<text x="35" y="108" text-anchor="middle" font-size="8" fill="#004c93" font-weight="700" transform="rotate(31 35 102)">groups</text>
+					<text x="85" y="108" text-anchor="middle" font-size="8" fill="#004c93" font-weight="700" transform="rotate(-31 85 102)">groups</text>
+					<text x="9" y="65" text-anchor="middle" font-size="8" fill="#004c93" font-weight="700" transform="rotate(-90 6 65)">properties</text>
+				</svg>
+				<svg class="pc-delta-cube-small" viewBox="0 0 120 120" aria-hidden="true">
+					<polygon points="60,10 110,40 60,70 10,40" fill="rgba(0,76,147,0.25)" stroke="#004c93" stroke-width="2"/>
+					<polygon points="10,40 60,70 60,115 10,85" fill="rgba(97,162,124,0.35)" stroke="#004c93" stroke-width="2"/>
+					<polygon points="60,70 110,40 110,85 60,115" fill="rgba(184,16,59,0.35)" stroke="#004c93" stroke-width="2"/>
+					<text x="60" y="38" text-anchor="middle" font-size="8" fill="#004c93" font-weight="700">Cliff's Delta</text>
+					<text x="60" y="48" text-anchor="middle" font-size="8" fill="#004c93" font-weight="700">Replicate C</text>
+					<text x="35" y="108" text-anchor="middle" font-size="8" fill="#004c93" font-weight="700" transform="rotate(31 35 102)">groups</text>
+					<text x="85" y="108" text-anchor="middle" font-size="8" fill="#004c93" font-weight="700" transform="rotate(-31 85 102)">groups</text>
+					<text x="9" y="65" text-anchor="middle" font-size="8" fill="#004c93" font-weight="700" transform="rotate(-90 6 65)">properties</text>
+				</svg>
+				<p data-id="pc-cube-caption">
+					If data and workflow are consistent, replicate cubes should be similar.
+				</p>
+			</section>
+
+			<section id="processing-consistency-5" data-auto-animate>
+				<h2>Processing Consistency Metric</h2>
+				<img src="resources/figures/histo_stability_score.svg" alt="Processing Consistency Metric Reference Histogram"/>
+				<!-- Overlay text for figure -->
+				<div style="margin-top: 24px; font-size: 1em; color: #888; text-align: left; padding: 0 20px; position: absolute; top: 200px; left: 100px; max-width: 700px;">
+					<ul style="margin: 0; padding: 0; list-style: none; font-size: 0.7em; color: #004c93; display: flex; flex-direction: column; gap: 10px;">
+							<li style="display: flex; align-items: flex-start; gap: 8px;">
+								<i class="fa-solid fa-arrow-right" style="font-size: 1em; color: var(--ude-blue); margin-top: 3px;"></i>
+								<span><strong>Reference Consistency:</strong> via Monte-Carlo Experiment</span>
+							</li>
+							<li style="display: flex; align-items: flex-start; gap: 8px;">
+								<i class="fa-solid fa-check-circle" style="font-size: 1em; color: var(--ude-green); margin-top: 3px;"></i>
+								<span><strong>Good Consistency:</strong> Sample should be located within this reference distribution</span>
+							</li>
+							<ul style="margin: 0 0 0 30px; padding: 0; list-style: none; font-size: 0.9em; color: var(--ude-green);">
+									<li>
+										<i class="fa-solid fa-lightbulb" style="font-size: 0.8em; margin-right: 6px;"></i>
+										<span>p-Value</span>
+									</li>
+								</ul>
+					</ul>
 				</div>
 			</section>
 
+			<section id="processing-consistency-6" data-auto-animate>
+				<h2>Processing Consistency Metric</h2>
+				<img src="resources/figures/controll_chart_nts.png" alt="Processing Consistency Metric Control Chart"/>
+				<!-- Overlay text for figure -->
+				<div style="margin-top: 24px; font-size: 1em; color: #888; text-align: left; padding: 0 20px; position: absolute; top: 150px; left: 80px; max-width: 700px;">
+					<ul style="margin: 0; padding: 0; list-style: none; font-size: 0.7em; color: #004c93; display: flex; flex-direction: column; gap: 10px;">
+							<li style="display: flex; align-items: flex-start; gap: 8px;">
+								<i class="fa-solid fa-arrow-right" style="font-size: 1em; color: var(--ude-blue); margin-top: 3px;"></i>
+								<span>River Samples using RPLC, SFC, with/without polarity switching</span>
+							</li>
+					</ul>
+				</div>
+				<div style="margin-top: 24px; font-size: 0.6em; color: #111; text-align: left; padding: 0 20px; position: absolute; bottom: 70px; right: -150px; max-width: 200px;">
+				<p style="margin-left: 50px; margin-bottom: -25px;"><strong>Negative control:</strong> same sample, different MS settings</p>
+				<i class="fa-solid fa-arrow-left-long" style="font-size: 0.8em; color: var(--ude-red); margin-left: 6px;"></i>  
+				</div>
+					
+			</section>
+
+			<section id="qalgorithms-availability-1" data-auto-animate-restart data-auto-animate>
+				<p>qAlgorithms NTS Data Processing & the consistency measure tool are available as open source</p>  
+			</section>
+
+			<section id="qalgorithms-availability-2" data-auto-animate>
+				<p>qAlgorithms NTS Data Processing & the consistency measure tool are available as open source</p> 
+				<div data-id="spacer1" style="font-size: 0.7em; color: var(--ude-accent-1);"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+				<p>but hard to use for progammers & non-programmers.</p>
+			</section>
+
+			<section id="qalgorithms-availability-3" data-auto-animate>
+				<p>qAlgorithms NTS Data Processing & the consistency measure tool are available as open source</p>  
+				<div data-id="spacer1" style="font-size: 0.7em; color: var(--ude-accent-1);"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+				<p>but hard to use for progammers & non-programmers.</p>
+				<div data-id="spacer2" style="font-size: 0.7em; color: var(--ude-accent-1);"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+				<p>Why? <i class="fa-solid fa-arrow-right-long"></i> there are no established standards for i/o</p>
+			</section>
+
+			<section id="PINTS-1" data-auto-animate-restart data-auto-animate>
+				<h2>PINTS (Pipelines for Non-Target Screening)</h2>
+				<p style="font-size: 0.7em;">A community founded to standardize i/o for non-target screening data evaluation tools</p>
+			</section>
+
+			<section id="PINTS-2" data-auto-animate>
+				<h2>PINTS (Pipelines for Non-Target Screening)</h2>
+				<p style="font-size: 0.7em;">A community founded to standardize i/o for non-target screening data evaluation tools</p>
+				<p>Approach based on: <strong>duckDB</strong></p>
+				<img src="resources/figures/duckdb-logo.jpg" alt="DuckDB Logo" style="width: 200px; margin-top: 20px;"/>
+				<p><a href="https://duckdb.org">https://duckdb.org</a></p> 
+			<!-- Overlay text for figure -->
+				<div style="margin-top: 24px; font-size: 1em; color: #888; text-align: left; padding: 0 20px; position: absolute; top: 210px; left: 600px; max-width: 400px;">
+					<ul style="margin: 0; padding: 0; list-style: none; font-size: 0.7em; color: #004c93; display: flex; flex-direction: column; gap: 10px;">
+						<li style="display: flex; align-items: flex-start; gap: 8px;">
+							<i class="fa-solid fa-arrow-right" style="font-size: 1em; color: var(--ude-blue); margin-top: 3px;"></i>
+							<span>open database</span>
+						</li>
+						<li style="display: flex; align-items: flex-start; gap: 8px;">
+							<i class="fa-solid fa-arrow-right" style="font-size: 1em; color: var(--ude-blue); margin-top: 3px;"></i>
+							<span>no server</span>
+						</li>
+						<li style="display: flex; align-items: flex-start; gap: 8px;">
+							<i class="fa-solid fa-arrow-right" style="font-size: 1em; color: var(--ude-blue); margin-top: 3px;"></i>
+							<span>optimized for analytical data</span>
+						</li>
+						<li style="display: flex; align-items: flex-start; gap: 8px;">
+							<i class="fa-solid fa-arrow-right" style="font-size: 1em; color: var(--ude-blue); margin-top: 3px;"></i>
+							<span>easy to implement</span>
+						</li>
+						<li style="display: flex; align-items: flex-start; gap: 8px;">
+							<i class="fa-solid fa-arrow-right" style="font-size: 1em; color: var(--ude-blue); margin-top: 3px;"></i>
+							<span>multi programming language support</span>
+						</li>
+					</ul>
+				</div>
+			</section>
+
+			<section id="PINTS-3" data-auto-animate>
+				<h2>PINTS (Pipelines for Non-Target Screening)</h2>
+				<p style="font-size: 0.7em;">A community founded to standardize i/o for non-target screening data evaluation tools</p>
+				<div class="duckdb-wrap">
+					<div class="duckdb-header">myfile.duckdb</div>
+					<div class="duckdb-grid">
+						<div class="duckdb-table">
+							<div class="duckdb-table-header duckdb-header-samples">samples</div>
+							<div class="duckdb-table-body">
+								<ul>
+									<li>smp id</li>
+									<li>meta info</li>
+								</ul>
+							</div>
+						</div>
+						<div class="duckdb-table">
+							<div class="duckdb-table-header duckdb-header-runs">runs</div>
+							<div class="duckdb-table-body">
+								<ul>
+									<li>smp id</li>
+									<li>run id</li>
+									<li>method info</li>
+								</ul>
+							</div>
+						</div>
+						<div class="duckdb-table">
+							<div class="duckdb-table-header duckdb-header-features">features</div>
+							<div class="duckdb-table-body">
+								<ul>
+									<li>smp id</li>
+									<li>run id</li>
+									<li>feat id</li>
+									<li>mz</li>
+									<li>rt</li>
+									<li>area</li>
+								</ul>
+							</div>
+						</div>
+						<div class="duckdb-table">
+							<div class="duckdb-table-header duckdb-header-custom">custom tables</div>
+							<div class="duckdb-table-body">
+								<ul>
+									<li>e.g., smp id</li>
+									<li>e.g., run id</li>
+									<li>e.g., feat id</li>
+									<li>e.g., peak width</li>
+									<li>e.g., annotation</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+				</div>
+				<p>A standardized schema for non-target screening data</p>
+			</section>
+
+			<section id="PINTS-4" data-auto-animate>
+				<h2>PINTS (Pipelines for Non-Target Screening)</h2>
+				<p style="font-size: 0.7em;">A community founded to standardize i/o for non-target screening data evaluation tools</p>
+			<!--
+			Here we need a tree hierachy visulaization schema showing items
+			PINTS
+			-- PINTS-core
+			-- PINTS-plugins
+				|-- qAlgorithms
+				|-- qConsistency
+			-- PINTS-api
+				|--PINTS-py
+				|--PINTS-cpp
+				|--PINTS-r
+
+			you can also create this hierachy with small colored div shapes
+			-->
+			</section>
+
+			<section id="Cogniflow-1" data-auto-animate-restart data-auto-animate>
+				<h2>Extend your perspective</h2>
+			<!--
+			Here, we will show a series of slides about Cogniflow starting with 4 small boxes that are connected and should stay for the NTS workflow.
+			then on the next slide there will be a zoom out to show that nts is not the only data pipeline but for most analytical devices and methods there are data pipelines. this shows that nts is just a part of a larger ecosystem. and in cogniflow we want standardize data processing pipelines for all analytical data. Then we a slide that shows the main concept, i.e., we create a comprehensive ontology for analytical data processing including the concept of a processing step that has standardized i/o as well as processing pipelines that consists of multiple processing steps. in our vision user can create pipelines from a reservoir of generic processing steps and everything is defined in the ontology, which allows full documentation, full audit trails, and full reproducibility increasing the FAIRness of analytical data processing.
+			-->
+			</section>
+			
 		</div>
 	</div>
 
@@ -617,18 +1222,21 @@
 
 
 	<script src="https://d3js.org/d3.v7.min.js"></script>
-	<script src="resources/js/codemirror/assets/index-CI_ESZ2V.js"></script>
-
 	<!-- Reveal JS -->
 	<script src="dist/reveal.js"></script>
 	<script src="plugin/markdown/markdown.js"></script>
 	<script src="plugin/highlight/highlight.js"></script>
+	<script>
+		const highlightPlugin = RevealHighlight();
+		window.hljs = highlightPlugin.hljs;
+	</script>
+	<script src="plugin/highlight/json.min.js"></script>
 
 	<!-- Initialize Reveal -->
 	<script>
 		Reveal.initialize({
 			hash: true,
-			plugins: [ RevealMarkdown, RevealHighlight ],
+			plugins: [ RevealMarkdown, highlightPlugin ],
 			center: true,
 			transition: 'slide'
 		});
@@ -945,57 +1553,147 @@
 			});
 		}
 
-		function initQAlgorithmsResultEditors(root) {
-			if (!window.EditorView || !window.EditorState || !window.jsonLanguageSupport) {
+		function renderProcessingConsistencyPlots(slide) {
+			if (!slide || !window.d3 || slide.id !== 'processing-consistency-2') {
 				return;
 			}
 
-			const scope = root || document;
-			const containers = scope.querySelectorAll('.qalgo-cm');
-			containers.forEach(container => {
-				if (container.dataset.cmReady === 'true') {
-					return;
-				}
+			const containers = slide.querySelectorAll('[data-pc-plot]');
+			containers.forEach((container, index) => {
+				const width = Math.max(280, container.clientWidth || 360);
+				const height = 220;
+				const margin = { top: 10, right: 12, bottom: 28, left: 36 };
+				const innerWidth = width - margin.left - margin.right;
+				const innerHeight = height - margin.top - margin.bottom;
 
-				const pre = container.querySelector('pre');
-				if (!pre) {
-					return;
-				}
+				const svg = d3.select(container)
+					.selectAll('svg')
+					.data([null])
+					.join('svg')
+					.attr('width', width)
+					.attr('height', height)
+					.attr('viewBox', `0 0 ${width} ${height}`);
 
-				const doc = pre.textContent.trim();
-				container.innerHTML = '';
+				const chart = svg.selectAll('g.chart')
+					.data([null])
+					.join('g')
+					.attr('class', 'chart')
+					.attr('transform', `translate(${margin.left},${margin.top})`);
 
-				new window.EditorView({
-					state: window.EditorState.create({
-						doc,
-						extensions: [
-							window.basicSetup,
-							window.jsonLanguageSupport,
-							window.monokai,
-							window.EditorView.editable.of(false)
-						]
-					}),
-					parent: container
+				const n = 30;
+				const x = d3.range(n).map(i => i / (n - 1));
+				const coeffs = index === 0
+					? [0.8, 1.4, 2.1, 1.3, 0.6]
+					: [0.6, 1.1, 2.6, 1.6, 0.7];
+
+				const binomial = (n, k) => {
+					let result = 1;
+					for (let i = 1; i <= k; i++) {
+						result = (result * (n - (k - i))) / i;
+					}
+					return result;
+				};
+
+				const bernstein = (t, i, n) =>
+					binomial(n, i) * Math.pow(t, i) * Math.pow(1 - t, n - i);
+
+				const seededRandom = seed => () => {
+					let t = seed += 0x6D2B79F5;
+					t = Math.imul(t ^ (t >>> 15), t | 1);
+					t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+					return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+				};
+
+				const rand = seededRandom(1200 + index * 97);
+				const noiseScale = 0.26;
+
+				const values = x.map(t => {
+					const sum = coeffs.reduce((acc, c, i) => acc + c * bernstein(t, i, coeffs.length - 1), 0);
+					const noise = (rand() - 0.5) * noiseScale;
+					return Math.max(0, sum + noise);
 				});
 
-				container.dataset.cmReady = 'true';
+				const yMax = d3.max(values) || 1;
+				const y = d3.scaleLinear().domain([0, yMax * 1.1]).range([innerHeight, 0]);
+				const xScale = d3.scaleLinear().domain([0, 1]).range([0, innerWidth]);
+
+				chart.selectAll('*').remove();
+
+				chart.append('g')
+					.attr('transform', `translate(0,${innerHeight})`);
+
+				const barWidth = innerWidth / n;
+
+				chart.selectAll('rect.pc-bar')
+					.data(values)
+					.join('rect')
+					.attr('class', 'pc-bar')
+					.attr('x', (d, i) => xScale(i / (n - 1)) - barWidth * 0.45)
+					.attr('y', d => y(d))
+					.attr('width', barWidth * 0.9)
+					.attr('height', d => innerHeight - y(d))
+					.attr('rx', 2)
+					.attr('fill', index === 0 ? 'rgba(0, 76, 147, 0.75)' : 'rgba(184, 16, 59, 0.7)');
+
+				const axis = chart.append('g')
+					.attr('class', 'pc-axis');
+
+				axis.append('line')
+					.attr('x1', 0)
+					.attr('x2', innerWidth)
+					.attr('y1', innerHeight)
+					.attr('y2', innerHeight)
+					.attr('stroke', 'rgba(0, 76, 147, 0.4)')
+					.attr('stroke-width', 1.5);
+
+				axis.append('line')
+					.attr('x1', 0)
+					.attr('x2', 0)
+					.attr('y1', 0)
+					.attr('y2', innerHeight)
+					.attr('stroke', 'rgba(0, 76, 147, 0.4)')
+					.attr('stroke-width', 1.5);
+
+				svg.selectAll('text.pc-x-label')
+					.data([null])
+					.join('text')
+					.attr('class', 'pc-x-label')
+					.attr('x', width / 2)
+					.attr('y', height - 6)
+					.attr('text-anchor', 'middle')
+					.attr('fill', '#3b3b3b')
+					.attr('font-size', 10)
+					.text('property, e.g., m/z');
+
+				svg.selectAll('text.pc-y-label')
+					.data([null])
+					.join('text')
+					.attr('class', 'pc-y-label')
+					.attr('x', 10)
+					.attr('y', height / 2)
+					.attr('transform', `rotate(-90 10 ${height / 2})`)
+					.attr('text-anchor', 'middle')
+					.attr('fill', '#3b3b3b')
+					.attr('font-size', 10)
+					.text('frequency');
 			});
 		}
 
 		window.addEventListener('load', () => {
 			renderPeakIntroChart();
 			renderQAlgorithmCharts(Reveal.getCurrentSlide());
-			initQAlgorithmsResultEditors();
+			renderProcessingConsistencyPlots(Reveal.getCurrentSlide());
 			Reveal.on('resize', () => {
 				renderPeakIntroChart();
 				renderQAlgorithmCharts(Reveal.getCurrentSlide());
+				renderProcessingConsistencyPlots(Reveal.getCurrentSlide());
 			});
 			Reveal.on('slidechanged', event => {
 				if (event.currentSlide && event.currentSlide.id === 'peak-intro-1') {
 					renderPeakIntroChart();
 				}
 				renderQAlgorithmCharts(event.currentSlide);
-				initQAlgorithmsResultEditors(event.currentSlide);
+				renderProcessingConsistencyPlots(event.currentSlide);
 			});
 		});
 	</script>
