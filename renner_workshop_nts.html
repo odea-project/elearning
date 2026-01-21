@@ -1322,6 +1322,63 @@
 			color: rgba(255, 255, 255, 0.75);
 			line-height: 1.5;
 		}
+
+		/* qAlgorithms Visualization */
+		.qalgo-viz-container {
+			display: flex;
+			gap: 40px;
+			margin: 20px auto;
+			justify-content: center;
+			align-items: flex-start;
+		}
+
+		.qalgo-viz-panel {
+			padding: 20px;
+			border-radius: 14px;
+			background: var(--ude-lightblue);
+			border: 2px solid rgba(0, 76, 147, 0.2);
+		}
+
+		.qalgo-viz-panel h4 {
+			margin: 0 0 12px 0;
+			font-size: 0.7em;
+			color: var(--ude-blue);
+			text-align: center;
+		}
+
+		.qalgo-viz-panel p {
+			margin: 12px 0 0 0;
+			font-size: 0.5em;
+			color: var(--ude-black);
+			opacity: 0.7;
+			text-align: center;
+			line-height: 1.4;
+		}
+
+		#qalgo-peak-chart {
+			width: 400px;
+			height: 280px;
+			background: #fff;
+			border-radius: 8px;
+		}
+
+		#qalgo-crit-chart {
+			width: 400px;
+			height: 280px;
+			background: #fff;
+			border-radius: 8px;
+		}
+
+		.qalgo-crit-axis path,
+		.qalgo-crit-axis line {
+			stroke: var(--ude-blue);
+			stroke-width: 1.5px;
+		}
+
+		.qalgo-crit-axis text {
+			font-size: 10px;
+			fill: var(--ude-blue);
+		}
 	</style>
 </head>
 
@@ -1571,6 +1628,22 @@
 					<span style="display: block; margin-top: 4px;">a) Reuschenbach et al. (2022). <i>Anal. Bioanal. Chem.</i>, 414(22), 6635-6645.</span>
 					<span style="display: block;">b) Reuschenbach et al. (2023). <i>Anal. Chem.</i>, 95(37), 13804-13812.</span>
 					<span style="display: block;">c) Reuschenbach et al. (2024). <i>Anal. Chem.</i>, 96(18), 7120-7129.</span>
+				</div>
+			</section>
+
+			<section id="qAlgorithms-visualization">
+				<h2>qAlgorithms in essence</h2>
+				<div class="qalgo-viz-container">
+					<div class="qalgo-viz-panel">
+						<h4><i class="fa-solid fa-wave-square"></i> Asymmetric Peak Model</h4>
+						<div id="qalgo-peak-chart"></div>
+						<p>exp(β₀ + β₁x + β₂x² for x&lt;0, β₃x² for x≥0)</p>
+					</div>
+					<div class="qalgo-viz-panel">
+						<h4><i class="fa-solid fa-scissors"></i> Mass Trace Splitting Criterion</h4>
+						<div id="qalgo-crit-chart"></div>
+						<p>Critical distance: A + (B / √log(n+1)) · σ</p>
+					</div>
 				</div>
 			</section>
 			
@@ -2774,6 +2847,7 @@
 			renderPeakIntroChart();
 			renderQAlgorithmCharts(Reveal.getCurrentSlide());
 			scheduleProcessingConsistencyRender();
+			initQAlgoVisualization();
 			Reveal.on('resize', () => {
 				renderPeakIntroChart();
 				renderQAlgorithmCharts(Reveal.getCurrentSlide());
@@ -2786,6 +2860,9 @@
 				if (event.currentSlide && event.currentSlide.id === 'peak-intro-1') {
 					renderPeakIntroChart();
 				}
+				if (event.currentSlide && event.currentSlide.id === 'qAlgorithms-visualization') {
+					initQAlgoVisualization();
+				}
 				renderQAlgorithmCharts(event.currentSlide);
 				scheduleProcessingConsistencyRender();
 			});
@@ -2793,6 +2870,178 @@
 				scheduleProcessingConsistencyRender();
 			});
 		});
+
+		// qAlgorithms Visualization Functions
+		let qalgoPeakAnimationId = null;
+
+		function initQAlgoVisualization() {
+			renderQAlgoCritChart();
+			startQAlgoPeakAnimation();
+		}
+
+		function startQAlgoPeakAnimation() {
+			const container = document.getElementById('qalgo-peak-chart');
+			if (!container || !window.d3) return;
+
+			const width = 400;
+			const height = 280;
+			const margin = { top: 20, right: 20, bottom: 20, left: 20 };
+			const innerWidth = width - margin.left - margin.right;
+			const innerHeight = height - margin.top - margin.bottom;
+
+			container.innerHTML = '';
+			const svg = d3.select(container)
+				.append('svg')
+				.attr('width', width)
+				.attr('height', height);
+
+			const chart = svg.append('g')
+				.attr('transform', `translate(${margin.left},${margin.top})`);
+
+			const xScale = d3.scaleLinear().domain([-3, 3]).range([0, innerWidth]);
+			const yScale = d3.scaleLinear().domain([0, 1.1]).range([innerHeight, 0]);
+
+			const colors = ['var(--ude-blue)', 'var(--ude-accent-1)', 'var(--ude-accent-2)', 'var(--ude-accent-3)'];
+			const paths = colors.map((color, i) => 
+				chart.append('path')
+					.attr('fill', 'none')
+					.attr('stroke', color)
+					.attr('stroke-width', 2.5)
+					.attr('opacity', 0.85)
+			);
+
+			const line = d3.line()
+				.x(d => xScale(d.x))
+				.y(d => yScale(d.y))
+				.curve(d3.curveBasis);
+
+			function peakFunction(x, b0, b1, b2, b3) {
+				const quadTerm = x < 0 ? b2 * x * x : b3 * x * x;
+				return Math.exp(b0 + b1 * x + quadTerm);
+			}
+
+			let startTime = null;
+			function animate(timestamp) {
+				if (!startTime) startTime = timestamp;
+				const t = (timestamp - startTime) / 1000;
+
+				// Slowly varying shape parameters
+				const b1 = 0.1 * Math.sin(t * 0.3);
+				const b2 = -0.8 - 0.3 * Math.sin(t * 0.2);
+				const b3 = -0.5 - 0.25 * Math.sin(t * 0.25);
+
+				// Different b0 offsets for each curve, varying independently
+				const b0s = [
+					-0.1 + 0.3 * Math.sin(t * 0.7),
+					-0.5 + 0.3 * Math.sin(t * 0.5 + 1),
+					-1.0 + 0.3 * Math.sin(t * 0.6 + 2),
+					-1.5 + 0.3 * Math.sin(t * 0.4 + 3)
+				];
+
+				const xValues = d3.range(-3, 3.05, 0.1);
+
+				paths.forEach((path, i) => {
+					const data = xValues.map(x => ({
+						x,
+						y: peakFunction(x, b0s[i], b1, b2, b3)
+					}));
+					path.attr('d', line(data));
+				});
+
+				qalgoPeakAnimationId = requestAnimationFrame(animate);
+			}
+
+			if (qalgoPeakAnimationId) cancelAnimationFrame(qalgoPeakAnimationId);
+			qalgoPeakAnimationId = requestAnimationFrame(animate);
+		}
+
+		function renderQAlgoCritChart() {
+			const container = document.getElementById('qalgo-crit-chart');
+			if (!container || !window.d3) return;
+
+			const width = 400;
+			const height = 280;
+			const margin = { top: 20, right: 30, bottom: 50, left: 60 };
+			const innerWidth = width - margin.left - margin.right;
+			const innerHeight = height - margin.top - margin.bottom;
+
+			container.innerHTML = '';
+			const svg = d3.select(container)
+				.append('svg')
+				.attr('width', width)
+				.attr('height', height);
+
+			const chart = svg.append('g')
+				.attr('transform', `translate(${margin.left},${margin.top})`);
+
+			const OS_CRIT_A = 0.1443340625173891;
+			const OS_CRIT_B = 3.2412322699344687;
+			const stdDev = 1; // normalized
+
+			const nValues = d3.range(2, 151);
+			const data = nValues.map(n => ({
+				n,
+				crit: OS_CRIT_A + (OS_CRIT_B / Math.sqrt(Math.log(n + 1))) * stdDev
+			}));
+
+			const xScale = d3.scaleLinear().domain([0, 150]).range([0, innerWidth]);
+			const yScale = d3.scaleLinear().domain([0, d3.max(data, d => d.crit) * 1.1]).range([innerHeight, 0]);
+
+			// X axis
+			chart.append('g')
+				.attr('class', 'qalgo-crit-axis')
+				.attr('transform', `translate(0,${innerHeight})`)
+				.call(d3.axisBottom(xScale).ticks(6));
+
+			// Y axis
+			chart.append('g')
+				.attr('class', 'qalgo-crit-axis')
+				.call(d3.axisLeft(yScale).ticks(5));
+
+			// X label
+			svg.append('text')
+				.attr('x', width / 2)
+				.attr('y', height - 8)
+				.attr('text-anchor', 'middle')
+				.attr('fill', 'var(--ude-blue)')
+				.attr('font-size', '11px')
+				.text('Number of points (n)');
+
+			// Y label
+			svg.append('text')
+				.attr('transform', 'rotate(-90)')
+				.attr('x', -height / 2)
+				.attr('y', 14)
+				.attr('text-anchor', 'middle')
+				.attr('fill', 'var(--ude-blue)')
+				.attr('font-size', '11px')
+				.text('Critical distance (σ units)');
+
+			// Line
+			const line = d3.line()
+				.x(d => xScale(d.n))
+				.y(d => yScale(d.crit))
+				.curve(d3.curveMonotoneX);
+
+			chart.append('path')
+				.datum(data)
+				.attr('fill', 'none')
+				.attr('stroke', 'var(--ude-accent-3)')
+				.attr('stroke-width', 3)
+				.attr('d', line);
+
+			// Area fill
+			const area = d3.area()
+				.x(d => xScale(d.n))
+				.y0(innerHeight)
+				.y1(d => yScale(d.crit))
+				.curve(d3.curveMonotoneX);
+
+			chart.append('path')
+				.datum(data)
+				.attr('fill', 'rgba(184, 16, 59, 0.15)')
+				.attr('d', area);
+		}
 	</script>
 
 	<script src="resources/js/utils/clock.js"></script>
