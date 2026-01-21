@@ -1235,6 +1235,67 @@
 			color: var(--ude-black);
 			opacity: 0.75;
 		}
+
+		/* Summary Slide (Dark Mode) */
+		.cf-summary-container {
+			display: flex;
+			flex-direction: column;
+			gap: 24px;
+			margin: 20px auto;
+			max-width: 900px;
+		}
+
+		.cf-summary-item {
+			display: flex;
+			align-items: flex-start;
+			gap: 20px;
+			padding: 20px 24px;
+			border-radius: 14px;
+			background: rgba(255, 255, 255, 0.05);
+			border: 2px solid rgba(255, 255, 255, 0.15);
+		}
+
+		.cf-summary-icon {
+			width: 50px;
+			height: 50px;
+			border-radius: 12px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			flex-shrink: 0;
+		}
+
+		.cf-summary-icon i {
+			font-size: 1.5em;
+			color: #fff;
+		}
+
+		.cf-summary-item.qalgo .cf-summary-icon { background: var(--ude-blue); }
+		.cf-summary-item.consist .cf-summary-icon { background: var(--ude-accent-1); }
+		.cf-summary-item.pints .cf-summary-icon { background: var(--ude-accent-2); }
+		.cf-summary-item.cogni .cf-summary-icon { background: var(--ude-accent-3); }
+
+		.cf-summary-text {
+			flex: 1;
+		}
+
+		.cf-summary-text h4 {
+			margin: 0 0 6px 0;
+			font-size: 0.85em;
+			color: #fff;
+		}
+
+		.cf-summary-item.qalgo .cf-summary-text h4 { color: var(--ude-lightblue); }
+		.cf-summary-item.consist .cf-summary-text h4 { color: var(--ude-accent-1); }
+		.cf-summary-item.pints .cf-summary-text h4 { color: var(--ude-accent-2); }
+		.cf-summary-item.cogni .cf-summary-text h4 { color: var(--ude-accent-3); }
+
+		.cf-summary-text p {
+			margin: 0;
+			font-size: 0.6em;
+			color: rgba(255, 255, 255, 0.75);
+			line-height: 1.5;
+		}
 	</style>
 </head>
 
@@ -1392,50 +1453,6 @@
 				</div>
 			</section>
 
-			<section id="qalgorithms-philosophy-1" data-auto-animate>
-				<h2>Odea-Project: QAlgorithms</h2>
-				<strong data-id="nts-processing-step-label">NTS Processing Step</strong>
-				<div style="display: flex; flex-direction: row; align-items: center; gap: 12px; justify-content: center;">
-					<div data-id="data-box" class="in-out-box-small" style="background: #888;"><i class="fa-solid fa-arrow-right-to-bracket"></i><strong>Data<br>in</strong></div>
-					<div data-id="algorithm-box" class="algo-flow">
-						<div class="algo-step" data-id="algo-step-1">
-							<div class="algo-peakfit-box" data-id="algo-peakfit-1"></div>
-							<div class="algo-step-core">
-								<div data-id="algo-main-path-1" class="algo-path"></div>
-								<div data-id="algo-box-1" class="algo-box" style="background: var(--ude-accent-1);">
-									<strong>Apply Data Model</strong>
-								</div>
-								<div data-id="algo-main-path-2" class="algo-path"></div>
-							</div>
-						</div>
-						<div class="algo-step" data-id="algo-step-2">
-							<div class="algo-peakfit-box" data-id="algo-peakfit-2"></div>
-							<div class="algo-step-core">
-								<div data-id="algo-main-path-3" class="algo-path"></div>
-								<div data-id="algo-box-2" class="algo-box" style="background: var(--ude-accent-2);">
-									<strong>Validate Model Result(s)</strong>
-								</div>
-								<div data-id="algo-main-path-4" class="algo-path"></div>
-							</div>
-						</div>
-						<div class="algo-step" data-id="algo-step-3">
-							<div class="algo-peakfit-box" data-id="algo-peakfit-3"></div>
-							<div class="algo-step-core">
-								<div data-id="algo-main-path-5" class="algo-path"></div>
-								<div data-id="algo-box-3" class="algo-box" style="background: var(--ude-accent-3);">
-									<strong>Uncertainty Estimation</strong>
-								</div>
-								<div data-id="algo-main-path-6" class="algo-path"></div>
-							</div>
-						</div>
-					</div>
-					<div data-id="output-box" class="in-out-box-small" style="background: var(--ude-accent-4); width: auto;"><i class="fa-solid fa-arrow-right-from-bracket"></i><strong>Data<br>out</strong></div>
-				</div>
-				<div data-id="cap">
-					<span style="font-size: 0.65em; color: #888;"><i>Generic q-algorithm step design</i></span>
-				</div>
-			</section>
-
 			<section id="qalgorithms-philosophy-2" data-auto-animate>
 				<h2>Odea-Project: QAlgorithms</h2>
 				<strong data-id="nts-processing-step-label">NTS Processing Step</strong>
@@ -1443,7 +1460,7 @@
 					<div data-id="data-box" class="in-out-box-small" style="background: #888;"><i class="fa-solid fa-arrow-right-to-bracket"></i><strong>Data<br>in</strong></div>
 					<div data-id="algorithm-box" class="algo-flow">
 						<div class="algo-step" data-id="algo-step-1">
-							<div class="algo-peakfit-box" data-id="algo-peakfit-1">
+							<div class="algo-peakfit-box fragment" data-id="algo-peakfit-1" data-fragment-index="1">
 								<div class="algo-peakfit-chart" data-id="algo-peakfit-chart-1" data-chart="peak-fit"></div>
 							</div>
 							<div class="algo-step-core">
@@ -1455,7 +1472,7 @@
 							</div>
 						</div>
 						<div class="algo-step" data-id="algo-step-2">
-							<div class="algo-peakfit-box" data-id="algo-peakfit-2">
+							<div class="algo-peakfit-box fragment" data-id="algo-peakfit-2" data-fragment-index="1">
 								<div class="algo-peakfit-chart" data-id="algo-peakfit-chart-2" data-chart="residuals"></div>
 							</div>
 							<div class="algo-step-core">
@@ -1467,7 +1484,7 @@
 							</div>
 						</div>
 						<div class="algo-step" data-id="algo-step-3">
-							<div class="algo-peakfit-box" data-id="algo-peakfit-3">
+							<div class="algo-peakfit-box fragment" data-id="algo-peakfit-3" data-fragment-index="1">
 								<div class="algo-peakfit-chart" data-id="algo-peakfit-chart-3" data-chart="error-bars"></div>
 							</div>
 							<div class="algo-step-core">
@@ -1813,6 +1830,14 @@
 							<span>multi programming language support</span>
 						</li>
 					</ul>
+				</div>
+				<div class="qr-overlay" style="left: 50px; top: 250px;">
+					<a href="https://github.com/odea-project" target="_blank" rel="noopener">
+						<img src="resources/figures/odea-project.png" alt="QR code: https://github.com/odea-project">
+					</a>
+					<p style="font-size: 0.75em; color: #555;">
+						visit PINTS on GitHub
+					</p>
 				</div>
 			</section>
 
@@ -2166,6 +2191,58 @@
 					<i class="fa-solid fa-check-circle"></i> 
 					Every step documented • Parameters tracked • Fully reproducible
 				</p>
+			</section>
+
+			<section id="summary" data-background-color="black">
+				<h2 style="color: #fff; margin-bottom: 30px;">Summary</h2>
+				<div class="cf-summary-container">
+					<div class="cf-summary-item qalgo">
+						<div class="cf-summary-icon">
+							<i class="fa-solid fa-wand-magic-sparkles"></i>
+						</div>
+						<div class="cf-summary-text">
+							<h4>qAlgorithms</h4>
+							<p>Parameter-free, consistent NTS data processing</p>
+						</div>
+					</div>
+					<div class="cf-summary-item consist">
+						<div class="cf-summary-icon">
+							<i class="fa-solid fa-fingerprint"></i>
+						</div>
+						<div class="cf-summary-text">
+							<h4>Consistency & Digital Fingerprinting</h4>
+							<p>NTS enables consistency measurement & quality assurance</p>
+						</div>
+					</div>
+					<div class="cf-summary-item pints">
+						<div class="cf-summary-icon">
+							<i class="fa-solid fa-plug"></i>
+						</div>
+						<div class="cf-summary-text">
+							<h4>PINTS</h4>
+							<p>Standardized I/O for interoperable NTS tools</p>
+						</div>
+					</div>
+					<div class="cf-summary-item cogni">
+						<div class="cf-summary-icon">
+							<i class="fa-solid fa-brain"></i>
+						</div>
+						<div class="cf-summary-text">
+							<h4>CogniFlow</h4>
+							<p>Ontology-based standardization for all analytical methods</p>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<section id="thankyou">
+				<h1>Thank you for your attention!</h1>
+				<img src="resources/figures/iac_group.jpg" alt="IAC Group Photo" style="width: 600px;"/>
+				<div style="font-size: 0.55em; color: #555; text-align: left; margin-top: -150px;">
+					<i class="fa-solid fa-user" style="color: #004c93;"></i> Gerrit Renner, <br>
+					<i class="fa-solid fa-building" style="color: #004c93;"></i> University of Duisburg-Essen, Instrumental Analytical Chemistry, TC Schmidt Lab,<br>
+					<i class="fa-solid fa-envelope" style="color: #004c93;"></i> gerrit.renner@uni-due.de
+				</div>
 			</section>
 		</div>
 	</div>
