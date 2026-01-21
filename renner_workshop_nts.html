@@ -390,7 +390,19 @@
 			grid-template-columns: 1fr 140px 1fr;
 			align-items: center;
 			gap: 16px;
+		}
+
+		.pc-plots-grid {
+			display: grid;
+			grid-template-columns: 240px 1fr;
+			gap: 20px;
+			align-items: start;
 			margin-top: 20px;
+		}
+
+		.pc-plots-spacer {
+			height: 260px;
+			width: 20px;
 		}
 
 		.pc-plot {
@@ -585,6 +597,12 @@
 		.pints-dot-api { background: #b8103b; }
 		.pints-dot-leaf { background: #ec7206; }
 
+		#qalgorithms-results-1 pre,
+		#qalgorithms-results-2 pre,
+		#qalgorithms-results-3 pre {
+			overflow: hidden;
+		}
+
 		.pints-layout {
 			display: grid;
 			grid-template-columns: minmax(320px, 1fr) minmax(240px, 0.9fr);
@@ -692,6 +710,14 @@
 
 			.pc-plots {
 				grid-template-columns: 1fr;
+			}
+
+			.pc-plots-grid {
+				grid-template-columns: 1fr;
+			}
+
+			.pc-plots-spacer {
+				height: 0;
 			}
 
 			.pc-delta {
@@ -1658,18 +1684,21 @@
 								Appear in EICs, considered for features, and found in replicates
 							</div>
 					</div>
-					<div class="pc-plots">
-						<div class="pc-plot" data-pc-plot="replicate-a">
-							<div class="pc-plot-title">Centroid group A</div>
-						</div>
-						<div class="pc-delta">
-							<div><strong>Cliff's delta</strong></div>
-							<div>0.23 ± 0.02</div>
-							<div class="pc-delta-arrow"></div>
-							<div class="pc-plot-label">property, e.g., m/z</div>
-						</div>
-						<div class="pc-plot" data-pc-plot="replicate-b">
-							<div class="pc-plot-title">Centroid group B</div>
+					<div class="pc-plots-grid">
+						<div class="pc-plots-spacer" aria-hidden="true"></div>
+						<div class="pc-plots">
+							<div class="pc-plot" data-pc-plot="replicate-a">
+								<div class="pc-plot-title">Centroid group A</div>
+							</div>
+							<div class="pc-delta">
+								<div><strong>Cliff's delta</strong></div>
+								<div>0.23 +/- 0.02</div>
+								<div class="pc-delta-arrow"></div>
+								<div class="pc-plot-label">property, e.g., m/z</div>
+							</div>
+							<div class="pc-plot" data-pc-plot="replicate-b">
+								<div class="pc-plot-title">Centroid group B</div>
+							</div>
 						</div>
 					</div>
 			</section>
@@ -2584,14 +2613,20 @@
 			});
 		}
 
-		function renderProcessingConsistencyPlots(slide) {
+		function renderProcessingConsistencyPlots(slide, attempt) {
 			if (!slide || !window.d3 || slide.id !== 'processing-consistency-2') {
 				return;
 			}
 
+			const retry = typeof attempt === 'number' ? attempt : 0;
 			const containers = slide.querySelectorAll('[data-pc-plot]');
 			containers.forEach((container, index) => {
-				const width = Math.max(280, container.clientWidth || 360);
+				const rect = container.getBoundingClientRect();
+				if (rect.width < 50 && retry < 8) {
+					setTimeout(() => renderProcessingConsistencyPlots(slide, retry + 1), 60);
+					return;
+				}
+				const width = Math.max(280, Math.floor(rect.width) || 360);
 				const height = 220;
 				const margin = { top: 10, right: 12, bottom: 28, left: 36 };
 				const innerWidth = width - margin.left - margin.right;
@@ -2710,21 +2745,46 @@
 			});
 		}
 
+		function scheduleProcessingConsistencyRender() {
+			const slide = Reveal.getCurrentSlide();
+			if (!slide || slide.id !== 'processing-consistency-2') {
+				return;
+			}
+			let attempts = 0;
+			const run = () => {
+				if (Reveal.getCurrentSlide() !== slide) {
+					return;
+				}
+				renderProcessingConsistencyPlots(slide, attempts);
+				attempts += 1;
+				if (attempts < 6) {
+					setTimeout(run, 120);
+				}
+			};
+			requestAnimationFrame(run);
+		}
+
 		window.addEventListener('load', () => {
 			renderPeakIntroChart();
 			renderQAlgorithmCharts(Reveal.getCurrentSlide());
-			renderProcessingConsistencyPlots(Reveal.getCurrentSlide());
+			scheduleProcessingConsistencyRender();
 			Reveal.on('resize', () => {
 				renderPeakIntroChart();
 				renderQAlgorithmCharts(Reveal.getCurrentSlide());
-				renderProcessingConsistencyPlots(Reveal.getCurrentSlide());
+				scheduleProcessingConsistencyRender();
+			});
+			Reveal.on('ready', event => {
+				scheduleProcessingConsistencyRender();
 			});
 			Reveal.on('slidechanged', event => {
 				if (event.currentSlide && event.currentSlide.id === 'peak-intro-1') {
 					renderPeakIntroChart();
 				}
 				renderQAlgorithmCharts(event.currentSlide);
-				renderProcessingConsistencyPlots(event.currentSlide);
+				scheduleProcessingConsistencyRender();
+			});
+			Reveal.on('slidetransitionend', event => {
+				scheduleProcessingConsistencyRender();
 			});
 		});
 	</script>
