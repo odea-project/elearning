@@ -517,6 +517,146 @@
 		.duckdb-header-features { background: #b8103b; color: #ffffff; }
 		.duckdb-header-custom { background: #ec7206; }
 
+		.pints-tree {
+			margin-top: 20px;
+			display: flex;
+			justify-content: center;
+		}
+
+		.pints-tree ul {
+			list-style: none;
+			margin: 0;
+			padding: 0;
+			position: relative;
+		}
+
+		.pints-tree li {
+			position: relative;
+			padding: 8px 12px 8px 30px;
+			font-size: 0.7em;
+			color: var(--ude-blue);
+		}
+
+		.pints-tree li::before {
+			content: "";
+			position: absolute;
+			left: 10px;
+			top: 0;
+			bottom: 0;
+			width: 2px;
+			background: rgba(0, 76, 147, 0.3);
+		}
+
+		.pints-tree li::after {
+			content: "";
+			position: absolute;
+			left: 10px;
+			top: 18px;
+			width: 14px;
+			height: 2px;
+			background: rgba(0, 76, 147, 0.3);
+		}
+
+		.pints-tree li:last-child::before {
+			height: 18px;
+		}
+
+		.pints-node {
+			display: inline-flex;
+			align-items: center;
+			gap: 8px;
+			padding: 6px 12px;
+			border-radius: 10px;
+			background: #ffffff;
+			border: 1px solid rgba(0, 76, 147, 0.2);
+			box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);
+			font-weight: 700;
+		}
+
+		.pints-dot {
+			width: 10px;
+			height: 10px;
+			border-radius: 3px;
+			display: inline-block;
+		}
+
+		.pints-dot-core { background: #f5c542; }
+		.pints-dot-plugins { background: #61a27c; }
+		.pints-dot-api { background: #b8103b; }
+		.pints-dot-leaf { background: #ec7206; }
+
+		.pints-layout {
+			display: grid;
+			grid-template-columns: minmax(320px, 1fr) minmax(240px, 0.9fr);
+			gap: 24px;
+			align-items: start;
+			margin-top: 16px;
+		}
+
+		.pints-flow {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			gap: 10px;
+			font-size: 0.65em;
+		}
+
+		#PINTS-4 {
+			position: relative;
+		}
+
+		.pints-flow-offscreen {
+			position: absolute;
+			top: 140px;
+			right: -420px;
+		}
+
+		.pints-stagger-1 { transform: translateX(160px); }
+		.pints-stagger-2 { transform: translateX(320px); }
+		.pints-stagger-3 { transform: translateX(480px); }
+		.pints-stagger-4 { transform: translateX(640px); }
+		.pints-stagger-5 { transform: translateX(800px); }
+		.pints-stagger-6 { transform: translateX(960px); }
+		.pints-stagger-7 { transform: translateX(1120px); }
+
+		.pints-flow-box {
+			width: 100%;
+			max-width: 260px;
+			padding: 8px 12px;
+			border-radius: 10px;
+			background: #ffffff;
+			border: 2px solid rgba(0, 76, 147, 0.3);
+			color: var(--ude-blue);
+			font-weight: 700;
+			text-align: center;
+			box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);
+		}
+
+		.pints-flow-arrow {
+			width: 10px;
+			height: 16px;
+			background: var(--ude-blue);
+			border-radius: 6px;
+			position: relative;
+		}
+
+		.pints-flow-arrow::after {
+			content: "";
+			position: absolute;
+			left: 50%;
+			bottom: -8px;
+			transform: translateX(-50%);
+			width: 0;
+			height: 0;
+			border-left: 6px solid transparent;
+			border-right: 6px solid transparent;
+			border-top: 8px solid var(--ude-blue);
+		}
+
+		.pints-flow-arrow.long {
+			height: 42px;
+		}
+
 		@media (max-width: 1100px) {
 			.duckdb-grid {
 				grid-template-columns: repeat(2, minmax(180px, 1fr));
@@ -558,6 +698,542 @@
 				flex-direction: row;
 				justify-content: center;
 			}
+		}
+
+		/* ===== COGNIFLOW SECTION STYLES ===== */
+		.cf-pipeline {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			gap: 0;
+			margin: 30px auto;
+		}
+
+		.cf-pipeline-box {
+			padding: 18px 22px;
+			border-radius: 12px;
+			font-size: 0.65em;
+			font-weight: 700;
+			text-align: center;
+			color: #fff;
+			background: var(--ude-blue);
+			box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+			min-width: 140px;
+		}
+
+		.cf-pipeline-box.highlight {
+			background: var(--ude-blue);
+			color: #fff;
+			border: 3px solid var(--ude-accent-1);
+		}
+
+		.cf-pipeline-box.muted {
+			background: var(--ude-lightblue);
+			color: var(--ude-blue);
+		}
+
+		.cf-pipeline-box small {
+			display: block;
+			font-size: 0.8em;
+			font-weight: 400;
+			opacity: 0.85;
+			margin-top: 4px;
+		}
+
+		.cf-arrow {
+			width: 40px;
+			height: 20px;
+			background: var(--ude-blue);
+			mask: polygon(0 35%, 70% 35%, 70% 0, 100% 50%, 70% 100%, 70% 65%, 0 65%);
+			-webkit-mask: polygon(0 35%, 70% 35%, 70% 0, 100% 50%, 70% 100%, 70% 65%, 0 65%);
+		}
+
+		.cf-arrow.light {
+			background: var(--ude-accent-1);
+		}
+
+		.cf-pipelines-grid {
+			display: grid;
+			grid-template-columns: repeat(3, 1fr);
+			gap: 20px;
+			margin: 30px auto;
+			max-width: 900px;
+		}
+
+		.cf-pipeline-card {
+			padding: 20px 16px;
+			border-radius: 14px;
+			background: var(--ude-lightblue);
+			border: 2px solid rgba(0, 76, 147, 0.2);
+			text-align: center;
+			transition: all 0.3s ease;
+		}
+
+		.cf-pipeline-card.nts {
+			background: rgba(0, 76, 147, 0.1);
+			border: 3px solid var(--ude-blue);
+		}
+
+		.cf-pipeline-card i {
+			font-size: 2em;
+			margin-bottom: 12px;
+			display: block;
+			color: var(--ude-blue);
+			opacity: 0.6;
+		}
+
+		.cf-pipeline-card.nts i {
+			color: var(--ude-blue);
+			opacity: 1;
+		}
+
+		.cf-pipeline-card h4 {
+			margin: 0 0 8px 0;
+			font-size: 0.65em;
+			color: var(--ude-black);
+		}
+
+		.cf-pipeline-card.nts h4 {
+			color: var(--ude-blue);
+		}
+
+		.cf-pipeline-card p {
+			margin: 0;
+			font-size: 0.45em;
+			color: var(--ude-black);
+			opacity: 0.7;
+			line-height: 1.4;
+		}
+
+		.cf-problem-grid {
+			display: grid;
+			grid-template-columns: repeat(2, 1fr);
+			gap: 24px;
+			margin: 30px auto;
+			max-width: 850px;
+		}
+
+		.cf-problem-card {
+			padding: 24px 20px;
+			border-radius: 14px;
+			background: rgba(184, 16, 59, 0.08);
+			border: 2px solid var(--ude-accent-3-45);
+			text-align: center;
+		}
+
+		.cf-problem-card i {
+			font-size: 2.2em;
+			margin-bottom: 14px;
+			display: block;
+			color: var(--ude-accent-3);
+		}
+
+		.cf-problem-card h4 {
+			margin: 0 0 8px 0;
+			font-size: 0.85em;
+			color: var(--ude-black);
+		}
+
+		.cf-problem-card p {
+			margin: 0;
+			font-size: 0.6em;
+			color: var(--ude-black);
+			opacity: 0.7;
+			line-height: 1.4;
+		}
+
+		.cf-vision-container {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			gap: 30px;
+			margin: 20px auto;
+		}
+
+		.cf-ontology-hub {
+			width: 180px;
+			height: 180px;
+			border-radius: 50%;
+			background: linear-gradient(135deg, var(--ude-lightblue), var(--ude-beige));
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			flex-direction: column;
+			box-shadow: 0 8px 30px rgba(0, 76, 147, 0.2);
+			border: 4px solid var(--ude-blue);
+		}
+
+		.cf-ontology-hub i {
+			font-size: 2.5em;
+			color: var(--ude-blue);
+			margin-bottom: 8px;
+		}
+
+		.cf-ontology-hub span {
+			font-size: 0.9em;
+			font-weight: 700;
+			color: var(--ude-blue);
+		}
+
+		.cf-vision-features {
+			display: flex;
+			gap: 30px;
+			justify-content: center;
+		}
+
+		.cf-vision-feature {
+			padding: 20px 24px;
+			border-radius: 14px;
+			background: var(--ude-lightblue);
+			border: 2px solid rgba(0, 76, 147, 0.25);
+			text-align: center;
+			min-width: 200px;
+		}
+
+		.cf-vision-feature i {
+			font-size: 1.8em;
+			color: var(--ude-blue);
+			margin-bottom: 12px;
+			display: block;
+		}
+
+		.cf-vision-feature h4 {
+			margin: 0 0 8px 0;
+			font-size: 0.8em;
+			color: var(--ude-blue);
+		}
+
+		.cf-vision-feature p {
+			margin: 0;
+			font-size: 0.55em;
+			color: var(--ude-black);
+			opacity: 0.7;
+			line-height: 1.4;
+		}
+
+		.cf-connector-line {
+			width: 3px;
+			height: 30px;
+			background: linear-gradient(to bottom, var(--ude-blue), rgba(0, 76, 147, 0.3));
+		}
+
+		/* Processing Step Diagram */
+		.cf-step-container {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			gap: 0;
+			margin: 40px auto;
+		}
+
+		.cf-step-input, .cf-step-output {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			gap: 8px;
+		}
+
+		.cf-step-input span, .cf-step-output span {
+			font-size: 0.55em;
+			color: var(--ude-black);
+			opacity: 0.7;
+		}
+
+		.cf-step-data-box {
+			padding: 14px 20px;
+			border-radius: 10px;
+			background: var(--ude-beige);
+			border: 2px solid var(--ude-accent-1-65);
+			font-size: 0.6em;
+			font-weight: 600;
+			color: var(--ude-black);
+		}
+
+		.cf-step-arrow {
+			width: 60px;
+			height: 24px;
+			background: var(--ude-accent-1);
+			mask: polygon(0 35%, 75% 35%, 75% 0, 100% 50%, 75% 100%, 75% 65%, 0 65%);
+			-webkit-mask: polygon(0 35%, 75% 35%, 75% 0, 100% 50%, 75% 100%, 75% 65%, 0 65%);
+		}
+
+		.cf-step-core {
+			position: relative;
+			padding: 30px 40px;
+			border-radius: 16px;
+			background: linear-gradient(135deg, var(--ude-blue), #003a72);
+			box-shadow: 0 8px 25px rgba(0, 76, 147, 0.3);
+			text-align: center;
+			min-width: 200px;
+		}
+
+		.cf-step-core i {
+			font-size: 2.5em;
+			color: #fff;
+			margin-bottom: 12px;
+			display: block;
+		}
+
+		.cf-step-core h4 {
+			margin: 0;
+			font-size: 0.85em;
+			color: #fff;
+		}
+
+		.cf-step-params {
+			position: absolute;
+			top: -12px;
+			right: -12px;
+			padding: 8px 12px;
+			border-radius: 8px;
+			background: var(--ude-accent-4);
+			font-size: 0.5em;
+			font-weight: 700;
+			color: var(--ude-black);
+		}
+
+		.cf-step-examples {
+			display: flex;
+			justify-content: center;
+			gap: 16px;
+			margin-top: 30px;
+			flex-wrap: wrap;
+		}
+
+		.cf-step-example {
+			padding: 10px 18px;
+			border-radius: 20px;
+			background: var(--ude-lightblue);
+			border: 1px solid rgba(0, 76, 147, 0.2);
+			font-size: 0.55em;
+			color: var(--ude-blue);
+		}
+
+		/* Pipeline Composition */
+		.cf-composition-container {
+			display: flex;
+			align-items: flex-start;
+			justify-content: center;
+			gap: 40px;
+			margin: 30px auto;
+		}
+
+		.cf-step-library {
+			padding: 20px;
+			border-radius: 14px;
+			background: var(--ude-lightblue);
+			border: 2px dashed rgba(0, 76, 147, 0.3);
+			min-width: 200px;
+		}
+
+		.cf-step-library h4 {
+			margin: 0 0 16px 0;
+			font-size: 0.7em;
+			color: var(--ude-blue);
+			text-align: center;
+		}
+
+		.cf-library-steps {
+			display: flex;
+			flex-direction: column;
+			gap: 10px;
+		}
+
+		.cf-library-step {
+			padding: 10px 14px;
+			border-radius: 8px;
+			background: #fff;
+			border: 2px solid rgba(0, 76, 147, 0.15);
+			font-size: 0.55em;
+			color: var(--ude-blue);
+			display: flex;
+			align-items: center;
+			gap: 8px;
+		}
+
+		.cf-library-step i {
+			color: var(--ude-accent-1);
+		}
+
+		.cf-compose-arrow {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			gap: 8px;
+			padding-top: 60px;
+		}
+
+		.cf-compose-arrow span {
+			font-size: 0.55em;
+			color: var(--ude-black);
+			opacity: 0.6;
+		}
+
+		.cf-compose-arrow-icon {
+			width: 80px;
+			height: 30px;
+			background: var(--ude-accent-2);
+			mask: polygon(0 35%, 75% 35%, 75% 0, 100% 50%, 75% 100%, 75% 65%, 0 65%);
+			-webkit-mask: polygon(0 35%, 75% 35%, 75% 0, 100% 50%, 75% 100%, 75% 65%, 0 65%);
+		}
+
+		.cf-assembled-pipeline {
+			padding: 24px;
+			border-radius: 14px;
+			background: rgba(97, 162, 124, 0.1);
+			border: 3px solid var(--ude-accent-2);
+		}
+
+		.cf-assembled-pipeline h4 {
+			margin: 0 0 16px 0;
+			font-size: 0.7em;
+			color: var(--ude-accent-2);
+			text-align: center;
+		}
+
+		.cf-pipeline-chain {
+			display: flex;
+			align-items: center;
+			gap: 0;
+		}
+
+		.cf-chain-step {
+			padding: 12px 16px;
+			border-radius: 8px;
+			background: var(--ude-blue);
+			color: #fff;
+			font-size: 0.5em;
+			font-weight: 600;
+			text-align: center;
+		}
+
+		.cf-chain-arrow {
+			width: 30px;
+			height: 16px;
+			background: var(--ude-accent-2);
+			mask: polygon(0 35%, 70% 35%, 70% 0, 100% 50%, 70% 100%, 70% 65%, 0 65%);
+			-webkit-mask: polygon(0 35%, 70% 35%, 70% 0, 100% 50%, 70% 100%, 70% 65%, 0 65%);
+		}
+
+		/* Ontology Benefits */
+		.cf-benefits-container {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			gap: 24px;
+			margin: 20px auto;
+		}
+
+		.cf-benefits-hub {
+			width: 120px;
+			height: 120px;
+			border-radius: 50%;
+			background: linear-gradient(135deg, var(--ude-lightblue), var(--ude-beige));
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			box-shadow: 0 6px 20px rgba(0, 76, 147, 0.15);
+			border: 3px solid var(--ude-blue);
+		}
+
+		.cf-benefits-hub i {
+			font-size: 2em;
+			color: var(--ude-blue);
+		}
+
+		.cf-benefits-grid {
+			display: grid;
+			grid-template-columns: repeat(3, 1fr);
+			gap: 20px;
+			max-width: 950px;
+		}
+
+		.cf-benefit-card {
+			padding: 20px 16px;
+			border-radius: 12px;
+			background: var(--ude-lightblue);
+			border: 2px solid rgba(0, 76, 147, 0.2);
+			text-align: center;
+		}
+
+		.cf-benefit-card i {
+			font-size: 1.4em;
+			margin-bottom: 10px;
+			display: block;
+		}
+
+		.cf-benefit-card h4 {
+			margin: 0 0 6px 0;
+			font-size: 0.5em;
+			color: var(--ude-blue);
+		}
+
+		.cf-benefit-card p {
+			margin: 0;
+			font-size: 0.5em;
+			color: var(--ude-black);
+			opacity: 0.7;
+			line-height: 1.4;
+		}
+
+		.cf-benefit-card.doc i { color: var(--ude-blue); }
+		.cf-benefit-card.audit i { color: var(--ude-accent-1); }
+		.cf-benefit-card.repro i { color: var(--ude-accent-2); }
+		.cf-benefit-card.fair i { color: var(--ude-accent-3); }
+
+		/* FAIR Slide */
+		.cf-fair-container {
+			display: flex;
+			flex-direction: column;
+			gap: 20px;
+			margin: 30px auto;
+			max-width: 800px;
+		}
+
+		.cf-fair-item {
+			display: flex;
+			align-items: stretch;
+			gap: 0;
+			border-radius: 12px;
+			overflow: hidden;
+			box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+		}
+
+		.cf-fair-letter {
+			width: 80px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			font-size: 2em;
+			font-weight: 700;
+			color: #fff;
+		}
+
+		.cf-fair-item.f .cf-fair-letter { background: var(--ude-blue); }
+		.cf-fair-item.a .cf-fair-letter { background: var(--ude-accent-1); }
+		.cf-fair-item.i .cf-fair-letter { background: var(--ude-accent-2); }
+		.cf-fair-item.r .cf-fair-letter { background: var(--ude-accent-3); }
+
+		.cf-fair-content {
+			flex: 1;
+			padding: 16px 20px;
+			background: var(--ude-lightblue);
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+		}
+
+		.cf-fair-content h4 {
+			margin: 0 0 4px 0;
+			font-size: 0.75em;
+			color: var(--ude-blue);
+		}
+
+		.cf-fair-content p {
+			margin: 0;
+			font-size: 0.55em;
+			color: var(--ude-black);
+			opacity: 0.75;
 		}
 	</style>
 </head>
@@ -917,6 +1593,10 @@
 </code></pre>
 			</section>
 
+			<section id="processing-consistency-intro" data-background-color="black">
+				<h1 style="color: aquamarine;">What is the benefit of so much information?</h1>
+			</section>
+
 			<section id="processing-consistency-1" data-auto-animate-restart data-auto-animate>
 				<h2>Processing Consistency Metric</h2>
 				<p data-id="processing-consistency-subhead">NTS data processing workflow can be seen as a series of filtering steps for centroids.</p>
@@ -1057,7 +1737,7 @@
 				</div>
 			</section>
 
-			<section id="processing-consistency-6" data-auto-animate>
+			<section id="processing-consistency-6">
 				<h2>Processing Consistency Metric</h2>
 				<img src="resources/figures/controll_chart_nts.png" alt="Processing Consistency Metric Control Chart"/>
 				<!-- Overlay text for figure -->
@@ -1073,25 +1753,29 @@
 				<p style="margin-left: 50px; margin-bottom: -25px;"><strong>Negative control:</strong> same sample, different MS settings</p>
 				<i class="fa-solid fa-arrow-left-long" style="font-size: 0.8em; color: var(--ude-red); margin-left: 6px;"></i>  
 				</div>
-					
 			</section>
 
-			<section id="qalgorithms-availability-1" data-auto-animate-restart data-auto-animate>
-				<p>qAlgorithms NTS Data Processing & the consistency measure tool are available as open source</p>  
+			<section id="processing-consistency-7">	
+				<h2>Using Cliff's delta cubes for digital fingerprinting</h2>
+				<img src="resources/figures/plsda_scatter.svg" alt="PLS-DA Scatter Plot of Cliff's Delta Cubes"/>
 			</section>
 
-			<section id="qalgorithms-availability-2" data-auto-animate>
-				<p>qAlgorithms NTS Data Processing & the consistency measure tool are available as open source</p> 
+			<section id="qalgorithms-availability-1" data-auto-animate-restart data-auto-animate data-background-color="black">
+				<h1 style="color: aquamarine;">qAlgorithms NTS Data Processing & the consistency measure tool are available as open source</h1>  
+			</section>
+
+			<section id="qalgorithms-availability-2" data-auto-animate data-background-color="black">
+				<h1 style="color: aquamarine;">qAlgorithms NTS Data Processing & the consistency measure tool are available as open source</h1> 
 				<div data-id="spacer1" style="font-size: 0.7em; color: var(--ude-accent-1);"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
-				<p>but hard to use for progammers & non-programmers.</p>
+				<h1 style="color: aquamarine;">but hard to use for progammers & non-programmers.</h1>
 			</section>
 
-			<section id="qalgorithms-availability-3" data-auto-animate>
-				<p>qAlgorithms NTS Data Processing & the consistency measure tool are available as open source</p>  
+			<section id="qalgorithms-availability-3" data-auto-animate data-background-color="black">
+				<h1 style="color: aquamarine;">qAlgorithms NTS Data Processing & the consistency measure tool are available as open source</h1>  
 				<div data-id="spacer1" style="font-size: 0.7em; color: var(--ude-accent-1);"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
-				<p>but hard to use for progammers & non-programmers.</p>
+				<h1 style="color: aquamarine;">but hard to use for progammers & non-programmers.</h1>
 				<div data-id="spacer2" style="font-size: 0.7em; color: var(--ude-accent-1);"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
-				<p>Why? <i class="fa-solid fa-arrow-right-long"></i> there are no established standards for i/o</p>
+				<h1 style="color: aquamarine;">Why? <i class="fa-solid fa-arrow-right-long"></i> there are no established standards for i/o</h1>
 			</section>
 
 			<section id="PINTS-1" data-auto-animate-restart data-auto-animate>
@@ -1190,35 +1874,305 @@
 			<section id="PINTS-4" data-auto-animate>
 				<h2>PINTS (Pipelines for Non-Target Screening)</h2>
 				<p style="font-size: 0.7em;">A community founded to standardize i/o for non-target screening data evaluation tools</p>
-			<!--
-			Here we need a tree hierachy visulaization schema showing items
-			PINTS
-			-- PINTS-core
-			-- PINTS-plugins
-				|-- qAlgorithms
-				|-- qConsistency
-			-- PINTS-api
-				|--PINTS-py
-				|--PINTS-cpp
-				|--PINTS-r
-
-			you can also create this hierachy with small colored div shapes
-			-->
+				<div class="pints-layout" data-id="pints5-layout">
+					<div class="pints-tree" data-id="pints5-tree">
+						<ul data-id="pints5-ul-root">
+							<li data-id="pints5-li-root">
+								<span class="pints-node" data-id="pints5-node-root"><span class="pints-dot pints-dot-core"></span>PINTS</span>
+								<ul data-id="pints5-ul-main">
+									<li data-id="pints5-li-core">
+										<span class="pints-node" data-id="pints5-node-core"><span class="pints-dot pints-dot-core"></span>PINTS-core</span>
+									</li>
+									<li data-id="pints5-li-plugins">
+										<span class="pints-node" data-id="pints5-node-plugins"><span class="pints-dot pints-dot-plugins"></span>PINTS-plugins</span>
+										<ul data-id="pints5-ul-plugins">
+											<li data-id="pints5-li-qalgorithms"><span class="pints-node" data-id="pints5-node-qalgorithms"><span class="pints-dot pints-dot-leaf"></span>qAlgorithms</span></li>
+											<li data-id="pints5-li-qconsistency"><span class="pints-node" data-id="pints5-node-qconsistency"><span class="pints-dot pints-dot-leaf"></span>qConsistency</span></li>
+										</ul>
+									</li>
+									<li data-id="pints5-li-api">
+										<span class="pints-node" data-id="pints5-node-api"><span class="pints-dot pints-dot-api"></span>PINTS-api</span>
+										<ul data-id="pints5-ul-api">
+											<li data-id="pints5-li-py"><span class="pints-node" data-id="pints5-node-py"><span class="pints-dot pints-dot-leaf"></span>PINTS-py</span></li>
+											<li data-id="pints5-li-cpp"><span class="pints-node" data-id="pints5-node-cpp"><span class="pints-dot pints-dot-leaf"></span>PINTS-cpp</span></li>
+											<li data-id="pints5-li-r"><span class="pints-node" data-id="pints5-node-r"><span class="pints-dot pints-dot-leaf"></span>PINTS-r</span></li>
+										</ul>
+									</li>
+								</ul>
+							</li>
+						</ul>
+					</div>
+					<div class="pints-flow pints-flow-offscreen" data-id="pints5-flow">
+						<div class="pints-flow-box pints-stagger-1" data-id="pints5-flow-py-reader" style="background-color: pink;">PINTS-py.reader</div>
+						<div class="pints-flow-box pints-stagger-2" data-id="pints5-flow-py-tool" style="background-color: hotpink;">some NTS tool in python</div>
+						<div class="pints-flow-box pints-stagger-3" data-id="pints5-flow-py-writer" style="background-color: pink;">PINTS-py.writer</div>
+						<div class="pints-flow-arrow long pints-stagger-4" data-id="pints5-flow-gap"></div>
+						<div class="pints-flow-box pints-stagger-5" data-id="pints5-flow-cpp-reader" style="background-color: lightblue;">PINTS-cpp.reader</div>
+						<div class="pints-flow-box pints-stagger-6" data-id="pints5-flow-cpp-tool" style="background-color: deepskyblue;">some NTS tool in c++</div>
+						<div class="pints-flow-box pints-stagger-7" data-id="pints5-flow-cpp-writer" style="background-color: lightblue;">PINTS-cpp.writer</div>
+					</div>
+				</div>
 			</section>
 
-			<section id="Cogniflow-1" data-auto-animate-restart data-auto-animate>
-				<h2>Extend your perspective</h2>
-			<!--
-			Here, we will show a series of slides about Cogniflow starting with 4 small boxes that are connected and should stay for the NTS workflow.
-			then on the next slide there will be a zoom out to show that nts is not the only data pipeline but for most analytical devices and methods there are data pipelines. this shows that nts is just a part of a larger ecosystem. and in cogniflow we want standardize data processing pipelines for all analytical data. Then we a slide that shows the main concept, i.e., we create a comprehensive ontology for analytical data processing including the concept of a processing step that has standardized i/o as well as processing pipelines that consists of multiple processing steps. in our vision user can create pipelines from a reservoir of generic processing steps and everything is defined in the ontology, which allows full documentation, full audit trails, and full reproducibility increasing the FAIRness of analytical data processing.
-			-->
+			<section id="PINTS-5" data-auto-animate>
+				<h2>PINTS (Pipelines for Non-Target Screening)</h2>
+				<p style="font-size: 0.7em;">A community founded to standardize i/o for non-target screening data evaluation tools</p>
+				<div class="pints-layout" data-id="pints5-layout">
+					<div class="pints-tree" data-id="pints5-tree">
+						<ul data-id="pints5-ul-root">
+							<li data-id="pints5-li-root">
+								<span class="pints-node" data-id="pints5-node-root"><span class="pints-dot pints-dot-core"></span>PINTS</span>
+								<ul data-id="pints5-ul-main">
+									<li data-id="pints5-li-core">
+										<span class="pints-node" data-id="pints5-node-core"><span class="pints-dot pints-dot-core"></span>PINTS-core</span>
+									</li>
+									<li data-id="pints5-li-plugins">
+										<span class="pints-node" data-id="pints5-node-plugins"><span class="pints-dot pints-dot-plugins"></span>PINTS-plugins</span>
+										<ul data-id="pints5-ul-plugins">
+											<li data-id="pints5-li-qalgorithms"><span class="pints-node" data-id="pints5-node-qalgorithms"><span class="pints-dot pints-dot-leaf"></span>qAlgorithms</span></li>
+											<li data-id="pints5-li-qconsistency"><span class="pints-node" data-id="pints5-node-qconsistency"><span class="pints-dot pints-dot-leaf"></span>qConsistency</span></li>
+										</ul>
+									</li>
+									<li data-id="pints5-li-api">
+										<span class="pints-node" data-id="pints5-node-api"><span class="pints-dot pints-dot-api"></span>PINTS-api</span>
+										<ul data-id="pints5-ul-api">
+											<li data-id="pints5-li-py"><span class="pints-node" data-id="pints5-node-py"><span class="pints-dot pints-dot-leaf"></span>PINTS-py</span></li>
+											<li data-id="pints5-li-cpp"><span class="pints-node" data-id="pints5-node-cpp"><span class="pints-dot pints-dot-leaf"></span>PINTS-cpp</span></li>
+											<li data-id="pints5-li-r"><span class="pints-node" data-id="pints5-node-r"><span class="pints-dot pints-dot-leaf"></span>PINTS-r</span></li>
+										</ul>
+									</li>
+								</ul>
+							</li>
+						</ul>
+					</div>
+					<div class="pints-flow" data-id="pints5-flow">
+						<div class="pints-flow-box" data-id="pints5-flow-py-reader" style="background-color: pink;">PINTS-py.reader</div>
+						<div class="pints-flow-box" data-id="pints5-flow-py-tool" style="background-color: hotpink;">some NTS tool in python</div>
+						<div class="pints-flow-box" data-id="pints5-flow-py-writer" style="background-color: pink;">PINTS-py.writer</div>
+						<div class="pints-flow-arrow long" data-id="pints5-flow-gap"></div>
+						<div class="pints-flow-box" data-id="pints5-flow-cpp-reader" style="background-color: lightblue;">PINTS-cpp.reader</div>
+						<div class="pints-flow-box" data-id="pints5-flow-cpp-tool" style="background-color: deepskyblue;">some NTS tool in c++</div>
+						<div class="pints-flow-box" data-id="pints5-flow-cpp-writer" style="background-color: lightblue;">PINTS-cpp.writer</div>
+					</div>
+				</div>
 			</section>
+
+			<!-- ===== COGNIFLOW PROJECT SECTION ===== -->
 			
+			<!-- Slide 1: Section Title / Transition -->
+			<section id="cogniflow-title" data-auto-animate-restart data-background-color="black">
+				<h1 style="color: aquamarine;">Outlook: Extend your perspective</h1>
+			</section>
+
+			<!-- Slide 2: NTS Pipeline Focus (Starting Point) -->
+			<section id="cogniflow-nts-pipeline">
+				<h2 data-id="cf-nts-title">NTS Data Processing Pipeline</h2>
+				<div class="cf-pipeline" data-id="cf-nts-pipeline">
+					<div class="cf-pipeline-box highlight" data-id="cf-box-1">
+						<i class="fa-solid fa-database"></i>
+						Data Acquisition
+						<small>MS raw data</small>
+					</div>
+					<div class="cf-arrow light" data-id="cf-arrow-1"></div>
+					<div class="cf-pipeline-box highlight" data-id="cf-box-2">
+						<i class="fa-solid fa-chart-line"></i>
+						Peak Detection
+						<small>& Integration</small>
+					</div>
+					<div class="cf-arrow light" data-id="cf-arrow-2"></div>
+					<div class="cf-pipeline-box highlight" data-id="cf-box-3">
+						<i class="fa-solid fa-layer-group"></i>
+						Feature Alignment
+						<small>& Annotation</small>
+					</div>
+					<div class="cf-arrow light" data-id="cf-arrow-3"></div>
+					<div class="cf-pipeline-box highlight" data-id="cf-box-4">
+						<i class="fa-solid fa-chart-pie"></i>
+						Statistical Analysis
+						<small>& Reporting</small>
+					</div>
+				</div>
+				<p style="color: var(--ude-black); opacity: 0.6; font-size: 0.6em; margin-top: 40px;">
+					<i class="fa-solid fa-flask" style="color: var(--ude-blue);"></i> The workflow we've been discussing...
+				</p>
+			</section>
+
+			<!-- Slide 3: Zoom Out - Multiple Pipelines -->
+			<section id="cogniflow-multi-pipelines">
+				<h2 data-id="cf-multi-title">NTS is Just One of Many</h2>
+				<p style="color: var(--ude-black); opacity: 0.7; font-size: 0.65em; margin-bottom: 20px;">
+					Every analytical method has its own data processing pipeline
+				</p>
+				<div class="cf-pipelines-grid">
+					<div class="cf-pipeline-card nts" data-id="cf-card-nts">
+						<i class="fa-solid fa-atom"></i>
+						<h4>NTS / Mass Spectrometry</h4>
+						<p>Peak detection, alignment, annotation, identification</p>
+					</div>
+					<div class="cf-pipeline-card">
+						<i class="fa-solid fa-magnet"></i>
+						<h4>NMR Spectroscopy</h4>
+						<p>Phase correction, baseline, peak picking, assignment</p>
+					</div>
+					<div class="cf-pipeline-card">
+						<i class="fa-solid fa-wave-square"></i>
+						<h4>IR / Raman</h4>
+						<p>Baseline correction, normalization, band assignment</p>
+					</div>
+					<div class="cf-pipeline-card">
+						<i class="fa-solid fa-vials"></i>
+						<h4>Chromatography</h4>
+						<p>Peak integration, retention time alignment, quantification</p>
+					</div>
+					<div class="cf-pipeline-card">
+						<i class="fa-solid fa-fire"></i>
+						<h4>Elemental Analysis</h4>
+						<p>Calibration, matrix correction, quantification</p>
+					</div>
+					<div class="cf-pipeline-card">
+						<i class="fa-solid fa-ellipsis"></i>
+						<h4>And Many More...</h4>
+						<p>UV-Vis, Fluorescence, XRF, XRD, ...</p>
+					</div>
+				</div>
+				<p style="color: var(--ude-accent-3); font-size: 0.7em; margin-top: 25px;">
+					<i class="fa-solid fa-triangle-exclamation"></i> 
+					Each with different tools, formats, and workflows!
+				</p>
+			</section>
+
+			<!-- Slide 5: CogniFlow Vision / Solution -->
+			<section id="cogniflow-vision">
+				<h2 data-id="cf-vision-title">CogniFlow Project: Our Vision</h2>
+				<div class="cf-vision-container">
+					<div class="cf-ontology-hub">
+						<i class="fa-solid fa-brain"></i>
+						<span style="font-size: 0.8em;">Ontology</span>
+					</div>
+					<div class="cf-vision-features">
+						<div class="cf-vision-feature">
+							<i class="fa-solid fa-cube"></i>
+							<h4>Processing Steps</h4>
+							<p>Atomic units with<br>standardized I/O</p>
+						</div>
+						<div class="cf-vision-feature">
+							<i class="fa-solid fa-diagram-project"></i>
+							<h4>Composable Pipelines</h4>
+							<p>Chain steps into<br>complete workflows</p>
+						</div>
+						<div class="cf-vision-feature">
+							<i class="fa-solid fa-book-open"></i>
+							<h4>Full Traceability</h4>
+							<p>Every step documented<br>& reproducible</p>
+						</div>
+					</div>
+				</div>
+				<p style="color: var(--ude-black); font-size: 0.65em; margin-top: 20px;">
+					<i class="fa-solid fa-quote-left" style="color: var(--ude-blue);"></i>
+					A comprehensive ontology defining all concepts for analytical data processing,<br>
+					enabling <strong style="color: var(--ude-blue);">interoperability</strong>, <strong style="color: var(--ude-accent-2);">reproducibility</strong>, and <strong style="color: var(--ude-accent-1);">FAIR compliance</strong>.
+					<i class="fa-solid fa-quote-right" style="color: var(--ude-blue);"></i>
+				</p>
+			</section>
+
+			<!-- Slide 6: Processing Step Concept -->
+			<section id="cogniflow-processing-step">
+				<h2>The Processing Step</h2>
+				<p style="color: var(--ude-black); opacity: 0.7; font-size: 0.6em; margin-bottom: 10px;">
+					The atomic building block of every data pipeline
+				</p>
+				<div class="cf-step-container">
+					<div class="cf-step-input">
+						<div class="cf-step-data-box">
+							<i class="fa-solid fa-file-import"></i> Input Data
+						</div>
+						<span>Standardized format</span>
+					</div>
+					<div class="cf-step-arrow"></div>
+					<div class="cf-step-core">
+						<div class="cf-step-params"><i class="fa-solid fa-sliders"></i> Parameters</div>
+						<i class="fa-solid fa-gears"></i>
+						<h4>Processing Logic</h4>
+					</div>
+					<div class="cf-step-arrow"></div>
+					<div class="cf-step-output">
+						<div class="cf-step-data-box">
+							<i class="fa-solid fa-file-export"></i> Output Data
+						</div>
+						<span>Standardized format</span>
+					</div>
+				</div>
+				<div class="cf-benefit-card doc">
+					<i class="fa-solid fa-file-lines"></i>
+					<h4>Full Documentation</h4>
+					<p>Every step, parameter, and data type <strong>MUST BE</strong> formally described</p>
+				</div>
+			</section>
+
+			<!-- Slide 7: Pipeline Composition -->
+			<section id="cogniflow-pipeline-composition">
+				<h2>Building Pipelines</h2>
+				<p style="color: var(--ude-black); opacity: 0.7; font-size: 0.6em; margin-bottom: 10px;">
+					Compose custom workflows from standardized building blocks
+				</p>
+				<div class="cf-composition-container">
+					<div class="cf-step-library">
+						<h4><i class="fa-solid fa-cubes"></i> Step Library</h4>
+						<div class="cf-library-steps">
+							<div class="cf-library-step"><i class="fa-solid fa-file-import"></i> Data Import</div>
+							<div class="cf-library-step"><i class="fa-solid fa-minus"></i> Baseline Correction</div>
+							<div class="cf-library-step"><i class="fa-solid fa-chart-line"></i> Peak Detection</div>
+							<div class="cf-library-step"><i class="fa-solid fa-layer-group"></i> Alignment</div>
+							<div class="cf-library-step"><i class="fa-solid fa-tags"></i> Annotation</div>
+							<div class="cf-library-step"><i class="fa-solid fa-file-export"></i> Export</div>
+						</div>
+					</div>
+					<div>
+					<div class="cf-assembled-pipeline">
+						<h4><i class="fa-solid fa-diagram-project"></i> Your Pipeline</h4>
+						<div class="cf-pipeline-chain">
+							<div class="cf-chain-step">Import</div>
+							<div class="cf-chain-arrow"></div>
+							<div class="cf-chain-step">Baseline</div>
+							<div class="cf-chain-arrow"></div>
+							<div class="cf-chain-step">Peak Det.</div>
+							<div class="cf-chain-arrow"></div>
+							<div class="cf-chain-step">Annotate</div>
+							<div class="cf-chain-arrow"></div>
+							<div class="cf-chain-step">Export</div>
+						</div>
+					</div>
+					<h6 style="font-size: 0.6em;">As every step is defined in the Ontology</h6>
+					<div class="cf-benefits-grid">
+						<div class="cf-benefit-card audit">
+							<i class="fa-solid fa-clipboard-check"></i>
+							<h4>Complete Audit Trails</h4>
+							<p>All transformations tracked with full provenance</p>
+						</div>
+						<div class="cf-benefit-card repro">
+							<i class="fa-solid fa-rotate"></i>
+							<h4>Full Reproducibility</h4>
+							<p>Pipelines can be exactly recreated anywhere</p>
+						</div>
+						<div class="cf-benefit-card fair">
+							<i class="fa-solid fa-share-nodes"></i>
+							<h4>FAIR Principles</h4>
+							<p>Findable, Accessible, Interoperable, Reusable</p>
+						</div>
+					</div>
+					</div>
+				</div>
+				<p style="color: var(--ude-accent-2); font-size: 0.6em; margin-top: 20px;">
+					<i class="fa-solid fa-check-circle"></i> 
+					Every step documented • Parameters tracked • Fully reproducible
+				</p>
+			</section>
 		</div>
 	</div>
 
 	<!-- Clock -->
 	<div id="clock">--:--</div>
+	<img id="logo-claim" src="resources/figures/logo_claim_4c.svg" alt="Logo claim">
 
 
 	<script src="https://d3js.org/d3.v7.min.js"></script>
