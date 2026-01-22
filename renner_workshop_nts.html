@@ -141,7 +141,7 @@
 
 		.qr-overlay {
 			position: absolute;
-			top: 50px;
+			top: 0px;
 			right: 24px;
 			z-index: 3;
 			display: inline-flex;
@@ -241,6 +241,22 @@
 			display: flex;
 			flex-direction: column;
 			gap: 24px;
+		}
+
+		/* Pipeline arrows for processing consistency visualization */
+		.pc-pipeline-arrows {
+			width: 100%;
+			height: 80px;
+			margin-bottom: -8px;
+		}
+
+		.pc-group-exit {
+			border-left: 3px solid #b8103b;
+		}
+
+		.pc-group-final {
+			border-left: 3px solid #61a27c;
+			background: rgba(97, 162, 124, 0.15);
 		}
 
 		#processing-consistency-3 {
@@ -1544,7 +1560,7 @@
 					<div data-id="data-box" class="in-out-box-small" style="background: #888;"><i class="fa-solid fa-arrow-right-to-bracket"></i><strong>Data<br>in</strong></div>
 					<div data-id="algorithm-box" class="algo-flow">
 						<div class="algo-step" data-id="algo-step-1">
-							<div class="algo-peakfit-box fragment" data-id="algo-peakfit-1" data-fragment-index="1">
+							<div class="algo-peakfit-box" data-id="algo-peakfit-1">
 								<div class="algo-peakfit-chart" data-id="algo-peakfit-chart-1" data-chart="peak-fit"></div>
 							</div>
 							<div class="algo-step-core">
@@ -1556,7 +1572,7 @@
 							</div>
 						</div>
 						<div class="algo-step" data-id="algo-step-2">
-							<div class="algo-peakfit-box fragment" data-id="algo-peakfit-2" data-fragment-index="1">
+							<div class="algo-peakfit-box" data-id="algo-peakfit-2">
 								<div class="algo-peakfit-chart" data-id="algo-peakfit-chart-2" data-chart="residuals"></div>
 							</div>
 							<div class="algo-step-core">
@@ -1568,7 +1584,7 @@
 							</div>
 						</div>
 						<div class="algo-step" data-id="algo-step-3">
-							<div class="algo-peakfit-box fragment" data-id="algo-peakfit-3" data-fragment-index="1">
+							<div class="algo-peakfit-box" data-id="algo-peakfit-3">
 								<div class="algo-peakfit-chart" data-id="algo-peakfit-chart-3" data-chart="error-bars"></div>
 							</div>
 							<div class="algo-step-core">
@@ -1603,21 +1619,25 @@
 						<div data-id="data-box" class="in-out-box-small workflow-inout" style="background: #888; height:110px"><i class="fa-solid fa-arrow-right-to-bracket"></i><strong>mzml<br>in</strong></div>
 						<div data-id="algorithm-box" class="algo-flow-small"></div>
 						<div data-id="output-box" class="in-out-box-small workflow-inout" style="background: var(--ude-accent-4); height:110px"><i class="fa-solid fa-arrow-right-from-bracket"></i><strong>centroids<br>out</strong></div>
+						<i class="fa-solid fa-arrow-left-long" style="color: var(--ude-accent-4);"></i><div style="font-size: 0.55em; max-width: 100px; margin: 5px; color: var(--ude-accent-4);">contains uncertainty info</div>
 					</div>
 					<div class="workflow-step" data-step="2">
 						<div data-id="data-box" class="in-out-box-small workflow-inout" style="background: var(--ude-accent-4); height:110px"><i class="fa-solid fa-arrow-right-to-bracket"></i><strong>centroids<br>in</strong></div>
 						<div data-id="algorithm-box" class="algo-flow-small"></div>
 						<div data-id="output-box" class="in-out-box-small workflow-inout" style="background: var(--ude-accent-3); height:110px"><i class="fa-solid fa-arrow-right-from-bracket"></i><strong>eics<br>out</strong></div>
+						<i class="fa-solid fa-arrow-left-long" style="color: var(--ude-accent-3);"></i><div style="font-size: 0.55em; max-width: 100px; margin: 5px; color: var(--ude-accent-3);">contains uncertainty info</div>
 					</div>
 					<div class="workflow-step" data-step="3">
 						<div data-id="data-box" class="in-out-box-small workflow-inout" style="background: var(--ude-accent-3); height:110px"><i class="fa-solid fa-arrow-right-to-bracket"></i><strong>eics<br>in</strong></div>
 						<div data-id="algorithm-box" class="algo-flow-small"></div>
 						<div data-id="output-box" class="in-out-box-small workflow-inout" style="background: var(--ude-accent-2); height:110px"><i class="fa-solid fa-arrow-right-from-bracket"></i><strong>features<br>out</strong></div>
+						<i class="fa-solid fa-arrow-left-long" style="color: var(--ude-accent-2);"></i><div style="font-size: 0.55em; max-width: 100px; margin: 5px; color: var(--ude-accent-2);">contains uncertainty info</div>
 					</div>
 					<div class="workflow-step" data-step="4">
 						<div data-id="data-box" class="in-out-box-small workflow-inout" style="background: var(--ude-accent-2); height:110px"><i class="fa-solid fa-arrow-right-to-bracket"></i><strong>features<br>in</strong></div>
 						<div data-id="algorithm-box" class="algo-flow-small"></div>
 						<div data-id="output-box" class="in-out-box-small workflow-inout" style="background: var(--ude-accent-1); height:110px"><i class="fa-solid fa-arrow-right-from-bracket"></i><strong>components<br>out</strong></div>
+						<i class="fa-solid fa-arrow-left-long" style="color: var(--ude-accent-1);"></i><div style="font-size: 0.55em; max-width: 100px; margin: 5px; color: var(--ude-accent-1);">contains uncertainty info</div>
 					</div>
 				</div>
 				<div data-id="cap">
@@ -1638,12 +1658,12 @@
 					<div class="qalgo-viz-panel">
 						<h4><i class="fa-solid fa-wave-square"></i> Asymmetric Peak Model</h4>
 						<div id="qalgo-peak-chart"></div>
-						<p>exp(β₀ + β₁x + β₂x² for x&lt;0, β₃x² for x≥0)</p>
+						<div style="font-size: 0.6em;">$$\exp\left(\vec{\beta_0} + \beta_1 x + \begin{cases} \beta_2 x^2 & x < 0 \\ \beta_3 x^2 & x \geq 0 \end{cases}\right)$$</div>
 					</div>
 					<div class="qalgo-viz-panel">
 						<h4><i class="fa-solid fa-scissors"></i> Mass Trace Splitting Criterion</h4>
 						<div id="qalgo-crit-chart"></div>
-						<p>Critical distance: A + (B / √log(n+1)) · σ</p>
+						<div style="font-size: 0.6em;">$$A + \frac{B}{\sqrt{\log(n+1)}} \cdot \sigma$$ with empiric parameters $A$, $B$</div>
 					</div>
 				</div>
 			</section>
@@ -1717,20 +1737,21 @@
 			<section id="processing-consistency-1" data-auto-animate-restart data-auto-animate>
 				<h2>Processing Consistency Metric</h2>
 				<p data-id="processing-consistency-subhead">NTS data processing workflow can be seen as a series of filtering steps for centroids.</p>
-					<div data-id="centroid-groups" style="display: flex; gap: 12px; margin-top: 1em;">
-							<div class="pc-group-card">
+					<img src="resources/figures/arrows.svg" alt="Filtering steps" style="width: 100%; height: auto; position: relative; left: -120px; margin-top: -10px; margin-bottom: -10px;">
+					<div data-id="centroid-groups" style="display: flex; gap: 12px; margin-top: 0;">
+							<div class="pc-group-card pc-group-exit">
 								<strong>a)</strong>
 								Do not appear in EICs
 							</div>
-							<div class="pc-group-card">
+							<div class="pc-group-card pc-group-exit">
 								<strong>b)</strong>
 								Appear in EICs but not considered for features
 							</div>
-							<div class="pc-group-card">
+							<div class="pc-group-card pc-group-exit">
 								<strong>c)</strong>
 								Appear in EICs, considered for features, but not found in replicates
 							</div>
-							<div class="pc-group-card">
+							<div class="pc-group-card pc-group-final">
 								<strong>d)</strong>
 								Appear in EICs, considered for features, and found in replicates
 							</div>
@@ -1740,6 +1761,7 @@
 			<section id="processing-consistency-2" data-auto-animate>
 				<h2>Processing Consistency Metric</h2>
 				<p data-id="processing-consistency-subhead">NTS data processing workflow can be seen as a series of filtering steps for centroids.</p>
+				<img src="resources/figures/arrows.svg" alt="Filtering steps" style="width: 100%; height: auto; position: relative; left: -120px; margin-top: -10px; margin-bottom: -50px;">
 					<div data-id="centroid-groups" style="display: flex; gap: 12px; margin-top: 1em;">
 							<div class="pc-group-card">
 								<strong>a)</strong>
@@ -1880,22 +1902,8 @@
 				<img src="resources/figures/plsda_scatter.svg" alt="PLS-DA Scatter Plot of Cliff's Delta Cubes"/>
 			</section>
 
-			<section id="qalgorithms-availability-1" data-auto-animate-restart data-auto-animate data-background-color="black">
-				<h1 style="color: aquamarine;">qAlgorithms NTS Data Processing & the consistency measure tool are available as open source</h1>  
-			</section>
-
-			<section id="qalgorithms-availability-2" data-auto-animate data-background-color="black">
-				<h1 style="color: aquamarine;">qAlgorithms NTS Data Processing & the consistency measure tool are available as open source</h1> 
-				<div data-id="spacer1" style="font-size: 0.7em; color: var(--ude-accent-1);"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
-				<h1 style="color: aquamarine;">but hard to use for progammers & non-programmers.</h1>
-			</section>
-
 			<section id="qalgorithms-availability-3" data-auto-animate data-background-color="black">
-				<h1 style="color: aquamarine;">qAlgorithms NTS Data Processing & the consistency measure tool are available as open source</h1>  
-				<div data-id="spacer1" style="font-size: 0.7em; color: var(--ude-accent-1);"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
-				<h1 style="color: aquamarine;">but hard to use for progammers & non-programmers.</h1>
-				<div data-id="spacer2" style="font-size: 0.7em; color: var(--ude-accent-1);"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
-				<h1 style="color: aquamarine;">Why? <i class="fa-solid fa-arrow-right-long"></i> there are no established standards for i/o</h1>
+				<img src="resources/figures/horse_meme.webp" alt="Horse Meme: Why? There are no established standards for i/o" style="width: 600px; height: auto;"/>
 			</section>
 
 			<section id="PINTS-1" data-auto-animate-restart data-auto-animate>
@@ -2013,14 +2021,14 @@
 									</li>
 									<li>
 										<span class="pints-node"><span class="pints-dot pints-dot-plugins"></span>PINTS-plugins</span>
-										<ul class="fragment" data-fragment-index="2">
+										<ul>
 											<li><span class="pints-node"><span class="pints-dot pints-dot-leaf"></span>qAlgorithms</span></li>
 											<li><span class="pints-node"><span class="pints-dot pints-dot-leaf"></span>qConsistency</span></li>
 										</ul>
 									</li>
 									<li>
 										<span class="pints-node"><span class="pints-dot pints-dot-api"></span>PINTS-api</span>
-										<ul class="fragment" data-fragment-index="1">
+										<ul>
 											<li><span class="pints-node"><span class="pints-dot pints-dot-leaf"></span>PINTS-py</span></li>
 											<li><span class="pints-node"><span class="pints-dot pints-dot-leaf"></span>PINTS-cpp</span></li>
 											<li><span class="pints-node"><span class="pints-dot pints-dot-leaf"></span>PINTS-r</span></li>
@@ -2030,7 +2038,7 @@
 							</li>
 						</ul>
 					</div>
-					<div class="pints-flow fragment" data-fragment-index="3">
+					<div class="pints-flow fragment" data-fragment-index="1">
 						<div class="pints-flow-box" style="background-color: pink;">PINTS-py.reader</div>
 						<div class="pints-flow-box" style="background-color: hotpink;">some NTS tool in python</div>
 						<div class="pints-flow-box" style="background-color: pink;">PINTS-py.writer</div>
@@ -2233,7 +2241,7 @@
 							<div class="cf-chain-step">Export</div>
 						</div>
 					</div>
-					<h6 style="font-size: 0.6em;">As every step is defined in the Ontology</h6>
+					<h6 style="font-size: 0.6em;">As every step is defined based on the Ontology</h6>
 					<div class="cf-benefits-grid">
 						<div class="cf-benefit-card audit">
 							<i class="fa-solid fa-clipboard-check"></i>
@@ -2251,52 +2259,6 @@
 							<p>Findable, Accessible, Interoperable, Reusable</p>
 						</div>
 					</div>
-					</div>
-				</div>
-				<p style="color: var(--ude-accent-2); font-size: 0.6em; margin-top: 20px;">
-					<i class="fa-solid fa-check-circle"></i> 
-					Every step documented • Parameters tracked • Fully reproducible
-				</p>
-			</section>
-
-			<section id="summary" data-background-color="black">
-				<h2 style="color: #fff; margin-bottom: 30px;">Summary</h2>
-				<div class="cf-summary-container">
-					<div class="cf-summary-item qalgo">
-						<div class="cf-summary-icon">
-							<i class="fa-solid fa-wand-magic-sparkles"></i>
-						</div>
-						<div class="cf-summary-text">
-							<h4>qAlgorithms</h4>
-							<p>Parameter-free, consistent NTS data processing</p>
-						</div>
-					</div>
-					<div class="cf-summary-item consist">
-						<div class="cf-summary-icon">
-							<i class="fa-solid fa-fingerprint"></i>
-						</div>
-						<div class="cf-summary-text">
-							<h4>Consistency & Digital Fingerprinting</h4>
-							<p>NTS enables consistency measurement & quality assurance</p>
-						</div>
-					</div>
-					<div class="cf-summary-item pints">
-						<div class="cf-summary-icon">
-							<i class="fa-solid fa-plug"></i>
-						</div>
-						<div class="cf-summary-text">
-							<h4>PINTS</h4>
-							<p>Standardized I/O for interoperable NTS tools</p>
-						</div>
-					</div>
-					<div class="cf-summary-item cogni">
-						<div class="cf-summary-icon">
-							<i class="fa-solid fa-brain"></i>
-						</div>
-						<div class="cf-summary-text">
-							<h4>CogniFlow</h4>
-							<p>Ontology-based standardization for all analytical methods</p>
-						</div>
 					</div>
 				</div>
 			</section>
@@ -2324,6 +2286,7 @@
 	<script src="dist/reveal.js"></script>
 	<script src="plugin/markdown/markdown.js"></script>
 	<script src="plugin/highlight/highlight.js"></script>
+	<script src="plugin/math/math.js"></script>
 	<script>
 		const highlightPlugin = RevealHighlight();
 		window.hljs = highlightPlugin.hljs;
@@ -2334,7 +2297,7 @@
 	<script>
 		Reveal.initialize({
 			hash: true,
-			plugins: [ RevealMarkdown, highlightPlugin ],
+			plugins: [ RevealMarkdown, highlightPlugin, RevealMath.KaTeX ],
 			center: true,
 			transition: 'slide'
 		});

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="310.71143mm"
+   height="29.06831mm"
+   viewBox="0 0 310.71143 29.06831"
+   version="1.1"
+   id="svg1"
+   xml:space="preserve"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"><defs
+     id="defs1"><marker
+       style="overflow:visible"
+       id="Triangle"
+       refX="0"
+       refY="0"
+       orient="auto-start-reverse"
+       markerWidth="0.5"
+       markerHeight="0.5"
+       viewBox="0 0 1 1"
+       preserveAspectRatio="xMidYMid"><path
+         transform="scale(0.5)"
+         style="fill:context-stroke;fill-rule:evenodd;stroke:context-stroke;stroke-width:1pt"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         id="path135" /></marker></defs><g
+     id="layer1"
+     transform="translate(74.79409,-113.68802)"><path
+       style="fill:none;stroke:#44aa00;stroke-width:4;stroke-dasharray:none;marker-end:url(#Triangle)"
+       d="m -39.959,115.68803 h 257.04179 c 5.82374,0 12.67917,4.48827 12.67917,9.60543 v 9.60544"
+       id="path1" /><path
+       style="fill:none;stroke:#f6d32d;stroke-width:4;stroke-dasharray:none;marker-end:url(#Triangle)"
+       d="m -39.959,119.76327 h 156.76107 c 5.82374,0 12.67917,0.7841 12.67917,5.90126 v 9.60544"
+       id="path3" /><path
+       style="fill:none;stroke:#ed333b;stroke-width:4;stroke-dasharray:none;marker-end:url(#Triangle)"
+       d="m -39.959,123.79755 h 69.927952 c 5.82374,0 12.67917,0.0157 12.67917,5.13283 v 6.33959"
+       id="path4" /><path
+       style="fill:none;stroke:#9141ac;stroke-width:4;stroke-dasharray:none;marker-end:url(#Triangle)"
+       d="m -39.959,127.83183 h 8.453178 c 5.82374,0 12.67917,-0.26563 12.67917,4.8515 v 2.97086"
+       id="path5" /><text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:7.05556px;font-family:Arial;-inkscape-font-specification:'Arial Bold';text-align:center;letter-spacing:0px;writing-mode:lr-tb;direction:ltr;text-anchor:middle;fill:#000000;stroke:none;stroke-width:4;stroke-dasharray:none"
+       x="-58.664146"
+       y="123.8873"
+       id="text5"><tspan
+         id="tspan5"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:Arial;-inkscape-font-specification:'Arial Bold';fill:#000000;stroke:none;stroke-width:4"
+         x="-58.664146"
+         y="123.8873">Centroids</tspan></text></g></svg>
