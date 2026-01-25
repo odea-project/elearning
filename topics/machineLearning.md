@@ -31,6 +31,8 @@ description: "Understanding and applying machine learning techniques in water sc
 <!-- .slide:id="cold-opener-2" -->
 ## Why do we know this?
 
+Because perception becomes data, and data enables model-based inference.
+
 ---
 
 <!-- .slide:id="definition-ml" -->
@@ -70,52 +72,29 @@ description: "Understanding and applying machine learning techniques in water sc
 ## Cold Opener: Exceedance Alert?
 <!-- layout={rows: 1, columns: 2} -->
 <!-- position={row: 1, column: 1} -->
--! Scenario (coastal bathing water)
--: after heavy rain, contamination risk increases
--: lab results arrive tomorrow, but actions are needed now
+-! Scenario: bathing water after heavy rain
+-: lab result arrives tomorrow
 
 ***
 
--? Task: decide which sites to close / re-sample today
--: estimate p(class 1) = "exceeds E. coli threshold"
--: choose a decision threshold based on risk tolerance
+-? Decision 1: close the beach today?
+-: act on p(exceedance) now
 
 ***
 
--! What data could help?
--: rainfall (24h), turbidity, upstream discharge, season
+-? Decision 2: send extra samples today?
+-: prioritize the highest-risk sites
 <!-- /position -->
 <!-- position={row: 1, column: 2} -->
-<div style="border: 1px solid #2d3a66; border-radius: 10px; padding: 14px; background: rgba(0,0,0,0.15);">
-  <div style="font-size: 0.8em; color: #9efcff; font-weight: 700; margin-bottom: 10px;">
-    Today's quick measurements (no lab yet)
+<div style="border: 1px solid var(--ml-panel-border); border-radius: 12px; padding: 18px; background: var(--ml-panel-bg);">
+  <div style="font-size: 0.9em; color: var(--ml-muted); font-weight: 700; margin-bottom: 12px;">
+    Probability goal
   </div>
-  <table style="width: 100%; border-collapse: collapse; font-size: 0.72em; color: #ffffff;">
-    <thead>
-      <tr style="background: #2d3a5a;">
-        <th style="padding: 8px; text-align: left;">Site</th>
-        <th style="padding: 8px; text-align: right;">Rain (mm)</th>
-        <th style="padding: 8px; text-align: right;">Turb (NTU)</th>
-        <th style="padding: 8px; text-align: right;">Q (m^3/s)</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr style="background: rgba(0,255,255,0.06);">
-        <td style="padding: 8px;">A</td><td style="padding: 8px; text-align: right;">6</td><td style="padding: 8px; text-align: right;">3</td><td style="padding: 8px; text-align: right;">12</td>
-      </tr>
-      <tr style="background: rgba(0,255,255,0.03);">
-        <td style="padding: 8px;">B</td><td style="padding: 8px; text-align: right;">28</td><td style="padding: 8px; text-align: right;">18</td><td style="padding: 8px; text-align: right;">45</td>
-      </tr>
-      <tr style="background: rgba(0,255,255,0.06);">
-        <td style="padding: 8px;">C</td><td style="padding: 8px; text-align: right;">14</td><td style="padding: 8px; text-align: right;">8</td><td style="padding: 8px; text-align: right;">22</td>
-      </tr>
-      <tr style="background: rgba(0,255,255,0.03);">
-        <td style="padding: 8px;">D</td><td style="padding: 8px; text-align: right;">2</td><td style="padding: 8px; text-align: right;">1</td><td style="padding: 8px; text-align: right;">9</td>
-      </tr>
-    </tbody>
-  </table>
-  <div style="margin-top: 12px; font-size: 0.78em; color: #9efcffcc;">
-    Goal: a model that outputs a probability for class 1 (exceedance) from these predictors.
+  <div style="font-size: 1.0em; color: var(--ml-text); line-height: 1.35;">
+    Estimate <strong>p(exceedance)</strong> for each site <em>today</em>.
+  </div>
+  <div style="margin-top: 10px; font-size: 0.85em; color: var(--ml-muted); line-height: 1.35;">
+    Use the same probability to compare sites and justify decisions.
   </div>
 </div>
 <!-- /position -->
@@ -127,44 +106,27 @@ description: "Understanding and applying machine learning techniques in water sc
 ## Logistic Regression - Motivation
 <!-- layout={rows: 1, columns: 2} -->
 <!-- position={row: 1, column: 1} -->
--! Typical task: binary outcome (class 1 / class 0)
--: exceeds limit vs compliant; detected vs not detected
--: e.g., "E. coli above bathing-water threshold?"
+-! Binary outcome
+-: exceedance vs compliant
 
 ***
 
--! We want a probability, not a number
--: p(class 1) supports risk communication and prioritization
--: decision threshold tuned to false alarms vs missed events
+-! Need a probability
+-: supports risk-based decisions
 
 ***
 
--! Why not linear regression?
--: it predicts an unbounded value (<0 or >1 possible)
--: but probabilities must stay in [0,1]
+-! Linear regression is not probability-aware
 <!-- /position -->
 <!-- position={row: 1, column: 2} -->
 <div id="logreg-motivation-plot" style="width: 100%; height: 650px; border: 1px solid #2d3a66; border-radius: 12px; background: rgba(15,23,42,0.85);"></div>
--= linear regression not suitable in this case
 
 <script>
 (function() {
   const containerId = 'logreg-motivation-plot';
   const slideId = 'logistic-regression-01-motivation';
 
-  function seededRandom(seed) {
-    let value = seed >>> 0;
-    return function() {
-      value = (1664525 * value + 1013904223) >>> 0;
-      return value / 4294967296;
-    };
-  }
-
   function draw() {
-    if (typeof d3 === 'undefined' || typeof plotUtils === 'undefined') {
-      setTimeout(draw, 80);
-      return;
-    }
     const container = document.getElementById(containerId);
     if (!container) return;
 
@@ -173,11 +135,11 @@ description: "Understanding and applying machine learning techniques in water sc
     const margin = { top: 30, right: 30, bottom: 90, left: 90 };
 
     const fig = plotUtils.createFigure(containerId, width, height, margin);
-    plotUtils.addAxes(fig, [0, 10], [-0.5, 1.5], 6, 5);
+    plotUtils.addAxes(fig, [0, 10], [-0.4, 1.4], 6, 5);
 
     // Make the root SVG match the slide's dark panel styling.
     d3.select(`#${containerId} svg`)
-      .style('background-color', 'rgba(15,23,42,0.85)')
+      .style('background-color', 'var(--ml-panel-bg)')
       .style('border-radius', '12px');
 
     // Probability band [0,1].
@@ -186,39 +148,27 @@ description: "Understanding and applying machine learning techniques in water sc
       .attr('y', fig.yScale(1))
       .attr('width', fig.xScale(10) - fig.xScale(0))
       .attr('height', fig.yScale(0) - fig.yScale(1))
-      .attr('fill', 'rgba(0,255,255,0.18)')
-      .attr('stroke', '#00ffff')
+      .attr('fill', 'var(--ml-accent-cyan-soft-2)')
+      .attr('stroke', 'var(--ml-accent-cyan)')
       .attr('stroke-width', 2);
 
     fig.svg.append('text')
       .attr('x', fig.xScale(0) + 10)
       .attr('y', fig.yScale(1) - 12)
-      .style('fill', '#ffffff')
+      .style('fill', 'var(--ml-text)')
       .style('font-family', "'Press Start 2P', monospace")
       .style('font-size', '12px')
       .text('valid probability range [0,1]');
 
-    // Generate deterministic points (binary targets 0/1 with small noise).
-    const rng = seededRandom(17);
-    const jitter = (s) => (rng() * 2 - 1) * s;
-    const points = [];
-
-    const n0 = 18;
-    const n1 = 18;
-    for (let i = 0; i < n0; i++) {
-      // class 0 mostly at low x, but with a small overlap region
-      const xRaw = 0 + (i / (n0 - 1)) * 6 + jitter(0.18);
-      const x = Math.max(0, Math.min(6, xRaw));
-      const y = 0;
-      points.push({ x, y, cls: 0 });
-    }
-    for (let i = 0; i < n1; i++) {
-      // class 1 mostly at high x, but with a small overlap region
-      const xRaw = 5 + (i / (n1 - 1)) * 5 + jitter(0.18);
-      const x = Math.max(5, Math.min(10, xRaw));
-      const y = 1;
-      points.push({ x, y, cls: 1 });
-    }
+    // Minimal, deterministic example points.
+    const points = [
+      { x: 1.2, y: 0, cls: 0 },
+      { x: 2.6, y: 0, cls: 0 },
+      { x: 4.8, y: 0, cls: 0 },
+      { x: 5.2, y: 1, cls: 1 },
+      { x: 7.2, y: 1, cls: 1 },
+      { x: 8.8, y: 1, cls: 1 },
+    ];
 
     fig.svg.append('g')
       .selectAll('circle')
@@ -228,8 +178,8 @@ description: "Understanding and applying machine learning techniques in water sc
       .attr('cx', d => fig.xScale(d.x))
       .attr('cy', d => fig.yScale(d.y))
       .attr('r', 6)
-      .attr('fill', d => d.cls === 1 ? '#00ff94' : '#ff6b35')
-      .attr('stroke', '#ffffff')
+      .attr('fill', d => d.cls === 1 ? 'var(--ml-accent-green)' : 'var(--ml-accent-orange)')
+      .attr('stroke', 'var(--ml-text)')
       .attr('stroke-width', 2)
       .attr('opacity', 0.98);
 
@@ -247,7 +197,7 @@ description: "Understanding and applying machine learning techniques in water sc
       .datum(lineData)
       .attr('d', line)
       .attr('fill', 'none')
-      .attr('stroke', '#ff05ff')
+      .attr('stroke', 'var(--ml-accent-magenta)')
       .attr('stroke-width', 5)
       .attr('opacity', 0.95);
 
@@ -256,7 +206,7 @@ description: "Understanding and applying machine learning techniques in water sc
       .attr('x', fig.width / 2)
       .attr('y', fig.height + 60)
       .attr('text-anchor', 'middle')
-      .style('fill', '#0ff')
+      .style('fill', 'var(--d3-axis-label-text-color)')
       .style('font-family', "'Press Start 2P', monospace")
       .style('font-size', '12px')
       .text('predictor x (e.g., turbidity)');
@@ -266,67 +216,28 @@ description: "Understanding and applying machine learning techniques in water sc
       .attr('y', -60)
       .attr('transform', 'rotate(-90)')
       .attr('text-anchor', 'middle')
-      .style('fill', '#0ff')
+      .style('fill', 'var(--d3-axis-label-text-color)')
       .style('font-family', "'Press Start 2P', monospace")
       .style('font-size', '12px')
       .text('model output');
 
-    // Legend.
-    const legend = fig.svg.append('g')
-      .attr('transform', `translate(${fig.width - 300}, 10)`);
-
-    legend.append('rect')
-      .attr('x', 0)
-      .attr('y', 0)
-      .attr('width', 290)
-      .attr('height', 92)
-      .attr('rx', 10)
-      .attr('fill', 'rgba(0,0,0,0.55)')
-      .attr('stroke', 'rgba(0,255,255,0.35)')
-      .attr('stroke-width', 2);
-
-    legend.append('circle').attr('cx', 18).attr('cy', 25).attr('r', 6).attr('fill', '#ff6b35').attr('stroke', '#ffffff').attr('stroke-width', 2);
-    legend.append('text').attr('x', 34).attr('y', 30).style('fill', '#ffffff').style('font-size', '12px').text('class 0 (no exceedance)');
-
-    legend.append('circle').attr('cx', 18).attr('cy', 50).attr('r', 6).attr('fill', '#00ff94').attr('stroke', '#ffffff').attr('stroke-width', 2);
-    legend.append('text').attr('x', 34).attr('y', 55).style('fill', '#ffffff').style('font-size', '12px').text('class 1 (exceedance)');
-
-    legend.append('line').attr('x1', 8).attr('y1', 74).attr('x2', 30).attr('y2', 74).attr('stroke', '#ff05ff').attr('stroke-width', 5);
-    legend.append('text').attr('x', 34).attr('y', 79).style('fill', '#ffffff').style('font-size', '12px').text('linear regression output');
-
-    // Annotation hint.
-    fig.svg.append('rect')
-      .attr('x', fig.xScale(5.2))
-      .attr('y', fig.yScale(-0.35))
-      .attr('width', 310)
-      .attr('height', 28)
-      .attr('rx', 8)
-      .attr('fill', 'rgba(0,0,0,0.55)')
-      .attr('stroke', 'rgba(255,5,255,0.5)');
-
     fig.svg.append('text')
-      .attr('x', fig.xScale(5.2) + 10)
-      .attr('y', fig.yScale(-0.35) + 19)
-      .style('fill', '#ffffff')
+      .attr('x', fig.xScale(6.0))
+      .attr('y', fig.yScale(1.25))
+      .style('fill', 'var(--ml-muted)')
       .style('font-size', '12px')
-      .text('extrapolation can leave [0,1]');
+      .text('unbounded output');
   }
 
-  function onSlide(event) {
-    if (!event || !event.currentSlide) return;
-    if (event.currentSlide.getAttribute('id') !== slideId) return;
-    draw();
+  function register() {
+    if (typeof plotUtils === 'undefined') {
+      setTimeout(register, 80);
+      return;
+    }
+    plotUtils.renderOnSlideOnce({ slideId, containerId, draw });
   }
 
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', draw);
-  } else {
-    draw();
-  }
-
-  if (window.Reveal && typeof window.Reveal.on === 'function') {
-    window.Reveal.on('slidechanged', onSlide);
-  }
+  register();
 })();
 </script>
 <!-- /position -->
@@ -335,53 +246,31 @@ description: "Understanding and applying machine learning techniques in water sc
 ---
 
 <!-- .slide:id="logistic-regression-01a-labeled-data" -->
-## How Do We Get the Weights?
+## What Is Labeled Data?
 <!-- layout={rows: 1, columns: 2} -->
 <!-- position={row: 1, column: 1} -->
--! Step 0: collect labeled training data (x, y)
--: x = predictors today; y = lab-confirmed class 1 / class 0 (historical)
+-! Each sample has (x, y)
+-: x = quick measurements, y = lab outcome later
 
 ***
 
--! Start with a model guess (beta)
--: compute z and p(class 1) for each labeled sample
--: mismatch in the overlap region shows "we need a better beta"
+-! y anchors interpretation
+-: the model learns from outcomes, not just patterns
 
 ***
 
--! Fit beta by optimization
--: update beta to reduce cross-entropy on the labeled data
--: result: probabilities match labels better and calibrate decisions
+-! Goal for new samples
+-: output p(exceedance) from x
 <!-- /position -->
 <!-- position={row: 1, column: 2} -->
-<div id="logreg-labeled-fit-plot" style="width: 100%; height: 650px; border: 1px solid #2d3a66; border-radius: 12px; background: rgba(15,23,42,0.85);"></div>
+<div id="logreg-labeled-data-plot" style="width: 100%; height: 650px; border: 1px solid #2d3a66; border-radius: 12px; background: rgba(15,23,42,0.85);"></div>
 
 <script>
 (function() {
-  const containerId = 'logreg-labeled-fit-plot';
+  const containerId = 'logreg-labeled-data-plot';
   const slideId = 'logistic-regression-01a-labeled-data';
 
-  function seededRandom(seed) {
-    let value = seed >>> 0;
-    return function() {
-      value = (1664525 * value + 1013904223) >>> 0;
-      return value / 4294967296;
-    };
-  }
-
-  function sigmoid(z) {
-    return 1 / (1 + Math.exp(-z));
-  }
-
-  function fmt(x) {
-    return (Math.round(x * 1000) / 1000).toString();
-  }
-
   function draw() {
-    if (typeof d3 === 'undefined' || typeof plotUtils === 'undefined') {
-      setTimeout(draw, 80);
-      return;
-    }
     const container = document.getElementById(containerId);
     if (!container) return;
 
@@ -393,42 +282,28 @@ description: "Understanding and applying machine learning techniques in water sc
     plotUtils.addAxes(fig, [0, 10], [-0.1, 1.1], 6, 6);
 
     d3.select(`#${containerId} svg`)
-      .style('background-color', 'rgba(15,23,42,0.85)')
+      .style('background-color', 'var(--ml-panel-bg)')
       .style('border-radius', '12px');
 
-    // Same underlying data distribution as slide 01 (x ranges + overlap).
-    const rng = seededRandom(17);
-    const jitter = (s) => (rng() * 2 - 1) * s;
-    const points = [];
-    const n0 = 14;
-    const n1 = 14;
+    const points = [
+      { x: 2.2, y: 0, cls: 0 },
+      { x: 5.3, y: 1, cls: 1 },
+      { x: 7.8, y: 1, cls: 1 },
+    ];
 
-    for (let i = 0; i < n0; i++) {
-      const xRaw = 0 + (i / (n0 - 1)) * 6 + jitter(0.18);
-      const x = Math.max(0, Math.min(6, xRaw));
-      points.push({ x, y: 0, cls: 0 });
-    }
-    for (let i = 0; i < n1; i++) {
-      const xRaw = 5 + (i / (n1 - 1)) * 5 + jitter(0.18);
-      const x = Math.max(5, Math.min(10, xRaw));
-      points.push({ x, y: 1, cls: 1 });
-    }
-
-    // Visual guides at y=0 and y=1 (labels are binary).
     fig.svg.append('line')
       .attr('x1', fig.xScale(0)).attr('x2', fig.xScale(10))
       .attr('y1', fig.yScale(0)).attr('y2', fig.yScale(0))
-      .attr('stroke', 'rgba(255,255,255,0.25)')
+      .attr('stroke', 'var(--ml-stroke-soft)')
       .attr('stroke-width', 2)
       .attr('stroke-dasharray', '6 6');
     fig.svg.append('line')
       .attr('x1', fig.xScale(0)).attr('x2', fig.xScale(10))
       .attr('y1', fig.yScale(1)).attr('y2', fig.yScale(1))
-      .attr('stroke', 'rgba(255,255,255,0.25)')
+      .attr('stroke', 'var(--ml-stroke-soft)')
       .attr('stroke-width', 2)
       .attr('stroke-dasharray', '6 6');
 
-    // Scatter of labeled data (y is exact 0/1).
     fig.svg.append('g')
       .selectAll('circle')
       .data(points)
@@ -436,51 +311,17 @@ description: "Understanding and applying machine learning techniques in water sc
       .append('circle')
       .attr('cx', d => fig.xScale(d.x))
       .attr('cy', d => fig.yScale(d.y))
-      .attr('r', 6)
-      .attr('fill', d => d.cls === 1 ? '#00ff94' : '#ff6b35')
-      .attr('stroke', '#ffffff')
+      .attr('r', 8)
+      .attr('fill', d => d.cls === 1 ? 'var(--ml-accent-green)' : 'var(--ml-accent-orange)')
+      .attr('stroke', 'var(--ml-text)')
       .attr('stroke-width', 2)
       .attr('opacity', 0.98);
 
-    // Two parameter settings: "start" vs "after fitting".
-    const betaStart = { b0: -5.0, b1: 1.0 };   // z = x - 5
-    const betaFit = { b0: -4.4, b1: 1.25 };    // slightly shifted/steeper
-
-    function zFromX(x, beta) {
-      return beta.b0 + beta.b1 * x;
-    }
-
-    const curveX = d3.range(0, 10.001, 0.05);
-    const curveStart = curveX.map(x => ({ x, p: sigmoid(zFromX(x, betaStart)) }));
-    const curveFit = curveX.map(x => ({ x, p: sigmoid(zFromX(x, betaFit)) }));
-
-    const line = d3.line()
-      .x(d => fig.xScale(d.x))
-      .y(d => fig.yScale(d.p));
-
-    fig.svg.append('path')
-      .datum(curveStart)
-      .attr('d', line)
-      .attr('fill', 'none')
-      .attr('stroke', '#ff05ff')
-      .attr('stroke-width', 5)
-      .attr('stroke-dasharray', '10 8')
-      .attr('opacity', 0.9);
-
-    fig.svg.append('path')
-      .datum(curveFit)
-      .attr('d', line)
-      .attr('fill', 'none')
-      .attr('stroke', '#00ffff')
-      .attr('stroke-width', 5)
-      .attr('opacity', 0.95);
-
-    // Labels.
     fig.svg.append('text')
       .attr('x', fig.width / 2)
       .attr('y', fig.height + 60)
       .attr('text-anchor', 'middle')
-      .style('fill', '#0ff')
+      .style('fill', 'var(--d3-axis-label-text-color)')
       .style('font-family', "'Press Start 2P', monospace")
       .style('font-size', '12px')
       .text('predictor x (e.g., turbidity)');
@@ -490,101 +331,128 @@ description: "Understanding and applying machine learning techniques in water sc
       .attr('y', -60)
       .attr('transform', 'rotate(-90)')
       .attr('text-anchor', 'middle')
-      .style('fill', '#0ff')
+      .style('fill', 'var(--d3-axis-label-text-color)')
       .style('font-family', "'Press Start 2P', monospace")
       .style('font-size', '12px')
-      .text('label y (0/1) and model p(class 1)');
+      .text('label y (0/1)');
+  }
 
-    // Mini numeric "worked example" for 3 x values in/near overlap.
-    const examples = [
-      { x: 4.5, y: 0 },
-      { x: 5.2, y: 1 },
-      { x: 6.2, y: 1 },
-    ].map(d => ({
-      ...d,
-      p0: sigmoid(zFromX(d.x, betaStart)),
-      p1: sigmoid(zFromX(d.x, betaFit)),
-    }));
+  function register() {
+    if (typeof plotUtils === 'undefined') {
+      setTimeout(register, 80);
+      return;
+    }
+    plotUtils.renderOnSlideOnce({ slideId, containerId, draw });
+  }
 
-    const box = fig.svg.append('g')
-      .attr('transform', `translate(${fig.width - 320}, 10)`);
+  register();
+})();
+</script>
+<!-- /position -->
+<!-- /layout -->
 
-    box.append('rect')
-      .attr('width', 312)
-      .attr('height', 150)
-      .attr('rx', 12)
-      .attr('fill', 'rgba(0,0,0,0.55)')
-      .attr('stroke', 'rgba(0,255,255,0.35)')
-      .attr('stroke-width', 2);
+---
 
-    box.append('text')
-      .attr('x', 14)
-      .attr('y', 24)
-      .style('fill', '#ffffff')
+<!-- .slide:id="logistic-regression-01b-training-changes" -->
+## What Training Changes
+<!-- layout={rows: 1, columns: 2} -->
+<!-- position={row: 1, column: 1} -->
+-! Training adjusts the curve
+-: to align probabilities with labels
+
+***
+
+-! Focus on the overlap
+-: that is where uncertainty matters most
+<!-- /position -->
+<!-- position={row: 1, column: 2} -->
+<div id="logreg-training-change-plot" style="width: 100%; height: 650px; border: 1px solid #2d3a66; border-radius: 12px; background: rgba(15,23,42,0.85);"></div>
+
+<script>
+(function() {
+  const containerId = 'logreg-training-change-plot';
+  const slideId = 'logistic-regression-01b-training-changes';
+
+  function sigmoid(z) {
+    return 1 / (1 + Math.exp(-z));
+  }
+
+  function draw() {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+
+    const width = 680;
+    const height = 650;
+    const margin = { top: 40, right: 30, bottom: 90, left: 90 };
+
+    const fig = plotUtils.createFigure(containerId, width, height, margin);
+    plotUtils.addAxes(fig, [0, 10], [-0.1, 1.1], 6, 6);
+
+    d3.select(`#${containerId} svg`)
+      .style('background-color', 'var(--ml-panel-bg)')
+      .style('border-radius', '12px');
+
+    const points = [
+      { x: 2.2, y: 0, cls: 0 },
+      { x: 5.3, y: 1, cls: 1 },
+      { x: 7.8, y: 1, cls: 1 },
+    ];
+
+    fig.svg.append('g')
+      .selectAll('circle')
+      .data(points)
+      .enter()
+      .append('circle')
+      .attr('cx', d => fig.xScale(d.x))
+      .attr('cy', d => fig.yScale(d.y))
+      .attr('r', 7)
+      .attr('fill', d => d.cls === 1 ? 'var(--ml-accent-green)' : 'var(--ml-accent-orange)')
+      .attr('stroke', 'var(--ml-text)')
+      .attr('stroke-width', 2)
+      .attr('opacity', 0.95);
+
+    const curveX = d3.range(0, 10.001, 0.05);
+    const curveBefore = curveX.map(x => ({ x, p: sigmoid((x - 6.4) * 0.8) }));
+    const curveAfter = curveX.map(x => ({ x, p: sigmoid((x - 5.4) * 1.4) }));
+
+    const line = d3.line()
+      .x(d => fig.xScale(d.x))
+      .y(d => fig.yScale(d.p));
+
+    fig.svg.append('path')
+      .datum(curveBefore)
+      .attr('d', line)
+      .attr('fill', 'none')
+      .attr('stroke', 'var(--ml-gray-soft)')
+      .attr('stroke-width', 2)
+      .attr('stroke-dasharray', '10 8')
+      .attr('opacity', 0.22);
+
+    fig.svg.append('path')
+      .datum(curveAfter)
+      .attr('d', line)
+      .attr('fill', 'none')
+      .attr('stroke', 'var(--ml-accent-cyan)')
+      .attr('stroke-width', 6)
+      .attr('opacity', 0.95);
+
+    fig.svg.append('text')
+      .attr('x', fig.xScale(6.0))
+      .attr('y', fig.yScale(0.78))
+      .style('fill', 'var(--ml-muted)')
       .style('font-size', '12px')
-      .style('font-family', "'Press Start 2P', monospace")
-      .text('Worked example');
-
-    box.append('text')
-      .attr('x', 14)
-      .attr('y', 48)
-      .style('fill', '#ffffff')
-      .style('font-size', '12px')
-      .text(`start: b0=${fmt(betaStart.b0)}, b1=${fmt(betaStart.b1)}`);
-
-    box.append('text')
-      .attr('x', 14)
-      .attr('y', 68)
-      .style('fill', '#ffffff')
-      .style('font-size', '12px')
-      .text(`fit:   b0=${fmt(betaFit.b0)}, b1=${fmt(betaFit.b1)}`);
-
-    examples.forEach((d, i) => {
-      box.append('text')
-        .attr('x', 14)
-        .attr('y', 96 + i * 18)
-        .style('fill', '#ffffff')
-        .style('font-size', '12px')
-        .text(`x=${fmt(d.x)}, y=${d.y}: p_start=${fmt(d.p0)}, p_fit=${fmt(d.p1)}`);
-    });
-
-    // Legend.
-    const legend = fig.svg.append('g')
-      .attr('transform', `translate(10, 10)`);
-
-    legend.append('rect')
-      .attr('width', 250)
-      .attr('height', 96)
-      .attr('rx', 12)
-      .attr('fill', 'rgba(0,0,0,0.55)')
-      .attr('stroke', 'rgba(0,255,255,0.35)')
-      .attr('stroke-width', 2);
-
-    legend.append('circle').attr('cx', 18).attr('cy', 26).attr('r', 6).attr('fill', '#ff6b35').attr('stroke', '#ffffff').attr('stroke-width', 2);
-    legend.append('text').attr('x', 34).attr('y', 30).style('fill', '#ffffff').style('font-size', '12px').text('label y=0');
-    legend.append('circle').attr('cx', 18).attr('cy', 50).attr('r', 6).attr('fill', '#00ff94').attr('stroke', '#ffffff').attr('stroke-width', 2);
-    legend.append('text').attr('x', 34).attr('y', 54).style('fill', '#ffffff').style('font-size', '12px').text('label y=1');
-    legend.append('line').attr('x1', 10).attr('y1', 74).attr('x2', 34).attr('y2', 74).attr('stroke', '#ff05ff').attr('stroke-width', 5).attr('stroke-dasharray', '10 8');
-    legend.append('text').attr('x', 40).attr('y', 78).style('fill', '#ffffff').style('font-size', '12px').text('start model');
-    legend.append('line').attr('x1', 140).attr('y1', 74).attr('x2', 164).attr('y2', 74).attr('stroke', '#00ffff').attr('stroke-width', 5);
-    legend.append('text').attr('x', 170).attr('y', 78).style('fill', '#ffffff').style('font-size', '12px').text('after fit');
+      .text('after training');
   }
 
-  function onSlide(event) {
-    if (!event || !event.currentSlide) return;
-    if (event.currentSlide.getAttribute('id') !== slideId) return;
-    draw();
+  function register() {
+    if (typeof plotUtils === 'undefined') {
+      setTimeout(register, 80);
+      return;
+    }
+    plotUtils.renderOnSlideOnce({ slideId, containerId, draw });
   }
 
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', draw);
-  } else {
-    draw();
-  }
-
-  if (window.Reveal && typeof window.Reveal.on === 'function') {
-    window.Reveal.on('slidechanged', onSlide);
-  }
+  register();
 })();
 </script>
 <!-- /position -->
@@ -593,21 +461,21 @@ description: "Understanding and applying machine learning techniques in water sc
 ---
 
 <!-- .slide:id="logistic-regression-02-linear-to-logistic" -->
-## From Linear Score to Logistic Model
+## The Score z (Before Probabilities)
 <!-- layout={rows: 1, columns: 2} -->
 <!-- position={row: 1, column: 1} -->
--! Step 1: compute a linear score z
--: combine many predictors into one "evidence" scale (weighted sum + intercept)
--: weights and intercept are learned from labeled training data (not chosen by hand)
--: intercept = baseline log-odds when all predictors are 0 (reference level)
-$$z = \beta_0 + \beta_1 x_1 + \dots + \beta_p x_p$$
+-! z is an evidence scale
+-: one number per sample (can be any real value)
 
 ***
 
--! Step 2: turn z into a probability with sigmoid
--: p(class 1 | x) becomes bounded in [0,1] and interpretable
--: without sigmoid, z (or a linear output) is unbounded and not a probability
-$$p = \frac{1}{1 + e^{-z}}$$
+-! z is not a probability
+-: it is not constrained to [0,1]
+
+***
+
+-! z must be transformed
+-: before decisions are possible
 
 <!-- /position -->
 <!-- position={row: 1, column: 2} -->
@@ -618,6 +486,907 @@ $$p = \frac{1}{1 + e^{-z}}$$
   const containerId = 'logreg-score-sigmoid-plot';
   const slideId = 'logistic-regression-02-linear-to-logistic';
 
+  function draw() {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+
+    const width = 680;
+    const height = 650;
+    const margin = { top: 40, right: 26, bottom: 70, left: 70 };
+    const fig = plotUtils.createFigure(containerId, width, height, margin);
+
+    plotUtils.addAxes(fig, [-4, 4], [-0.5, 1.5], 5, 3);
+
+    d3.select(`#${containerId} svg`)
+      .style('background-color', 'var(--ml-panel-bg)')
+      .style('border-radius', '12px');
+
+    fig.svg.append('line')
+      .attr('x1', fig.xScale(-4)).attr('x2', fig.xScale(4))
+      .attr('y1', fig.yScale(0)).attr('y2', fig.yScale(0))
+      .attr('stroke', 'var(--ml-stroke-soft)')
+      .attr('stroke-width', 2)
+      .attr('stroke-dasharray', '6 6');
+    fig.svg.append('line')
+      .attr('x1', fig.xScale(-4)).attr('x2', fig.xScale(4))
+      .attr('y1', fig.yScale(1)).attr('y2', fig.yScale(1))
+      .attr('stroke', 'var(--ml-stroke-soft)')
+      .attr('stroke-width', 2)
+      .attr('stroke-dasharray', '6 6');
+
+    const points = [
+      { z: -2.8, y: 0, cls: 0 },
+      { z: -1.9, y: 0, cls: 0 },
+      { z: -0.9, y: 0, cls: 0 },
+      { z: 0.7, y: 1, cls: 1 },
+      { z: 1.8, y: 1, cls: 1 },
+      { z: 2.9, y: 1, cls: 1 },
+    ];
+
+    fig.svg.append('g')
+      .selectAll('circle')
+      .data(points)
+      .enter()
+      .append('circle')
+      .attr('cx', d => fig.xScale(d.z))
+      .attr('cy', d => fig.yScale(d.y))
+      .attr('r', 7)
+      .attr('fill', d => d.cls === 1 ? 'var(--ml-accent-green)' : 'var(--ml-accent-orange)')
+      .attr('stroke', 'var(--ml-text)')
+      .attr('stroke-width', 2)
+      .attr('opacity', 0.95);
+
+    fig.svg.append('text')
+      .attr('x', fig.width / 2)
+      .attr('y', fig.height + 55)
+      .attr('text-anchor', 'middle')
+      .style('fill', 'var(--d3-axis-label-text-color)')
+      .style('font-family', "'Press Start 2P', monospace")
+      .style('font-size', '12px')
+      .text('score z (evidence)');
+
+    fig.svg.append('text')
+      .attr('x', -fig.height / 2)
+      .attr('y', -55)
+      .attr('transform', 'rotate(-90)')
+      .attr('text-anchor', 'middle')
+      .style('fill', 'var(--d3-axis-label-text-color)')
+      .style('font-family', "'Press Start 2P', monospace")
+      .style('font-size', '12px')
+      .text('label (0/1)');
+
+    fig.svg.append('text')
+      .attr('x', fig.xScale(0.6))
+      .attr('y', fig.yScale(1.3))
+      .style('fill', 'var(--ml-muted)')
+      .style('font-size', '12px')
+      .text('higher z -> higher risk');
+  }
+
+  function register() {
+    if (typeof plotUtils === 'undefined') {
+      setTimeout(register, 80);
+      return;
+    }
+    plotUtils.renderOnSlideOnce({ slideId, containerId, draw });
+  }
+
+  register();
+})();
+</script>
+<!-- /position -->
+<!-- /layout -->
+
+---
+
+<!-- .slide:id="logistic-regression-03-sigmoid" -->
+## The Sigmoid Function - Intuition
+<!-- layout={rows: 1, columns: 2} -->
+<!-- position={row: 1, column: 1} -->
+-! Input: score z
+-: negative -> low risk, positive -> high risk
+
+***
+
+-! Output: probability
+-: always stays in [0,1]
+
+***
+
+-! Smooth uncertainty
+-: near the middle, the model is less sure
+<!-- /position -->
+<!-- position={row: 1, column: 2} -->
+<div id="logreg-sigmoid-intuition-plot" style="width: 100%; height: 520px; border: 1px solid #2d3a66; border-radius: 12px; background: rgba(15,23,42,0.85);"></div>
+
+<script>
+(function() {
+  const containerId = 'logreg-sigmoid-intuition-plot';
+  const slideId = 'logistic-regression-03-sigmoid';
+
+  function getTheme() {
+    const isPerformanceMode = document.body.classList.contains('performance-mode');
+    return isPerformanceMode ? {
+      panel: '#f7f7f4',
+      border: '#111827',
+      axis: '#111827',
+      text: '#111827',
+      sigmoid: '#0ea5e9',
+      threshold: '#1f2937',
+      low: '#f97316',
+      high: '#10b981',
+      mid: '#111827'
+    } : {
+      panel: 'rgba(15,23,42,0.85)',
+      border: '#2d3a66',
+      axis: '#0ff',
+      text: '#ffffff',
+      sigmoid: '#00ffff',
+      threshold: 'rgba(255,255,255,0.25)',
+      low: '#ff6b35',
+      high: '#00ff94',
+      mid: '#ffb48a'
+    };
+  }
+
+    function draw() {
+      const container = document.getElementById(containerId);
+      if (!container) return;
+
+    const theme = getTheme();
+    container.style.backgroundColor = theme.panel;
+    container.style.borderColor = theme.border;
+
+    const width = 640;
+    const height = 520;
+    const margin = { top: 40, right: 40, bottom: 80, left: 80 };
+    const fig = plotUtils.createFigure(containerId, width, height, margin);
+    plotUtils.addAxes(fig, [-6, 6], [0, 1], 7, 5);
+
+    const root = d3.select(`#${containerId} svg`);
+    root.style('background-color', theme.panel)
+      .style('border-radius', '12px');
+
+    fig.svg.append('rect')
+      .attr('x', 0)
+      .attr('y', 0)
+      .attr('width', fig.width)
+      .attr('height', fig.height)
+      .attr('rx', 12)
+      .attr('fill', 'none')
+      .attr('stroke', theme.border)
+      .attr('stroke-width', 2);
+
+    fig.xAxisGroup.selectAll('path, line')
+      .style('stroke', theme.axis)
+      .style('stroke-width', '2px');
+    fig.yAxisGroup.selectAll('path, line')
+      .style('stroke', theme.axis)
+      .style('stroke-width', '2px');
+    fig.xAxisGroup.selectAll('text')
+      .style('fill', theme.axis)
+      .style('font-size', '12px')
+      .style('font-family', "'Press Start 2P', monospace");
+    fig.yAxisGroup.selectAll('text')
+      .style('fill', theme.axis)
+      .style('font-size', '12px')
+      .style('font-family', "'Press Start 2P', monospace");
+
+    const sigmoid = (z) => 1 / (1 + Math.exp(-z));
+    const curve = d3.range(-6, 6.001, 0.05).map(z => ({ z, p: sigmoid(z) }));
+
+    fig.svg.append('path')
+      .datum(curve)
+      .attr('fill', 'none')
+      .attr('stroke', theme.sigmoid)
+      .attr('stroke-width', 5)
+      .attr('opacity', 0.95)
+      .attr('d', d3.line()
+        .x(d => fig.xScale(d.z))
+        .y(d => fig.yScale(d.p)));
+
+    const markers = [
+      { z: -4, label: 'strong evidence for class 0', color: theme.low, dx: -10, dy: 28, anchor: 'start' },
+      { z: 0, label: 'uncertain', color: theme.mid, dx: 10, dy: -14, anchor: 'start' },
+      { z: 4, label: 'strong evidence for class 1', color: theme.high, dx: -210, dy: -18, anchor: 'start' }
+    ];
+
+    fig.svg.append('g')
+      .selectAll('circle')
+      .data(markers)
+      .enter()
+      .append('circle')
+      .attr('cx', d => fig.xScale(d.z))
+      .attr('cy', d => fig.yScale(sigmoid(d.z)))
+      .attr('r', 7)
+      .attr('fill', d => d.color)
+      .attr('stroke', theme.text)
+      .attr('stroke-width', 2);
+
+    fig.svg.append('g')
+      .selectAll('text')
+      .data(markers)
+      .enter()
+      .append('text')
+      .attr('x', d => fig.xScale(d.z) + d.dx)
+      .attr('y', d => fig.yScale(sigmoid(d.z)) + d.dy)
+      .style('fill', theme.text)
+      .style('font-size', '12px')
+      .text(d => d.label);
+
+    fig.svg.append('text')
+      .attr('x', fig.width / 2)
+      .attr('y', fig.height + 55)
+      .attr('text-anchor', 'middle')
+      .style('fill', theme.axis)
+      .style('font-family', "'Press Start 2P', monospace")
+      .style('font-size', '12px')
+      .text('evidence score z');
+
+    fig.svg.append('text')
+      .attr('x', -fig.height / 2)
+      .attr('y', -55)
+      .attr('transform', 'rotate(-90)')
+      .attr('text-anchor', 'middle')
+      .style('fill', theme.axis)
+      .style('font-family', "'Press Start 2P', monospace")
+      .style('font-size', '12px')
+      .text('p(class 1)');
+  }
+
+    function register() {
+      if (typeof plotUtils === 'undefined') {
+        setTimeout(register, 80);
+        return;
+      }
+      plotUtils.renderOnSlideOnce({ slideId, containerId, draw });
+    }
+
+    register();
+  })();
+  </script>
+<!-- /position -->
+<!-- /layout -->
+
+---
+
+<!-- .slide:id="logistic-regression-04-interpretation" -->
+## Model Interpretation
+<!-- layout={rows: 1, columns: 2} -->
+<!-- position={row: 1, column: 1} -->
+-! Coefficients show drivers of risk
+-: all features standardized (unit-free)
+
+***
+
+-! Show only three features
+-: rainfall (24h), turbidity, discharge
+
+***
+
+-! Baseline model
+-: simple and transparent (but limited)
+<!-- /position -->
+<!-- position={row: 1, column: 2} -->
+<div id="logreg-interpretation-plot" style="width: 100%; height: 520px; border: 1px solid #2d3a66; border-radius: 12px; background: rgba(15,23,42,0.85);"></div>
+
+<script>
+(function() {
+  const containerId = 'logreg-interpretation-plot';
+  const slideId = 'logistic-regression-04-interpretation';
+
+  function getTheme() {
+    const isPerformanceMode = document.body.classList.contains('performance-mode');
+    return isPerformanceMode ? {
+      panel: '#f7f7f4',
+      border: '#111827',
+      axis: '#111827',
+      text: '#111827',
+      pos: '#10b981',
+      neg: '#f97316',
+      zero: '#1f2937'
+    } : {
+      panel: 'rgba(15,23,42,0.85)',
+      border: '#2d3a66',
+      axis: '#0ff',
+      text: '#9efcff',
+      pos: '#00ff94',
+      neg: '#ff6b35',
+      zero: 'rgba(255,255,255,0.25)'
+    };
+  }
+
+  function draw() {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+
+    const theme = getTheme();
+    container.style.backgroundColor = theme.panel;
+    container.style.borderColor = theme.border;
+
+    const width = 640;
+    const height = 520;
+    const margin = { top: 50, right: 50, bottom: 90, left: 190 };
+    const fig = plotUtils.createFigure(containerId, width, height, margin);
+
+    const data = [
+      { name: 'rainfall (24h)', value: 0.7 },
+      { name: 'turbidity', value: 0.9 },
+      { name: 'discharge', value: -0.5 }
+    ];
+
+    const xScale = d3.scaleLinear().domain([-1.2, 1.2]).range([0, fig.width]);
+    const yScale = d3.scaleBand()
+      .domain(data.map(d => d.name))
+      .range([0, fig.height - 20])
+      .padding(0.25);
+
+    const xAxis = d3.axisBottom(xScale).ticks(5);
+    const yAxis = d3.axisLeft(yScale);
+
+    const yAxisGroup = fig.svg.append('g').call(yAxis);
+    const xAxisGroup = fig.svg.append('g')
+      .attr('transform', `translate(0, ${fig.height})`)
+      .call(xAxis);
+
+    yAxisGroup.selectAll('path, line').style('stroke', theme.axis).style('stroke-width', '2px');
+    xAxisGroup.selectAll('path, line').style('stroke', theme.axis).style('stroke-width', '2px');
+    yAxisGroup.selectAll('text')
+      .style('fill', theme.text)
+      .style('font-size', '14px')
+      .style('font-family', "'Press Start 2P', monospace");
+    xAxisGroup.selectAll('text')
+      .style('fill', theme.axis)
+      .style('font-size', '12px')
+      .style('font-family', "'Press Start 2P', monospace");
+
+    fig.svg.append('line')
+      .attr('x1', xScale(0))
+      .attr('x2', xScale(0))
+      .attr('y1', 0)
+      .attr('y2', fig.height)
+      .attr('stroke', theme.zero)
+      .attr('stroke-width', 2)
+      .attr('stroke-dasharray', '6 6');
+
+    fig.svg.append('g')
+      .selectAll('rect')
+      .data(data)
+      .enter()
+      .append('rect')
+      .attr('x', d => xScale(Math.min(0, d.value)))
+      .attr('y', d => yScale(d.name))
+      .attr('width', d => Math.abs(xScale(d.value) - xScale(0)))
+      .attr('height', yScale.bandwidth())
+      .attr('rx', 6)
+      .attr('fill', d => d.value >= 0 ? theme.pos : theme.neg)
+      .attr('stroke', theme.border)
+      .attr('stroke-width', 1.5)
+      .attr('opacity', 0.95);
+
+    fig.svg.append('text')
+      .attr('x', fig.width / 2)
+      .attr('y', fig.height + 60)
+      .attr('text-anchor', 'middle')
+      .style('fill', theme.axis)
+      .style('font-family', "'Press Start 2P', monospace")
+      .style('font-size', '12px')
+      .text('pushes risk up/down (standardized)');
+
+    fig.svg.append('text')
+      .attr('x', xScale(-1.05))
+      .attr('y', fig.height + 30)
+      .style('fill', theme.text)
+      .style('font-size', '12px')
+      .text('left = negative');
+
+    fig.svg.append('text')
+      .attr('x', xScale(0.4))
+      .attr('y', fig.height + 30)
+      .style('fill', theme.text)
+      .style('font-size', '12px')
+      .text('right = positive');
+  }
+
+  function register() {
+    if (typeof plotUtils === 'undefined') {
+      setTimeout(register, 80);
+      return;
+    }
+    plotUtils.renderOnSlideOnce({ slideId, containerId, draw });
+  }
+
+  register();
+})();
+</script>
+<!-- /position -->
+<!-- /layout -->
+
+---
+
+<!-- .slide:id="logistic-regression-05-decision-boundary" -->
+## Decision Boundary
+<!-- layout={rows: 1, columns: 2} -->
+<!-- position={row: 1, column: 1} -->
+-! Probability field, not a hard split
+-: color shows p(exceedance)
+
+***
+
+-! Boundary is secondary
+-: it is where p reaches a policy-chosen threshold
+
+***
+
+-! Policy defines the decision threshold
+-: which sets the boundary location
+<!-- /position -->
+<!-- position={row: 1, column: 2} -->
+<div id="logreg-decision-boundary-plot" style="width: 100%; height: 520px; border: 1px solid #2d3a66; border-radius: 12px; background: rgba(15,23,42,0.85);"></div>
+
+<script>
+(function() {
+  const containerId = 'logreg-decision-boundary-plot';
+  const slideId = 'logistic-regression-05-decision-boundary';
+
+  function getTheme() {
+    const isPerformanceMode = document.body.classList.contains('performance-mode');
+    return isPerformanceMode ? {
+      panel: '#f7f7f4',
+      border: '#111827',
+      axis: '#111827',
+      text: '#111827',
+      boundary: '#111827',
+      class0: '#f97316',
+      class1: '#10b981',
+      shade0: 'rgba(249,115,22,0.16)',
+      shade1: 'rgba(16,185,129,0.16)'
+    } : {
+      panel: 'rgba(15,23,42,0.85)',
+      border: '#2d3a66',
+      axis: '#0ff',
+      text: '#9efcff',
+      boundary: '#9efcff',
+      class0: '#ff6b35',
+      class1: '#00ff94',
+      shade0: 'rgba(255,107,53,0.16)',
+      shade1: 'rgba(0,255,148,0.16)'
+    };
+  }
+
+  function draw() {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+
+    const theme = getTheme();
+    container.style.backgroundColor = theme.panel;
+    container.style.borderColor = theme.border;
+
+    const width = 640;
+    const height = 520;
+    const margin = { top: 40, right: 40, bottom: 80, left: 80 };
+    const fig = plotUtils.createFigure(containerId, width, height, margin);
+
+    const xDomain = [0, 10];
+    const yDomain = [0, 10];
+    const xScale = d3.scaleLinear().domain(xDomain).range([0, fig.width]);
+    const yScale = d3.scaleLinear().domain(yDomain).range([fig.height, 0]);
+
+    const xAxis = d3.axisBottom(xScale).ticks(6);
+    const yAxis = d3.axisLeft(yScale).ticks(6);
+    const xAxisGroup = fig.svg.append('g')
+      .attr('transform', `translate(0, ${fig.height})`)
+      .call(xAxis);
+    const yAxisGroup = fig.svg.append('g').call(yAxis);
+
+    xAxisGroup.selectAll('path, line').style('stroke', theme.axis).style('stroke-width', '2px');
+    yAxisGroup.selectAll('path, line').style('stroke', theme.axis).style('stroke-width', '2px');
+    xAxisGroup.selectAll('text')
+      .style('fill', theme.axis)
+      .style('font-size', '12px')
+      .style('font-family', "'Press Start 2P', monospace");
+    yAxisGroup.selectAll('text')
+      .style('fill', theme.axis)
+      .style('font-size', '12px')
+      .style('font-family', "'Press Start 2P', monospace");
+
+    const defs = fig.svg.append('defs');
+    const grad = defs.append('linearGradient')
+      .attr('id', `${containerId}-shade`)
+      .attr('x1', '0%')
+      .attr('y1', '0%')
+      .attr('x2', '100%')
+      .attr('y2', '0%');
+    grad.append('stop').attr('offset', '0%').attr('stop-color', theme.shade0);
+    grad.append('stop').attr('offset', '100%').attr('stop-color', theme.shade1);
+
+    fig.svg.append('rect')
+      .attr('x', 0)
+      .attr('y', 0)
+      .attr('width', fig.width)
+      .attr('height', fig.height)
+      .attr('rx', 12)
+      .attr('fill', `url(#${containerId}-shade)`)
+      .attr('stroke', theme.border)
+      .attr('stroke-width', 2);
+
+    const boundary = [
+      { x: 1, y: 9 },
+      { x: 9, y: 2 }
+    ];
+      fig.svg.append('path')
+        .datum(boundary)
+        .attr('fill', 'none')
+        .attr('stroke', theme.boundary)
+        .attr('stroke-width', 2)
+        .attr('stroke-dasharray', '8 6')
+        .attr('opacity', 0.55)
+        .attr('d', d3.line().x(d => xScale(d.x)).y(d => yScale(d.y)));
+
+    const points = [
+      { x: 1.6, y: 2.2, cls: 0 },
+      { x: 2.6, y: 2.8, cls: 0 },
+      { x: 3.4, y: 2.0, cls: 0 },
+      { x: 2.8, y: 4.2, cls: 0 },
+      { x: 7.4, y: 6.9, cls: 1 },
+      { x: 8.3, y: 6.1, cls: 1 },
+      { x: 9.0, y: 7.6, cls: 1 },
+      { x: 7.6, y: 4.7, cls: 1 }
+    ];
+
+    fig.svg.append('g')
+      .selectAll('circle')
+      .data(points)
+      .enter()
+      .append('circle')
+      .attr('cx', d => xScale(d.x))
+      .attr('cy', d => yScale(d.y))
+      .attr('r', 7)
+      .attr('fill', d => d.cls === 1 ? theme.class1 : theme.class0)
+      .attr('stroke', theme.text)
+      .attr('stroke-width', 2)
+      .attr('opacity', 0.95);
+
+    fig.svg.append('text')
+      .attr('x', 10)
+      .attr('y', fig.height + 55)
+      .style('fill', theme.text)
+      .style('font-size', '12px')
+      .text('probability shading');
+
+  }
+
+  function register() {
+    if (typeof plotUtils === 'undefined') {
+      setTimeout(register, 80);
+      return;
+    }
+    plotUtils.renderOnSlideOnce({ slideId, containerId, draw });
+  }
+
+  register();
+})();
+</script>
+<!-- /position -->
+<!-- /layout -->
+
+---
+
+<!-- .slide:id="logistic-regression-06-training" -->
+## Training the Model
+<!-- layout={rows: 1, columns: 2} -->
+<!-- position={row: 1, column: 1} -->
+-! Training adjusts the weights
+-: to match probabilities to observed outcomes
+
+***
+
+-! Two states to remember
+-: before training vs after training
+
+***
+
+-! Goal
+-: better alignment (especially near overlap)
+<!-- /position -->
+<!-- position={row: 1, column: 2} -->
+<div id="logreg-training-loss-plot" style="width: 100%; height: 520px; border: 1px solid #2d3a66; border-radius: 12px; background: rgba(15,23,42,0.85);"></div>
+
+<script>
+(function() {
+  const containerId = 'logreg-training-loss-plot';
+  const slideId = 'logistic-regression-06-training';
+
+  function getTheme() {
+    const isPerformanceMode = document.body.classList.contains('performance-mode');
+    return isPerformanceMode ? {
+      panel: '#f7f7f4',
+      border: '#111827',
+      axis: '#111827',
+      text: '#111827',
+      y1: '#10b981',
+      y0: '#f97316',
+      hint: '#111827'
+    } : {
+      panel: 'rgba(15,23,42,0.85)',
+      border: '#2d3a66',
+      axis: '#0ff',
+      text: '#9efcff',
+      y1: '#00ff94',
+      y0: '#ff6b35',
+      hint: '#9efcff'
+    };
+  }
+
+  function draw() {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+
+    const theme = getTheme();
+    container.style.backgroundColor = theme.panel;
+    container.style.borderColor = theme.border;
+
+    const width = 640;
+    const height = 520;
+    const margin = { top: 50, right: 40, bottom: 90, left: 90 };
+    const fig = plotUtils.createFigure(containerId, width, height, margin);
+
+    // Curated visual: before vs after training (no loss curves, no formulas).
+    plotUtils.addAxes(fig, [0, 10], [-0.1, 1.1], 6, 6);
+
+    const points = [
+      { x: 4.8, y: 0, cls: 0 },
+      { x: 5.4, y: 1, cls: 1 },
+      { x: 7.6, y: 1, cls: 1 },
+    ];
+
+    fig.svg.append('g')
+      .selectAll('circle')
+      .data(points)
+      .enter()
+      .append('circle')
+      .attr('cx', d => fig.xScale(d.x))
+      .attr('cy', d => fig.yScale(d.y))
+      .attr('r', 7)
+      .attr('fill', d => d.cls === 1 ? theme.y1 : theme.y0)
+      .attr('stroke', theme.text)
+      .attr('stroke-width', 2)
+      .attr('opacity', 0.95);
+
+    const sigmoid = (t) => 1 / (1 + Math.exp(-t));
+    const curveX = d3.range(0, 10.001, 0.05);
+    const curveBefore = curveX.map(x => ({ x, p: sigmoid((x - 6.2) * 0.9) }));
+    const curveAfter = curveX.map(x => ({ x, p: sigmoid((x - 5.4) * 1.4) }));
+
+    const line = d3.line()
+      .x(d => fig.xScale(d.x))
+      .y(d => fig.yScale(d.p));
+
+    fig.svg.append('path')
+      .datum(curveBefore)
+      .attr('d', line)
+      .attr('fill', 'none')
+      .attr('stroke', theme.y0)
+      .attr('stroke-width', 5)
+      .attr('stroke-dasharray', '10 8')
+      .attr('opacity', 0.9);
+
+    fig.svg.append('path')
+      .datum(curveAfter)
+      .attr('d', line)
+      .attr('fill', 'none')
+      .attr('stroke', theme.y1)
+      .attr('stroke-width', 5)
+      .attr('opacity', 0.95);
+
+    fig.svg.append('text')
+      .attr('x', fig.xScale(7.2))
+      .attr('y', fig.yScale(0.18))
+      .style('fill', theme.text)
+      .style('font-size', '12px')
+      .text('before');
+
+    fig.svg.append('text')
+      .attr('x', fig.xScale(6.1))
+      .attr('y', fig.yScale(0.78))
+      .style('fill', theme.text)
+      .style('font-size', '12px')
+      .text('after');
+
+    return;
+
+  }
+
+  function register() {
+    if (typeof plotUtils === 'undefined') {
+      setTimeout(register, 80);
+      return;
+    }
+    plotUtils.renderOnSlideOnce({ slideId, containerId, draw });
+  }
+
+  register();
+})();
+</script>
+<!-- /position -->
+<!-- /layout -->
+
+---
+
+<!-- .slide:id="logistic-regression-07-strengths-limitations" -->
+## When to Use Logistic Regression
+<!-- layout={rows: 1, columns: 2} -->
+<!-- position={row: 1, column: 1} -->
+-! Default baseline model
+-: simple, transparent, trustworthy
+
+***
+
+-! Works best when effects are roughly monotonic
+-: and interactions are not dominant
+
+***
+
+-! Use probabilities responsibly
+-: calibrate and pick thresholds with domain costs
+<!-- /position -->
+<!-- position={row: 1, column: 2} -->
+<div id="logreg-strengths-plot" style="width: 100%; height: 520px; border: 1px solid #2d3a66; border-radius: 12px; background: rgba(15,23,42,0.0);"></div>
+
+<script>
+(function() {
+  const containerId = 'logreg-strengths-plot';
+  const slideId = 'logistic-regression-07-strengths-limitations';
+
+  function getTheme() {
+    const isPerformanceMode = document.body.classList.contains('performance-mode');
+    return isPerformanceMode ? {
+      panel: '#f7f7f4',
+      border: '#111827',
+      text: '#111827',
+      header: '#111827',
+      good: '#10b981',
+      bad: '#f97316',
+      divider: '#111827'
+    } : {
+      panel: 'rgba(15,23,42,0.85)',
+      border: '#2d3a66',
+      text: '#9efcff',
+      header: '#ffffff',
+      good: '#00ff94',
+      bad: '#ff6b35',
+      divider: '#2d3a66'
+    };
+  }
+
+    function draw() {
+      const container = document.getElementById(containerId);
+      if (!container) return;
+
+    const theme = getTheme();
+    container.style.backgroundColor = theme.panel;
+    container.style.borderColor = theme.border;
+
+    const width = 640;
+    const height = 520;
+    const margin = { top: 50, right: 40, bottom: 60, left: 40 };
+    const fig = plotUtils.createFigure(containerId, width, height, margin);
+
+    fig.svg.append('rect')
+      .attr('x', 0)
+      .attr('y', 0)
+      .attr('width', fig.width)
+      .attr('height', fig.height)
+      .attr('rx', 12)
+      .attr('fill', 'none')
+      .attr('stroke', theme.border)
+      .attr('stroke-width', 2);
+
+    const mid = fig.width / 2;
+    fig.svg.append('line')
+      .attr('x1', mid)
+      .attr('x2', mid)
+      .attr('y1', 0)
+      .attr('y2', fig.height)
+      .attr('stroke', theme.divider)
+      .attr('stroke-width', 2);
+
+    fig.svg.append('text')
+      .attr('x', mid / 2)
+      .attr('y', 30)
+      .attr('text-anchor', 'middle')
+      .style('fill', theme.header)
+      .style('font-size', '18px')
+      .style('font-family', "'Press Start 2P', monospace")
+      .text('Logistic');
+
+    fig.svg.append('text')
+      .attr('x', mid + mid / 2)
+      .attr('y', 30)
+      .attr('text-anchor', 'middle')
+      .style('fill', theme.header)
+      .style('font-size', '18px')
+      .style('font-family', "'Press Start 2P', monospace")
+      .text('Random Forest');
+
+    const leftItems = [
+      { text: 'interpretable', color: theme.good },
+      { text: 'fast, small data', color: theme.good },
+      { text: 'linear boundary', color: theme.bad }
+    ];
+    const rightItems = [
+      { text: 'flexible boundary', color: theme.good },
+      { text: 'handles interactions', color: theme.good },
+      { text: 'less transparent', color: theme.bad }
+    ];
+
+    const lineHeight = 42;
+    leftItems.forEach((item, i) => {
+      fig.svg.append('text')
+        .attr('x', 20)
+        .attr('y', 90 + i * lineHeight)
+        .style('fill', item.color)
+        .style('font-size', '16px')
+        .text(item.text);
+    });
+
+    rightItems.forEach((item, i) => {
+      fig.svg.append('text')
+        .attr('x', mid + 20)
+        .attr('y', 90 + i * lineHeight)
+        .style('fill', item.color)
+        .style('font-size', '16px')
+        .text(item.text);
+    });
+  }
+
+  function register() {
+    if (typeof plotUtils === 'undefined') {
+      setTimeout(register, 80);
+      return;
+    }
+    plotUtils.renderOnSlideOnce({ slideId, containerId, draw });
+  }
+
+  register();
+})();
+</script>
+<!-- /position -->
+<!-- /layout -->
+
+---
+
+<!-- .slide:id="random-forest-01-motivation" -->
+## Random Forest - Motivation
+<!-- layout={rows: 1, columns: 2} -->
+
+<!-- position={row: 1, column: 1} -->
+-! Many water-quality problems are not linear
+-: predictors often interact (for example, turbidity can matter differently across seasons)
+-: effects can be non-monotonic (risk increases, saturates, then changes again)
+
+***
+
+-! Random Forest is a strong baseline for classification and regression
+-: it works well without heavy feature engineering and handles mixed feature types
+-: it is fairly robust to noise and outliers compared to a single decision tree
+
+***
+
+-! The key advantage is flexible decision boundaries
+-: linear models are great when the boundary is approximately linear
+-: tree ensembles can capture interactions that a single straight line cannot
+<!-- /position -->
+
+<!-- position={row: 1, column: 2} -->
+<div id="rf-motivation-plot" style="width: 100%; height: 650px; border: 1px solid #2d3a66; border-radius: 12px; background: rgba(15,23,42,0.85);"></div>
+-= Same dataset: a linear boundary cannot separate an interaction pattern, while axis-aligned splits can.
+
+<script>
+(function() {
+  const containerId = 'rf-motivation-plot';
+  const slideId = 'random-forest-01-motivation';
+
   function seededRandom(seed) {
     let value = seed >>> 0;
     return function() {
@@ -626,15 +1395,23 @@ $$p = \frac{1}{1 + e^{-z}}$$
     };
   }
 
-  function styleAxis(g) {
-    g.selectAll('path, line')
-      .style('stroke', '#0ff')
-      .style('stroke-width', '2px')
-      .style('shape-rendering', 'crispEdges');
-    g.selectAll('text')
-      .style('fill', '#0ff')
-      .style('font-size', '12px')
-      .style('font-family', "'Press Start 2P', monospace");
+  function makeData() {
+    const rng = seededRandom(41);
+    const jitter = (s) => (rng() * 2 - 1) * s;
+    const points = [];
+    const n = 80;
+
+    for (let i = 0; i < n; i++) {
+      const x = Math.max(0, Math.min(1, rng() + jitter(0.03)));
+      const y = Math.max(0, Math.min(1, rng() + jitter(0.03)));
+
+      // Interaction pattern (two diagonally opposite "high-risk" corners).
+      const cls =
+        (x < 0.45 && y < 0.45) || (x > 0.55 && y > 0.55) ? 1 : 0;
+
+      points.push({ x, y, cls });
+    }
+    return points;
   }
 
   function draw() {
@@ -647,451 +1424,2893 @@ $$p = \frac{1}{1 + e^{-z}}$$
 
     const width = 680;
     const height = 650;
-    const margin = { top: 40, right: 26, bottom: 70, left: 70 };
+    const margin = { top: 36, right: 28, bottom: 70, left: 70 };
+
+    const points = makeData();
+
     const fig = plotUtils.createFigure(containerId, width, height, margin);
 
-    // Use the helper for container creation, but draw custom axes for 2 panels.
-    fig.xAxisGroup.remove();
-    fig.yAxisGroup.remove();
-
     d3.select(`#${containerId} svg`)
-      .style('background-color', 'rgba(15,23,42,0.85)')
+      .style('background-color', 'var(--ml-panel-bg)')
       .style('border-radius', '12px');
 
-    const gap = 56;
-    const panelH = (fig.height - gap) / 2;
-    const xScale = d3.scaleLinear().domain([-6, 6]).range([0, fig.width]);
+    const theme = {
+      border: 'var(--ml-panel-border)',
+      text: 'var(--ml-text)',
+      muted: 'var(--ml-muted)',
+      magenta: 'var(--ml-accent-magenta)',
+      green: 'var(--ml-accent-green)',
+      orange: 'var(--ml-accent-orange)'
+    };
 
-    const top = fig.svg.append('g').attr('transform', 'translate(0,0)');
-    const bottom = fig.svg.append('g').attr('transform', `translate(0,${panelH + gap})`);
+    const gap = 22;
+    const panelW = (fig.width - gap) / 2;
+    const panelH = fig.height - 30;
 
-    const yTop = d3.scaleLinear().domain([-0.5, 1.5]).range([panelH, 0]);
-    const yBot = d3.scaleLinear().domain([0, 1]).range([panelH, 0]);
+    const x = d3.scaleLinear().domain([0, 1]).range([0, panelW]);
+    const y = d3.scaleLinear().domain([0, 1]).range([panelH, 0]);
 
-    function drawPanelBackground(g) {
-      g.append('rect')
+    const left = fig.svg.append('g').attr('transform', `translate(0, 30)`);
+    const right = fig.svg.append('g').attr('transform', `translate(${panelW + gap}, 30)`);
+
+    function drawFrame(root, title) {
+      root.append('rect')
         .attr('x', 0)
         .attr('y', 0)
-        .attr('width', fig.width)
+        .attr('width', panelW)
         .attr('height', panelH)
-        .attr('rx', 12)
-        .attr('fill', 'rgba(0,0,0,0.06)')
-        .attr('stroke', 'rgba(0,255,255,0.18)')
+        .attr('rx', 10)
+        .attr('fill', 'var(--ml-surface)')
+        .attr('stroke', theme.border)
         .attr('stroke-width', 2);
+
+      root.append('text')
+        .attr('x', panelW / 2)
+        .attr('y', -10)
+        .attr('text-anchor', 'middle')
+        .style('fill', theme.text)
+        .style('font-family', "'Press Start 2P', monospace")
+        .style('font-size', '12px')
+        .text(title);
+
+      root.append('g')
+        .attr('transform', `translate(0, ${panelH})`)
+        .attr('class', 'd3-axis')
+        .call(d3.axisBottom(x).ticks(4));
+      root.append('g')
+        .attr('class', 'd3-axis')
+        .call(d3.axisLeft(y).ticks(4));
     }
 
-    function drawProbBand(g, yScale) {
-      g.append('rect')
-        .attr('x', xScale(-6))
-        .attr('y', yScale(1))
-        .attr('width', xScale(6) - xScale(-6))
-        .attr('height', yScale(0) - yScale(1))
-        .attr('fill', 'rgba(0,255,255,0.14)')
-        .attr('stroke', '#00ffff')
-        .attr('stroke-width', 1.5);
-      g.append('line')
-        .attr('x1', 0).attr('x2', fig.width)
-        .attr('y1', yScale(0)).attr('y2', yScale(0))
-        .attr('stroke', 'rgba(255,255,255,0.25)')
-        .attr('stroke-width', 2)
-        .attr('stroke-dasharray', '6 6');
-      g.append('line')
-        .attr('x1', 0).attr('x2', fig.width)
-        .attr('y1', yScale(1)).attr('y2', yScale(1))
-        .attr('stroke', 'rgba(255,255,255,0.25)')
-        .attr('stroke-width', 2)
-        .attr('stroke-dasharray', '6 6');
+    drawFrame(left, 'Linear boundary');
+    drawFrame(right, 'Tree-like boundary');
+
+    const line = d3.line()
+      .x(d => x(d.x))
+      .y(d => y(d.y));
+
+    const linBoundary = d3.range(0, 1.001, 0.02).map(t => ({ x: t, y: t }));
+    left.append('path')
+      .datum(linBoundary)
+      .attr('d', line)
+      .attr('fill', 'none')
+      .attr('stroke', theme.magenta)
+      .attr('stroke-width', 3)
+      .attr('opacity', 0.95);
+
+    const positiveRegions = [
+      { x0: 0, y0: 0, x1: 0.45, y1: 0.45 },
+      { x0: 0.55, y0: 0.55, x1: 1, y1: 1 }
+    ];
+
+    right.append('g')
+      .selectAll('rect.region')
+      .data(positiveRegions)
+      .enter()
+      .append('rect')
+      .attr('class', 'region')
+      .attr('x', d => x(d.x0))
+      .attr('y', d => y(d.y1))
+      .attr('width', d => x(d.x1) - x(d.x0))
+      .attr('height', d => y(d.y0) - y(d.y1))
+      .attr('fill', 'var(--ml-accent-green-soft)')
+      .attr('stroke', theme.green)
+      .attr('stroke-width', 2);
+
+    function drawPoints(root) {
+      root.append('g')
+        .selectAll('circle')
+        .data(points)
+        .enter()
+        .append('circle')
+        .attr('cx', d => x(d.x))
+        .attr('cy', d => y(d.y))
+        .attr('r', 4.8)
+        .attr('fill', d => d.cls === 1 ? theme.green : theme.orange)
+        .attr('stroke', theme.text)
+        .attr('stroke-width', 1.5)
+        .attr('opacity', 0.96);
     }
+    drawPoints(left);
+    drawPoints(right);
 
-    drawPanelBackground(top);
-    drawPanelBackground(bottom);
-    drawProbBand(top, yTop);
-    drawProbBand(bottom, yBot);
-
-    top.append('text')
-      .attr('x', 10)
-      .attr('y', -12)
-      .style('fill', '#ffffff')
-      .style('font-size', '13px')
-      .style('font-family', "'Press Start 2P', monospace")
-      .text('If output is linear (not a probability)');
-
-    bottom.append('text')
-      .attr('x', 10)
-      .attr('y', -12)
-      .style('fill', '#ffffff')
-      .style('font-size', '13px')
-      .style('font-family', "'Press Start 2P', monospace")
-      .text('After sigmoid: probability p(class 1)');
-
-    top.append('text')
-      .attr('x', 10)
-      .attr('y', 16)
-      .style('fill', '#ffffff')
-      .style('font-size', '12px')
-      .text('y-hat (unbounded)');
-
-    bottom.append('text')
-      .attr('x', 10)
-      .attr('y', 16)
-      .style('fill', '#ffffff')
-      .style('font-size', '12px')
-      .text('p in [0,1]');
-
-    // Axes (top: y + unlabeled x ticks; bottom: y + full x axis).
-    const yAxisTop = top.append('g').call(d3.axisLeft(yTop).ticks(5));
-    styleAxis(yAxisTop);
-    const xAxisTop = top.append('g')
-      .attr('transform', `translate(0,${panelH})`)
-      .call(d3.axisBottom(xScale).ticks(7).tickFormat(() => ''));
-    styleAxis(xAxisTop);
-
-    const yAxisBot = bottom.append('g').call(d3.axisLeft(yBot).ticks(5));
-    styleAxis(yAxisBot);
-    const xAxisBot = bottom.append('g')
-      .attr('transform', `translate(0,${panelH})`)
-      .call(d3.axisBottom(xScale).ticks(7));
-    styleAxis(xAxisBot);
-
-    // Axis labels (bottom panel).
-    bottom.append('text')
-      .attr('x', fig.width / 2)
-      .attr('y', panelH + 56)
+    fig.svg.append('text')
+      .attr('x', (panelW / 2))
+      .attr('y', fig.height + 24)
       .attr('text-anchor', 'middle')
-      .style('fill', '#0ff')
+      .style('fill', theme.muted)
       .style('font-size', '12px')
-      .style('font-family', "'Press Start 2P', monospace")
-      .text('linear score z (example: z = x - 5)');
+      .text('predictor 1 (e.g., turbidity)');
 
-    // Use the same underlying x distribution as the previous slide:
-    // class 0: x in [0,6], class 1: x in [5,10] (overlap 5..6).
-    // Convert to a score with a simple 1-predictor example: z = x - 5 (i.e., beta0=-5, beta1=1).
-    // In a real model, beta0 and beta1..betap are learned from labeled data by maximizing log-likelihood.
-    const rng = seededRandom(17);
-    const jitter = (s) => (rng() * 2 - 1) * s;
-    const n0 = 18;
-    const n1 = 18;
-    const z0 = [];
-    const z1 = [];
-
-    for (let i = 0; i < n0; i++) {
-      const xRaw = 0 + (i / (n0 - 1)) * 6 + jitter(0.18);
-      const x = Math.max(0, Math.min(6, xRaw));
-      z0.push(x - 5);
-    }
-    for (let i = 0; i < n1; i++) {
-      const xRaw = 5 + (i / (n1 - 1)) * 5 + jitter(0.18);
-      const x = Math.max(5, Math.min(10, xRaw));
-      z1.push(x - 5);
-    }
-    const ptsTop = [
-      ...z0.map(z => ({ z, y: 0, cls: 0 })),
-      ...z1.map(z => ({ z, y: 1, cls: 1 })),
-    ];
-
-    top.append('g')
-      .selectAll('circle')
-      .data(ptsTop)
-      .enter()
-      .append('circle')
-      .attr('cx', d => xScale(d.z))
-      .attr('cy', d => yTop(d.y))
-      .attr('r', 6)
-      .attr('fill', d => d.cls === 1 ? '#00ff94' : '#ff6b35')
-      .attr('stroke', '#ffffff')
-      .attr('stroke-width', 2)
-      .attr('opacity', 0.98);
-
-    // Linear mapping (naive "probability") -> can exceed [0,1].
-    const linData = d3.range(-6, 6.001, 0.05).map(z => ({ z, y: 0.5 + 0.2 * z }));
-    top.append('path')
-      .datum(linData)
-      .attr('fill', 'none')
-      .attr('stroke', '#ff05ff')
-      .attr('stroke-width', 5)
-      .attr('opacity', 0.95)
-      .attr('d', d3.line().x(d => xScale(d.z)).y(d => yTop(d.y)));
-
-    // Sigmoid curve + mapped points.
-    const sigmoid = (z) => 1 / (1 + Math.exp(-z));
-    const sigData = d3.range(-6, 6.001, 0.05).map(z => ({ z, p: sigmoid(z) }));
-    bottom.append('path')
-      .datum(sigData)
-      .attr('fill', 'none')
-      .attr('stroke', '#00ffff')
-      .attr('stroke-width', 5)
-      .attr('opacity', 0.95)
-      .attr('d', d3.line().x(d => xScale(d.z)).y(d => yBot(d.p)));
-
-    const ptsBot = [
-      ...z0.map(z => ({ z, p: sigmoid(z), cls: 0 })),
-      ...z1.map(z => ({ z, p: sigmoid(z), cls: 1 })),
-    ];
-    bottom.append('g')
-      .selectAll('circle')
-      .data(ptsBot)
-      .enter()
-      .append('circle')
-      .attr('cx', d => xScale(d.z))
-      .attr('cy', d => yBot(d.p))
-      .attr('r', 6)
-      .attr('fill', d => d.cls === 1 ? '#00ff94' : '#ff6b35')
-      .attr('stroke', '#ffffff')
-      .attr('stroke-width', 2)
-      .attr('opacity', 0.98);
-
-    // Visual cue: z=0 -> p=0.5.
-    bottom.append('line')
-      .attr('x1', xScale(0)).attr('x2', xScale(0))
-      .attr('y1', 0).attr('y2', panelH)
-      .attr('stroke', 'rgba(255,255,255,0.25)')
-      .attr('stroke-width', 2)
-      .attr('stroke-dasharray', '6 6');
-    bottom.append('circle')
-      .attr('cx', xScale(0))
-      .attr('cy', yBot(0.5))
-      .attr('r', 7)
-      .attr('fill', '#ff6b35')
-      .attr('stroke', '#ffffff')
-      .attr('stroke-width', 2);
-    bottom.append('text')
-      .attr('x', xScale(0) + 10)
-      .attr('y', yBot(0.5) - 10)
-      .style('fill', '#ffffff')
+    fig.svg.append('text')
+      .attr('x', panelW + gap + (panelW / 2))
+      .attr('y', fig.height + 24)
+      .attr('text-anchor', 'middle')
+      .style('fill', theme.muted)
       .style('font-size', '12px')
-      .text('z=0 -> p=0.5');
-
-    // Legend (top-right inside bottom panel).
-    const legend = bottom.append('g').attr('transform', `translate(${fig.width - 260}, 8)`);
-    legend.append('rect')
-      .attr('width', 252)
-      .attr('height', 88)
-      .attr('rx', 10)
-      .attr('fill', 'rgba(0,0,0,0.55)')
-      .attr('stroke', 'rgba(0,255,255,0.35)')
-      .attr('stroke-width', 2);
-    legend.append('circle').attr('cx', 16).attr('cy', 24).attr('r', 6).attr('fill', '#ff6b35').attr('stroke', '#ffffff').attr('stroke-width', 2);
-    legend.append('text').attr('x', 32).attr('y', 28).style('fill', '#ffffff').style('font-size', '12px').text('class 0');
-    legend.append('circle').attr('cx', 16).attr('cy', 48).attr('r', 6).attr('fill', '#00ff94').attr('stroke', '#ffffff').attr('stroke-width', 2);
-    legend.append('text').attr('x', 32).attr('y', 52).style('fill', '#ffffff').style('font-size', '12px').text('class 1');
-    legend.append('line').attr('x1', 10).attr('y1', 72).attr('x2', 30).attr('y2', 72).attr('stroke', '#ff05ff').attr('stroke-width', 5);
-    legend.append('text').attr('x', 32).attr('y', 76).style('fill', '#ffffff').style('font-size', '12px').text('linear');
-    legend.append('line').attr('x1', 110).attr('y1', 72).attr('x2', 130).attr('y2', 72).attr('stroke', '#00ffff').attr('stroke-width', 5);
-    legend.append('text').attr('x', 134).attr('y', 76).style('fill', '#ffffff').style('font-size', '12px').text('sigmoid');
+      .text('predictor 2 (e.g., DOC)');
   }
 
-  function onSlide(event) {
-    if (!event || !event.currentSlide) return;
-    if (event.currentSlide.getAttribute('id') !== slideId) return;
-    draw();
+  function register() {
+    if (typeof plotUtils === 'undefined') {
+      setTimeout(register, 80);
+      return;
+    }
+    plotUtils.renderOnSlideOnce({ slideId, containerId, draw });
   }
 
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', draw);
-  } else {
-    draw();
-  }
-
-  if (window.Reveal && typeof window.Reveal.on === 'function') {
-    window.Reveal.on('slidechanged', onSlide);
-  }
+  register();
 })();
 </script>
 <!-- /position -->
+
 <!-- /layout -->
 
 ---
 
-<!-- .slide:id="logistic-regression-03-sigmoid" -->
-## The Sigmoid Function - Intuition
+<!-- .slide:id="random-forest-02-single-tree-intuition" -->
+## Start with One Decision Tree
 <!-- layout={rows: 1, columns: 2} -->
+
 <!-- position={row: 1, column: 1} -->
--! Sigmoid turns evidence into confidence
--: large positive z -> p close to 1 (confident class 1)
--: large negative z -> p close to 0 (confident class 0)
+-! A decision tree is a sequence of if/else decisions
+-: each split checks one feature against a threshold
+-: after a few splits we end up in a leaf that stores the prediction
 
 ***
 
--! Probabilities are explicit
--: p(class 1) and p(class 0)=1-p sum to 1
--: useful for ranking sites/samples by risk
+-! The same idea can be shown in two ways
+-: as a small tree with nodes and leaves
+-: as a partition of the feature space into rectangles
 
 ***
 
--! Decision threshold is a policy choice
--: default 0.5, but shift for monitoring goals
--: lower threshold -> fewer missed exceedances (more alarms)
+-! Trees are easy to explain but can be unstable
+-: small changes in data can change early splits
+-: later predictions then change as well
 <!-- /position -->
+
 <!-- position={row: 1, column: 2} -->
-<svg width="640" height="520" viewBox="0 0 640 520" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Sigmoid with 0.5 threshold">
-  <rect x="60" y="60" width="520" height="360" fill="none" stroke="#2d3a66" stroke-width="3" rx="12"/>
-  <path d="M90 360 C 190 360, 240 340, 300 250 C 360 160, 410 140, 550 140" fill="none" stroke="#00ffff" stroke-width="4"/>
-  <line x1="60" y1="250" x2="580" y2="250" stroke="rgba(255,255,255,0.2)" stroke-width="2" stroke-dasharray="6 6"/>
-  <circle cx="320" cy="250" r="6" fill="#ff6b35"/>
-  <text x="330" y="242" fill="#ffb48a" font-size="16">p=0.5</text>
-  <text x="70" y="430" fill="#9efcff" font-size="16">decision threshold</text>
-</svg>
+<div id="rf-single-tree-plot" style="width: 100%; height: 650px; border: 1px solid #2d3a66; border-radius: 12px; background: rgba(15,23,42,0.85);"></div>
+-= A tiny tree and its corresponding rectangular partition.
+
+<script>
+(function() {
+  const containerId = 'rf-single-tree-plot';
+  const slideId = 'random-forest-02-single-tree-intuition';
+
+  function draw() {
+    if (typeof d3 === 'undefined' || typeof plotUtils === 'undefined') {
+      setTimeout(draw, 80);
+      return;
+    }
+    const container = document.getElementById(containerId);
+    if (!container) return;
+
+    const width = 680;
+    const height = 650;
+    const margin = { top: 26, right: 26, bottom: 26, left: 26 };
+
+    const fig = plotUtils.createFigure(containerId, width, height, margin);
+    d3.select(`#${containerId} svg`)
+      .style('background-color', 'var(--ml-panel-bg)')
+      .style('border-radius', '12px');
+
+    const theme = {
+      border: 'var(--ml-panel-border)',
+      text: 'var(--ml-text)',
+      muted: 'var(--ml-muted)',
+      cyan: 'var(--ml-accent-cyan)',
+      green: 'var(--ml-accent-green)',
+      orange: 'var(--ml-accent-orange)'
+    };
+
+    const gap = 26;
+    const panelW = (fig.width - gap) / 2;
+    const panelH = fig.height;
+
+    const left = fig.svg.append('g');
+    const right = fig.svg.append('g').attr('transform', `translate(${panelW + gap}, 0)`);
+
+    left.append('rect')
+      .attr('x', 0).attr('y', 0)
+      .attr('width', panelW).attr('height', panelH)
+      .attr('rx', 10)
+      .attr('fill', 'var(--ml-surface)')
+      .attr('stroke', theme.border)
+      .attr('stroke-width', 2);
+
+    left.append('text')
+      .attr('x', panelW / 2).attr('y', 20)
+      .attr('text-anchor', 'middle')
+      .style('fill', theme.text)
+      .style('font-family', "'Press Start 2P', monospace")
+      .style('font-size', '12px')
+      .text('Tree');
+
+    const treeNodes = [
+      { id: 'root', x: panelW / 2, y: 90, label: 'x < 0.5?' },
+      { id: 'l', x: panelW * 0.28, y: 220, label: 'y < 0.4?' },
+      { id: 'r', x: panelW * 0.72, y: 220, label: 'y < 0.7?' },
+      { id: 'll', x: panelW * 0.16, y: 360, label: 'leaf: class 1', cls: 1 },
+      { id: 'lr', x: panelW * 0.40, y: 360, label: 'leaf: class 0', cls: 0 },
+      { id: 'rl', x: panelW * 0.60, y: 360, label: 'leaf: class 0', cls: 0 },
+      { id: 'rr', x: panelW * 0.84, y: 360, label: 'leaf: class 1', cls: 1 }
+    ];
+
+    const treeLinks = [
+      { a: 'root', b: 'l', text: 'yes' },
+      { a: 'root', b: 'r', text: 'no' },
+      { a: 'l', b: 'll', text: 'yes' },
+      { a: 'l', b: 'lr', text: 'no' },
+      { a: 'r', b: 'rl', text: 'yes' },
+      { a: 'r', b: 'rr', text: 'no' }
+    ];
+
+    const byId = new Map(treeNodes.map(n => [n.id, n]));
+
+    left.append('g')
+      .selectAll('line')
+      .data(treeLinks)
+      .enter()
+      .append('line')
+      .attr('x1', d => byId.get(d.a).x)
+      .attr('y1', d => byId.get(d.a).y + 18)
+      .attr('x2', d => byId.get(d.b).x)
+      .attr('y2', d => byId.get(d.b).y - 18)
+      .attr('stroke', theme.muted)
+      .attr('stroke-width', 2);
+
+    left.append('g')
+      .selectAll('text.edge')
+      .data(treeLinks)
+      .enter()
+      .append('text')
+      .attr('class', 'edge')
+      .attr('x', d => (byId.get(d.a).x + byId.get(d.b).x) / 2)
+      .attr('y', d => (byId.get(d.a).y + byId.get(d.b).y) / 2)
+      .attr('text-anchor', 'middle')
+      .style('fill', theme.muted)
+      .style('font-size', '11px')
+      .text(d => d.text);
+
+    const nodeG = left.append('g')
+      .selectAll('g.node')
+      .data(treeNodes)
+      .enter()
+      .append('g')
+      .attr('class', 'node')
+      .attr('transform', d => `translate(${d.x}, ${d.y})`);
+
+    nodeG.append('rect')
+      .attr('x', -86)
+      .attr('y', -18)
+      .attr('width', 172)
+      .attr('height', 36)
+      .attr('rx', 10)
+      .attr('fill', d => d.cls === 1 ? 'var(--ml-accent-green-soft-2)' : d.cls === 0 ? 'var(--ml-accent-orange-soft-2)' : 'var(--ml-accent-cyan-soft)')
+      .attr('stroke', d => d.cls === 1 ? theme.green : d.cls === 0 ? theme.orange : theme.cyan)
+      .attr('stroke-width', 2);
+
+    nodeG.append('text')
+      .attr('text-anchor', 'middle')
+      .attr('dominant-baseline', 'middle')
+      .style('fill', theme.text)
+      .style('font-size', '11px')
+      .text(d => d.label);
+
+    right.append('rect')
+      .attr('x', 0).attr('y', 0)
+      .attr('width', panelW).attr('height', panelH)
+      .attr('rx', 10)
+      .attr('fill', 'var(--ml-surface)')
+      .attr('stroke', theme.border)
+      .attr('stroke-width', 2);
+
+    right.append('text')
+      .attr('x', panelW / 2).attr('y', 20)
+      .attr('text-anchor', 'middle')
+      .style('fill', theme.text)
+      .style('font-family', "'Press Start 2P', monospace")
+      .style('font-size', '12px')
+      .text('Feature space');
+
+    const inner = { left: 50, top: 50, right: 20, bottom: 50 };
+    const w = panelW - inner.left - inner.right;
+    const h = panelH - inner.top - inner.bottom;
+    const gx = right.append('g').attr('transform', `translate(${inner.left}, ${inner.top})`);
+
+    const x = d3.scaleLinear().domain([0, 1]).range([0, w]);
+    const y = d3.scaleLinear().domain([0, 1]).range([h, 0]);
+
+    gx.append('g').attr('class', 'd3-axis').attr('transform', `translate(0, ${h})`).call(d3.axisBottom(x).ticks(4));
+    gx.append('g').attr('class', 'd3-axis').call(d3.axisLeft(y).ticks(4));
+
+    const regions = [
+      { x0: 0, x1: 0.5, y0: 0, y1: 0.4, cls: 1 },
+      { x0: 0, x1: 0.5, y0: 0.4, y1: 1, cls: 0 },
+      { x0: 0.5, x1: 1, y0: 0, y1: 0.7, cls: 0 },
+      { x0: 0.5, x1: 1, y0: 0.7, y1: 1, cls: 1 }
+    ];
+
+    gx.append('g')
+      .selectAll('rect.region')
+      .data(regions)
+      .enter()
+      .append('rect')
+      .attr('class', 'region')
+      .attr('x', d => x(d.x0))
+      .attr('y', d => y(d.y1))
+      .attr('width', d => x(d.x1) - x(d.x0))
+      .attr('height', d => y(d.y0) - y(d.y1))
+      .attr('fill', d => d.cls === 1 ? 'var(--ml-accent-green-soft)' : 'var(--ml-accent-orange-soft)')
+      .attr('stroke', theme.border)
+      .attr('stroke-width', 1.5);
+
+    const splitColor = theme.cyan;
+    gx.append('line')
+      .attr('x1', x(0.5)).attr('x2', x(0.5))
+      .attr('y1', 0).attr('y2', h)
+      .attr('stroke', splitColor)
+      .attr('stroke-width', 2);
+    gx.append('line')
+      .attr('x1', x(0)).attr('x2', x(0.5))
+      .attr('y1', y(0.4)).attr('y2', y(0.4))
+      .attr('stroke', splitColor)
+      .attr('stroke-width', 2);
+    gx.append('line')
+      .attr('x1', x(0.5)).attr('x2', x(1))
+      .attr('y1', y(0.7)).attr('y2', y(0.7))
+      .attr('stroke', splitColor)
+      .attr('stroke-width', 2);
+
+    right.append('text')
+      .attr('x', inner.left + w / 2)
+      .attr('y', panelH - 16)
+      .attr('text-anchor', 'middle')
+      .style('fill', theme.muted)
+      .style('font-size', '12px')
+      .text('x');
+
+    right.append('text')
+      .attr('x', 18)
+      .attr('y', inner.top + h / 2)
+      .attr('text-anchor', 'middle')
+      .attr('transform', `rotate(-90, 18, ${inner.top + h / 2})`)
+      .style('fill', theme.muted)
+      .style('font-size', '12px')
+      .text('y');
+  }
+
+  function register() {
+    if (typeof plotUtils === 'undefined') {
+      setTimeout(register, 80);
+      return;
+    }
+    plotUtils.renderOnSlideOnce({ slideId, containerId, draw });
+  }
+
+  register();
+})();
+</script>
 <!-- /position -->
+
 <!-- /layout -->
 
 ---
 
-<!-- .slide:id="logistic-regression-04-interpretation" -->
-## Model Interpretation
+<!-- .slide:id="random-forest-03-why-forests" -->
+## Why Not Just One Tree?
 <!-- layout={rows: 1, columns: 2} -->
+
 <!-- position={row: 1, column: 1} -->
--! Each coefficient explains "what pushes risk up/down"
--: sign = direction; magnitude = strength (holding others fixed)
--: positive beta -> higher p(class 1) as that feature increases
+-! A single tree has high variance
+-: it can change a lot when the training set changes slightly
+-: noise can trigger different early splits and lead to different boundaries
 
 ***
 
--! Units matter for interpretation
--: 1 mg/L nitrate vs 1 NTU turbidity are not comparable
--: standardize/scale when comparing effect sizes
+-! Two trees trained on nearly the same data can disagree
+-: their partitions can look different even when accuracy is similar
+-: this makes a single tree an unreliable baseline
 
 ***
 
--! Often preferred in regulatory settings
--: transparent model, auditable reasoning
--: easy to report drivers behind class 1 predictions
+-! Random Forest reduces variance by averaging
+-: build many slightly different trees (different samples, different split candidates)
+-: combine them by voting (classification) or averaging (regression)
 <!-- /position -->
+
 <!-- position={row: 1, column: 2} -->
-<svg width="640" height="520" viewBox="0 0 640 520" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Coefficient effects">
-  <rect x="70" y="80" width="500" height="320" rx="12" fill="none" stroke="#2d3a66" stroke-width="3"/>
-  <line x1="320" y1="90" x2="320" y2="390" stroke="#9efcff" stroke-width="2" stroke-dasharray="6 6"/>
+<div id="rf-variance-plot" style="width: 100%; height: 650px; border: 1px solid #2d3a66; border-radius: 12px; background: rgba(15,23,42,0.85);"></div>
+-= Small training changes can produce different tree boundaries (variance).
 
-  <rect x="320" y="130" width="120" height="30" fill="#00ff94"/>
-  <rect x="200" y="190" width="120" height="30" fill="#ff6b35"/>
-  <rect x="320" y="250" width="180" height="30" fill="#00ff94"/>
-  <rect x="240" y="310" width="80" height="30" fill="#ff6b35"/>
+<script>
+(function() {
+  const containerId = 'rf-variance-plot';
+  const slideId = 'random-forest-03-why-forests';
 
-  <text x="120" y="150" fill="#9efcff" font-size="16">nitrate</text>
-  <text x="120" y="210" fill="#9efcff" font-size="16">turbidity</text>
-  <text x="120" y="270" fill="#9efcff" font-size="16">conductivity</text>
-  <text x="120" y="330" fill="#9efcff" font-size="16">temperature</text>
+  function seededRandom(seed) {
+    let value = seed >>> 0;
+    return function() {
+      value = (1664525 * value + 1013904223) >>> 0;
+      return value / 4294967296;
+    };
+  }
 
-  <text x="450" y="420" fill="#9efcff" font-size="16">right = positive effect</text>
-  <text x="130" y="420" fill="#9efcff" font-size="16">left = negative effect</text>
-</svg>
+  function makeData() {
+    const rng = seededRandom(99);
+    const jitter = (s) => (rng() * 2 - 1) * s;
+    const points = [];
+    const n = 90;
+    for (let i = 0; i < n; i++) {
+      const x = Math.max(0, Math.min(1, rng() + jitter(0.03)));
+      const y = Math.max(0, Math.min(1, rng() + jitter(0.03)));
+      const cls =
+        (x < 0.45 && y < 0.45) || (x > 0.55 && y > 0.55) ? 1 : 0;
+      points.push({ x, y, cls });
+    }
+    return points;
+  }
+
+  function draw() {
+    if (typeof d3 === 'undefined' || typeof plotUtils === 'undefined') {
+      setTimeout(draw, 80);
+      return;
+    }
+    const container = document.getElementById(containerId);
+    if (!container) return;
+
+    const width = 680;
+    const height = 650;
+    const margin = { top: 36, right: 28, bottom: 70, left: 70 };
+
+    const points = makeData();
+    const fig = plotUtils.createFigure(containerId, width, height, margin);
+
+    d3.select(`#${containerId} svg`)
+      .style('background-color', 'var(--ml-panel-bg)')
+      .style('border-radius', '12px');
+
+    const theme = {
+      border: 'var(--ml-panel-border)',
+      text: 'var(--ml-text)',
+      muted: 'var(--ml-muted)',
+      cyan: 'var(--ml-accent-cyan)',
+      magenta: 'var(--ml-accent-magenta)',
+      green: 'var(--ml-accent-green)',
+      orange: 'var(--ml-accent-orange)'
+    };
+
+    const gap = 22;
+    const panelW = (fig.width - gap) / 2;
+    const panelH = fig.height - 30;
+
+    const x = d3.scaleLinear().domain([0, 1]).range([0, panelW]);
+    const y = d3.scaleLinear().domain([0, 1]).range([panelH, 0]);
+
+    const left = fig.svg.append('g').attr('transform', `translate(0, 30)`);
+    const right = fig.svg.append('g').attr('transform', `translate(${panelW + gap}, 30)`);
+
+    function drawFrame(root, title) {
+      root.append('rect')
+        .attr('x', 0)
+        .attr('y', 0)
+        .attr('width', panelW)
+        .attr('height', panelH)
+        .attr('rx', 10)
+        .attr('fill', 'var(--ml-surface)')
+        .attr('stroke', theme.border)
+        .attr('stroke-width', 2);
+
+      root.append('text')
+        .attr('x', panelW / 2)
+        .attr('y', -10)
+        .attr('text-anchor', 'middle')
+        .style('fill', theme.text)
+        .style('font-family', "'Press Start 2P', monospace")
+        .style('font-size', '12px')
+        .text(title);
+
+      root.append('g')
+        .attr('transform', `translate(0, ${panelH})`)
+        .attr('class', 'd3-axis')
+        .call(d3.axisBottom(x).ticks(4));
+      root.append('g')
+        .attr('class', 'd3-axis')
+        .call(d3.axisLeft(y).ticks(4));
+    }
+
+    drawFrame(left, 'Tree A');
+    drawFrame(right, 'Tree B');
+
+    function drawPoints(root) {
+      root.append('g')
+        .selectAll('circle')
+        .data(points)
+        .enter()
+        .append('circle')
+        .attr('cx', d => x(d.x))
+        .attr('cy', d => y(d.y))
+        .attr('r', 4.6)
+        .attr('fill', d => d.cls === 1 ? theme.green : theme.orange)
+        .attr('stroke', theme.text)
+        .attr('stroke-width', 1.4)
+        .attr('opacity', 0.96);
+    }
+
+    function drawBoundary(root, regions, outlineColor) {
+      root.append('g')
+        .selectAll('rect.region')
+        .data(regions)
+        .enter()
+        .append('rect')
+        .attr('class', 'region')
+        .attr('x', d => x(d.x0))
+        .attr('y', d => y(d.y1))
+        .attr('width', d => x(d.x1) - x(d.x0))
+        .attr('height', d => y(d.y0) - y(d.y1))
+        .attr('fill', 'var(--ml-accent-cyan-soft)')
+        .attr('stroke', outlineColor)
+        .attr('stroke-width', 2.2);
+    }
+
+    const treeA = [
+      { x0: 0, x1: 0.47, y0: 0, y1: 0.43 },
+      { x0: 0.56, x1: 1, y0: 0.58, y1: 1 }
+    ];
+    const treeB = [
+      { x0: 0, x1: 0.42, y0: 0, y1: 0.48 },
+      { x0: 0.60, x1: 1, y0: 0.53, y1: 1 }
+    ];
+
+    drawBoundary(left, treeA, theme.cyan);
+    drawBoundary(right, treeB, theme.magenta);
+    drawPoints(left);
+    drawPoints(right);
+
+    fig.svg.append('text')
+      .attr('x', (panelW / 2))
+      .attr('y', fig.height + 24)
+      .attr('text-anchor', 'middle')
+      .style('fill', theme.muted)
+      .style('font-size', '12px')
+      .text('same problem, different split choices');
+  }
+
+  function register() {
+    if (typeof plotUtils === 'undefined') {
+      setTimeout(register, 80);
+      return;
+    }
+    plotUtils.renderOnSlideOnce({ slideId, containerId, draw });
+  }
+
+  register();
+})();
+</script>
 <!-- /position -->
+
 <!-- /layout -->
 
 ---
 
-<!-- .slide:id="logistic-regression-05-decision-boundary" -->
-## Decision Boundary
+<!-- .slide:id="random-forest-04-rf-big-picture" -->
+## Random Forest - Big Picture
 <!-- layout={rows: 1, columns: 2} -->
+
 <!-- position={row: 1, column: 1} -->
--! Geometry: where the model is undecided
--: boundary is where probability hits the threshold
--: in 2D: a line; in higher D: a hyperplane
+-! A Random Forest is many decision trees plus aggregation
+-: each tree is trained on a slightly different view of the data
+-: the forest prediction is a vote (classification) or an average (regression)
 
 ***
 
--! It's not just a hard split
--: probabilities vary smoothly across feature space
--: near boundary = uncertain; far away = confident
+-! Two kinds of randomness create diverse trees
+-: bootstrap sampling changes which rows each tree sees
+-: random feature selection changes which predictors are considered at each split
 
 ***
 
--! Link back to decisions
--: move the threshold -> move the boundary
--: choose based on consequences of missed exceedance vs false alarm
+-! Aggregation reduces variance
+-: single trees can overfit and are sensitive to noise
+-: the average over many different trees is much more stable
 <!-- /position -->
+
 <!-- position={row: 1, column: 2} -->
-<svg width="640" height="520" viewBox="0 0 640 520" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="2D scatter with boundary">
-  <defs>
-    <linearGradient id="probShade" x1="0" y1="0" x2="1" y2="0">
-      <stop offset="0%" stop-color="rgba(255,107,53,0.08)"/>
-      <stop offset="100%" stop-color="rgba(0,255,148,0.08)"/>
-    </linearGradient>
-  </defs>
-  <rect x="60" y="60" width="520" height="360" fill="url(#probShade)" stroke="#2d3a66" stroke-width="3" rx="12"/>
-  <line x1="90" y1="360" x2="550" y2="120" stroke="#9efcff" stroke-width="3"/>
-  <circle cx="140" cy="320" r="7" fill="#ff6b35"/>
-  <circle cx="190" cy="300" r="7" fill="#ff6b35"/>
-  <circle cx="240" cy="330" r="7" fill="#ff6b35"/>
-  <circle cx="210" cy="250" r="7" fill="#ff6b35"/>
-  <circle cx="420" cy="160" r="7" fill="#00ff94"/>
-  <circle cx="470" cy="190" r="7" fill="#00ff94"/>
-  <circle cx="520" cy="140" r="7" fill="#00ff94"/>
-  <circle cx="430" cy="240" r="7" fill="#00ff94"/>
-  <text x="80" y="440" fill="#9efcff" font-size="16">probability shading</text>
-  <text x="420" y="440" fill="#9efcff" font-size="16">boundary at decision threshold</text>
-</svg>
+<div id="rf-big-picture-plot" style="width: 100%; height: 650px; border: 1px solid #2d3a66; border-radius: 12px; background: rgba(15,23,42,0.85);"></div>
+-= Training pipeline: dataset -> bootstrap samples -> many trees -> aggregation -> prediction.
+
+<script>
+(function() {
+  const containerId = 'rf-big-picture-plot';
+  const slideId = 'random-forest-04-rf-big-picture';
+
+  function draw() {
+    if (typeof d3 === 'undefined' || typeof plotUtils === 'undefined') {
+      setTimeout(draw, 80);
+      return;
+    }
+    const container = document.getElementById(containerId);
+    if (!container) return;
+
+    const width = 680;
+    const height = 650;
+    const margin = { top: 36, right: 26, bottom: 26, left: 26 };
+
+    const fig = plotUtils.createFigure(containerId, width, height, margin);
+    d3.select(`#${containerId} svg`)
+      .style('background-color', 'var(--ml-panel-bg)')
+      .style('border-radius', '12px');
+
+    const theme = {
+      border: 'var(--ml-panel-border)',
+      text: 'var(--ml-text)',
+      muted: 'var(--ml-muted)',
+      cyan: 'var(--ml-accent-cyan)',
+      magenta: 'var(--ml-accent-magenta)',
+      green: 'var(--ml-accent-green)',
+      orange: 'var(--ml-accent-orange)'
+    };
+
+    const W = fig.width;
+    const H = fig.height;
+
+    function box(x, y, w, h, label, stroke, fill) {
+      const g = fig.svg.append('g').attr('transform', `translate(${x}, ${y})`);
+      g.append('rect')
+        .attr('x', 0).attr('y', 0)
+        .attr('width', w).attr('height', h)
+        .attr('rx', 12)
+        .attr('fill', fill || 'rgba(0,0,0,0.12)')
+        .attr('stroke', stroke || theme.border)
+        .attr('stroke-width', 2);
+      g.append('text')
+        .attr('x', w / 2).attr('y', 22)
+        .attr('text-anchor', 'middle')
+        .style('fill', theme.text)
+        .style('font-family', "'Press Start 2P', monospace")
+        .style('font-size', '11px')
+        .text(label);
+      return g;
+    }
+
+    function arrow(x1, y1, x2, y2, color) {
+      const markerId = `${containerId}-arrow`;
+      const defs = d3.select(`#${containerId} svg`).select('defs').empty()
+        ? d3.select(`#${containerId} svg`).append('defs')
+        : d3.select(`#${containerId} svg`).select('defs');
+
+      if (defs.select(`#${markerId}`).empty()) {
+        defs.append('marker')
+          .attr('id', markerId)
+          .attr('viewBox', '0 0 10 10')
+          .attr('refX', 9).attr('refY', 5)
+          .attr('markerWidth', 8).attr('markerHeight', 8)
+          .attr('orient', 'auto-start-reverse')
+          .append('path')
+          .attr('d', 'M 0 0 L 10 5 L 0 10 z')
+          .attr('fill', theme.muted);
+      }
+
+      fig.svg.append('line')
+        .attr('x1', x1).attr('y1', y1)
+        .attr('x2', x2).attr('y2', y2)
+        .attr('stroke', color || theme.muted)
+        .attr('stroke-width', 3)
+        .attr('marker-end', `url(#${markerId})`)
+        .attr('opacity', 0.95);
+    }
+
+    const y0 = 60;
+    const dataset = box(10, y0, 150, 260, 'Dataset', theme.cyan);
+    const boots = box(190, y0, 160, 260, 'Bootstrap', theme.orange);
+    const trees = box(380, y0, 160, 260, 'Trees', theme.green);
+    const agg = box(570, y0, 90, 120, 'Vote', theme.magenta);
+    const pred = box(570, y0 + 160, 90, 100, 'Output', theme.cyan);
+
+    // Decorative points in dataset.
+    const pointArea = dataset.append('g').attr('transform', 'translate(14, 44)');
+    const px = d3.scaleLinear().domain([0, 1]).range([0, 120]);
+    const py = d3.scaleLinear().domain([0, 1]).range([200, 0]);
+    const pts = d3.range(36).map(i => ({
+      x: (i * 37 % 97) / 97,
+      y: (i * 19 % 89) / 89,
+      cls: (i * 13 % 5) < 2 ? 1 : 0
+    }));
+    pointArea.selectAll('circle')
+      .data(pts)
+      .enter()
+      .append('circle')
+      .attr('cx', d => px(d.x))
+      .attr('cy', d => py(d.y))
+      .attr('r', 4)
+      .attr('fill', d => d.cls ? theme.green : theme.orange)
+      .attr('stroke', '#ffffff')
+      .attr('stroke-width', 1.2)
+      .attr('opacity', 0.95);
+
+    // Bootstrap mini-samples.
+    const b = boots.append('g').attr('transform', 'translate(18, 48)');
+    const sampleW = 124, sampleH = 58, sampleGap = 18;
+    const sampleLabels = ['Tree 1', 'Tree 2', 'Tree 3'];
+    sampleLabels.forEach((lab, i) => {
+      const y = i * (sampleH + sampleGap);
+      b.append('rect')
+        .attr('x', 0).attr('y', y)
+        .attr('width', sampleW).attr('height', sampleH)
+        .attr('rx', 10)
+        .attr('fill', 'var(--ml-accent-orange-soft)')
+        .attr('stroke', theme.orange)
+        .attr('stroke-width', 2);
+      b.append('text')
+        .attr('x', 6).attr('y', y + 18)
+        .attr('text-anchor', 'start')
+        .style('fill', theme.text)
+        .style('font-size', '11px')
+        .text(lab);
+      // tiny duplicates to hint "with replacement"
+      const s = b.append('g').attr('transform', `translate(8, ${y + 26})`);
+      const cells = d3.range(10).map(j => j);
+      s.selectAll('rect')
+        .data(cells)
+        .enter()
+        .append('rect')
+        .attr('x', d => (d % 5) * 22)
+        .attr('y', d => Math.floor(d / 5) * 16)
+        .attr('width', 18)
+        .attr('height', 12)
+        .attr('rx', 3)
+        .attr('fill', d => (d === 1 || d === 6) ? 'rgba(0,255,255,0.20)' : 'rgba(0,0,0,0.12)')
+        .attr('stroke', theme.border)
+        .attr('stroke-width', 1.4);
+    });
+
+    // Trees icons.
+    const tg = trees.append('g').attr('transform', 'translate(16, 56)');
+    const icon = (gx, x, y, color) => {
+      const g = gx.append('g').attr('transform', `translate(${x}, ${y})`);
+      g.append('line').attr('x1', 28).attr('y1', 8).attr('x2', 16).attr('y2', 24).attr('stroke', color).attr('stroke-width', 2.2);
+      g.append('line').attr('x1', 28).attr('y1', 8).attr('x2', 40).attr('y2', 24).attr('stroke', color).attr('stroke-width', 2.2);
+      g.append('line').attr('x1', 16).attr('y1', 24).attr('x2', 10).attr('y2', 40).attr('stroke', color).attr('stroke-width', 2.2);
+      g.append('line').attr('x1', 16).attr('y1', 24).attr('x2', 22).attr('y2', 40).attr('stroke', color).attr('stroke-width', 2.2);
+      g.append('line').attr('x1', 40).attr('y1', 24).attr('x2', 34).attr('y2', 40).attr('stroke', color).attr('stroke-width', 2.2);
+      g.append('line').attr('x1', 40).attr('y1', 24).attr('x2', 46).attr('y2', 40).attr('stroke', color).attr('stroke-width', 2.2);
+      g.selectAll('circle')
+        .data([{x:28,y:8},{x:16,y:24},{x:40,y:24},{x:10,y:40},{x:22,y:40},{x:34,y:40},{x:46,y:40}])
+        .enter()
+        .append('circle')
+        .attr('cx', d => d.x).attr('cy', d => d.y)
+        .attr('r', 4.2)
+        .attr('fill', 'var(--ml-accent-green-soft)')
+        .attr('stroke', color)
+        .attr('stroke-width', 2);
+    };
+    icon(tg, 6, 10, theme.green);
+    icon(tg, 74, 10, theme.green);
+    icon(tg, 40, 92, theme.green);
+    tg.append('text')
+      .attr('x', 64).attr('y', 160)
+      .attr('text-anchor', 'middle')
+      .style('fill', theme.muted)
+      .style('font-size', '11px')
+      .text('many diverse trees');
+
+    // Aggregation and output glyphs.
+    agg.append('text')
+      .attr('x', 45).attr('y', 56)
+      .attr('text-anchor', 'middle')
+      .style('fill', theme.muted)
+      .style('font-size', '11px')
+      .text('average');
+    agg.append('text')
+      .attr('x', 45).attr('y', 80)
+      .attr('text-anchor', 'middle')
+      .style('fill', theme.muted)
+      .style('font-size', '11px')
+      .text('or vote');
+
+    pred.append('rect')
+      .attr('x', 18).attr('y', 48)
+      .attr('width', 54).attr('height', 20)
+      .attr('rx', 8)
+      .attr('fill', 'var(--ml-accent-cyan-soft-2)')
+      .attr('stroke', theme.cyan)
+      .attr('stroke-width', 2);
+    pred.append('text')
+      .attr('x', 45).attr('y', 63)
+      .attr('text-anchor', 'middle')
+      .style('fill', theme.text)
+      .style('font-size', '11px')
+      .text('ŷ');
+
+    // Arrows.
+    arrow(160, y0 + 130, 190, y0 + 130);
+    arrow(350, y0 + 130, 380, y0 + 130);
+    arrow(540, y0 + 80, 570, y0 + 80, theme.muted);
+    arrow(540, y0 + 200, 570, y0 + 200, theme.muted);
+
+    // Curly hint that aggregation uses all trees.
+    fig.svg.append('path')
+      .attr('d', `M ${540} ${y0 + 140} C ${548} ${y0 + 140}, ${554} ${y0 + 140}, ${560} ${y0 + 120}
+                 C ${566} ${y0 + 100}, ${566} ${y0 + 160}, ${560} ${y0 + 180}
+                 C ${554} ${y0 + 200}, ${548} ${y0 + 200}, ${540} ${y0 + 200}`)
+      .attr('fill', 'none')
+      .attr('stroke', theme.magenta)
+      .attr('stroke-width', 2.2)
+      .attr('opacity', 0.9);
+  }
+
+  function register() {
+    if (typeof plotUtils === 'undefined') {
+      setTimeout(register, 80);
+      return;
+    }
+    plotUtils.renderOnSlideOnce({ slideId, containerId, draw });
+  }
+
+  register();
+})();
+</script>
 <!-- /position -->
+
 <!-- /layout -->
 
 ---
 
-<!-- .slide:id="logistic-regression-06-training" -->
-## Training the Model
+<!-- .slide:id="random-forest-05-step1-bootstrap" -->
+## Step 1 - Bootstrap Sampling
 <!-- layout={rows: 1, columns: 2} -->
+
 <!-- position={row: 1, column: 1} -->
--! Training fits probabilities to observed labels
--: maximize log-likelihood (same as minimizing cross-entropy)
--: objective matches the Bernoulli nature of class 1 / class 0
+-! Each tree is trained on a bootstrap sample
+-: draw N observations with replacement from the training set
+-: some rows appear multiple times, and some rows are not drawn at all
 
 ***
 
--! Why cross-entropy works well
--: confident-wrong predictions get a large penalty
--: encourages calibrated probabilities (not just correct classes)
+-! Rows that are not drawn are called out-of-bag (OOB)
+-: the probability that a row is never selected is about 37 percent
+-: OOB rows give an internal validation set without an extra split
 
 ***
 
--! Objective (binary)
-$$\mathcal{L} = -\sum [y\log(p) + (1-y)\log(1-p)]$$
+-! Bootstrap sampling increases diversity across trees
+-: different samples lead to different split choices and different errors
+-: averaging over many trees reduces variance compared to one tree
 <!-- /position -->
+
 <!-- position={row: 1, column: 2} -->
-<svg width="640" height="520" viewBox="0 0 640 520" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Cross-entropy loss intuition">
-  <rect x="60" y="60" width="520" height="360" fill="none" stroke="#2d3a66" stroke-width="3" rx="12"/>
-  <path d="M90 120 C 220 120, 260 200, 320 260 C 380 320, 440 360, 550 370" fill="none" stroke="#00ff94" stroke-width="4"/>
-  <path d="M90 370 C 220 360, 260 320, 320 260 C 380 200, 440 140, 550 120" fill="none" stroke="#ff6b35" stroke-width="4"/>
-  <text x="95" y="100" fill="#00ff94" font-size="16">loss for y=1</text>
-  <text x="95" y="395" fill="#ff6b35" font-size="16">loss for y=0</text>
-  <text x="330" y="440" fill="#9efcff" font-size="16">confident wrong -> high loss</text>
-</svg>
+<div id="rf-bootstrap-plot" style="width: 100%; height: 650px; border: 1px solid #2d3a66; border-radius: 12px; background: rgba(15,23,42,0.85);"></div>
+-= Two bootstrap samples from the same dataset: duplicates appear, and OOB rows remain unused.
+
+<script>
+(function() {
+  const containerId = 'rf-bootstrap-plot';
+  const slideId = 'random-forest-05-step1-bootstrap';
+
+  function seededRandom(seed) {
+    let value = seed >>> 0;
+    return function() {
+      value = (1664525 * value + 1013904223) >>> 0;
+      return value / 4294967296;
+    };
+  }
+
+  function bootstrapSample(n, rng) {
+    const draws = d3.range(n).map(() => Math.floor(rng() * n));
+    const counts = Array.from({ length: n }, () => 0);
+    draws.forEach(i => { counts[i] += 1; });
+    const oob = d3.range(n).filter(i => counts[i] === 0);
+    return { draws, counts, oob };
+  }
+
+  function draw() {
+    if (typeof d3 === 'undefined' || typeof plotUtils === 'undefined') {
+      setTimeout(draw, 80);
+      return;
+    }
+    const container = document.getElementById(containerId);
+    if (!container) return;
+
+    const width = 680;
+    const height = 650;
+    const margin = { top: 36, right: 26, bottom: 26, left: 26 };
+    const fig = plotUtils.createFigure(containerId, width, height, margin);
+
+    d3.select(`#${containerId} svg`)
+      .style('background-color', 'var(--ml-panel-bg)')
+      .style('border-radius', '12px');
+
+    const theme = {
+      border: 'var(--ml-panel-border)',
+      text: 'var(--ml-text)',
+      muted: 'var(--ml-muted)',
+      cyan: 'var(--ml-accent-cyan)',
+      magenta: 'var(--ml-accent-magenta)',
+      green: 'var(--ml-accent-green)',
+      orange: 'var(--ml-accent-orange)'
+    };
+
+    const W = fig.width;
+    const H = fig.height;
+    const gap = 22;
+    const panelW = (W - gap) / 2;
+    const panelH = H;
+
+    const rng1 = seededRandom(7);
+    const rng2 = seededRandom(19);
+    const n = 14;
+    const s1 = bootstrapSample(n, rng1);
+    const s2 = bootstrapSample(n, rng2);
+
+    const panels = [
+      { x: 0, title: 'Tree 1', s: s1, accent: theme.cyan },
+      { x: panelW + gap, title: 'Tree 2', s: s2, accent: theme.magenta }
+    ];
+
+    function panelRoot(px) {
+      const g = fig.svg.append('g').attr('transform', `translate(${px}, 0)`);
+      g.append('rect')
+        .attr('x', 0).attr('y', 0)
+        .attr('width', panelW).attr('height', panelH)
+        .attr('rx', 12)
+        .attr('fill', 'var(--ml-surface)')
+        .attr('stroke', theme.border)
+        .attr('stroke-width', 2);
+      return g;
+    }
+
+    function drawDatasetGrid(g, x0, y0, s, label) {
+      g.append('text')
+        .attr('x', x0).attr('y', y0 - 10)
+        .attr('text-anchor', 'start')
+        .style('fill', theme.text)
+        .style('font-family', "'Press Start 2P', monospace")
+        .style('font-size', '11px')
+        .text(label);
+
+      const cell = 26;
+      const cols = 7;
+      const ids = d3.range(n);
+
+      const grp = g.append('g').attr('transform', `translate(${x0}, ${y0})`);
+      const item = grp.selectAll('g.item')
+        .data(ids)
+        .enter()
+        .append('g')
+        .attr('class', 'item')
+        .attr('transform', d => `translate(${(d % cols) * cell}, ${Math.floor(d / cols) * cell})`);
+
+      item.append('rect')
+        .attr('x', 0).attr('y', 0)
+        .attr('width', 22).attr('height', 22)
+        .attr('rx', 6)
+        .attr('fill', d => s.counts[d] === 0 ? 'rgba(255,255,255,0.06)' : 'rgba(0,255,255,0.10)')
+        .attr('stroke', d => s.counts[d] === 0 ? theme.border : theme.cyan)
+        .attr('stroke-width', 1.8);
+
+      item.append('text')
+        .attr('x', 11).attr('y', 15)
+        .attr('text-anchor', 'middle')
+        .style('fill', theme.text)
+        .style('font-size', '11px')
+        .text(d => d + 1);
+
+      // Usage count label below each cell for duplicates.
+      item.append('text')
+        .attr('x', 11).attr('y', 34)
+        .attr('text-anchor', 'middle')
+        .style('fill', theme.muted)
+        .style('font-size', '11px')
+        .text(d => s.counts[d] > 1 ? `x${s.counts[d]}` : '');
+    }
+
+    function drawSampleRow(g, x0, y0, s, accent, label) {
+      g.append('text')
+        .attr('x', x0).attr('y', y0 - 10)
+        .attr('text-anchor', 'start')
+        .style('fill', theme.text)
+        .style('font-family', "'Press Start 2P', monospace")
+        .style('font-size', '11px')
+        .text(label);
+
+      const cellW = 32;
+      const cols = 7;
+      const grp = g.append('g').attr('transform', `translate(${x0}, ${y0})`);
+
+      grp.selectAll('rect')
+        .data(s.draws)
+        .enter()
+        .append('rect')
+        .attr('x', (d, i) => (i % cols) * cellW)
+        .attr('y', (d, i) => Math.floor(i / cols) * 26)
+        .attr('width', 28)
+        .attr('height', 22)
+        .attr('rx', 6)
+        .attr('fill', d => 'rgba(0,0,0,0.10)')
+        .attr('stroke', accent)
+        .attr('stroke-width', 1.8);
+
+      grp.selectAll('text')
+        .data(s.draws)
+        .enter()
+        .append('text')
+        .attr('x', (d, i) => (i % cols) * cellW + 14)
+        .attr('y', (d, i) => Math.floor(i / cols) * 26 + 15)
+        .attr('text-anchor', 'middle')
+        .style('fill', theme.text)
+        .style('font-size', '11px')
+        .text(d => d + 1);
+    }
+
+    function drawOOB(g, x0, y0, s, label) {
+      g.append('text')
+        .attr('x', x0).attr('y', y0 - 10)
+        .attr('text-anchor', 'start')
+        .style('fill', theme.text)
+        .style('font-family', "'Press Start 2P', monospace")
+        .style('font-size', '11px')
+        .text(label);
+
+      const oobText = s.oob.length ? s.oob.map(i => i + 1).join(', ') : 'none';
+      g.append('text')
+        .attr('x', x0).attr('y', y0 + 10)
+        .attr('text-anchor', 'start')
+        .style('fill', theme.muted)
+        .style('font-size', '12px')
+        .text(oobText);
+    }
+
+    panels.forEach(p => {
+      const g = panelRoot(p.x);
+      g.append('text')
+        .attr('x', panelW / 2).attr('y', 24)
+        .attr('text-anchor', 'middle')
+        .style('fill', theme.text)
+        .style('font-family', "'Press Start 2P', monospace")
+        .style('font-size', '12px')
+        .text(p.title);
+
+      drawDatasetGrid(g, 18, 70, p.s, 'training set (N rows)');
+      drawSampleRow(g, 18, 220, p.s, p.accent, 'bootstrap sample (draw N times)');
+      drawOOB(g, 18, 410, p.s, 'out-of-bag rows (unused)');
+
+      g.append('text')
+        .attr('x', 18).attr('y', 520)
+        .attr('text-anchor', 'start')
+        .style('fill', theme.muted)
+        .style('font-size', '12px')
+        .text('duplicates show "with replacement"');
+    });
+
+    // Center caption arrows.
+    const centerX = panelW + gap / 2;
+    fig.svg.append('line')
+      .attr('x1', centerX).attr('x2', centerX)
+      .attr('y1', 70).attr('y2', 520)
+      .attr('stroke', theme.border)
+      .attr('stroke-width', 2);
+  }
+
+  function register() {
+    if (typeof plotUtils === 'undefined') {
+      setTimeout(register, 80);
+      return;
+    }
+    plotUtils.renderOnSlideOnce({ slideId, containerId, draw });
+  }
+
+  register();
+})();
+</script>
 <!-- /position -->
+
 <!-- /layout -->
 
 ---
 
-<!-- .slide:id="logistic-regression-07-strengths-limitations" -->
-## When to Use Logistic Regression
+<!-- .slide:id="random-forest-06-step2-feature-subsampling" -->
+## Step 2 - Random Feature Selection
 <!-- layout={rows: 1, columns: 2} -->
+
 <!-- position={row: 1, column: 1} -->
--! Use it as the default baseline
--: strong when relationships are roughly monotonic/linear in features
--: works well for early-warning and screening classifiers
+-! At each split, a tree considers only m of p features
+-: first pick m random features, then find the best split among those candidates
+-: typical defaults are m = sqrt(p) for classification and m = p/3 for regression
 
 ***
 
--! Where it can fail
--: non-linear boundaries and strong interactions
--: missing key predictors -> misleading probabilities
+-! Feature subsampling prevents one predictor from dominating every tree
+-: different trees are forced to explore different predictors and interactions
+-: the resulting trees become less correlated with each other
 
 ***
 
--! Practical workflow
--: scale features; handle class imbalance
--: validate calibration + pick threshold with domain costs
+-! Less correlation makes averaging more powerful
+-: if trees make different mistakes, the vote cancels errors out
+-: if trees are too similar, the forest behaves like one unstable tree
 <!-- /position -->
+
 <!-- position={row: 1, column: 2} -->
-<svg width="640" height="520" viewBox="0 0 640 520" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Logistic regression vs random forest comparison">
-  <rect x="60" y="80" width="520" height="320" rx="12" fill="none" stroke="#2d3a66" stroke-width="3"/>
-  <text x="170" y="120" fill="#9efcff" font-size="18" text-anchor="middle">Logistic</text>
-  <text x="470" y="120" fill="#9efcff" font-size="18" text-anchor="middle">Random Forest</text>
-  <line x1="320" y1="90" x2="320" y2="380" stroke="#2d3a66" stroke-width="2"/>
+<div id="rf-feature-subsampling-plot" style="width: 100%; height: 650px; border: 1px solid #2d3a66; border-radius: 12px; background: rgba(15,23,42,0.85);"></div>
+-= Different trees see different candidate features at the same type of split, which decorrelates their decisions.
 
-  <text x="90" y="170" fill="#00ff94" font-size="16">interpretable</text>
-  <text x="90" y="210" fill="#00ff94" font-size="16">fast, small data</text>
-  <text x="90" y="250" fill="#ff6b35" font-size="16">linear boundary</text>
+<script>
+(function() {
+  const containerId = 'rf-feature-subsampling-plot';
+  const slideId = 'random-forest-06-step2-feature-subsampling';
 
-  <text x="350" y="170" fill="#00ff94" font-size="16">flexible boundary</text>
-  <text x="350" y="210" fill="#00ff94" font-size="16">handles interactions</text>
-  <text x="350" y="250" fill="#ff6b35" font-size="16">less transparent</text>
-</svg>
+  function draw() {
+    if (typeof d3 === 'undefined' || typeof plotUtils === 'undefined') {
+      setTimeout(draw, 80);
+      return;
+    }
+    const container = document.getElementById(containerId);
+    if (!container) return;
+
+    const width = 680;
+    const height = 650;
+    const margin = { top: 36, right: 26, bottom: 26, left: 26 };
+    const fig = plotUtils.createFigure(containerId, width, height, margin);
+
+    d3.select(`#${containerId} svg`)
+      .style('background-color', 'var(--ml-panel-bg)')
+      .style('border-radius', '12px');
+
+    const theme = {
+      border: 'var(--ml-panel-border)',
+      text: 'var(--ml-text)',
+      muted: 'var(--ml-muted)',
+      cyan: 'var(--ml-accent-cyan)',
+      magenta: 'var(--ml-accent-magenta)',
+      green: 'var(--ml-accent-green)',
+      orange: 'var(--ml-accent-orange)'
+    };
+
+    const W = fig.width;
+    const H = fig.height;
+    const gap = 22;
+    const panelW = (W - gap) / 2;
+    const panelH = H;
+
+    function frame(x, title, accent) {
+      const g = fig.svg.append('g').attr('transform', `translate(${x}, 0)`);
+      g.append('rect')
+        .attr('x', 0).attr('y', 0)
+        .attr('width', panelW).attr('height', panelH)
+        .attr('rx', 12)
+        .attr('fill', 'var(--ml-surface)')
+        .attr('stroke', theme.border)
+        .attr('stroke-width', 2);
+      g.append('text')
+        .attr('x', panelW / 2).attr('y', 24)
+        .attr('text-anchor', 'middle')
+        .style('fill', theme.text)
+        .style('font-family', "'Press Start 2P', monospace")
+        .style('font-size', '12px')
+        .text(title);
+      g.append('rect')
+        .attr('x', 18).attr('y', 58)
+        .attr('width', panelW - 36).attr('height', 80)
+        .attr('rx', 12)
+        .attr('fill', 'var(--ml-accent-cyan-soft)')
+        .attr('stroke', accent)
+        .attr('stroke-width', 2);
+      g.append('text')
+        .attr('x', panelW / 2).attr('y', 88)
+        .attr('text-anchor', 'middle')
+        .style('fill', theme.muted)
+        .style('font-size', '12px')
+        .text('split node');
+      g.append('text')
+        .attr('x', panelW / 2).attr('y', 110)
+        .attr('text-anchor', 'middle')
+        .style('fill', theme.muted)
+        .style('font-size', '12px')
+        .text('candidate features');
+      return g;
+    }
+
+    const features = ['f1', 'f2', 'f3', 'f4', 'f5', 'f6', 'f7', 'f8'];
+    const subsetA = new Set(['f1', 'f4', 'f7']);
+    const subsetB = new Set(['f2', 'f5', 'f8']);
+
+    function drawFeaturePool(g, x0, y0, subset, accent, caption) {
+      g.append('text')
+        .attr('x', x0).attr('y', y0 - 12)
+        .attr('text-anchor', 'start')
+        .style('fill', theme.text)
+        .style('font-size', '12px')
+        .text(caption);
+
+      const cellW = 60;
+      const cellH = 28;
+      const cols = 4;
+      const grp = g.append('g').attr('transform', `translate(${x0}, ${y0})`);
+
+      const item = grp.selectAll('g.f')
+        .data(features)
+        .enter()
+        .append('g')
+        .attr('class', 'f')
+        .attr('transform', (d, i) => `translate(${(i % cols) * cellW}, ${Math.floor(i / cols) * (cellH + 12)})`);
+
+      item.append('rect')
+        .attr('x', 0).attr('y', 0)
+        .attr('width', 54).attr('height', cellH)
+        .attr('rx', 8)
+        .attr('fill', d => subset.has(d) ? 'rgba(0,255,255,0.18)' : 'rgba(0,0,0,0.10)')
+        .attr('stroke', d => subset.has(d) ? accent : theme.border)
+        .attr('stroke-width', 2);
+
+      item.append('text')
+        .attr('x', 27).attr('y', 18)
+        .attr('text-anchor', 'middle')
+        .style('fill', theme.text)
+        .style('font-size', '12px')
+        .text(d => d);
+
+      g.append('text')
+        .attr('x', x0).attr('y', y0 + 2 * (cellH + 12) + 26)
+        .attr('text-anchor', 'start')
+        .style('fill', theme.muted)
+        .style('font-size', '12px')
+        .text(`m = ${Array.from(subset).length} of p = ${features.length} highlighted`);
+    }
+
+    function drawChosenSplit(g, x0, y0, accent, label) {
+      g.append('rect')
+        .attr('x', x0).attr('y', y0)
+        .attr('width', panelW - 36).attr('height', 88)
+        .attr('rx', 12)
+        .attr('fill', 'var(--ml-accent-green-soft)')
+        .attr('stroke', accent)
+        .attr('stroke-width', 2);
+      g.append('text')
+        .attr('x', x0 + (panelW - 36) / 2).attr('y', y0 + 34)
+        .attr('text-anchor', 'middle')
+        .style('fill', theme.text)
+        .style('font-size', '12px')
+        .text(label);
+      g.append('text')
+        .attr('x', x0 + (panelW - 36) / 2).attr('y', y0 + 56)
+        .attr('text-anchor', 'middle')
+        .style('fill', theme.muted)
+        .style('font-size', '12px')
+        .text('best split among candidates');
+    }
+
+    const A = frame(0, 'Tree A', theme.cyan);
+    const B = frame(panelW + gap, 'Tree B', theme.magenta);
+
+    drawFeaturePool(A, 24, 156, subsetA, theme.cyan, 'candidates at this node');
+    drawFeaturePool(B, 24, 156, subsetB, theme.magenta, 'candidates at this node');
+
+    drawChosenSplit(A, 18, 430, theme.green, 'uses f4 for the split');
+    drawChosenSplit(B, 18, 430, theme.green, 'uses f5 for the split');
+
+    // Divider.
+    fig.svg.append('line')
+      .attr('x1', panelW + gap / 2).attr('x2', panelW + gap / 2)
+      .attr('y1', 58).attr('y2', 560)
+      .attr('stroke', theme.border)
+      .attr('stroke-width', 2);
+
+    fig.svg.append('text')
+      .attr('x', panelW + gap / 2).attr('y', 610)
+      .attr('text-anchor', 'middle')
+      .style('fill', theme.muted)
+      .style('font-size', '12px')
+      .text('different candidate sets -> less correlation');
+  }
+
+  function register() {
+    if (typeof plotUtils === 'undefined') {
+      setTimeout(register, 80);
+      return;
+    }
+    plotUtils.renderOnSlideOnce({ slideId, containerId, draw });
+  }
+
+  register();
+})();
+</script>
 <!-- /position -->
+
 <!-- /layout -->
+
+---
+
+<!-- .slide:id="random-forest-07-step3-splitting-criterion" -->
+## Step 3 - How a Tree Splits
+<!-- layout={rows: 1, columns: 2} -->
+
+<!-- position={row: 1, column: 1} -->
+-! A tree chooses splits that improve prediction in the child nodes
+-: it tests candidate thresholds on the currently available features
+-: it picks the split that gives the biggest improvement according to a criterion
+
+***
+
+-! Classification trees aim for purer class distributions
+-: criteria such as Gini impurity or entropy measure how mixed a node is
+-: a good split makes the children more pure, so uncertainty decreases
+
+***
+
+-! Regression trees aim for lower spread of target values
+-: common criteria reduce mean squared error, which is closely related to variance
+-: splitting continues until a stopping rule is met (depth, minimum samples, purity)
+<!-- /position -->
+
+<!-- position={row: 1, column: 2} -->
+<div id="rf-splitting-criterion-plot" style="width: 100%; height: 650px; border: 1px solid #2d3a66; border-radius: 12px; background: rgba(15,23,42,0.85);"></div>
+-= A split is good when it reduces impurity: the parent is mixed, the children are more pure.
+
+<script>
+(function() {
+  const containerId = 'rf-splitting-criterion-plot';
+  const slideId = 'random-forest-07-step3-splitting-criterion';
+
+  function draw() {
+    if (typeof d3 === 'undefined' || typeof plotUtils === 'undefined') {
+      setTimeout(draw, 80);
+      return;
+    }
+    const container = document.getElementById(containerId);
+    if (!container) return;
+
+    const width = 680;
+    const height = 650;
+    const margin = { top: 36, right: 30, bottom: 30, left: 30 };
+    const fig = plotUtils.createFigure(containerId, width, height, margin);
+
+    d3.select(`#${containerId} svg`)
+      .style('background-color', 'var(--ml-panel-bg)')
+      .style('border-radius', '12px');
+
+    const theme = {
+      border: 'var(--ml-panel-border)',
+      text: 'var(--ml-text)',
+      muted: 'var(--ml-muted)',
+      cyan: 'var(--ml-accent-cyan)',
+      magenta: 'var(--ml-accent-magenta)',
+      green: 'var(--ml-accent-green)',
+      orange: 'var(--ml-accent-orange)'
+    };
+
+    const W = fig.width;
+    const H = fig.height;
+
+    function nodeBox(x, y, w, h, title) {
+      const g = fig.svg.append('g').attr('transform', `translate(${x}, ${y})`);
+      g.append('rect')
+        .attr('x', 0).attr('y', 0)
+        .attr('width', w).attr('height', h)
+        .attr('rx', 12)
+        .attr('fill', 'var(--ml-surface)')
+        .attr('stroke', theme.border)
+        .attr('stroke-width', 2);
+      g.append('text')
+        .attr('x', w / 2).attr('y', 22)
+        .attr('text-anchor', 'middle')
+        .style('fill', theme.text)
+        .style('font-family', "'Press Start 2P', monospace")
+        .style('font-size', '11px')
+        .text(title);
+      return g;
+    }
+
+    function stackedBar(g, x, y, w, h, p1) {
+      const p0 = 1 - p1;
+      g.append('rect')
+        .attr('x', x).attr('y', y)
+        .attr('width', w * p0).attr('height', h)
+        .attr('rx', 8)
+        .attr('fill', theme.orange)
+        .attr('opacity', 0.85);
+      g.append('rect')
+        .attr('x', x + w * p0).attr('y', y)
+        .attr('width', w * p1).attr('height', h)
+        .attr('rx', 8)
+        .attr('fill', theme.green)
+        .attr('opacity', 0.85);
+      g.append('rect')
+        .attr('x', x).attr('y', y)
+        .attr('width', w).attr('height', h)
+        .attr('rx', 8)
+        .attr('fill', 'none')
+        .attr('stroke', '#ffffff')
+        .attr('stroke-width', 1.8)
+        .attr('opacity', 0.9);
+      g.append('text')
+        .attr('x', x).attr('y', y + h + 18)
+        .attr('text-anchor', 'start')
+        .style('fill', theme.muted)
+        .style('font-size', '12px')
+        .text(`class 0: ${(p0 * 100).toFixed(0)}%`);
+      g.append('text')
+        .attr('x', x + w).attr('y', y + h + 18)
+        .attr('text-anchor', 'end')
+        .style('fill', theme.muted)
+        .style('font-size', '12px')
+        .text(`class 1: ${(p1 * 100).toFixed(0)}%`);
+    }
+
+    function gini(p1) {
+      const p0 = 1 - p1;
+      return 1 - (p0 * p0 + p1 * p1);
+    }
+
+    function arrow(x1, y1, x2, y2, color) {
+      const markerId = `${containerId}-arrow`;
+      const defs = d3.select(`#${containerId} svg`).select('defs').empty()
+        ? d3.select(`#${containerId} svg`).append('defs')
+        : d3.select(`#${containerId} svg`).select('defs');
+
+      if (defs.select(`#${markerId}`).empty()) {
+        defs.append('marker')
+          .attr('id', markerId)
+          .attr('viewBox', '0 0 10 10')
+          .attr('refX', 9).attr('refY', 5)
+          .attr('markerWidth', 8).attr('markerHeight', 8)
+          .attr('orient', 'auto')
+          .append('path')
+          .attr('d', 'M 0 0 L 10 5 L 0 10 z')
+          .attr('fill', theme.muted);
+      }
+
+      fig.svg.append('line')
+        .attr('x1', x1).attr('y1', y1)
+        .attr('x2', x2).attr('y2', y2)
+        .attr('stroke', color || theme.muted)
+        .attr('stroke-width', 3)
+        .attr('marker-end', `url(#${markerId})`)
+        .attr('opacity', 0.95);
+    }
+
+    const parentP1 = 0.50;
+    const leftP1 = 0.15;
+    const rightP1 = 0.85;
+
+    const parent = nodeBox(120, 70, 400, 170, 'Parent node');
+    stackedBar(parent, 40, 58, 320, 26, parentP1);
+    parent.append('text')
+      .attr('x', 200).attr('y', 145)
+      .attr('text-anchor', 'middle')
+      .style('fill', theme.muted)
+      .style('font-size', '12px')
+      .text(`Gini = ${gini(parentP1).toFixed(2)} (mixed)`);
+
+    const leftChild = nodeBox(50, 320, 260, 220, 'Child (x < threshold)');
+    stackedBar(leftChild, 30, 58, 200, 26, leftP1);
+    leftChild.append('text')
+      .attr('x', 130).attr('y', 145)
+      .attr('text-anchor', 'middle')
+      .style('fill', theme.muted)
+      .style('font-size', '12px')
+      .text(`Gini = ${gini(leftP1).toFixed(2)} (more pure)`);
+
+    const rightChild = nodeBox(370, 320, 260, 220, 'Child (x ≥ threshold)');
+    stackedBar(rightChild, 30, 58, 200, 26, rightP1);
+    rightChild.append('text')
+      .attr('x', 130).attr('y', 145)
+      .attr('text-anchor', 'middle')
+      .style('fill', theme.muted)
+      .style('font-size', '12px')
+      .text(`Gini = ${gini(rightP1).toFixed(2)} (more pure)`);
+
+    arrow(320, 240, 180, 320);
+    arrow(320, 240, 500, 320);
+
+    fig.svg.append('text')
+      .attr('x', W / 2)
+      .attr('y', H - 16)
+      .attr('text-anchor', 'middle')
+      .style('fill', theme.muted)
+      .style('font-size', '12px')
+      .text('goal: reduce impurity (classification) or error/variance (regression)');
+  }
+
+  function register() {
+    if (typeof plotUtils === 'undefined') {
+      setTimeout(register, 80);
+      return;
+    }
+    plotUtils.renderOnSlideOnce({ slideId, containerId, draw });
+  }
+
+  register();
+})();
+</script>
+<!-- /position -->
+
+<!-- /layout -->
+
+---
+
+<!-- .slide:id="random-forest-08-step4-growing-many-trees" -->
+## Step 4 - Grow Many Trees
+<!-- layout={rows: 1, columns: 2} -->
+
+<!-- position={row: 1, column: 1} -->
+-! Training a forest means training many trees independently
+-: for each tree, take a bootstrap sample and build the tree with feature subsampling
+-: each tree is allowed to grow fairly deep, because overfitting is handled by averaging
+
+***
+
+-! Why deep trees still work well inside a forest
+-: deep trees reduce bias because they can fit complex patterns
+-: randomness makes the trees different, so their errors are less correlated
+
+***
+
+-! The practical effect is a strong, stable model
+-: individual trees may be noisy, but the ensemble smooths the noise out
+-: increasing the number of trees mainly improves stability (but costs runtime)
+<!-- /position -->
+
+<!-- position={row: 1, column: 2} -->
+<div id="rf-grow-many-trees-plot" style="width: 100%; height: 650px; border: 1px solid #2d3a66; border-radius: 12px; background: rgba(15,23,42,0.85);"></div>
+-= A forest is a collection of many independently trained trees (T can be 100, 500, or more).
+
+<script>
+(function() {
+  const containerId = 'rf-grow-many-trees-plot';
+  const slideId = 'random-forest-08-step4-growing-many-trees';
+
+  function draw() {
+    if (typeof d3 === 'undefined' || typeof plotUtils === 'undefined') {
+      setTimeout(draw, 80);
+      return;
+    }
+    const container = document.getElementById(containerId);
+    if (!container) return;
+
+    const width = 680;
+    const height = 650;
+    const margin = { top: 36, right: 26, bottom: 26, left: 26 };
+    const fig = plotUtils.createFigure(containerId, width, height, margin);
+
+    d3.select(`#${containerId} svg`)
+      .style('background-color', 'var(--ml-panel-bg)')
+      .style('border-radius', '12px');
+
+    const theme = {
+      border: 'var(--ml-panel-border)',
+      text: 'var(--ml-text)',
+      muted: 'var(--ml-muted)',
+      cyan: 'var(--ml-accent-cyan)',
+      magenta: 'var(--ml-accent-magenta)',
+      green: 'var(--ml-accent-green)'
+    };
+
+    const W = fig.width;
+    const H = fig.height;
+
+    fig.svg.append('text')
+      .attr('x', W / 2).attr('y', 18)
+      .attr('text-anchor', 'middle')
+      .style('fill', theme.text)
+      .style('font-family', "'Press Start 2P', monospace")
+      .style('font-size', '12px')
+      .text('Many trees (independent training)');
+
+    const cols = 4;
+    const rows = 3;
+    const padX = 18;
+    const padY = 42;
+    const cellW = (W - padX * 2) / cols;
+    const cellH = (H - padY * 2) / rows;
+
+    function drawMiniTree(root, x0, y0, w, h, accent) {
+      const g = root.append('g').attr('transform', `translate(${x0}, ${y0})`);
+      g.append('rect')
+        .attr('x', 10).attr('y', 10)
+        .attr('width', w - 20).attr('height', h - 20)
+        .attr('rx', 12)
+        .attr('fill', 'var(--ml-surface)')
+        .attr('stroke', theme.border)
+        .attr('stroke-width', 2);
+
+      const cx = w / 2;
+      const topY = 44;
+      const midY = 78;
+      const botY = 112;
+
+      const jitter = (t) => (t * 13 % 11) - 5;
+      const j1 = jitter(x0 + y0) * 0.7;
+      const j2 = jitter(x0 - y0) * 0.7;
+
+      const nodes = [
+        { x: cx, y: topY, r: 5.2 },
+        { x: cx - 26 + j1, y: midY, r: 5.0 },
+        { x: cx + 26 + j2, y: midY, r: 5.0 },
+        { x: cx - 42 + j2, y: botY, r: 4.6 },
+        { x: cx - 10 + j1, y: botY, r: 4.6 },
+        { x: cx + 10 + j2, y: botY, r: 4.6 },
+        { x: cx + 42 + j1, y: botY, r: 4.6 }
+      ];
+
+      const links = [
+        [0, 1], [0, 2],
+        [1, 3], [1, 4],
+        [2, 5], [2, 6]
+      ];
+
+      g.append('g')
+        .selectAll('line')
+        .data(links)
+        .enter()
+        .append('line')
+        .attr('x1', d => nodes[d[0]].x)
+        .attr('y1', d => nodes[d[0]].y)
+        .attr('x2', d => nodes[d[1]].x)
+        .attr('y2', d => nodes[d[1]].y)
+        .attr('stroke', theme.muted)
+        .attr('stroke-width', 2);
+
+      g.append('g')
+        .selectAll('circle')
+        .data(nodes)
+        .enter()
+        .append('circle')
+        .attr('cx', d => d.x)
+        .attr('cy', d => d.y)
+        .attr('r', d => d.r)
+        .attr('fill', 'var(--ml-accent-cyan-soft)')
+        .attr('stroke', accent)
+        .attr('stroke-width', 2);
+    }
+
+    const accents = [theme.cyan, theme.magenta, theme.green, theme.cyan];
+    let k = 0;
+    for (let r = 0; r < rows; r++) {
+      for (let c = 0; c < cols; c++) {
+        const x0 = padX + c * cellW;
+        const y0 = padY + r * cellH;
+        drawMiniTree(fig.svg, x0, y0, cellW, cellH, accents[k % accents.length]);
+        k++;
+      }
+    }
+
+    fig.svg.append('text')
+      .attr('x', W / 2).attr('y', H - 16)
+      .attr('text-anchor', 'middle')
+      .style('fill', theme.muted)
+      .style('font-size', '12px')
+      .text('in practice: T is much larger than shown');
+  }
+
+  function register() {
+    if (typeof plotUtils === 'undefined') {
+      setTimeout(register, 80);
+      return;
+    }
+    plotUtils.renderOnSlideOnce({ slideId, containerId, draw });
+  }
+
+  register();
+})();
+</script>
+<!-- /position -->
+
+<!-- /layout -->
+
+---
+
+<!-- .slide:id="random-forest-09-prediction-vote-average" -->
+## Prediction - Vote or Average
+<!-- layout={rows: 1, columns: 2} -->
+
+<!-- position={row: 1, column: 1} -->
+-! Prediction means sending the same input to every tree
+-: each tree produces its own output, based on its splits and leaves
+-: we do not pick the best tree, we combine all trees
+
+***
+
+-! Classification: vote or average probabilities
+-: each tree votes for a class, and the majority vote is the final class
+-: if trees output probabilities, we average them to get a calibrated score
+
+***
+
+-! Regression: average numeric predictions
+-: each tree returns a number (a mean value in its leaf)
+-: the forest output is the average, which reduces variance and smooths noise
+<!-- /position -->
+
+<!-- position={row: 1, column: 2} -->
+<div id="rf-prediction-plot" style="width: 100%; height: 650px; border: 1px solid #2d3a66; border-radius: 12px; background: rgba(15,23,42,0.85);"></div>
+-= One input produces many tree outputs, which are then combined into one final prediction.
+
+<script>
+(function() {
+  const containerId = 'rf-prediction-plot';
+  const slideId = 'random-forest-09-prediction-vote-average';
+
+  function seededRandom(seed) {
+    let value = seed >>> 0;
+    return function() {
+      value = (1664525 * value + 1013904223) >>> 0;
+      return value / 4294967296;
+    };
+  }
+
+  function draw() {
+    if (typeof d3 === 'undefined' || typeof plotUtils === 'undefined') {
+      setTimeout(draw, 80);
+      return;
+    }
+    const container = document.getElementById(containerId);
+    if (!container) return;
+
+    const width = 680;
+    const height = 650;
+    const margin = { top: 36, right: 26, bottom: 26, left: 26 };
+    const fig = plotUtils.createFigure(containerId, width, height, margin);
+
+    d3.select(`#${containerId} svg`)
+      .style('background-color', 'var(--ml-panel-bg)')
+      .style('border-radius', '12px');
+
+    const theme = {
+      border: 'var(--ml-panel-border)',
+      text: 'var(--ml-text)',
+      muted: 'var(--ml-muted)',
+      cyan: 'var(--ml-accent-cyan)',
+      magenta: 'var(--ml-accent-magenta)',
+      green: 'var(--ml-accent-green)',
+      orange: 'var(--ml-accent-orange)'
+    };
+
+    const W = fig.width;
+    const H = fig.height;
+
+    function box(x, y, w, h, label, stroke, fill) {
+      const g = fig.svg.append('g').attr('transform', `translate(${x}, ${y})`);
+      g.append('rect')
+        .attr('x', 0).attr('y', 0)
+        .attr('width', w).attr('height', h)
+        .attr('rx', 12)
+        .attr('fill', fill || 'rgba(0,0,0,0.10)')
+        .attr('stroke', stroke || theme.border)
+        .attr('stroke-width', 2);
+      g.append('text')
+        .attr('x', w / 2).attr('y', 22)
+        .attr('text-anchor', 'middle')
+        .style('fill', theme.text)
+        .style('font-family', "'Press Start 2P', monospace")
+        .style('font-size', '11px')
+        .text(label);
+      return g;
+    }
+
+    function arrow(x1, y1, x2, y2) {
+      const markerId = `${containerId}-arrow`;
+      const defs = d3.select(`#${containerId} svg`).select('defs').empty()
+        ? d3.select(`#${containerId} svg`).append('defs')
+        : d3.select(`#${containerId} svg`).select('defs');
+      if (defs.select(`#${markerId}`).empty()) {
+        defs.append('marker')
+          .attr('id', markerId)
+          .attr('viewBox', '0 0 10 10')
+          .attr('refX', 9).attr('refY', 5)
+          .attr('markerWidth', 8).attr('markerHeight', 8)
+          .attr('orient', 'auto')
+          .append('path')
+          .attr('d', 'M 0 0 L 10 5 L 0 10 z')
+          .attr('fill', theme.muted);
+      }
+      fig.svg.append('line')
+        .attr('x1', x1).attr('y1', y1)
+        .attr('x2', x2).attr('y2', y2)
+        .attr('stroke', theme.muted)
+        .attr('stroke-width', 3)
+        .attr('marker-end', `url(#${markerId})`)
+        .attr('opacity', 0.95);
+    }
+
+    // Layout.
+    const input = box(10, 220, 120, 160, 'Input x', theme.cyan);
+    input.append('text')
+      .attr('x', 60).attr('y', 88)
+      .attr('text-anchor', 'middle')
+      .style('fill', theme.muted)
+      .style('font-size', '12px')
+      .text('same x');
+    input.append('text')
+      .attr('x', 60).attr('y', 112)
+      .attr('text-anchor', 'middle')
+      .style('fill', theme.muted)
+      .style('font-size', '12px')
+      .text('to all trees');
+
+    const trees = box(160, 90, 320, 420, 'Trees', theme.green);
+    const agg = box(510, 150, 150, 300, 'Aggregation', theme.magenta);
+
+    arrow(130, 300, 160, 300);
+    arrow(480, 300, 510, 300);
+
+    // Draw a set of mini trees and their outputs.
+    const rng = seededRandom(123);
+    const T = 9;
+    const treeY = d3.range(T).map(i => 70 + i * 36);
+
+    const treeGroup = trees.append('g').attr('transform', 'translate(18, 54)');
+
+    function miniTree(g, x, y, color) {
+      const r = g.append('g').attr('transform', `translate(${x}, ${y})`);
+      r.append('line').attr('x1', 20).attr('y1', 6).attr('x2', 10).attr('y2', 18).attr('stroke', theme.muted).attr('stroke-width', 2);
+      r.append('line').attr('x1', 20).attr('y1', 6).attr('x2', 30).attr('y2', 18).attr('stroke', theme.muted).attr('stroke-width', 2);
+      r.append('circle').attr('cx', 20).attr('cy', 6).attr('r', 4).attr('fill', 'var(--ml-accent-green-soft)').attr('stroke', theme.green).attr('stroke-width', 2);
+      r.append('circle').attr('cx', 10).attr('cy', 18).attr('r', 4).attr('fill', 'var(--ml-accent-green-soft)').attr('stroke', theme.green).attr('stroke-width', 2);
+      r.append('circle').attr('cx', 30).attr('cy', 18).attr('r', 4).attr('fill', 'var(--ml-accent-green-soft)').attr('stroke', theme.green).attr('stroke-width', 2);
+      r.append('rect')
+        .attr('x', 52).attr('y', -6)
+        .attr('width', 90).attr('height', 20)
+        .attr('rx', 8)
+        .attr('fill', 'var(--ml-surface)')
+        .attr('stroke', theme.border)
+        .attr('stroke-width', 2);
+      r.append('text')
+        .attr('x', 97).attr('y', 8)
+        .attr('text-anchor', 'middle')
+        .style('fill', theme.text)
+        .style('font-size', '11px')
+        .text(color === theme.green ? 'vote: 1' : 'vote: 0');
+    }
+
+    const votes = [];
+    for (let i = 0; i < T; i++) {
+      // Make a plausible mix of votes.
+      const p = 0.35 + 0.5 * rng();
+      const vote = p > 0.5 ? 1 : 0;
+      votes.push(vote);
+      miniTree(treeGroup, 10, treeY[i], vote === 1 ? theme.green : theme.orange);
+    }
+
+    // Draw vote tally as bars in aggregation box.
+    const v1 = votes.reduce((a, b) => a + b, 0);
+    const v0 = T - v1;
+    const prob = v1 / T;
+
+    const ag = agg.append('g').attr('transform', 'translate(16, 54)');
+    ag.append('text')
+      .attr('x', 60).attr('y', 0)
+      .attr('text-anchor', 'middle')
+      .style('fill', theme.muted)
+      .style('font-size', '12px')
+      .text('vote tally');
+
+    const barW = 110;
+    const barH = 22;
+    ag.append('rect')
+      .attr('x', 5).attr('y', 20)
+      .attr('width', barW).attr('height', barH)
+      .attr('rx', 8)
+      .attr('fill', 'var(--ml-surface)')
+      .attr('stroke', theme.border)
+      .attr('stroke-width', 2);
+    ag.append('rect')
+      .attr('x', 5).attr('y', 20)
+      .attr('width', barW * (v1 / T)).attr('height', barH)
+      .attr('rx', 8)
+      .attr('fill', theme.green)
+      .attr('opacity', 0.85);
+
+    ag.append('text')
+      .attr('x', 5).attr('y', 60)
+      .attr('text-anchor', 'start')
+      .style('fill', theme.muted)
+      .style('font-size', '12px')
+      .text(`votes for class 1: ${v1}/${T}`);
+
+    ag.append('text')
+      .attr('x', 5).attr('y', 82)
+      .attr('text-anchor', 'start')
+      .style('fill', theme.muted)
+      .style('font-size', '12px')
+      .text(`votes for class 0: ${v0}/${T}`);
+
+    ag.append('text')
+      .attr('x', 60).attr('y', 122)
+      .attr('text-anchor', 'middle')
+      .style('fill', theme.muted)
+      .style('font-size', '12px')
+      .text('mean probability');
+
+    ag.append('rect')
+      .attr('x', 5).attr('y', 140)
+      .attr('width', barW).attr('height', 52)
+      .attr('rx', 12)
+      .attr('fill', 'var(--ml-accent-cyan-soft)')
+      .attr('stroke', theme.cyan)
+      .attr('stroke-width', 2);
+    ag.append('text')
+      .attr('x', 60).attr('y', 172)
+      .attr('text-anchor', 'middle')
+      .style('fill', theme.text)
+      .style('font-size', '12px')
+      .text(`p(class 1) = ${prob.toFixed(2)}`);
+
+    ag.append('text')
+      .attr('x', 60).attr('y', 232)
+      .attr('text-anchor', 'middle')
+      .style('fill', theme.muted)
+      .style('font-size', '12px')
+      .text('final output');
+
+    ag.append('rect')
+      .attr('x', 28).attr('y', 248)
+      .attr('width', 64).attr('height', 26)
+      .attr('rx', 10)
+      .attr('fill', 'var(--ml-accent-magenta-soft)')
+      .attr('stroke', theme.magenta)
+      .attr('stroke-width', 2);
+    ag.append('text')
+      .attr('x', 60).attr('y', 266)
+      .attr('text-anchor', 'middle')
+      .style('fill', theme.text)
+      .style('font-size', '12px')
+      .text(prob >= 0.5 ? 'class 1' : 'class 0');
+  }
+
+  function register() {
+    if (typeof plotUtils === 'undefined') {
+      setTimeout(register, 80);
+      return;
+    }
+    plotUtils.renderOnSlideOnce({ slideId, containerId, draw });
+  }
+
+  register();
+})();
+</script>
+<!-- /position -->
+
+<!-- /layout -->
+
+---
+
+<!-- .slide:id="random-forest-10-oob-validation" -->
+## Built-in Validation - OOB Error
+<!-- layout={rows: 1, columns: 2} -->
+
+<!-- position={row: 1, column: 1} -->
+-! Out-of-bag (OOB) error is a built-in validation for Random Forest
+-: because of bootstrap sampling, each training row is left out for many trees
+-: we can predict that row using only the trees that did not see it during training
+
+***
+
+-! OOB predictions behave like internal cross-validation
+-: every row gets evaluated on a subset of trees that are "honestly" out-of-sample
+-: aggregating these row-wise predictions gives an OOB error estimate
+
+***
+
+-! OOB is useful for quick model selection
+-: it gives fast feedback for hyperparameters without an extra validation split
+-: it is not a replacement for a final test set when you need a trustworthy report
+<!-- /position -->
+
+<!-- position={row: 1, column: 2} -->
+<div id="rf-oob-plot" style="width: 100%; height: 650px; border: 1px solid #2d3a66; border-radius: 12px; background: rgba(15,23,42,0.85);"></div>
+-= One row is predicted only by trees for which it was out-of-bag; their vote becomes the OOB prediction.
+
+<script>
+(function() {
+  const containerId = 'rf-oob-plot';
+  const slideId = 'random-forest-10-oob-validation';
+
+  function seededRandom(seed) {
+    let value = seed >>> 0;
+    return function() {
+      value = (1664525 * value + 1013904223) >>> 0;
+      return value / 4294967296;
+    };
+  }
+
+  function draw() {
+    if (typeof d3 === 'undefined' || typeof plotUtils === 'undefined') {
+      setTimeout(draw, 80);
+      return;
+    }
+    const container = document.getElementById(containerId);
+    if (!container) return;
+
+    const width = 680;
+    const height = 650;
+    const margin = { top: 36, right: 26, bottom: 26, left: 26 };
+    const fig = plotUtils.createFigure(containerId, width, height, margin);
+
+    d3.select(`#${containerId} svg`)
+      .style('background-color', 'var(--ml-panel-bg)')
+      .style('border-radius', '12px');
+
+    const theme = {
+      border: 'var(--ml-panel-border)',
+      text: 'var(--ml-text)',
+      muted: 'var(--ml-muted)',
+      cyan: 'var(--ml-accent-cyan)',
+      magenta: 'var(--ml-accent-magenta)',
+      green: 'var(--ml-accent-green)',
+      orange: 'var(--ml-accent-orange)',
+      gray: 'var(--ml-gray-soft)'
+    };
+
+    const W = fig.width;
+    const H = fig.height;
+    const gap = 18;
+    const leftW = 250;
+    const rightW = W - leftW - gap;
+
+    // Frames.
+    const left = fig.svg.append('g');
+    const right = fig.svg.append('g').attr('transform', `translate(${leftW + gap}, 0)`);
+
+    function frame(root, x, y, w, h, title, accent) {
+      root.append('rect')
+        .attr('x', x).attr('y', y)
+        .attr('width', w).attr('height', h)
+        .attr('rx', 12)
+        .attr('fill', 'var(--ml-surface)')
+        .attr('stroke', theme.border)
+        .attr('stroke-width', 2);
+      root.append('text')
+        .attr('x', x + w / 2).attr('y', y + 22)
+        .attr('text-anchor', 'middle')
+        .style('fill', theme.text)
+        .style('font-family', "'Press Start 2P', monospace")
+        .style('font-size', '11px')
+        .text(title);
+      if (accent) {
+        root.append('rect')
+          .attr('x', x + 10).attr('y', y + 34)
+          .attr('width', w - 20).attr('height', 4)
+          .attr('rx', 2)
+          .attr('fill', accent)
+          .attr('opacity', 0.8);
+      }
+    }
+
+    frame(left, 0, 0, leftW, H, 'Training rows', theme.cyan);
+    frame(right, 0, 0, rightW, H, 'Trees and OOB vote', theme.magenta);
+
+    // Mock dataset as rows.
+    const nRows = 14;
+    const rng = seededRandom(202);
+    const labels = d3.range(nRows).map(i => (i * 11 % 7) < 3 ? 1 : 0);
+    const targetRow = 6;
+
+    const rowsG = left.append('g').attr('transform', 'translate(18, 60)');
+    rowsG.append('text')
+      .attr('x', 0).attr('y', -10)
+      .attr('text-anchor', 'start')
+      .style('fill', theme.muted)
+      .style('font-size', '12px')
+      .text('each tree bootstraps rows');
+
+    const rowH = 34;
+    const rowW = leftW - 36;
+    const row = rowsG.selectAll('g.row')
+      .data(d3.range(nRows))
+      .enter()
+      .append('g')
+      .attr('class', 'row')
+      .attr('transform', d => `translate(0, ${d * rowH})`);
+
+    row.append('rect')
+      .attr('x', 0).attr('y', 0)
+      .attr('width', rowW).attr('height', 28)
+      .attr('rx', 10)
+      .attr('fill', d => d === targetRow ? 'rgba(0,255,255,0.12)' : 'rgba(0,0,0,0.10)')
+      .attr('stroke', d => d === targetRow ? theme.cyan : theme.border)
+      .attr('stroke-width', 2);
+
+    row.append('text')
+      .attr('x', 12).attr('y', 19)
+      .attr('text-anchor', 'start')
+      .style('fill', theme.text)
+      .style('font-size', '12px')
+      .text(d => `row ${d + 1}`);
+
+    row.append('circle')
+      .attr('cx', rowW - 18)
+      .attr('cy', 14)
+      .attr('r', 7)
+      .attr('fill', d => labels[d] ? theme.green : theme.orange)
+      .attr('stroke', '#ffffff')
+      .attr('stroke-width', 1.4)
+      .attr('opacity', 0.95);
+
+    left.append('text')
+      .attr('x', leftW / 2)
+      .attr('y', H - 18)
+      .attr('text-anchor', 'middle')
+      .style('fill', theme.muted)
+      .style('font-size', '12px')
+      .text('highlighted row is evaluated OOB');
+
+    // Trees: each has OOB status for targetRow + a vote.
+    const T = 16;
+    const trees = d3.range(T).map(i => {
+      const isOOB = rng() < 0.38; // roughly 37% left out
+      const vote = (rng() + (labels[targetRow] ? 0.12 : -0.12)) > 0.5 ? 1 : 0;
+      return { i, isOOB, vote };
+    });
+
+    const oobTrees = trees.filter(t => t.isOOB);
+    const vote1 = oobTrees.reduce((s, t) => s + t.vote, 0);
+    const vote0 = oobTrees.length - vote1;
+    const p1 = oobTrees.length ? vote1 / oobTrees.length : 0.5;
+    const pred = p1 >= 0.5 ? 1 : 0;
+    const truth = labels[targetRow];
+    const correct = pred === truth;
+
+    const treesG = right.append('g').attr('transform', 'translate(18, 60)');
+    treesG.append('text')
+      .attr('x', 0).attr('y', -10)
+      .attr('text-anchor', 'start')
+      .style('fill', theme.muted)
+      .style('font-size', '12px')
+      .text('only OOB trees are allowed to vote');
+
+    const cols = 4;
+    const tileW = (rightW - 36) / cols;
+    const tileH = 70;
+
+    const tile = treesG.selectAll('g.tile')
+      .data(trees)
+      .enter()
+      .append('g')
+      .attr('class', 'tile')
+      .attr('transform', d => `translate(${(d.i % cols) * tileW}, ${Math.floor(d.i / cols) * tileH})`);
+
+    tile.append('rect')
+      .attr('x', 8).attr('y', 10)
+      .attr('width', tileW - 16).attr('height', 50)
+      .attr('rx', 12)
+      .attr('fill', d => d.isOOB ? 'rgba(255,5,255,0.08)' : 'rgba(255,255,255,0.04)')
+      .attr('stroke', d => d.isOOB ? theme.magenta : theme.border)
+      .attr('stroke-width', 2);
+
+    tile.append('text')
+      .attr('x', tileW / 2).attr('y', 30)
+      .attr('text-anchor', 'middle')
+      .style('fill', theme.text)
+      .style('font-size', '11px')
+      .text(d => `tree ${d.i + 1}`);
+
+    tile.append('text')
+      .attr('x', tileW / 2).attr('y', 50)
+      .attr('text-anchor', 'middle')
+      .style('fill', d => d.isOOB ? theme.text : theme.gray)
+      .style('font-size', '11px')
+      .text(d => d.isOOB ? `vote: ${d.vote}` : 'in-bag');
+
+    // OOB vote summary.
+    const summary = right.append('g').attr('transform', `translate(18, ${H - 200})`);
+    summary.append('rect')
+      .attr('x', 0).attr('y', 0)
+      .attr('width', rightW - 36).attr('height', 170)
+      .attr('rx', 12)
+      .attr('fill', 'var(--ml-surface)')
+      .attr('stroke', theme.border)
+      .attr('stroke-width', 2);
+
+    summary.append('text')
+      .attr('x', 12).attr('y', 26)
+      .attr('text-anchor', 'start')
+      .style('fill', theme.text)
+      .style('font-family', "'Press Start 2P', monospace")
+      .style('font-size', '11px')
+      .text('OOB prediction for highlighted row');
+
+    summary.append('text')
+      .attr('x', 12).attr('y', 56)
+      .attr('text-anchor', 'start')
+      .style('fill', theme.muted)
+      .style('font-size', '12px')
+      .text(`eligible trees: ${oobTrees.length}/${T}`);
+
+    // Vote bar.
+    const barW = 220;
+    summary.append('rect')
+      .attr('x', 12).attr('y', 72)
+      .attr('width', barW).attr('height', 22)
+      .attr('rx', 10)
+      .attr('fill', 'var(--ml-grid)')
+      .attr('stroke', theme.border)
+      .attr('stroke-width', 2);
+    summary.append('rect')
+      .attr('x', 12).attr('y', 72)
+      .attr('width', barW * p1).attr('height', 22)
+      .attr('rx', 10)
+      .attr('fill', theme.green)
+      .attr('opacity', 0.85);
+
+    summary.append('text')
+      .attr('x', 12 + barW + 10).attr('y', 88)
+      .attr('text-anchor', 'start')
+      .style('fill', theme.muted)
+      .style('font-size', '12px')
+      .text(`p(class 1) = ${p1.toFixed(2)}`);
+
+    summary.append('text')
+      .attr('x', 12).attr('y', 122)
+      .attr('text-anchor', 'start')
+      .style('fill', theme.muted)
+      .style('font-size', '12px')
+      .text(`prediction: class ${pred} (vote ${vote1}:${vote0})`);
+
+    summary.append('text')
+      .attr('x', 12).attr('y', 146)
+      .attr('text-anchor', 'start')
+      .style('fill', theme.muted)
+      .style('font-size', '12px')
+      .text(`true label: class ${truth} -> ${correct ? 'correct' : 'error'}`);
+  }
+
+  function register() {
+    if (typeof plotUtils === 'undefined') {
+      setTimeout(register, 80);
+      return;
+    }
+    plotUtils.renderOnSlideOnce({ slideId, containerId, draw });
+  }
+
+  register();
+})();
+</script>
+<!-- /position -->
+
+<!-- /layout -->
+
+---
+
+<!-- .slide:id="random-forest-11-feature-importance" -->
+## Interpretation - Feature Importance
+<!-- layout={rows: 1, columns: 2} -->
+
+<!-- position={row: 1, column: 1} -->
+-! Feature importance answers: which inputs influence the model most?
+-: it is a tool for understanding and sanity-checking, not a proof of causality
+-: importance is always relative to the dataset and the chosen metric
+
+***
+
+-! Permutation importance is a robust default
+-: randomly shuffle one feature column in the validation data
+-: if performance drops, the model relied on that feature for prediction
+
+***
+
+-! There are alternative views with trade-offs
+-: impurity-based importance is fast but can be biased toward high-cardinality features
+-: partial dependence can show the average effect but can hide interactions
+<!-- /position -->
+
+<!-- position={row: 1, column: 2} -->
+<div id="rf-feature-importance-plot" style="width: 100%; height: 650px; border: 1px solid #2d3a66; border-radius: 12px; background: rgba(15,23,42,0.85);"></div>
+-= Permutation importance: bar length is the drop in score after shuffling that feature.
+
+<script>
+(function() {
+  const containerId = 'rf-feature-importance-plot';
+  const slideId = 'random-forest-11-feature-importance';
+
+  function draw() {
+    if (typeof d3 === 'undefined' || typeof plotUtils === 'undefined') {
+      setTimeout(draw, 80);
+      return;
+    }
+    const container = document.getElementById(containerId);
+    if (!container) return;
+
+    const width = 680;
+    const height = 650;
+    const margin = { top: 36, right: 40, bottom: 40, left: 140 };
+    const fig = plotUtils.createFigure(containerId, width, height, margin);
+
+    d3.select(`#${containerId} svg`)
+      .style('background-color', 'var(--ml-panel-bg)')
+      .style('border-radius', '12px');
+
+    const theme = {
+      border: 'var(--ml-panel-border)',
+      text: 'var(--ml-text)',
+      muted: 'var(--ml-muted)',
+      cyan: 'var(--ml-accent-cyan)',
+      magenta: 'var(--ml-accent-magenta)',
+      green: 'var(--ml-accent-green)',
+      orange: 'var(--ml-accent-orange)'
+    };
+
+    const baseScore = 0.86;
+    const data = [
+      { feature: 'turbidity', drop: 0.10, color: theme.cyan },
+      { feature: 'DOC', drop: 0.07, color: theme.magenta },
+      { feature: 'temperature', drop: 0.04, color: theme.green },
+      { feature: 'rain (24h)', drop: 0.03, color: theme.orange },
+      { feature: 'season', drop: 0.02, color: theme.cyan }
+    ].sort((a, b) => b.drop - a.drop);
+
+    const x = d3.scaleLinear()
+      .domain([0, d3.max(data, d => d.drop) * 1.15])
+      .range([0, fig.width]);
+
+    const y = d3.scaleBand()
+      .domain(data.map(d => d.feature))
+      .range([0, fig.height])
+      .padding(0.22);
+
+    fig.svg.append('g')
+      .attr('transform', `translate(0, ${fig.height})`)
+      .call(d3.axisBottom(x).ticks(5).tickFormat(d3.format('.2f')));
+    fig.svg.append('g')
+      .call(d3.axisLeft(y));
+
+    // Axis styling.
+    fig.svg.selectAll('.tick text')
+      .style('fill', theme.muted)
+      .style('font-size', '12px');
+    fig.svg.selectAll('.domain, .tick line')
+      .style('stroke', theme.border)
+      .style('stroke-width', 2);
+
+    fig.svg.append('text')
+      .attr('x', 0).attr('y', -10)
+      .attr('text-anchor', 'start')
+      .style('fill', theme.muted)
+      .style('font-size', '12px')
+      .text(`base score: ${baseScore.toFixed(2)} (before shuffling)`);
+
+    const bars = fig.svg.append('g')
+      .selectAll('rect')
+      .data(data)
+      .enter()
+      .append('rect')
+      .attr('x', 0)
+      .attr('y', d => y(d.feature))
+      .attr('width', d => x(d.drop))
+      .attr('height', y.bandwidth())
+      .attr('rx', 10)
+      .attr('fill', d => d.color)
+      .attr('opacity', 0.78)
+      .attr('stroke', '#ffffff')
+      .attr('stroke-width', 1.4);
+
+    fig.svg.append('g')
+      .selectAll('text.val')
+      .data(data)
+      .enter()
+      .append('text')
+      .attr('class', 'val')
+      .attr('x', d => x(d.drop) + 8)
+      .attr('y', d => y(d.feature) + y.bandwidth() / 2 + 4)
+      .attr('text-anchor', 'start')
+      .style('fill', theme.text)
+      .style('font-size', '12px')
+      .text(d => `-${d.drop.toFixed(2)}`);
+
+    fig.svg.append('text')
+      .attr('x', fig.width)
+      .attr('y', fig.height + 34)
+      .attr('text-anchor', 'end')
+      .style('fill', theme.muted)
+      .style('font-size', '12px')
+      .text('drop in score after shuffling (larger = more important)');
+  }
+
+  function register() {
+    if (typeof plotUtils === 'undefined') {
+      setTimeout(register, 80);
+      return;
+    }
+    plotUtils.renderOnSlideOnce({ slideId, containerId, draw });
+  }
+
+  register();
+})();
+</script>
+<!-- /position -->
+
+<!-- /layout -->
+
+---
+
+<!-- .slide:id="random-forest-12-hyperparameters" -->
+## Practical Knobs
+<!-- layout={rows: 1, columns: 2} -->
+
+<!-- position={row: 1, column: 1} -->
+-! The main knobs trade off stability, runtime, and generalization
+-: changing hyperparameters changes how complex the forest can be and how much it averages noise
+-: defaults are often good, but tuning matters for small data and imbalanced problems
+
+***
+
+-! Number of trees controls stability
+-: more trees reduce variance and make predictions more stable
+-: beyond a point the improvement is small, but runtime keeps increasing
+
+***
+
+-! Depth, leaf size, and max features control complexity and diversity
+-: deeper trees and smaller leaves increase flexibility but can overfit more
+-: limiting max features makes trees less correlated, which helps averaging
+<!-- /position -->
+
+<!-- position={row: 1, column: 2} -->
+<div id="rf-hyperparameters-plot" style="width: 100%; height: 650px; border: 1px solid #2d3a66; border-radius: 12px; background: rgba(15,23,42,0.85);"></div>
+-= Typical effects: more trees reduce variance, and too much depth can increase overfitting.
+
+<script>
+(function() {
+  const containerId = 'rf-hyperparameters-plot';
+  const slideId = 'random-forest-12-hyperparameters';
+
+  function draw() {
+    if (typeof d3 === 'undefined' || typeof plotUtils === 'undefined') {
+      setTimeout(draw, 80);
+      return;
+    }
+    const container = document.getElementById(containerId);
+    if (!container) return;
+
+    const width = 680;
+    const height = 650;
+    const margin = { top: 36, right: 30, bottom: 30, left: 30 };
+    const fig = plotUtils.createFigure(containerId, width, height, margin);
+
+    d3.select(`#${containerId} svg`)
+      .style('background-color', 'var(--ml-panel-bg)')
+      .style('border-radius', '12px');
+
+    const theme = {
+      border: 'var(--ml-panel-border)',
+      text: 'var(--ml-text)',
+      muted: 'var(--ml-muted)',
+      cyan: 'var(--ml-accent-cyan)',
+      magenta: 'var(--ml-accent-magenta)',
+      green: 'var(--ml-accent-green)',
+      orange: 'var(--ml-accent-orange)'
+    };
+
+    const W = fig.width;
+    const H = fig.height;
+    const gap = 22;
+    const panelH = (H - gap) / 2;
+    const panelW = (W - gap) / 2;
+
+    function panel(x, y, w, h, title) {
+      const g = fig.svg.append('g').attr('transform', `translate(${x}, ${y})`);
+      g.append('rect')
+        .attr('x', 0).attr('y', 0)
+        .attr('width', w).attr('height', h)
+        .attr('rx', 12)
+        .attr('fill', 'var(--ml-surface)')
+        .attr('stroke', theme.border)
+        .attr('stroke-width', 2);
+      g.append('text')
+        .attr('x', w / 2).attr('y', 22)
+        .attr('text-anchor', 'middle')
+        .style('fill', theme.text)
+        .style('font-family', "'Press Start 2P', monospace")
+        .style('font-size', '11px')
+        .text(title);
+      return g;
+    }
+
+    // Panel A: error vs number of trees.
+    const pA = panel(0, 0, panelW, panelH, 'n_trees: stability');
+    const aInner = { l: 46, t: 46, r: 18, b: 36 };
+    const aW = panelW - aInner.l - aInner.r;
+    const aH = panelH - aInner.t - aInner.b;
+    const aG = pA.append('g').attr('transform', `translate(${aInner.l}, ${aInner.t})`);
+
+    const xA = d3.scaleLinear().domain([10, 500]).range([0, aW]);
+    const yA = d3.scaleLinear().domain([0.06, 0.20]).range([aH, 0]);
+    aG.append('g').attr('transform', `translate(0, ${aH})`).call(d3.axisBottom(xA).ticks(4));
+    aG.append('g').call(d3.axisLeft(yA).ticks(4));
+    aG.selectAll('.tick text').style('fill', theme.muted).style('font-size', '11px');
+    aG.selectAll('.domain, .tick line').style('stroke', theme.border).style('stroke-width', 2);
+
+    const curveA = d3.range(10, 500.1, 5).map(n => {
+      const err = 0.07 + 0.13 * Math.exp(-n / 90);
+      return { n, err };
+    });
+    aG.append('path')
+      .datum(curveA)
+      .attr('d', d3.line().x(d => xA(d.n)).y(d => yA(d.err)))
+      .attr('fill', 'none')
+      .attr('stroke', theme.cyan)
+      .attr('stroke-width', 3);
+
+    aG.append('text')
+      .attr('x', 0).attr('y', -10)
+      .attr('text-anchor', 'start')
+      .style('fill', theme.muted)
+      .style('font-size', '11px')
+      .text('OOB error flattens out');
+
+    // Panel B: depth vs generalization (U-shape).
+    const pB = panel(panelW + gap, 0, panelW, panelH, 'max_depth: overfit');
+    const bInner = { l: 46, t: 46, r: 18, b: 36 };
+    const bW = panelW - bInner.l - bInner.r;
+    const bH = panelH - bInner.t - bInner.b;
+    const bG = pB.append('g').attr('transform', `translate(${bInner.l}, ${bInner.t})`);
+
+    const xB = d3.scaleLinear().domain([2, 30]).range([0, bW]);
+    const yB = d3.scaleLinear().domain([0.06, 0.22]).range([bH, 0]);
+    bG.append('g').attr('transform', `translate(0, ${bH})`).call(d3.axisBottom(xB).ticks(4));
+    bG.append('g').call(d3.axisLeft(yB).ticks(4));
+    bG.selectAll('.tick text').style('fill', theme.muted).style('font-size', '11px');
+    bG.selectAll('.domain, .tick line').style('stroke', theme.border).style('stroke-width', 2);
+
+    const curveB = d3.range(2, 30.01, 0.5).map(d => {
+      const err = 0.08 + 0.0025 * Math.pow(d - 10, 2) / 10;
+      return { d, err };
+    });
+    bG.append('path')
+      .datum(curveB)
+      .attr('d', d3.line().x(d => xB(d.d)).y(d => yB(d.err)))
+      .attr('fill', 'none')
+      .attr('stroke', theme.magenta)
+      .attr('stroke-width', 3);
+
+    bG.append('text')
+      .attr('x', 0).attr('y', -10)
+      .attr('text-anchor', 'start')
+      .style('fill', theme.muted)
+      .style('font-size', '11px')
+      .text('too deep can hurt');
+
+    // Panel C: max_features effect (diversity vs strength).
+    const pC = panel(0, panelH + gap, W, panelH, 'max_features: diversity');
+    const cG = pC.append('g').attr('transform', 'translate(24, 60)');
+
+    cG.append('text')
+      .attr('x', 0).attr('y', -14)
+      .attr('text-anchor', 'start')
+      .style('fill', theme.muted)
+      .style('font-size', '12px')
+      .text('smaller m makes trees less correlated (better averaging)');
+
+    const barX = 160;
+    const barY = 30;
+    const barW = W - 24 * 2 - barX - 30;
+
+    const items = [
+      { label: 'low m', corr: 0.25, strength: 0.65, color: theme.green },
+      { label: 'high m', corr: 0.70, strength: 0.80, color: theme.orange }
+    ];
+
+    function drawTradeoff(y, d) {
+      cG.append('text')
+        .attr('x', 0).attr('y', y + 18)
+        .attr('text-anchor', 'start')
+        .style('fill', theme.text)
+        .style('font-size', '12px')
+        .text(d.label);
+
+      // correlation bar
+      cG.append('rect')
+        .attr('x', barX).attr('y', y)
+        .attr('width', barW).attr('height', 18)
+        .attr('rx', 9)
+        .attr('fill', 'var(--ml-grid)')
+        .attr('stroke', theme.border)
+        .attr('stroke-width', 2);
+      cG.append('rect')
+        .attr('x', barX).attr('y', y)
+        .attr('width', barW * d.corr).attr('height', 18)
+        .attr('rx', 9)
+        .attr('fill', theme.magenta)
+        .attr('opacity', 0.78);
+      cG.append('text')
+        .attr('x', barX + barW + 10).attr('y', y + 14)
+        .attr('text-anchor', 'start')
+        .style('fill', theme.muted)
+        .style('font-size', '12px')
+        .text(`corr: ${d.corr.toFixed(2)}`);
+
+      // strength bar
+      const y2 = y + 34;
+      cG.append('rect')
+        .attr('x', barX).attr('y', y2)
+        .attr('width', barW).attr('height', 18)
+        .attr('rx', 9)
+        .attr('fill', 'var(--ml-grid)')
+        .attr('stroke', theme.border)
+        .attr('stroke-width', 2);
+      cG.append('rect')
+        .attr('x', barX).attr('y', y2)
+        .attr('width', barW * d.strength).attr('height', 18)
+        .attr('rx', 9)
+        .attr('fill', d.color)
+        .attr('opacity', 0.78);
+      cG.append('text')
+        .attr('x', barX + barW + 10).attr('y', y2 + 14)
+        .attr('text-anchor', 'start')
+        .style('fill', theme.muted)
+        .style('font-size', '12px')
+        .text(`strength: ${d.strength.toFixed(2)}`);
+    }
+
+    drawTradeoff(28, items[0]);
+    drawTradeoff(110, items[1]);
+
+    cG.append('text')
+      .attr('x', 0).attr('y', 220)
+      .attr('text-anchor', 'start')
+      .style('fill', theme.muted)
+      .style('font-size', '12px')
+      .text('goal: keep strength high and correlation low');
+  }
+
+  function register() {
+    if (typeof plotUtils === 'undefined') {
+      setTimeout(register, 80);
+      return;
+    }
+    plotUtils.renderOnSlideOnce({ slideId, containerId, draw });
+  }
+
+  register();
+})();
+</script>
+<!-- /position -->
+
+<!-- /layout -->
+
+---
+
+<!-- .slide:id="random-forest-13-strengths-limitations" -->
+## When to Use Random Forest
+<!-- layout={rows: 1, columns: 2} -->
+
+<!-- position={row: 1, column: 1} -->
+-! Choose Random Forest when you need a strong baseline quickly
+-: it often performs well with little preprocessing and minimal feature engineering
+-: it can model nonlinear relationships and interactions between predictors
+
+***
+
+-! Choose Random Forest when prediction accuracy is more important than a simple formula
+-: it is robust in many noisy settings because averaging smooths unstable trees
+-: it works for classification and regression, and handles mixed feature types
+
+***
+
+-! Be aware of its limitations
+-: it is harder to interpret than a small linear model such as logistic regression
+-: it can struggle with extrapolation beyond the range covered by training data
+<!-- /position -->
+
+<!-- position={row: 1, column: 2} -->
+<div id="rf-when-to-use-plot" style="width: 100%; height: 650px; border: 1px solid #2d3a66; border-radius: 12px; background: rgba(15,23,42,0.85);"></div>
+-= Trade-off sketch: interpretability versus flexibility (and why extrapolation can be tricky for trees).
+
+<script>
+(function() {
+  const containerId = 'rf-when-to-use-plot';
+  const slideId = 'random-forest-13-strengths-limitations';
+
+  function draw() {
+    if (typeof d3 === 'undefined' || typeof plotUtils === 'undefined') {
+      setTimeout(draw, 80);
+      return;
+    }
+    const container = document.getElementById(containerId);
+    if (!container) return;
+
+    const width = 680;
+    const height = 650;
+    const margin = { top: 36, right: 32, bottom: 70, left: 78 };
+    const fig = plotUtils.createFigure(containerId, width, height, margin);
+
+    d3.select(`#${containerId} svg`)
+      .style('background-color', 'var(--ml-panel-bg)')
+      .style('border-radius', '12px');
+
+    const theme = {
+      border: 'var(--ml-panel-border)',
+      text: 'var(--ml-text)',
+      muted: 'var(--ml-muted)',
+      cyan: 'var(--ml-accent-cyan)',
+      magenta: 'var(--ml-accent-magenta)',
+      green: 'var(--ml-accent-green)',
+      orange: 'var(--ml-accent-orange)'
+    };
+
+    const x = d3.scaleLinear().domain([0, 10]).range([0, fig.width]);
+    const y = d3.scaleLinear().domain([0, 10]).range([fig.height, 0]);
+
+    const xAxis = d3.axisBottom(x).ticks(5);
+    const yAxis = d3.axisLeft(y).ticks(5);
+
+    fig.svg.append('g')
+      .attr('transform', `translate(0, ${fig.height})`)
+      .call(xAxis);
+    fig.svg.append('g')
+      .call(yAxis);
+
+    fig.svg.selectAll('.tick text')
+      .style('fill', theme.muted)
+      .style('font-size', '12px');
+    fig.svg.selectAll('.domain, .tick line')
+      .style('stroke', theme.border)
+      .style('stroke-width', 2);
+
+    // Quadrant hints.
+    fig.svg.append('rect')
+      .attr('x', x(0)).attr('y', y(10))
+      .attr('width', x(10) - x(0))
+      .attr('height', y(0) - y(10))
+      .attr('fill', 'var(--ml-surface)')
+      .attr('stroke', theme.border)
+      .attr('stroke-width', 2)
+      .attr('rx', 12);
+
+    fig.svg.append('line')
+      .attr('x1', x(5)).attr('x2', x(5))
+      .attr('y1', y(0)).attr('y2', y(10))
+      .attr('stroke', theme.border)
+      .attr('stroke-width', 2);
+    fig.svg.append('line')
+      .attr('x1', x(0)).attr('x2', x(10))
+      .attr('y1', y(5)).attr('y2', y(5))
+      .attr('stroke', theme.border)
+      .attr('stroke-width', 2);
+
+    fig.svg.append('text')
+      .attr('x', x(2.5)).attr('y', y(9.4))
+      .attr('text-anchor', 'middle')
+      .style('fill', theme.muted)
+      .style('font-size', '11px')
+      .text('high flexibility');
+
+    fig.svg.append('text')
+      .attr('x', x(7.5)).attr('y', y(1.0))
+      .attr('text-anchor', 'middle')
+      .style('fill', theme.muted)
+      .style('font-size', '11px')
+      .text('high interpretability');
+
+    fig.svg.append('text')
+      .attr('x', x(5)).attr('y', fig.height + 46)
+      .attr('text-anchor', 'middle')
+      .style('fill', theme.muted)
+      .style('font-size', '12px')
+      .text('interpretability (easy to explain)  ->');
+
+    fig.svg.append('text')
+      .attr('x', -fig.height / 2)
+      .attr('y', -54)
+      .attr('transform', 'rotate(-90)')
+      .attr('text-anchor', 'middle')
+      .style('fill', theme.muted)
+      .style('font-size', '12px')
+      .text('flexibility (captures interactions)  ->');
+
+    const models = [
+      { name: 'Logistic regression', x: 8.2, y: 3.0, color: theme.cyan, note: 'simple, interpretable' },
+      { name: 'Random forest', x: 4.2, y: 8.2, color: theme.green, note: 'flexible boundary' }
+    ];
+
+    const g = fig.svg.append('g');
+    g.selectAll('circle.model')
+      .data(models)
+      .enter()
+      .append('circle')
+      .attr('class', 'model')
+      .attr('cx', d => x(d.x))
+      .attr('cy', d => y(d.y))
+      .attr('r', 9)
+      .attr('fill', d => d.color)
+      .attr('opacity', 0.9)
+      .attr('stroke', '#ffffff')
+      .attr('stroke-width', 2);
+
+    g.selectAll('text.label')
+      .data(models)
+      .enter()
+      .append('text')
+      .attr('class', 'label')
+      .attr('x', d => x(d.x) + 14)
+      .attr('y', d => y(d.y) + 4)
+      .attr('text-anchor', 'start')
+      .style('fill', theme.text)
+      .style('font-size', '12px')
+      .text(d => d.name);
+
+    g.selectAll('text.note')
+      .data(models)
+      .enter()
+      .append('text')
+      .attr('class', 'note')
+      .attr('x', d => x(d.x) + 14)
+      .attr('y', d => y(d.y) + 22)
+      .attr('text-anchor', 'start')
+      .style('fill', theme.muted)
+      .style('font-size', '11px')
+      .text(d => d.note);
+
+    // Extrapolation callout: trees partition space, so outside the observed range the prediction is less reliable.
+    const call = fig.svg.append('g').attr('transform', `translate(${x(6.2)}, ${y(7.4)})`);
+    call.append('rect')
+      .attr('x', 0).attr('y', 0)
+      .attr('width', 240).attr('height', 96)
+      .attr('rx', 12)
+      .attr('fill', 'var(--ml-surface-2)')
+      .attr('stroke', theme.magenta)
+      .attr('stroke-width', 2);
+    call.append('text')
+      .attr('x', 12).attr('y', 26)
+      .attr('text-anchor', 'start')
+      .style('fill', theme.text)
+      .style('font-size', '12px')
+      .text('extrapolation warning');
+    call.append('text')
+      .attr('x', 12).attr('y', 50)
+      .attr('text-anchor', 'start')
+      .style('fill', theme.muted)
+      .style('font-size', '11px')
+      .text('trees predict using seen regions;');
+    call.append('text')
+      .attr('x', 12).attr('y', 70)
+      .attr('text-anchor', 'start')
+      .style('fill', theme.muted)
+      .style('font-size', '11px')
+      .text('outside-range values can be risky');
+
+    fig.svg.append('line')
+      .attr('x1', x(5.0)).attr('y1', y(6.5))
+      .attr('x2', x(6.2)).attr('y2', y(7.4) + 30)
+      .attr('stroke', theme.magenta)
+      .attr('stroke-width', 2.4)
+      .attr('opacity', 0.9);
+  }
+
+  function register() {
+    if (typeof plotUtils === 'undefined') {
+      setTimeout(register, 80);
+      return;
+    }
+    plotUtils.renderOnSlideOnce({ slideId, containerId, draw });
+  }
+
+  register();
+})();
+</script>
+<!-- /position -->
+
+<!-- /layout -->
+
+---

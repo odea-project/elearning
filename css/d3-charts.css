@@ -19,6 +19,38 @@
   --d3-body-text-color: #9efcff;
   --d3-body-font-size: 14px;
   --d3-body-font-weight: 600;
+
+  /* MachineLearning slide palette (used in inline D3 figures) */
+  --ml-panel-bg: rgba(15,23,42,0.85);
+  --ml-panel-border: #2d3a66;
+  --ml-text: #ffffff;
+  --ml-muted: #9efcffcc;
+  --ml-accent-cyan: #00ffff;
+  --ml-accent-magenta: #ff05ff;
+  --ml-accent-green: #00ff94;
+  --ml-accent-orange: #ff6b35;
+  --ml-gray-soft: rgba(255,255,255,0.15);
+
+  /* Translucent fills tuned for dark neon panels */
+  --ml-surface: rgba(0,0,0,0.12);
+  --ml-surface-2: rgba(0,0,0,0.16);
+  --ml-grid: rgba(255,255,255,0.04);
+  --ml-stroke-muted: rgba(255,255,255,0.35);
+
+  --ml-accent-cyan-soft: rgba(0,255,255,0.10);
+  --ml-accent-cyan-soft-2: rgba(0,255,255,0.18);
+  --ml-accent-magenta-soft: rgba(255,5,255,0.10);
+  --ml-accent-magenta-soft-2: rgba(255,5,255,0.18);
+  --ml-accent-green-soft: rgba(0,255,148,0.16);
+  --ml-accent-green-soft-2: rgba(0,255,148,0.20);
+  --ml-accent-orange-soft: rgba(255,107,53,0.12);
+  --ml-accent-orange-soft-2: rgba(255,107,53,0.18);
+
+  /* Common callouts/legend styling inside SVG */
+  --ml-legend-bg: rgba(0,0,0,0.55);
+  --ml-stroke-soft: rgba(255,255,255,0.25);
+  --ml-accent-cyan-stroke-muted: rgba(0,255,255,0.35);
+  --ml-accent-magenta-stroke-muted: rgba(255,5,255,0.50);
 }
 
 .d3-axis text {

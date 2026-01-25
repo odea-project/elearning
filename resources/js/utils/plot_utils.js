@@ -78,21 +78,21 @@
 
       // 4) Inline-Styling: Neon-Cyan für Linien & „Press Start 2P“ für Texte
       fig.xAxisGroup.selectAll("path, line")
-        .style("stroke", "#0ff")
+        .style("stroke", "var(--d3-axis-line-color)")
         .style("stroke-width", "2px")
         .style("shape-rendering", "crispEdges");
       fig.xAxisGroup.selectAll("text")
-        .style("fill", "#0ff")
+        .style("fill", "var(--d3-axis-text-color)")
         .style("font-size", "14px")
         .style("font-family", "'Press Start 2P', monospace")
         .style("shape-rendering", "crispEdges");
 
       fig.yAxisGroup.selectAll("path, line")
-        .style("stroke", "#0ff")
+        .style("stroke", "var(--d3-axis-line-color)")
         .style("stroke-width", "2px")
         .style("shape-rendering", "crispEdges");
       fig.yAxisGroup.selectAll("text")
-        .style("fill", "#0ff")
+        .style("fill", "var(--d3-axis-text-color)")
         .style("font-size", "14px")
         .style("font-family", "'Press Start 2P', monospace")
         .style("shape-rendering", "crispEdges");
@@ -180,6 +180,71 @@
         x: +d.x,
         y: +d.y
       }));
+    },
+
+    /**
+     * Register a plot to render only when its slide is active, and only once.
+     * This prevents off-slide rendering and prevents redraws when revisiting slides.
+     *
+     * @param {object} opts
+     * @param {string} opts.slideId
+     * @param {string} opts.containerId
+     * @param {Function} opts.draw
+     * @param {Array<string>} [opts.deps]  Global names that must exist (default: ['d3','plotUtils','Reveal'])
+     * @param {number} [opts.pollMs]       Retry interval while deps/Reveal are not ready (default: 80)
+     */
+    renderOnSlideOnce: function (opts) {
+      const { slideId, containerId, draw, deps = ['d3', 'plotUtils', 'Reveal'], pollMs = 80 } = opts || {};
+      if (!slideId || !containerId || typeof draw !== 'function') return;
+
+      const cache = (plotUtils._renderOnce = plotUtils._renderOnce || {});
+      const key = `${slideId}::${containerId}`;
+      const state = (cache[key] = cache[key] || { registered: false, drawn: false });
+      if (state.registered) return;
+      state.registered = true;
+
+      function hasDeps() {
+        return deps.every((name) => typeof window[name] !== 'undefined');
+      }
+
+      function currentSlideId() {
+        if (!window.Reveal || typeof window.Reveal.getCurrentSlide !== 'function') return null;
+        const slide = window.Reveal.getCurrentSlide();
+        return slide ? slide.getAttribute('id') : null;
+      }
+
+      function tryDraw() {
+        if (state.drawn) return;
+        if (!hasDeps()) {
+          setTimeout(tryDraw, pollMs);
+          return;
+        }
+        if (currentSlideId() !== slideId) return;
+        const container = document.getElementById(containerId);
+        if (!container) return;
+
+        state.drawn = true;
+        draw();
+      }
+
+      function onSlideChanged(event) {
+        if (state.drawn) return;
+        if (!event || !event.currentSlide) return;
+        if (event.currentSlide.getAttribute('id') !== slideId) return;
+        tryDraw();
+      }
+
+      if (window.Reveal && typeof window.Reveal.on === 'function') {
+        window.Reveal.on('ready', tryDraw);
+        window.Reveal.on('slidechanged', onSlideChanged);
+      } else {
+        // Fallback: Reveal not available (e.g. standalone render).
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', tryDraw);
+        } else {
+          setTimeout(tryDraw, 0);
+        }
+      }
     },
 
     /**

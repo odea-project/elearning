@@ -26,13 +26,48 @@ body.performance-mode {
   --r-link-color-hover: #0000cc;
   --r-selection-background-color: #b3d4fc;
   --r-selection-color: #000000;
-  --d3-axis-text-color: rgb(0, 122, 126);
-  --d3-axis-label-text-color: rgb(0, 122, 126);
-  --d3-axis-line-color: rgb(0, 122, 126);
+  /* Match the "good" ML slides: dark axes on white background */
+  --d3-axis-text-color: #111827;
+  --d3-axis-label-text-color: #111827;
+  --d3-axis-line-color: #111827;
   --d3-title-color: #000000;
   --d3-subtitle-color: #333333;
   --d3-legend-text-color: #000000;
   --d3-body-text-color: #000000;
+
+  /* MachineLearning slide palette overrides */
+  --ml-panel-bg: #ffffff;
+  --ml-panel-border: #000000;
+  --ml-text: #000000;
+  --ml-muted: #222222;
+
+  /* Saturated accents that work on white */
+  --ml-accent-cyan: #0ea5e9;
+  --ml-accent-magenta: #a21caf;
+  --ml-accent-green: #10b981;
+  --ml-accent-orange: #f97316;
+  --ml-gray-soft: rgba(0,0,0,0.22);
+
+  /* Translucent fills tuned for light backgrounds */
+  --ml-surface: rgba(0,0,0,0.06);
+  --ml-surface-2: rgba(0,0,0,0.10);
+  --ml-grid: rgba(0,0,0,0.06);
+  --ml-stroke-muted: rgba(0,0,0,0.45);
+
+  --ml-accent-cyan-soft: rgba(14,165,233,0.18);
+  --ml-accent-cyan-soft-2: rgba(14,165,233,0.26);
+  --ml-accent-magenta-soft: rgba(162,28,175,0.18);
+  --ml-accent-magenta-soft-2: rgba(162,28,175,0.26);
+  --ml-accent-green-soft: rgba(16,185,129,0.18);
+  --ml-accent-green-soft-2: rgba(16,185,129,0.26);
+  --ml-accent-orange-soft: rgba(249,115,22,0.18);
+  --ml-accent-orange-soft-2: rgba(249,115,22,0.26);
+
+  /* Common callouts/legend styling inside SVG */
+  --ml-legend-bg: rgba(255,255,255,0.90);
+  --ml-stroke-soft: rgba(0,0,0,0.25);
+  --ml-accent-cyan-stroke-muted: rgba(14,165,233,0.55);
+  --ml-accent-magenta-stroke-muted: rgba(162,28,175,0.55);
 }
 
 /* ========================================
