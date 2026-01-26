@@ -284,8 +284,8 @@ Because perception becomes data, and data enables model-based inference.
 -! Linear regression is not probability-aware
 -: can output < 0 or > 1
 
--< Instead, we need a model that outputs valid probabilities
--: between 0 and 1
+-! Key idea (logistic regression)
+-: map it to a probability: $p(y=1|x)=\\sigma(z) \\in [0,1]$
 <!-- /position -->
 <!-- position={row: 1, column: 2} -->
 <div id="logreg-motivation-plot"></div>
@@ -408,21 +408,22 @@ Because perception becomes data, and data enables model-based inference.
 ---
 
 <!-- .slide:id="logistic-regression-02-linear-to-logistic" -->
-## The Score z (Before Probabilities)
+## The Sigmoid Function (Logistic Function)
 <!-- layout={rows: 1, columns: 2} -->
 <!-- position={row: 1, column: 1} -->
--! z is an evidence scale
--: one number per sample (can be any real value)
+-! Instead using a linear function like
+
+$$ y\_{hat} = \\beta_0 + \\beta_1 x + ... + \\beta_n x_n $$
+
+-: with $y\_{hat} \\in (-\\infty, +\\infty)$
 
 ***
 
--! z is not a probability
--: it is not constrained to [0,1]
+-! We use a logistic (sigmoid) function to map to [0,1]:
 
-***
+$$ y\_{hat} = \\frac{1}{1 + e^{-(\\beta_0 + \\beta_1 x + ... + \\beta_n x_n)}} = \\frac{1}{1 + e^{-z}} = \\sigma(z) $$
 
--! z must be transformed
--: before decisions are possible
+-: with $y\_{hat} \\in [0, 1]$
 
 <!-- /position -->
 <!-- position={row: 1, column: 2} -->
@@ -437,8 +438,8 @@ Because perception becomes data, and data enables model-based inference.
     const container = document.getElementById(containerId);
     if (!container) return;
 
-    const width = 780;
-    const height = 820;
+    const width = 680;
+    const height = 720;
     const margin = { top: 40, right: 26, bottom: 70, left: 70 };
     const fig = plotUtils.createFigure(containerId, width, height, margin);
 
@@ -447,6 +448,9 @@ Because perception becomes data, and data enables model-based inference.
     d3.select(`#${containerId} svg`)
       .style('background-color', 'var(--ml-panel-bg)')
       .style('border-radius', '12px');
+
+    const sigmoid = (z) => 1 / (1 + Math.exp(-z));
+    const curve = d3.range(-4, 4.001, 0.03).map(z => ({ z, p: sigmoid(z) }));
 
     fig.svg.append('line')
       .attr('x1', fig.xScale(-4)).attr('x2', fig.xScale(4))
@@ -460,6 +464,16 @@ Because perception becomes data, and data enables model-based inference.
       .attr('stroke', 'var(--ml-stroke-soft)')
       .attr('stroke-width', 2)
       .attr('stroke-dasharray', '6 6');
+
+    fig.svg.append('path')
+      .datum(curve)
+      .attr('fill', 'none')
+      .attr('stroke', 'var(--ml-accent-cyan)')
+      .attr('stroke-width', 5)
+      .attr('opacity', 0.9)
+      .attr('d', d3.line()
+        .x(d => fig.xScale(d.z))
+        .y(d => fig.yScale(d.p)));
 
     const points = [
       { z: -2.8, y: 0, cls: 0 },
@@ -500,14 +514,7 @@ Because perception becomes data, and data enables model-based inference.
       .style('fill', 'var(--d3-axis-label-text-color)')
       .style('font-family', "'Press Start 2P', monospace")
       .style('font-size', '12px')
-      .text('label (0/1)');
-
-    fig.svg.append('text')
-      .attr('x', fig.xScale(0.6))
-      .attr('y', fig.yScale(1.3))
-      .style('fill', 'var(--ml-muted)')
-      .style('font-size', '12px')
-      .text('higher z -> higher risk');
+      .text('p(y=1|x) / label');
   }
 
   function register() {
@@ -516,6 +523,365 @@ Because perception becomes data, and data enables model-based inference.
       return;
     }
     plotUtils.renderOnSlideOnce({ slideId, containerId, draw });
+  }
+
+  register();
+})();
+</script>
+<!-- /position -->
+<!-- /layout -->
+
+---
+
+<!-- .slide:id="logistic-regression-03-nonlinear" -->
+## The Sigmoid Function - Nonlinear Mapping
+<!-- layout={rows: 1, columns: 2} -->
+<!-- position={row: 1, column: 1} -->
+We know how to fit linear models:
+
+$$ \beta = (X^TX)^{-1}X^Ty $$
+
+-: with $\beta$ = coefficients, $X$ = features, $y$ = labels
+
+***
+
+But now we have a nonlinear mapping, so we need a different approach.
+-: use iterative optimization (gradient ascent):
+
+$$ \beta^{(i+1)} = \beta^{(i)} + \\eta X^T (y - \\sigma(X\\beta^{(i)})) $$
+-: with learning rate $\\eta$, typically small (e.g., 0.01)
+-: repeat until convergence
+<!-- /position -->
+<!-- position={row: 1, column: 2} -->
+<div style="display: grid; gap: 12px;">
+  <div style="display: flex; gap: 10px; align-items: center; justify-content: space-between;">
+    <div style="display: flex; gap: 10px; align-items: center;">
+      <button id="logreg-nonlinear-step" style="padding: 10px 14px; border-radius: 10px; border: 1px solid var(--ml-panel-border); background: rgba(0,255,255,0.12); color: var(--ml-text); font-weight: 800; cursor: pointer;">
+        Step
+      </button>
+      <button id="logreg-nonlinear-reset" style="padding: 10px 14px; border-radius: 10px; border: 1px solid var(--ml-panel-border); background: rgba(255,255,255,0.06); color: var(--ml-text); font-weight: 800; cursor: pointer;">
+        Reset
+      </button>
+      <div id="logreg-nonlinear-status" style="font-size: 0.6em; color: var(--ml-muted); font-weight: 700;">
+        iter: 0 | eta: 0.20
+      </div>
+    </div>
+    <div id="logreg-nonlinear-beta" style="font-size: 0.6em; color: var(--ml-text); font-weight: 800; text-align: right;">
+      beta = [0.00, 0.00, 0.00, 0.00]
+    </div>
+  </div>
+
+  <div id="logreg-nonlinear-plot" style="width: 100%; height: 420px;"></div>
+
+  <div>
+    <div style="display: flex; justify-content: space-between; gap: 10px; margin-bottom: 8px;">
+      <div id="logreg-nonlinear-grad" style="font-size: 0.6em; color: var(--ml-muted); font-weight: 700; text-align: right;">
+      </div>
+    </div>
+    <div style="max-height: 360px; overflow: auto; border-radius: 10px;">
+      <table id="logreg-nonlinear-table" style="width: 100%; border-collapse: collapse; font-size: 0.5em; color: var(--ml-text);">
+        <!-- filled by script -->
+      </table>
+    </div>
+  </div>
+</div>
+
+<script>
+(function() {
+  const slideId = 'logistic-regression-03-nonlinear';
+  const plotId = 'logreg-nonlinear-plot';
+  const stepId = 'logreg-nonlinear-step';
+  const resetId = 'logreg-nonlinear-reset';
+  const statusId = 'logreg-nonlinear-status';
+  const betaId = 'logreg-nonlinear-beta';
+  const tableId = 'logreg-nonlinear-table';
+  const gradId = 'logreg-nonlinear-grad';
+
+  const eta = 0.20;
+  const data = [
+    // From the bathing-water scenario dataset (last days).
+    { rain: 0, turbidity: 2.1, quick: 0.10, y: 0 },
+    { rain: 3, turbidity: 3.4, quick: 0.12, y: 0 },
+    { rain: 12, turbidity: 7.8, quick: 0.30, y: 1 },
+    { rain: 6, turbidity: 4.9, quick: 0.18, y: 0 },
+    { rain: 25, turbidity: 11.2, quick: 0.55, y: 1 },
+    { rain: 0, turbidity: 2.4, quick: 0.09, y: 0 },
+    { rain: 9, turbidity: 6.1, quick: 0.24, y: 1 },
+  ];
+
+  const sigmoid = (z) => 1 / (1 + Math.exp(-z));
+  const fmt = (v, digits = 2) => (Number.isFinite(v) ? v.toFixed(digits) : '-');
+
+  function mean(xs) {
+    return xs.reduce((a, b) => a + b, 0) / xs.length;
+  }
+
+  function stdev(xs, mu) {
+    const v = xs.reduce((acc, x) => acc + (x - mu) * (x - mu), 0) / xs.length;
+    return Math.sqrt(v);
+  }
+
+  const scales = (() => {
+    const rains = data.map(d => d.rain);
+    const turbs = data.map(d => d.turbidity);
+    const quicks = data.map(d => d.quick);
+
+    const muRain = mean(rains);
+    const muTurb = mean(turbs);
+    const muQuick = mean(quicks);
+
+    const sdRain = Math.max(1e-9, stdev(rains, muRain));
+    const sdTurb = Math.max(1e-9, stdev(turbs, muTurb));
+    const sdQuick = Math.max(1e-9, stdev(quicks, muQuick));
+
+    return {
+      rain: { mu: muRain, sd: sdRain },
+      turbidity: { mu: muTurb, sd: sdTurb },
+      quick: { mu: muQuick, sd: sdQuick },
+    };
+  })();
+
+  function standardize(value, spec) {
+    return (value - spec.mu) / spec.sd;
+  }
+
+  function compute(beta) {
+    const b = beta[0];
+    const wRain = beta[1];
+    const wTurb = beta[2];
+    const wQuick = beta[3];
+
+    const rows = data.map(d => {
+      const rainS = standardize(d.rain, scales.rain);
+      const turbS = standardize(d.turbidity, scales.turbidity);
+      const quickS = standardize(d.quick, scales.quick);
+
+      const z = b + wRain * rainS + wTurb * turbS + wQuick * quickS;
+      const p = sigmoid(z);
+      const err = d.y - p;
+
+      return {
+        ...d,
+        rainS,
+        turbS,
+        quickS,
+        z,
+        p,
+        err,
+        db: err,
+        dwRain: rainS * err,
+        dwTurb: turbS * err,
+        dwQuick: quickS * err,
+      };
+    });
+
+    const grad0 = rows.reduce((acc, r) => acc + r.db, 0);
+    const grad1 = rows.reduce((acc, r) => acc + r.dwRain, 0);
+    const grad2 = rows.reduce((acc, r) => acc + r.dwTurb, 0);
+    const grad3 = rows.reduce((acc, r) => acc + r.dwQuick, 0);
+
+    return { rows, grad: [grad0, grad1, grad2, grad3] };
+  }
+
+  function renderTable(tableEl, beta, nextBeta, rows) {
+    const headerStyle = 'text-align: right; padding: 6px 8px; border-bottom: 1px solid var(--ml-panel-border); position: sticky; top: 0;';
+    const cellStyleR = 'text-align: right; padding: 6px 8px; border-bottom: 1px solid rgba(255,255,255,0.08);';
+    const cellStyleC = 'text-align: center; padding: 6px 8px; border-bottom: 1px solid rgba(255,255,255,0.08);';
+
+    const head = `
+      <thead>
+        <tr>
+          <th style="${headerStyle}">rain</th>
+          <th style="${headerStyle}">turb.</th>
+          <th style="${headerStyle}">quick</th>
+          <th style="${headerStyle}; text-align:center;">y</th>
+          <th style="${headerStyle}">yhat</th>
+          <th style="${headerStyle}">y - yhat</th>
+        </tr>
+      </thead>
+    `;
+
+    const body = rows.map(r => `
+      <tr>
+        <td style="${cellStyleR}">${fmt(r.rain, 0)}</td>
+        <td style="${cellStyleR}">${fmt(r.turbidity, 1)}</td>
+        <td style="${cellStyleR}">${fmt(r.quick, 2)}</td>
+        <td style="${cellStyleC}">${r.y}</td>
+        <td style="${cellStyleR}">${fmt(r.p, 3)}</td>
+        <td style="${cellStyleR}">${fmt(r.err, 3)}</td>
+      </tr>
+    `).join('');
+
+    tableEl.innerHTML = head + `<tbody>${body}</tbody>`;
+  }
+
+  function draw() {
+    const plotContainer = document.getElementById(plotId);
+    const stepBtn = document.getElementById(stepId);
+    const resetBtn = document.getElementById(resetId);
+    const statusEl = document.getElementById(statusId);
+    const betaEl = document.getElementById(betaId);
+    const tableEl = document.getElementById(tableId);
+    const gradEl = document.getElementById(gradId);
+
+    if (!plotContainer || !stepBtn || !resetBtn || !statusEl || !betaEl || !tableEl || !gradEl) return;
+
+    // Avoid duplicate listeners if something re-renders the markdown.
+    if (plotContainer.dataset.bound === '1') return;
+    plotContainer.dataset.bound = '1';
+
+    let iter = 0;
+    let beta = [0, 0, 0, 0]; // [b, w_rain, w_turbidity, w_quick]
+
+    const turbSValues = data.map(d => standardize(d.turbidity, scales.turbidity));
+    const xMin = Math.min(...turbSValues) - 0.6;
+    const xMax = Math.max(...turbSValues) + 0.6;
+
+    const width = 780;
+    const height = 420;
+    const margin = { top: 30, right: 26, bottom: 60, left: 70 };
+    const fig = plotUtils.createFigure(plotId, width, height, margin);
+    plotUtils.addAxes(fig, [xMin, xMax], [-0.15, 1.15], 5, 5);
+
+    d3.select(`#${plotId} svg`)
+      .style('background-color', 'var(--ml-panel-bg)')
+      .style('border-radius', '12px');
+
+    // Reference lines at y=0 and y=1.
+    fig.svg.append('line')
+      .attr('x1', fig.xScale(xMin)).attr('x2', fig.xScale(xMax))
+      .attr('y1', fig.yScale(0)).attr('y2', fig.yScale(0))
+      .attr('stroke', 'var(--ml-stroke-soft)')
+      .attr('stroke-width', 2)
+      .attr('stroke-dasharray', '6 6');
+    fig.svg.append('line')
+      .attr('x1', fig.xScale(xMin)).attr('x2', fig.xScale(xMax))
+      .attr('y1', fig.yScale(1)).attr('y2', fig.yScale(1))
+      .attr('stroke', 'var(--ml-stroke-soft)')
+      .attr('stroke-width', 2)
+      .attr('stroke-dasharray', '6 6');
+
+    // Fixed points (x = turbidity (standardized), y = label).
+    const pointsSelection = fig.svg.append('g')
+      .selectAll('circle')
+      .data(data)
+      .enter()
+      .append('circle')
+      .attr('cx', d => fig.xScale(standardize(d.turbidity, scales.turbidity)))
+      .attr('cy', d => fig.yScale(d.y))
+      .attr('r', 7)
+      .attr('fill', d => d.y === 1 ? 'var(--ml-accent-green)' : 'var(--ml-accent-orange)')
+      .attr('stroke', 'var(--ml-text)')
+      .attr('stroke-width', 2)
+      .attr('opacity', 0.95);
+
+    // Logistic curve p(y=1|x) while varying turbidity; others held at mean (0 after standardization).
+    const curvePath = fig.svg.append('path')
+      .attr('fill', 'none')
+      .attr('stroke', 'var(--ml-accent-cyan)')
+      .attr('stroke-width', 5)
+      .attr('opacity', 0.92);
+
+    // Threshold p = 0.5.
+    fig.svg.append('line')
+      .attr('x1', fig.xScale(xMin)).attr('x2', fig.xScale(xMax))
+      .attr('y1', fig.yScale(0.5)).attr('y2', fig.yScale(0.5))
+      .attr('stroke', 'rgba(255,255,255,0.18)')
+      .attr('stroke-width', 2);
+
+    const betaText = fig.svg.append('text')
+      .attr('x', fig.xScale(xMin + 0.1))
+      .attr('y', fig.yScale(1.08))
+      .style('fill', 'var(--ml-muted)')
+      .style('font-size', '12px')
+      .style('font-family', "'Press Start 2P', monospace");
+
+    // Axis labels.
+    fig.svg.append('text')
+      .attr('x', fig.width / 2)
+      .attr('y', fig.height + 48)
+      .attr('text-anchor', 'middle')
+      .style('fill', 'var(--d3-axis-label-text-color)')
+      .style('font-family', "'Press Start 2P', monospace")
+      .style('font-size', '12px')
+      .text('turbidity (standardized), other features fixed');
+
+    fig.svg.append('text')
+      .attr('x', -fig.height / 2)
+      .attr('y', -55)
+      .attr('transform', 'rotate(-90)')
+      .attr('text-anchor', 'middle')
+      .style('fill', 'var(--d3-axis-label-text-color)')
+      .style('font-family', "'Press Start 2P', monospace")
+      .style('font-size', '12px')
+      .text('label (0/1) + curve p(y=1|x)');
+
+    function updatePlot() {
+      const { rows } = compute(beta);
+
+      const curve = d3.range(xMin, xMax + 1e-9, 0.03).map(x => ({
+        x,
+        p: sigmoid(beta[0] + beta[2] * x)
+      }));
+
+      curvePath
+        .datum(curve)
+        .attr('d', d3.line()
+          .x(d => fig.xScale(d.x))
+          .y(d => fig.yScale(d.p)));
+
+      // Keep label points fixed on x=turbidity.
+      pointsSelection
+        .data(rows)
+        .attr('cx', r => fig.xScale(r.turbS));
+    }
+
+    function render() {
+      const { rows, grad } = compute(beta);
+      const nextBeta = [
+        beta[0] + eta * grad[0],
+        beta[1] + eta * grad[1],
+        beta[2] + eta * grad[2],
+        beta[3] + eta * grad[3],
+      ];
+
+      statusEl.textContent = `iter: ${iter} | eta: ${eta.toFixed(2)}`;
+      betaEl.textContent = `beta = [${fmt(beta[0], 2)}, ${fmt(beta[1], 2)}, ${fmt(beta[2], 2)}, ${fmt(beta[3], 2)}]`;
+
+      renderTable(tableEl, beta, nextBeta, rows);
+      updatePlot();
+    }
+
+    function step() {
+      const { grad } = compute(beta);
+      beta = [
+        beta[0] + eta * grad[0],
+        beta[1] + eta * grad[1],
+        beta[2] + eta * grad[2],
+        beta[3] + eta * grad[3],
+      ];
+      iter += 1;
+      render();
+    }
+
+    function reset() {
+      iter = 0;
+      beta = [0, 0, 0, 0];
+      render();
+    }
+
+    stepBtn.addEventListener('click', step);
+    resetBtn.addEventListener('click', reset);
+
+    render();
+  }
+
+  function register() {
+    if (typeof plotUtils === 'undefined') {
+      setTimeout(register, 80);
+      return;
+    }
+    plotUtils.renderOnSlideOnce({ slideId, containerId: plotId, draw });
   }
 
   register();
@@ -833,458 +1199,6 @@ Because perception becomes data, and data enables model-based inference.
       .style('fill', theme.text)
       .style('font-size', '12px')
       .text('right = positive');
-  }
-
-  function register() {
-    if (typeof plotUtils === 'undefined') {
-      setTimeout(register, 80);
-      return;
-    }
-    plotUtils.renderOnSlideOnce({ slideId, containerId, draw });
-  }
-
-  register();
-})();
-</script>
-<!-- /position -->
-<!-- /layout -->
-
----
-
-<!-- .slide:id="logistic-regression-05-decision-boundary" -->
-## Decision Boundary
-<!-- layout={rows: 1, columns: 2} -->
-<!-- position={row: 1, column: 1} -->
--! Probability field, not a hard split
--: color shows p(exceedance)
-
-***
-
--! Boundary is secondary
--: it is where p reaches a policy-chosen threshold
-
-***
-
--! Policy defines the decision threshold
--: which sets the boundary location
-<!-- /position -->
-<!-- position={row: 1, column: 2} -->
-<div id="logreg-decision-boundary-plot" style="width: 100%; height: 520px; border: 1px solid #2d3a66; border-radius: 12px; background: rgba(15,23,42,0.85);"></div>
-
-<script>
-(function() {
-  const containerId = 'logreg-decision-boundary-plot';
-  const slideId = 'logistic-regression-05-decision-boundary';
-
-  function getTheme() {
-    const isPerformanceMode = document.body.classList.contains('performance-mode');
-    return isPerformanceMode ? {
-      panel: '#f7f7f4',
-      border: '#111827',
-      axis: '#111827',
-      text: '#111827',
-      boundary: '#111827',
-      class0: '#f97316',
-      class1: '#10b981',
-      shade0: 'rgba(249,115,22,0.16)',
-      shade1: 'rgba(16,185,129,0.16)'
-    } : {
-      panel: 'rgba(15,23,42,0.85)',
-      border: '#2d3a66',
-      axis: '#0ff',
-      text: '#9efcff',
-      boundary: '#9efcff',
-      class0: '#ff6b35',
-      class1: '#00ff94',
-      shade0: 'rgba(255,107,53,0.16)',
-      shade1: 'rgba(0,255,148,0.16)'
-    };
-  }
-
-  function draw() {
-    const container = document.getElementById(containerId);
-    if (!container) return;
-
-    const theme = getTheme();
-    container.style.backgroundColor = theme.panel;
-    container.style.borderColor = theme.border;
-
-    const width = 640;
-    const height = 520;
-    const margin = { top: 40, right: 40, bottom: 80, left: 80 };
-    const fig = plotUtils.createFigure(containerId, width, height, margin);
-
-    const xDomain = [0, 10];
-    const yDomain = [0, 10];
-    const xScale = d3.scaleLinear().domain(xDomain).range([0, fig.width]);
-    const yScale = d3.scaleLinear().domain(yDomain).range([fig.height, 0]);
-
-    const xAxis = d3.axisBottom(xScale).ticks(6);
-    const yAxis = d3.axisLeft(yScale).ticks(6);
-    const xAxisGroup = fig.svg.append('g')
-      .attr('transform', `translate(0, ${fig.height})`)
-      .call(xAxis);
-    const yAxisGroup = fig.svg.append('g').call(yAxis);
-
-    xAxisGroup.selectAll('path, line').style('stroke', theme.axis).style('stroke-width', '2px');
-    yAxisGroup.selectAll('path, line').style('stroke', theme.axis).style('stroke-width', '2px');
-    xAxisGroup.selectAll('text')
-      .style('fill', theme.axis)
-      .style('font-size', '12px')
-      .style('font-family', "'Press Start 2P', monospace");
-    yAxisGroup.selectAll('text')
-      .style('fill', theme.axis)
-      .style('font-size', '12px')
-      .style('font-family', "'Press Start 2P', monospace");
-
-    const defs = fig.svg.append('defs');
-    const grad = defs.append('linearGradient')
-      .attr('id', `${containerId}-shade`)
-      .attr('x1', '0%')
-      .attr('y1', '0%')
-      .attr('x2', '100%')
-      .attr('y2', '0%');
-    grad.append('stop').attr('offset', '0%').attr('stop-color', theme.shade0);
-    grad.append('stop').attr('offset', '100%').attr('stop-color', theme.shade1);
-
-    fig.svg.append('rect')
-      .attr('x', 0)
-      .attr('y', 0)
-      .attr('width', fig.width)
-      .attr('height', fig.height)
-      .attr('rx', 12)
-      .attr('fill', `url(#${containerId}-shade)`)
-      .attr('stroke', theme.border)
-      .attr('stroke-width', 2);
-
-    const boundary = [
-      { x: 1, y: 9 },
-      { x: 9, y: 2 }
-    ];
-      fig.svg.append('path')
-        .datum(boundary)
-        .attr('fill', 'none')
-        .attr('stroke', theme.boundary)
-        .attr('stroke-width', 2)
-        .attr('stroke-dasharray', '8 6')
-        .attr('opacity', 0.55)
-        .attr('d', d3.line().x(d => xScale(d.x)).y(d => yScale(d.y)));
-
-    const points = [
-      { x: 1.6, y: 2.2, cls: 0 },
-      { x: 2.6, y: 2.8, cls: 0 },
-      { x: 3.4, y: 2.0, cls: 0 },
-      { x: 2.8, y: 4.2, cls: 0 },
-      { x: 7.4, y: 6.9, cls: 1 },
-      { x: 8.3, y: 6.1, cls: 1 },
-      { x: 9.0, y: 7.6, cls: 1 },
-      { x: 7.6, y: 4.7, cls: 1 }
-    ];
-
-    fig.svg.append('g')
-      .selectAll('circle')
-      .data(points)
-      .enter()
-      .append('circle')
-      .attr('cx', d => xScale(d.x))
-      .attr('cy', d => yScale(d.y))
-      .attr('r', 7)
-      .attr('fill', d => d.cls === 1 ? theme.class1 : theme.class0)
-      .attr('stroke', theme.text)
-      .attr('stroke-width', 2)
-      .attr('opacity', 0.95);
-
-    fig.svg.append('text')
-      .attr('x', 10)
-      .attr('y', fig.height + 55)
-      .style('fill', theme.text)
-      .style('font-size', '12px')
-      .text('probability shading');
-
-  }
-
-  function register() {
-    if (typeof plotUtils === 'undefined') {
-      setTimeout(register, 80);
-      return;
-    }
-    plotUtils.renderOnSlideOnce({ slideId, containerId, draw });
-  }
-
-  register();
-})();
-</script>
-<!-- /position -->
-<!-- /layout -->
-
----
-
-<!-- .slide:id="logistic-regression-06-training" -->
-## Training the Model
-<!-- layout={rows: 1, columns: 2} -->
-<!-- position={row: 1, column: 1} -->
--! Training adjusts the weights
--: to match probabilities to observed outcomes
-
-***
-
--! Two states to remember
--: before training vs after training
-
-***
-
--! Goal
--: better alignment (especially near overlap)
-<!-- /position -->
-<!-- position={row: 1, column: 2} -->
-<div id="logreg-training-loss-plot" style="width: 100%; height: 520px; border: 1px solid #2d3a66; border-radius: 12px; background: rgba(15,23,42,0.85);"></div>
-
-<script>
-(function() {
-  const containerId = 'logreg-training-loss-plot';
-  const slideId = 'logistic-regression-06-training';
-
-  function getTheme() {
-    const isPerformanceMode = document.body.classList.contains('performance-mode');
-    return isPerformanceMode ? {
-      panel: '#f7f7f4',
-      border: '#111827',
-      axis: '#111827',
-      text: '#111827',
-      y1: '#10b981',
-      y0: '#f97316',
-      hint: '#111827'
-    } : {
-      panel: 'rgba(15,23,42,0.85)',
-      border: '#2d3a66',
-      axis: '#0ff',
-      text: '#9efcff',
-      y1: '#00ff94',
-      y0: '#ff6b35',
-      hint: '#9efcff'
-    };
-  }
-
-  function draw() {
-    const container = document.getElementById(containerId);
-    if (!container) return;
-
-    const theme = getTheme();
-    container.style.backgroundColor = theme.panel;
-    container.style.borderColor = theme.border;
-
-    const width = 640;
-    const height = 520;
-    const margin = { top: 50, right: 40, bottom: 90, left: 90 };
-    const fig = plotUtils.createFigure(containerId, width, height, margin);
-
-    // Curated visual: before vs after training (no loss curves, no formulas).
-    plotUtils.addAxes(fig, [0, 10], [-0.1, 1.1], 6, 6);
-
-    const points = [
-      { x: 4.8, y: 0, cls: 0 },
-      { x: 5.4, y: 1, cls: 1 },
-      { x: 7.6, y: 1, cls: 1 },
-    ];
-
-    fig.svg.append('g')
-      .selectAll('circle')
-      .data(points)
-      .enter()
-      .append('circle')
-      .attr('cx', d => fig.xScale(d.x))
-      .attr('cy', d => fig.yScale(d.y))
-      .attr('r', 7)
-      .attr('fill', d => d.cls === 1 ? theme.y1 : theme.y0)
-      .attr('stroke', theme.text)
-      .attr('stroke-width', 2)
-      .attr('opacity', 0.95);
-
-    const sigmoid = (t) => 1 / (1 + Math.exp(-t));
-    const curveX = d3.range(0, 10.001, 0.05);
-    const curveBefore = curveX.map(x => ({ x, p: sigmoid((x - 6.2) * 0.9) }));
-    const curveAfter = curveX.map(x => ({ x, p: sigmoid((x - 5.4) * 1.4) }));
-
-    const line = d3.line()
-      .x(d => fig.xScale(d.x))
-      .y(d => fig.yScale(d.p));
-
-    fig.svg.append('path')
-      .datum(curveBefore)
-      .attr('d', line)
-      .attr('fill', 'none')
-      .attr('stroke', theme.y0)
-      .attr('stroke-width', 5)
-      .attr('stroke-dasharray', '10 8')
-      .attr('opacity', 0.9);
-
-    fig.svg.append('path')
-      .datum(curveAfter)
-      .attr('d', line)
-      .attr('fill', 'none')
-      .attr('stroke', theme.y1)
-      .attr('stroke-width', 5)
-      .attr('opacity', 0.95);
-
-    fig.svg.append('text')
-      .attr('x', fig.xScale(7.2))
-      .attr('y', fig.yScale(0.18))
-      .style('fill', theme.text)
-      .style('font-size', '12px')
-      .text('before');
-
-    fig.svg.append('text')
-      .attr('x', fig.xScale(6.1))
-      .attr('y', fig.yScale(0.78))
-      .style('fill', theme.text)
-      .style('font-size', '12px')
-      .text('after');
-
-    return;
-
-  }
-
-  function register() {
-    if (typeof plotUtils === 'undefined') {
-      setTimeout(register, 80);
-      return;
-    }
-    plotUtils.renderOnSlideOnce({ slideId, containerId, draw });
-  }
-
-  register();
-})();
-</script>
-<!-- /position -->
-<!-- /layout -->
-
----
-
-<!-- .slide:id="logistic-regression-07-strengths-limitations" -->
-## When to Use Logistic Regression
-<!-- layout={rows: 1, columns: 2} -->
-<!-- position={row: 1, column: 1} -->
--! Default baseline model
--: simple, transparent, trustworthy
-
-***
-
--! Works best when effects are roughly monotonic
--: and interactions are not dominant
-
-***
-
--! Use probabilities responsibly
--: calibrate and pick thresholds with domain costs
-<!-- /position -->
-<!-- position={row: 1, column: 2} -->
-<div id="logreg-strengths-plot" style="width: 100%; height: 520px; border: 1px solid #2d3a66; border-radius: 12px; background: rgba(15,23,42,0.0);"></div>
-
-<script>
-(function() {
-  const containerId = 'logreg-strengths-plot';
-  const slideId = 'logistic-regression-07-strengths-limitations';
-
-  function getTheme() {
-    const isPerformanceMode = document.body.classList.contains('performance-mode');
-    return isPerformanceMode ? {
-      panel: '#f7f7f4',
-      border: '#111827',
-      text: '#111827',
-      header: '#111827',
-      good: '#10b981',
-      bad: '#f97316',
-      divider: '#111827'
-    } : {
-      panel: 'rgba(15,23,42,0.85)',
-      border: '#2d3a66',
-      text: '#9efcff',
-      header: '#ffffff',
-      good: '#00ff94',
-      bad: '#ff6b35',
-      divider: '#2d3a66'
-    };
-  }
-
-    function draw() {
-      const container = document.getElementById(containerId);
-      if (!container) return;
-
-    const theme = getTheme();
-    container.style.backgroundColor = theme.panel;
-    container.style.borderColor = theme.border;
-
-    const width = 640;
-    const height = 520;
-    const margin = { top: 50, right: 40, bottom: 60, left: 40 };
-    const fig = plotUtils.createFigure(containerId, width, height, margin);
-
-    fig.svg.append('rect')
-      .attr('x', 0)
-      .attr('y', 0)
-      .attr('width', fig.width)
-      .attr('height', fig.height)
-      .attr('rx', 12)
-      .attr('fill', 'none')
-      .attr('stroke', theme.border)
-      .attr('stroke-width', 2);
-
-    const mid = fig.width / 2;
-    fig.svg.append('line')
-      .attr('x1', mid)
-      .attr('x2', mid)
-      .attr('y1', 0)
-      .attr('y2', fig.height)
-      .attr('stroke', theme.divider)
-      .attr('stroke-width', 2);
-
-    fig.svg.append('text')
-      .attr('x', mid / 2)
-      .attr('y', 30)
-      .attr('text-anchor', 'middle')
-      .style('fill', theme.header)
-      .style('font-size', '18px')
-      .style('font-family', "'Press Start 2P', monospace")
-      .text('Logistic');
-
-    fig.svg.append('text')
-      .attr('x', mid + mid / 2)
-      .attr('y', 30)
-      .attr('text-anchor', 'middle')
-      .style('fill', theme.header)
-      .style('font-size', '18px')
-      .style('font-family', "'Press Start 2P', monospace")
-      .text('Random Forest');
-
-    const leftItems = [
-      { text: 'interpretable', color: theme.good },
-      { text: 'fast, small data', color: theme.good },
-      { text: 'linear boundary', color: theme.bad }
-    ];
-    const rightItems = [
-      { text: 'flexible boundary', color: theme.good },
-      { text: 'handles interactions', color: theme.good },
-      { text: 'less transparent', color: theme.bad }
-    ];
-
-    const lineHeight = 42;
-    leftItems.forEach((item, i) => {
-      fig.svg.append('text')
-        .attr('x', 20)
-        .attr('y', 90 + i * lineHeight)
-        .style('fill', item.color)
-        .style('font-size', '16px')
-        .text(item.text);
-    });
-
-    rightItems.forEach((item, i) => {
-      fig.svg.append('text')
-        .attr('x', mid + 20)
-        .attr('y', 90 + i * lineHeight)
-        .style('fill', item.color)
-        .style('font-size', '16px')
-        .text(item.text);
-    });
   }
 
   function register() {
