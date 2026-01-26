@@ -86,6 +86,109 @@ Because perception becomes data, and data enables model-based inference.
 -: prioritize the highest-risk sites
 <!-- /position -->
 <!-- position={row: 1, column: 2} -->
+<div style="border: 1px solid var(--ml-panel-border); border-radius: 12px; padding: 12px; background: var(--ml-panel-bg); margin-bottom: 14px;">
+
+  <svg viewBox="0 0 700 400" width="700" height="400" style="width: 100%; height: auto; display: block;" role="img" aria-label="Bathing water after heavy rain: beach, rain cloud, runoff into water, and a warning sign">
+    <defs>
+      <linearGradient id="skyGrad" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#0b1222" />
+        <stop offset="100%" stop-color="#0f1b33" />
+      </linearGradient>
+      <linearGradient id="waterGrad" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#1b3b7a" />
+        <stop offset="100%" stop-color="#0b1e4a" />
+      </linearGradient>
+      <linearGradient id="sandGrad" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#b9864a" />
+        <stop offset="100%" stop-color="#8b5f2e" />
+      </linearGradient>
+      <filter id="softShadow" x="-20%" y="-20%" width="140%" height="140%">
+        <feDropShadow dx="0" dy="8" stdDeviation="10" flood-color="#000000" flood-opacity="0.35" />
+      </filter>
+      <pattern id="rainPattern" width="18" height="18" patternUnits="userSpaceOnUse" patternTransform="rotate(20)">
+        <line x1="2" y1="0" x2="2" y2="14" stroke="#7dd3fc" stroke-opacity="0.35" stroke-width="3" />
+        <line x1="10" y1="4" x2="10" y2="18" stroke="#7dd3fc" stroke-opacity="0.25" stroke-width="3" />
+      </pattern>
+    </defs>
+    <!-- sky -->
+    <rect x="0" y="0" width="700" height="250" fill="url(#skyGrad)" />
+    <!-- distant hills / city -->
+    <path d="M0,210 C80,185 140,205 220,190 C290,178 360,205 430,194 C520,180 590,205 700,188 L700,250 L0,250 Z"
+          fill="#0a1733" opacity="0.9" />
+    <g opacity="0.55">
+      <rect x="70" y="165" width="28" height="45" fill="#132a57" />
+      <rect x="106" y="150" width="36" height="60" fill="#10244c" />
+      <rect x="150" y="168" width="22" height="42" fill="#163161" />
+      <rect x="520" y="158" width="40" height="52" fill="#10244c" />
+      <rect x="566" y="172" width="26" height="38" fill="#132a57" />
+    </g>
+    <!-- rain cloud -->
+    <g filter="url(#softShadow)">
+      <path d="M210,90
+               C215,62 240,46 265,52
+               C275,34 300,26 320,38
+               C340,22 370,28 382,50
+               C404,48 420,62 422,84
+               C444,90 458,106 452,128
+               C448,156 420,172 392,166
+               L250,166
+               C222,170 198,150 200,122
+               C202,106 212,96 210,90 Z"
+            fill="#223555" stroke="#2f4a7a" stroke-width="3" />
+      <rect x="230" y="168" width="200" height="150" fill="url(#rainPattern)" opacity="0.9" />
+    </g>
+    <!-- sand -->
+    <path d="M0,250 C130,235 230,285 350,270 C460,256 560,300 700,275 L700,400 L0,400 Z"
+          fill="url(#sandGrad)" />
+    <!-- water -->
+    <path d="M0,260 C120,290 230,260 350,285 C470,310 560,275 700,300 L700,400 L0,400 Z"
+          fill="url(#waterGrad)" opacity="0.95" />
+    <path d="M0,292 C140,322 260,292 380,315 C520,342 590,315 700,335" fill="none" stroke="#5ea7ff" stroke-opacity="0.35" stroke-width="4" />
+    <path d="M0,330 C160,355 270,332 420,355 C560,378 610,360 700,380" fill="none" stroke="#5ea7ff" stroke-opacity="0.25" stroke-width="4" />
+    <!-- runoff arrow -->
+    <g opacity="0.95" filter="url(#softShadow)">
+      <path d="M430,220 C460,240 490,255 520,270" fill="none" stroke="#7c3aed" stroke-width="10" stroke-linecap="round" />
+      <path d="M520,270 L498,270 L512,254 Z" fill="#7c3aed" />
+      <text x="450" y="235" fill="#d8b4fe" font-size="18" font-weight="700" font-family="system-ui, -apple-system, Segoe UI, Roboto, Arial">
+        runoff after rain
+      </text>
+    </g>
+    <!-- warning sign -->
+    <g filter="url(#softShadow)">
+      <rect x="90" y="210" width="18" height="160" rx="6" fill="#334155" />
+      <path d="M70,235 L160,235 L160,300 L70,300 Z" fill="#0b1222" stroke="#fbbf24" stroke-width="6" />
+      <path d="M115,250 L145,285 L85,285 Z" fill="#fbbf24" />
+      <rect x="112" y="262" width="6" height="14" rx="3" fill="#0b1222" />
+      <circle cx="115" cy="282" r="4" fill="#0b1222" />
+      <text x="70" y="325" fill="#e2e8f0" font-size="16" font-weight="700" font-family="system-ui, -apple-system, Segoe UI, Roboto, Arial">
+        possible exceedance
+      </text>
+    </g>
+    <!-- lab + clock -->
+    <g opacity="0.95" filter="url(#softShadow)">
+      <rect x="520" y="38" width="150" height="70" rx="14" fill="#0b1222" stroke="#2f4a7a" stroke-width="3" />
+      <g transform="translate(540,52)">
+        <path d="M18,0 h20 v10 l10,16 a16,16 0 0 1 -14,24 h-12 a16,16 0 0 1 -14,-24 l10,-16 v-10 z"
+              fill="#60a5fa" fill-opacity="0.25" stroke="#60a5fa" stroke-width="2" />
+        <path d="M20,34 h28" stroke="#60a5fa" stroke-width="3" stroke-linecap="round" />
+      </g>
+      <g transform="translate(602,52)">
+        <circle cx="18" cy="18" r="16" fill="#22c55e" fill-opacity="0.18" stroke="#22c55e" stroke-width="2" />
+        <path d="M18,18 L18,9" stroke="#22c55e" stroke-width="3" stroke-linecap="round" />
+        <path d="M18,18 L26,22" stroke="#22c55e" stroke-width="3" stroke-linecap="round" />
+      </g>
+      <text x="640" y="63" fill="#e2e8f0" font-size="16" font-weight="700" text-anchor="middle"
+            font-family="system-ui, -apple-system, Segoe UI, Roboto, Arial">
+        lab result
+      </text>
+      <text x="640" y="86" fill="#94a3b8" font-size="14" text-anchor="middle"
+            font-family="system-ui, -apple-system, Segoe UI, Roboto, Arial">
+        arrives tomorrow
+      </text>
+    </g>
+  </svg>
+
+</div>
 <div style="border: 1px solid var(--ml-panel-border); border-radius: 12px; padding: 18px; background: var(--ml-panel-bg);">
   <div style="font-size: 0.9em; color: var(--ml-muted); font-weight: 700; margin-bottom: 12px;">
     Probability goal
@@ -102,24 +205,90 @@ Because perception becomes data, and data enables model-based inference.
 
 ---
 
+<!-- .slide:id="logistic-regression-00a-concrete-case" -->
+## Concrete Case: Fast Tests vs. Lab Result
+<!-- layout={rows: 1, columns: 2} -->
+<!-- position={row: 1, column: 1} -->
+-! Problem
+-: we must decide <em>today</em>, but the lab label arrives <em>tomorrow</em>
+
+***
+
+-! What we can measure now (x)
+-: fast test strip / sensor readings (minutes)
+-: rainfall in last 24h, turbidity, conductivity, temperature, ...
+
+***
+
+-! What we learn later (y)
+-: lab measurement (1 day) → exceedance yes/no
+-: we already have the last days: fast tests + lab labels
+<!-- /position -->
+<!-- position={row: 1, column: 2} -->
+<div style="border: 1px solid var(--ml-panel-border); border-radius: 12px; padding: 16px; background: var(--ml-panel-bg);">
+  <div style="font-size: 0.9em; color: var(--ml-muted); font-weight: 700; margin-bottom: 10px;">
+    Example dataset (last 7 days)
+  </div>
+  <table style="width: 100%; border-collapse: collapse; font-size: 0.85em; color: var(--ml-text);">
+    <thead>
+      <tr>
+        <th style="text-align: right; padding: 4px 6px; border-bottom: 1px solid var(--ml-panel-border);">Day</th>
+        <th style="text-align: right; padding: 4px 6px; border-bottom: 1px solid var(--ml-panel-border);">Rain 24h (mm)</th>
+        <th style="text-align: right; padding: 4px 6px; border-bottom: 1px solid var(--ml-panel-border);">Turbidity (NTU)</th>
+        <th style="text-align: right; padding: 4px 6px; border-bottom: 1px solid var(--ml-panel-border);">Quick E. coli (strip)</th>
+        <th style="text-align: center; padding: 4px 6px; border-bottom: 1px solid var(--ml-panel-border);">Lab: exceedance (y)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td style="text-align: right; padding: 3px 6px;">-7</td><td style="text-align: right; padding: 3px 6px;">0</td><td style="text-align: right; padding: 3px 6px;">2.1</td><td style="text-align: right; padding: 3px 6px;">0.10</td><td style="text-align: center; padding: 3px 6px;">0</td></tr>
+      <tr><td style="text-align: right; padding: 3px 6px;">-6</td><td style="text-align: right; padding: 3px 6px;">3</td><td style="text-align: right; padding: 3px 6px;">3.4</td><td style="text-align: right; padding: 3px 6px;">0.12</td><td style="text-align: center; padding: 3px 6px;">0</td></tr>
+      <tr><td style="text-align: right; padding: 3px 6px;">-5</td><td style="text-align: right; padding: 3px 6px;">12</td><td style="text-align: right; padding: 3px 6px;">7.8</td><td style="text-align: right; padding: 3px 6px;">0.30</td><td style="text-align: center; padding: 3px 6px;">1</td></tr>
+      <tr><td style="text-align: right; padding: 3px 6px;">-4</td><td style="text-align: right; padding: 3px 6px;">6</td><td style="text-align: right; padding: 3px 6px;">4.9</td><td style="text-align: right; padding: 3px 6px;">0.18</td><td style="text-align: center; padding: 3px 6px;">0</td></tr>
+      <tr><td style="text-align: right; padding: 3px 6px;">-3</td><td style="text-align: right; padding: 3px 6px;">25</td><td style="text-align: right; padding: 3px 6px;">11.2</td><td style="text-align: right; padding: 3px 6px;">0.55</td><td style="text-align: center; padding: 3px 6px;">1</td></tr>
+      <tr><td style="text-align: right; padding: 3px 6px;">-2</td><td style="text-align: right; padding: 3px 6px;">0</td><td style="text-align: right; padding: 3px 6px;">2.4</td><td style="text-align: right; padding: 3px 6px;">0.09</td><td style="text-align: center; padding: 3px 6px;">0</td></tr>
+      <tr><td style="text-align: right; padding: 3px 6px;">-1</td><td style="text-align: right; padding: 3px 6px;">9</td><td style="text-align: right; padding: 3px 6px;">6.1</td><td style="text-align: right; padding: 3px 6px;">0.24</td><td style="text-align: center; padding: 3px 6px;">1</td></tr>
+      <tr>
+        <td style="text-align: right; padding: 3px 6px;"><strong>today</strong></td>
+        <td style="text-align: right; padding: 3px 6px;"><strong>8</strong></td>
+        <td style="text-align: right; padding: 3px 6px;"><strong>6.8</strong></td>
+        <td style="text-align: right; padding: 3px 6px;"><strong>0.26</strong></td>
+        <td style="text-align: center; padding: 3px 6px;"><strong>?</strong></td>
+      </tr>
+    </tbody>
+  </table>
+  <div style="margin-top: 10px; font-size: 0.85em; color: var(--ml-muted); line-height: 1.35;">
+    Train on past rows (<strong>x</strong> → <strong>y</strong>), then predict <strong>p(y=1 | x today)</strong>.
+  </div>
+</div>
+<!-- /position -->
+<!-- /layout -->
+
+---
+
 <!-- .slide:id="logistic-regression-01-motivation" -->
 ## Logistic Regression - Motivation
 <!-- layout={rows: 1, columns: 2} -->
 <!-- position={row: 1, column: 1} -->
 -! Binary outcome
--: exceedance vs compliant
+-: $f(x) = \\{0, 1\\}$
+-: compliant or exceedance
 
 ***
 
 -! Need a probability
+-: $p(y=1 | x)$
 -: supports risk-based decisions
 
 ***
 
 -! Linear regression is not probability-aware
+-: can output < 0 or > 1
+
+-< Instead, we need a model that outputs valid probabilities
+-: between 0 and 1
 <!-- /position -->
 <!-- position={row: 1, column: 2} -->
-<div id="logreg-motivation-plot" style="width: 100%; height: 650px; border: 1px solid #2d3a66; border-radius: 12px; background: rgba(15,23,42,0.85);"></div>
+<div id="logreg-motivation-plot"></div>
 
 <script>
 (function() {
@@ -130,8 +299,8 @@ Because perception becomes data, and data enables model-based inference.
     const container = document.getElementById(containerId);
     if (!container) return;
 
-    const width = 680;
-    const height = 650;
+    const width = 780;
+    const height = 820;
     const margin = { top: 30, right: 30, bottom: 90, left: 90 };
 
     const fig = plotUtils.createFigure(containerId, width, height, margin);
@@ -220,228 +389,6 @@ Because perception becomes data, and data enables model-based inference.
       .style('font-family', "'Press Start 2P', monospace")
       .style('font-size', '12px')
       .text('model output');
-
-    fig.svg.append('text')
-      .attr('x', fig.xScale(6.0))
-      .attr('y', fig.yScale(1.25))
-      .style('fill', 'var(--ml-muted)')
-      .style('font-size', '12px')
-      .text('unbounded output');
-  }
-
-  function register() {
-    if (typeof plotUtils === 'undefined') {
-      setTimeout(register, 80);
-      return;
-    }
-    plotUtils.renderOnSlideOnce({ slideId, containerId, draw });
-  }
-
-  register();
-})();
-</script>
-<!-- /position -->
-<!-- /layout -->
-
----
-
-<!-- .slide:id="logistic-regression-01a-labeled-data" -->
-## What Is Labeled Data?
-<!-- layout={rows: 1, columns: 2} -->
-<!-- position={row: 1, column: 1} -->
--! Each sample has (x, y)
--: x = quick measurements, y = lab outcome later
-
-***
-
--! y anchors interpretation
--: the model learns from outcomes, not just patterns
-
-***
-
--! Goal for new samples
--: output p(exceedance) from x
-<!-- /position -->
-<!-- position={row: 1, column: 2} -->
-<div id="logreg-labeled-data-plot" style="width: 100%; height: 650px; border: 1px solid #2d3a66; border-radius: 12px; background: rgba(15,23,42,0.85);"></div>
-
-<script>
-(function() {
-  const containerId = 'logreg-labeled-data-plot';
-  const slideId = 'logistic-regression-01a-labeled-data';
-
-  function draw() {
-    const container = document.getElementById(containerId);
-    if (!container) return;
-
-    const width = 680;
-    const height = 650;
-    const margin = { top: 40, right: 30, bottom: 90, left: 90 };
-
-    const fig = plotUtils.createFigure(containerId, width, height, margin);
-    plotUtils.addAxes(fig, [0, 10], [-0.1, 1.1], 6, 6);
-
-    d3.select(`#${containerId} svg`)
-      .style('background-color', 'var(--ml-panel-bg)')
-      .style('border-radius', '12px');
-
-    const points = [
-      { x: 2.2, y: 0, cls: 0 },
-      { x: 5.3, y: 1, cls: 1 },
-      { x: 7.8, y: 1, cls: 1 },
-    ];
-
-    fig.svg.append('line')
-      .attr('x1', fig.xScale(0)).attr('x2', fig.xScale(10))
-      .attr('y1', fig.yScale(0)).attr('y2', fig.yScale(0))
-      .attr('stroke', 'var(--ml-stroke-soft)')
-      .attr('stroke-width', 2)
-      .attr('stroke-dasharray', '6 6');
-    fig.svg.append('line')
-      .attr('x1', fig.xScale(0)).attr('x2', fig.xScale(10))
-      .attr('y1', fig.yScale(1)).attr('y2', fig.yScale(1))
-      .attr('stroke', 'var(--ml-stroke-soft)')
-      .attr('stroke-width', 2)
-      .attr('stroke-dasharray', '6 6');
-
-    fig.svg.append('g')
-      .selectAll('circle')
-      .data(points)
-      .enter()
-      .append('circle')
-      .attr('cx', d => fig.xScale(d.x))
-      .attr('cy', d => fig.yScale(d.y))
-      .attr('r', 8)
-      .attr('fill', d => d.cls === 1 ? 'var(--ml-accent-green)' : 'var(--ml-accent-orange)')
-      .attr('stroke', 'var(--ml-text)')
-      .attr('stroke-width', 2)
-      .attr('opacity', 0.98);
-
-    fig.svg.append('text')
-      .attr('x', fig.width / 2)
-      .attr('y', fig.height + 60)
-      .attr('text-anchor', 'middle')
-      .style('fill', 'var(--d3-axis-label-text-color)')
-      .style('font-family', "'Press Start 2P', monospace")
-      .style('font-size', '12px')
-      .text('predictor x (e.g., turbidity)');
-
-    fig.svg.append('text')
-      .attr('x', -fig.height / 2)
-      .attr('y', -60)
-      .attr('transform', 'rotate(-90)')
-      .attr('text-anchor', 'middle')
-      .style('fill', 'var(--d3-axis-label-text-color)')
-      .style('font-family', "'Press Start 2P', monospace")
-      .style('font-size', '12px')
-      .text('label y (0/1)');
-  }
-
-  function register() {
-    if (typeof plotUtils === 'undefined') {
-      setTimeout(register, 80);
-      return;
-    }
-    plotUtils.renderOnSlideOnce({ slideId, containerId, draw });
-  }
-
-  register();
-})();
-</script>
-<!-- /position -->
-<!-- /layout -->
-
----
-
-<!-- .slide:id="logistic-regression-01b-training-changes" -->
-## What Training Changes
-<!-- layout={rows: 1, columns: 2} -->
-<!-- position={row: 1, column: 1} -->
--! Training adjusts the curve
--: to align probabilities with labels
-
-***
-
--! Focus on the overlap
--: that is where uncertainty matters most
-<!-- /position -->
-<!-- position={row: 1, column: 2} -->
-<div id="logreg-training-change-plot" style="width: 100%; height: 650px; border: 1px solid #2d3a66; border-radius: 12px; background: rgba(15,23,42,0.85);"></div>
-
-<script>
-(function() {
-  const containerId = 'logreg-training-change-plot';
-  const slideId = 'logistic-regression-01b-training-changes';
-
-  function sigmoid(z) {
-    return 1 / (1 + Math.exp(-z));
-  }
-
-  function draw() {
-    const container = document.getElementById(containerId);
-    if (!container) return;
-
-    const width = 680;
-    const height = 650;
-    const margin = { top: 40, right: 30, bottom: 90, left: 90 };
-
-    const fig = plotUtils.createFigure(containerId, width, height, margin);
-    plotUtils.addAxes(fig, [0, 10], [-0.1, 1.1], 6, 6);
-
-    d3.select(`#${containerId} svg`)
-      .style('background-color', 'var(--ml-panel-bg)')
-      .style('border-radius', '12px');
-
-    const points = [
-      { x: 2.2, y: 0, cls: 0 },
-      { x: 5.3, y: 1, cls: 1 },
-      { x: 7.8, y: 1, cls: 1 },
-    ];
-
-    fig.svg.append('g')
-      .selectAll('circle')
-      .data(points)
-      .enter()
-      .append('circle')
-      .attr('cx', d => fig.xScale(d.x))
-      .attr('cy', d => fig.yScale(d.y))
-      .attr('r', 7)
-      .attr('fill', d => d.cls === 1 ? 'var(--ml-accent-green)' : 'var(--ml-accent-orange)')
-      .attr('stroke', 'var(--ml-text)')
-      .attr('stroke-width', 2)
-      .attr('opacity', 0.95);
-
-    const curveX = d3.range(0, 10.001, 0.05);
-    const curveBefore = curveX.map(x => ({ x, p: sigmoid((x - 6.4) * 0.8) }));
-    const curveAfter = curveX.map(x => ({ x, p: sigmoid((x - 5.4) * 1.4) }));
-
-    const line = d3.line()
-      .x(d => fig.xScale(d.x))
-      .y(d => fig.yScale(d.p));
-
-    fig.svg.append('path')
-      .datum(curveBefore)
-      .attr('d', line)
-      .attr('fill', 'none')
-      .attr('stroke', 'var(--ml-gray-soft)')
-      .attr('stroke-width', 2)
-      .attr('stroke-dasharray', '10 8')
-      .attr('opacity', 0.22);
-
-    fig.svg.append('path')
-      .datum(curveAfter)
-      .attr('d', line)
-      .attr('fill', 'none')
-      .attr('stroke', 'var(--ml-accent-cyan)')
-      .attr('stroke-width', 6)
-      .attr('opacity', 0.95);
-
-    fig.svg.append('text')
-      .attr('x', fig.xScale(6.0))
-      .attr('y', fig.yScale(0.78))
-      .style('fill', 'var(--ml-muted)')
-      .style('font-size', '12px')
-      .text('after training');
   }
 
   function register() {
@@ -479,7 +426,7 @@ Because perception becomes data, and data enables model-based inference.
 
 <!-- /position -->
 <!-- position={row: 1, column: 2} -->
-<div id="logreg-score-sigmoid-plot" style="width: 100%; height: 650px; border: 1px solid #2d3a66; border-radius: 12px; background: rgba(15,23,42,0.85);"></div>
+<div id="logreg-score-sigmoid-plot"></div>
 
 <script>
 (function() {
@@ -490,8 +437,8 @@ Because perception becomes data, and data enables model-based inference.
     const container = document.getElementById(containerId);
     if (!container) return;
 
-    const width = 680;
-    const height = 650;
+    const width = 780;
+    const height = 820;
     const margin = { top: 40, right: 26, bottom: 70, left: 70 };
     const fig = plotUtils.createFigure(containerId, width, height, margin);
 
