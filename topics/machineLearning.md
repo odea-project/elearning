@@ -2157,20 +2157,8 @@ $$ GINI = 1 - \sum_{i=1}^{C} p_i^2 $$
 
 ***
 
--: Example tree structure (as text) 
-
-```
-             [x < 0.5?]
-          /              \
-        yes               no
-        /                  \
-    [y < 0.4?]           [y < 0.7?]
-     /    \               /     \
-    yes    no           yes      no
-    /       \           /         \
-  leaf1   leaf0       leaf0     leaf1
-(class 1) (class 0) (class 0) (class 1)
-```
+-! Important: each split divides the data into two parts
+-: for more classes, there will be a cascade of binary splits
 
 
 
@@ -4179,6 +4167,63 @@ $$ G_B = 1 - (0.10^2 + 0.90^2) = 0.18 $$
 
 ---
 
+<!-- .slide:id="discussion" -->
+## Group Exercise
+<!-- layout={rows: 1, columns: 2} -->
+<!-- position={row: 1, column: 1} -->
+Create the best possible decision tree for classifying the following objects:
+
+<div style="border: 1px solid var(--ml-panel-border); border-radius: 12px; padding: 16px; background: var(--ml-panel-bg);">
+
+  <svg viewBox="0 0 700 240" width="700" height="240" style="width: 100%; height: auto; display: block;" role="img" aria-label="Three objects: a red square, a blue square, and a red circle">
+    <defs>
+      <filter id="shapeShadow" x="-20%" y="-20%" width="140%" height="140%">
+        <feDropShadow dx="0" dy="6" stdDeviation="6" flood-color="#000000" flood-opacity="0.35" />
+      </filter>
+    </defs>
+    <rect x="0" y="0" width="700" height="240" rx="14" fill="rgba(0,0,0,0)" />
+    <!-- red square -->
+    <g transform="translate(95,40)" filter="url(#shapeShadow)">
+      <rect x="0" y="0" width="120" height="120" rx="14" fill="#ef4444" stroke="rgba(255,255,255,0.35)" stroke-width="4" />
+    </g>
+    <text x="155" y="205" text-anchor="middle" fill="var(--ml-muted)" font-size="18" font-weight="700"
+          font-family="system-ui, -apple-system, Segoe UI, Roboto, Arial">
+      red square
+    </text>
+    <!-- blue square -->
+    <g transform="translate(290,40)" filter="url(#shapeShadow)">
+      <rect x="0" y="0" width="120" height="120" rx="14" fill="#3b82f6" stroke="rgba(255,255,255,0.35)" stroke-width="4" />
+    </g>
+    <text x="350" y="205" text-anchor="middle" fill="var(--ml-muted)" font-size="18" font-weight="700"
+          font-family="system-ui, -apple-system, Segoe UI, Roboto, Arial">
+      blue square
+    </text>
+    <!-- red circle -->
+    <g transform="translate(485,40)" filter="url(#shapeShadow)">
+      <circle cx="60" cy="60" r="60" fill="#ef4444" stroke="rgba(255,255,255,0.35)" stroke-width="4" />
+    </g>
+    <text x="545" y="205" text-anchor="middle" fill="var(--ml-muted)" font-size="18" font-weight="700"
+          font-family="system-ui, -apple-system, Segoe UI, Roboto, Arial">
+      red circle
+    </text>
+  </svg>
+  
+</div>
+<!-- /position -->
+<!-- position={row: 1, column: 2} -->
+Create the best possible random forest for classifying the same objects:
+
+-! Apple
+-! Broccoli
+-! Pineapple
+-! Strawberry
+-! Car
+
+<!--/position -->
+<!-- /layout -->
+
+---
+
 <!-- .slide:id="random-forest-12-hyperparameters" -->
 ## Practical Knobs
 <!-- layout={rows: 1, columns: 2} -->
@@ -4425,6 +4470,76 @@ $$ G_B = 1 - (0.10^2 + 0.90^2) = 0.18 $$
 
 ---
 
+<!-- .slide:id="random-forest-12-strength-correlation-intuition" -->
+## Random Forest: Strength & Correlation
+<!-- layout={rows: 1, columns: 2} -->
+<!-- position={row: 1, column: 1} -->
+-! Strength
+-: how good is a single tree on average?
+-: accuracy / margin of individual trees
+
+***
+
+-! Correlation
+-: how similar are the trees’ errors?
+-: do trees fail on the same cases?
+<!-- /position -->
+<!-- position={row: 1, column: 2} -->
+-! Why both matter
+-: strong but highly correlated trees → limited gain
+-: weak but diverse trees → noisy forest
+
+***
+
+-! Key idea
+-: good forests = reasonably strong **and** weakly correlated trees
+<!-- /position -->
+<!-- /layout -->
+
+---
+
+<!-- .slide:id="random-forest-13-strength-correlation-estimation" -->
+## Estimating Strength & Correlation
+<!-- layout={rows: 1, columns: 2} -->
+<!-- position={row: 1, column: 1} -->
+-! Strength (concept)
+-: average performance of trees
+-: e.g. accuracy or margin on out-of-bag data
+
+$$ \text{Strength} = \mathbb{E}\_\text{trees}[\text{accuracy}\_\text{OOB}]$$
+
+***
+
+-! Margin (classification)
+-: correct class probability minus best wrong class
+
+$$ \text{Margin} = P\_\text{correct} - \max\_{\text{c not correct}} P\_c $$
+
+```
+example:
+correct class = A
+P_A = 0.7, P_B = 0.2, P_C = 0.1
+Margin = 0.7 - 0.2 = 0.5
+```
+
+<!-- /position -->
+<!-- position={row: 1, column: 2} -->
+-! Correlation (concept)
+-: correlation of tree errors
+-: measured on the same samples (OOB)
+
+$$ \text{Correlation} = \mathbb{E}\_{\text{tree pairs}}[\text{corr}(\text{error}\_i, \text{error}\_j)] $$
+
+***
+
+-! Practical takeaway
+-: RF error ↓ when
+-: tree strength ↑ and error correlation ↓
+<!-- /position -->
+<!-- /layout -->
+
+---
+
 <!-- .slide:id="random-forest-13-webr-example" -->
 ## Practical Example in R (WebR)
 <!-- layout={rows: 1, columns: 2} -->
@@ -4522,3 +4637,4 @@ Random forest: variable importance + predicted class probabilities.`;
 
 <!-- /position -->
 <!-- /layout -->
+
