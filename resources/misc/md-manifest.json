@@ -290,5 +290,20 @@
       "Variance",
       "Distances"
     ]
+  },
+  {
+    "filename": "machineLearning.md",
+    "title": "Machine Learning",
+    "keywords": [
+      "Machine Learning",
+      "support vector machines",
+      "random forests"
+    ],
+    "thumbnail": "resources/icons/machine-learning.svg",
+    "requirements": [
+      "Linear Regression",
+      "Cluster Analysis II",
+      "Distances"
+    ]
   }
 ]

@@ -31,7 +31,71 @@ description: "Understanding and applying machine learning techniques in water sc
 <!-- .slide:id="cold-opener-2" -->
 ## Why do we know this?
 
-Because perception becomes data, and data enables model-based inference.
+---
+
+<!-- .slide:id="cold-opener-3" -->
+## What is learning?
+
+<div style="border: 1px solid var(--ml-panel-border); border-radius: 14px; padding: 18px; background: var(--ml-panel-bg);">
+
+  <svg viewBox="0 0 1000 360" width="100%" height="360" role="img" aria-label="Two flow diagrams: training from labeled data, and prediction from unlabeled data using a trained model">
+    <defs>
+      <marker id="arrow-cold-opener-3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="10" markerHeight="10" orient="auto-start-reverse">
+        <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--ml-panel-border)"></path>
+      </marker>
+      <filter id="shadow-cold-opener-3" x="-20%" y="-20%" width="140%" height="140%">
+        <feDropShadow dx="0" dy="6" stdDeviation="8" flood-color="#000000" flood-opacity="0.18" />
+      </filter>
+    </defs>
+    <g font-family="system-ui, -apple-system, Segoe UI, Roboto, Arial" font-size="24" font-weight="900" fill="var(--ml-text)">
+      <text x="70" y="58">Training (learn from labels)</text>
+      <text x="70" y="218">Prediction (use learned model)</text>
+    </g>
+    <g font-family="system-ui, -apple-system, Segoe UI, Roboto, Arial" font-size="24" font-weight="800" fill="var(--ml-text)" filter="url(#shadow-cold-opener-3)">
+      <rect x="70" y="80" width="270" height="82" rx="16" fill="var(--ml-surface)" stroke="var(--ml-panel-border)" stroke-width="3" />
+      <text x="205" y="132" text-anchor="middle">Labeled data</text>
+      <rect x="395" y="80" width="240" height="82" rx="16" fill="var(--ml-accent-cyan-soft-2)" stroke="var(--ml-accent-cyan)" stroke-width="3" />
+      <text x="515" y="132" text-anchor="middle">Training</text>
+      <rect x="690" y="80" width="240" height="82" rx="16" fill="var(--ml-accent-green-soft-2)" stroke="var(--ml-accent-green)" stroke-width="3" />
+      <text x="810" y="132" text-anchor="middle">Model</text>
+      <rect x="70" y="240" width="270" height="82" rx="16" fill="var(--ml-surface)" stroke="var(--ml-panel-border)" stroke-width="3" />
+      <text x="205" y="292" text-anchor="middle">Unlabeled data</text>
+      <rect x="395" y="240" width="240" height="82" rx="16" fill="var(--ml-accent-green-soft-2)" stroke="var(--ml-accent-green)" stroke-width="3" />
+      <text x="515" y="292" text-anchor="middle">Model</text>
+      <rect x="690" y="240" width="240" height="82" rx="16" fill="var(--ml-accent-orange-soft-2)" stroke="var(--ml-accent-orange)" stroke-width="3" />
+      <text x="810" y="292" text-anchor="middle">Prediction</text>
+    </g>
+    <g stroke="var(--ml-panel-border)" stroke-width="6" fill="none" marker-end="url(#arrow-cold-opener-3)" opacity="0.95">
+      <line x1="350" y1="121" x2="390" y2="121" />
+      <line x1="645" y1="121" x2="685" y2="121" />
+      <line x1="350" y1="281" x2="390" y2="281" />
+      <line x1="645" y1="281" x2="685" y2="281" />
+    </g>
+    <g font-family="system-ui, -apple-system, Segoe UI, Roboto, Arial" font-size="18" font-weight="700" fill="var(--ml-muted)">
+      <text x="810" y="154" text-anchor="middle">knowledge from data</text>
+      <text x="810" y="314" text-anchor="middle">assignment / decision</text>
+    </g>
+  </svg>
+
+</div>
+
+---
+
+<!-- .slide:id="learrning-from-data" -->
+## Learning from Data
+
+<img src="resources/figures/1015608--44111-.webp" alt="A person looking at a computer screen with code and data visualizations" width="600" style="border: 1px solid var(--ml-panel-border); border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
+
+This is a Kiwano.
+
+---
+
+<!-- .slide:id="prediction" -->
+## Prediction from Learned Model
+
+<img src="resources/figures/rect528.webp" alt="A person pointing at a large screen displaying data visualizations and charts" width="1000" style="border: 1px solid var(--ml-panel-border); border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
+
+Can we predict which of the objects are Kiwano?
 
 ---
 
@@ -39,8 +103,24 @@ Because perception becomes data, and data enables model-based inference.
 ## Definition of Machine Learning
 <!-- layout={rows: 1, columns: 2} -->
 <!-- position={row: 1, column: 1} -->
+-! Learn a mapping from examples
+-: data-driven rules instead of hand-coded rules
+
+***
+
+-! Goal: generalize
+-: work well on new, unseen cases
+
 <!-- /position -->
 <!-- position={row: 1, column: 2} -->
+-! Ingredients
+-: data + model class + objective (loss)
+
+***
+
+-! Output
+-: predictions with uncertainty (e.g., p(exceedance))
+
 <!-- /position -->
 <!-- /layout -->
 
@@ -50,8 +130,33 @@ Because perception becomes data, and data enables model-based inference.
 ## Important Terms in Machine Learning
 <!-- layout={rows: 1, columns: 2} -->
 <!-- position={row: 1, column: 1} -->
+-! Feature (x)
+-: measurable input (rainfall 24h, turbidity, discharge)
+
+***
+
+-! Label (y)
+-: outcome to learn (exceedance: 0/1, or concentration of an analyte, or a class)
+
+***
+
+-! Model
+-: rule that maps x -> prediction
 <!-- /position -->
 <!-- position={row: 1, column: 2} -->
+-! Training (fitting)
+-: choose parameters that best match the labels
+
+***
+
+-! Validation / test
+-: estimate how well it generalizes
+
+***
+
+-! Overfitting
+-: fits noise -> fails on new data
+-: not robust
 <!-- /position -->
 <!-- /layout -->
 
@@ -61,8 +166,36 @@ Because perception becomes data, and data enables model-based inference.
 ## Types of Machine Learning
 <!-- layout={rows: 1, columns: 2} -->
 <!-- position={row: 1, column: 1} -->
+-! Supervised learning
+-: learn from labeled examples (x, y)
+-: Classification
+-: Regression
+
+***
+
+-! Unsupervised learning
+-: find structure in x (patterns without labels)
+-: Anomaly detection
+
+***
+
+-! Reinforcement learning
+-: learn decisions from feedback over time
+-: game playing, robotics
 <!-- /position -->
 <!-- position={row: 1, column: 2} -->
+-! Classification
+-: predict a class (exceedance yes/no, species A/B/C)
+-: logistic regression
+-: k-means clustering
+
+***
+
+-! Regression
+-: predict a number (e.g., concentration, flow rate)
+-: linear regression
+-: nonlinear regression
+
 <!-- /position -->
 <!-- /layout -->
 
@@ -91,36 +224,36 @@ Because perception becomes data, and data enables model-based inference.
   <svg viewBox="0 0 700 400" width="700" height="400" style="width: 100%; height: auto; display: block;" role="img" aria-label="Bathing water after heavy rain: beach, rain cloud, runoff into water, and a warning sign">
     <defs>
       <linearGradient id="skyGrad" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0%" stop-color="#0b1222" />
-        <stop offset="100%" stop-color="#0f1b33" />
+        <stop offset="0%" stop-color="var(--ml-surface-2, #0b1222)" />
+        <stop offset="100%" stop-color="var(--ml-surface, #0f1b33)" />
       </linearGradient>
       <linearGradient id="waterGrad" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0%" stop-color="#1b3b7a" />
-        <stop offset="100%" stop-color="#0b1e4a" />
+        <stop offset="0%" stop-color="var(--ml-accent-cyan-soft-2, #1b3b7a)" />
+        <stop offset="100%" stop-color="var(--ml-accent-cyan-soft, #0b1e4a)" />
       </linearGradient>
       <linearGradient id="sandGrad" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0%" stop-color="#b9864a" />
-        <stop offset="100%" stop-color="#8b5f2e" />
+        <stop offset="0%" stop-color="var(--ml-accent-orange-soft-2, #b9864a)" />
+        <stop offset="100%" stop-color="var(--ml-accent-orange-soft, #8b5f2e)" />
       </linearGradient>
       <filter id="softShadow" x="-20%" y="-20%" width="140%" height="140%">
         <feDropShadow dx="0" dy="8" stdDeviation="10" flood-color="#000000" flood-opacity="0.35" />
       </filter>
       <pattern id="rainPattern" width="18" height="18" patternUnits="userSpaceOnUse" patternTransform="rotate(20)">
-        <line x1="2" y1="0" x2="2" y2="14" stroke="#7dd3fc" stroke-opacity="0.35" stroke-width="3" />
-        <line x1="10" y1="4" x2="10" y2="18" stroke="#7dd3fc" stroke-opacity="0.25" stroke-width="3" />
+        <line x1="2" y1="0" x2="2" y2="14" stroke="var(--ml-accent-cyan, #7dd3fc)" stroke-opacity="0.35" stroke-width="3" />
+        <line x1="10" y1="4" x2="10" y2="18" stroke="var(--ml-accent-cyan, #7dd3fc)" stroke-opacity="0.25" stroke-width="3" />
       </pattern>
     </defs>
     <!-- sky -->
     <rect x="0" y="0" width="700" height="250" fill="url(#skyGrad)" />
     <!-- distant hills / city -->
     <path d="M0,210 C80,185 140,205 220,190 C290,178 360,205 430,194 C520,180 590,205 700,188 L700,250 L0,250 Z"
-          fill="#0a1733" opacity="0.9" />
+          fill="var(--ml-surface-2, #0a1733)" opacity="0.9" />
     <g opacity="0.55">
-      <rect x="70" y="165" width="28" height="45" fill="#132a57" />
-      <rect x="106" y="150" width="36" height="60" fill="#10244c" />
-      <rect x="150" y="168" width="22" height="42" fill="#163161" />
-      <rect x="520" y="158" width="40" height="52" fill="#10244c" />
-      <rect x="566" y="172" width="26" height="38" fill="#132a57" />
+      <rect x="70" y="165" width="28" height="45" fill="var(--ml-surface-2, #132a57)" />
+      <rect x="106" y="150" width="36" height="60" fill="var(--ml-surface, #10244c)" />
+      <rect x="150" y="168" width="22" height="42" fill="var(--ml-surface-2, #163161)" />
+      <rect x="520" y="158" width="40" height="52" fill="var(--ml-surface, #10244c)" />
+      <rect x="566" y="172" width="26" height="38" fill="var(--ml-surface-2, #132a57)" />
     </g>
     <!-- rain cloud -->
     <g filter="url(#softShadow)">
@@ -134,7 +267,7 @@ Because perception becomes data, and data enables model-based inference.
                L250,166
                C222,170 198,150 200,122
                C202,106 212,96 210,90 Z"
-            fill="#223555" stroke="#2f4a7a" stroke-width="3" />
+              fill="var(--ml-gray-soft, rgba(255,255,255,0.15))" stroke="var(--ml-stroke-muted, rgba(255,255,255,0.35))" stroke-width="3" />
       <rect x="230" y="168" width="200" height="150" fill="url(#rainPattern)" opacity="0.9" />
     </g>
     <!-- sand -->
@@ -143,45 +276,45 @@ Because perception becomes data, and data enables model-based inference.
     <!-- water -->
     <path d="M0,260 C120,290 230,260 350,285 C470,310 560,275 700,300 L700,400 L0,400 Z"
           fill="url(#waterGrad)" opacity="0.95" />
-    <path d="M0,292 C140,322 260,292 380,315 C520,342 590,315 700,335" fill="none" stroke="#5ea7ff" stroke-opacity="0.35" stroke-width="4" />
-    <path d="M0,330 C160,355 270,332 420,355 C560,378 610,360 700,380" fill="none" stroke="#5ea7ff" stroke-opacity="0.25" stroke-width="4" />
+    <path d="M0,292 C140,322 260,292 380,315 C520,342 590,315 700,335" fill="none" stroke="var(--ml-accent-cyan, #5ea7ff)" stroke-opacity="0.35" stroke-width="4" />
+    <path d="M0,330 C160,355 270,332 420,355 C560,378 610,360 700,380" fill="none" stroke="var(--ml-accent-cyan, #5ea7ff)" stroke-opacity="0.25" stroke-width="4" />
     <!-- runoff arrow -->
     <g opacity="0.95" filter="url(#softShadow)">
-      <path d="M430,220 C460,240 490,255 520,270" fill="none" stroke="#7c3aed" stroke-width="10" stroke-linecap="round" />
-      <path d="M520,270 L498,270 L512,254 Z" fill="#7c3aed" />
-      <text x="450" y="235" fill="#d8b4fe" font-size="18" font-weight="700" font-family="system-ui, -apple-system, Segoe UI, Roboto, Arial">
+      <path d="M430,220 C460,240 490,255 520,270" fill="none" stroke="var(--ml-accent-magenta, #7c3aed)" stroke-width="10" stroke-linecap="round" />
+      <path d="M520,270 L498,270 L512,254 Z" fill="var(--ml-accent-magenta, #7c3aed)" />
+      <text x="470" y="235" fill="var(--ml-accent-magenta, #d8b4fe)" font-size="18" font-weight="700" font-family="system-ui, -apple-system, Segoe UI, Roboto, Arial">
         runoff after rain
       </text>
     </g>
     <!-- warning sign -->
     <g filter="url(#softShadow)">
-      <rect x="90" y="210" width="18" height="160" rx="6" fill="#334155" />
-      <path d="M70,235 L160,235 L160,300 L70,300 Z" fill="#0b1222" stroke="#fbbf24" stroke-width="6" />
-      <path d="M115,250 L145,285 L85,285 Z" fill="#fbbf24" />
-      <rect x="112" y="262" width="6" height="14" rx="3" fill="#0b1222" />
-      <circle cx="115" cy="282" r="4" fill="#0b1222" />
-      <text x="70" y="325" fill="#e2e8f0" font-size="16" font-weight="700" font-family="system-ui, -apple-system, Segoe UI, Roboto, Arial">
+      <rect x="90" y="210" width="18" height="160" rx="6" fill="var(--ml-panel-border, #334155)" />
+      <path d="M70,235 L160,235 L160,300 L70,300 Z" fill="var(--ml-panel-bg, #0b1222)" stroke="var(--ml-accent-orange, #fbbf24)" stroke-width="6" />
+      <path d="M115,250 L145,285 L85,285 Z" fill="var(--ml-accent-orange, #fbbf24)" />
+      <rect x="112" y="262" width="6" height="14" rx="3" fill="var(--ml-panel-border, #0b1222)" />
+      <circle cx="115" cy="282" r="4" fill="var(--ml-panel-border, #0b1222)" />
+      <text x="130" y="325" fill="var(--ml-text, #e2e8f0)" font-size="16" font-weight="700" font-family="system-ui, -apple-system, Segoe UI, Roboto, Arial">
         possible exceedance
       </text>
     </g>
     <!-- lab + clock -->
     <g opacity="0.95" filter="url(#softShadow)">
-      <rect x="520" y="38" width="150" height="70" rx="14" fill="#0b1222" stroke="#2f4a7a" stroke-width="3" />
+      <rect x="520" y="38" width="150" height="70" rx="14" fill="var(--ml-surface, #0b1222)" stroke="var(--ml-panel-border, #2f4a7a)" stroke-width="3" />
       <g transform="translate(540,52)">
         <path d="M18,0 h20 v10 l10,16 a16,16 0 0 1 -14,24 h-12 a16,16 0 0 1 -14,-24 l10,-16 v-10 z"
-              fill="#60a5fa" fill-opacity="0.25" stroke="#60a5fa" stroke-width="2" />
-        <path d="M20,34 h28" stroke="#60a5fa" stroke-width="3" stroke-linecap="round" />
+              fill="var(--ml-accent-cyan, #60a5fa)" fill-opacity="0.25" stroke="var(--ml-accent-cyan, #60a5fa)" stroke-width="2" />
+        <path d="M20,34 h28" stroke="var(--ml-accent-cyan, #60a5fa)" stroke-width="3" stroke-linecap="round" />
       </g>
       <g transform="translate(602,52)">
-        <circle cx="18" cy="18" r="16" fill="#22c55e" fill-opacity="0.18" stroke="#22c55e" stroke-width="2" />
-        <path d="M18,18 L18,9" stroke="#22c55e" stroke-width="3" stroke-linecap="round" />
-        <path d="M18,18 L26,22" stroke="#22c55e" stroke-width="3" stroke-linecap="round" />
+        <circle cx="18" cy="18" r="16" fill="var(--ml-accent-green, #22c55e)" fill-opacity="0.18" stroke="var(--ml-accent-green, #22c55e)" stroke-width="2" />
+        <path d="M18,18 L18,9" stroke="var(--ml-accent-green, #22c55e)" stroke-width="3" stroke-linecap="round" />
+        <path d="M18,18 L26,22" stroke="var(--ml-accent-green, #22c55e)" stroke-width="3" stroke-linecap="round" />
       </g>
-      <text x="640" y="63" fill="#e2e8f0" font-size="16" font-weight="700" text-anchor="middle"
+      <text x="610" y="33" fill="var(--ml-text, #e2e8f0)" font-size="16" font-weight="700" text-anchor="middle"
             font-family="system-ui, -apple-system, Segoe UI, Roboto, Arial">
         lab result
       </text>
-      <text x="640" y="86" fill="#94a3b8" font-size="14" text-anchor="middle"
+      <text x="610" y="126" fill="var(--ml-muted, #94a3b8)" font-size="14" text-anchor="middle"
             font-family="system-ui, -apple-system, Segoe UI, Roboto, Arial">
         arrives tomorrow
       </text>
@@ -438,7 +571,7 @@ $$ y\_{hat} = \\frac{1}{1 + e^{-(\\beta_0 + \\beta_1 x + ... + \\beta_n x_n)}} =
     const container = document.getElementById(containerId);
     if (!container) return;
 
-    const width = 680;
+    const width = 760;
     const height = 720;
     const margin = { top: 40, right: 26, bottom: 70, left: 70 };
     const fig = plotUtils.createFigure(containerId, width, height, margin);
@@ -1217,12 +1350,598 @@ $$ \beta^{(i+1)} = \beta^{(i)} + \\eta X^T (y - \\sigma(X\\beta^{(i)})) $$
 
 ---
 
+<!-- .slide:id="logistic-regression-04a-webr-example" -->
+## Practical Example in R (WebR)
+<!-- layout={rows: 1, columns: 2} -->
+<!-- position={row: 1, column: 1} -->
+-! Fit the same baseline model in R
+-: `glm(..., family = binomial())`
+
+***
+
+-! Standardize features before fitting
+-: makes coefficients comparable
+
+***
+
+-! Use the model for decisions
+-: predict `p(exceedance)` for "today"
+<!-- /position -->
+<!-- position={row: 1, column: 2} -->
+<div style="display: flex; flex-direction: column; gap: 12px;">
+  <div id="logreg-webr-example-container"></div>
+  <div id="logreg-webr-example-plot" style="border: 1px solid var(--ml-panel-border); border-radius: 12px; min-height: 240px; display: flex; align-items: center; justify-content: center; color: var(--ml-muted); font-size: 0.9em; text-align: center; padding: 12px; background: var(--ml-panel-bg);">
+    Run the WebR example to render the coefficient plot.
+  </div>
+  <button id="logreg-webr-example-open-plot" style="padding: 8px 16px; background: var(--ml-panel-bg); color: var(--ml-text); border: 1px solid var(--ml-panel-border); border-radius: 8px; cursor: pointer; font-size: 0.85em; font-weight: 700; display: none; align-self: flex-start;">
+    <i class="fas fa-external-link-alt"></i> Popout Plot
+  </button>
+</div>
+
+<script>
+(function() {
+  const containerId = 'logreg-webr-example-container';
+  const plotContainerId = 'logreg-webr-example-plot';
+  const openBtnId = 'logreg-webr-example-open-plot';
+  const slideId = 'logistic-regression-04a-webr-example';
+
+  const code = `# Logistic regression in R (water-quality example)
+# Features: rainfall_24h, turbidity, discharge
+# Label: exceedance (0/1)
+
+df <- data.frame(
+  rainfall_24h = c(0, 3, 12, 6, 25, 0, 9, 8),
+  turbidity    = c(2.1, 3.4, 7.8, 4.9, 11.2, 2.4, 6.1, 6.8),
+  discharge    = c(0.8, 1.0, 1.6, 1.1, 1.9, 0.7, 1.4, 1.3),
+  exceedance   = c(0, 0, 1, 0, 1, 0, 1, NA)
+)
+
+# Train on labeled rows only
+train <- subset(df, !is.na(exceedance))
+
+# Standardize features (unit-free)
+features <- c("rainfall_24h","turbidity","discharge")
+mu <- colMeans(train[, features])
+sd <- apply(train[, features], 2, sd)
+train_scaled <- as.data.frame(scale(train[, features], center = mu, scale = sd))
+train_scaled$exceedance <- train$exceedance
+
+# Fit baseline model (no interactions)
+fit <- glm(exceedance ~ rainfall_24h + turbidity + discharge,
+  data = train_scaled,
+  family = binomial()
+) |> print()
+
+# Coefficients (standardized): sign shows direction of risk
+b <- coef(fit)[-1]
+names(b) <- c("rainfall_24h", "turbidity", "discharge")
+
+par(mar = c(5, 9, 3, 1))
+cols <- ifelse(b >= 0, "#10b981", "#f97316")
+barplot(rev(b),
+  horiz = TRUE, las = 1,
+  col = rev(cols),
+  xlab = "coefficient (standardized)"
+)
+abline(v = 0, lwd = 2, col = "gray40")
+
+# Predict probability for "today"
+today <- df[nrow(df), features]
+today_scaled <- as.data.frame(scale(today, center = mu, scale = sd))
+p_today <- predict(fit, newdata = today_scaled, type = "response")
+
+title("Drivers of risk in the baseline model")
+mtext(sprintf("p(exceedance | today) = %.2f", p_today), side = 3, line = 0.2, cex = 0.9)`;
+
+  const fallbackOutput = `[Simulated]
+Coefficient plot (standardized): which features push risk up or down.`;
+
+  const init = async () => {
+    const helper = await window.ensureWebRHelper();
+    await helper.initCodeAndPlotSection({
+      containerId,
+      plotContainerId,
+      code,
+      slideId,
+      fallback: () => fallbackOutput,
+      runLabel: 'Run Logistic Regression (WebR)',
+      minHeight: '30px',
+      renderOptions: {
+        width: 640,
+        height: 420,
+        background: '#ffffff',
+        altText: 'Coefficient plot from logistic regression in WebR',
+        loadingMessage: 'Fitting model and rendering plot...',
+        errorMessage: 'Plot rendering unavailable in offline mode.',
+        initialPlotMessage: 'Run the example to render the coefficient plot.'
+      },
+      popupButtonId: openBtnId
+    });
+  };
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init, { once: true });
+  } else {
+    init();
+  }
+})();
+</script>
+
+<!-- /position -->
+<!-- /layout -->
+
+---
+
+<!-- .slide:id="random-forest-01-linear-failure" -->
+## Why Linear Fails Here
+<!-- layout={rows: 1, columns: 2} -->
+
+<!-- position={row: 1, column: 1} -->
+-! Same water-quality decision context
+-: risk depends on interactions, not one trend
+-! Linear model assumption is violated
+<!-- /position -->
+
+<!-- position={row: 1, column: 2} -->
+<div id="rf-linear-failure-plot" style="width: 100%; height: 650px;"></div>
+
+<script>
+(function() {
+  const containerId = 'rf-linear-failure-plot';
+  const slideId = 'random-forest-01-linear-failure';
+
+  function draw() {
+    if (typeof d3 === 'undefined' || typeof plotUtils === 'undefined') {
+      setTimeout(draw, 80);
+      return;
+    }
+    const container = document.getElementById(containerId);
+    if (!container) return;
+
+    const width = 680;
+    const height = 650;
+    const margin = { top: 36, right: 30, bottom: 70, left: 70 };
+    const fig = plotUtils.createFigure(containerId, width, height, margin);
+
+    d3.select(`#${containerId} svg`)
+      .style('background-color', 'var(--ml-panel-bg)')
+      .style('border-radius', '12px');
+
+    const theme = {
+      border: 'var(--ml-panel-border)',
+      text: 'var(--ml-text)',
+      muted: 'var(--ml-muted)',
+      cyan: 'var(--ml-accent-cyan)',
+      magenta: 'var(--ml-accent-magenta)',
+      green: 'var(--ml-accent-green)',
+      orange: 'var(--ml-accent-orange)'
+    };
+
+    plotUtils.addAxes(fig, [-6, 6], [0, 1], 7, 5);
+
+    fig.svg.append('rect')
+      .attr('x', 0)
+      .attr('y', 0)
+      .attr('width', fig.width)
+      .attr('height', fig.height)
+      .attr('rx', 12)
+      .attr('fill', 'none')
+      .attr('stroke', theme.border)
+      .attr('stroke-width', 2);
+
+    fig.xAxisGroup.selectAll('path, line')
+      .style('stroke', theme.border)
+      .style('stroke-width', '2px');
+    fig.yAxisGroup.selectAll('path, line')
+      .style('stroke', theme.border)
+      .style('stroke-width', '2px');
+    fig.xAxisGroup.selectAll('text')
+      .style('fill', theme.muted)
+      .style('font-size', '12px')
+      .style('font-family', "'Press Start 2P', monospace");
+    fig.yAxisGroup.selectAll('text')
+      .style('fill', theme.muted)
+      .style('font-size', '12px')
+      .style('font-family', "'Press Start 2P', monospace");
+
+    fig.svg.append('rect')
+      .attr('x', fig.xScale(-1))
+      .attr('y', 0)
+      .attr('width', fig.xScale(1) - fig.xScale(-1))
+      .attr('height', fig.height)
+      .attr('fill', 'var(--ml-accent-magenta-soft)')
+      .attr('opacity', 0.22);
+
+    const sigmoid = (z) => 1 / (1 + Math.exp(-z));
+    const curve = d3.range(-6, 6.001, 0.05).map(z => ({ z, p: sigmoid(z) }));
+
+    fig.svg.append('path')
+      .datum(curve)
+      .attr('fill', 'none')
+      .attr('stroke', theme.cyan)
+      .attr('stroke-width', 5)
+      .attr('opacity', 0.92)
+      .attr('d', d3.line()
+        .x(d => fig.xScale(d.z))
+        .y(d => fig.yScale(d.p)));
+
+    const class0 = [-3.8, -3.1, -2.4, -1.7, -1.0, -0.3, 0.4, 1.1, 1.8, 2.5, 3.2];
+    const class1 = [-3.5, -2.8, -2.1, -1.4, -0.7, 0.0, 0.7, 1.4, 2.1, 2.8, 3.5];
+    const points = [
+      ...class0.map(z => ({ z, y: 0, cls: 0 })),
+      ...class1.map(z => ({ z, y: 1, cls: 1 }))
+    ];
+
+    fig.svg.append('g')
+      .selectAll('circle')
+      .data(points)
+      .enter()
+      .append('circle')
+      .attr('cx', d => fig.xScale(d.z))
+      .attr('cy', d => fig.yScale(d.y))
+      .attr('r', 5.2)
+      .attr('fill', d => d.cls === 1 ? theme.green : theme.orange)
+      .attr('stroke', theme.text)
+      .attr('stroke-width', 1.8)
+      .attr('opacity', 0.9);
+
+    fig.svg.append('text')
+      .attr('x', fig.width / 2)
+      .attr('y', fig.height + 55)
+      .attr('text-anchor', 'middle')
+      .style('fill', theme.muted)
+      .style('font-family', "'Press Start 2P', monospace")
+      .style('font-size', '12px')
+      .text('linear score z');
+
+    fig.svg.append('text')
+      .attr('x', -fig.height / 2)
+      .attr('y', -58)
+      .attr('transform', 'rotate(-90)')
+      .attr('text-anchor', 'middle')
+      .style('fill', theme.muted)
+      .style('font-family', "'Press Start 2P', monospace")
+      .style('font-size', '12px')
+      .text('p(exceedance)');
+  }
+
+  function register() {
+    if (typeof plotUtils === 'undefined') {
+      setTimeout(register, 80);
+      return;
+    }
+    plotUtils.renderOnSlideOnce({ slideId, containerId, draw });
+  }
+
+  register();
+})();
+</script>
+<!-- /position -->
+
+<!-- /layout -->
+---
+
+<!-- .slide:id="random-forest-00-abstract-forest" -->
+## Random Forest (Abstract)
+<!-- layout={rows: 1, columns: 2} -->
+
+<!-- position={row: 1, column: 1} -->
+<div style="width: 100%; height: 650px; display: flex; align-items: center; justify-content: center;">
+
+  <svg viewBox="0 0 640 520" width="100%" height="100%" role="img" aria-label="Abstract decision tree diagram">
+    <rect x="12" y="12" width="616" height="496" rx="16" fill="var(--ml-panel-bg)" stroke="var(--ml-panel-border)" stroke-width="3"/>
+    <g stroke="var(--ml-panel-border)" stroke-width="3" opacity="0.9">
+      <line x1="320" y1="120" x2="210" y2="210"/>
+      <line x1="320" y1="120" x2="430" y2="210"/>
+      <line x1="210" y1="250" x2="150" y2="340"/>
+      <line x1="210" y1="250" x2="270" y2="340"/>
+      <line x1="430" y1="250" x2="370" y2="340"/>
+      <line x1="430" y1="250" x2="490" y2="340"/>
+    </g>
+    <g fill="var(--ml-surface)" stroke="var(--ml-panel-border)" stroke-width="3">
+      <circle cx="320" cy="120" r="28"/>
+      <circle cx="210" cy="250" r="26"/>
+      <circle cx="430" cy="250" r="26"/>
+      <rect x="110" y="340" width="80" height="52" rx="12"/>
+      <rect x="230" y="340" width="80" height="52" rx="12"/>
+      <rect x="350" y="340" width="80" height="52" rx="12"/>
+      <rect x="470" y="340" width="80" height="52" rx="12"/>
+    </g>
+    <g font-family="'Press Start 2P', monospace" fill="var(--ml-text)" opacity="0.95">
+      <text x="320" y="92" text-anchor="middle" font-size="10">root</text>
+      <text x="210" y="222" text-anchor="middle" font-size="9">split</text>
+      <text x="430" y="222" text-anchor="middle" font-size="9">split</text>
+      <text x="150" y="372" text-anchor="middle" font-size="9">leaf</text>
+      <text x="270" y="372" text-anchor="middle" font-size="9">leaf</text>
+      <text x="390" y="372" text-anchor="middle" font-size="9">leaf</text>
+      <text x="510" y="372" text-anchor="middle" font-size="9">leaf</text>
+    </g>
+    <g font-family="'Press Start 2P', monospace" font-size="9" fill="var(--ml-muted)">
+      <text x="320" y="160" text-anchor="middle">turbidity > t?</text>
+      <text x="210" y="290" text-anchor="middle">rainfall > r?</text>
+      <text x="430" y="290" text-anchor="middle">discharge > q?</text>
+    </g>
+    <g opacity="0.95">
+      <rect x="122" y="352" width="56" height="12" rx="6" fill="var(--ml-accent-orange-soft-2)"/>
+      <rect x="122" y="352" width="18" height="12" rx="6" fill="var(--ml-accent-green-soft)"/>
+      <rect x="242" y="352" width="56" height="12" rx="6" fill="var(--ml-accent-orange-soft-2)"/>
+      <rect x="242" y="352" width="40" height="12" rx="6" fill="var(--ml-accent-green-soft)"/>
+      <rect x="362" y="352" width="56" height="12" rx="6" fill="var(--ml-accent-orange-soft-2)"/>
+      <rect x="362" y="352" width="46" height="12" rx="6" fill="var(--ml-accent-green-soft)"/>
+      <rect x="482" y="352" width="56" height="12" rx="6" fill="var(--ml-accent-orange-soft-2)"/>
+      <rect x="482" y="352" width="10" height="12" rx="6" fill="var(--ml-accent-green-soft)"/>
+    </g>
+    <g font-family="'Press Start 2P', monospace" font-size="10" fill="var(--ml-muted)">
+      <text x="320" y="468" text-anchor="middle">one tree = sequence of questions</text>
+    </g>
+  </svg>
+
+</div>
+<!-- /position -->
+
+<!-- position={row: 1, column: 2} -->
+<div style="width: 100%; height: 650px; display: flex; align-items: center; justify-content: center;">
+
+  <svg viewBox="0 0 640 520" width="100%" height="100%" role="img" aria-label="Abstract random forest diagram">
+    <rect x="12" y="12" width="616" height="496" rx="16" fill="var(--ml-panel-bg)" stroke="var(--ml-panel-border)" stroke-width="3"/>
+    <g fill="var(--ml-surface)" stroke="var(--ml-panel-border)" stroke-width="2">
+      <rect x="40" y="70" width="150" height="110" rx="14"/>
+      <rect x="40" y="205" width="150" height="110" rx="14"/>
+      <rect x="40" y="340" width="150" height="110" rx="14"/>
+      <rect x="220" y="70" width="150" height="110" rx="14"/>
+      <rect x="220" y="205" width="150" height="110" rx="14"/>
+      <rect x="220" y="340" width="150" height="110" rx="14"/>
+    </g>
+    <g font-family="'Press Start 2P', monospace" font-size="10" fill="var(--ml-text)" opacity="0.95">
+      <text x="62" y="96">tree</text>
+      <text x="62" y="231">tree</text>
+      <text x="62" y="366">tree</text>
+      <text x="242" y="96">tree</text>
+      <text x="242" y="231">tree</text>
+      <text x="242" y="366">tree</text>
+    </g>
+    <g stroke="var(--ml-accent-cyan)" stroke-width="3" opacity="0.8">
+      <line x1="190" y1="125" x2="410" y2="155"/>
+      <line x1="190" y1="260" x2="410" y2="200"/>
+      <line x1="190" y1="395" x2="410" y2="245"/>
+      <line x1="370" y1="125" x2="410" y2="155"/>
+      <line x1="370" y1="260" x2="410" y2="200"/>
+      <line x1="370" y1="395" x2="410" y2="245"/>
+    </g>
+    <g>
+      <rect x="410" y="140" width="190" height="140" rx="16" fill="var(--ml-surface-2)" stroke="var(--ml-accent-magenta)" stroke-width="3" opacity="0.95"/>
+      <text x="505" y="175" text-anchor="middle" font-family="'Press Start 2P', monospace" font-size="11" fill="var(--ml-text)">aggregate</text>
+      <text x="505" y="205" text-anchor="middle" font-family="'Press Start 2P', monospace" font-size="10" fill="var(--ml-muted)">vote / avg p</text>
+      <rect x="455" y="232" width="100" height="18" rx="9" fill="var(--ml-accent-cyan-soft-2)" stroke="var(--ml-accent-cyan)" stroke-width="2" opacity="0.9"/>
+      <rect x="455" y="232" width="64" height="18" rx="9" fill="var(--ml-accent-green-soft)" opacity="0.95"/>
+      <text x="505" y="247" text-anchor="middle" font-family="'Press Start 2P', monospace" font-size="9" fill="var(--ml-text)">p=0.64</text>
+    </g>
+    <g font-family="'Press Start 2P', monospace" font-size="10" fill="var(--ml-muted)">
+      <text x="60" y="48">many trees</text>
+      <text x="445" y="320">one prediction</text>
+    </g>
+  </svg>
+
+</div>
+<!-- /position -->
+
+<!-- /layout -->
+
+---
+
+<!-- .slide:id="random-forest-00b-tree-anatomy" -->
+## Tree Anatomy (Words We Will Use)
+<!-- layout={rows: 1, columns: 2} -->
+
+<!-- position={row: 1, column: 1} -->
+-! root, branch, leaf
+-: root at the top, leaves store the prediction
+
+***
+
+-! depth
+-: number of split steps from root to leaf
+<!-- /position -->
+
+<!-- position={row: 1, column: 2} -->
+<div style="width: 100%; height: 650px; display: flex; align-items: center; justify-content: center;">
+
+  <svg viewBox="0 0 640 520" width="100%" height="100%" role="img" aria-label="Decision tree anatomy diagram">
+    <rect x="12" y="12" width="616" height="496" rx="16" fill="var(--ml-panel-bg)" stroke="var(--ml-panel-border)" stroke-width="3"/>
+    <g stroke="var(--ml-panel-border)" stroke-width="3" opacity="0.9">
+      <line x1="320" y1="120" x2="220" y2="220"/>
+      <line x1="320" y1="120" x2="420" y2="220"/>
+      <line x1="220" y1="250" x2="160" y2="340"/>
+      <line x1="220" y1="250" x2="280" y2="340"/>
+      <line x1="420" y1="250" x2="360" y2="340"/>
+      <line x1="420" y1="250" x2="480" y2="340"/>
+    </g>
+    <g fill="var(--ml-surface)" stroke="var(--ml-panel-border)" stroke-width="3">
+      <circle cx="320" cy="120" r="28"/>
+      <circle cx="220" cy="250" r="26"/>
+      <circle cx="420" cy="250" r="26"/>
+      <rect x="122" y="340" width="76" height="52" rx="12"/>
+      <rect x="242" y="340" width="76" height="52" rx="12"/>
+      <rect x="342" y="340" width="76" height="52" rx="12"/>
+      <rect x="462" y="340" width="76" height="52" rx="12"/>
+    </g>
+    <g font-family="'Press Start 2P', monospace" fill="var(--ml-text)" opacity="0.95">
+      <text x="320" y="92" text-anchor="middle" font-size="10">root</text>
+      <text x="220" y="222" text-anchor="middle" font-size="9">branch</text>
+      <text x="420" y="222" text-anchor="middle" font-size="9">branch</text>
+      <text x="160" y="372" text-anchor="middle" font-size="9">leaf</text>
+      <text x="280" y="372" text-anchor="middle" font-size="9">leaf</text>
+      <text x="380" y="372" text-anchor="middle" font-size="9">leaf</text>
+      <text x="500" y="372" text-anchor="middle" font-size="9">leaf</text>
+    </g>
+    <!-- depth indicator -->
+    <g stroke="var(--ml-accent-cyan)" stroke-width="4" opacity="0.9">
+      <line x1="88" y1="120" x2="88" y2="372"/>
+    </g>
+    <g fill="var(--ml-accent-cyan)" opacity="0.9">
+      <circle cx="88" cy="120" r="5.5"/>
+      <circle cx="88" cy="250" r="5.5"/>
+      <circle cx="88" cy="372" r="5.5"/>
+    </g>
+    <g font-family="'Press Start 2P', monospace" font-size="10" fill="var(--ml-muted)">
+      <text x="104" y="180">depth</text>
+      <text x="104" y="204">= 2</text>
+    </g>
+  </svg>
+  
+</div>
+<!-- /position -->
+
+<!-- /layout -->
+
+---
+
+<!-- .slide:id="random-forest-00a-tree-vs-forest" -->
+## Decision Tree vs Random Forest
+<!-- layout={rows: 1, columns: 2} -->
+
+<!-- position={row: 1, column: 1} -->
+-! Decision tree: one sequence of questions
+-: each path ends in a prediction (leaf)
+
+***
+
+-! Random forest: many trees + aggregation
+-: average probability (classification) -> more stable
+<!-- /position -->
+
+<!-- position={row: 1, column: 2} -->
+<div style="width: 100%; height: 650px; display: flex; align-items: center; justify-content: center;">
+
+  <svg viewBox="0 0 640 520" width="100%" height="100%" role="img" aria-label="One tree versus many trees diagram">
+    <rect x="12" y="12" width="616" height="496" rx="16" fill="var(--ml-panel-bg)" stroke="var(--ml-panel-border)" stroke-width="3"/>
+    <g>
+      <rect x="44" y="70" width="240" height="380" rx="18" fill="var(--ml-surface)" stroke="var(--ml-panel-border)" stroke-width="2.5"/>
+      <rect x="356" y="70" width="240" height="380" rx="18" fill="var(--ml-surface)" stroke="var(--ml-panel-border)" stroke-width="2.5"/>
+    </g>
+    <!-- left: single tree -->
+    <g stroke="var(--ml-panel-border)" stroke-width="3" opacity="0.9">
+      <line x1="164" y1="150" x2="120" y2="220"/>
+      <line x1="164" y1="150" x2="208" y2="220"/>
+      <line x1="120" y1="250" x2="92" y2="320"/>
+      <line x1="120" y1="250" x2="148" y2="320"/>
+    </g>
+    <g fill="var(--ml-surface-2)" stroke="var(--ml-panel-border)" stroke-width="3">
+      <circle cx="164" cy="150" r="18"/>
+      <circle cx="120" cy="250" r="16"/>
+      <rect x="72" y="320" width="42" height="30" rx="10"/>
+      <rect x="132" y="320" width="42" height="30" rx="10"/>
+      <circle cx="208" cy="250" r="16"/>
+      <rect x="186" y="320" width="44" height="30" rx="10"/>
+    </g>
+    <g font-family="'Press Start 2P', monospace" font-size="10" fill="var(--ml-muted)">
+      <text x="164" y="106" text-anchor="middle">one tree</text>
+    </g>
+    <!-- right: a small forest -->
+    <g fill="var(--ml-surface-2)" stroke="var(--ml-panel-border)" stroke-width="2.5" opacity="0.95">
+      <rect x="388" y="124" width="56" height="78" rx="12"/>
+      <rect x="460" y="106" width="56" height="96" rx="12"/>
+      <rect x="532" y="134" width="56" height="68" rx="12"/>
+    </g>
+    <g stroke="var(--ml-accent-cyan)" stroke-width="3" opacity="0.85">
+      <line x1="416" y1="220" x2="476" y2="280"/>
+      <line x1="488" y1="220" x2="476" y2="280"/>
+      <line x1="560" y1="220" x2="476" y2="280"/>
+    </g>
+    <g>
+      <rect x="418" y="284" width="164" height="96" rx="16" fill="var(--ml-surface-2)" stroke="var(--ml-accent-magenta)" stroke-width="3" opacity="0.95"/>
+      <text x="500" y="318" text-anchor="middle" font-family="'Press Start 2P', monospace" font-size="10" fill="var(--ml-text)">aggregate</text>
+      <text x="500" y="344" text-anchor="middle" font-family="'Press Start 2P', monospace" font-size="9" fill="var(--ml-muted)">avg probability</text>
+      <rect x="450" y="356" width="100" height="16" rx="8" fill="var(--ml-accent-cyan-soft-2)" stroke="var(--ml-accent-cyan)" stroke-width="2" opacity="0.9"/>
+      <rect x="450" y="356" width="62" height="16" rx="8" fill="var(--ml-accent-green-soft)" opacity="0.95"/>
+      <text x="500" y="369" text-anchor="middle" font-family="'Press Start 2P', monospace" font-size="9" fill="var(--ml-text)">p=0.62</text>
+    </g>
+    <g font-family="'Press Start 2P', monospace" font-size="10" fill="var(--ml-muted)">
+      <text x="476" y="106" text-anchor="middle">many trees</text>
+    </g>
+  </svg>
+
+</div>
+<!-- /position -->
+
+<!-- /layout -->
+
+---
+
+<!-- .slide:id="random-forest-00c-purity-impurity" -->
+## Purity / Impurity After a Split
+<!-- layout={rows: 1, columns: 2} -->
+
+<!-- position={row: 1, column: 1} -->
+-! A good split makes child nodes more pure
+-: fewer mixed labels in each child
+
+***
+
+-! Measured by impurity (Gini/entropy)
+-: we prefer splits that reduce impurity
+
+$$ GINI = 1 - \sum_{i=1}^{C} p_i^2 $$
+
+-: $p_i$ = proportion of class i in node, C = number of classes
+<!-- /position -->
+
+<!-- position={row: 1, column: 2} -->
+<div style="width: 100%; height: 650px; display: flex; align-items: center; justify-content: center;">
+
+  <svg viewBox="0 0 640 520" width="100%" height="100%" role="img" aria-label="Impurity before and after split diagram">
+    <rect x="12" y="12" width="616" height="496" rx="16" fill="var(--ml-panel-bg)" stroke="var(--ml-panel-border)" stroke-width="3"/>
+    <!-- parent -->
+    <g transform="translate(110,70)">
+      <rect x="0" y="0" width="420" height="150" rx="16" fill="var(--ml-surface)" stroke="var(--ml-panel-border)" stroke-width="2.5"/>
+      <text x="210" y="34" text-anchor="middle" font-family="'Press Start 2P', monospace" font-size="11" fill="var(--ml-text)">before split</text>
+      <text x="210" y="56" text-anchor="middle" font-family="'Press Start 2P', monospace" font-size="10" fill="var(--ml-muted)">mixed node (high impurity)</text>
+      <rect x="60" y="84" width="300" height="24" rx="12" fill="var(--ml-accent-orange-soft-2)" opacity="0.95"/>
+      <rect x="60" y="84" width="150" height="24" rx="12" fill="var(--ml-accent-green-soft)" opacity="0.95"/>
+      <rect x="60" y="84" width="300" height="24" rx="12" fill="none" stroke="var(--ml-panel-border)" stroke-width="2"/>
+      <text x="60" y="130" text-anchor="start" font-family="'Press Start 2P', monospace" font-size="9" fill="var(--ml-muted)">class 0</text>
+      <text x="360" y="130" text-anchor="end" font-family="'Press Start 2P', monospace" font-size="9" fill="var(--ml-muted)">class 1</text>
+    </g>
+    <!-- arrows -->
+    <g stroke="var(--ml-accent-cyan)" stroke-width="4" opacity="0.85">
+      <line x1="300" y1="235" x2="230" y2="280"/>
+      <line x1="340" y1="235" x2="410" y2="280"/>
+    </g>
+    <!-- children -->
+    <g transform="translate(70,290)">
+      <rect x="0" y="0" width="240" height="170" rx="16" fill="var(--ml-surface)" stroke="var(--ml-panel-border)" stroke-width="2.5"/>
+      <text x="120" y="34" text-anchor="middle" font-family="'Press Start 2P', monospace" font-size="11" fill="var(--ml-text)">child A</text>
+      <text x="120" y="56" text-anchor="middle" font-family="'Press Start 2P', monospace" font-size="10" fill="var(--ml-muted)">more pure</text>
+      <rect x="28" y="88" width="184" height="22" rx="11" fill="var(--ml-accent-orange-soft-2)" opacity="0.95"/>
+      <rect x="28" y="88" width="30" height="22" rx="11" fill="var(--ml-accent-green-soft)" opacity="0.95"/>
+      <rect x="28" y="88" width="184" height="22" rx="11" fill="none" stroke="var(--ml-panel-border)" stroke-width="2"/>
+    </g>
+    <g transform="translate(330,290)">
+      <rect x="0" y="0" width="240" height="170" rx="16" fill="var(--ml-surface)" stroke="var(--ml-panel-border)" stroke-width="2.5"/>
+      <text x="120" y="34" text-anchor="middle" font-family="'Press Start 2P', monospace" font-size="11" fill="var(--ml-text)">child B</text>
+      <text x="120" y="56" text-anchor="middle" font-family="'Press Start 2P', monospace" font-size="10" fill="var(--ml-muted)">more pure</text>
+      <rect x="28" y="88" width="184" height="22" rx="11" fill="var(--ml-accent-orange-soft-2)" opacity="0.95"/>
+      <rect x="28" y="88" width="160" height="22" rx="11" fill="var(--ml-accent-green-soft)" opacity="0.95"/>
+      <rect x="28" y="88" width="184" height="22" rx="11" fill="none" stroke="var(--ml-panel-border)" stroke-width="2"/>
+    </g>
+    <g font-family="'Press Start 2P', monospace" font-size="10" fill="var(--ml-muted)">
+      <text x="320" y="492" text-anchor="middle">goal: children less mixed than parent</text>
+    </g>
+  </svg>
+
+</div>
+<!-- /position -->
+
+<!-- /layout -->
+
+---
+
 <!-- .slide:id="random-forest-01-motivation" -->
 ## Random Forest - Motivation
 <!-- layout={rows: 1, columns: 2} -->
 
 <!-- position={row: 1, column: 1} -->
--! Many water-quality problems are not linear
+-! Many problems are not linear
 -: predictors often interact (for example, turbidity can matter differently across seasons)
 -: effects can be non-monotonic (risk increases, saturates, then changes again)
 
@@ -1235,13 +1954,11 @@ $$ \beta^{(i+1)} = \beta^{(i)} + \\eta X^T (y - \\sigma(X\\beta^{(i)})) $$
 ***
 
 -! The key advantage is flexible decision boundaries
--: linear models are great when the boundary is approximately linear
 -: tree ensembles can capture interactions that a single straight line cannot
 <!-- /position -->
 
 <!-- position={row: 1, column: 2} -->
-<div id="rf-motivation-plot" style="width: 100%; height: 650px; border: 1px solid #2d3a66; border-radius: 12px; background: rgba(15,23,42,0.85);"></div>
--= Same dataset: a linear boundary cannot separate an interaction pattern, while axis-aligned splits can.
+<div id="rf-motivation-plot" style="width: 100%; height: 820px;"></div>
 
 <script>
 (function() {
@@ -1283,8 +2000,8 @@ $$ \beta^{(i+1)} = \beta^{(i)} + \\eta X^T (y - \\sigma(X\\beta^{(i)})) $$
     const container = document.getElementById(containerId);
     if (!container) return;
 
-    const width = 680;
-    const height = 650;
+    const width = 780;
+    const height = 820;
     const margin = { top: 36, right: 28, bottom: 70, left: 70 };
 
     const points = makeData();
@@ -1304,7 +2021,7 @@ $$ \beta^{(i+1)} = \beta^{(i)} + \\eta X^T (y - \\sigma(X\\beta^{(i)})) $$
       orange: 'var(--ml-accent-orange)'
     };
 
-    const gap = 22;
+    const gap = 102;
     const panelW = (fig.width - gap) / 2;
     const panelH = fig.height - 30;
 
@@ -1397,7 +2114,7 @@ $$ \beta^{(i+1)} = \beta^{(i)} + \\eta X^T (y - \\sigma(X\\beta^{(i)})) $$
 
     fig.svg.append('text')
       .attr('x', (panelW / 2))
-      .attr('y', fig.height + 24)
+      .attr('y', fig.height + 44)
       .attr('text-anchor', 'middle')
       .style('fill', theme.muted)
       .style('font-size', '12px')
@@ -1405,7 +2122,7 @@ $$ \beta^{(i+1)} = \beta^{(i)} + \\eta X^T (y - \\sigma(X\\beta^{(i)})) $$
 
     fig.svg.append('text')
       .attr('x', panelW + gap + (panelW / 2))
-      .attr('y', fig.height + 24)
+      .attr('y', fig.height + 44)
       .attr('text-anchor', 'middle')
       .style('fill', theme.muted)
       .style('font-size', '12px')
@@ -1440,20 +2157,28 @@ $$ \beta^{(i+1)} = \beta^{(i)} + \\eta X^T (y - \\sigma(X\\beta^{(i)})) $$
 
 ***
 
--! The same idea can be shown in two ways
--: as a small tree with nodes and leaves
--: as a partition of the feature space into rectangles
+-: Example tree structure (as text) 
 
-***
+```
+             [x < 0.5?]
+          /              \
+        yes               no
+        /                  \
+    [y < 0.4?]           [y < 0.7?]
+     /    \               /     \
+    yes    no           yes      no
+    /       \           /         \
+  leaf1   leaf0       leaf0     leaf1
+(class 1) (class 0) (class 0) (class 1)
+```
 
--! Trees are easy to explain but can be unstable
--: small changes in data can change early splits
--: later predictions then change as well
+
+
 <!-- /position -->
 
 <!-- position={row: 1, column: 2} -->
-<div id="rf-single-tree-plot" style="width: 100%; height: 650px; border: 1px solid #2d3a66; border-radius: 12px; background: rgba(15,23,42,0.85);"></div>
--= A tiny tree and its corresponding rectangular partition.
+-: Example tree visualization (as diagram)
+<div id="rf-single-tree-plot" style="width: 100%; height: 820px;"></div>
 
 <script>
 (function() {
@@ -1468,8 +2193,8 @@ $$ \beta^{(i+1)} = \beta^{(i)} + \\eta X^T (y - \\sigma(X\\beta^{(i)})) $$
     const container = document.getElementById(containerId);
     if (!container) return;
 
-    const width = 680;
-    const height = 650;
+    const width = 780;
+    const height = 820;
     const margin = { top: 26, right: 26, bottom: 26, left: 26 };
 
     const fig = plotUtils.createFigure(containerId, width, height, margin);
@@ -1486,12 +2211,10 @@ $$ \beta^{(i+1)} = \beta^{(i)} + \\eta X^T (y - \\sigma(X\\beta^{(i)})) $$
       orange: 'var(--ml-accent-orange)'
     };
 
-    const gap = 26;
-    const panelW = (fig.width - gap) / 2;
+    const panelW = fig.width;
     const panelH = fig.height;
 
     const left = fig.svg.append('g');
-    const right = fig.svg.append('g').attr('transform', `translate(${panelW + gap}, 0)`);
 
     left.append('rect')
       .attr('x', 0).attr('y', 0)
@@ -1506,17 +2229,17 @@ $$ \beta^{(i+1)} = \beta^{(i)} + \\eta X^T (y - \\sigma(X\\beta^{(i)})) $$
       .attr('text-anchor', 'middle')
       .style('fill', theme.text)
       .style('font-family', "'Press Start 2P', monospace")
-      .style('font-size', '12px')
+      .style('font-size', '16px')
       .text('Tree');
 
     const treeNodes = [
-      { id: 'root', x: panelW / 2, y: 90, label: 'x < 0.5?' },
-      { id: 'l', x: panelW * 0.28, y: 220, label: 'y < 0.4?' },
-      { id: 'r', x: panelW * 0.72, y: 220, label: 'y < 0.7?' },
-      { id: 'll', x: panelW * 0.16, y: 360, label: 'leaf: class 1', cls: 1 },
-      { id: 'lr', x: panelW * 0.40, y: 360, label: 'leaf: class 0', cls: 0 },
-      { id: 'rl', x: panelW * 0.60, y: 360, label: 'leaf: class 0', cls: 0 },
-      { id: 'rr', x: panelW * 0.84, y: 360, label: 'leaf: class 1', cls: 1 }
+      { id: 'root', x: panelW / 2, y: 140, label: 'x < 0.5?' },
+      { id: 'l', x: panelW * 0.28, y: 340, label: 'y < 0.4?' },
+      { id: 'r', x: panelW * 0.72, y: 340, label: 'y < 0.7?' },
+      { id: 'll', x: panelW * 0.16, y: 600, label: 'leaf 1', cls: 1 },
+      { id: 'lr', x: panelW * 0.40, y: 600, label: 'leaf 0', cls: 0 },
+      { id: 'rl', x: panelW * 0.60, y: 600, label: 'leaf 0', cls: 0 },
+      { id: 'rr', x: panelW * 0.84, y: 600, label: 'leaf 1', cls: 1 }
     ];
 
     const treeLinks = [
@@ -1536,11 +2259,11 @@ $$ \beta^{(i+1)} = \beta^{(i)} + \\eta X^T (y - \\sigma(X\\beta^{(i)})) $$
       .enter()
       .append('line')
       .attr('x1', d => byId.get(d.a).x)
-      .attr('y1', d => byId.get(d.a).y + 18)
+      .attr('y1', d => byId.get(d.a).y + 24)
       .attr('x2', d => byId.get(d.b).x)
-      .attr('y2', d => byId.get(d.b).y - 18)
+      .attr('y2', d => byId.get(d.b).y - 24)
       .attr('stroke', theme.muted)
-      .attr('stroke-width', 2);
+      .attr('stroke-width', 2.6);
 
     left.append('g')
       .selectAll('text.edge')
@@ -1552,7 +2275,7 @@ $$ \beta^{(i+1)} = \beta^{(i)} + \\eta X^T (y - \\sigma(X\\beta^{(i)})) $$
       .attr('y', d => (byId.get(d.a).y + byId.get(d.b).y) / 2)
       .attr('text-anchor', 'middle')
       .style('fill', theme.muted)
-      .style('font-size', '11px')
+      .style('font-size', '15px')
       .text(d => d.text);
 
     const nodeG = left.append('g')
@@ -1563,12 +2286,18 @@ $$ \beta^{(i+1)} = \beta^{(i)} + \\eta X^T (y - \\sigma(X\\beta^{(i)})) $$
       .attr('class', 'node')
       .attr('transform', d => `translate(${d.x}, ${d.y})`);
 
+    function nodeWidth(d) {
+      if (d.id === 'root') return 220;
+      if (d.cls === 0 || d.cls === 1) return 110;
+      return 190;
+    }
+
     nodeG.append('rect')
-      .attr('x', -86)
-      .attr('y', -18)
-      .attr('width', 172)
-      .attr('height', 36)
-      .attr('rx', 10)
+      .attr('x', d => -nodeWidth(d) / 2)
+      .attr('y', -22)
+      .attr('width', d => nodeWidth(d))
+      .attr('height', 44)
+      .attr('rx', 12)
       .attr('fill', d => d.cls === 1 ? 'var(--ml-accent-green-soft-2)' : d.cls === 0 ? 'var(--ml-accent-orange-soft-2)' : 'var(--ml-accent-cyan-soft)')
       .attr('stroke', d => d.cls === 1 ? theme.green : d.cls === 0 ? theme.orange : theme.cyan)
       .attr('stroke-width', 2);
@@ -1577,286 +2306,10 @@ $$ \beta^{(i+1)} = \beta^{(i)} + \\eta X^T (y - \\sigma(X\\beta^{(i)})) $$
       .attr('text-anchor', 'middle')
       .attr('dominant-baseline', 'middle')
       .style('fill', theme.text)
-      .style('font-size', '11px')
+      .style('font-size', '16px')
       .text(d => d.label);
 
-    right.append('rect')
-      .attr('x', 0).attr('y', 0)
-      .attr('width', panelW).attr('height', panelH)
-      .attr('rx', 10)
-      .attr('fill', 'var(--ml-surface)')
-      .attr('stroke', theme.border)
-      .attr('stroke-width', 2);
-
-    right.append('text')
-      .attr('x', panelW / 2).attr('y', 20)
-      .attr('text-anchor', 'middle')
-      .style('fill', theme.text)
-      .style('font-family', "'Press Start 2P', monospace")
-      .style('font-size', '12px')
-      .text('Feature space');
-
-    const inner = { left: 50, top: 50, right: 20, bottom: 50 };
-    const w = panelW - inner.left - inner.right;
-    const h = panelH - inner.top - inner.bottom;
-    const gx = right.append('g').attr('transform', `translate(${inner.left}, ${inner.top})`);
-
-    const x = d3.scaleLinear().domain([0, 1]).range([0, w]);
-    const y = d3.scaleLinear().domain([0, 1]).range([h, 0]);
-
-    gx.append('g').attr('class', 'd3-axis').attr('transform', `translate(0, ${h})`).call(d3.axisBottom(x).ticks(4));
-    gx.append('g').attr('class', 'd3-axis').call(d3.axisLeft(y).ticks(4));
-
-    const regions = [
-      { x0: 0, x1: 0.5, y0: 0, y1: 0.4, cls: 1 },
-      { x0: 0, x1: 0.5, y0: 0.4, y1: 1, cls: 0 },
-      { x0: 0.5, x1: 1, y0: 0, y1: 0.7, cls: 0 },
-      { x0: 0.5, x1: 1, y0: 0.7, y1: 1, cls: 1 }
-    ];
-
-    gx.append('g')
-      .selectAll('rect.region')
-      .data(regions)
-      .enter()
-      .append('rect')
-      .attr('class', 'region')
-      .attr('x', d => x(d.x0))
-      .attr('y', d => y(d.y1))
-      .attr('width', d => x(d.x1) - x(d.x0))
-      .attr('height', d => y(d.y0) - y(d.y1))
-      .attr('fill', d => d.cls === 1 ? 'var(--ml-accent-green-soft)' : 'var(--ml-accent-orange-soft)')
-      .attr('stroke', theme.border)
-      .attr('stroke-width', 1.5);
-
-    const splitColor = theme.cyan;
-    gx.append('line')
-      .attr('x1', x(0.5)).attr('x2', x(0.5))
-      .attr('y1', 0).attr('y2', h)
-      .attr('stroke', splitColor)
-      .attr('stroke-width', 2);
-    gx.append('line')
-      .attr('x1', x(0)).attr('x2', x(0.5))
-      .attr('y1', y(0.4)).attr('y2', y(0.4))
-      .attr('stroke', splitColor)
-      .attr('stroke-width', 2);
-    gx.append('line')
-      .attr('x1', x(0.5)).attr('x2', x(1))
-      .attr('y1', y(0.7)).attr('y2', y(0.7))
-      .attr('stroke', splitColor)
-      .attr('stroke-width', 2);
-
-    right.append('text')
-      .attr('x', inner.left + w / 2)
-      .attr('y', panelH - 16)
-      .attr('text-anchor', 'middle')
-      .style('fill', theme.muted)
-      .style('font-size', '12px')
-      .text('x');
-
-    right.append('text')
-      .attr('x', 18)
-      .attr('y', inner.top + h / 2)
-      .attr('text-anchor', 'middle')
-      .attr('transform', `rotate(-90, 18, ${inner.top + h / 2})`)
-      .style('fill', theme.muted)
-      .style('font-size', '12px')
-      .text('y');
-  }
-
-  function register() {
-    if (typeof plotUtils === 'undefined') {
-      setTimeout(register, 80);
-      return;
-    }
-    plotUtils.renderOnSlideOnce({ slideId, containerId, draw });
-  }
-
-  register();
-})();
-</script>
-<!-- /position -->
-
-<!-- /layout -->
-
----
-
-<!-- .slide:id="random-forest-03-why-forests" -->
-## Why Not Just One Tree?
-<!-- layout={rows: 1, columns: 2} -->
-
-<!-- position={row: 1, column: 1} -->
--! A single tree has high variance
--: it can change a lot when the training set changes slightly
--: noise can trigger different early splits and lead to different boundaries
-
-***
-
--! Two trees trained on nearly the same data can disagree
--: their partitions can look different even when accuracy is similar
--: this makes a single tree an unreliable baseline
-
-***
-
--! Random Forest reduces variance by averaging
--: build many slightly different trees (different samples, different split candidates)
--: combine them by voting (classification) or averaging (regression)
-<!-- /position -->
-
-<!-- position={row: 1, column: 2} -->
-<div id="rf-variance-plot" style="width: 100%; height: 650px; border: 1px solid #2d3a66; border-radius: 12px; background: rgba(15,23,42,0.85);"></div>
--= Small training changes can produce different tree boundaries (variance).
-
-<script>
-(function() {
-  const containerId = 'rf-variance-plot';
-  const slideId = 'random-forest-03-why-forests';
-
-  function seededRandom(seed) {
-    let value = seed >>> 0;
-    return function() {
-      value = (1664525 * value + 1013904223) >>> 0;
-      return value / 4294967296;
-    };
-  }
-
-  function makeData() {
-    const rng = seededRandom(99);
-    const jitter = (s) => (rng() * 2 - 1) * s;
-    const points = [];
-    const n = 90;
-    for (let i = 0; i < n; i++) {
-      const x = Math.max(0, Math.min(1, rng() + jitter(0.03)));
-      const y = Math.max(0, Math.min(1, rng() + jitter(0.03)));
-      const cls =
-        (x < 0.45 && y < 0.45) || (x > 0.55 && y > 0.55) ? 1 : 0;
-      points.push({ x, y, cls });
-    }
-    return points;
-  }
-
-  function draw() {
-    if (typeof d3 === 'undefined' || typeof plotUtils === 'undefined') {
-      setTimeout(draw, 80);
-      return;
-    }
-    const container = document.getElementById(containerId);
-    if (!container) return;
-
-    const width = 680;
-    const height = 650;
-    const margin = { top: 36, right: 28, bottom: 70, left: 70 };
-
-    const points = makeData();
-    const fig = plotUtils.createFigure(containerId, width, height, margin);
-
-    d3.select(`#${containerId} svg`)
-      .style('background-color', 'var(--ml-panel-bg)')
-      .style('border-radius', '12px');
-
-    const theme = {
-      border: 'var(--ml-panel-border)',
-      text: 'var(--ml-text)',
-      muted: 'var(--ml-muted)',
-      cyan: 'var(--ml-accent-cyan)',
-      magenta: 'var(--ml-accent-magenta)',
-      green: 'var(--ml-accent-green)',
-      orange: 'var(--ml-accent-orange)'
-    };
-
-    const gap = 22;
-    const panelW = (fig.width - gap) / 2;
-    const panelH = fig.height - 30;
-
-    const x = d3.scaleLinear().domain([0, 1]).range([0, panelW]);
-    const y = d3.scaleLinear().domain([0, 1]).range([panelH, 0]);
-
-    const left = fig.svg.append('g').attr('transform', `translate(0, 30)`);
-    const right = fig.svg.append('g').attr('transform', `translate(${panelW + gap}, 30)`);
-
-    function drawFrame(root, title) {
-      root.append('rect')
-        .attr('x', 0)
-        .attr('y', 0)
-        .attr('width', panelW)
-        .attr('height', panelH)
-        .attr('rx', 10)
-        .attr('fill', 'var(--ml-surface)')
-        .attr('stroke', theme.border)
-        .attr('stroke-width', 2);
-
-      root.append('text')
-        .attr('x', panelW / 2)
-        .attr('y', -10)
-        .attr('text-anchor', 'middle')
-        .style('fill', theme.text)
-        .style('font-family', "'Press Start 2P', monospace")
-        .style('font-size', '12px')
-        .text(title);
-
-      root.append('g')
-        .attr('transform', `translate(0, ${panelH})`)
-        .attr('class', 'd3-axis')
-        .call(d3.axisBottom(x).ticks(4));
-      root.append('g')
-        .attr('class', 'd3-axis')
-        .call(d3.axisLeft(y).ticks(4));
-    }
-
-    drawFrame(left, 'Tree A');
-    drawFrame(right, 'Tree B');
-
-    function drawPoints(root) {
-      root.append('g')
-        .selectAll('circle')
-        .data(points)
-        .enter()
-        .append('circle')
-        .attr('cx', d => x(d.x))
-        .attr('cy', d => y(d.y))
-        .attr('r', 4.6)
-        .attr('fill', d => d.cls === 1 ? theme.green : theme.orange)
-        .attr('stroke', theme.text)
-        .attr('stroke-width', 1.4)
-        .attr('opacity', 0.96);
-    }
-
-    function drawBoundary(root, regions, outlineColor) {
-      root.append('g')
-        .selectAll('rect.region')
-        .data(regions)
-        .enter()
-        .append('rect')
-        .attr('class', 'region')
-        .attr('x', d => x(d.x0))
-        .attr('y', d => y(d.y1))
-        .attr('width', d => x(d.x1) - x(d.x0))
-        .attr('height', d => y(d.y0) - y(d.y1))
-        .attr('fill', 'var(--ml-accent-cyan-soft)')
-        .attr('stroke', outlineColor)
-        .attr('stroke-width', 2.2);
-    }
-
-    const treeA = [
-      { x0: 0, x1: 0.47, y0: 0, y1: 0.43 },
-      { x0: 0.56, x1: 1, y0: 0.58, y1: 1 }
-    ];
-    const treeB = [
-      { x0: 0, x1: 0.42, y0: 0, y1: 0.48 },
-      { x0: 0.60, x1: 1, y0: 0.53, y1: 1 }
-    ];
-
-    drawBoundary(left, treeA, theme.cyan);
-    drawBoundary(right, treeB, theme.magenta);
-    drawPoints(left);
-    drawPoints(right);
-
-    fig.svg.append('text')
-      .attr('x', (panelW / 2))
-      .attr('y', fig.height + 24)
-      .attr('text-anchor', 'middle')
-      .style('fill', theme.muted)
-      .style('font-size', '12px')
-      .text('same problem, different split choices');
+    // Intentionally no "feature space" panel on this slide.
   }
 
   function register() {
@@ -1882,25 +2335,24 @@ $$ \beta^{(i+1)} = \beta^{(i)} + \\eta X^T (y - \\sigma(X\\beta^{(i)})) $$
 
 <!-- position={row: 1, column: 1} -->
 -! A Random Forest is many decision trees plus aggregation
--: each tree is trained on a slightly different view of the data
+-: each tree is trained on a different view of the data
 -: the forest prediction is a vote (classification) or an average (regression)
 
 ***
 
 -! Two kinds of randomness create diverse trees
--: bootstrap sampling changes which rows each tree sees
+-: bootstrap changes which rows each tree sees
 -: random feature selection changes which predictors are considered at each split
 
 ***
 
 -! Aggregation reduces variance
 -: single trees can overfit and are sensitive to noise
--: the average over many different trees is much more stable
+-: average over many different trees is more stable
 <!-- /position -->
 
 <!-- position={row: 1, column: 2} -->
-<div id="rf-big-picture-plot" style="width: 100%; height: 650px; border: 1px solid #2d3a66; border-radius: 12px; background: rgba(15,23,42,0.85);"></div>
--= Training pipeline: dataset -> bootstrap samples -> many trees -> aggregation -> prediction.
+<div id="rf-big-picture-plot" style="width: 100%; height: 820px;"></div>
 
 <script>
 (function() {
@@ -1915,8 +2367,8 @@ $$ \beta^{(i+1)} = \beta^{(i)} + \\eta X^T (y - \\sigma(X\\beta^{(i)})) $$
     const container = document.getElementById(containerId);
     if (!container) return;
 
-    const width = 680;
-    const height = 650;
+    const width = 780;
+    const height = 820;
     const margin = { top: 36, right: 26, bottom: 26, left: 26 };
 
     const fig = plotUtils.createFigure(containerId, width, height, margin);
@@ -1978,22 +2430,32 @@ $$ \beta^{(i+1)} = \beta^{(i)} + \\eta X^T (y - \\sigma(X\\beta^{(i)})) $$
         .attr('x1', x1).attr('y1', y1)
         .attr('x2', x2).attr('y2', y2)
         .attr('stroke', color || theme.muted)
-        .attr('stroke-width', 3)
+        .attr('stroke-width', 5)
         .attr('marker-end', `url(#${markerId})`)
         .attr('opacity', 0.95);
     }
 
-    const y0 = 60;
-    const dataset = box(10, y0, 150, 260, 'Dataset', theme.cyan);
-    const boots = box(190, y0, 160, 260, 'Bootstrap', theme.orange);
-    const trees = box(380, y0, 160, 260, 'Trees', theme.green);
-    const agg = box(570, y0, 90, 120, 'Vote', theme.magenta);
-    const pred = box(570, y0 + 160, 90, 100, 'Output', theme.cyan);
+    const padX = 18;
+    const padY = 60;
+    const gapX = 26;
+    const gapY = 44;
+    const cellW = (W - padX * 2 - gapX) / 2;
+    const cellH = (H - padY * 2 - gapY) / 2;
+
+    const dataset = box(padX, padY, cellW, cellH, 'Dataset', theme.cyan);
+    const boots = box(padX + cellW + gapX, padY, cellW, cellH, 'Bootstrap', theme.orange);
+    const trees = box(padX, padY + cellH + gapY, cellW, cellH, 'Trees', theme.green);
+
+    const voteH = Math.round(cellH * 0.42);
+    const outH = cellH - voteH - 18;
+    const agg = box(padX + cellW + gapX, padY + cellH + gapY, cellW, voteH, 'Vote', theme.magenta);
+    const pred = box(padX + cellW + gapX, padY + cellH + gapY + voteH + 18, cellW, outH, 'Output', theme.cyan);
 
     // Decorative points in dataset.
-    const pointArea = dataset.append('g').attr('transform', 'translate(14, 44)');
-    const px = d3.scaleLinear().domain([0, 1]).range([0, 120]);
-    const py = d3.scaleLinear().domain([0, 1]).range([200, 0]);
+    const dsInner = { x: 20, y: 56, w: cellW - 40, h: cellH - 92 };
+    const pointArea = dataset.append('g').attr('transform', `translate(${dsInner.x}, ${dsInner.y})`);
+    const px = d3.scaleLinear().domain([0, 1]).range([0, dsInner.w]);
+    const py = d3.scaleLinear().domain([0, 1]).range([dsInner.h, 0]);
     const pts = d3.range(36).map(i => ({
       x: (i * 37 % 97) / 97,
       y: (i * 19 % 89) / 89,
@@ -2005,15 +2467,17 @@ $$ \beta^{(i+1)} = \beta^{(i)} + \\eta X^T (y - \\sigma(X\\beta^{(i)})) $$
       .append('circle')
       .attr('cx', d => px(d.x))
       .attr('cy', d => py(d.y))
-      .attr('r', 4)
+      .attr('r', 4.2)
       .attr('fill', d => d.cls ? theme.green : theme.orange)
       .attr('stroke', '#ffffff')
       .attr('stroke-width', 1.2)
       .attr('opacity', 0.95);
 
     // Bootstrap mini-samples.
-    const b = boots.append('g').attr('transform', 'translate(18, 48)');
-    const sampleW = 124, sampleH = 58, sampleGap = 18;
+    const b = boots.append('g').attr('transform', 'translate(20, 64)');
+    const sampleGap = 16;
+    const sampleW = cellW - 40;
+    const sampleH = Math.max(54, Math.floor((cellH - 64 - 44 - sampleGap * 2) / 3));
     const sampleLabels = ['Tree 1', 'Tree 2', 'Tree 3'];
     sampleLabels.forEach((lab, i) => {
       const y = i * (sampleH + sampleGap);
@@ -2025,22 +2489,22 @@ $$ \beta^{(i+1)} = \beta^{(i)} + \\eta X^T (y - \\sigma(X\\beta^{(i)})) $$
         .attr('stroke', theme.orange)
         .attr('stroke-width', 2);
       b.append('text')
-        .attr('x', 6).attr('y', y + 18)
+        .attr('x', 10).attr('y', y + 20)
         .attr('text-anchor', 'start')
         .style('fill', theme.text)
-        .style('font-size', '11px')
+        .style('font-size', '16px')
         .text(lab);
       // tiny duplicates to hint "with replacement"
-      const s = b.append('g').attr('transform', `translate(8, ${y + 26})`);
+      const s = b.append('g').attr('transform', `translate(10, ${y + 24})`);
       const cells = d3.range(10).map(j => j);
       s.selectAll('rect')
         .data(cells)
         .enter()
         .append('rect')
         .attr('x', d => (d % 5) * 22)
-        .attr('y', d => Math.floor(d / 5) * 16)
+        .attr('y', d => Math.floor(d / 5) * 14)
         .attr('width', 18)
-        .attr('height', 12)
+        .attr('height', 10)
         .attr('rx', 3)
         .attr('fill', d => (d === 1 || d === 6) ? 'rgba(0,255,255,0.20)' : 'rgba(0,0,0,0.12)')
         .attr('stroke', theme.border)
@@ -2048,9 +2512,10 @@ $$ \beta^{(i+1)} = \beta^{(i)} + \\eta X^T (y - \\sigma(X\\beta^{(i)})) $$
     });
 
     // Trees icons.
-    const tg = trees.append('g').attr('transform', 'translate(16, 56)');
+    const treeScale = 2.25;
+    const tg = trees.append('g').attr('transform', 'translate(46, 82)');
     const icon = (gx, x, y, color) => {
-      const g = gx.append('g').attr('transform', `translate(${x}, ${y})`);
+      const g = gx.append('g').attr('transform', `translate(${x}, ${y}) scale(${treeScale})`);
       g.append('line').attr('x1', 28).attr('y1', 8).attr('x2', 16).attr('y2', 24).attr('stroke', color).attr('stroke-width', 2.2);
       g.append('line').attr('x1', 28).attr('y1', 8).attr('x2', 40).attr('y2', 24).attr('stroke', color).attr('stroke-width', 2.2);
       g.append('line').attr('x1', 16).attr('y1', 24).attr('x2', 10).attr('y2', 40).attr('stroke', color).attr('stroke-width', 2.2);
@@ -2067,59 +2532,57 @@ $$ \beta^{(i+1)} = \beta^{(i)} + \\eta X^T (y - \\sigma(X\\beta^{(i)})) $$
         .attr('stroke', color)
         .attr('stroke-width', 2);
     };
-    icon(tg, 6, 10, theme.green);
-    icon(tg, 74, 10, theme.green);
-    icon(tg, 40, 92, theme.green);
-    tg.append('text')
-      .attr('x', 64).attr('y', 160)
-      .attr('text-anchor', 'middle')
-      .style('fill', theme.muted)
-      .style('font-size', '11px')
-      .text('many diverse trees');
+    icon(tg, 6, -40, theme.green);
+    icon(tg, 120, -20, theme.green);
+    icon(tg, 88, 92, theme.green);
 
     // Aggregation and output glyphs.
-    agg.append('text')
-      .attr('x', 45).attr('y', 56)
-      .attr('text-anchor', 'middle')
-      .style('fill', theme.muted)
-      .style('font-size', '11px')
-      .text('average');
-    agg.append('text')
-      .attr('x', 45).attr('y', 80)
-      .attr('text-anchor', 'middle')
-      .style('fill', theme.muted)
-      .style('font-size', '11px')
-      .text('or vote');
+    const ax = cellW / 2;
 
+    agg.append('text')
+      .attr('x', ax).attr('y', Math.round(voteH / 2) - 6)
+      .attr('text-anchor', 'middle')
+      .style('fill', theme.muted)
+      .style('font-size', '18px')
+      .text('average probability');
+    agg.append('text')
+      .attr('x', ax).attr('y', Math.round(voteH / 2) + 16)
+      .attr('text-anchor', 'middle')
+      .style('fill', theme.muted)
+      .style('font-size', '18px')
+      .text('vote (class)');
+
+    const barW = Math.min(240, cellW - 80);
+    const barX = ax - barW / 2;
+    const barY = Math.round(outH / 2) - 11;
     pred.append('rect')
-      .attr('x', 18).attr('y', 48)
-      .attr('width', 54).attr('height', 20)
-      .attr('rx', 8)
+      .attr('x', barX).attr('y', barY)
+      .attr('width', barW).attr('height', 22)
+      .attr('rx', 10)
       .attr('fill', 'var(--ml-accent-cyan-soft-2)')
       .attr('stroke', theme.cyan)
-      .attr('stroke-width', 2);
+      .attr('stroke-width', 2)
+      .attr('opacity', 0.9);
+    pred.append('rect')
+      .attr('x', barX).attr('y', barY)
+      .attr('width', barW * 0.62).attr('height', 22)
+      .attr('rx', 10)
+      .attr('fill', 'var(--ml-accent-green-soft)')
+      .attr('opacity', 0.95);
     pred.append('text')
-      .attr('x', 45).attr('y', 63)
+      .attr('x', ax).attr('y', barY + 15)
       .attr('text-anchor', 'middle')
       .style('fill', theme.text)
-      .style('font-size', '11px')
-      .text('ŷ');
+      .style('font-family', "'Press Start 2P', monospace")
+      .style('font-size', '12px')
+      .text('p = 0.62');
 
     // Arrows.
-    arrow(160, y0 + 130, 190, y0 + 130);
-    arrow(350, y0 + 130, 380, y0 + 130);
-    arrow(540, y0 + 80, 570, y0 + 80, theme.muted);
-    arrow(540, y0 + 200, 570, y0 + 200, theme.muted);
+    arrow(padX + cellW, padY + cellH / 2, padX + cellW + gapX, padY + cellH / 2);
+    arrow(padX + cellW + gapX + cellW / 2, padY + cellH, padX + cellW / 2, padY + cellH + gapY);
+    arrow(padX + cellW, padY + cellH + gapY + cellH / 2, padX + cellW + gapX, padY + cellH + gapY + voteH / 2, theme.muted);
+    arrow(padX + cellW + gapX + cellW / 2, padY + cellH + gapY + voteH, padX + cellW + gapX + cellW / 2, padY + cellH + gapY + voteH + 18, theme.muted);
 
-    // Curly hint that aggregation uses all trees.
-    fig.svg.append('path')
-      .attr('d', `M ${540} ${y0 + 140} C ${548} ${y0 + 140}, ${554} ${y0 + 140}, ${560} ${y0 + 120}
-                 C ${566} ${y0 + 100}, ${566} ${y0 + 160}, ${560} ${y0 + 180}
-                 C ${554} ${y0 + 200}, ${548} ${y0 + 200}, ${540} ${y0 + 200}`)
-      .attr('fill', 'none')
-      .attr('stroke', theme.magenta)
-      .attr('stroke-width', 2.2)
-      .attr('opacity', 0.9);
   }
 
   function register() {
@@ -2144,26 +2607,25 @@ $$ \beta^{(i+1)} = \beta^{(i)} + \\eta X^T (y - \\sigma(X\\beta^{(i)})) $$
 <!-- layout={rows: 1, columns: 2} -->
 
 <!-- position={row: 1, column: 1} -->
--! Each tree is trained on a bootstrap sample
+-! Each tree: trained on bootstrap
 -: draw N observations with replacement from the training set
 -: some rows appear multiple times, and some rows are not drawn at all
 
 ***
 
 -! Rows that are not drawn are called out-of-bag (OOB)
--: the probability that a row is never selected is about 37 percent
--: OOB rows give an internal validation set without an extra split
+-: the probability that a row is never selected is ~ 37 %
+-: OOB rows give an internal validation set
 
 ***
 
 -! Bootstrap sampling increases diversity across trees
--: different samples lead to different split choices and different errors
--: averaging over many trees reduces variance compared to one tree
+-: different samples: different split choices and errors
+-: averaging over many trees reduces variance
 <!-- /position -->
 
 <!-- position={row: 1, column: 2} -->
-<div id="rf-bootstrap-plot" style="width: 100%; height: 650px; border: 1px solid #2d3a66; border-radius: 12px; background: rgba(15,23,42,0.85);"></div>
--= Two bootstrap samples from the same dataset: duplicates appear, and OOB rows remain unused.
+<div id="rf-bootstrap-plot" style="width: 100%; height: 820px;"></div>
 
 <script>
 (function() {
@@ -2194,8 +2656,8 @@ $$ \beta^{(i+1)} = \beta^{(i)} + \\eta X^T (y - \\sigma(X\\beta^{(i)})) $$
     const container = document.getElementById(containerId);
     if (!container) return;
 
-    const width = 680;
-    const height = 650;
+    const width = 780;
+    const height = 820;
     const margin = { top: 36, right: 26, bottom: 26, left: 26 };
     const fig = plotUtils.createFigure(containerId, width, height, margin);
 
@@ -2248,10 +2710,11 @@ $$ \beta^{(i+1)} = \beta^{(i)} + \\eta X^T (y - \\sigma(X\\beta^{(i)})) $$
         .attr('text-anchor', 'start')
         .style('fill', theme.text)
         .style('font-family', "'Press Start 2P', monospace")
-        .style('font-size', '11px')
+        .style('font-size', '18px')
         .text(label);
 
-      const cell = 26;
+      const cellX = 42;
+      const cellY = 58;
       const cols = 7;
       const ids = d3.range(n);
 
@@ -2261,29 +2724,29 @@ $$ \beta^{(i+1)} = \beta^{(i)} + \\eta X^T (y - \\sigma(X\\beta^{(i)})) $$
         .enter()
         .append('g')
         .attr('class', 'item')
-        .attr('transform', d => `translate(${(d % cols) * cell}, ${Math.floor(d / cols) * cell})`);
+        .attr('transform', d => `translate(${(d % cols) * cellX}, ${Math.floor(d / cols) * cellY})`);
 
       item.append('rect')
         .attr('x', 0).attr('y', 0)
-        .attr('width', 22).attr('height', 22)
-        .attr('rx', 6)
+        .attr('width', 34).attr('height', 34)
+        .attr('rx', 8)
         .attr('fill', d => s.counts[d] === 0 ? 'rgba(255,255,255,0.06)' : 'rgba(0,255,255,0.10)')
         .attr('stroke', d => s.counts[d] === 0 ? theme.border : theme.cyan)
         .attr('stroke-width', 1.8);
 
       item.append('text')
-        .attr('x', 11).attr('y', 15)
+        .attr('x', 17).attr('y', 23)
         .attr('text-anchor', 'middle')
         .style('fill', theme.text)
-        .style('font-size', '11px')
+        .style('font-size', '16px')
         .text(d => d + 1);
 
       // Usage count label below each cell for duplicates.
       item.append('text')
-        .attr('x', 11).attr('y', 34)
+        .attr('x', 17).attr('y', 52)
         .attr('text-anchor', 'middle')
         .style('fill', theme.muted)
-        .style('font-size', '11px')
+        .style('font-size', '14px')
         .text(d => s.counts[d] > 1 ? `x${s.counts[d]}` : '');
     }
 
@@ -2293,10 +2756,11 @@ $$ \beta^{(i+1)} = \beta^{(i)} + \\eta X^T (y - \\sigma(X\\beta^{(i)})) $$
         .attr('text-anchor', 'start')
         .style('fill', theme.text)
         .style('font-family', "'Press Start 2P', monospace")
-        .style('font-size', '11px')
+        .style('font-size', '18px')
         .text(label);
 
-      const cellW = 32;
+      const cellX = 42;
+      const cellY = 44;
       const cols = 7;
       const grp = g.append('g').attr('transform', `translate(${x0}, ${y0})`);
 
@@ -2304,11 +2768,11 @@ $$ \beta^{(i+1)} = \beta^{(i)} + \\eta X^T (y - \\sigma(X\\beta^{(i)})) $$
         .data(s.draws)
         .enter()
         .append('rect')
-        .attr('x', (d, i) => (i % cols) * cellW)
-        .attr('y', (d, i) => Math.floor(i / cols) * 26)
-        .attr('width', 28)
-        .attr('height', 22)
-        .attr('rx', 6)
+        .attr('x', (d, i) => (i % cols) * cellX)
+        .attr('y', (d, i) => Math.floor(i / cols) * cellY)
+        .attr('width', 38)
+        .attr('height', 32)
+        .attr('rx', 8)
         .attr('fill', d => 'rgba(0,0,0,0.10)')
         .attr('stroke', accent)
         .attr('stroke-width', 1.8);
@@ -2317,11 +2781,11 @@ $$ \beta^{(i+1)} = \beta^{(i)} + \\eta X^T (y - \\sigma(X\\beta^{(i)})) $$
         .data(s.draws)
         .enter()
         .append('text')
-        .attr('x', (d, i) => (i % cols) * cellW + 14)
-        .attr('y', (d, i) => Math.floor(i / cols) * 26 + 15)
+        .attr('x', (d, i) => (i % cols) * cellX + 19)
+        .attr('y', (d, i) => Math.floor(i / cols) * cellY + 22)
         .attr('text-anchor', 'middle')
         .style('fill', theme.text)
-        .style('font-size', '11px')
+        .style('font-size', '16px')
         .text(d => d + 1);
     }
 
@@ -2331,7 +2795,7 @@ $$ \beta^{(i+1)} = \beta^{(i)} + \\eta X^T (y - \\sigma(X\\beta^{(i)})) $$
         .attr('text-anchor', 'start')
         .style('fill', theme.text)
         .style('font-family', "'Press Start 2P', monospace")
-        .style('font-size', '11px')
+        .style('font-size', '18px')
         .text(label);
 
       const oobText = s.oob.length ? s.oob.map(i => i + 1).join(', ') : 'none';
@@ -2339,7 +2803,7 @@ $$ \beta^{(i+1)} = \beta^{(i)} + \\eta X^T (y - \\sigma(X\\beta^{(i)})) $$
         .attr('x', x0).attr('y', y0 + 10)
         .attr('text-anchor', 'start')
         .style('fill', theme.muted)
-        .style('font-size', '12px')
+        .style('font-size', '24px')
         .text(oobText);
     }
 
@@ -2350,26 +2814,19 @@ $$ \beta^{(i+1)} = \beta^{(i)} + \\eta X^T (y - \\sigma(X\\beta^{(i)})) $$
         .attr('text-anchor', 'middle')
         .style('fill', theme.text)
         .style('font-family', "'Press Start 2P', monospace")
-        .style('font-size', '12px')
+        .style('font-size', '18px')
         .text(p.title);
 
-      drawDatasetGrid(g, 18, 70, p.s, 'training set (N rows)');
-      drawSampleRow(g, 18, 220, p.s, p.accent, 'bootstrap sample (draw N times)');
-      drawOOB(g, 18, 410, p.s, 'out-of-bag rows (unused)');
-
-      g.append('text')
-        .attr('x', 18).attr('y', 520)
-        .attr('text-anchor', 'start')
-        .style('fill', theme.muted)
-        .style('font-size', '12px')
-        .text('duplicates show "with replacement"');
+      drawDatasetGrid(g, 18, 86, p.s, 'training set');
+      drawSampleRow(g, 18, 280, p.s, p.accent, 'bootstrap sample');
+      drawOOB(g, 18, 506, p.s, 'out-of-bag');
     });
 
     // Center caption arrows.
     const centerX = panelW + gap / 2;
     fig.svg.append('line')
       .attr('x1', centerX).attr('x2', centerX)
-      .attr('y1', 70).attr('y2', 520)
+      .attr('y1', 70).attr('y2', 610)
       .attr('stroke', theme.border)
       .attr('stroke-width', 2);
   }
@@ -2396,26 +2853,24 @@ $$ \beta^{(i+1)} = \beta^{(i)} + \\eta X^T (y - \\sigma(X\\beta^{(i)})) $$
 <!-- layout={rows: 1, columns: 2} -->
 
 <!-- position={row: 1, column: 1} -->
--! At each split, a tree considers only m of p features
--: first pick m random features, then find the best split among those candidates
--: typical defaults are m = sqrt(p) for classification and m = p/3 for regression
+-! At each split, a tree considers only $m$ of $p$ features
+-: first pick $m$ random features, then find the best split among those candidates
+-: typical defaults are $m = \sqrt{p}$ for classification and $m = \frac{p}{3}$ for regression
 
 ***
 
--! Feature subsampling prevents one predictor from dominating every tree
+-! Feature subsampling prevents one predictor from dominating
 -: different trees are forced to explore different predictors and interactions
--: the resulting trees become less correlated with each other
+-: the resulting trees become less correlated
 
 ***
 
--! Less correlation makes averaging more powerful
--: if trees make different mistakes, the vote cancels errors out
--: if trees are too similar, the forest behaves like one unstable tree
+-! Less correlation: averaging more powerful
+-: if trees make different mistakes, vote cancels errors
 <!-- /position -->
 
 <!-- position={row: 1, column: 2} -->
-<div id="rf-feature-subsampling-plot" style="width: 100%; height: 650px; border: 1px solid #2d3a66; border-radius: 12px; background: rgba(15,23,42,0.85);"></div>
--= Different trees see different candidate features at the same type of split, which decorrelates their decisions.
+<div id="rf-feature-subsampling-plot" style="width: 100%; height: 820px;"></div>
 
 <script>
 (function() {
@@ -2430,8 +2885,8 @@ $$ \beta^{(i+1)} = \beta^{(i)} + \\eta X^T (y - \\sigma(X\\beta^{(i)})) $$
     const container = document.getElementById(containerId);
     if (!container) return;
 
-    const width = 680;
-    const height = 650;
+    const width = 780;
+    const height = 820;
     const margin = { top: 36, right: 26, bottom: 26, left: 26 };
     const fig = plotUtils.createFigure(containerId, width, height, margin);
 
@@ -2469,32 +2924,32 @@ $$ \beta^{(i+1)} = \beta^{(i)} + \\eta X^T (y - \\sigma(X\\beta^{(i)})) $$
         .attr('text-anchor', 'middle')
         .style('fill', theme.text)
         .style('font-family', "'Press Start 2P', monospace")
-        .style('font-size', '12px')
+        .style('font-size', '18px')
         .text(title);
       g.append('rect')
-        .attr('x', 18).attr('y', 58)
-        .attr('width', panelW - 36).attr('height', 80)
+        .attr('x', 18).attr('y', 72)
+        .attr('width', panelW - 36).attr('height', 98)
         .attr('rx', 12)
         .attr('fill', 'var(--ml-accent-cyan-soft)')
         .attr('stroke', accent)
         .attr('stroke-width', 2);
       g.append('text')
-        .attr('x', panelW / 2).attr('y', 88)
+        .attr('x', panelW / 2).attr('y', 112)
         .attr('text-anchor', 'middle')
         .style('fill', theme.muted)
-        .style('font-size', '12px')
+        .style('font-size', '16px')
         .text('split node');
       g.append('text')
-        .attr('x', panelW / 2).attr('y', 110)
+        .attr('x', panelW / 2).attr('y', 140)
         .attr('text-anchor', 'middle')
         .style('fill', theme.muted)
-        .style('font-size', '12px')
+        .style('font-size', '16px')
         .text('candidate features');
       return g;
     }
 
     const features = ['f1', 'f2', 'f3', 'f4', 'f5', 'f6', 'f7', 'f8'];
-    const subsetA = new Set(['f1', 'f4', 'f7']);
+    const subsetA = new Set(['f1', 'f6', 'f7']);
     const subsetB = new Set(['f2', 'f5', 'f8']);
 
     function drawFeaturePool(g, x0, y0, subset, accent, caption) {
@@ -2502,12 +2957,12 @@ $$ \beta^{(i+1)} = \beta^{(i)} + \\eta X^T (y - \\sigma(X\\beta^{(i)})) $$
         .attr('x', x0).attr('y', y0 - 12)
         .attr('text-anchor', 'start')
         .style('fill', theme.text)
-        .style('font-size', '12px')
+        .style('font-size', '18px')
         .text(caption);
 
-      const cellW = 60;
-      const cellH = 28;
-      const cols = 4;
+      const cellW = 78;
+      const cellH = 36;
+      const cols = 3;
       const grp = g.append('g').attr('transform', `translate(${x0}, ${y0})`);
 
       const item = grp.selectAll('g.f')
@@ -2519,71 +2974,58 @@ $$ \beta^{(i+1)} = \beta^{(i)} + \\eta X^T (y - \\sigma(X\\beta^{(i)})) $$
 
       item.append('rect')
         .attr('x', 0).attr('y', 0)
-        .attr('width', 54).attr('height', cellH)
+        .attr('width', 70).attr('height', cellH)
         .attr('rx', 8)
         .attr('fill', d => subset.has(d) ? 'rgba(0,255,255,0.18)' : 'rgba(0,0,0,0.10)')
         .attr('stroke', d => subset.has(d) ? accent : theme.border)
         .attr('stroke-width', 2);
 
       item.append('text')
-        .attr('x', 27).attr('y', 18)
+        .attr('x', 35).attr('y', 24)
         .attr('text-anchor', 'middle')
         .style('fill', theme.text)
-        .style('font-size', '12px')
+        .style('font-size', '16px')
         .text(d => d);
 
+      const rows = Math.ceil(features.length / cols);
       g.append('text')
-        .attr('x', x0).attr('y', y0 + 2 * (cellH + 12) + 26)
+        .attr('x', x0).attr('y', y0 + rows * (cellH + 12) + 28)
         .attr('text-anchor', 'start')
         .style('fill', theme.muted)
-        .style('font-size', '12px')
+        .style('font-size', '16px')
         .text(`m = ${Array.from(subset).length} of p = ${features.length} highlighted`);
     }
 
     function drawChosenSplit(g, x0, y0, accent, label) {
       g.append('rect')
         .attr('x', x0).attr('y', y0)
-        .attr('width', panelW - 36).attr('height', 88)
+        .attr('width', panelW - 36).attr('height', 110)
         .attr('rx', 12)
         .attr('fill', 'var(--ml-accent-green-soft)')
         .attr('stroke', accent)
         .attr('stroke-width', 2);
       g.append('text')
-        .attr('x', x0 + (panelW - 36) / 2).attr('y', y0 + 34)
+        .attr('x', x0 + (panelW - 36) / 2).attr('y', y0 + 44)
         .attr('text-anchor', 'middle')
         .style('fill', theme.text)
-        .style('font-size', '12px')
+        .style('font-size', '16px')
         .text(label);
       g.append('text')
-        .attr('x', x0 + (panelW - 36) / 2).attr('y', y0 + 56)
+        .attr('x', x0 + (panelW - 36) / 2).attr('y', y0 + 72)
         .attr('text-anchor', 'middle')
         .style('fill', theme.muted)
-        .style('font-size', '12px')
+        .style('font-size', '16px')
         .text('best split among candidates');
     }
 
     const A = frame(0, 'Tree A', theme.cyan);
     const B = frame(panelW + gap, 'Tree B', theme.magenta);
 
-    drawFeaturePool(A, 24, 156, subsetA, theme.cyan, 'candidates at this node');
-    drawFeaturePool(B, 24, 156, subsetB, theme.magenta, 'candidates at this node');
+    drawFeaturePool(A, 24, 206, subsetA, theme.cyan, 'candidates at this node');
+    drawFeaturePool(B, 24, 206, subsetB, theme.magenta, 'candidates at this node');
 
-    drawChosenSplit(A, 18, 430, theme.green, 'uses f4 for the split');
-    drawChosenSplit(B, 18, 430, theme.green, 'uses f5 for the split');
-
-    // Divider.
-    fig.svg.append('line')
-      .attr('x1', panelW + gap / 2).attr('x2', panelW + gap / 2)
-      .attr('y1', 58).attr('y2', 560)
-      .attr('stroke', theme.border)
-      .attr('stroke-width', 2);
-
-    fig.svg.append('text')
-      .attr('x', panelW + gap / 2).attr('y', 610)
-      .attr('text-anchor', 'middle')
-      .style('fill', theme.muted)
-      .style('font-size', '12px')
-      .text('different candidate sets -> less correlation');
+    drawChosenSplit(A, 18, 500, theme.green, 'uses f1 for the split');
+    drawChosenSplit(B, 18, 500, theme.green, 'uses f5 for the split');
   }
 
   function register() {
@@ -2615,19 +3057,17 @@ $$ \beta^{(i+1)} = \beta^{(i)} + \\eta X^T (y - \\sigma(X\\beta^{(i)})) $$
 ***
 
 -! Classification trees aim for purer class distributions
--: criteria such as Gini impurity or entropy measure how mixed a node is
--: a good split makes the children more pure, so uncertainty decreases
+-: criteria as Gini impurity measure how mixed a node is
+-: a good split makes the children more pure
 
 ***
 
 -! Regression trees aim for lower spread of target values
--: common criteria reduce mean squared error, which is closely related to variance
--: splitting continues until a stopping rule is met (depth, minimum samples, purity)
+-: common criteria reduce mean squared error (MSE)
 <!-- /position -->
 
 <!-- position={row: 1, column: 2} -->
-<div id="rf-splitting-criterion-plot" style="width: 100%; height: 650px; border: 1px solid #2d3a66; border-radius: 12px; background: rgba(15,23,42,0.85);"></div>
--= A split is good when it reduces impurity: the parent is mixed, the children are more pure.
+<div id="rf-splitting-criterion-plot" style="width: 100%; height: 720px;"></div>
 
 <script>
 (function() {
@@ -2642,8 +3082,8 @@ $$ \beta^{(i+1)} = \beta^{(i)} + \\eta X^T (y - \\sigma(X\\beta^{(i)})) $$
     const container = document.getElementById(containerId);
     if (!container) return;
 
-    const width = 680;
-    const height = 650;
+    const width = 780;
+    const height = 820;
     const margin = { top: 36, right: 30, bottom: 30, left: 30 };
     const fig = plotUtils.createFigure(containerId, width, height, margin);
 
@@ -2678,7 +3118,7 @@ $$ \beta^{(i+1)} = \beta^{(i)} + \\eta X^T (y - \\sigma(X\\beta^{(i)})) $$
         .attr('text-anchor', 'middle')
         .style('fill', theme.text)
         .style('font-family', "'Press Start 2P', monospace")
-        .style('font-size', '11px')
+        .style('font-size', '18px')
         .text(title);
       return g;
     }
@@ -2706,22 +3146,17 @@ $$ \beta^{(i+1)} = \beta^{(i)} + \\eta X^T (y - \\sigma(X\\beta^{(i)})) $$
         .attr('stroke-width', 1.8)
         .attr('opacity', 0.9);
       g.append('text')
-        .attr('x', x).attr('y', y + h + 18)
+        .attr('x', x).attr('y', y + h + 22)
         .attr('text-anchor', 'start')
         .style('fill', theme.muted)
-        .style('font-size', '12px')
-        .text(`class 0: ${(p0 * 100).toFixed(0)}%`);
+        .style('font-size', '18px')
+        .text('class 0');
       g.append('text')
-        .attr('x', x + w).attr('y', y + h + 18)
+        .attr('x', x + w).attr('y', y + h + 22)
         .attr('text-anchor', 'end')
         .style('fill', theme.muted)
-        .style('font-size', '12px')
-        .text(`class 1: ${(p1 * 100).toFixed(0)}%`);
-    }
-
-    function gini(p1) {
-      const p0 = 1 - p1;
-      return 1 - (p0 * p0 + p1 * p1);
+        .style('font-size', '18px')
+        .text('class 1');
     }
 
     function arrow(x1, y1, x2, y2, color) {
@@ -2755,43 +3190,35 @@ $$ \beta^{(i+1)} = \beta^{(i)} + \\eta X^T (y - \\sigma(X\\beta^{(i)})) $$
     const leftP1 = 0.15;
     const rightP1 = 0.85;
 
-    const parent = nodeBox(120, 70, 400, 170, 'Parent node');
-    stackedBar(parent, 40, 58, 320, 26, parentP1);
+    const parent = nodeBox(60, 40, 500, 220, 'Before split');
+    stackedBar(parent, 50, 96, 400, 36, parentP1);
     parent.append('text')
-      .attr('x', 200).attr('y', 145)
+      .attr('x', 250).attr('y', 190)
       .attr('text-anchor', 'middle')
       .style('fill', theme.muted)
-      .style('font-size', '12px')
-      .text(`Gini = ${gini(parentP1).toFixed(2)} (mixed)`);
+      .style('font-size', '18px')
+      .text('mixed labels (high impurity)');
 
-    const leftChild = nodeBox(50, 320, 260, 220, 'Child (x < threshold)');
-    stackedBar(leftChild, 30, 58, 200, 26, leftP1);
+    const leftChild = nodeBox(20, 310, 290, 250, 'Child A');
+    stackedBar(leftChild, 40, 104, 210, 36, leftP1);
     leftChild.append('text')
-      .attr('x', 130).attr('y', 145)
+      .attr('x', 145).attr('y', 182)
       .attr('text-anchor', 'middle')
       .style('fill', theme.muted)
-      .style('font-size', '12px')
-      .text(`Gini = ${gini(leftP1).toFixed(2)} (more pure)`);
+      .style('font-size', '18px')
+      .text('more pure');
 
-    const rightChild = nodeBox(370, 320, 260, 220, 'Child (x ≥ threshold)');
-    stackedBar(rightChild, 30, 58, 200, 26, rightP1);
+    const rightChild = nodeBox(310, 310, 290, 250, 'Child B');
+    stackedBar(rightChild, 40, 104, 210, 36, rightP1);
     rightChild.append('text')
-      .attr('x', 130).attr('y', 145)
+      .attr('x', 145).attr('y', 182)
       .attr('text-anchor', 'middle')
       .style('fill', theme.muted)
-      .style('font-size', '12px')
-      .text(`Gini = ${gini(rightP1).toFixed(2)} (more pure)`);
+      .style('font-size', '18px')
+      .text('more pure');
 
-    arrow(320, 240, 180, 320);
-    arrow(320, 240, 500, 320);
-
-    fig.svg.append('text')
-      .attr('x', W / 2)
-      .attr('y', H - 16)
-      .attr('text-anchor', 'middle')
-      .style('fill', theme.muted)
-      .style('font-size', '12px')
-      .text('goal: reduce impurity (classification) or error/variance (regression)');
+    arrow(310, 270, 165, 310);
+    arrow(310, 270, 455, 310);
   }
 
   function register() {
@@ -2811,6 +3238,47 @@ $$ \beta^{(i+1)} = \beta^{(i)} + \\eta X^T (y - \\sigma(X\\beta^{(i)})) $$
 
 ---
 
+<!-- .slide:id="random-forest-07a-gini-example" -->
+## Example - Gini Before vs After a Split
+<!-- layout={rows: 1, columns: 2} -->
+
+<!-- position={row: 1, column: 1} -->
+-! Idea: lower Gini = more pure
+-: we only need class proportions
+
+***
+
+-! Parent (50/50) is more mixed than children (90/10)
+
+$$ GINI = 1 - \sum_{k=0}^{K-1} p_k^2 $$
+
+-: where $p_k$ is the proportion of class $k$ in the node
+
+***
+
+*Gini (2 classes):* $GINI = 1 - (p_0^2 + p_1^2)$
+<!-- /position -->
+
+<!-- position={row: 1, column: 2} -->
+
+*Before split (parent):*
+$$ p_0 = 0.50, \quad p_1 = 0.50 $$
+$$ G_{parent} = 1 - (0.50^2 + 0.50^2) = 0.50 $$
+
+***
+
+*After split (two children):*
+$$ p_0 = 0.90, \quad p_1 = 0.10 $$
+$$ G_A = 1 - (0.90^2 + 0.10^2) = 0.18 $$
+$$ p_0 = 0.10, \quad p_1 = 0.90 $$
+$$ G_B = 1 - (0.10^2 + 0.90^2) = 0.18 $$
+</div>
+<!-- /position -->
+
+<!-- /layout -->
+
+---
+
 <!-- .slide:id="random-forest-08-step4-growing-many-trees" -->
 ## Step 4 - Grow Many Trees
 <!-- layout={rows: 1, columns: 2} -->
@@ -2822,19 +3290,19 @@ $$ \beta^{(i+1)} = \beta^{(i)} + \\eta X^T (y - \\sigma(X\\beta^{(i)})) $$
 
 ***
 
--! Why deep trees still work well inside a forest
--: deep trees reduce bias because they can fit complex patterns
+-! Why deep trees still work well
+-: reduce bias because they can fit complex patterns
 -: randomness makes the trees different, so their errors are less correlated
 
 ***
 
--! The practical effect is a strong, stable model
+-! The practical effect is a stable model
 -: individual trees may be noisy, but the ensemble smooths the noise out
 -: increasing the number of trees mainly improves stability (but costs runtime)
 <!-- /position -->
 
 <!-- position={row: 1, column: 2} -->
-<div id="rf-grow-many-trees-plot" style="width: 100%; height: 650px; border: 1px solid #2d3a66; border-radius: 12px; background: rgba(15,23,42,0.85);"></div>
+<div id="rf-grow-many-trees-plot" style="width: 100%; height: 650px;"></div>
 -= A forest is a collection of many independently trained trees (T can be 100, 500, or more).
 
 <script>
@@ -2956,13 +3424,6 @@ $$ \beta^{(i+1)} = \beta^{(i)} + \\eta X^T (y - \\sigma(X\\beta^{(i)})) $$
         k++;
       }
     }
-
-    fig.svg.append('text')
-      .attr('x', W / 2).attr('y', H - 16)
-      .attr('text-anchor', 'middle')
-      .style('fill', theme.muted)
-      .style('font-size', '12px')
-      .text('in practice: T is much larger than shown');
   }
 
   function register() {
@@ -2988,7 +3449,7 @@ $$ \beta^{(i+1)} = \beta^{(i)} + \\eta X^T (y - \\sigma(X\\beta^{(i)})) $$
 
 <!-- position={row: 1, column: 1} -->
 -! Prediction means sending the same input to every tree
--: each tree produces its own output, based on its splits and leaves
+-: each tree produces its own output
 -: we do not pick the best tree, we combine all trees
 
 ***
@@ -2999,13 +3460,13 @@ $$ \beta^{(i+1)} = \beta^{(i)} + \\eta X^T (y - \\sigma(X\\beta^{(i)})) $$
 
 ***
 
--! Regression: average numeric predictions
+-! Regression: average predictions
 -: each tree returns a number (a mean value in its leaf)
 -: the forest output is the average, which reduces variance and smooths noise
 <!-- /position -->
 
 <!-- position={row: 1, column: 2} -->
-<div id="rf-prediction-plot" style="width: 100%; height: 650px; border: 1px solid #2d3a66; border-radius: 12px; background: rgba(15,23,42,0.85);"></div>
+<div id="rf-prediction-plot" style="width: 100%; height: 650px;"></div>
 -= One input produces many tree outputs, which are then combined into one final prediction.
 
 <script>
@@ -3029,7 +3490,7 @@ $$ \beta^{(i+1)} = \beta^{(i)} + \\eta X^T (y - \\sigma(X\\beta^{(i)})) $$
     const container = document.getElementById(containerId);
     if (!container) return;
 
-    const width = 680;
+    const width = 780;
     const height = 650;
     const margin = { top: 36, right: 26, bottom: 26, left: 26 };
     const fig = plotUtils.createFigure(containerId, width, height, margin);
@@ -3065,7 +3526,7 @@ $$ \beta^{(i+1)} = \beta^{(i)} + \\eta X^T (y - \\sigma(X\\beta^{(i)})) $$
         .attr('text-anchor', 'middle')
         .style('fill', theme.text)
         .style('font-family', "'Press Start 2P', monospace")
-        .style('font-size', '11px')
+        .style('font-size', '18px')
         .text(label);
       return g;
     }
@@ -3090,58 +3551,74 @@ $$ \beta^{(i+1)} = \beta^{(i)} + \\eta X^T (y - \\sigma(X\\beta^{(i)})) $$
         .attr('x1', x1).attr('y1', y1)
         .attr('x2', x2).attr('y2', y2)
         .attr('stroke', theme.muted)
-        .attr('stroke-width', 3)
+        .attr('stroke-width', 4)
         .attr('marker-end', `url(#${markerId})`)
         .attr('opacity', 0.95);
     }
 
     // Layout.
-    const input = box(10, 220, 120, 160, 'Input x', theme.cyan);
+    const padX = 10;
+    const gap1 = 18;
+    const gap2 = 18;
+    const inputW = 160;
+    const aggW = 220;
+    const treesW = W - padX * 2 - inputW - aggW - gap1 - gap2;
+
+    const inputX = padX;
+    const treesX = inputX + inputW + gap1;
+    const aggX = treesX + treesW + gap2;
+
+    const input = box(inputX, 220, inputW, 160, 'Input x', theme.cyan);
     input.append('text')
-      .attr('x', 60).attr('y', 88)
+      .attr('x', inputW / 2).attr('y', 92)
       .attr('text-anchor', 'middle')
       .style('fill', theme.muted)
-      .style('font-size', '12px')
+      .style('font-size', '16px')
       .text('same x');
     input.append('text')
-      .attr('x', 60).attr('y', 112)
+      .attr('x', inputW / 2).attr('y', 120)
       .attr('text-anchor', 'middle')
       .style('fill', theme.muted)
-      .style('font-size', '12px')
+      .style('font-size', '16px')
       .text('to all trees');
 
-    const trees = box(160, 90, 320, 420, 'Trees', theme.green);
-    const agg = box(510, 150, 150, 300, 'Aggregation', theme.magenta);
+    const trees = box(treesX, 90, treesW, 420, 'Trees', theme.green);
+    const agg = box(aggX, 130, aggW, 370, 'Aggregation', theme.magenta);
 
-    arrow(130, 300, 160, 300);
-    arrow(480, 300, 510, 300);
+    arrow(inputX + inputW, 300, treesX, 300);
+    arrow(treesX + treesW, 300, aggX, 300);
 
     // Draw a set of mini trees and their outputs.
     const rng = seededRandom(123);
     const T = 9;
-    const treeY = d3.range(T).map(i => 70 + i * 36);
+    const treeY = d3.range(T).map(i => 18 + i * 36);
 
-    const treeGroup = trees.append('g').attr('transform', 'translate(18, 54)');
+    const treeGroup = trees.append('g').attr('transform', 'translate(18, 44)');
 
     function miniTree(g, x, y, color) {
       const r = g.append('g').attr('transform', `translate(${x}, ${y})`);
-      r.append('line').attr('x1', 20).attr('y1', 6).attr('x2', 10).attr('y2', 18).attr('stroke', theme.muted).attr('stroke-width', 2);
-      r.append('line').attr('x1', 20).attr('y1', 6).attr('x2', 30).attr('y2', 18).attr('stroke', theme.muted).attr('stroke-width', 2);
-      r.append('circle').attr('cx', 20).attr('cy', 6).attr('r', 4).attr('fill', 'var(--ml-accent-green-soft)').attr('stroke', theme.green).attr('stroke-width', 2);
-      r.append('circle').attr('cx', 10).attr('cy', 18).attr('r', 4).attr('fill', 'var(--ml-accent-green-soft)').attr('stroke', theme.green).attr('stroke-width', 2);
-      r.append('circle').attr('cx', 30).attr('cy', 18).attr('r', 4).attr('fill', 'var(--ml-accent-green-soft)').attr('stroke', theme.green).attr('stroke-width', 2);
+      // tree icon (left)
+      r.append('line').attr('x1', 22).attr('y1', 8).attr('x2', 10).attr('y2', 24).attr('stroke', theme.muted).attr('stroke-width', 2.4);
+      r.append('line').attr('x1', 22).attr('y1', 8).attr('x2', 34).attr('y2', 24).attr('stroke', theme.muted).attr('stroke-width', 2.4);
+      r.append('circle').attr('cx', 22).attr('cy', 8).attr('r', 5.2).attr('fill', 'var(--ml-accent-green-soft)').attr('stroke', theme.green).attr('stroke-width', 2);
+      r.append('circle').attr('cx', 10).attr('cy', 24).attr('r', 5.0).attr('fill', 'var(--ml-accent-green-soft)').attr('stroke', theme.green).attr('stroke-width', 2);
+      r.append('circle').attr('cx', 34).attr('cy', 24).attr('r', 5.0).attr('fill', 'var(--ml-accent-green-soft)').attr('stroke', theme.green).attr('stroke-width', 2);
+
+      // vote box (right)
+      const voteX = 66;
+      const voteW = Math.max(120, Math.min(160, treesW - 110));
       r.append('rect')
-        .attr('x', 52).attr('y', -6)
-        .attr('width', 90).attr('height', 20)
-        .attr('rx', 8)
+        .attr('x', voteX).attr('y', -10)
+        .attr('width', voteW).attr('height', 30)
+        .attr('rx', 10)
         .attr('fill', 'var(--ml-surface)')
         .attr('stroke', theme.border)
         .attr('stroke-width', 2);
       r.append('text')
-        .attr('x', 97).attr('y', 8)
+        .attr('x', voteX + voteW / 2).attr('y', 10)
         .attr('text-anchor', 'middle')
         .style('fill', theme.text)
-        .style('font-size', '11px')
+        .style('font-size', '14px')
         .text(color === theme.green ? 'vote: 1' : 'vote: 0');
     }
 
@@ -3160,83 +3637,85 @@ $$ \beta^{(i+1)} = \beta^{(i)} + \\eta X^T (y - \\sigma(X\\beta^{(i)})) $$
     const prob = v1 / T;
 
     const ag = agg.append('g').attr('transform', 'translate(16, 54)');
+    const agW = aggW - 32;
+    const cx = agW / 2;
     ag.append('text')
-      .attr('x', 60).attr('y', 0)
+      .attr('x', cx).attr('y', 0)
       .attr('text-anchor', 'middle')
       .style('fill', theme.muted)
-      .style('font-size', '12px')
+      .style('font-size', '16px')
       .text('vote tally');
 
-    const barW = 110;
+    const barW = Math.min(agW - 10, 150);
     const barH = 22;
     ag.append('rect')
-      .attr('x', 5).attr('y', 20)
+      .attr('x', 0).attr('y', 20)
       .attr('width', barW).attr('height', barH)
       .attr('rx', 8)
       .attr('fill', 'var(--ml-surface)')
       .attr('stroke', theme.border)
       .attr('stroke-width', 2);
     ag.append('rect')
-      .attr('x', 5).attr('y', 20)
+      .attr('x', 0).attr('y', 20)
       .attr('width', barW * (v1 / T)).attr('height', barH)
       .attr('rx', 8)
       .attr('fill', theme.green)
       .attr('opacity', 0.85);
 
     ag.append('text')
-      .attr('x', 5).attr('y', 60)
+      .attr('x', 0).attr('y', 62)
       .attr('text-anchor', 'start')
       .style('fill', theme.muted)
-      .style('font-size', '12px')
+      .style('font-size', '14px')
       .text(`votes for class 1: ${v1}/${T}`);
 
     ag.append('text')
-      .attr('x', 5).attr('y', 82)
+      .attr('x', 0).attr('y', 88)
       .attr('text-anchor', 'start')
       .style('fill', theme.muted)
-      .style('font-size', '12px')
+      .style('font-size', '14px')
       .text(`votes for class 0: ${v0}/${T}`);
 
     ag.append('text')
-      .attr('x', 60).attr('y', 122)
+      .attr('x', cx).attr('y', 132)
       .attr('text-anchor', 'middle')
       .style('fill', theme.muted)
-      .style('font-size', '12px')
+      .style('font-size', '16px')
       .text('mean probability');
 
     ag.append('rect')
-      .attr('x', 5).attr('y', 140)
-      .attr('width', barW).attr('height', 52)
+      .attr('x', 0).attr('y', 150)
+      .attr('width', barW+30).attr('height', 52)
       .attr('rx', 12)
       .attr('fill', 'var(--ml-accent-cyan-soft)')
       .attr('stroke', theme.cyan)
       .attr('stroke-width', 2);
     ag.append('text')
-      .attr('x', 60).attr('y', 172)
+      .attr('x', cx).attr('y', 184)
       .attr('text-anchor', 'middle')
       .style('fill', theme.text)
-      .style('font-size', '12px')
+      .style('font-size', '16px')
       .text(`p(class 1) = ${prob.toFixed(2)}`);
 
     ag.append('text')
-      .attr('x', 60).attr('y', 232)
+      .attr('x', cx).attr('y', 244)
       .attr('text-anchor', 'middle')
       .style('fill', theme.muted)
-      .style('font-size', '12px')
+      .style('font-size', '16px')
       .text('final output');
 
     ag.append('rect')
-      .attr('x', 28).attr('y', 248)
-      .attr('width', 64).attr('height', 26)
+      .attr('x', cx - 52).attr('y', 262)
+      .attr('width', 104).attr('height', 26)
       .attr('rx', 10)
       .attr('fill', 'var(--ml-accent-magenta-soft)')
       .attr('stroke', theme.magenta)
       .attr('stroke-width', 2);
     ag.append('text')
-      .attr('x', 60).attr('y', 266)
+      .attr('x', cx).attr('y', 280)
       .attr('text-anchor', 'middle')
       .style('fill', theme.text)
-      .style('font-size', '12px')
+      .style('font-size', '16px')
       .text(prob >= 0.5 ? 'class 1' : 'class 0');
   }
 
@@ -3268,19 +3747,19 @@ $$ \beta^{(i+1)} = \beta^{(i)} + \\eta X^T (y - \\sigma(X\\beta^{(i)})) $$
 
 ***
 
--! OOB predictions behave like internal cross-validation
+-! OOB behaves like cross-validation
 -: every row gets evaluated on a subset of trees that are "honestly" out-of-sample
 -: aggregating these row-wise predictions gives an OOB error estimate
 
 ***
 
--! OOB is useful for quick model selection
--: it gives fast feedback for hyperparameters without an extra validation split
--: it is not a replacement for a final test set when you need a trustworthy report
+-! OOB is useful for model selection
+-: fast feedback for hyperparameters, like n(trees)
+-: NOT replacing final test set for trustworthy report
 <!-- /position -->
 
 <!-- position={row: 1, column: 2} -->
-<div id="rf-oob-plot" style="width: 100%; height: 650px; border: 1px solid #2d3a66; border-radius: 12px; background: rgba(15,23,42,0.85);"></div>
+<div id="rf-oob-plot" style="width: 100%; height: 650px; "></div>
 -= One row is predicted only by trees for which it was out-of-bag; their vote becomes the OOB prediction.
 
 <script>
@@ -3304,7 +3783,7 @@ $$ \beta^{(i+1)} = \beta^{(i)} + \\eta X^T (y - \\sigma(X\\beta^{(i)})) $$
     const container = document.getElementById(containerId);
     if (!container) return;
 
-    const width = 680;
+    const width = 780;
     const height = 650;
     const margin = { top: 36, right: 26, bottom: 26, left: 26 };
     const fig = plotUtils.createFigure(containerId, width, height, margin);
@@ -3347,7 +3826,7 @@ $$ \beta^{(i+1)} = \beta^{(i)} + \\eta X^T (y - \\sigma(X\\beta^{(i)})) $$
         .attr('text-anchor', 'middle')
         .style('fill', theme.text)
         .style('font-family', "'Press Start 2P', monospace")
-        .style('font-size', '11px')
+        .style('font-size', '16px')
         .text(title);
       if (accent) {
         root.append('rect')
@@ -3373,7 +3852,7 @@ $$ \beta^{(i+1)} = \beta^{(i)} + \\eta X^T (y - \\sigma(X\\beta^{(i)})) $$
       .attr('x', 0).attr('y', -10)
       .attr('text-anchor', 'start')
       .style('fill', theme.muted)
-      .style('font-size', '12px')
+      .style('font-size', '14px')
       .text('each tree bootstraps rows');
 
     const rowH = 34;
@@ -3397,7 +3876,7 @@ $$ \beta^{(i+1)} = \beta^{(i)} + \\eta X^T (y - \\sigma(X\\beta^{(i)})) $$
       .attr('x', 12).attr('y', 19)
       .attr('text-anchor', 'start')
       .style('fill', theme.text)
-      .style('font-size', '12px')
+      .style('font-size', '14px')
       .text(d => `row ${d + 1}`);
 
     row.append('circle')
@@ -3414,7 +3893,7 @@ $$ \beta^{(i+1)} = \beta^{(i)} + \\eta X^T (y - \\sigma(X\\beta^{(i)})) $$
       .attr('y', H - 18)
       .attr('text-anchor', 'middle')
       .style('fill', theme.muted)
-      .style('font-size', '12px')
+      .style('font-size', '14px')
       .text('highlighted row is evaluated OOB');
 
     // Trees: each has OOB status for targetRow + a vote.
@@ -3438,7 +3917,7 @@ $$ \beta^{(i+1)} = \beta^{(i)} + \\eta X^T (y - \\sigma(X\\beta^{(i)})) $$
       .attr('x', 0).attr('y', -10)
       .attr('text-anchor', 'start')
       .style('fill', theme.muted)
-      .style('font-size', '12px')
+      .style('font-size', '14px')
       .text('only OOB trees are allowed to vote');
 
     const cols = 4;
@@ -3464,14 +3943,14 @@ $$ \beta^{(i+1)} = \beta^{(i)} + \\eta X^T (y - \\sigma(X\\beta^{(i)})) $$
       .attr('x', tileW / 2).attr('y', 30)
       .attr('text-anchor', 'middle')
       .style('fill', theme.text)
-      .style('font-size', '11px')
+      .style('font-size', '13px')
       .text(d => `tree ${d.i + 1}`);
 
     tile.append('text')
       .attr('x', tileW / 2).attr('y', 50)
       .attr('text-anchor', 'middle')
       .style('fill', d => d.isOOB ? theme.text : theme.gray)
-      .style('font-size', '11px')
+      .style('font-size', '13px')
       .text(d => d.isOOB ? `vote: ${d.vote}` : 'in-bag');
 
     // OOB vote summary.
@@ -3489,14 +3968,14 @@ $$ \beta^{(i+1)} = \beta^{(i)} + \\eta X^T (y - \\sigma(X\\beta^{(i)})) $$
       .attr('text-anchor', 'start')
       .style('fill', theme.text)
       .style('font-family', "'Press Start 2P', monospace")
-      .style('font-size', '11px')
-      .text('OOB prediction for highlighted row');
+      .style('font-size', '16px')
+      .text('OOB pred. for example row');
 
     summary.append('text')
       .attr('x', 12).attr('y', 56)
       .attr('text-anchor', 'start')
       .style('fill', theme.muted)
-      .style('font-size', '12px')
+      .style('font-size', '14px')
       .text(`eligible trees: ${oobTrees.length}/${T}`);
 
     // Vote bar.
@@ -3519,21 +3998,21 @@ $$ \beta^{(i+1)} = \beta^{(i)} + \\eta X^T (y - \\sigma(X\\beta^{(i)})) $$
       .attr('x', 12 + barW + 10).attr('y', 88)
       .attr('text-anchor', 'start')
       .style('fill', theme.muted)
-      .style('font-size', '12px')
+      .style('font-size', '14px')
       .text(`p(class 1) = ${p1.toFixed(2)}`);
 
     summary.append('text')
       .attr('x', 12).attr('y', 122)
       .attr('text-anchor', 'start')
       .style('fill', theme.muted)
-      .style('font-size', '12px')
+      .style('font-size', '14px')
       .text(`prediction: class ${pred} (vote ${vote1}:${vote0})`);
 
     summary.append('text')
       .attr('x', 12).attr('y', 146)
       .attr('text-anchor', 'start')
       .style('fill', theme.muted)
-      .style('font-size', '12px')
+      .style('font-size', '14px')
       .text(`true label: class ${truth} -> ${correct ? 'correct' : 'error'}`);
   }
 
@@ -3560,24 +4039,19 @@ $$ \beta^{(i+1)} = \beta^{(i)} + \\eta X^T (y - \\sigma(X\\beta^{(i)})) $$
 
 <!-- position={row: 1, column: 1} -->
 -! Feature importance answers: which inputs influence the model most?
--: it is a tool for understanding and sanity-checking, not a proof of causality
+-: it is a tool for understanding, not a proof of causality
 -: importance is always relative to the dataset and the chosen metric
 
 ***
 
--! Permutation importance is a robust default
--: randomly shuffle one feature column in the validation data
+-! Permutation importance:
+-: randomly shuffle a feature column during validation
 -: if performance drops, the model relied on that feature for prediction
 
-***
-
--! There are alternative views with trade-offs
--: impurity-based importance is fast but can be biased toward high-cardinality features
--: partial dependence can show the average effect but can hide interactions
 <!-- /position -->
 
 <!-- position={row: 1, column: 2} -->
-<div id="rf-feature-importance-plot" style="width: 100%; height: 650px; border: 1px solid #2d3a66; border-radius: 12px; background: rgba(15,23,42,0.85);"></div>
+<div id="rf-feature-importance-plot" style="width: 100%; height: 650px;"></div>
 -= Permutation importance: bar length is the drop in score after shuffling that feature.
 
 <script>
@@ -3593,9 +4067,9 @@ $$ \beta^{(i+1)} = \beta^{(i)} + \\eta X^T (y - \\sigma(X\\beta^{(i)})) $$
     const container = document.getElementById(containerId);
     if (!container) return;
 
-    const width = 680;
+    const width = 780;
     const height = 650;
-    const margin = { top: 36, right: 40, bottom: 40, left: 140 };
+    const margin = { top: 44, right: 40, bottom: 52, left: 200 };
     const fig = plotUtils.createFigure(containerId, width, height, margin);
 
     d3.select(`#${containerId} svg`)
@@ -3639,7 +4113,7 @@ $$ \beta^{(i+1)} = \beta^{(i)} + \\eta X^T (y - \\sigma(X\\beta^{(i)})) $$
     // Axis styling.
     fig.svg.selectAll('.tick text')
       .style('fill', theme.muted)
-      .style('font-size', '12px');
+      .style('font-size', '18px');
     fig.svg.selectAll('.domain, .tick line')
       .style('stroke', theme.border)
       .style('stroke-width', 2);
@@ -3648,7 +4122,7 @@ $$ \beta^{(i+1)} = \beta^{(i)} + \\eta X^T (y - \\sigma(X\\beta^{(i)})) $$
       .attr('x', 0).attr('y', -10)
       .attr('text-anchor', 'start')
       .style('fill', theme.muted)
-      .style('font-size', '12px')
+      .style('font-size', '18px')
       .text(`base score: ${baseScore.toFixed(2)} (before shuffling)`);
 
     const bars = fig.svg.append('g')
@@ -3676,7 +4150,7 @@ $$ \beta^{(i+1)} = \beta^{(i)} + \\eta X^T (y - \\sigma(X\\beta^{(i)})) $$
       .attr('y', d => y(d.feature) + y.bandwidth() / 2 + 4)
       .attr('text-anchor', 'start')
       .style('fill', theme.text)
-      .style('font-size', '12px')
+      .style('font-size', '18px')
       .text(d => `-${d.drop.toFixed(2)}`);
 
     fig.svg.append('text')
@@ -3684,7 +4158,7 @@ $$ \beta^{(i+1)} = \beta^{(i)} + \\eta X^T (y - \\sigma(X\\beta^{(i)})) $$
       .attr('y', fig.height + 34)
       .attr('text-anchor', 'end')
       .style('fill', theme.muted)
-      .style('font-size', '12px')
+      .style('font-size', '18px')
       .text('drop in score after shuffling (larger = more important)');
   }
 
@@ -3712,23 +4186,22 @@ $$ \beta^{(i+1)} = \beta^{(i)} + \\eta X^T (y - \\sigma(X\\beta^{(i)})) $$
 <!-- position={row: 1, column: 1} -->
 -! The main knobs trade off stability, runtime, and generalization
 -: changing hyperparameters changes how complex the forest can be and how much it averages noise
--: defaults are often good, but tuning matters for small data and imbalanced problems
 
 ***
 
 -! Number of trees controls stability
--: more trees reduce variance and make predictions more stable
+-: more trees reduce variance & stabilize predictions
 -: beyond a point the improvement is small, but runtime keeps increasing
 
 ***
 
 -! Depth, leaf size, and max features control complexity and diversity
--: deeper trees and smaller leaves increase flexibility but can overfit more
+-: deeper trees & smaller leaves increase flexibility but can overfit
 -: limiting max features makes trees less correlated, which helps averaging
 <!-- /position -->
 
 <!-- position={row: 1, column: 2} -->
-<div id="rf-hyperparameters-plot" style="width: 100%; height: 650px; border: 1px solid #2d3a66; border-radius: 12px; background: rgba(15,23,42,0.85);"></div>
+<div id="rf-hyperparameters-plot" style="width: 100%; height: 650px;"></div>
 -= Typical effects: more trees reduce variance, and too much depth can increase overfitting.
 
 <script>
@@ -3744,7 +4217,7 @@ $$ \beta^{(i+1)} = \beta^{(i)} + \\eta X^T (y - \\sigma(X\\beta^{(i)})) $$
     const container = document.getElementById(containerId);
     if (!container) return;
 
-    const width = 680;
+    const width = 780;
     const height = 650;
     const margin = { top: 36, right: 30, bottom: 30, left: 30 };
     const fig = plotUtils.createFigure(containerId, width, height, margin);
@@ -3783,7 +4256,7 @@ $$ \beta^{(i+1)} = \beta^{(i)} + \\eta X^T (y - \\sigma(X\\beta^{(i)})) $$
         .attr('text-anchor', 'middle')
         .style('fill', theme.text)
         .style('font-family', "'Press Start 2P', monospace")
-        .style('font-size', '11px')
+        .style('font-size', '16px')
         .text(title);
       return g;
     }
@@ -3799,7 +4272,7 @@ $$ \beta^{(i+1)} = \beta^{(i)} + \\eta X^T (y - \\sigma(X\\beta^{(i)})) $$
     const yA = d3.scaleLinear().domain([0.06, 0.20]).range([aH, 0]);
     aG.append('g').attr('transform', `translate(0, ${aH})`).call(d3.axisBottom(xA).ticks(4));
     aG.append('g').call(d3.axisLeft(yA).ticks(4));
-    aG.selectAll('.tick text').style('fill', theme.muted).style('font-size', '11px');
+    aG.selectAll('.tick text').style('fill', theme.muted).style('font-size', '14px');
     aG.selectAll('.domain, .tick line').style('stroke', theme.border).style('stroke-width', 2);
 
     const curveA = d3.range(10, 500.1, 5).map(n => {
@@ -3817,7 +4290,7 @@ $$ \beta^{(i+1)} = \beta^{(i)} + \\eta X^T (y - \\sigma(X\\beta^{(i)})) $$
       .attr('x', 0).attr('y', -10)
       .attr('text-anchor', 'start')
       .style('fill', theme.muted)
-      .style('font-size', '11px')
+      .style('font-size', '14px')
       .text('OOB error flattens out');
 
     // Panel B: depth vs generalization (U-shape).
@@ -3831,7 +4304,7 @@ $$ \beta^{(i+1)} = \beta^{(i)} + \\eta X^T (y - \\sigma(X\\beta^{(i)})) $$
     const yB = d3.scaleLinear().domain([0.06, 0.22]).range([bH, 0]);
     bG.append('g').attr('transform', `translate(0, ${bH})`).call(d3.axisBottom(xB).ticks(4));
     bG.append('g').call(d3.axisLeft(yB).ticks(4));
-    bG.selectAll('.tick text').style('fill', theme.muted).style('font-size', '11px');
+    bG.selectAll('.tick text').style('fill', theme.muted).style('font-size', '14px');
     bG.selectAll('.domain, .tick line').style('stroke', theme.border).style('stroke-width', 2);
 
     const curveB = d3.range(2, 30.01, 0.5).map(d => {
@@ -3849,7 +4322,7 @@ $$ \beta^{(i+1)} = \beta^{(i)} + \\eta X^T (y - \\sigma(X\\beta^{(i)})) $$
       .attr('x', 0).attr('y', -10)
       .attr('text-anchor', 'start')
       .style('fill', theme.muted)
-      .style('font-size', '11px')
+      .style('font-size', '14px')
       .text('too deep can hurt');
 
     // Panel C: max_features effect (diversity vs strength).
@@ -3860,12 +4333,12 @@ $$ \beta^{(i+1)} = \beta^{(i)} + \\eta X^T (y - \\sigma(X\\beta^{(i)})) $$
       .attr('x', 0).attr('y', -14)
       .attr('text-anchor', 'start')
       .style('fill', theme.muted)
-      .style('font-size', '12px')
+      .style('font-size', '18px')
       .text('smaller m makes trees less correlated (better averaging)');
 
-    const barX = 160;
+    const barX = 80;
     const barY = 30;
-    const barW = W - 24 * 2 - barX - 30;
+    const barW = W - 24 * 2 - barX - 30-80;
 
     const items = [
       { label: 'low m', corr: 0.25, strength: 0.65, color: theme.green },
@@ -3877,7 +4350,7 @@ $$ \beta^{(i+1)} = \beta^{(i)} + \\eta X^T (y - \\sigma(X\\beta^{(i)})) $$
         .attr('x', 0).attr('y', y + 18)
         .attr('text-anchor', 'start')
         .style('fill', theme.text)
-        .style('font-size', '12px')
+        .style('font-size', '14px')
         .text(d.label);
 
       // correlation bar
@@ -3898,7 +4371,7 @@ $$ \beta^{(i+1)} = \beta^{(i)} + \\eta X^T (y - \\sigma(X\\beta^{(i)})) $$
         .attr('x', barX + barW + 10).attr('y', y + 14)
         .attr('text-anchor', 'start')
         .style('fill', theme.muted)
-        .style('font-size', '12px')
+        .style('font-size', '14px')
         .text(`corr: ${d.corr.toFixed(2)}`);
 
       // strength bar
@@ -3920,7 +4393,7 @@ $$ \beta^{(i+1)} = \beta^{(i)} + \\eta X^T (y - \\sigma(X\\beta^{(i)})) $$
         .attr('x', barX + barW + 10).attr('y', y2 + 14)
         .attr('text-anchor', 'start')
         .style('fill', theme.muted)
-        .style('font-size', '12px')
+        .style('font-size', '14px')
         .text(`strength: ${d.strength.toFixed(2)}`);
     }
 
@@ -3928,10 +4401,10 @@ $$ \beta^{(i+1)} = \beta^{(i)} + \\eta X^T (y - \\sigma(X\\beta^{(i)})) $$
     drawTradeoff(110, items[1]);
 
     cG.append('text')
-      .attr('x', 0).attr('y', 220)
+      .attr('x', 0).attr('y', 200)
       .attr('text-anchor', 'start')
       .style('fill', theme.muted)
-      .style('font-size', '12px')
+      .style('font-size', '18px')
       .text('goal: keep strength high and correlation low');
   }
 
@@ -3952,226 +4425,100 @@ $$ \beta^{(i+1)} = \beta^{(i)} + \\eta X^T (y - \\sigma(X\\beta^{(i)})) $$
 
 ---
 
-<!-- .slide:id="random-forest-13-strengths-limitations" -->
-## When to Use Random Forest
+<!-- .slide:id="random-forest-13-webr-example" -->
+## Practical Example in R (WebR)
 <!-- layout={rows: 1, columns: 2} -->
-
 <!-- position={row: 1, column: 1} -->
--! Choose Random Forest when you need a strong baseline quickly
--: it often performs well with little preprocessing and minimal feature engineering
--: it can model nonlinear relationships and interactions between predictors
+-! Train a random forest (classification)
+-: example dataset: `iris`
 
 ***
 
--! Choose Random Forest when prediction accuracy is more important than a simple formula
--: it is robust in many noisy settings because averaging smooths unstable trees
--: it works for classification and regression, and handles mixed feature types
+-! Interpretation hook
+-: variable importance (which inputs matter most?)
 
 ***
 
--! Be aware of its limitations
--: it is harder to interpret than a small linear model such as logistic regression
--: it can struggle with extrapolation beyond the range covered by training data
+-! Decision hook
+-: predict class probabilities for a new point
 <!-- /position -->
-
 <!-- position={row: 1, column: 2} -->
-<div id="rf-when-to-use-plot" style="width: 100%; height: 650px; border: 1px solid #2d3a66; border-radius: 12px; background: rgba(15,23,42,0.85);"></div>
--= Trade-off sketch: interpretability versus flexibility (and why extrapolation can be tricky for trees).
+<div style="display: flex; flex-direction: column; gap: 12px;">
+  <div id="rf-webr-example-container"></div>
+  <div id="rf-webr-example-plot" style="border: 1px solid var(--ml-panel-border); border-radius: 12px; min-height: 240px; display: flex; align-items: center; justify-content: center; color: var(--ml-muted); font-size: 0.9em; text-align: center; padding: 12px; background: var(--ml-panel-bg);">
+    Run the WebR example to render the random forest output.
+  </div>
+  <button id="rf-webr-example-open-plot" style="padding: 8px 16px; background: var(--ml-panel-bg); color: var(--ml-text); border: 1px solid var(--ml-panel-border); border-radius: 8px; cursor: pointer; font-size: 0.85em; font-weight: 700; display: none; align-self: flex-start;">
+    <i class="fas fa-external-link-alt"></i> Popout Plot
+  </button>
+</div>
 
 <script>
 (function() {
-  const containerId = 'rf-when-to-use-plot';
-  const slideId = 'random-forest-13-strengths-limitations';
+  const containerId = 'rf-webr-example-container';
+  const plotContainerId = 'rf-webr-example-plot';
+  const openBtnId = 'rf-webr-example-open-plot';
+  const slideId = 'random-forest-13-webr-example';
 
-  function draw() {
-    if (typeof d3 === 'undefined' || typeof plotUtils === 'undefined') {
-      setTimeout(draw, 80);
-      return;
-    }
-    const container = document.getElementById(containerId);
-    if (!container) return;
+  const code = `# Random forest in R (WebR)
+# Note: package availability depends on the WebR build.
 
-    const width = 680;
-    const height = 650;
-    const margin = { top: 36, right: 32, bottom: 70, left: 78 };
-    const fig = plotUtils.createFigure(containerId, width, height, margin);
+data(iris)
 
-    d3.select(`#${containerId} svg`)
-      .style('background-color', 'var(--ml-panel-bg)')
-      .style('border-radius', '12px');
+if (!requireNamespace("randomForest", quietly = TRUE)) {
+  plot.new()
+  text(0.5, 0.55, "Package 'randomForest' is not available in this WebR environment", cex = 1.0)
+  text(0.5, 0.45, "Try a different runtime or pre-bundled packages", cex = 0.9)
+} else {
+  library(randomForest)
+  set.seed(1)
 
-    const theme = {
-      border: 'var(--ml-panel-border)',
-      text: 'var(--ml-text)',
-      muted: 'var(--ml-muted)',
-      cyan: 'var(--ml-accent-cyan)',
-      magenta: 'var(--ml-accent-magenta)',
-      green: 'var(--ml-accent-green)',
-      orange: 'var(--ml-accent-orange)'
-    };
+  fit <- randomForest(Species ~ ., data = iris, importance = TRUE)
 
-    const x = d3.scaleLinear().domain([0, 10]).range([0, fig.width]);
-    const y = d3.scaleLinear().domain([0, 10]).range([fig.height, 0]);
+  # Variable importance plot
+  varImpPlot(fit, main = "Random Forest: variable importance")
 
-    const xAxis = d3.axisBottom(x).ticks(5);
-    const yAxis = d3.axisLeft(y).ticks(5);
+  # Predict probabilities for a single new point
+  x_new <- iris[1, 1:4, drop = FALSE]
+  p <- predict(fit, x_new, type = "prob")
+  mtext(sprintf("Example: P(setosa) = %.2f, P(versicolor) = %.2f, P(virginica) = %.2f",
+    p[1, "setosa"], p[1, "versicolor"], p[1, "virginica"]
+  ), side = 3, line = 0.2, cex = 0.85)
+}`;
 
-    fig.svg.append('g')
-      .attr('transform', `translate(0, ${fig.height})`)
-      .call(xAxis);
-    fig.svg.append('g')
-      .call(yAxis);
+  const fallbackOutput = `[Simulated]
+Random forest: variable importance + predicted class probabilities.`;
 
-    fig.svg.selectAll('.tick text')
-      .style('fill', theme.muted)
-      .style('font-size', '12px');
-    fig.svg.selectAll('.domain, .tick line')
-      .style('stroke', theme.border)
-      .style('stroke-width', 2);
+  const init = async () => {
+    const helper = await window.ensureWebRHelper();
+    await helper.initCodeAndPlotSection({
+      containerId,
+      plotContainerId,
+      code,
+      slideId,
+      fallback: () => fallbackOutput,
+      runLabel: 'Run Random Forest (WebR)',
+      minHeight: '30px',
+      renderOptions: {
+        width: 640,
+        height: 440,
+        background: '#ffffff',
+        altText: 'Random forest variable importance plot from WebR',
+        loadingMessage: 'Training model and rendering plot...',
+        errorMessage: 'Plot rendering unavailable in offline mode.',
+        initialPlotMessage: 'Run the example to render the random forest output.'
+      },
+      popupButtonId: openBtnId
+    });
+  };
 
-    // Quadrant hints.
-    fig.svg.append('rect')
-      .attr('x', x(0)).attr('y', y(10))
-      .attr('width', x(10) - x(0))
-      .attr('height', y(0) - y(10))
-      .attr('fill', 'var(--ml-surface)')
-      .attr('stroke', theme.border)
-      .attr('stroke-width', 2)
-      .attr('rx', 12);
-
-    fig.svg.append('line')
-      .attr('x1', x(5)).attr('x2', x(5))
-      .attr('y1', y(0)).attr('y2', y(10))
-      .attr('stroke', theme.border)
-      .attr('stroke-width', 2);
-    fig.svg.append('line')
-      .attr('x1', x(0)).attr('x2', x(10))
-      .attr('y1', y(5)).attr('y2', y(5))
-      .attr('stroke', theme.border)
-      .attr('stroke-width', 2);
-
-    fig.svg.append('text')
-      .attr('x', x(2.5)).attr('y', y(9.4))
-      .attr('text-anchor', 'middle')
-      .style('fill', theme.muted)
-      .style('font-size', '11px')
-      .text('high flexibility');
-
-    fig.svg.append('text')
-      .attr('x', x(7.5)).attr('y', y(1.0))
-      .attr('text-anchor', 'middle')
-      .style('fill', theme.muted)
-      .style('font-size', '11px')
-      .text('high interpretability');
-
-    fig.svg.append('text')
-      .attr('x', x(5)).attr('y', fig.height + 46)
-      .attr('text-anchor', 'middle')
-      .style('fill', theme.muted)
-      .style('font-size', '12px')
-      .text('interpretability (easy to explain)  ->');
-
-    fig.svg.append('text')
-      .attr('x', -fig.height / 2)
-      .attr('y', -54)
-      .attr('transform', 'rotate(-90)')
-      .attr('text-anchor', 'middle')
-      .style('fill', theme.muted)
-      .style('font-size', '12px')
-      .text('flexibility (captures interactions)  ->');
-
-    const models = [
-      { name: 'Logistic regression', x: 8.2, y: 3.0, color: theme.cyan, note: 'simple, interpretable' },
-      { name: 'Random forest', x: 4.2, y: 8.2, color: theme.green, note: 'flexible boundary' }
-    ];
-
-    const g = fig.svg.append('g');
-    g.selectAll('circle.model')
-      .data(models)
-      .enter()
-      .append('circle')
-      .attr('class', 'model')
-      .attr('cx', d => x(d.x))
-      .attr('cy', d => y(d.y))
-      .attr('r', 9)
-      .attr('fill', d => d.color)
-      .attr('opacity', 0.9)
-      .attr('stroke', '#ffffff')
-      .attr('stroke-width', 2);
-
-    g.selectAll('text.label')
-      .data(models)
-      .enter()
-      .append('text')
-      .attr('class', 'label')
-      .attr('x', d => x(d.x) + 14)
-      .attr('y', d => y(d.y) + 4)
-      .attr('text-anchor', 'start')
-      .style('fill', theme.text)
-      .style('font-size', '12px')
-      .text(d => d.name);
-
-    g.selectAll('text.note')
-      .data(models)
-      .enter()
-      .append('text')
-      .attr('class', 'note')
-      .attr('x', d => x(d.x) + 14)
-      .attr('y', d => y(d.y) + 22)
-      .attr('text-anchor', 'start')
-      .style('fill', theme.muted)
-      .style('font-size', '11px')
-      .text(d => d.note);
-
-    // Extrapolation callout: trees partition space, so outside the observed range the prediction is less reliable.
-    const call = fig.svg.append('g').attr('transform', `translate(${x(6.2)}, ${y(7.4)})`);
-    call.append('rect')
-      .attr('x', 0).attr('y', 0)
-      .attr('width', 240).attr('height', 96)
-      .attr('rx', 12)
-      .attr('fill', 'var(--ml-surface-2)')
-      .attr('stroke', theme.magenta)
-      .attr('stroke-width', 2);
-    call.append('text')
-      .attr('x', 12).attr('y', 26)
-      .attr('text-anchor', 'start')
-      .style('fill', theme.text)
-      .style('font-size', '12px')
-      .text('extrapolation warning');
-    call.append('text')
-      .attr('x', 12).attr('y', 50)
-      .attr('text-anchor', 'start')
-      .style('fill', theme.muted)
-      .style('font-size', '11px')
-      .text('trees predict using seen regions;');
-    call.append('text')
-      .attr('x', 12).attr('y', 70)
-      .attr('text-anchor', 'start')
-      .style('fill', theme.muted)
-      .style('font-size', '11px')
-      .text('outside-range values can be risky');
-
-    fig.svg.append('line')
-      .attr('x1', x(5.0)).attr('y1', y(6.5))
-      .attr('x2', x(6.2)).attr('y2', y(7.4) + 30)
-      .attr('stroke', theme.magenta)
-      .attr('stroke-width', 2.4)
-      .attr('opacity', 0.9);
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init, { once: true });
+  } else {
+    init();
   }
-
-  function register() {
-    if (typeof plotUtils === 'undefined') {
-      setTimeout(register, 80);
-      return;
-    }
-    plotUtils.renderOnSlideOnce({ slideId, containerId, draw });
-  }
-
-  register();
 })();
 </script>
+
 <!-- /position -->
-
 <!-- /layout -->
-
----
