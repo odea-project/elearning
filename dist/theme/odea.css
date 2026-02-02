@@ -1255,19 +1255,29 @@ input:checked+.slider:before {
 ---------------------------------------------------*/
 .reveal .katex,
 .reveal .katex .base {
-  font-family: "Montserrat", serif !important;
   color: #FF0;
 }
 
-.reveal .katex .mord,
-.reveal .katex .math,
-.reveal .katex .strut {
+/* Apply custom font only to basic text elements, NOT to accents/symbols */
+.reveal .katex .mathnormal,
+.reveal .katex .mathit {
   font-family: "Montserrat", serif !important;
 }
 
-.reveal .katex .mord>.mord,
-.reveal .katex .mord>.mord>.mord {
-  font-family: "Montserrat", serif !important;
+/* Preserve KaTeX fonts for accents, operators, and special symbols */
+.reveal .katex .accent,
+.reveal .katex .accent-body,
+.reveal .katex .mop,
+.reveal .katex .mbin,
+.reveal .katex .mrel,
+.reveal .katex .mopen,
+.reveal .katex .mclose,
+.reveal .katex .mpunct,
+.reveal .katex .vlist,
+.reveal .katex .sqrt,
+.reveal .katex .delimsizing,
+.reveal .katex .large-op {
+  font-family: KaTeX_Main, "Times New Roman", serif !important;
 }
 
 /*---------------------------------------------------
