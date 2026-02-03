@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <defs>
+    <linearGradient id="gradRecap" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#4A90E2;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#357ABD;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Background circle -->
+  <circle cx="100" cy="100" r="90" fill="url(#gradRecap)" opacity="0.1"/>
+  
+  <!-- Circular arrow (recap/refresh symbol) -->
+  <path d="M 100 30 A 50 50 0 1 1 60 60" 
+        fill="none" 
+        stroke="url(#gradRecap)" 
+        stroke-width="12" 
+        stroke-linecap="round"/>
+  
+  <!-- Arrow head -->
+  <path d="M 55 50 L 60 60 L 70 55" 
+        fill="none" 
+        stroke="url(#gradRecap)" 
+        stroke-width="12" 
+        stroke-linecap="round" 
+        stroke-linejoin="round"/>
+  
+  <!-- Checkmark inside circle -->
+  <path d="M 80 100 L 95 115 L 125 80" 
+        fill="none" 
+        stroke="url(#gradRecap)" 
+        stroke-width="10" 
+        stroke-linecap="round" 
+        stroke-linejoin="round"/>
+  
+  <!-- Small dots for emphasis -->
+  <circle cx="145" cy="90" r="4" fill="url(#gradRecap)"/>
+  <circle cx="155" cy="105" r="4" fill="url(#gradRecap)"/>
+  <circle cx="150" cy="120" r="4" fill="url(#gradRecap)"/>
+</svg>

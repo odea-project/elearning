@@ -305,5 +305,26 @@
       "Cluster Analysis II",
       "Distances"
     ]
+  },
+  {
+    "filename": "recap.md",
+    "title": "Exam Recap",
+    "keywords": [
+      "t-test",
+      "F-test",
+      "degrees of freedom",
+      "standard error",
+      "ANOVA",
+      "regression",
+      "DOE",
+      "design matrix",
+      "exam preparation"
+    ],
+    "thumbnail": "resources/icons/recap.svg",
+    "requirements": [
+      "t-Test",
+      "ANOVA",
+      "Linear Regression"
+    ]
   }
 ]
