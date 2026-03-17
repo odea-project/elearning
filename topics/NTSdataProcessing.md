@@ -460,7 +460,7 @@ $$
 ---
 
 <!-- .slide:id="running-window-fit-grid-slide" -->
-## Running-Window Fits As Tiles
+## Validating Peak Fits using a Filter Cascade
 <div style="max-width: 1650px; margin: 24px auto 0 auto; text-align: center;">
 	<div style="display: flex; justify-content: center; gap: 32px; flex-wrap: wrap; margin: 0 auto 18px auto; padding: 14px 18px; max-width: 1120px; border-radius: 16px; border: 2px solid rgba(0, 255, 255, 0.16); background: linear-gradient(180deg, rgba(4, 17, 26, 0.34), rgba(4, 17, 26, 0.16)); box-shadow: 0 0 24px rgba(0, 255, 255, 0.06); text-align: left;">
 		<div style="display: inline-flex; align-items: center; gap: 12px; font-size: 0.42em; color: #efefef;">
