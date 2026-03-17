@@ -1522,6 +1522,48 @@ input:checked+.slider:before {
 }
 
 /*---------------------------------------------------
+  FOOTNOTES
+---------------------------------------------------*/
+.reveal .slides .odea-footnote {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0.75em;
+  padding: 0 1.8em;
+  font-size: 0.42em;
+  line-height: 1.35;
+  color: rgba(239, 239, 239, 0.72);
+  text-align: left;
+}
+
+.reveal .slides .odea-footnote p {
+  margin: 0.2em 0 0;
+  line-height: inherit;
+}
+
+.reveal .slides .odea-footnote strong,
+.reveal .slides .odea-footnote b,
+.reveal .slides .odea-footnote em,
+.reveal .slides .odea-footnote i {
+  color: inherit;
+}
+
+.reveal .slides .odea-footnote strong,
+.reveal .slides .odea-footnote b {
+  color: #00ffff;
+}
+
+.reveal .slides .odea-footnote-list {
+  margin: 0.2em 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.reveal .slides .odea-footnote-list li {
+  margin: 0.12em 0;
+}
+
+/*---------------------------------------------------
   EXERCISE BOXES
 ---------------------------------------------------*/
 /* Overlay background */

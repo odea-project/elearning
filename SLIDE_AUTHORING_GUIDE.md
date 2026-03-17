@@ -83,6 +83,29 @@ Remember to cite the data source.
 
 The inner content is parsed as Markdown, allowing bold text, lists, or inline math.
 
+## 5a. Add Reusable Footnotes
+
+For literature references or short source notes, use the shared ODEA footnote class instead of inline styles. Raw HTML blocks are preserved by the loader, so this works directly inside a slide.
+
+```markdown
+<div class="odea-footnote">
+<strong>Reference:</strong>
+<p>Author, A. (2024). <em>Journal Name</em> 12(3), 45-67.</p>
+</div>
+```
+
+For multiple entries, use the list variant:
+
+```markdown
+<div class="odea-footnote">
+<strong>References:</strong>
+<ul class="odea-footnote-list">
+  <li>a) First source.</li>
+  <li>b) Second source.</li>
+</ul>
+</div>
+```
+
 ## 6. Wire Up Custom Scripts Safely
 
 Dynamic slides often need supporting JavaScript. Attach the script directly after the relevant content and guard the initializer so it runs once per load.
