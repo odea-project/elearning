@@ -22,6 +22,12 @@
   font-weight: 700;
   font-style: normal;
 }
+@font-face {
+  font-family: 'Humor Sans';
+  src: url("./fonts/humor-sans/Humor-Sans.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+}
 
 /* ---------------------------------------------------------
    UDE COLOR SYSTEM (CSS VARIABLES)

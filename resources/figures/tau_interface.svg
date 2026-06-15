@@ -1,0 +1,308 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="integrated_tau_tdu_open_cutaway_light_blue_gray_cavity" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 720" role="img" aria-label="Integrated open cutaway TAU TDU interface with light blue gray cutaway cavity and blue Twister">
+  <defs>
+    <linearGradient id="blueShell" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0%" stop-color="#dff1ff"/>
+      <stop offset="24%" stop-color="#9fc8ea"/>
+      <stop offset="58%" stop-color="#6fa7d4"/>
+      <stop offset="100%" stop-color="#3f78ad"/>
+    </linearGradient>
+    <linearGradient id="blueShellDark" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0%" stop-color="#1d588f"/>
+      <stop offset="58%" stop-color="#103f6b"/>
+      <stop offset="100%" stop-color="#082b4d"/>
+    </linearGradient>
+    <linearGradient id="whiteInset" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="55%" stop-color="#f4f7fa"/>
+      <stop offset="100%" stop-color="#dfe6ed"/>
+    </linearGradient>
+    <linearGradient id="metal" x1="0" x2="1" y1="0" y2="0">
+      <stop offset="0%" stop-color="#7f8790"/>
+      <stop offset="15%" stop-color="#b8bec5"/>
+      <stop offset="32%" stop-color="#eef2f5"/>
+      <stop offset="49%" stop-color="#ffffff"/>
+      <stop offset="66%" stop-color="#d7dde2"/>
+      <stop offset="84%" stop-color="#9ea7af"/>
+      <stop offset="100%" stop-color="#68727b"/>
+    </linearGradient>
+    <linearGradient id="darkCavity" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0%" stop-color="#d8e6f0"/>
+      <stop offset="42%" stop-color="#b8cad8"/>
+      <stop offset="100%" stop-color="#7f96aa"/>
+    </linearGradient>
+    <linearGradient id="tubeGreen" x1="0" x2="1" y1="0" y2="0">
+      <stop offset="0%" stop-color="#0d3b3e"/>
+      <stop offset="38%" stop-color="#1b7d7d"/>
+      <stop offset="65%" stop-color="#0e5b61"/>
+      <stop offset="100%" stop-color="#092b2d"/>
+    </linearGradient>
+    <linearGradient id="glassTube" x1="0" x2="1" y1="0" y2="0">
+      <stop offset="0%" stop-color="#bfe8ff" stop-opacity="0.25"/>
+      <stop offset="30%" stop-color="#ffffff" stop-opacity="0.54"/>
+      <stop offset="55%" stop-color="#eaf8ff" stop-opacity="0.18"/>
+      <stop offset="100%" stop-color="#60b9ed" stop-opacity="0.28"/>
+    </linearGradient>
+    <linearGradient id="heatedZone" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0%" stop-color="#ffdc7e" stop-opacity="0.96"/>
+      <stop offset="45%" stop-color="#f08d34" stop-opacity="0.74"/>
+      <stop offset="100%" stop-color="#7f261f" stop-opacity="0.34"/>
+    </linearGradient>
+    <linearGradient id="twisterFill" x1="0" x2="1" y1="0" y2="0">
+      <stop offset="0%" stop-color="#123a62" stop-opacity="0.86"/>
+      <stop offset="34%" stop-color="#73d7ff" stop-opacity="0.96"/>
+      <stop offset="68%" stop-color="#2d8fd2" stop-opacity="0.92"/>
+      <stop offset="100%" stop-color="#0b2b48" stop-opacity="0.88"/>
+    </linearGradient>
+    <linearGradient id="glassReflect" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.25"/>
+      <stop offset="35%" stop-color="#d5ecff" stop-opacity="0.10"/>
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0.03"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="5" stdDeviation="4" flood-color="#000000" flood-opacity="0.17"/>
+    </filter>
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="4.8" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <!-- transparent background -->
+
+  <g id="integrated_unit" filter="url(#shadow)">
+    <!-- One-piece outer shell: TAU base and TDU tower are one continuous housing -->
+    <path id="one_piece_shell"
+          d="M104 390
+             Q104 364 130 358
+             H380
+             Q410 358 418 329
+             L438 88
+             Q441 52 478 45
+             H586
+             Q623 52 626 88
+             L647 329
+             Q655 358 685 358
+             H705
+             Q732 358 738 385
+             V566
+             Q732 592 705 598
+             H130
+             Q104 592 104 566
+             Z"
+          fill="url(#blueShell)" stroke="#123a62" stroke-width="3.4"/>
+
+    <!-- continuous dark-blue top/edge cap, visually unifies TAU and TDU -->
+    <path id="integrated_cap"
+          d="M421 116
+             L438 88
+             Q441 52 478 45
+             H586
+             Q623 52 626 88
+             L643 116
+             H421 Z"
+          fill="url(#blueShellDark)" stroke="#071d34" stroke-width="3"/>
+    <ellipse cx="532" cy="45" rx="55" ry="18" fill="#1d588f" stroke="#071d34" stroke-width="2.4"/>
+    <path d="M452 73 H612" stroke="#7fb8e3" stroke-width="2" opacity="0.35"/>
+    <path d="M120 412 H722" stroke="#ffffff" stroke-width="2.4" opacity="0.18"/>
+    <path d="M119 570 H721" stroke="#174d7a" stroke-width="2.1" opacity="0.30"/>
+    <path d="M682 360 H738 V598 H682 Z" fill="#0b3158" opacity="0.12"/>
+    <path d="M104 440 H738" stroke="#285f8d" stroke-width="1.6" opacity="0.38"/>
+
+    <!-- subtle side bevels to make it a single molded block -->
+    <path d="M104 390 Q104 364 130 358 H186 V598 H130 Q104 592 104 566 Z"
+          fill="#ffffff" opacity="0.10"/>
+    <path d="M626 88 L647 329 Q655 358 685 358 H705 Q732 358 738 385 V566 Q732 592 705 598 H682 V377 Q674 350 646 343 L622 88 Z"
+          fill="#0b3158" opacity="0.10"/>
+
+    <!-- No separate mounting plate: only a machined collar/opening integrated in the shell -->
+    <g id="integrated_collar">
+      <rect x="398" y="352" width="267" height="46" rx="10" fill="url(#metal)" stroke="#20252b" stroke-width="2.7"/>
+      <path d="M419 362 H525" stroke="#ffffff" stroke-width="2" opacity="0.27"/>
+      <path d="M420 395 H646" stroke="#6b747c" stroke-width="1.5" opacity="0.38"/>
+      <circle cx="472" cy="375" r="21" fill="#c5ccd2" stroke="#20252b" stroke-width="2"/>
+      <circle cx="472" cy="375" r="10.5" fill="#0e5b61" stroke="#123a62" stroke-width="1.5"/>
+    </g>
+
+    <!-- TGA-facing socket as part of shell -->
+    <g id="left_socket_to_tga">
+      <rect x="18" y="480" width="96" height="46" rx="8" fill="url(#metal)" stroke="#20252b" stroke-width="3"/>
+      <ellipse cx="18" cy="503" rx="13" ry="23" fill="#e7ebef" stroke="#20252b" stroke-width="2.4"/>
+      <ellipse cx="18" cy="503" rx="5" ry="13.5" fill="#6d7781" opacity="0.60"/>
+      <rect x="98" y="464" width="35" height="78" rx="8" fill="url(#metal)" stroke="#20252b" stroke-width="3"/>
+      <path d="M38 489 H112" stroke="#ffffff" stroke-width="2" opacity="0.38"/>
+      <path d="M38 519 H112" stroke="#68727b" stroke-width="1.6" opacity="0.32"/>
+    </g>
+
+    <!-- large continuous cutaway cavity: base and tower are opened as one section -->
+    <g id="one_piece_cutaway">
+      <path d="M172 462
+               H390
+               Q444 462 444 408
+               V150
+               Q444 130 464 130
+               H602
+               Q622 130 622 150
+               V520
+               Q622 547 595 547
+               H172
+               Q145 547 145 520
+               V489
+               Q145 462 172 462 Z"
+            fill="url(#darkCavity)" stroke="#50687b" stroke-width="3.2"/>
+      <!-- open TDU cavity: no heat-field overlay --><path d="M448 151 L475 132 H622 V151 Z" fill="#ffffff" opacity="0.16" stroke="#8b949d" stroke-width="1.3"/>
+      <path d="M622 151 L596 171 V526 L622 520 Z" fill="#466274" opacity="0.18"/>
+      <path d="M448 151 L474 171 V442 L448 462 Z" fill="#ffffff" opacity="0.09"/>
+      <path d="M474 462 H596" stroke="#ffffff" stroke-width="1.6" opacity="0.08"/>
+      <path d="M596 171 V526" stroke="#466274" stroke-width="1.8" opacity="0.28"/>
+      <path d="M474 171 V442" stroke="#ffffff" stroke-width="1.4" opacity="0.08"/>
+
+      <!-- corrected transfer path: horizontal TAU channel with a short, coaxial rise into the liner seat -->
+      <path d="M92 503 H455 Q532 503 532 426 V365"
+            fill="none" stroke="#123a62" stroke-width="35" stroke-linecap="round"/>
+      <path d="M92 503 H455 Q532 503 532 426 V365"
+            fill="none" stroke="url(#tubeGreen)" stroke-width="24" stroke-linecap="round"/>
+      <path d="M100 494 H456 Q520 494 520 424 V366"
+            fill="none" stroke="#ffffff" stroke-width="4.5" stroke-linecap="round" opacity="0.24"/>
+      <path d="M100 511 H456 Q544 511 544 428 V366"
+            fill="none" stroke="#001315" stroke-width="4" stroke-linecap="round" opacity="0.22"/>
+      <!-- machined liner seat, flush transition into the liner bottom fitting -->
+      <rect x="512" y="352" width="40" height="32" rx="9" fill="url(#metal)" stroke="#20252b" stroke-width="2.2"/>
+      <circle cx="532" cy="365" r="11" fill="#0e5b61" stroke="#123a62" stroke-width="1.5"/>
+      <circle cx="532" cy="365" r="5" fill="#75cfff" opacity="0.35"/>
+
+      <!-- liner and Twister, seated in same vertical channel -->
+      <g id="liner_twister">
+        <rect x="517" y="82" width="31" height="284" rx="15.5" fill="url(#glassTube)" stroke="#5f8198" stroke-width="2.3"/>
+        <path d="M525 91 V356" stroke="#ffffff" stroke-width="2" opacity="0.34"/>
+        <path d="M545 91 V356" stroke="#5d7c91" stroke-width="1.4" opacity="0.25"/>
+        <rect x="514" y="55" width="36" height="40" rx="8" fill="url(#metal)" stroke="#20252b" stroke-width="2.2"/>
+        <rect x="510" y="32" width="44" height="30" rx="8" fill="url(#metal)" stroke="#20252b" stroke-width="2.2"/>
+        <rect x="514" y="356" width="37" height="37" rx="8" fill="url(#metal)" stroke="#20252b" stroke-width="2.2"/>
+        <rect x="509" y="383" width="46" height="20" rx="7" fill="url(#metal)" stroke="#20252b" stroke-width="2.1"/>
+        <circle cx="532" cy="393" r="7" fill="#0e5b61" stroke="#123a62" stroke-width="1.2"/>
+        <path d="M517 69 H547" stroke="#50687b" stroke-width="3" opacity="0.62"/>
+        <path d="M518 83 H546" stroke="#50687b" stroke-width="3" opacity="0.62"/>
+
+        <rect x="521" y="220" width="22" height="82" rx="11" fill="url(#twisterFill)" stroke="#0b2b48" stroke-width="1.8"/>
+        <circle cx="525.9" cy="228.4" r="1.8" fill="#d8f5ff" opacity="0.90"/>
+<circle cx="532.5" cy="228.4" r="2.0" fill="#d8f5ff" opacity="0.90"/>
+<circle cx="539.2" cy="228.4" r="2.2" fill="#d8f5ff" opacity="0.90"/>
+<circle cx="527.3" cy="235.8" r="2.0" fill="#d8f5ff" opacity="0.90"/>
+<circle cx="534.0" cy="235.8" r="2.2" fill="#d8f5ff" opacity="0.90"/>
+<circle cx="540.7" cy="235.8" r="1.8" fill="#d8f5ff" opacity="0.90"/>
+<circle cx="525.9" cy="243.2" r="2.2" fill="#d8f5ff" opacity="0.90"/>
+<circle cx="532.5" cy="243.2" r="1.8" fill="#d8f5ff" opacity="0.90"/>
+<circle cx="539.2" cy="243.2" r="2.0" fill="#d8f5ff" opacity="0.90"/>
+<circle cx="527.3" cy="250.6" r="1.8" fill="#d8f5ff" opacity="0.90"/>
+<circle cx="534.0" cy="250.6" r="2.0" fill="#d8f5ff" opacity="0.90"/>
+<circle cx="540.7" cy="250.6" r="2.2" fill="#d8f5ff" opacity="0.90"/>
+<circle cx="525.9" cy="258.0" r="2.0" fill="#d8f5ff" opacity="0.90"/>
+<circle cx="532.5" cy="258.0" r="2.2" fill="#d8f5ff" opacity="0.90"/>
+<circle cx="539.2" cy="258.0" r="1.8" fill="#d8f5ff" opacity="0.90"/>
+<circle cx="527.3" cy="265.4" r="2.2" fill="#d8f5ff" opacity="0.90"/>
+<circle cx="534.0" cy="265.4" r="1.8" fill="#d8f5ff" opacity="0.90"/>
+<circle cx="540.7" cy="265.4" r="2.0" fill="#d8f5ff" opacity="0.90"/>
+<circle cx="525.9" cy="272.8" r="1.8" fill="#d8f5ff" opacity="0.90"/>
+<circle cx="532.5" cy="272.8" r="2.0" fill="#d8f5ff" opacity="0.90"/>
+<circle cx="539.2" cy="272.8" r="2.2" fill="#d8f5ff" opacity="0.90"/>
+<circle cx="527.3" cy="280.2" r="2.0" fill="#d8f5ff" opacity="0.90"/>
+<circle cx="534.0" cy="280.2" r="2.2" fill="#d8f5ff" opacity="0.90"/>
+<circle cx="540.7" cy="280.2" r="1.8" fill="#d8f5ff" opacity="0.90"/>
+<circle cx="525.9" cy="287.6" r="2.2" fill="#d8f5ff" opacity="0.90"/>
+<circle cx="532.5" cy="287.6" r="1.8" fill="#d8f5ff" opacity="0.90"/>
+<circle cx="539.2" cy="287.6" r="2.0" fill="#d8f5ff" opacity="0.90"/>
+<circle cx="527.3" cy="295.0" r="1.8" fill="#d8f5ff" opacity="0.90"/>
+<circle cx="534.0" cy="295.0" r="2.0" fill="#d8f5ff" opacity="0.90"/>
+<circle cx="540.7" cy="295.0" r="2.2" fill="#d8f5ff" opacity="0.90"/>
+        <ellipse cx="532" cy="220" rx="10" ry="3.3" fill="#ffffff" opacity="0.34"/>
+        <ellipse cx="532" cy="302" rx="10" ry="3.3" fill="#5f3c22" opacity="0.28"/>
+      </g>
+
+      <!-- flow indicators -->
+      <path d="M102 503 H252" stroke="#75cfff" stroke-width="4.4" stroke-linecap="round" opacity="0.72"/>
+      <path d="M355 485 H428" stroke="#8fe2ff" stroke-width="3.2" stroke-linecap="round" opacity="0.62"/>
+      <path d="M416 475 L432 485 L416 495" fill="none" stroke="#8fe2ff" stroke-width="3.2" stroke-linecap="round" opacity="0.62"/>
+      <path d="M510 472 C528 448, 532 420, 532 384" stroke="#8fe2ff" stroke-width="3.2" stroke-linecap="round" opacity="0.50" fill="none"/>
+      <path d="M523 398 L532 382 L541 398" fill="none" stroke="#8fe2ff" stroke-width="3.2" stroke-linecap="round" opacity="0.50"/>
+      <path d="M532 384 V356" fill="none" stroke="#75cfff" stroke-width="4.2" stroke-linecap="round" opacity="0.54"/>
+      <path d="M521 370 L532 354 L543 370" fill="none" stroke="#75cfff" stroke-width="4.2" stroke-linecap="round" opacity="0.54"/>
+    </g>
+
+    <!-- integrated shell details, screws, vents; no display/control panel -->
+    <g id="hardware_details">
+      
+    <g transform="translate(136 420) rotate(12)">
+      <circle cx="0" cy="0" r="4.8" fill="url(#metal)" stroke="#20252b" stroke-width="1.4"/>
+      <circle cx="0" cy="0" r="2.9" fill="#c9d0d6" stroke="#4e5962" stroke-width="0.8"/>
+      <path d="M-1.8 0 H1.8" stroke="#59636c" stroke-width="1.1" stroke-linecap="round"/>
+      <path d="M0 -1.5 V1.5" stroke="#59636c" stroke-width="0.9" stroke-linecap="round" opacity="0.55"/>
+    </g>
+
+      
+    <g transform="translate(136 565) rotate(-15)">
+      <circle cx="0" cy="0" r="4.8" fill="url(#metal)" stroke="#20252b" stroke-width="1.4"/>
+      <circle cx="0" cy="0" r="2.9" fill="#c9d0d6" stroke="#4e5962" stroke-width="0.8"/>
+      <path d="M-1.8 0 H1.8" stroke="#59636c" stroke-width="1.1" stroke-linecap="round"/>
+      <path d="M0 -1.5 V1.5" stroke="#59636c" stroke-width="0.9" stroke-linecap="round" opacity="0.55"/>
+    </g>
+
+      
+    <g transform="translate(706 420) rotate(0)">
+      <circle cx="0" cy="0" r="4.8" fill="url(#metal)" stroke="#20252b" stroke-width="1.4"/>
+      <circle cx="0" cy="0" r="2.9" fill="#c9d0d6" stroke="#4e5962" stroke-width="0.8"/>
+      <path d="M-1.8 0 H1.8" stroke="#59636c" stroke-width="1.1" stroke-linecap="round"/>
+      <path d="M0 -1.5 V1.5" stroke="#59636c" stroke-width="0.9" stroke-linecap="round" opacity="0.55"/>
+    </g>
+
+      
+    <g transform="translate(706 565) rotate(20)">
+      <circle cx="0" cy="0" r="4.8" fill="url(#metal)" stroke="#20252b" stroke-width="1.4"/>
+      <circle cx="0" cy="0" r="2.9" fill="#c9d0d6" stroke="#4e5962" stroke-width="0.8"/>
+      <path d="M-1.8 0 H1.8" stroke="#59636c" stroke-width="1.1" stroke-linecap="round"/>
+      <path d="M0 -1.5 V1.5" stroke="#59636c" stroke-width="0.9" stroke-linecap="round" opacity="0.55"/>
+    </g>
+
+      
+    <g transform="translate(452 93) rotate(0)">
+      <circle cx="0" cy="0" r="4.5" fill="url(#metal)" stroke="#20252b" stroke-width="1.4"/>
+      <circle cx="0" cy="0" r="2.7" fill="#c9d0d6" stroke="#4e5962" stroke-width="0.8"/>
+      <path d="M-1.7 0 H1.7" stroke="#59636c" stroke-width="1.1" stroke-linecap="round"/>
+      <path d="M0 -1.4 V1.4" stroke="#59636c" stroke-width="0.9" stroke-linecap="round" opacity="0.55"/>
+    </g>
+
+      
+    <g transform="translate(613 93) rotate(0)">
+      <circle cx="0" cy="0" r="4.5" fill="url(#metal)" stroke="#20252b" stroke-width="1.4"/>
+      <circle cx="0" cy="0" r="2.7" fill="#c9d0d6" stroke="#4e5962" stroke-width="0.8"/>
+      <path d="M-1.7 0 H1.7" stroke="#59636c" stroke-width="1.1" stroke-linecap="round"/>
+      <path d="M0 -1.4 V1.4" stroke="#59636c" stroke-width="0.9" stroke-linecap="round" opacity="0.55"/>
+    </g>
+
+      
+    <g transform="translate(452 354) rotate(0)">
+      <circle cx="0" cy="0" r="4.5" fill="url(#metal)" stroke="#20252b" stroke-width="1.4"/>
+      <circle cx="0" cy="0" r="2.7" fill="#c9d0d6" stroke="#4e5962" stroke-width="0.8"/>
+      <path d="M-1.7 0 H1.7" stroke="#59636c" stroke-width="1.1" stroke-linecap="round"/>
+      <path d="M0 -1.4 V1.4" stroke="#59636c" stroke-width="0.9" stroke-linecap="round" opacity="0.55"/>
+    </g>
+
+      
+    <g transform="translate(613 354) rotate(0)">
+      <circle cx="0" cy="0" r="4.5" fill="url(#metal)" stroke="#20252b" stroke-width="1.4"/>
+      <circle cx="0" cy="0" r="2.7" fill="#c9d0d6" stroke="#4e5962" stroke-width="0.8"/>
+      <path d="M-1.7 0 H1.7" stroke="#59636c" stroke-width="1.1" stroke-linecap="round"/>
+      <path d="M0 -1.4 V1.4" stroke="#59636c" stroke-width="0.9" stroke-linecap="round" opacity="0.55"/>
+    </g>
+
+      <rect x="526" y="405" width="10" height="36" rx="2" fill="#0d3155" opacity="0.18"/><rect x="544" y="405" width="10" height="36" rx="2" fill="#0d3155" opacity="0.18"/><rect x="562" y="405" width="10" height="36" rx="2" fill="#0d3155" opacity="0.18"/><rect x="580" y="405" width="10" height="36" rx="2" fill="#0d3155" opacity="0.18"/><rect x="598" y="405" width="10" height="36" rx="2" fill="#0d3155" opacity="0.18"/><rect x="616" y="405" width="10" height="36" rx="2" fill="#0d3155" opacity="0.18"/><rect x="634" y="405" width="10" height="36" rx="2" fill="#0d3155" opacity="0.18"/>
+      <path d="M136 412 H360" stroke="#ffffff" stroke-width="2.4" opacity="0.45"/>
+      <path d="M456 102 H598" stroke="#ffffff" stroke-width="2.0" opacity="0.18"/>
+      <path d="M149 548 C248 565, 515 565, 604 548" fill="none" stroke="#466274" stroke-width="2" opacity="0.20"/>
+    </g>
+
+    <!-- glass highlights over tower cutaway -->
+    <path d="M485 147 L584 340" stroke="#ffffff" stroke-width="4.5" opacity="0.055"/>
+    <rect x="478" y="145" width="18" height="203" rx="9" fill="url(#glassReflect)" opacity="0.62"/>
+  </g>
+</svg>
