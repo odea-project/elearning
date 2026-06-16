@@ -1411,18 +1411,28 @@
 		overflow: visible;
 	}
 
+	#analytical-process-tga .tga-process-wrap.tga-gcms-mode {
+		display: block;
+	}
+
 	#analytical-process-tga .tga-stage {
-		position: relative;
+		position: absolute;
+		top: 10px;
+		left: calc(50% - 250px);
 		width: 500px;
 		aspect-ratio: 1 / 1;
-		margin: 0 auto;
+		margin: 0;
 		flex: 0 0 auto;
 		z-index: 3;
 		opacity: 1;
-		transform: translateX(0);
+		transform: translateX(0) scale(1);
 		transition:
-			transform 0.95s cubic-bezier(0.16, 0.84, 0.32, 1),
-			opacity 0.45s ease-in-out;
+			top 0.95s cubic-bezier(0.16, 0.84, 0.32, 1),
+			left 0.95s cubic-bezier(0.16, 0.84, 0.32, 1),
+			width 0.95s cubic-bezier(0.16, 0.84, 0.32, 1),
+			opacity 0.45s ease-in-out,
+			transform 0.95s cubic-bezier(0.16, 0.84, 0.32, 1);
+		will-change: top, left, width, opacity, transform;
 	}
 
 	/* Beide SVGs liegen exakt übereinander */
@@ -1454,10 +1464,14 @@
 		opacity: 0;
 	}
 
-	/* Fragment 3: TGA oven leaves the composition */
+	/* Fragment 3: TGA oven smoothly scales down and shifts left */
 	#analytical-process-tga .tga-process-wrap.tga-gcms-mode .tga-stage {
-		opacity: 0;
-		transform: translateX(-560px);
+		position: absolute;
+		top: 200px;
+		left: 120px;
+		width: 245px;
+		opacity: 1;
+		transform: translateX(0) scale(1);
 	}
 
 	/* D3 overlay: animated TGA mass-loss sketch */
@@ -1472,18 +1486,27 @@
 		opacity: 0;
 		transform: translateX(0) scale(1);
 		transition:
+			top 0.95s cubic-bezier(0.16, 0.84, 0.32, 1),
+			left 0.95s cubic-bezier(0.16, 0.84, 0.32, 1),
+			width 0.95s cubic-bezier(0.16, 0.84, 0.32, 1),
+			height 0.95s cubic-bezier(0.16, 0.84, 0.32, 1),
 			opacity 0.35s ease-in-out,
-			transform 0.75s cubic-bezier(0.16, 0.84, 0.32, 1);
+			transform 0.95s cubic-bezier(0.16, 0.84, 0.32, 1);
+		will-change: top, left, width, height, opacity, transform;
 	}
 
 	#analytical-process-tga .tga-massloss-overlay.visible {
 		opacity: 1;
 	}
 
-	/* Fragment 3: diagram disappears but is not redrawn/reset */
+	/* Fragment 3: diagram stays visible and shrinks into the overview row */
 	#analytical-process-tga .tga-process-wrap.tga-gcms-mode .tga-massloss-overlay.visible {
-		opacity: 0;
-		transform: translateX(-45px) scale(0.96);
+		left: 0;
+		top: 82px;
+		width: 255px;
+		height: 190px;
+		opacity: 1;
+		transform: translateX(0) scale(1);
 	}
 
 	#analytical-process-tga .tga-massloss-overlay svg {
@@ -1527,10 +1550,30 @@
 		fill: rgba(0, 0, 0, 0.72);
 	}
 
+	#analytical-process-tga .autosampler-overlay {
+		position: absolute;
+		top: 20px;
+		left: 220px;
+		width: 455px;
+		height: auto;
+		z-index: 2;
+		pointer-events: none;
+		opacity: 0;
+		transform: translateX(40px) scale(0.96);
+		transition:
+			opacity 0.35s ease-in-out,
+			transform 0.95s cubic-bezier(0.16, 0.84, 0.32, 1);
+	}
+
+	#analytical-process-tga .autosampler-overlay.visible {
+		opacity: 0.74;
+		transform: translateX(0) scale(1);
+	}
+
 	#analytical-process-tga .tau-interface-overlay {
 		position: absolute;
 		top: -19px;
-		left: 740px;
+		left: 550px;
 		width: 460px;
 		height: auto;
 		z-index: 6;
@@ -1551,11 +1594,11 @@
 		transform: translateX(0);
 	}
 
-	/* Fragment 3: TAU moves into the former diagram position */
+	/* Fragment 3: TAU moves into the overview row */
 	#analytical-process-tga .tga-process-wrap.tga-gcms-mode .tau-interface-overlay.visible {
-		top: 152px;
-		left: 14px;
-		width: 430px;
+		top: 215px;
+		left: 275px;
+		width: 165px;
 		opacity: 1;
 		transform: translateX(0) scale(1);
 	}
@@ -1579,6 +1622,12 @@
 	#analytical-process-tga .gcms-overlay.visible {
 		opacity: 1;
 		transform: translateX(0);
+	}
+
+	#analytical-process-tga .tga-process-wrap.tga-gcms-mode .gcms-overlay.visible {
+		top: 138px;
+		right: 6px;
+		width: 450px;
 	}
 
 	#analytical-process-tga .instrument-chart-overlay {
@@ -1616,6 +1665,20 @@
 		left: 605px;
 		width: 250px;
 		height: 165px;
+	}
+
+	#analytical-process-tga .tga-process-wrap.tga-gcms-mode .gc-chart-overlay {
+		top: 110px;
+		left: 680px;
+		width: 170px;
+		height: 118px;
+	}
+
+	#analytical-process-tga .tga-process-wrap.tga-gcms-mode .ms-chart-overlay {
+		top: 110px;
+		left: 850px;
+		width: 170px;
+		height: 118px;
 	}
 
 	.chart-sketch-line {
@@ -1658,12 +1721,22 @@
 		}
 
 		#analytical-process-tga .tga-stage {
-			transform: translateX(90px);
+			top: 10px;
+			left: calc(50% - 250px);
+			transform: translateX(90px) scale(1);
 		}
 
 		#analytical-process-tga .tga-process-wrap.tga-gcms-mode .tga-stage {
-			opacity: 0;
-			transform: translateX(-520px);
+			top: 164px;
+			left: 220px;
+			width: 220px;
+			opacity: 1;
+			transform: translateX(0) scale(1);
+		}
+
+		#analytical-process-tga .autosampler-overlay {
+			left: 390px;
+			width: 400px;
 		}
 
 		#analytical-process-tga .tau-interface-overlay {
@@ -1672,14 +1745,27 @@
 		}
 
 		#analytical-process-tga .tga-process-wrap.tga-gcms-mode .tau-interface-overlay.visible {
-			left: 0;
-			top: 24px;
-			width: 360px;
+			left: 430px;
+			top: 188px;
+			width: 155px;
 		}
 
 		#analytical-process-tga .gcms-overlay {
 			right: -70px;
 			width: 610px;
+		}
+
+		#analytical-process-tga .tga-process-wrap.tga-gcms-mode .gcms-overlay.visible {
+			top: 150px;
+			right: -20px;
+			width: 400px;
+		}
+
+		#analytical-process-tga .tga-process-wrap.tga-gcms-mode .tga-massloss-overlay.visible {
+			left: 0;
+			top: 90px;
+			width: 220px;
+			height: 164px;
 		}
 
 		#analytical-process-tga .gc-chart-overlay {
@@ -1693,9 +1779,489 @@
 			width: 220px;
 			height: 150px;
 		}
+
+		#analytical-process-tga .tga-process-wrap.tga-gcms-mode .gc-chart-overlay {
+			left: 520px;
+			width: 150px;
+			height: 106px;
+		}
+
+		#analytical-process-tga .tga-process-wrap.tga-gcms-mode .ms-chart-overlay {
+			left: 740px;
+			width: 150px;
+			height: 106px;
+		}
 	}
 
-	</style>
+	
+		/* ===== Measurement time Gantt slide ===== */
+		.reveal .slides section#measurement-time-focus {
+			top: 0 !important;
+			height: 680px;
+			display: flex !important;
+			flex-direction: column;
+			justify-content: flex-start;
+			align-items: center;
+			padding-top: 80px;
+			box-sizing: border-box;
+		}
+
+		#measurement-time-focus h4 {
+			margin: 0 0 4px 0;
+			line-height: 1.08;
+		}
+
+		#measurement-time-gantt {
+			width: 1120px;
+			height: 515px;
+			margin: 0 auto;
+		}
+
+		.measurement-time-subnote {
+			font-family: "Montserrat", Arial, sans-serif;
+			font-size: 0.38em;
+			line-height: 1.25;
+			color: #4b5d73;
+			text-align: center;
+			margin-top: -6px;
+		}
+
+		.time-gantt-step {
+			display: none;
+		}
+
+		.time-gantt-axis text,
+		.time-gantt-label,
+		.time-gantt-small,
+		.time-gantt-legend text,
+		.time-gantt-value,
+		.time-gantt-total,
+		.time-gantt-lane,
+		.time-gantt-runlabel,
+		.time-gantt-hint {
+			font-family: "Montserrat", Arial, sans-serif;
+		}
+
+		.time-gantt-axis text,
+		.time-gantt-small {
+			fill: #4b5d73;
+			font-size: 17px;
+		}
+
+		.time-gantt-axis line,
+		.time-gantt-axis path {
+			stroke: rgba(0, 76, 147, 0.38);
+			stroke-width: 1.2px;
+		}
+
+		.time-gantt-grid line {
+			stroke: rgba(0, 76, 147, 0.08);
+			stroke-width: 1px;
+		}
+
+		.time-gantt-label {
+			fill: var(--ude-accent-2);
+			font-size: 21px;
+			font-weight: 800;
+		}
+
+		.time-gantt-lane {
+			fill: var(--ude-blue);
+			font-size: 20px;
+			font-weight: 800;
+		}
+
+		.time-gantt-runlabel {
+			fill: #1f2d3d;
+			font-size: 15px;
+			font-weight: 800;
+		}
+
+		.time-gantt-total {
+			fill: var(--ude-accent-3);
+			font-size: 24px;
+			font-weight: 900;
+		}
+
+		.time-gantt-value {
+			fill: #b8103b;
+			font-size: 28px;
+			font-weight: 900;
+		}
+
+		.time-gantt-ref {
+			stroke: rgba(184, 16, 59, 0.82);
+			stroke-width: 2;
+			stroke-dasharray: 7 6;
+		}
+
+		.time-gantt-hint {
+			fill: rgba(0, 76, 147, 0.68);
+			font-size: 34px;
+			font-weight: 800;
+		}
+
+		.time-gantt-wait-label {
+			font-family: "Montserrat", Arial, sans-serif;
+			font-size: 16px;
+			font-weight: 700;
+			fill: #b8103b;
+		}
+
+		/* ===== Bridge slide calibration time ===== */
+		.reveal .slides section#bridge-slide-time {
+			top: 0 !important;
+			height: 680px;
+			display: flex !important;
+			flex-direction: column;
+			align-items: center;
+			justify-content: flex-start;
+			padding-top: 120px;
+			box-sizing: border-box;
+		}
+
+		#bridge-slide-time h4 {
+			margin: 0 0 8px 0;
+		}
+
+		.bridge-time-lead {
+			font-family: "Montserrat", Arial, sans-serif;
+			font-size: 0.54em;
+			line-height: 1.35;
+			color: #32475b;
+			text-align: center;
+			margin-bottom: 12px;
+		}
+
+		#bridge-calibration-gantt {
+			width: 1120px;
+			height: 285px;
+			margin: 0 auto;
+		}
+
+		.bridge-time-subnote {
+			font-family: "Montserrat", Arial, sans-serif;
+			font-size: 0.39em;
+			line-height: 1.35;
+			color: #4b5d73;
+			text-align: center;
+			margin-top: 8px;
+		}
+
+		/* ===== Running regression slide ===== */
+		.reveal .slides section#running-regression {
+			top: 0 !important;
+			height: 680px;
+			display: flex !important;
+			flex-direction: column;
+			align-items: center;
+			justify-content: flex-start;
+			padding-top: 10px;
+			box-sizing: border-box;
+		}
+
+		#running-regression h4 {
+			margin: 0 0 8px 0;
+		}
+
+		.running-regression-lead {
+			font-family: "Montserrat", Arial, sans-serif;
+			font-size: 0.41em;
+			line-height: 1.32;
+			color: #32475b;
+			text-align: center;
+			max-width: 1100px;
+			margin-bottom: 8px;
+		}
+
+		.running-regression-layout {
+			width: 1120px;
+			display: grid;
+			grid-template-columns: 1fr 1fr;
+			column-gap: 22px;
+			align-items: stretch;
+		}
+
+		.running-regression-panel {
+			min-width: 0;
+		}
+
+		.running-regression-right {
+			display: grid;
+			grid-template-columns: 1fr 112px;
+			column-gap: 14px;
+			align-items: stretch;
+		}
+
+		#running-regression-raw {
+			width: 544px;
+			height: 460px;
+		}
+
+		#running-regression-calibration {
+			width: 418px;
+			height: 460px;
+		}
+
+		#running-regression-error {
+			width: 112px;
+			height: 460px;
+		}
+
+		.running-regression-step {
+			display: none;
+		}
+
+		.rr-axis text,
+		.rr-small,
+		.rr-legend text,
+		.rr-window-note,
+		.rr-error-label,
+		.rr-error-value,
+		.rr-title,
+		.rr-subtitle,
+		.rr-mini-title {
+			font-family: "Montserrat", Arial, sans-serif;
+		}
+
+		.rr-axis text,
+		.rr-small,
+		.rr-window-note,
+		.rr-error-label {
+			fill: #4b5d73;
+			font-size: 13px;
+		}
+
+		.rr-axis path,
+		.rr-axis line {
+			stroke: rgba(0, 76, 147, 0.35);
+			stroke-width: 1.1px;
+		}
+
+		.rr-grid line {
+			stroke: rgba(0, 76, 147, 0.08);
+			stroke-width: 1px;
+		}
+
+		.rr-grid path {
+			stroke: none;
+		}
+
+		.rr-title,
+		.rr-mini-title {
+			fill: var(--ude-accent-2);
+			font-size: 18px;
+			font-weight: 800;
+		}
+
+		.rr-subtitle {
+			fill: #4b5d73;
+			font-size: 13px;
+			font-weight: 600;
+		}
+
+		.rr-legend text {
+			fill: #4b5d73;
+			font-size: 13px;
+		}
+
+		.rr-error-value {
+			fill: #b8103b;
+			font-size: 18px;
+			font-weight: 800;
+		}
+
+		/* ===== Sample robustness slide ===== */
+		.reveal .slides section#sample-robustness {
+			top: 0 !important;
+			height: 680px;
+			display: flex !important;
+			flex-direction: column;
+			align-items: center;
+			justify-content: flex-start;
+			padding-top: 12px;
+			box-sizing: border-box;
+		}
+
+		#sample-robustness h4 {
+			margin: 0 0 8px 0;
+		}
+
+		.sample-robustness-lead {
+			font-family: "Montserrat", Arial, sans-serif;
+			font-size: 0.42em;
+			line-height: 1.34;
+			color: #32475b;
+			text-align: center;
+			max-width: 1100px;
+			margin-bottom: 10px;
+		}
+
+		#sample-robustness-chart {
+			width: 1120px;
+			height: 500px;
+			margin: 0 auto;
+		}
+
+		.sr-axis text,
+		.sr-small,
+		.sr-title,
+		.sr-subtitle,
+		.sr-value,
+		.sr-note {
+			font-family: "Montserrat", Arial, sans-serif;
+		}
+
+		.sr-axis text,
+		.sr-small,
+		.sr-note {
+			fill: #4b5d73;
+			font-size: 14px;
+		}
+
+		.sr-axis path,
+		.sr-axis line {
+			stroke: rgba(0, 76, 147, 0.35);
+			stroke-width: 1.1px;
+		}
+
+		.sr-grid line {
+			stroke: rgba(0, 76, 147, 0.08);
+			stroke-width: 1px;
+		}
+
+		.sr-grid path {
+			stroke: none;
+		}
+
+		.sr-title {
+			fill: var(--ude-accent-2);
+			font-size: 20px;
+			font-weight: 800;
+		}
+
+		.sr-subtitle {
+			fill: #4b5d73;
+			font-size: 14px;
+			font-weight: 600;
+		}
+
+		.sr-value {
+			fill: #b8103b;
+			font-size: 17px;
+			font-weight: 800;
+		}
+
+		/* ===== TGA heating rate optimisation slide ===== */
+		.reveal .slides section#tga-heating-rate-optimization {
+			padding-top: 56px;
+		}
+
+		.heating-rate-optimization-layout {
+			display: grid;
+			grid-template-columns: 780px 280px;
+			align-items: stretch;
+			gap: 26px;
+			width: 1110px;
+		}
+
+		#heating-rate-optimum-chart {
+			width: 780px;
+			height: 505px;
+		}
+
+		.heating-rate-side-panel {
+			display: flex;
+		}
+
+		.heating-rate-creditbox {
+			width: 100%;
+			display: flex;
+			flex-direction: column;
+			justify-content: flex-start;
+			gap: 12px;
+			padding: 18px 20px;
+			border: 2px solid rgba(184, 16, 59, 0.22);
+			border-radius: 14px;
+			background: linear-gradient(180deg, rgba(184, 16, 59, 0.05), rgba(0, 76, 147, 0.03));
+			box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08);
+			text-align: left;
+			box-sizing: border-box;
+		}
+
+		.heating-rate-creditbox .source-title {
+			font-family: "Montserrat", Arial, sans-serif;
+			font-size: 0.58em;
+			font-weight: 800;
+			color: var(--ude-accent-2);
+			letter-spacing: 0.02em;
+		}
+
+		.heating-rate-creditbox .big {
+			font-family: "Montserrat", Arial, sans-serif;
+			font-size: 0.56em;
+			font-weight: 800;
+			color: var(--ude-blue);
+			line-height: 1.3;
+		}
+
+		.heating-rate-creditbox .small {
+			font-family: "Montserrat", Arial, sans-serif;
+			font-size: 0.42em;
+			line-height: 1.45;
+			color: #32475b;
+		}
+
+		.heating-rate-axis path,
+		.heating-rate-axis line {
+			stroke: rgba(0, 76, 147, 0.65);
+			stroke-width: 1.4px;
+		}
+
+		.heating-rate-grid line {
+			stroke: rgba(120, 120, 120, 0.35);
+		}
+
+		.heating-rate-grid path {
+			stroke: none;
+		}
+
+		.heating-rate-axis text {
+			font-family: "Montserrat", Arial, sans-serif;
+			font-size: 19px;
+			font-weight: 700;
+			fill: #32475b;
+		}
+
+		.heating-rate-label {
+			font-family: "Montserrat", Arial, sans-serif;
+			font-size: 16px;
+			font-weight: 700;
+			fill: var(--ude-blue);
+		}
+
+		.heating-rate-point-label,
+		.heating-rate-legend-text,
+		.heating-rate-annotation {
+			font-family: "Montserrat", Arial, sans-serif;
+			fill: #32475b;
+		}
+
+		.heating-rate-point-label {
+			font-size: 16px;
+			font-weight: 700;
+		}
+
+		.heating-rate-legend-text {
+			font-size: 15px;
+			font-weight: 600;
+		}
+
+		.heating-rate-annotation {
+			font-size: 14px;
+			font-weight: 700;
+		}
+</style>
 </head>
 
 <body>
@@ -1738,6 +2304,11 @@
 						alt="TAU interface"
 						data-fragment-index="2">
 
+					<img class="autosampler-overlay fragment custom"
+						src="resources/figures/autosampler.webp"
+						alt="Autosampler bridging interface"
+						data-fragment-index="3">
+
 					<img class="gcms-overlay fragment custom"
 						src="resources/figures/gc-ms.webp"
 						alt="GC-MS system"
@@ -1751,9 +2322,76 @@
 				</div>
 			</section>
 
+
+			<section id="measurement-time-focus">
+				<h4>Why Measurement Time Becomes a Bottleneck</h4>
+				<div id="measurement-time-gantt"></div>
+				<span class="fragment custom time-gantt-step" data-fragment-index="1"></span>
+				<span class="fragment custom time-gantt-step" data-fragment-index="2"></span>
+				<span class="fragment custom time-gantt-step" data-fragment-index="3"></span>
+			</section>
+
+			<section id="tga-heating-rate-optimization">
+				<h4>TGA Heating Rate: Reproducibility Study</h4>
+				<div class="heating-rate-optimization-layout">
+					<div id="heating-rate-optimum-chart"
+					aria-label="D3 chart showing standard deviation of the method as function of TGA heating rate"></div>
+
+					<div class="heating-rate-side-panel">
+					<div class="heating-rate-creditbox">
+						<span class="source-title">Credit</span>
+						<span class="big">Rajshree Jeewon<br>Master Thesis Data</span>
+						<span class="small">
+						The heating rate affects not only runtime, but also the reproducibility of the SBR marker response.
+						The minimum of S<sub>x0</sub> supports the optimized TGA program.
+						</span>
+						<span class="small">
+						<strong>Rajshree Jeewon</strong><br>
+						Master Thesis, Environmental Toxicology<br>
+						University of Duisburg-Essen, IAC, 2026
+						</span>
+					</div>
+					</div>
+				</div>
+			</section>
+
+			<section id="bridge-slide-time">
+				<h4>Measurement Time Still Remains a Challenge</h4>
+				<div class="bridge-time-lead" style="font-size: 0.60em; margin-bottom: 16px;">
+					<br>
+					For a 5-point calibration we need: <b>Std 1, Blank, Std 2, Blank, ... , Std 5, Blank</b>.
+				</div>
+				<div class="vertical-spacer" style="height: 30px;"></div>
+				<div id="bridge-calibration-gantt"></div>
+			</section>
+
+			<section id="running-regression">
+				<h4>Running Regression</h4>
+				<div class="vertical-spacer" style="height: 50px;"></div>
+				<div class="running-regression-layout">
+					<div class="running-regression-panel">
+						<div id="running-regression-raw"></div>
+					</div>
+					<div class="running-regression-panel running-regression-right">
+						<div id="running-regression-calibration"></div>
+						<div id="running-regression-error"></div>
+					</div>
+				</div>
+				<span class="fragment custom running-regression-step" data-fragment-index="1"></span>
+				<span class="fragment custom running-regression-step" data-fragment-index="2"></span>
+			</section>
+
+			<section id="sample-robustness">
+				<h4>Sample Result Stability Across Neighboring Calibration Sessions</h4>
+				<div class="sample-robustness-lead">
+					The same triplicate sample is back-calculated with 11 neighboring 15-point calibration windows. The center point represents the assumed sample day from the middle of the calibration series; the surrounding points test whether earlier and later calibration sessions change the result significantly.
+				</div>
+				<div id="sample-robustness-chart"></div>
+			</section>
+
 			<section id="concept-of-analytical-marker">
 				<h4>Concept of Analytical Marker Compounds for TED-GC-MS Based Microplastics Analysis</h4>
-				<img src="resources/figures/marker-concept.webp" alt="Concept of Analytical Marker Compounds" style="width: 800px;"/>
+				<img src="resources/figures/marker-concept.webp" alt="Concept of Analytical Marker Compounds" style="width: 700px;"/>
 			</section>
 			
 			<section id="thankyou">
@@ -2273,12 +2911,16 @@
 				scheduleProcessingConsistencyRender();
 				updateTgaProcessState(event.currentSlide);
 				syncTgaMassLossOverlay(event.currentSlide, false);
-				scheduleInstrumentCharts(event.currentSlide, 50);
+				if (event.currentSlide && event.currentSlide.id === 'analytical-process-tga' && isGcmsStageVisible(event.currentSlide)) {
+					scheduleInstrumentCharts(event.currentSlide, false, 120);
+				} else {
+					syncInstrumentCharts(event.currentSlide, false);
+				}
 			});
 			Reveal.on('slidechanged', event => {
 				updateTgaProcessState(event.currentSlide);
 				syncTgaMassLossOverlay(event.currentSlide, false);
-				scheduleInstrumentCharts(event.currentSlide, 50);
+				syncInstrumentCharts(event.currentSlide, false);
 				if (event.currentSlide && event.currentSlide.id === 'peak-intro-1') {
 					renderPeakIntroChart();
 				}
@@ -2307,6 +2949,34 @@
 			);
 		}
 
+		function getRevealEventFragments(event) {
+			const fragments = [];
+			if (event && event.fragment) {
+				fragments.push(event.fragment);
+			}
+			if (event && event.fragments) {
+				fragments.push(...Array.from(event.fragments));
+			}
+			return fragments;
+		}
+
+		function revealEventContainsGcmsFragment(event) {
+			return getRevealEventFragments(event).some(fragment => isGcmsFragment(fragment));
+		}
+
+		function revealEventContainsTgaHeatingFragment(event) {
+			return getRevealEventFragments(event).some(fragment => isTgaHeatingFragment(fragment));
+		}
+
+		function isGcmsStageVisible(slide) {
+			if (!slide) {
+				return false;
+			}
+			return Boolean(
+				slide.querySelector('.gcms-overlay.visible, .autosampler-overlay.visible, [data-fragment-index="3"].visible')
+			);
+		}
+
 		function updateTgaProcessState(slide) {
 			if (!slide || slide.id !== 'analytical-process-tga') {
 				return;
@@ -2315,7 +2985,7 @@
 			if (!wrap) {
 				return;
 			}
-			const gcmsVisible = Boolean(slide.querySelector('.gcms-overlay.visible'));
+			const gcmsVisible = isGcmsStageVisible(slide);
 			wrap.classList.toggle('tga-gcms-mode', gcmsVisible);
 			if (!gcmsVisible) {
 				wrap.classList.remove('gcms-charts-visible');
@@ -2331,11 +3001,23 @@
 			const currentSlide = Reveal.getCurrentSlide();
 			if (currentSlide && currentSlide.id === 'analytical-process-tga') {
 				updateTgaProcessState(currentSlide);
-				if (isTgaHeatingFragment(event.fragment)) {
+
+				if (revealEventContainsTgaHeatingFragment(event)) {
 					syncTgaMassLossOverlay(currentSlide, true);
 				}
-				if (isGcmsFragment(event.fragment)) {
-					scheduleInstrumentCharts(currentSlide, 1125);
+
+				if (revealEventContainsGcmsFragment(event) || isGcmsStageVisible(currentSlide)) {
+					/*
+					 * The GC-MS step contains several elements with the same fragment index
+					 * (autosampler + GC-MS). Some Reveal versions expose them through
+					 * event.fragments rather than event.fragment. The delayed schedule gives
+					 * the moving TGA and GC-MS overlays time to obtain their new layout before
+					 * the TIC and mass spectrum are drawn and faded in.
+					 */
+					window.requestAnimationFrame(() => {
+						updateTgaProcessState(currentSlide);
+						scheduleInstrumentCharts(currentSlide, true, 650);
+					});
 				}
 			}
 		});
@@ -2344,10 +3026,12 @@
 			const currentSlide = Reveal.getCurrentSlide();
 			if (currentSlide && currentSlide.id === 'analytical-process-tga') {
 				updateTgaProcessState(currentSlide);
-				if (isTgaHeatingFragment(event.fragment)) {
+
+				if (revealEventContainsTgaHeatingFragment(event)) {
 					syncTgaMassLossOverlay(currentSlide, false);
 				}
-				if (isGcmsFragment(event.fragment)) {
+
+				if (revealEventContainsGcmsFragment(event) || !isGcmsStageVisible(currentSlide)) {
 					const wrap = currentSlide.querySelector('.tga-process-wrap');
 					if (wrap) {
 						wrap.classList.remove('gcms-charts-visible');
@@ -2662,7 +3346,18 @@
 			});
 		}
 
-		function scheduleInstrumentCharts(slide, delay = 0) {
+		function scheduleInstrumentCharts(slide, animate = false, delay = 0) {
+			if (gcmsChartsTimerId) {
+				window.clearTimeout(gcmsChartsTimerId);
+				gcmsChartsTimerId = null;
+			}
+			gcmsChartsTimerId = window.setTimeout(() => {
+				gcmsChartsTimerId = null;
+				syncInstrumentCharts(slide, animate, true);
+			}, delay);
+		}
+
+		function syncInstrumentCharts(slide, animate = false, forceRender = false) {
 			if (gcmsChartsTimerId) {
 				window.clearTimeout(gcmsChartsTimerId);
 				gcmsChartsTimerId = null;
@@ -2671,23 +3366,27 @@
 				return;
 			}
 			const wrap = slide.querySelector('.tga-process-wrap');
-			const gcmsVisible = Boolean(slide.querySelector('.gcms-overlay.visible'));
-			if (!wrap || !gcmsVisible) {
-				if (wrap) {
-					wrap.classList.remove('gcms-charts-visible');
-				}
+			if (!wrap) {
 				resetInstrumentCharts();
 				return;
 			}
-			gcmsChartsTimerId = window.setTimeout(() => {
-				if (Reveal.getCurrentSlide() !== slide) {
-					return;
-				}
+			const gcmsVisible = isGcmsStageVisible(slide);
+			if (!gcmsVisible && !forceRender) {
+				wrap.classList.remove('gcms-charts-visible');
+				resetInstrumentCharts();
+				return;
+			}
+
+			wrap.classList.add('tga-gcms-mode');
+
+			// Draw first while the overlays are still hidden; then fade them in.
+			resetInstrumentCharts();
+			renderGcTicChart(animate);
+			renderMsSpectrumChart(animate);
+
+			window.requestAnimationFrame(() => {
 				wrap.classList.add('gcms-charts-visible');
-				renderGcTicChart(true);
-				renderMsSpectrumChart(true);
-				gcmsChartsTimerId = null;
-			}, Math.max(0, delay));
+			});
 		}
 
 		function renderTgaMassLossOverlay(animate = false) {
@@ -2946,6 +3645,1446 @@
 				.attr('fill', 'rgba(184, 16, 59, 0.15)')
 				.attr('d', area);
 		}
+	</script>
+
+	<script>
+		(function() {
+			const sequence = [
+				{ short: 'SMP 1', type: 'sample' },
+				{ short: 'BLK 1', type: 'blank' },
+				{ short: 'SMP 2', type: 'sample' },
+				{ short: 'BLK 2', type: 'blank' },
+				{ short: 'SMP 3', type: 'sample' },
+				{ short: 'BLK 3', type: 'blank' }
+			];
+
+			const timeGanttColors = {
+				sample: '#004c93',
+				blank: '#7f8a96',
+				extraction: '#2f80c9',
+				tgaCleanup: '#a9cce8',
+				tdu: '#3f8f69',
+				gc: '#82bf95',
+				post: '#f2a65a',
+				wait: 'rgba(184, 16, 59, 0.11)',
+				waitStroke: 'rgba(184, 16, 59, 0.48)',
+				optimizedAccent: '#ec7206'
+			};
+
+			const timeGanttModel = {
+				serial: {
+					total: 630,
+					runDuration: 105,
+					tgaStart: i => i * 105,
+					gcStart: i => i * 105 + 52,
+					tgaSegments: [
+						{ name: 'extraction', offset: 0, duration: 30, color: timeGanttColors.extraction },
+						{ name: 'tgaCleanup', offset: 30, duration: 22, color: timeGanttColors.tgaCleanup }
+					],
+					gcSegments: [
+						{ name: 'tdu', offset: 0, duration: 6, color: timeGanttColors.tdu },
+						{ name: 'gc', offset: 6, duration: 42, color: timeGanttColors.gc },
+						{ name: 'post', offset: 48, duration: 5, color: timeGanttColors.post }
+					],
+					gap: 0
+				},
+				baseline: {
+					total: 445,
+					runDuration: 68,
+					tgaStart: i => i * 68,
+					gcStart: i => 52 + i * 68,
+					tgaSegments: [
+						{ name: 'extraction', offset: 0, duration: 30, color: timeGanttColors.extraction },
+						{ name: 'tgaCleanup', offset: 30, duration: 38, color: timeGanttColors.tgaCleanup }
+					],
+					gcSegments: [
+						{ name: 'tdu', offset: 0, duration: 6, color: timeGanttColors.tdu },
+						{ name: 'gc', offset: 6, duration: 42, color: timeGanttColors.gc },
+						{ name: 'post', offset: 48, duration: 5, color: timeGanttColors.post }
+					],
+					gap: 15
+				},
+				optimized: {
+					total: 352,
+					runDuration: 53,
+					tgaStart: i => i * 50,
+					gcStart: i => 34 + i * 53,
+					tgaSegments: [
+						{ name: 'extraction', offset: 0, duration: 20, color: timeGanttColors.extraction },
+						{ name: 'tgaCleanup', offset: 20, duration: 30, color: timeGanttColors.tgaCleanup }
+					],
+					gcSegments: [
+						{ name: 'tdu', offset: 0, duration: 6, color: timeGanttColors.tdu },
+						{ name: 'gc', offset: 6, duration: 42, color: timeGanttColors.gc },
+						{ name: 'post', offset: 48, duration: 5, color: timeGanttColors.post }
+					],
+					gap: 0
+				}
+			};
+
+			let measurementTimeChart = null;
+
+			function getMeasurementTimeStage(slide) {
+				if (!slide || slide.id !== 'measurement-time-focus') return 0;
+				return slide.querySelectorAll('.time-gantt-step.visible').length;
+			}
+
+			function getMeasurementTimeDomainMax(stage) {
+				return stage === 0 ? 120 : 660;
+			}
+
+			function getMeasurementTimeTicks(stage) {
+				return stage === 0 ? d3.range(0, 121, 15) : d3.range(0, 661, 60);
+			}
+
+			function getVisibleRunCount(stage) {
+				return stage === 0 ? 1 : sequence.length;
+			}
+
+			function createMeasurementTimeChart() {
+				const container = document.getElementById('measurement-time-gantt');
+				if (!container || !window.d3) return null;
+
+				container.innerHTML = '';
+
+				const width = 1120;
+				const height = 515;
+				const margin = { top: 50, right: 42, bottom: 46, left: 112 };
+				const x = d3.scaleLinear().domain([0, 660]).range([margin.left, width - margin.right]);
+				const svg = d3.select(container)
+					.append('svg')
+					.attr('width', width)
+					.attr('height', height)
+					.attr('viewBox', `0 0 ${width} ${height}`);
+
+				const ticks = getMeasurementTimeTicks(1);
+				svg.append('g')
+					.attr('class', 'time-gantt-grid')
+					.selectAll('line')
+					.data(ticks)
+					.enter()
+					.append('line')
+					.attr('x1', d => x(d))
+					.attr('x2', d => x(d))
+					.attr('y1', margin.top)
+					.attr('y2', height - margin.bottom);
+
+				svg.append('g')
+					.attr('class', 'time-gantt-axis')
+					.attr('transform', `translate(0,${height - margin.bottom})`)
+					.call(d3.axisBottom(x).tickValues(ticks).tickFormat(d => d));
+
+				svg.append('text')
+					.attr('class', 'time-gantt-label')
+					.attr('x', width / 2)
+					.attr('y', height - 8)
+					.attr('text-anchor', 'middle')
+					.attr('font-size', 13)
+					.text('time / min');
+
+				const legend = svg.append('g').attr('class', 'time-gantt-legend').attr('transform', `translate(${margin.left},22)`);
+				[
+					{ label: 'TGA extraction', color: timeGanttColors.extraction },
+					{ label: 'TGA clean', color: timeGanttColors.tgaCleanup },
+					{ label: 'cryo focus', color: timeGanttColors.tdu },
+					{ label: 'GC-MS', color: timeGanttColors.gc },
+					{ label: 'post-run', color: timeGanttColors.post }
+				].forEach((item, i) => {
+					const g = legend.append('g').attr('transform', `translate(${i * 180},0)`);
+					g.append('rect').attr('x', 0).attr('y', -10).attr('width', 22).attr('height', 11).attr('rx', 3).attr('fill', item.color).attr('stroke', 'rgba(0,0,0,0.12)');
+					g.append('text').attr('class', 'time-gantt-small').attr('x', 30).attr('y', 0).text(item.label);
+				});
+
+				return {
+					container,
+					svg,
+					x,
+					width,
+					height,
+					margin,
+					layers: {
+						hint: svg.append('g').attr('class', 'time-gantt-hint-layer'),
+						labels: svg.append('g').attr('class', 'time-gantt-label-layer'),
+						blocks: svg.append('g').attr('class', 'time-gantt-block-layer'),
+						wait: svg.append('g').attr('class', 'time-gantt-wait-layer'),
+						markers: svg.append('g').attr('class', 'time-gantt-marker-layer')
+					}
+				};
+			}
+
+			function getLayout(stage) {
+				if (stage === 0) {
+					return {
+						baseline: {
+							titleY: 78,
+							tgaY: 146,
+							gcY: 204,
+							title: '1. Serial view: one complete measurement cycle',
+							subtitle: 'One sample run: TGA / TED followed by TDU / GC-MS.',
+							accent: 'var(--ude-blue)'
+						}
+					};
+				}
+				if (stage < 3) {
+					return {
+						baseline: { titleY: 78, tgaY: 146, gcY: 204, title: stage === 1 ? '1. Serial view: 3 samples + 3 blanks' : '2. Baseline workflow: nested two-device process', subtitle: stage === 1 ? 'The remaining runs are added to show the full serial workload for 3 samples + 3 blanks.' : 'Same bars are shifted left: GC-MS starts as soon as a loaded Twister is ready.', accent: 'var(--ude-blue)' }
+					};
+				}
+				return {
+					baseline: { titleY: 62, tgaY: 116, gcY: 166, title: '2. Baseline workflow: nested two-device process', subtitle: 'GC-MS is partly decoupled, but still has ≈15 min idle time between runs.', accent: 'var(--ude-blue)' },
+					optimized: { titleY: 274, tgaY: 326, gcY: 376, title: '3. Optimized TGA program', subtitle: 'Faster extraction and shorter TGA reset allow almost continuous GC-MS operation.', accent: 'var(--ude-accent-3)' }
+				};
+			}
+
+			function buildBlocks(modelName, model, layout, runCount = sequence.length) {
+				const blocks = [];
+				sequence.slice(0, runCount).forEach((entry, i) => {
+					const tgaStart = model.tgaStart(i);
+					const gcStart = model.gcStart(i);
+					model.tgaSegments.forEach(seg => {
+						blocks.push({
+							key: `${modelName}-tga-${seg.name}-${i}`,
+							model: modelName,
+							lane: 'TGA',
+							run: entry.short,
+							type: entry.type,
+							x0: tgaStart + seg.offset,
+							x1: tgaStart + seg.offset + seg.duration,
+							y: layout.tgaY,
+							h: 22,
+							color: seg.color,
+							stroke: 'rgba(0,0,0,0.10)'
+						});
+					});
+					model.gcSegments.forEach(seg => {
+						blocks.push({
+							key: `${modelName}-gc-${seg.name}-${i}`,
+							model: modelName,
+							lane: 'GC-MS',
+							run: entry.short,
+							type: entry.type,
+							x0: gcStart + seg.offset,
+							x1: gcStart + seg.offset + seg.duration,
+							y: layout.gcY,
+							h: 22,
+							color: seg.color,
+							stroke: 'rgba(0,0,0,0.10)'
+						});
+					});
+				});
+				return blocks;
+			}
+
+			function buildRunLabels(modelName, model, layout, runCount = sequence.length) {
+				return sequence.slice(0, runCount).map((entry, i) => ({
+					key: `${modelName}-runlabel-${i}`,
+					text: entry.short,
+					x0: model.gcStart(i),
+					x1: model.gcStart(i) + 53,
+					y: layout.gcY - 15,
+					type: entry.type
+				}));
+			}
+
+			function buildWaits(modelName, model, layout, runCount = sequence.length) {
+				if (!model.gap || model.gap <= 0) return [];
+				return sequence.slice(0, Math.max(0, runCount - 1)).map((entry, i) => {
+					const start = model.gcStart(i) + 53;
+					return {
+						key: `${modelName}-wait-${i}`,
+						x0: start,
+						x1: start + model.gap,
+						y: layout.gcY - 2,
+						h: 26
+					};
+				});
+			}
+
+			function updateMeasurementTimeGantt(stage) {
+				const slide = window.Reveal ? Reveal.getCurrentSlide() : null;
+				if (!slide || slide.id !== 'measurement-time-focus') return;
+
+				if (!measurementTimeChart || !document.body.contains(measurementTimeChart.container)) {
+					measurementTimeChart = createMeasurementTimeChart();
+				}
+				if (!measurementTimeChart) return;
+
+				const chart = measurementTimeChart;
+				const x = chart.x;
+				const t = chart.svg.transition().duration(850).ease(d3.easeCubicInOut);
+				const domainMax = getMeasurementTimeDomainMax(stage);
+				const ticks = getMeasurementTimeTicks(stage);
+				x.domain([0, domainMax]);
+
+				chart.svg.select('.time-gantt-axis')
+					.transition(t)
+					.call(d3.axisBottom(x).tickValues(ticks).tickFormat(d => d));
+
+				const gridSel = chart.svg.select('.time-gantt-grid')
+					.selectAll('line')
+					.data(ticks, d => d);
+				gridSel.join(
+					enter => enter.append('line')
+						.attr('x1', d => x(d))
+						.attr('x2', d => x(d))
+						.attr('y1', chart.margin.top)
+						.attr('y2', chart.height - chart.margin.bottom)
+						.attr('opacity', 0)
+						.call(enter => enter.transition(t).attr('opacity', 1)),
+					update => update.call(update => update.transition(t)
+						.attr('x1', d => x(d))
+						.attr('x2', d => x(d))
+						.attr('y1', chart.margin.top)
+						.attr('y2', chart.height - chart.margin.bottom)),
+					exit => exit.call(exit => exit.transition(t).attr('opacity', 0).remove())
+				);
+
+				chart.layers.hint.selectAll('*').remove();
+
+				const layout = getLayout(stage);
+				const visibleRunCount = getVisibleRunCount(stage);
+				const currentModel = stage <= 1 ? timeGanttModel.serial : timeGanttModel.baseline;
+				const baselineLayout = layout.baseline;
+				let blocks = buildBlocks('baseline', currentModel, baselineLayout, visibleRunCount);
+				let runLabels = buildRunLabels('baseline', currentModel, baselineLayout, visibleRunCount);
+				let waits = stage >= 2 ? buildWaits('baseline', timeGanttModel.baseline, baselineLayout, visibleRunCount) : [];
+
+				if (stage >= 3 && layout.optimized) {
+					blocks = blocks.concat(buildBlocks('optimized', timeGanttModel.optimized, layout.optimized, sequence.length));
+					runLabels = runLabels.concat(buildRunLabels('optimized', timeGanttModel.optimized, layout.optimized, sequence.length));
+				}
+
+				const laneLabels = [
+					{ key: 'baseline-title', text: baselineLayout.title, x: chart.margin.left, y: baselineLayout.titleY, cls: 'time-gantt-label', color: baselineLayout.accent },
+					{ key: 'baseline-subtitle', text: baselineLayout.subtitle, x: chart.margin.left, y: baselineLayout.titleY + 20, cls: 'time-gantt-small', color: '#4b5d73' },
+					{ key: 'baseline-tga-lane', text: 'TGA', x: chart.margin.left - 14, y: baselineLayout.tgaY + 15, cls: 'time-gantt-lane', anchor: 'end' },
+					{ key: 'baseline-gc-lane', text: 'GC-MS', x: chart.margin.left - 14, y: baselineLayout.gcY + 15, cls: 'time-gantt-lane', anchor: 'end' }
+				];
+				if (stage >= 3 && layout.optimized) {
+					laneLabels.push(
+						{ key: 'optimized-title', text: layout.optimized.title, x: chart.margin.left, y: layout.optimized.titleY, cls: 'time-gantt-label', color: layout.optimized.accent },
+						{ key: 'optimized-subtitle', text: layout.optimized.subtitle, x: chart.margin.left, y: layout.optimized.titleY + 20, cls: 'time-gantt-small', color: '#4b5d73' },
+						{ key: 'optimized-tga-lane', text: 'TGA', x: chart.margin.left - 14, y: layout.optimized.tgaY + 15, cls: 'time-gantt-lane', anchor: 'end' },
+						{ key: 'optimized-gc-lane', text: 'GC-MS', x: chart.margin.left - 14, y: layout.optimized.gcY + 15, cls: 'time-gantt-lane', anchor: 'end' }
+					);
+				}
+
+				const labelSel = chart.layers.labels.selectAll('text.lane-label').data(laneLabels, d => d.key);
+				labelSel.join(
+					enter => enter.append('text')
+						.attr('class', d => `lane-label ${d.cls}`)
+						.attr('x', d => d.x)
+						.attr('y', d => d.y + 12)
+						.attr('text-anchor', d => d.anchor || 'start')
+						.attr('fill', d => d.color || null)
+						.attr('opacity', 0)
+						.text(d => d.text)
+						.call(enter => enter.transition(t).attr('y', d => d.y).attr('opacity', 1)),
+					update => update.call(update => update.transition(t)
+						.attr('x', d => d.x)
+						.attr('y', d => d.y)
+						.attr('text-anchor', d => d.anchor || 'start')
+						.attr('fill', d => d.color || null)
+						.attr('opacity', 1)
+						.text(d => d.text)),
+					exit => exit.call(exit => exit.transition(t).attr('opacity', 0).remove())
+				);
+
+				const rectSel = chart.layers.blocks.selectAll('rect.time-block').data(blocks, d => d.key);
+				rectSel.join(
+					enter => enter.append('rect')
+						.attr('class', 'time-block')
+						.attr('x', d => x(d.x0))
+						.attr('y', d => d.y)
+						.attr('width', 0)
+						.attr('height', d => d.h)
+						.attr('rx', 5)
+						.attr('fill', d => d.color)
+						.attr('stroke', d => d.stroke)
+						.attr('opacity', 0.92)
+						.call(enter => enter.transition(t)
+							.attr('width', d => Math.max(1, x(d.x1) - x(d.x0)))
+							.attr('opacity', 0.92)),
+					update => update.call(update => update.transition(t)
+						.attr('x', d => x(d.x0))
+						.attr('y', d => d.y)
+						.attr('width', d => Math.max(1, x(d.x1) - x(d.x0)))
+						.attr('height', d => d.h)
+						.attr('fill', d => d.color)
+						.attr('opacity', 0.92)),
+					exit => exit.call(exit => exit.transition(t).attr('opacity', 0).attr('width', 0).remove())
+				);
+
+				const runSel = chart.layers.blocks.selectAll('g.run-chip').data(runLabels, d => d.key);
+				const runEnter = runSel.enter().append('g').attr('class', 'run-chip').attr('opacity', 0);
+				runEnter.append('rect').attr('height', 14).attr('rx', 7).attr('y', -11).attr('stroke-width', 1);
+				runEnter.append('text').attr('class', 'time-gantt-runlabel').attr('y', 0).attr('text-anchor', 'middle');
+				runSel.merge(runEnter).call(sel => sel.transition(t)
+					.attr('opacity', 1)
+					.attr('transform', d => `translate(${x((d.x0 + d.x1) / 2)},${d.y})`));
+				runSel.merge(runEnter).select('rect').transition(t)
+					.attr('x', d => -(x(d.x1) - x(d.x0)) / 2)
+					.attr('width', d => Math.max(1, x(d.x1) - x(d.x0)))
+					.attr('fill', d => d.type === 'sample' ? 'rgba(0,76,147,0.11)' : 'rgba(127,138,150,0.13)')
+					.attr('stroke', d => d.type === 'sample' ? timeGanttColors.sample : timeGanttColors.blank);
+				runSel.merge(runEnter).select('text').text(d => d.text);
+				runSel.exit().transition(t).attr('opacity', 0).remove();
+
+				const waitSel = chart.layers.wait.selectAll('rect.wait-block').data(waits, d => d.key);
+				waitSel.join(
+					enter => enter.append('rect')
+						.attr('class', 'wait-block')
+						.attr('x', d => x(d.x0))
+						.attr('y', d => d.y)
+						.attr('height', d => d.h)
+						.attr('rx', 4)
+						.attr('fill', timeGanttColors.wait)
+						.attr('stroke', timeGanttColors.waitStroke)
+						.attr('stroke-dasharray', '4 4')
+						.attr('width', 0)
+						.call(enter => enter.transition(t).attr('width', d => x(d.x1) - x(d.x0))),
+					update => update.call(update => update.transition(t)
+						.attr('x', d => x(d.x0))
+						.attr('y', d => d.y)
+						.attr('height', d => d.h)
+						.attr('width', d => x(d.x1) - x(d.x0))),
+					exit => exit.call(exit => exit.transition(t).attr('width', 0).attr('opacity', 0).remove())
+				);
+
+				const waitLabels = stage >= 2 ? [{ key: 'wait-label', text: '≈15 min waiting for TGA', x: 178, y: baselineLayout.gcY + 46 }] : [];
+				const waitLabelSel = chart.layers.wait.selectAll('text.time-gantt-wait-label').data(waitLabels, d => d.key);
+				waitLabelSel.join(
+					enter => enter.append('text').attr('class', 'time-gantt-wait-label').attr('x', d => x(d.x)).attr('y', d => d.y + 8).attr('opacity', 0).attr('text-anchor', 'middle').text(d => d.text).call(enter => enter.transition(t).attr('y', d => d.y).attr('opacity', 1)),
+					update => update.call(update => update.transition(t).attr('x', d => x(d.x)).attr('y', d => d.y).attr('opacity', 1).text(d => d.text)),
+					exit => exit.call(exit => exit.transition(t).attr('opacity', 0).remove())
+				);
+
+				const markers = [];
+				if (stage === 0) {
+					markers.push({ key: 'cycle-total', type: 'total', x: timeGanttModel.serial.runDuration, y1: baselineLayout.gcY - 22, y2: baselineLayout.gcY + 34, label: '≈105 min' });
+				} else {
+					markers.push({ key: 'serial-ref', type: 'ref', x: timeGanttModel.serial.total, y1: 80, y2: stage >= 3 ? 445 : 300 });
+					if (stage >= 2) {
+						markers.push({ key: 'baseline-total', type: 'total', x: timeGanttModel.baseline.total, y1: baselineLayout.gcY - 22, y2: baselineLayout.gcY + 34, label: '≈445 min' });
+					}
+				}
+				if (stage >= 3 && layout.optimized) {
+					markers.push({ key: 'optimized-total', type: 'total', x: timeGanttModel.optimized.total, y1: layout.optimized.gcY - 22, y2: layout.optimized.gcY + 34, label: '≈352 min', color: timeGanttColors.optimizedAccent });
+				}
+
+				const markerSel = chart.layers.markers.selectAll('line.marker-line').data(markers, d => d.key);
+				markerSel.join(
+					enter => enter.append('line')
+						.attr('class', d => d.type === 'ref' ? 'marker-line time-gantt-ref' : 'marker-line')
+						.attr('x1', d => x(d.x))
+						.attr('x2', d => x(d.x))
+						.attr('y1', d => d.y1)
+						.attr('y2', d => d.y1)
+						.attr('stroke', d => d.color || (d.type === 'ref' ? null : '#b8103b'))
+						.attr('stroke-width', d => d.type === 'ref' ? null : 2)
+						.call(enter => enter.transition(t).attr('y2', d => d.y2)),
+					update => update.call(update => update.transition(t)
+						.attr('x1', d => x(d.x))
+						.attr('x2', d => x(d.x))
+						.attr('y1', d => d.y1)
+						.attr('y2', d => d.y2)
+						.attr('stroke', d => d.color || (d.type === 'ref' ? null : '#b8103b'))),
+					exit => exit.call(exit => exit.transition(t).attr('y2', d => d.y1).attr('opacity', 0).remove())
+				);
+
+				const markerLabels = stage === 0
+					? [{ key: 'cycle-total-label', text: 'one meas.', x: timeGanttModel.serial.runDuration + 3, y: baselineLayout.gcY + 6, anchor: 'start', cls: 'time-gantt-total', color: '#b8103b' }]
+					: [{ key: 'serial-ref-label', text: 'serial reference ≈630 min', x: timeGanttModel.serial.total - 8, y: 72, anchor: 'end', cls: 'time-gantt-small', color: '#b8103b' }];
+				if (stage >= 2) markerLabels.push({ key: 'baseline-total-label', text: 'baseline ≈445 min', x: timeGanttModel.baseline.total + 8, y: baselineLayout.gcY + 6, anchor: 'start', cls: 'time-gantt-total', color: '#b8103b' });
+				if (stage >= 3) markerLabels.push(
+					{ key: 'optimized-total-label', text: 'optimized ≈352 min', x: timeGanttModel.optimized.total + 8, y: layout.optimized.gcY + 6, anchor: 'start', cls: 'time-gantt-total', color: timeGanttColors.optimizedAccent }
+				);
+
+				const markerLabelSel = chart.layers.markers.selectAll('text.marker-label').data(markerLabels, d => d.key);
+				markerLabelSel.join(
+					enter => enter.append('text').attr('class', d => `marker-label ${d.cls}`).attr('x', d => x(d.x)).attr('y', d => d.y + 8).attr('text-anchor', d => d.anchor).attr('fill', d => d.color).attr('opacity', 0).text(d => d.text).call(enter => enter.transition(t).attr('y', d => d.y).attr('opacity', 1)),
+					update => update.call(update => update.transition(t).attr('x', d => x(d.x)).attr('y', d => d.y).attr('text-anchor', d => d.anchor).attr('fill', d => d.color).attr('opacity', 1).text(d => d.text)),
+					exit => exit.call(exit => exit.transition(t).attr('opacity', 0).remove())
+				);
+			}
+
+			function refreshMeasurementTimeGantt() {
+				if (!window.Reveal) return;
+				const slide = Reveal.getCurrentSlide();
+				if (!slide || slide.id !== 'measurement-time-focus') return;
+				updateMeasurementTimeGantt(getMeasurementTimeStage(slide));
+			}
+
+			function renderBridgeCalibrationGantt() {
+				const container = document.getElementById('bridge-calibration-gantt');
+				if (!container || !window.d3) return;
+
+				container.innerHTML = '';
+
+				const calibrationSequence = [
+					{ short: 'STD 1', type: 'sample' },
+					{ short: 'BLK 1', type: 'blank' },
+					{ short: 'STD 2', type: 'sample' },
+					{ short: 'BLK 2', type: 'blank' },
+					{ short: 'STD 3', type: 'sample' },
+					{ short: 'BLK 3', type: 'blank' },
+					{ short: 'STD 4', type: 'sample' },
+					{ short: 'BLK 4', type: 'blank' },
+					{ short: 'STD 5', type: 'sample' },
+					{ short: 'BLK 5', type: 'blank' }
+				];
+
+				const model = timeGanttModel.optimized;
+				const width = 1120;
+				const height = 285;
+				const margin = { top: 52, right: 36, bottom: 44, left: 118 };
+				const innerWidth = width - margin.left - margin.right;
+				const innerHeight = height - margin.top - margin.bottom;
+				const totalTime = model.gcStart(calibrationSequence.length - 1) + 53;
+				const x = d3.scaleLinear().domain([0, 600]).range([0, innerWidth]);
+
+				const svg = d3.select(container)
+					.append('svg')
+					.attr('width', width)
+					.attr('height', height)
+					.attr('viewBox', `0 0 ${width} ${height}`);
+
+				const chart = svg.append('g')
+					.attr('transform', `translate(${margin.left},${margin.top})`);
+
+				const ticks = d3.range(0, 601, 60);
+				chart.append('g')
+					.attr('class', 'time-gantt-grid')
+					.selectAll('line')
+					.data(ticks)
+					.enter()
+					.append('line')
+					.attr('x1', d => x(d))
+					.attr('x2', d => x(d))
+					.attr('y1', 0)
+					.attr('y2', innerHeight);
+
+				chart.append('g')
+					.attr('class', 'time-gantt-axis')
+					.attr('transform', `translate(0,${innerHeight})`)
+					.call(d3.axisBottom(x).tickValues(ticks).tickFormat(d => d));
+
+				svg.append('text')
+					.attr('class', 'time-gantt-label')
+					.attr('x', width / 2)
+					.attr('y', height - 6)
+					.attr('text-anchor', 'middle')
+					.text('time / min');
+
+				const legend = svg.append('g').attr('class', 'time-gantt-legend').attr('transform', `translate(${margin.left},24)`);
+				[
+					{ label: 'TGA extraction', color: timeGanttColors.extraction },
+					{ label: 'TGA clean', color: timeGanttColors.tgaCleanup },
+					{ label: 'cryo focus', color: timeGanttColors.tdu },
+					{ label: 'GC-MS', color: timeGanttColors.gc },
+					{ label: 'post-run', color: timeGanttColors.post }
+				].forEach((item, i) => {
+					const g = legend.append('g').attr('transform', `translate(${i * 178},0)`);
+					g.append('rect').attr('x', 0).attr('y', -10).attr('width', 22).attr('height', 11).attr('rx', 3).attr('fill', item.color).attr('stroke', 'rgba(0,0,0,0.12)');
+					g.append('text').attr('class', 'time-gantt-small').attr('x', 30).attr('y', 0).text(item.label);
+				});
+
+				const lanes = {
+					tgaY: 74,
+					gcY: 142
+				};
+
+				[
+					{ text: 'TGA', y: lanes.tgaY + 15 },
+					{ text: 'GC-MS', y: lanes.gcY + 15 }
+				].forEach(lane => {
+					chart.append('text')
+						.attr('class', 'time-gantt-lane')
+						.attr('x', -14)
+						.attr('y', lane.y)
+						.attr('text-anchor', 'end')
+						.text(lane.text);
+				});
+
+				const blocks = [];
+				calibrationSequence.forEach((entry, i) => {
+					const tgaStart = model.tgaStart(i);
+					const gcStart = model.gcStart(i);
+					model.tgaSegments.forEach(seg => {
+						blocks.push({
+							key: `cal-tga-${seg.name}-${i}`,
+							x0: tgaStart + seg.offset,
+							x1: tgaStart + seg.offset + seg.duration,
+							y: lanes.tgaY,
+							h: 24,
+							color: seg.color,
+							stroke: 'rgba(0,0,0,0.10)'
+						});
+					});
+					model.gcSegments.forEach(seg => {
+						blocks.push({
+							key: `cal-gc-${seg.name}-${i}`,
+							x0: gcStart + seg.offset,
+							x1: gcStart + seg.offset + seg.duration,
+							y: lanes.gcY,
+							h: 24,
+							color: seg.color,
+							stroke: 'rgba(0,0,0,0.10)'
+						});
+					});
+				});
+
+				chart.selectAll('rect.time-block')
+					.data(blocks)
+					.enter()
+					.append('rect')
+					.attr('class', 'time-block')
+					.attr('x', d => x(d.x0))
+					.attr('y', d => d.y)
+					.attr('width', d => Math.max(1, x(d.x1) - x(d.x0)))
+					.attr('height', d => d.h)
+					.attr('rx', 5)
+					.attr('fill', d => d.color)
+					.attr('stroke', d => d.stroke)
+					.attr('opacity', 0.92);
+
+				chart.selectAll('g.cal-run-chip')
+					.data(calibrationSequence)
+					.enter()
+					.append('g')
+					.attr('class', 'cal-run-chip')
+					.attr('transform', (d, i) => `translate(${x(model.gcStart(i) + 26.5)},${lanes.gcY - 16})`)
+					.call(g => {
+						g.append('rect')
+							.attr('x', -31)
+							.attr('y', -12)
+							.attr('width', 62)
+							.attr('height', 16)
+							.attr('rx', 7)
+							.attr('fill', d => d.type === 'sample' ? 'rgba(0,76,147,0.11)' : 'rgba(127,138,150,0.13)')
+							.attr('stroke', d => d.type === 'sample' ? timeGanttColors.sample : timeGanttColors.blank);
+						g.append('text')
+							.attr('class', 'time-gantt-runlabel')
+							.attr('y', 0)
+							.attr('text-anchor', 'middle')
+							.text(d => d.short);
+					});
+
+				chart.append('line')
+					.attr('class', 'marker-line')
+					.attr('x1', x(totalTime))
+					.attr('x2', x(totalTime))
+					.attr('y1', lanes.gcY - 22)
+					.attr('y2', lanes.gcY + 36)
+					.attr('stroke', 'var(--ude-accent-3)')
+					.attr('stroke-width', 2.5);
+			}
+
+			let runningRegressionDataPromise = null;
+			let runningRegressionLoopTimerId = null;
+			let runningRegressionAutoFillTimerId = null;
+			let runningRegressionLoopOffset = 0;
+			let runningRegressionVisibleCount = 5;
+			let runningRegressionMeta = null;
+
+			function stopRunningRegressionLoop() {
+				if (runningRegressionLoopTimerId) {
+					window.clearInterval(runningRegressionLoopTimerId);
+					runningRegressionLoopTimerId = null;
+				}
+			}
+
+			function stopRunningRegressionAutoFill() {
+				if (runningRegressionAutoFillTimerId) {
+					window.clearInterval(runningRegressionAutoFillTimerId);
+					runningRegressionAutoFillTimerId = null;
+				}
+			}
+
+			function computeRunningRegressionMeta(data) {
+				const calibrationAreaMax = (d3.max(data, d => d.area) || 1) * 1.12;
+				const rawIntensityMax = (d3.max(data, d => d3.max(d.rawIntensity.concat(d.fitIntensity))) || 1) * 1.06;
+				const pointCountMax = d3.max(data, d => Math.max(d.rawRt.length, d.rawIntensity.length, d.fitIntensity.length)) || 1;
+				let looMax = 5;
+
+				for (let size = 5; size <= Math.min(15, data.length); size += 1) {
+					looMax = Math.max(looMax, computeMeanLooPredictionError(data.slice(0, size)));
+				}
+
+				if (data.length > 15) {
+					for (let start = 0; start < data.length; start += 1) {
+						const windowRows = [];
+						for (let i = 0; i < 15; i += 1) {
+							windowRows.push(data[(start + i) % data.length]);
+						}
+						looMax = Math.max(looMax, computeMeanLooPredictionError(windowRows));
+					}
+				}
+
+				return {
+					calibrationAreaMax,
+					rawIntensityMax,
+					pointCountMax,
+					looMax: Math.max(5, looMax * 1.1)
+				};
+			}
+
+			function parseNumericArray(value) {
+				if (!value) return [];
+				try {
+					const parsed = JSON.parse(value);
+					return Array.isArray(parsed) ? parsed.map(Number) : [];
+				} catch (error) {
+					return [];
+				}
+			}
+
+			function loadRunningRegressionData() {
+				if (!runningRegressionDataPromise) {
+					runningRegressionDataPromise = d3.csv('resources/data/sbr_mz104_peak_table.csv').then(rows => {
+						const parsed = rows.map((row, index) => ({
+							index,
+							date: String(row.date || ''),
+							dateValue: Number(row.date || 0),
+							file: row.file,
+							mass: Number(row.mass_ug || 0),
+							area: Number(row.area || 0),
+							rawRt: parseNumericArray(row['51_rt']),
+							rawIntensity: parseNumericArray(row['51_raw_int']),
+							fitIntensity: parseNumericArray(row['51_fit_int'])
+						})).sort((a, b) => a.dateValue - b.dateValue || a.index - b.index);
+
+						const colorScale = d3.scaleSequential()
+							.domain([0, Math.max(1, parsed.length - 1)])
+							.interpolator(t => d3.interpolateRgbBasis(['#004c93', '#5f3dc4', '#b8103b', '#ec7206'])(t));
+
+						const colored = parsed.map((row, idx) => ({
+							...row,
+							color: colorScale(idx)
+						}));
+						runningRegressionMeta = computeRunningRegressionMeta(colored);
+						return colored;
+					});
+				}
+				return runningRegressionDataPromise;
+			}
+
+			function getRunningRegressionStage(slide) {
+				if (!slide || slide.id !== 'running-regression') return 0;
+				return slide.querySelectorAll('.running-regression-step.visible').length;
+			}
+
+			function getRunningRegressionWindow(data, stage) {
+				const size = Math.min(stage === 0 ? 5 : runningRegressionVisibleCount, 15, data.length);
+				if (stage < 2 || data.length <= size) {
+					return data.slice(0, size);
+				}
+				const visible = [];
+				for (let i = 0; i < size; i += 1) {
+					visible.push(data[(runningRegressionLoopOffset + i) % data.length]);
+				}
+				return visible;
+			}
+
+			function fitLinearRegression(points) {
+				const n = points.length;
+				const xMean = d3.mean(points, d => d.mass) || 0;
+				const yMean = d3.mean(points, d => d.area) || 0;
+				const sxx = d3.sum(points, d => Math.pow(d.mass - xMean, 2));
+				const sxy = d3.sum(points, d => (d.mass - xMean) * (d.area - yMean));
+				const slope = sxx === 0 ? 0 : sxy / sxx;
+				const intercept = yMean - slope * xMean;
+				const residuals = points.map(d => d.area - (intercept + slope * d.mass));
+				const sse = d3.sum(residuals, d => d * d);
+				const sigma = n > 2 ? Math.sqrt(sse / (n - 2)) : 0;
+				return { n, xMean, slope, intercept, sxx, sigma };
+			}
+
+			function buildRegressionBand(regression, xMin, xMax, steps = 90) {
+				const tValue = regression.n > 6 ? 2.2 : 2.57;
+				return d3.range(steps + 1).map(i => {
+					const x = xMin + ((xMax - xMin) * i / steps);
+					const y = regression.intercept + regression.slope * x;
+					const se = (regression.n > 2 && regression.sxx > 0)
+						? regression.sigma * Math.sqrt((1 / regression.n) + (Math.pow(x - regression.xMean, 2) / regression.sxx))
+						: 0;
+					return { x, y, lower: y - tValue * se, upper: y + tValue * se };
+				});
+			}
+
+			function computeMeanLooPredictionError(points) {
+				if (points.length < 3) return 0;
+				const errors = [];
+				points.forEach((point, idx) => {
+					const training = points.filter((_, trainingIdx) => trainingIdx !== idx);
+					const regression = fitLinearRegression(training);
+					if (Math.abs(regression.slope) < 1e-9) return;
+					const predictedMass = (point.area - regression.intercept) / regression.slope;
+					errors.push(Math.abs(predictedMass - point.mass));
+				});
+				return errors.length ? d3.mean(errors) : 0;
+			}
+
+			function renderRunningRegressionRaw(container, visibleRows) {
+				container.innerHTML = '';
+				const width = 544;
+				const height = 460;
+				const margin = { top: 42, right: 22, bottom: 44, left: 66 };
+				const innerWidth = width - margin.left - margin.right;
+				const innerHeight = height - margin.top - margin.bottom;
+				const x = d3.scaleLinear().domain([0, Math.max(1, (runningRegressionMeta && runningRegressionMeta.pointCountMax ? runningRegressionMeta.pointCountMax : 2) - 1)]).range([0, innerWidth]);
+				const y = d3.scaleLinear().domain([0, runningRegressionMeta && runningRegressionMeta.rawIntensityMax ? runningRegressionMeta.rawIntensityMax : 1]).range([innerHeight, 0]);
+				const svg = d3.select(container).append('svg').attr('width', width).attr('height', height).attr('viewBox', `0 0 ${width} ${height}`);
+				const chart = svg.append('g').attr('transform', `translate(${margin.left},${margin.top})`);
+
+				chart.append('g').attr('class', 'rr-grid').attr('transform', `translate(0,${innerHeight})`).call(d3.axisBottom(x).ticks(7).tickSize(-innerHeight).tickFormat(''));
+				chart.append('g').attr('class', 'rr-grid').call(d3.axisLeft(y).ticks(4).tickSize(-innerWidth).tickFormat(''));
+				chart.append('g').attr('class', 'rr-axis').attr('transform', `translate(0,${innerHeight})`).call(d3.axisBottom(x).ticks(7));
+				chart.append('g').attr('class', 'rr-axis').call(d3.axisLeft(y).ticks(4).tickFormat(d3.format('~s')));
+
+				svg.append('text').attr('class', 'rr-title').attr('x', margin.left).attr('y', 18).text('Raw traces and fitted peak shapes');
+				svg.append('text').attr('class', 'rr-small').attr('x', margin.left + innerWidth / 2).attr('y', height - 8).attr('text-anchor', 'middle').text('datapoint index');
+				svg.append('text').attr('class', 'rr-small').attr('transform', 'rotate(-90)').attr('x', -(margin.top + innerHeight / 2)).attr('y', 16).attr('text-anchor', 'middle').text('intensity');
+
+				const area = d3.area().x(d => x(d.index)).y0(innerHeight).y1(d => y(d.value)).curve(d3.curveMonotoneX);
+				const line = d3.line().x(d => x(d.index)).y(d => y(d.value)).curve(d3.curveMonotoneX);
+
+				visibleRows.forEach(row => {
+					const fitSeries = row.fitIntensity.map((value, i) => ({ index: i, value }));
+					const rawSeries = row.rawIntensity.map((value, i) => ({ index: i, value }));
+					chart.append('path')
+						.datum(fitSeries)
+						.attr('fill', d3.color(row.color).copy({ opacity: 0.16 }))
+						.attr('stroke', 'none')
+						.attr('d', area);
+					chart.append('path')
+						.datum(fitSeries)
+						.attr('fill', 'none')
+						.attr('stroke', d3.color(row.color).copy({ opacity: 0.58 }))
+						.attr('stroke-width', 2)
+						.attr('d', line);
+					chart.append('path')
+						.datum(rawSeries)
+						.attr('fill', 'none')
+						.attr('stroke', row.color)
+						.attr('stroke-width', 1.15)
+						.attr('opacity', 0.94)
+						.attr('d', line);
+				});
+
+			}
+
+			function renderRunningRegressionCalibration(container, visibleRows) {
+				container.innerHTML = '';
+				const width = 418;
+				const height = 460;
+				const margin = { top: 42, right: 20, bottom: 44, left: 62 };
+				const innerWidth = width - margin.left - margin.right;
+				const innerHeight = height - margin.top - margin.bottom;
+				const x = d3.scaleLinear().domain([0, 300]).range([0, innerWidth]);
+				const y = d3.scaleLinear().domain([0, runningRegressionMeta && runningRegressionMeta.calibrationAreaMax ? runningRegressionMeta.calibrationAreaMax : 1]).range([innerHeight, 0]);
+				const regression = fitLinearRegression(visibleRows);
+				const bandData = buildRegressionBand(regression, 0, 300);
+				const svg = d3.select(container).append('svg').attr('width', width).attr('height', height).attr('viewBox', `0 0 ${width} ${height}`);
+				const chart = svg.append('g').attr('transform', `translate(${margin.left},${margin.top})`);
+
+				chart.append('g').attr('class', 'rr-grid').attr('transform', `translate(0,${innerHeight})`).call(d3.axisBottom(x).tickValues([0, 50, 100, 150, 200, 250, 300]).tickSize(-innerHeight).tickFormat(''));
+				chart.append('g').attr('class', 'rr-grid').call(d3.axisLeft(y).ticks(4).tickSize(-innerWidth).tickFormat(''));
+				chart.append('g').attr('class', 'rr-axis').attr('transform', `translate(0,${innerHeight})`).call(d3.axisBottom(x).tickValues([0, 50, 100, 150, 200, 250, 300]));
+				chart.append('g').attr('class', 'rr-axis').call(d3.axisLeft(y).ticks(4).tickFormat(d3.format('~s')));
+
+				svg.append('text').attr('class', 'rr-title').attr('x', margin.left).attr('y', 18).text('Chronological calibration window');
+				svg.append('text').attr('class', 'rr-small').attr('x', margin.left + innerWidth / 2).attr('y', height - 8).attr('text-anchor', 'middle').text('mass / ug');
+				svg.append('text').attr('class', 'rr-small').attr('transform', 'rotate(-90)').attr('x', -(margin.top + innerHeight / 2)).attr('y', 16).attr('text-anchor', 'middle').text('peak area');
+
+				const band = d3.area().x(d => x(d.x)).y0(d => y(d.lower)).y1(d => y(d.upper)).curve(d3.curveMonotoneX);
+				const line = d3.line().x(d => x(d.x)).y(d => y(d.y)).curve(d3.curveMonotoneX);
+				chart.append('path').datum(bandData).attr('fill', 'rgba(184, 16, 59, 0.12)').attr('stroke', 'none').attr('d', band);
+				chart.append('path').datum(bandData).attr('fill', 'none').attr('stroke', '#b8103b').attr('stroke-width', 2.8).attr('d', line);
+
+				chart.selectAll('circle.rr-cal-point')
+					.data(visibleRows)
+					.enter()
+					.append('circle')
+					.attr('class', 'rr-cal-point')
+					.attr('cx', d => x(d.mass))
+					.attr('cy', d => y(d.area))
+					.attr('r', 5.8)
+					.attr('fill', d => d.color)
+					.attr('stroke', '#ffffff')
+					.attr('stroke-width', 1.8);
+
+				chart.append('text')
+					.attr('class', 'rr-window-note')
+					.attr('x', innerWidth - 2)
+					.attr('y', innerHeight - 8)
+					.attr('text-anchor', 'end')
+					.text(`fit: area = ${d3.format('.0f')(regression.intercept)} + ${d3.format('.1f')(regression.slope)} · mass`);
+			}
+
+			function renderRunningRegressionError(container, visibleRows) {
+				container.innerHTML = '';
+				const width = 112;
+				const height = 460;
+				const margin = { top: 42, right: 14, bottom: 44, left: 46 };
+				const innerWidth = width - margin.left - margin.right;
+				const innerHeight = height - margin.top - margin.bottom;
+				const meanError = computeMeanLooPredictionError(visibleRows);
+				const yMax = runningRegressionMeta && runningRegressionMeta.looMax ? runningRegressionMeta.looMax : Math.max(5, meanError * 1.5);
+				const y = d3.scaleLinear().domain([0, yMax]).range([innerHeight, 0]);
+				const svg = d3.select(container).append('svg').attr('width', width).attr('height', height).attr('viewBox', `0 0 ${width} ${height}`);
+				const chart = svg.append('g').attr('transform', `translate(${margin.left},${margin.top})`);
+
+				chart.append('g').attr('class', 'rr-grid').call(d3.axisLeft(y).ticks(4).tickSize(-innerWidth).tickFormat(''));
+				chart.append('g').attr('class', 'rr-axis').call(d3.axisLeft(y).ticks(4).tickFormat(d3.format('.1f')));
+				chart.append('rect').attr('x', 8).attr('y', y(meanError)).attr('width', innerWidth - 16).attr('height', innerHeight - y(meanError)).attr('rx', 8).attr('fill', 'rgba(184, 16, 59, 0.74)');
+				svg.append('text').attr('class', 'rr-mini-title').attr('x', width / 2).attr('y', 18).attr('text-anchor', 'middle').text('LOO');
+				svg.append('text').attr('class', 'rr-small').attr('x', width / 2).attr('y', height - 22).attr('text-anchor', 'middle').text('pred. err.');
+				svg.append('text').attr('class', 'rr-error-value').attr('x', width / 2).attr('y', height - 6).attr('text-anchor', 'middle').text(`${d3.format('.1f')(meanError)} ug`);
+			}
+
+			function renderRunningRegressionCharts(visibleRows) {
+				const rawContainer = document.getElementById('running-regression-raw');
+				const calibrationContainer = document.getElementById('running-regression-calibration');
+				const errorContainer = document.getElementById('running-regression-error');
+				if (!rawContainer || !calibrationContainer || !errorContainer || !visibleRows.length) return;
+				renderRunningRegressionRaw(rawContainer, visibleRows);
+				renderRunningRegressionCalibration(calibrationContainer, visibleRows);
+				renderRunningRegressionError(errorContainer, visibleRows);
+			}
+
+			function refreshRunningRegressionSlide() {
+				if (!window.Reveal) return;
+				const slide = Reveal.getCurrentSlide();
+				if (!slide || slide.id !== 'running-regression') {
+					stopRunningRegressionAutoFill();
+					stopRunningRegressionLoop();
+					return;
+				}
+				loadRunningRegressionData().then(data => {
+					const stage = getRunningRegressionStage(slide);
+					if (stage === 0) {
+						stopRunningRegressionAutoFill();
+						stopRunningRegressionLoop();
+						runningRegressionVisibleCount = 5;
+						runningRegressionLoopOffset = 0;
+					} else if (stage === 1) {
+						stopRunningRegressionLoop();
+						if (!runningRegressionAutoFillTimerId && runningRegressionVisibleCount < Math.min(15, data.length)) {
+							runningRegressionAutoFillTimerId = window.setInterval(() => {
+								const currentSlide = Reveal.getCurrentSlide();
+								if (!currentSlide || currentSlide.id !== 'running-regression') {
+									stopRunningRegressionAutoFill();
+									return;
+								}
+								runningRegressionVisibleCount = Math.min(15, data.length, runningRegressionVisibleCount + 1);
+								renderRunningRegressionCharts(getRunningRegressionWindow(data, 1));
+								if (runningRegressionVisibleCount >= Math.min(15, data.length)) {
+									stopRunningRegressionAutoFill();
+								}
+							}, 300);
+						}
+					} else {
+						stopRunningRegressionAutoFill();
+						runningRegressionVisibleCount = Math.min(15, data.length);
+					}
+					renderRunningRegressionCharts(getRunningRegressionWindow(data, stage));
+					if (stage >= 2 && !runningRegressionLoopTimerId && data.length > 15) {
+						runningRegressionLoopTimerId = window.setInterval(() => {
+							const currentSlide = Reveal.getCurrentSlide();
+							if (!currentSlide || currentSlide.id !== 'running-regression') {
+								stopRunningRegressionLoop();
+								return;
+							}
+							runningRegressionLoopOffset = (runningRegressionLoopOffset + 1) % data.length;
+							renderRunningRegressionCharts(getRunningRegressionWindow(data, 2));
+						}, 300);
+					}
+				});
+			}
+
+			const sampleRobustnessPeaks = [9422, 10165, 10119];
+			const sampleRobustnessMassesUg = [3978.2, 4014.1, 4084.1];
+
+			function evaluateSampleWindow(windowRows) {
+				const regression = fitLinearRegression(windowRows);
+				const replicateResults = sampleRobustnessPeaks.map((peakArea, idx) => {
+					const predictedMassUg = (peakArea - regression.intercept) / regression.slope;
+					const sampleMassMg = sampleRobustnessMassesUg[idx] / 1000;
+					return predictedMassUg / sampleMassMg;
+				});
+				const mean = d3.mean(replicateResults) || 0;
+				const sd = replicateResults.length > 1
+					? Math.sqrt(d3.sum(replicateResults, value => Math.pow(value - mean, 2)) / (replicateResults.length - 1))
+					: 0;
+				const se = replicateResults.length > 0 ? sd / Math.sqrt(replicateResults.length) : 0;
+				return { mean, se, replicateResults };
+			}
+
+			function buildSampleRobustnessSeries(data) {
+				const windowSize = Math.min(15, data.length);
+				const maxStart = Math.max(0, data.length - windowSize);
+				const middleRowIndex = Math.floor((data.length - 1) / 2);
+				const centralStart = Math.max(0, Math.min(maxStart, middleRowIndex - Math.floor(windowSize / 2)));
+				const startPositions = d3.range(-5, 6).map(offset => Math.max(0, Math.min(maxStart, centralStart + offset)));
+				return startPositions.map((start, idx) => {
+					const windowRows = data.slice(start, start + windowSize);
+					const evaluation = evaluateSampleWindow(windowRows);
+					return {
+						offset: idx - 5,
+						start,
+						windowRows,
+						date: windowRows[Math.floor(windowRows.length / 2)].date,
+						...evaluation
+					};
+				});
+			}
+
+			function buildSampleRobustnessSummary(series) {
+				const central = series[5];
+				const overallMean = d3.mean(series, d => d.mean) || 0;
+				const overallSd = series.length > 1
+					? Math.sqrt(d3.sum(series, d => Math.pow(d.mean - overallMean, 2)) / (series.length - 1))
+					: 0;
+				const overallSe = series.length > 0 ? overallSd / Math.sqrt(series.length) : 0;
+				return [
+					{
+						key: 'day-0',
+						label: 'Day of Measurement',
+						sublabel: central.date,
+						mean: central.mean,
+						se: central.se,
+						color: '#b8103b'
+					},
+					{
+						key: 'mean-11',
+						label: 'Mean of 11',
+						sublabel: 'neighboring calibrations',
+						mean: overallMean,
+						se: overallSe,
+						color: '#004c93'
+					}
+				];
+			}
+
+			function renderSampleRobustnessChart() {
+				const container = document.getElementById('sample-robustness-chart');
+				if (!container || !window.d3) return;
+				loadRunningRegressionData().then(data => {
+					container.innerHTML = '';
+					const series = buildSampleRobustnessSeries(data);
+					const summary = buildSampleRobustnessSummary(series);
+					const width = 1120;
+					const height = 500;
+					const margin = { top: 48, right: 36, bottom: 52, left: 88 };
+					const innerWidth = width - margin.left - margin.right;
+					const innerHeight = height - margin.top - margin.bottom;
+					const x = d3.scalePoint().domain(summary.map(d => d.label)).range([0, innerWidth]).padding(0.5);
+					const y = d3.scaleLinear().domain([10, 15]).range([innerHeight, 0]);
+					const overallMean = summary[1].mean;
+
+					const svg = d3.select(container)
+						.append('svg')
+						.attr('width', width)
+						.attr('height', height)
+						.attr('viewBox', `0 0 ${width} ${height}`);
+					const chart = svg.append('g').attr('transform', `translate(${margin.left},${margin.top})`);
+
+					chart.append('g').attr('class', 'sr-grid').attr('transform', `translate(0,${innerHeight})`).call(d3.axisBottom(x).tickSize(-innerHeight).tickFormat(''));
+					chart.append('g').attr('class', 'sr-grid').call(d3.axisLeft(y).ticks(5).tickSize(-innerWidth).tickFormat(''));
+					chart.append('g').attr('class', 'sr-axis').attr('transform', `translate(0,${innerHeight})`).call(d3.axisBottom(x));
+					chart.append('g').attr('class', 'sr-axis').call(d3.axisLeft(y).ticks(5).tickFormat(d3.format('.2f')));
+
+					chart.append('line')
+						.attr('x1', 0)
+						.attr('x2', innerWidth)
+						.attr('y1', y(overallMean))
+						.attr('y2', y(overallMean))
+						.attr('stroke', 'rgba(0, 76, 147, 0.4)')
+						.attr('stroke-width', 1.8)
+						.attr('stroke-dasharray', '5 5');
+
+					const groups = chart.selectAll('g.sr-point').data(summary).enter().append('g').attr('class', 'sr-point').attr('transform', d => `translate(${x(d.label)},0)`);
+					groups.append('line')
+						.attr('x1', 0)
+						.attr('x2', 0)
+						.attr('y1', d => y(d.mean - d.se))
+						.attr('y2', d => y(d.mean + d.se))
+						.attr('stroke', d => d.color)
+						.attr('stroke-width', 2.2);
+					groups.append('line')
+						.attr('x1', -7)
+						.attr('x2', 7)
+						.attr('y1', d => y(d.mean - d.se))
+						.attr('y2', d => y(d.mean - d.se))
+						.attr('stroke', d => d.color)
+						.attr('stroke-width', 2.2);
+					groups.append('line')
+						.attr('x1', -7)
+						.attr('x2', 7)
+						.attr('y1', d => y(d.mean + d.se))
+						.attr('y2', d => y(d.mean + d.se))
+						.attr('stroke', d => d.color)
+						.attr('stroke-width', 2.2);
+					groups.append('circle')
+						.attr('cx', 0)
+						.attr('cy', d => y(d.mean))
+						.attr('r', 7.2)
+						.attr('fill', d => d.color)
+						.attr('stroke', '#ffffff')
+						.attr('stroke-width', 2);
+
+					svg.append('text').attr('class', 'sr-title').attr('x', margin.left).attr('y', 20).text('Day 0 result versus average over 11 neighboring calibrations');
+					svg.append('text').attr('class', 'sr-subtitle').attr('x', margin.left).attr('y', 38).text(`center session date assumed as sample day: ${series[5].date} · points show mean +/- SE`);
+					svg.append('text').attr('class', 'sr-small').attr('transform', 'rotate(-90)').attr('x', -(margin.top + innerHeight / 2)).attr('y', 18).attr('text-anchor', 'middle').text('SBR result / ug mg^-1 sample');
+					svg.append('text').attr('class', 'sr-note').attr('x', width - margin.right).attr('y', 20).attr('text-anchor', 'end').text(`overall mean = ${d3.format('.2f')(overallMean)} ug/mg`);
+
+					groups.append('text')
+						.attr('class', 'sr-value')
+						.attr('x', 0)
+						.attr('y', d => y(d.mean) - (d.key === 'mean-11' ? 44 : 24))
+						.attr('text-anchor', 'middle')
+						.attr('opacity', 1)
+						.text(d => d3.format('.2f')(d.mean));
+
+					groups.append('text')
+						.attr('class', 'sr-note')
+						.attr('x', 0)
+						.attr('y', innerHeight + 38)
+						.attr('text-anchor', 'middle')
+						.text(d => d.sublabel);
+				});
+			}
+
+			window.addEventListener('load', () => {
+				window.setTimeout(refreshMeasurementTimeGantt, 180);
+				window.setTimeout(renderBridgeCalibrationGantt, 180);
+				window.setTimeout(refreshRunningRegressionSlide, 180);
+				window.setTimeout(renderSampleRobustnessChart, 180);
+				if (!window.Reveal) return;
+				Reveal.on('ready', refreshMeasurementTimeGantt);
+				Reveal.on('ready', renderBridgeCalibrationGantt);
+				Reveal.on('ready', refreshRunningRegressionSlide);
+				Reveal.on('ready', renderSampleRobustnessChart);
+				Reveal.on('slidechanged', refreshMeasurementTimeGantt);
+				Reveal.on('slidechanged', renderBridgeCalibrationGantt);
+				Reveal.on('slidechanged', refreshRunningRegressionSlide);
+				Reveal.on('slidechanged', renderSampleRobustnessChart);
+				Reveal.on('fragmentshown', refreshMeasurementTimeGantt);
+				Reveal.on('fragmenthidden', refreshMeasurementTimeGantt);
+				Reveal.on('fragmentshown', refreshRunningRegressionSlide);
+				Reveal.on('fragmenthidden', refreshRunningRegressionSlide);
+				Reveal.on('resize', () => {
+					measurementTimeChart = null;
+					refreshMeasurementTimeGantt();
+					renderBridgeCalibrationGantt();
+					refreshRunningRegressionSlide();
+					renderSampleRobustnessChart();
+				});
+			});
+		})();
+	</script>
+
+	<script>
+	(function() {
+		function renderHeatingRateOptimumChart(animate = true) {
+			const container = document.getElementById('heating-rate-optimum-chart');
+			if (!container || !window.d3) return;
+
+			container.innerHTML = '';
+
+			const width = 780;
+			const height = 505;
+			const margin = { top: 30, right: 28, bottom: 76, left: 82 };
+			const innerWidth = width - margin.left - margin.right;
+			const innerHeight = height - margin.top - margin.bottom;
+
+			// Approximate values digitized from Fig. 11 of Rajshree Jeewon's Master thesis.
+			const points = [
+				{ rate: 10.0, sx0: 34.6 },
+				{ rate: 12.5, sx0: 27.0 },
+				{ rate: 15.0, sx0: 25.3 },
+				{ rate: 17.5, sx0: 29.2 },
+				{ rate: 20.0, sx0: 34.1 }
+			];
+
+			const fit = { a: 0.34971429, b: -10.44342857, c: 103.63428571 };
+			const optimum = { rate: 14.9, sx0: 25.7 };
+
+			const fitData = d3.range(9.0, 21.05, 0.15).map(rate => ({
+				rate,
+				sx0: fit.a * rate * rate + fit.b * rate + fit.c
+			}));
+
+			const svg = d3.select(container)
+				.append('svg')
+				.attr('width', width)
+				.attr('height', height)
+				.attr('viewBox', `0 0 ${width} ${height}`)
+				.attr('role', 'img')
+				.attr('aria-label', 'Heating rate versus method standard deviation with optimum around 15 degrees Celsius per minute');
+
+			const chart = svg.append('g')
+				.attr('transform', `translate(${margin.left},${margin.top})`);
+
+			const x = d3.scaleLinear()
+				.domain([9, 21])
+				.range([0, innerWidth]);
+
+			const y = d3.scaleLinear()
+				.domain([24, 39])
+				.range([innerHeight, 0]);
+
+			chart.append('g')
+				.attr('class', 'heating-rate-grid')
+				.attr('transform', `translate(0,${innerHeight})`)
+				.call(
+					d3.axisBottom(x)
+						.tickValues([10, 12.5, 15, 17.5, 20])
+						.tickSize(-innerHeight)
+						.tickFormat('')
+				);
+
+			chart.append('g')
+				.attr('class', 'heating-rate-grid')
+				.call(
+					d3.axisLeft(y)
+						.tickValues([24, 27, 30, 33, 36, 39])
+						.tickSize(-innerWidth)
+						.tickFormat('')
+				);
+
+			chart.append('g')
+				.attr('class', 'heating-rate-axis')
+				.attr('transform', `translate(0,${innerHeight})`)
+				.call(
+					d3.axisBottom(x)
+						.tickValues([10, 12.5, 15, 17.5, 20])
+						.tickFormat(d => d)
+				);
+
+			chart.append('g')
+				.attr('class', 'heating-rate-axis')
+				.call(
+					d3.axisLeft(y)
+						.tickValues([24, 27, 30, 33, 36, 39])
+				);
+
+			svg.append('text')
+				.attr('class', 'heating-rate-label')
+				.attr('x', margin.left + innerWidth / 2)
+				.attr('y', height - 18)
+				.attr('text-anchor', 'middle')
+				.text('TGA heating rate / °C min⁻¹');
+
+			svg.append('text')
+				.attr('class', 'heating-rate-label')
+				.attr('transform', 'rotate(-90)')
+				.attr('x', -(margin.top + innerHeight / 2))
+				.attr('y', 25)
+				.attr('text-anchor', 'middle')
+				.text('Method standard deviation Sₓ₀');
+
+			const line = d3.line()
+				.x(d => x(d.rate))
+				.y(d => y(d.sx0))
+				.curve(d3.curveMonotoneX);
+
+			const area = d3.area()
+				.x(d => x(d.rate))
+				.y0(innerHeight)
+				.y1(d => y(d.sx0))
+				.curve(d3.curveMonotoneX);
+
+			chart.append('path')
+				.datum(fitData)
+				.attr('fill', 'rgba(0, 76, 147, 0.07)')
+				.attr('d', area)
+				.attr('opacity', animate ? 0 : 1)
+				.transition()
+				.duration(animate ? 550 : 0)
+				.attr('opacity', 1);
+
+			const fitPath = chart.append('path')
+				.datum(fitData)
+				.attr('fill', 'none')
+				.attr('stroke', 'var(--ude-blue)')
+				.attr('stroke-width', 4)
+				.attr('stroke-linecap', 'round')
+				.attr('d', line);
+
+			if (animate) {
+				const length = fitPath.node().getTotalLength();
+				fitPath
+					.attr('stroke-dasharray', `${length} ${length}`)
+					.attr('stroke-dashoffset', length)
+					.transition()
+					.duration(950)
+					.ease(d3.easeCubicInOut)
+					.attr('stroke-dashoffset', 0);
+			}
+
+			const pointGroup = chart.append('g')
+				.attr('class', 'heating-rate-points');
+
+			pointGroup.selectAll('circle')
+				.data(points)
+				.enter()
+				.append('circle')
+				.attr('cx', d => x(d.rate))
+				.attr('cy', d => y(d.sx0))
+				.attr('r', animate ? 0 : 7)
+				.attr('fill', '#4b3b57')
+				.attr('stroke', '#ffffff')
+				.attr('stroke-width', 2.5)
+				.transition()
+				.delay((d, i) => animate ? 650 + i * 80 : 0)
+				.duration(animate ? 350 : 0)
+				.ease(d3.easeBackOut.overshoot(1.4))
+				.attr('r', 7);
+
+			pointGroup.selectAll('text.heating-rate-point-label')
+				.data(points)
+				.enter()
+				.append('text')
+				.attr('class', 'heating-rate-point-label')
+				.attr('x', d => x(d.rate))
+				.attr('y', d => y(d.sx0) - 13)
+				.attr('text-anchor', 'middle')
+				.attr('opacity', 0)
+				.text(d => d.rate === 15 ? '15' : '')
+				.transition()
+				.delay(animate ? 1100 : 0)
+				.duration(animate ? 300 : 0)
+				.attr('opacity', 1);
+
+			const optX = x(optimum.rate);
+			const optY = y(optimum.sx0);
+
+			const opt = chart.append('g')
+				.attr('transform', `translate(${optX},${optY})`)
+				.attr('opacity', animate ? 0 : 1);
+
+			opt.append('line')
+				.attr('x1', 0)
+				.attr('x2', 0)
+				.attr('y1', 0)
+				.attr('y2', innerHeight - optY)
+				.attr('stroke', '#b8103b')
+				.attr('stroke-width', 2)
+				.attr('stroke-dasharray', '6 6');
+
+			opt.append('text')
+				.attr('x', 0)
+				.attr('y', 7)
+				.attr('text-anchor', 'middle')
+				.attr('font-size', 26)
+				.attr('font-family', 'Montserrat, Arial, sans-serif')
+				.attr('font-weight', 900)
+				.attr('fill', '#b8103b')
+				.text('★');
+
+			svg.append('defs')
+				.append('marker')
+				.attr('id', 'heating-rate-arrow')
+				.attr('viewBox', '0 0 10 10')
+				.attr('refX', 9)
+				.attr('refY', 5)
+				.attr('markerWidth', 6)
+				.attr('markerHeight', 6)
+				.attr('orient', 'auto-start-reverse')
+				.append('path')
+				.attr('d', 'M 0 0 L 10 5 L 0 10 z')
+				.attr('fill', '#b8103b');
+
+			opt.append('path')
+				.attr('d', 'M 95 -78 L 21 -15')
+				.attr('fill', 'none')
+				.attr('stroke', '#b8103b')
+				.attr('stroke-width', 2.5)
+				.attr('stroke-linecap', 'round')
+				.attr('marker-end', 'url(#heating-rate-arrow)');
+
+			opt.append('text')
+				.attr('class', 'heating-rate-annotation')
+				.attr('x', 24)
+				.attr('y', -106)
+				.attr('fill', '#b8103b')
+				.text('minimum Sₓ₀');
+
+			opt.append('text')
+				.attr('class', 'heating-rate-annotation')
+				.attr('x', 24)
+				.attr('y', -86)
+				.attr('fill', '#b8103b')
+				.text('at ≈14.9 °C/min');
+
+			opt.transition()
+				.delay(animate ? 1250 : 0)
+				.duration(animate ? 450 : 0)
+				.attr('opacity', 1);
+
+			const legend = chart.append('g')
+				.attr('transform', `translate(${innerWidth - 265},18)`)
+				.attr('opacity', animate ? 0 : 1);
+
+			legend.append('line')
+				.attr('x1', 0)
+				.attr('x2', 34)
+				.attr('y1', 0)
+				.attr('y2', 0)
+				.attr('stroke', 'var(--ude-blue)')
+				.attr('stroke-width', 4)
+				.attr('stroke-linecap', 'round');
+
+			legend.append('text')
+				.attr('class', 'heating-rate-legend-text')
+				.attr('x', 44)
+				.attr('y', 5)
+				.text('quadratic fit');
+
+			legend.append('circle')
+				.attr('cx', 12)
+				.attr('cy', 25)
+				.attr('r', 6)
+				.attr('fill', '#4b3b57')
+				.attr('stroke', '#ffffff')
+				.attr('stroke-width', 2);
+
+			legend.append('text')
+				.attr('class', 'heating-rate-legend-text')
+				.attr('x', 44)
+				.attr('y', 30)
+				.text('measured Sₓ₀');
+
+			legend.transition()
+				.delay(animate ? 900 : 0)
+				.duration(animate ? 350 : 0)
+				.attr('opacity', 1);
+		}
+
+		function refreshHeatingRateOptimumChart(event) {
+			if (!window.Reveal) return;
+
+			const slide = event && event.currentSlide
+				? event.currentSlide
+				: Reveal.getCurrentSlide();
+
+			if (!slide || slide.id !== 'tga-heating-rate-optimization') return;
+
+			renderHeatingRateOptimumChart(true);
+		}
+
+		window.addEventListener('load', () => {
+			window.setTimeout(refreshHeatingRateOptimumChart, 200);
+
+			if (!window.Reveal) return;
+
+			Reveal.on('ready', refreshHeatingRateOptimumChart);
+			Reveal.on('slidechanged', refreshHeatingRateOptimumChart);
+			Reveal.on('resize', refreshHeatingRateOptimumChart);
+		});
+	})();
 	</script>
 
 	<script src="resources/js/utils/clock.js"></script>
