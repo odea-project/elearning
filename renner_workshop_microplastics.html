@@ -1570,6 +1570,167 @@
 		transform: translateX(0) scale(1);
 	}
 
+	#analytical-process-tga .process-label-layer {
+		position: absolute;
+		inset: 0;
+		z-index: 8;
+		pointer-events: none;
+	}
+
+	#analytical-process-tga .process-label {
+		position: absolute;
+		padding: 4px 10px;
+		border-radius: 999px;
+		background: rgba(255, 255, 255, 0.94);
+		border: 1px solid rgba(0, 76, 147, 0.18);
+		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+		font-family: "Montserrat", Arial, sans-serif;
+		font-size: 14px;
+		font-weight: 800;
+		letter-spacing: 0.02em;
+		color: var(--ude-blue);
+		white-space: nowrap;
+		opacity: 0;
+		transform: translateY(8px);
+		transition:
+			top 0.95s cubic-bezier(0.16, 0.84, 0.32, 1),
+			left 0.95s cubic-bezier(0.16, 0.84, 0.32, 1),
+			opacity 0.24s ease-in-out,
+			transform 0.95s cubic-bezier(0.16, 0.84, 0.32, 1);
+	}
+
+	#analytical-process-tga .process-label-tga {
+		top: 474px;
+		left: 430px;
+		opacity: 1;
+		transform: translateY(0);
+	}
+
+	#analytical-process-tga .process-label-tau {
+		top: 300px;
+		left: 706px;
+		transform: translateX(120vw);
+	}
+
+	#analytical-process-tga .process-label-autosampler {
+		top: 90px;
+		left: 400px;
+	}
+
+	#analytical-process-tga .process-label-gc {
+		top: 436px;
+		left: 584px;
+	}
+
+	#analytical-process-tga .process-label-ms {
+		top: 436px;
+		left: 784px;
+	}
+
+	#analytical-process-tga .tga-process-wrap:has(.tau-interface-overlay.visible) .process-label-tau {
+		opacity: 1;
+		transform: translateX(0);
+	}
+
+	#analytical-process-tga .twister-callout {
+		--twister-callout-x: 155px;
+		--twister-callout-y: -35px;
+		position: absolute;
+		inset: 0;
+		z-index: 10;
+		pointer-events: none;
+		opacity: 0;
+		transform: translateX(120vw);
+		transition:
+			opacity 0.24s ease-in-out,
+			transform 0.95s cubic-bezier(0.16, 0.84, 0.32, 1);
+	}
+
+	#analytical-process-tga .twister-callout-group {
+		transform: translate(var(--twister-callout-x), var(--twister-callout-y));
+	}
+
+	#analytical-process-tga .twister-callout-box,
+	#analytical-process-tga .twister-callout-line {
+		fill: none;
+		stroke: #b8103b;
+		stroke-width: 3;
+		stroke-linecap: round;
+		stroke-linejoin: round;
+	}
+
+	#analytical-process-tga .twister-callout-label {
+		fill: #b8103b;
+		font-family: "Montserrat", Arial, sans-serif;
+		font-size: 15px;
+		font-weight: 800;
+		paint-order: stroke;
+		stroke: rgba(255, 255, 255, 0.94);
+		stroke-width: 3px;
+	}
+
+	#analytical-process-tga .tga-process-wrap.tau-only-mode .twister-callout {
+		opacity: 1;
+		transform: translateX(0);
+	}
+
+	#analytical-process-tga .marker-concept-overlay {
+		position: absolute;
+		inset: 0;
+		z-index: 20;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		pointer-events: none;
+		opacity: 0;
+		transform: translateY(18px) scale(0.98);
+		transition:
+			opacity 0.35s ease-in-out,
+			transform 0.65s cubic-bezier(0.16, 0.84, 0.32, 1);
+	}
+
+	#analytical-process-tga .marker-concept-overlay.visible {
+		opacity: 1;
+		transform: translateY(0) scale(1);
+	}
+
+	#analytical-process-tga .tga-process-wrap.tga-gcms-mode .marker-concept-overlay.visible {
+		opacity: 0;
+		transform: translateY(-10px) scale(0.98);
+	}
+
+	#analytical-process-tga .marker-concept-card {
+		background: rgba(255, 255, 255, 0.96);
+		border-radius: 16px;
+		padding: 22px 26px;
+		box-shadow: 0 14px 38px rgba(0, 0, 0, 0.18);
+		border: 1px solid rgba(0, 76, 147, 0.12);
+	}
+
+	#analytical-process-tga .marker-concept-card img {
+		display: block;
+		width: min(780px, 82vw);
+		max-height: 430px;
+		object-fit: contain;
+	}
+
+	#analytical-process-tga .tga-process-wrap.tga-gcms-mode .process-label-tga {
+		top: 442px;
+		left: 198px;
+	}
+
+	#analytical-process-tga .tga-process-wrap.tga-gcms-mode .process-label-tau {
+		top: 346px;
+		left: 310px;
+	}
+
+	#analytical-process-tga .tga-process-wrap.tga-gcms-mode .process-label-autosampler,
+	#analytical-process-tga .tga-process-wrap.tga-gcms-mode .process-label-gc,
+	#analytical-process-tga .tga-process-wrap.tga-gcms-mode .process-label-ms {
+		opacity: 1;
+		transform: translateY(0);
+	}
+
 	#analytical-process-tga .tau-interface-overlay {
 		position: absolute;
 		top: -19px;
@@ -1737,6 +1898,50 @@
 		#analytical-process-tga .autosampler-overlay {
 			left: 390px;
 			width: 400px;
+		}
+
+		#analytical-process-tga .process-label {
+			font-size: 12px;
+			padding: 3px 8px;
+		}
+
+		#analytical-process-tga .twister-callout-label {
+			font-size: 13px;
+		}
+
+		#analytical-process-tga .process-label-tga {
+			top: 452px;
+			left: 420px;
+		}
+
+		#analytical-process-tga .process-label-tau {
+			top: 440px;
+			left: 600px;
+		}
+
+		#analytical-process-tga .process-label-autosampler {
+			top: 38px;
+			left: 338px;
+		}
+
+		#analytical-process-tga .process-label-gc {
+			top: 386px;
+			left: 624px;
+		}
+
+		#analytical-process-tga .process-label-ms {
+			top: 386px;
+			left: 782px;
+		}
+
+		#analytical-process-tga .tga-process-wrap.tga-gcms-mode .process-label-tga {
+			top: 416px;
+			left: 152px;
+		}
+
+		#analytical-process-tga .tga-process-wrap.tga-gcms-mode .process-label-tau {
+			top: 392px;
+			left: 252px;
 		}
 
 		#analytical-process-tga .tau-interface-overlay {
@@ -2080,6 +2285,7 @@
 			align-items: center;
 			justify-content: flex-start;
 			padding-top: 12px;
+			position: relative;
 			box-sizing: border-box;
 		}
 
@@ -2100,8 +2306,40 @@
 		#sample-robustness-chart {
 			width: 1120px;
 			height: 500px;
-			margin: 0 auto;
 		}
+
+		.sample-robustness-overlay-box {
+			position: absolute;
+			top: 250px;
+			right: -40px;
+			width: 250px;
+			padding: 18px 20px;
+			display: flex;
+			flex-direction: column;
+			gap: 10px;
+			border: 2px solid rgba(184, 16, 59, 0.22);
+			border-radius: 14px;
+			background: linear-gradient(180deg, rgba(184, 16, 59, 0.05), rgba(0, 76, 147, 0.03));
+			box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08);
+			text-align: left;
+			box-sizing: border-box;
+		}
+
+		.sample-robustness-overlay-box .source-title {
+			font-family: "Montserrat", Arial, sans-serif;
+			font-size: 0.54em;
+			font-weight: 800;
+			color: var(--ude-accent-2);
+			letter-spacing: 0.02em;
+		}
+
+		.sample-robustness-overlay-box .small {
+			font-family: "Montserrat", Arial, sans-serif;
+			font-size: 0.4em;
+			line-height: 1.45;
+			color: #32475b;
+		}
+
 
 		.sr-axis text,
 		.sr-small,
@@ -2150,6 +2388,393 @@
 			fill: #b8103b;
 			font-size: 17px;
 			font-weight: 800;
+		}
+
+		/* ===== Matrix effects slide ===== */
+		.reveal .slides section#matrix-effects-markers {
+			top: 0 !important;
+			height: 680px;
+			display: flex !important;
+			flex-direction: column;
+			align-items: center;
+			justify-content: flex-start;
+			padding-top: 40px;
+			box-sizing: border-box;
+		}
+
+		#matrix-effects-markers h4 {
+			margin: 0 0 16px 0;
+		}
+
+		.matrix-effects-layout {
+			display: grid;
+			grid-template-columns: 1fr 1fr;
+			gap: 30px;
+			width: 1120px;
+			flex: 1;
+		}
+
+		.matrix-effect-card {
+			background: rgba(255, 255, 255, 0.94);
+			border-radius: 16px;
+			padding: 18px 20px 14px;
+			box-shadow: 0 8px 28px rgba(0, 0, 0, 0.10);
+			border: 1px solid rgba(0, 76, 147, 0.10);
+			display: flex;
+			flex-direction: column;
+		}
+
+		.matrix-effect-card-title {
+			font-family: "Montserrat", Arial, sans-serif;
+			font-size: 24px;
+			font-weight: 800;
+			color: var(--ude-accent-2);
+			text-align: center;
+			margin-bottom: 6px;
+		}
+
+		.matrix-effect-chart {
+			flex: 1;
+			min-height: 0;
+		}
+
+		.matrix-effect-chart svg {
+			width: 100%;
+			height: 100%;
+			display: block;
+		}
+
+		.matrix-effect-caption {
+			font-family: "Montserrat", Arial, sans-serif;
+			font-size: 16px;
+			line-height: 1.35;
+			color: #32475b;
+			text-align: center;
+			margin-top: 4px;
+			padding: 0 6px;
+		}
+
+		.me-axis text {
+			font-family: "Montserrat", Arial, sans-serif;
+			font-size: 17px;
+			fill: #4b5d73;
+		}
+
+		.me-axis path,
+		.me-axis line {
+			stroke: rgba(0, 76, 147, 0.35);
+			stroke-width: 1.2px;
+		}
+
+		.me-grid line {
+			stroke: rgba(0, 76, 147, 0.07);
+			stroke-width: 1px;
+		}
+
+		.me-grid path {
+			stroke: none;
+		}
+
+		.me-axis-label {
+			font-family: "Montserrat", Arial, sans-serif;
+			font-size: 21px;
+			font-weight: 700;
+			fill: var(--ude-blue);
+		}
+
+		.me-legend-text {
+			font-family: "Montserrat", Arial, sans-serif;
+			font-size: 19px;
+			fill: #32475b;
+		}
+
+		.me-annotation-text {
+			font-family: "Montserrat", Arial, sans-serif;
+			font-size: 18px;
+			font-weight: 700;
+			fill: #b8103b;
+		}
+
+		/* ===== Piecewise parabola slide ===== */
+		#piecewise-parabola {
+			color: var(--ude-black);
+		}
+
+		#piecewise-parabola .piecewise-parabola-wrap {
+			width: min(1060px, 100%);
+			margin: 0 auto;
+			padding: 16px 20px 18px 20px;
+			border-radius: 16px;
+			background: linear-gradient(180deg, rgba(255,255,255,0.98), rgba(223,228,242,0.35));
+			border: 2px solid rgba(0,76,147,0.16);
+			box-shadow: 0 10px 24px rgba(0,0,0,0.08);
+		}
+
+		#piecewise-parabola-plot {
+			width: 900px;
+			height: 500px;
+			max-width: 100%;
+			margin: 0 auto 14px auto;
+		}
+
+		#piecewise-parabola .piecewise-toggle-row {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			gap: 14px;
+			margin-top: 8px;
+		}
+
+		#piecewise-parabola .piecewise-toggle-label {
+			font-family: "Montserrat", Arial, sans-serif;
+			font-size: 0.42em;
+			font-weight: 800;
+			color: #4b5d73;
+			transition: opacity 0.25s ease, color 0.25s ease;
+		}
+
+		#piecewise-parabola .piecewise-toggle-label.active {
+			color: var(--ude-blue);
+			opacity: 1;
+		}
+
+		#piecewise-parabola .piecewise-toggle-label.inactive {
+			opacity: 0.45;
+		}
+
+		#piecewise-parabola .piecewise-toggle {
+			position: relative;
+			display: inline-flex;
+			align-items: center;
+			width: 58px;
+			height: 30px;
+			cursor: pointer;
+		}
+
+		#piecewise-parabola .piecewise-toggle input {
+			opacity: 0;
+			width: 0;
+			height: 0;
+		}
+
+		#piecewise-parabola .piecewise-toggle-track {
+			position: absolute;
+			inset: 0;
+			background: rgba(223,228,242,0.8);
+			border: 2px solid rgba(0,76,147,0.30);
+			border-radius: 999px;
+			transition: background 0.25s ease, border-color 0.25s ease;
+		}
+
+		#piecewise-parabola .piecewise-toggle-knob {
+			position: absolute;
+			left: 4px;
+			top: 4px;
+			width: 20px;
+			height: 20px;
+			background: var(--ude-blue);
+			border-radius: 50%;
+			transition: transform 0.25s ease, background 0.25s ease;
+		}
+
+		.pp-axis text {
+			font-family: "Montserrat", Arial, sans-serif;
+			font-size: 17px;
+			fill: #4b5d73;
+		}
+
+		.pp-axis path,
+		.pp-axis line {
+			stroke: rgba(0, 76, 147, 0.35);
+			stroke-width: 1.2px;
+		}
+
+		.pp-grid line {
+			stroke: rgba(0, 76, 147, 0.07);
+			stroke-width: 1px;
+		}
+
+		.pp-grid path {
+			stroke: none;
+		}
+
+		.pp-axis-label {
+			font-family: "Montserrat", Arial, sans-serif;
+			font-size: 21px;
+			font-weight: 700;
+			fill: var(--ude-blue);
+		}
+
+		.pp-annotation {
+			font-family: "Montserrat", Arial, sans-serif;
+			font-size: 17px;
+			font-weight: 700;
+			fill: #4b5d73;
+		}
+
+		.pp-junction {
+			stroke: rgba(0, 76, 147, 0.35);
+			stroke-width: 2;
+			stroke-dasharray: 6 4;
+		}
+
+		/* ===== qPeaks article preview slide ===== */
+		#qPeaks {
+			color: var(--ude-black);
+		}
+
+		#qPeaks .qpeaks-card {
+			max-width: 1120px;
+			margin: 18px auto 0 auto;
+			padding: 20px 24px;
+			border-radius: 16px;
+			border: 2px solid rgba(0, 76, 147, 0.16);
+			background: linear-gradient(180deg, rgba(255,255,255,0.98), rgba(223,228,242,0.35));
+			box-shadow: 0 10px 24px rgba(0,0,0,0.08);
+			text-align: left;
+		}
+
+		#qPeaks .qpeaks-layout {
+			display: flex;
+			justify-content: space-between;
+			align-items: flex-start;
+			gap: 20px;
+			flex-wrap: nowrap;
+		}
+
+		#qPeaks .qpeaks-text {
+			flex: 1 1 auto;
+			min-width: 0;
+		}
+
+		#qPeaks .qpeaks-badge {
+			display: inline-block;
+			padding: 5px 12px;
+			margin-bottom: 14px;
+			border-radius: 999px;
+			background: rgba(254, 202, 0, 0.18);
+			color: #004c93;
+			font-size: 0.38em;
+			font-weight: 700;
+			letter-spacing: 0.06em;
+			text-transform: uppercase;
+		}
+
+		#qPeaks .qpeaks-title {
+			margin: 0 0 14px 0;
+			font-size: 0.56em;
+			line-height: 1.35;
+			color: var(--ude-black);
+			text-transform: none;
+			font-family: 'Montserrat', Helvetica, sans-serif;
+		}
+
+		#qPeaks .qpeaks-authors {
+			margin: 0 0 12px 0;
+			font-size: 0.40em;
+			line-height: 1.55;
+			color: #4b5d73;
+		}
+
+		#qPeaks .qpeaks-journal {
+			margin: 0 0 16px 0;
+			font-size: 0.42em;
+			line-height: 1.55;
+			color: var(--ude-accent-3);
+			font-weight: 700;
+		}
+
+		#qPeaks .qpeaks-description {
+			margin: 0 0 18px 0;
+			font-size: 0.38em;
+			line-height: 1.65;
+			color: #4b5d73;
+			max-width: 700px;
+		}
+
+		#qPeaks .qpeaks-actions {
+			display: flex;
+			gap: 12px;
+			flex-wrap: wrap;
+			align-items: center;
+		}
+
+		#qPeaks .qpeaks-btn-primary {
+			display: inline-block;
+			padding: 10px 18px;
+			border-radius: 10px;
+			background: var(--ude-blue);
+			color: #ffffff;
+			font-size: 0.40em;
+			font-weight: 700;
+			text-decoration: none;
+			transition: transform 0.2s ease, box-shadow 0.2s ease;
+		}
+
+		#qPeaks .qpeaks-btn-primary:hover {
+			transform: scale(1.02);
+			box-shadow: 0 6px 16px rgba(0, 76, 147, 0.20);
+		}
+
+		#qPeaks .qpeaks-btn-doi {
+			display: inline-block;
+			padding: 10px 18px;
+			border-radius: 10px;
+			border: 2px solid rgba(0, 76, 147, 0.30);
+			color: var(--ude-blue);
+			font-size: 0.40em;
+			font-weight: 700;
+			text-decoration: none;
+			background: rgba(255, 255, 255, 0.80);
+			transition: transform 0.2s ease, box-shadow 0.2s ease;
+		}
+
+		#qPeaks .qpeaks-btn-doi:hover {
+			transform: scale(1.02);
+			box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+		}
+
+		#qPeaks .qpeaks-preview-card {
+			flex: 0 0 320px;
+			padding: 14px 16px;
+			border-radius: 14px;
+			background: rgba(255,255,255,0.96);
+			border: 1px solid rgba(0,76,147,0.18);
+			box-shadow: 0 8px 18px rgba(0,0,0,0.07);
+		}
+
+		#qPeaks .qpeaks-preview-label {
+			margin: 0 0 10px 0;
+			font-size: 0.34em;
+			font-weight: 700;
+			color: var(--ude-accent-2);
+			text-transform: uppercase;
+			letter-spacing: 0.06em;
+		}
+
+		#qPeaks #qpeaks-preview-image {
+			display: block;
+			width: 100%;
+			max-height: 230px;
+			object-fit: contain;
+			margin: 0 0 10px 0;
+			border-radius: 10px;
+			border: 1px solid rgba(0,76,147,0.16);
+			background: #ffffff;
+			cursor: zoom-in;
+			transition: transform 0.2s ease, box-shadow 0.2s ease;
+		}
+
+		#qPeaks #qpeaks-preview-image:hover {
+			transform: scale(1.01);
+			box-shadow: 0 8px 18px rgba(0, 0, 0, 0.10);
+		}
+
+		#qPeaks .qpeaks-preview-caption {
+			margin: 0 0 10px 0;
+			font-size: 0.32em;
+			line-height: 1.55;
+			color: #6b7d8f;
 		}
 
 		/* ===== TGA heating rate optimisation slide ===== */
@@ -2304,15 +2929,37 @@
 						alt="TAU interface"
 						data-fragment-index="2">
 
+					<svg class="twister-callout" viewBox="0 0 1120 520" aria-hidden="true" preserveAspectRatio="none">
+						<g class="twister-callout-group">
+							<rect class="twister-callout-box" x="742" y="152" width="72" height="50" rx="6"></rect>
+							<path class="twister-callout-line" d="M 814 172 L 854 146 L 900 146"></path>
+							<text class="twister-callout-label" x="908" y="151">Twister</text>
+						</g>
+					</svg>
+
+					<div class="marker-concept-overlay fragment custom" data-fragment-index="3">
+						<div class="marker-concept-card">
+							<img src="resources/figures/marker-concept.webp" alt="Marker concept for TED-GC-MS microplastics analysis">
+						</div>
+					</div>
+
 					<img class="autosampler-overlay fragment custom"
 						src="resources/figures/autosampler.webp"
 						alt="Autosampler bridging interface"
-						data-fragment-index="3">
+						data-fragment-index="4">
 
 					<img class="gcms-overlay fragment custom"
 						src="resources/figures/gc-ms.webp"
 						alt="GC-MS system"
-						data-fragment-index="3">
+						data-fragment-index="4">
+
+					<div class="process-label-layer" aria-hidden="true">
+						<div class="process-label process-label-tga" style="font-size: 0.7em;">TGA</div>
+						<div class="process-label process-label-tau" style="font-size: 0.7em;">TAU</div>
+						<div class="process-label process-label-autosampler" style="font-size: 0.7em;">Autosampler</div>
+						<div class="process-label process-label-gc" style="font-size: 0.7em;">GC</div>
+						<div class="process-label process-label-ms" style="font-size: 0.7em;">MS</div>
+					</div>
 
 					<div id="gc-tic-chart" class="instrument-chart-overlay gc-chart-overlay"
 						aria-label="Animated RT versus intensity chromatogram"></div>
@@ -2346,7 +2993,7 @@
 						The minimum of S<sub>x0</sub> supports the optimized TGA program.
 						</span>
 						<span class="small">
-						<strong>Rajshree Jeewon</strong><br>
+						<b>Rajshree Jeewon</b><br>
 						Master Thesis, Environmental Toxicology<br>
 						University of Duisburg-Essen, IAC, 2026
 						</span>
@@ -2356,10 +3003,12 @@
 			</section>
 
 			<section id="bridge-slide-time">
-				<h4>Measurement Time Still Remains a Challenge</h4>
+				<h4><strong>However</strong> , Measurement Time Still Remains a Challenge</h4>
 				<div class="bridge-time-lead" style="font-size: 0.60em; margin-bottom: 16px;">
 					<br>
 					For a 5-point calibration we need: <b>Std 1, Blank, Std 2, Blank, ... , Std 5, Blank</b>.
+					<br><br>
+					<strong>i.e., more than 9 hours</strong>
 				</div>
 				<div class="vertical-spacer" style="height: 30px;"></div>
 				<div id="bridge-calibration-gantt"></div>
@@ -2367,7 +3016,7 @@
 
 			<section id="running-regression">
 				<h4>Running Regression</h4>
-				<div class="vertical-spacer" style="height: 50px;"></div>
+				<div class="vertical-spacer" style="height: 80px;"></div>
 				<div class="running-regression-layout">
 					<div class="running-regression-panel">
 						<div id="running-regression-raw"></div>
@@ -2382,18 +3031,108 @@
 			</section>
 
 			<section id="sample-robustness">
+				<div class="vertical-spacer" style="height: 40px;"></div>
 				<h4>Sample Result Stability Across Neighboring Calibration Sessions</h4>
 				<div class="sample-robustness-lead">
-					The same triplicate sample is back-calculated with 11 neighboring 15-point calibration windows. The center point represents the assumed sample day from the middle of the calibration series; the surrounding points test whether earlier and later calibration sessions change the result significantly.
+					Pre-treatment and post-treatment samples are each evaluated once with the local session calibration and once with the mean result from 11 neighboring calibration windows to assess robustness across nearby measurement sessions.
 				</div>
 				<div id="sample-robustness-chart"></div>
+				<div class="sample-robustness-overlay-box">
+					<span class="source-title">about Standard Errors</span>
+					<span class="small">
+						Both the <b>pre-treatment</b> and <b>post-treatment</b> results remain comparable when the calibration is averaged across <b>+/- 5 measurement sessions</b>.
+					</span>
+					<span class="small">
+						The standard errors of the <b>11-session means</b> likely provide a more realistic & robust estimate of the uncertainty for a practical sample measurement.
+					</span>
+				</div>
 			</section>
 
-			<section id="concept-of-analytical-marker">
-				<h4>Concept of Analytical Marker Compounds for TED-GC-MS Based Microplastics Analysis</h4>
-				<img src="resources/figures/marker-concept.webp" alt="Concept of Analytical Marker Compounds" style="width: 700px;"/>
+			<section id="matrix-effects-markers">
+				<h4>Matrix Effects can Change Marker Signals</h4>
+				<div class="undertitle" style="font-size: 0.62em; color: #4b5d73; margin-bottom: 24px;">
+					Robust & Automated Peak Detection Required
+				</div>
+				<div class="matrix-effects-layout">
+					<div class="matrix-effect-card">
+						<div class="matrix-effect-card-title">PP marker, m/z 111</div>
+						<div id="pp-matrix-effect-chart" class="matrix-effect-chart"></div>
+						<div class="matrix-effect-caption">Retention-time shifts and altered peak shapes can affect marker interpretation.</div>
+					</div>
+					<div class="matrix-effect-card">
+						<div class="matrix-effect-card-title">PET marker, m/z 105</div>
+						<div id="pet-matrix-effect-chart" class="matrix-effect-chart"></div>
+						<div class="matrix-effect-caption">Matrix-dependent signals can appear as additional apparent marker structures.</div>
+					</div>
+				</div>
 			</section>
-			
+
+			<section id="qPeaks">
+				<h4>qPeaks: A Linear Regression-Based Asymmetric Peak Model</h4>
+				<div class="qpeaks-card">
+				<div class="qpeaks-layout">
+					<div class="qpeaks-text">
+						<div class="qpeaks-badge">External article preview</div>
+						<h3 class="qpeaks-title">
+							qPeaks: A Linear Regression-Based Asymmetric Peak Model for Parameter-Free Automatized Detection and Characterization of Chromatographic Peaks in Non-Target Screening Data
+						</h3>
+						<p class="qpeaks-authors">
+							Max Reuschenbach, Felix Drees, Michael S. Leupold, Lucie K. Tintrop, Torsten C. Schmidt, Gerrit Renner
+						</p>
+						<p class="qpeaks-journal">
+							<strong>Analytical Chemistry</strong>, 96(18), 7120-7129, 2024
+						</p>
+						<p class="qpeaks-description">
+							This article introduces qPeaks, a linear regression-based asymmetric peak model for automated chromatographic peak detection and characterization in non-target screening. It is directly relevant here because it connects transformed peak models with efficient parameter estimation and uncertainty-aware peak analysis.
+						</p>
+						<div class="qpeaks-actions">
+							<a href="https://pubs.acs.org/doi/10.1021/acs.analchem.4c00494" target="_blank" rel="noopener" class="qpeaks-btn-primary">
+								Open article on ACS
+							</a>
+							<a href="https://doi.org/10.1021/acs.analchem.4c00494" target="_blank" rel="noopener" class="qpeaks-btn-doi">
+								DOI: 10.1021/acs.analchem.4c00494
+							</a>
+						</div>
+					</div>
+					<div class="qpeaks-preview-card">
+						<p class="qpeaks-preview-label">Article figure preview</p>
+						<img id="qpeaks-preview-image" src="https://pubs.acs.org/cms/10.1021/acs.analchem.4c00494/asset/images/large/ac4c00494_0001.jpeg" alt="Figure 1 from the qPeaks article">
+						<p class="qpeaks-preview-caption">
+							Click the image to open a large preview.
+						</p>
+						<p class="qpeaks-preview-caption">
+							This slide uses a local preview card style with direct links instead of embedding the publisher page.
+						</p>
+					</div>
+				</div>
+			</div>
+			</section>
+
+			<section id="piecewise-parabola">
+				<h4>Piecewise parabola peak model</h4>
+				<div class="piecewise-parabola-wrap">
+					<div id="piecewise-parabola-plot"></div>
+					<div class="piecewise-toggle-row">
+						<span id="piecewise-parabola-label-linear" class="piecewise-toggle-label active">Peak view</span>
+						<label for="piecewise-parabola-scale-toggle" class="piecewise-toggle">
+							<input id="piecewise-parabola-scale-toggle" type="checkbox">
+							<span class="piecewise-toggle-track"></span>
+							<span id="piecewise-parabola-scale-toggle-knob" class="piecewise-toggle-knob"></span>
+						</label>
+						<span id="piecewise-parabola-label-log" class="piecewise-toggle-label inactive">Log y-axis</span>
+					</div>
+					<div class="piecewise-toggle-row">
+						<span id="piecewise-parabola-label-merged" class="piecewise-toggle-label active">Merged peak</span>
+						<label for="piecewise-parabola-mode-toggle" class="piecewise-toggle">
+							<input id="piecewise-parabola-mode-toggle" type="checkbox">
+							<span class="piecewise-toggle-track"></span>
+							<span id="piecewise-parabola-mode-toggle-knob" class="piecewise-toggle-knob"></span>
+						</label>
+						<span id="piecewise-parabola-label-separate" class="piecewise-toggle-label inactive">Separate parabolas</span>
+					</div>
+				</div>
+			</section>
+
 			<section id="thankyou">
 				<h1>Thank you for your attention!</h1>
 				<img src="resources/figures/iac_group.jpg" alt="IAC Group Photo" style="width: 600px;"/>
@@ -2944,8 +3683,7 @@
 
 		function isGcmsFragment(fragment) {
 			return fragment && (
-				fragment.matches('.gcms-overlay') ||
-				fragment.getAttribute('data-fragment-index') === '3'
+				fragment.matches('.gcms-overlay, .autosampler-overlay')
 			);
 		}
 
@@ -2973,7 +3711,7 @@
 				return false;
 			}
 			return Boolean(
-				slide.querySelector('.gcms-overlay.visible, .autosampler-overlay.visible, [data-fragment-index="3"].visible')
+				slide.querySelector('.gcms-overlay.visible, .autosampler-overlay.visible')
 			);
 		}
 
@@ -2985,7 +3723,9 @@
 			if (!wrap) {
 				return;
 			}
+			const tauVisible = Boolean(slide.querySelector('.tau-interface-overlay.visible'));
 			const gcmsVisible = isGcmsStageVisible(slide);
+			wrap.classList.toggle('tau-only-mode', tauVisible && !gcmsVisible);
 			wrap.classList.toggle('tga-gcms-mode', gcmsVisible);
 			if (!gcmsVisible) {
 				wrap.classList.remove('gcms-charts-visible');
@@ -3689,10 +4429,10 @@
 					gap: 0
 				},
 				baseline: {
-					total: 445,
+					total: 423,
 					runDuration: 68,
 					tgaStart: i => i * 68,
-					gcStart: i => 52 + i * 68,
+					gcStart: i => 30 + i * 68,
 					tgaSegments: [
 						{ name: 'extraction', offset: 0, duration: 30, color: timeGanttColors.extraction },
 						{ name: 'tgaCleanup', offset: 30, duration: 38, color: timeGanttColors.tgaCleanup }
@@ -3705,10 +4445,10 @@
 					gap: 15
 				},
 				optimized: {
-					total: 352,
+					total: 338,
 					runDuration: 53,
 					tgaStart: i => i * 50,
-					gcStart: i => 34 + i * 53,
+					gcStart: i => 20 + i * 53,
 					tgaSegments: [
 						{ name: 'extraction', offset: 0, duration: 20, color: timeGanttColors.extraction },
 						{ name: 'tgaCleanup', offset: 20, duration: 30, color: timeGanttColors.tgaCleanup }
@@ -3827,12 +4567,12 @@
 				}
 				if (stage < 3) {
 					return {
-						baseline: { titleY: 78, tgaY: 146, gcY: 204, title: stage === 1 ? '1. Serial view: 3 samples + 3 blanks' : '2. Baseline workflow: nested two-device process', subtitle: stage === 1 ? 'The remaining runs are added to show the full serial workload for 3 samples + 3 blanks.' : 'Same bars are shifted left: GC-MS starts as soon as a loaded Twister is ready.', accent: 'var(--ude-blue)' }
+						baseline: { titleY: 78, tgaY: 146, gcY: 204, title: stage === 1 ? '1. Serial view: 3 samples + 3 blanks' : '2. Baseline workflow: nested two-device process', subtitle: stage === 1 ? 'The remaining runs are added to show the full serial workload for 3 samples + 3 blanks.' : 'GC-MS now starts right after extraction while TGA cleanup continues in parallel.', accent: 'var(--ude-blue)' }
 					};
 				}
 				return {
-					baseline: { titleY: 62, tgaY: 116, gcY: 166, title: '2. Baseline workflow: nested two-device process', subtitle: 'GC-MS is partly decoupled, but still has ≈15 min idle time between runs.', accent: 'var(--ude-blue)' },
-					optimized: { titleY: 274, tgaY: 326, gcY: 376, title: '3. Optimized TGA program', subtitle: 'Faster extraction and shorter TGA reset allow almost continuous GC-MS operation.', accent: 'var(--ude-accent-3)' }
+					baseline: { titleY: 62, tgaY: 116, gcY: 166, title: '2. Baseline workflow: nested two-device process', subtitle: 'GC-MS now starts right after extraction while TGA cleanup continues in parallel.', accent: 'var(--ude-blue)' },
+					optimized: { titleY: 274, tgaY: 326, gcY: 376, title: '3. Optimized TGA program', subtitle: 'Earlier transfer plus faster TGA reset bring GC-MS close to continuous operation.', accent: 'var(--ude-accent-3)' }
 				};
 			}
 
@@ -4051,7 +4791,7 @@
 					exit => exit.call(exit => exit.transition(t).attr('width', 0).attr('opacity', 0).remove())
 				);
 
-				const waitLabels = stage >= 2 ? [{ key: 'wait-label', text: '≈15 min waiting for TGA', x: 178, y: baselineLayout.gcY + 46 }] : [];
+				const waitLabels = stage >= 2 ? [{ key: 'wait-label', text: '≈15 min waiting for TGA', x: 90.5, y: baselineLayout.gcY + 46 }] : [];
 				const waitLabelSel = chart.layers.wait.selectAll('text.time-gantt-wait-label').data(waitLabels, d => d.key);
 				waitLabelSel.join(
 					enter => enter.append('text').attr('class', 'time-gantt-wait-label').attr('x', d => x(d.x)).attr('y', d => d.y + 8).attr('opacity', 0).attr('text-anchor', 'middle').text(d => d.text).call(enter => enter.transition(t).attr('y', d => d.y).attr('opacity', 1)),
@@ -4065,11 +4805,11 @@
 				} else {
 					markers.push({ key: 'serial-ref', type: 'ref', x: timeGanttModel.serial.total, y1: 80, y2: stage >= 3 ? 445 : 300 });
 					if (stage >= 2) {
-						markers.push({ key: 'baseline-total', type: 'total', x: timeGanttModel.baseline.total, y1: baselineLayout.gcY - 22, y2: baselineLayout.gcY + 34, label: '≈445 min' });
+						markers.push({ key: 'baseline-total', type: 'total', x: timeGanttModel.baseline.total, y1: baselineLayout.gcY - 22, y2: baselineLayout.gcY + 34, label: '≈423 min' });
 					}
 				}
 				if (stage >= 3 && layout.optimized) {
-					markers.push({ key: 'optimized-total', type: 'total', x: timeGanttModel.optimized.total, y1: layout.optimized.gcY - 22, y2: layout.optimized.gcY + 34, label: '≈352 min', color: timeGanttColors.optimizedAccent });
+					markers.push({ key: 'optimized-total', type: 'total', x: timeGanttModel.optimized.total, y1: layout.optimized.gcY - 22, y2: layout.optimized.gcY + 34, label: '≈338 min', color: timeGanttColors.optimizedAccent });
 				}
 
 				const markerSel = chart.layers.markers.selectAll('line.marker-line').data(markers, d => d.key);
@@ -4095,9 +4835,9 @@
 				const markerLabels = stage === 0
 					? [{ key: 'cycle-total-label', text: 'one meas.', x: timeGanttModel.serial.runDuration + 3, y: baselineLayout.gcY + 6, anchor: 'start', cls: 'time-gantt-total', color: '#b8103b' }]
 					: [{ key: 'serial-ref-label', text: 'serial reference ≈630 min', x: timeGanttModel.serial.total - 8, y: 72, anchor: 'end', cls: 'time-gantt-small', color: '#b8103b' }];
-				if (stage >= 2) markerLabels.push({ key: 'baseline-total-label', text: 'baseline ≈445 min', x: timeGanttModel.baseline.total + 8, y: baselineLayout.gcY + 6, anchor: 'start', cls: 'time-gantt-total', color: '#b8103b' });
+				if (stage >= 2) markerLabels.push({ key: 'baseline-total-label', text: 'baseline ≈423 min', x: timeGanttModel.baseline.total + 8, y: baselineLayout.gcY + 6, anchor: 'start', cls: 'time-gantt-total', color: '#b8103b' });
 				if (stage >= 3) markerLabels.push(
-					{ key: 'optimized-total-label', text: 'optimized ≈352 min', x: timeGanttModel.optimized.total + 8, y: layout.optimized.gcY + 6, anchor: 'start', cls: 'time-gantt-total', color: timeGanttColors.optimizedAccent }
+					{ key: 'optimized-total-label', text: 'optimized ≈338 min', x: timeGanttModel.optimized.total + 8, y: layout.optimized.gcY + 6, anchor: 'start', cls: 'time-gantt-total', color: timeGanttColors.optimizedAccent },
 				);
 
 				const markerLabelSel = chart.layers.markers.selectAll('text.marker-label').data(markerLabels, d => d.key);
@@ -4603,14 +5343,32 @@
 				});
 			}
 
-			const sampleRobustnessPeaks = [9422, 10165, 10119];
-			const sampleRobustnessMassesUg = [3978.2, 4014.1, 4084.1];
+			const sampleRobustnessSamples = [
+				{
+					key: 'pre',
+					label: 'before',
+					centerShift: 0,
+					sampleDate: '20251125',
+					peaks: [9422, 10165, 10119],
+					massesUg: [3978.2, 4014.1, 4084.1],
+					colors: { single: '#b8103b', mean: '#004c93' }
+				},
+				{
+					key: 'post',
+					label: 'after',
+					centerShift: 1,
+					sampleDate: '20251128',
+					peaks: [11827, 10695, 13545],
+					massesUg: [4074.2, 4087.6, 3992.7],
+					colors: { single: '#ec7206', mean: '#3f8f69' }
+				}
+			];
 
-			function evaluateSampleWindow(windowRows) {
+			function evaluateSampleWindow(windowRows, sample) {
 				const regression = fitLinearRegression(windowRows);
-				const replicateResults = sampleRobustnessPeaks.map((peakArea, idx) => {
+				const replicateResults = sample.peaks.map((peakArea, idx) => {
 					const predictedMassUg = (peakArea - regression.intercept) / regression.slope;
-					const sampleMassMg = sampleRobustnessMassesUg[idx] / 1000;
+					const sampleMassMg = sample.massesUg[idx] / 1000;
 					return predictedMassUg / sampleMassMg;
 				});
 				const mean = d3.mean(replicateResults) || 0;
@@ -4621,15 +5379,15 @@
 				return { mean, se, replicateResults };
 			}
 
-			function buildSampleRobustnessSeries(data) {
+			function buildSampleRobustnessSeries(data, centerShift, sample) {
 				const windowSize = Math.min(15, data.length);
 				const maxStart = Math.max(0, data.length - windowSize);
 				const middleRowIndex = Math.floor((data.length - 1) / 2);
-				const centralStart = Math.max(0, Math.min(maxStart, middleRowIndex - Math.floor(windowSize / 2)));
+				const centralStart = Math.max(0, Math.min(maxStart, middleRowIndex - Math.floor(windowSize / 2) + centerShift));
 				const startPositions = d3.range(-5, 6).map(offset => Math.max(0, Math.min(maxStart, centralStart + offset)));
 				return startPositions.map((start, idx) => {
 					const windowRows = data.slice(start, start + windowSize);
-					const evaluation = evaluateSampleWindow(windowRows);
+					const evaluation = evaluateSampleWindow(windowRows, sample);
 					return {
 						offset: idx - 5,
 						start,
@@ -4640,7 +5398,7 @@
 				});
 			}
 
-			function buildSampleRobustnessSummary(series) {
+			function buildSampleRobustnessSummary(series, sample) {
 				const central = series[5];
 				const overallMean = d3.mean(series, d => d.mean) || 0;
 				const overallSd = series.length > 1
@@ -4649,20 +5407,20 @@
 				const overallSe = series.length > 0 ? overallSd / Math.sqrt(series.length) : 0;
 				return [
 					{
-						key: 'day-0',
-						label: 'Day of Measurement',
-						sublabel: central.date,
+						key: `${sample.key}-single`,
+						label: `${sample.label}`,
+						sublabel: sample.sampleDate || central.date,
 						mean: central.mean,
 						se: central.se,
-						color: '#b8103b'
+						color: sample.colors.single
 					},
 					{
-						key: 'mean-11',
-						label: 'Mean of 11',
-						sublabel: 'neighboring calibrations',
+						key: `${sample.key}-mean`,
+						label: `${sample.label} (mean)`,
+						sublabel: '+/- 5 sessions',
 						mean: overallMean,
 						se: overallSe,
-						color: '#004c93'
+						color: sample.colors.mean
 					}
 				];
 			}
@@ -4672,16 +5430,21 @@
 				if (!container || !window.d3) return;
 				loadRunningRegressionData().then(data => {
 					container.innerHTML = '';
-					const series = buildSampleRobustnessSeries(data);
-					const summary = buildSampleRobustnessSummary(series);
-					const width = 1120;
+					const sampleSeries = sampleRobustnessSamples.map(sample => ({
+						sample,
+						series: buildSampleRobustnessSeries(data, sample.centerShift, sample)
+					}));
+					const preDate = sampleSeries[0].series[5].date;
+					const postDate = sampleSeries[1].series[5].date;
+					const summary = sampleSeries.flatMap(({ sample, series }) => buildSampleRobustnessSummary(series, sample));
+					const width = 600;
 					const height = 500;
 					const margin = { top: 48, right: 36, bottom: 52, left: 88 };
 					const innerWidth = width - margin.left - margin.right;
 					const innerHeight = height - margin.top - margin.bottom;
-					const x = d3.scalePoint().domain(summary.map(d => d.label)).range([0, innerWidth]).padding(0.5);
-					const y = d3.scaleLinear().domain([10, 15]).range([innerHeight, 0]);
-					const overallMean = summary[1].mean;
+					const x = d3.scalePoint().domain(summary.map(d => d.key)).range([0, innerWidth]).padding(0.5);
+					const y = d3.scaleLinear().domain([10, 17]).range([innerHeight, 0]);
+					const overallMean = d3.mean(summary, d => d.mean) || 0;
 
 					const svg = d3.select(container)
 						.append('svg')
@@ -4692,7 +5455,7 @@
 
 					chart.append('g').attr('class', 'sr-grid').attr('transform', `translate(0,${innerHeight})`).call(d3.axisBottom(x).tickSize(-innerHeight).tickFormat(''));
 					chart.append('g').attr('class', 'sr-grid').call(d3.axisLeft(y).ticks(5).tickSize(-innerWidth).tickFormat(''));
-					chart.append('g').attr('class', 'sr-axis').attr('transform', `translate(0,${innerHeight})`).call(d3.axisBottom(x));
+					chart.append('g').attr('class', 'sr-axis').attr('transform', `translate(0,${innerHeight})`).call(d3.axisBottom(x).tickFormat(() => ''));
 					chart.append('g').attr('class', 'sr-axis').call(d3.axisLeft(y).ticks(5).tickFormat(d3.format('.2f')));
 
 					chart.append('line')
@@ -4704,7 +5467,7 @@
 						.attr('stroke-width', 1.8)
 						.attr('stroke-dasharray', '5 5');
 
-					const groups = chart.selectAll('g.sr-point').data(summary).enter().append('g').attr('class', 'sr-point').attr('transform', d => `translate(${x(d.label)},0)`);
+					const groups = chart.selectAll('g.sr-point').data(summary).enter().append('g').attr('class', 'sr-point').attr('transform', d => `translate(${x(d.key)},0)`);
 					groups.append('line')
 						.attr('x1', 0)
 						.attr('x2', 0)
@@ -4734,23 +5497,27 @@
 						.attr('stroke', '#ffffff')
 						.attr('stroke-width', 2);
 
-					svg.append('text').attr('class', 'sr-title').attr('x', margin.left).attr('y', 20).text('Day 0 result versus average over 11 neighboring calibrations');
-					svg.append('text').attr('class', 'sr-subtitle').attr('x', margin.left).attr('y', 38).text(`center session date assumed as sample day: ${series[5].date} · points show mean +/- SE`);
+					svg.append('text').attr('class', 'sr-title').attr('x', margin.left + 60).attr('y', 30).text('Pre- and post-treatment sample');
 					svg.append('text').attr('class', 'sr-small').attr('transform', 'rotate(-90)').attr('x', -(margin.top + innerHeight / 2)).attr('y', 18).attr('text-anchor', 'middle').text('SBR result / ug mg^-1 sample');
-					svg.append('text').attr('class', 'sr-note').attr('x', width - margin.right).attr('y', 20).attr('text-anchor', 'end').text(`overall mean = ${d3.format('.2f')(overallMean)} ug/mg`);
-
 					groups.append('text')
 						.attr('class', 'sr-value')
 						.attr('x', 0)
-						.attr('y', d => y(d.mean) - (d.key === 'mean-11' ? 44 : 24))
+						.attr('y', d => y(d.mean) - (d.key.endsWith('-mean') ? 44 : 24))
 						.attr('text-anchor', 'middle')
 						.attr('opacity', 1)
 						.text(d => d3.format('.2f')(d.mean));
 
 					groups.append('text')
+						.attr('class', 'sr-small')
+						.attr('x', 0)
+						.attr('y', innerHeight + 14)
+						.attr('text-anchor', 'middle')
+						.text(d => d.label);
+
+					groups.append('text')
 						.attr('class', 'sr-note')
 						.attr('x', 0)
-						.attr('y', innerHeight + 38)
+						.attr('y', innerHeight + 34)
 						.attr('text-anchor', 'middle')
 						.text(d => d.sublabel);
 				});
@@ -5075,6 +5842,435 @@
 			renderHeatingRateOptimumChart(true);
 		}
 
+		const matrixEffectsState = { drawn: false };
+
+		function drawMatrixEffectChart(containerSelector, csvPath, options) {
+			const container = document.querySelector(containerSelector);
+			if (!container || !window.d3) return;
+
+			if (container.dataset.chartDrawn === 'true') return;
+
+			const col1 = options.col1 || 'signal_1';
+			const col2 = options.col2 || 'signal_2';
+			const offset1 = options.offset1 || 0;
+			const offset2 = options.offset2 || 0;
+			const yMax = options.yMax || 1.08;
+
+			d3.csv(csvPath, d3.autoType).then(data => {
+				container.innerHTML = '';
+
+				const width = 500;
+				const height = 390;
+				const margin = { top: 45, right: 25, bottom: 65, left: 75 };
+				const innerWidth = width - margin.left - margin.right;
+				const innerHeight = height - margin.top - margin.bottom;
+
+				const svg = d3.select(container)
+					.append('svg')
+					.attr('viewBox', `0 0 ${width} ${height}`)
+					.attr('preserveAspectRatio', 'xMidYMid meet');
+
+				const chart = svg.append('g')
+					.attr('transform', `translate(${margin.left},${margin.top})`);
+
+				data = data.filter(d => d.RT != null && d[col1] != null && d[col2] != null);
+
+				const signal1 = data.map(d => +d[col1]);
+				const signal2 = data.map(d => +d[col2]);
+				const max1 = d3.max(signal1) || 1;
+				const max2 = d3.max(signal2) || 1;
+
+				const plotData = data.map(d => ({
+					RT: +d.RT,
+					signal_1_norm: (+d[col1] / max1) + offset1,
+					signal_2_norm: (+d[col2] / max2) + offset2
+				}));
+
+				const xDomain = d3.extent(plotData, d => d.RT);
+				const xScale = d3.scaleLinear()
+					.domain(xDomain)
+					.range([0, innerWidth]);
+
+				const yScale = d3.scaleLinear()
+					.domain([0, yMax])
+					.range([innerHeight, 0]);
+
+				chart.append('g')
+					.attr('class', 'me-grid')
+					.attr('transform', `translate(0,${innerHeight})`)
+					.call(d3.axisBottom(xScale)
+						.ticks(8)
+						.tickSize(-innerHeight)
+						.tickFormat(''));
+
+				chart.append('g')
+					.attr('class', 'me-grid')
+					.call(d3.axisLeft(yScale)
+						.ticks(6)
+						.tickSize(-innerWidth)
+						.tickFormat(''));
+
+				chart.append('g')
+					.attr('class', 'me-axis')
+					.attr('transform', `translate(0,${innerHeight})`)
+					.call(d3.axisBottom(xScale).ticks(8));
+
+				chart.append('g')
+					.attr('class', 'me-axis')
+					.call(d3.axisLeft(yScale).ticks(6));
+
+				svg.append('text')
+					.attr('class', 'me-axis-label')
+					.attr('x', margin.left + innerWidth / 2)
+					.attr('y', margin.top + innerHeight + 52)
+					.attr('text-anchor', 'middle')
+					.text('retention time / min');
+
+				svg.append('text')
+					.attr('class', 'me-axis-label')
+					.attr('transform', 'rotate(-90)')
+					.attr('x', -(margin.top + innerHeight / 2))
+					.attr('y', 22)
+					.attr('text-anchor', 'middle')
+					.text('normalized intensity');
+
+				const line = d3.line()
+					.x(d => xScale(d.RT))
+					.y(d => yScale(d.signal_1_norm))
+					.curve(d3.curveLinear);
+
+				const line2 = d3.line()
+					.x(d => xScale(d.RT))
+					.y(d => yScale(d.signal_2_norm))
+					.curve(d3.curveLinear);
+
+				chart.append('path')
+					.datum(plotData)
+					.attr('fill', 'none')
+					.attr('stroke', 'var(--ude-blue)')
+					.attr('stroke-width', 3)
+					.attr('opacity', 0.9)
+					.attr('d', line);
+
+				chart.append('path')
+					.datum(plotData)
+					.attr('fill', 'none')
+					.attr('stroke', 'var(--ude-accent-3)')
+					.attr('stroke-width', 3)
+					.attr('opacity', 0.9)
+					.attr('d', line2);
+
+				const legend = chart.append('g')
+					.attr('transform', `translate(${innerWidth - 195}, 6)`);
+
+				legend.append('line')
+					.attr('x1', 0)
+					.attr('x2', 30)
+					.attr('y1', 8)
+					.attr('y2', 8)
+					.attr('stroke', 'var(--ude-blue)')
+					.attr('stroke-width', 3);
+
+				legend.append('text')
+					.attr('class', 'me-legend-text')
+					.attr('x', 42)
+					.attr('y', 14)
+					.text('sample');
+
+				legend.append('line')
+					.attr('x1', 0)
+					.attr('x2', 30)
+					.attr('y1', 34)
+					.attr('y2', 34)
+					.attr('stroke', 'var(--ude-accent-3)')
+					.attr('stroke-width', 3);
+
+				legend.append('text')
+					.attr('class', 'me-legend-text')
+					.attr('x', 42)
+					.attr('y', 40)
+					.text('reference');
+
+				container.dataset.chartDrawn = 'true';
+			});
+		}
+
+		function initMatrixEffectsSlide() {
+			if (!document.querySelector('#matrix-effects-markers')) return;
+			if (matrixEffectsState.drawn) return;
+			matrixEffectsState.drawn = true;
+
+			drawMatrixEffectChart('#pp-matrix-effect-chart', 'resources/data/PP_mz111_dataset.csv', {
+				col1: 'PP_mz111_signal_1',
+				col2: 'PP_mz111_signal_2',
+				offset1: 1.0,
+				offset2: 0,
+				yMax: 2.2,
+				annotation: 'RT shift + altered peak shape',
+				annotationType: 'shift'
+			});
+
+			drawMatrixEffectChart('#pet-matrix-effect-chart', 'resources/data/PET_mz105_dataset.csv', {
+				col1: 'PET_mz105_signal_1',
+				col2: 'PET_mz105_signal_2',
+				offset1: 1.0,
+				offset2: 0,
+				yMax: 2.2,
+				annotation: 'additional matrix-induced signals',
+				annotationType: 'new-signals'
+			});
+		}
+
+		function refreshMatrixEffectsSlide(event) {
+			if (!window.Reveal) return;
+			const slide = event && event.currentSlide
+				? event.currentSlide
+				: Reveal.getCurrentSlide();
+			if (!slide || slide.id !== 'matrix-effects-markers') return;
+			initMatrixEffectsSlide();
+		}
+
+		/* ==== Piecewise parabola ==== */
+		const ppXMin = -7, ppXMax = 7, ppStep = 0.04;
+		const ppMargin = { top: 50, right: 40, bottom: 70, left: 85 };
+		const ppW = 900, ppH = 500;
+		const ppInnerW = ppW - ppMargin.left - ppMargin.right;
+		const ppInnerH = ppH - ppMargin.top - ppMargin.bottom;
+		const ppPointXs = [-5, -3, -1.5, 0, 1.5, 3, 5];
+
+		const ppState = {
+			timer: null, drawn: false,
+			isLogView: false, isSeparateMode: false,
+			params: { beta0: 0, beta1: 0, beta2: -0.16, beta3: -0.16 },
+			svg: null, chart: null,
+			xScale: null, yScale: null,
+			yAxisGroup: null, mainPath: null,
+			comp2Path: null, comp3Path: null,
+			pointsGroup: null, title: null, yLabel: null
+		};
+
+		function ppModel(x, p) {
+			return x < 0
+				? p.beta0 + p.beta1 * x + p.beta2 * x * x
+				: p.beta0 + p.beta1 * x + p.beta3 * x * x;
+		}
+
+		function ppUpdatePaths(t) {
+			const p = ppState.params;
+			p.beta1 = Math.sin(t * 0.8) * 0.12;
+			p.beta2 = -0.16 + Math.sin(t * 0.47 + 0.7) * 0.09;
+			p.beta3 = -0.16 + Math.cos(t * 0.62 - 0.35) * 0.09;
+
+			const merged = [], c2 = [], c3 = [];
+			for (let x = ppXMin; x <= ppXMax; x += ppStep) {
+				const ly = ppModel(x, p);
+				const ly2 = p.beta0 + p.beta1 * x + p.beta2 * x * x;
+				const ly3 = p.beta0 + p.beta1 * x + p.beta3 * x * x;
+				merged.push({ x, logY: ly });
+				c2.push({ x, logY: ly2 });
+				c3.push({ x, logY: ly3 });
+			}
+
+			const expM = merged.map(d => Math.exp(d.logY));
+			const maxM = d3.max(expM) || 1;
+			const exp2 = c2.map(d => Math.exp(d.logY));
+			const max2 = d3.max(exp2) || 1;
+			const exp3 = c3.map(d => Math.exp(d.logY));
+			const max3 = d3.max(exp3) || 1;
+
+			const peakM = merged.map((d, i) => ({ x: d.x, y: expM[i] / maxM }));
+			const peak2 = c2.map((d, i) => ({ x: d.x, y: exp2[i] / max2 }));
+			const peak3 = c3.map((d, i) => ({ x: d.x, y: exp3[i] / max3 }));
+
+			const xs = ppState.xScale, ys = ppState.yScale;
+			const lineGen = d3.line().x(d => xs(d.x)).y(d => ys(d.y)).curve(d3.curveLinear);
+
+			if (ppState.isLogView) {
+				ppState.mainPath.attr('d', lineGen(merged));
+				ppState.comp2Path.attr('d', lineGen(c2));
+				ppState.comp3Path.attr('d', lineGen(c3));
+			} else {
+				ppState.mainPath.attr('d', lineGen(peakM));
+				ppState.comp2Path.attr('d', lineGen(peak2));
+				ppState.comp3Path.attr('d', lineGen(peak3));
+			}
+
+			const mainVis = ppState.isSeparateMode ? 0 : 1;
+			const compVis = ppState.isSeparateMode ? 1 : 0;
+			ppState.mainPath.attr('opacity', mainVis);
+			ppState.comp2Path.attr('opacity', compVis);
+			ppState.comp3Path.attr('opacity', compVis);
+
+			ppState.title.text(ppState.isSeparateMode
+				? 'Underlying parabolas before piecewise merging'
+				: ppState.isLogView
+					? 'Same model shown in log space'
+					: 'Asymmetric peak from two quadratic halves');
+
+			const pts = ppState.isLogView
+				? ppPointXs.map(x => ({ x, y: ppModel(x, p) }))
+				: ppPointXs.map(x => ({ x, y: Math.exp(ppModel(x, p)) / maxM }));
+
+			ppState.pointsGroup.selectAll('circle').data(pts).join('circle')
+				.attr('cx', d => xs(d.x))
+				.attr('cy', d => ys(d.y))
+				.attr('r', 4.5)
+				.attr('fill', 'var(--ude-accent-3)')
+				.attr('stroke', '#ffffff')
+				.attr('stroke-width', 1.5);
+		}
+
+		function renderPiecewiseParabolaSlide() {
+			if (ppState.drawn) return;
+			ppState.drawn = true;
+
+			const container = document.getElementById('piecewise-parabola-plot');
+			if (!container || !window.d3) return;
+			container.innerHTML = '';
+
+			const svg = d3.select(container)
+				.append('svg')
+				.attr('viewBox', `0 0 ${ppW} ${ppH}`)
+				.attr('preserveAspectRatio', 'xMidYMid meet');
+
+			const chart = svg.append('g')
+				.attr('transform', `translate(${ppMargin.left},${ppMargin.top})`);
+
+			ppState.xScale = d3.scaleLinear().domain([-7, 7]).range([0, ppInnerW]);
+			ppState.yScale = d3.scaleLinear().domain([0, 1.15]).range([ppInnerH, 0]);
+
+			const xs = ppState.xScale, ys = ppState.yScale;
+
+			chart.append('g').attr('class', 'pp-grid')
+				.attr('transform', `translate(0,${ppInnerH})`)
+				.call(d3.axisBottom(xs).ticks(10).tickSize(-ppInnerH).tickFormat(''));
+			chart.append('g').attr('class', 'pp-grid')
+				.call(d3.axisLeft(ys).ticks(6).tickSize(-ppInnerW).tickFormat(''));
+
+			chart.append('g').attr('class', 'pp-axis')
+				.attr('transform', `translate(0,${ppInnerH})`)
+				.call(d3.axisBottom(xs).ticks(10));
+
+			ppState.yAxisGroup = chart.append('g').attr('class', 'pp-axis')
+				.call(d3.axisLeft(ys).ticks(6));
+
+			ppState.junctionLine = chart.append('line')
+				.attr('class', 'pp-junction')
+				.attr('x1', xs(0)).attr('y1', 0)
+				.attr('x2', xs(0)).attr('y2', ppInnerH);
+
+			svg.append('text').attr('class', 'pp-axis-label')
+				.attr('x', ppMargin.left + ppInnerW / 2)
+				.attr('y', ppMargin.top + ppInnerH + 52)
+				.attr('text-anchor', 'middle')
+				.text('x / relative retention coordinate');
+
+			ppState.yLabel = svg.append('text').attr('class', 'pp-axis-label')
+				.attr('transform', 'rotate(-90)')
+				.attr('x', -(ppMargin.top + ppInnerH / 2))
+				.attr('y', 22)
+				.attr('text-anchor', 'middle')
+				.text('normalized intensity');
+
+			ppState.title = svg.append('text').attr('class', 'pp-axis-label')
+				.attr('x', ppMargin.left + ppInnerW / 2)
+				.attr('y', 28)
+				.attr('text-anchor', 'middle')
+				.style('font-size', '20px')
+				.text('Asymmetric peak from two quadratic halves');
+
+			chart.append('text').attr('class', 'pp-annotation')
+				.attr('x', xs(-6)).attr('y', ppInnerH - 10)
+				.text('left half: β₂');
+
+			chart.append('text').attr('class', 'pp-annotation')
+				.attr('x', xs(4.5)).attr('y', ppInnerH - 10)
+				.text('right half: β₃');
+
+			chart.append('text').attr('class', 'pp-annotation')
+				.attr('x', xs(0) + 6).attr('y', ppInnerH - 10)
+				.text('junction at x = 0');
+
+			ppState.mainPath = chart.append('path')
+				.attr('fill', 'none').attr('stroke', 'var(--ude-blue)')
+				.attr('stroke-width', 3.5).attr('stroke-linejoin', 'round');
+
+			ppState.comp2Path = chart.append('path')
+				.attr('fill', 'none').attr('stroke', 'var(--ude-blue)')
+				.attr('stroke-width', 2.5).attr('stroke-dasharray', '6 4')
+				.attr('opacity', 0);
+
+			ppState.comp3Path = chart.append('path')
+				.attr('fill', 'none').attr('stroke', 'var(--ude-accent-3)')
+				.attr('stroke-width', 2.5).attr('stroke-dasharray', '6 4')
+				.attr('opacity', 0);
+
+			ppState.pointsGroup = chart.append('g');
+
+			ppState.svg = svg;
+			ppState.chart = chart;
+
+			ppUpdatePaths(0);
+
+			document.getElementById('piecewise-parabola-scale-toggle').addEventListener('change', function () {
+				ppState.isLogView = this.checked;
+				const yDom = ppState.isLogView ? [-7, 0.5] : [0, 1.15];
+				ppState.yScale.domain(yDom);
+				ppState.yAxisGroup.call(d3.axisLeft(ppState.yScale).ticks(6));
+				ppState.yLabel.text(ppState.isLogView ? 'log intensity' : 'normalized intensity');
+				document.getElementById('piecewise-parabola-label-linear').className =
+					'piecewise-toggle-label' + (ppState.isLogView ? ' inactive' : ' active');
+				document.getElementById('piecewise-parabola-label-log').className =
+					'piecewise-toggle-label' + (ppState.isLogView ? ' active' : ' inactive');
+				document.getElementById('piecewise-parabola-scale-toggle-knob').style.transform =
+					ppState.isLogView ? 'translateX(28px)' : 'translateX(0)';
+			});
+
+			document.getElementById('piecewise-parabola-mode-toggle').addEventListener('change', function () {
+				ppState.isSeparateMode = this.checked;
+				document.getElementById('piecewise-parabola-label-merged').className =
+					'piecewise-toggle-label' + (ppState.isSeparateMode ? ' inactive' : ' active');
+				document.getElementById('piecewise-parabola-label-separate').className =
+					'piecewise-toggle-label' + (ppState.isSeparateMode ? ' active' : ' inactive');
+				document.getElementById('piecewise-parabola-mode-toggle-knob').style.transform =
+					ppState.isSeparateMode ? 'translateX(28px)' : 'translateX(0)';
+			});
+		}
+
+		function startPiecewiseParabolaAnimation() {
+			if (ppState.timer) return;
+			let start = null;
+			function frame(t) {
+				if (!start) start = t;
+				const elapsed = (t - start) / 1000;
+				ppUpdatePaths(elapsed);
+				ppState.timer = requestAnimationFrame(frame);
+			}
+			ppState.timer = requestAnimationFrame(frame);
+		}
+
+		function stopPiecewiseParabolaAnimation() {
+			if (ppState.timer) {
+				cancelAnimationFrame(ppState.timer);
+				ppState.timer = null;
+			}
+		}
+
+		function refreshPiecewiseParabola(event) {
+			if (!window.Reveal) return;
+			const cur = event && event.currentSlide ? event.currentSlide : Reveal.getCurrentSlide();
+			if (cur && cur.id === 'piecewise-parabola') {
+				renderPiecewiseParabolaSlide();
+				startPiecewiseParabolaAnimation();
+			}
+		}
+
+		function stopPiecewiseParabolaOnLeave(event) {
+			if (event.previousSlide && event.previousSlide.id === 'piecewise-parabola') {
+				stopPiecewiseParabolaAnimation();
+			}
+		}
+
 		window.addEventListener('load', () => {
 			window.setTimeout(refreshHeatingRateOptimumChart, 200);
 
@@ -5083,6 +6279,13 @@
 			Reveal.on('ready', refreshHeatingRateOptimumChart);
 			Reveal.on('slidechanged', refreshHeatingRateOptimumChart);
 			Reveal.on('resize', refreshHeatingRateOptimumChart);
+
+			Reveal.on('ready', refreshMatrixEffectsSlide);
+			Reveal.on('slidechanged', refreshMatrixEffectsSlide);
+
+			Reveal.on('ready', refreshPiecewiseParabola);
+			Reveal.on('slidechanged', refreshPiecewiseParabola);
+			Reveal.on('slidechanged', stopPiecewiseParabolaOnLeave);
 		});
 	})();
 	</script>
