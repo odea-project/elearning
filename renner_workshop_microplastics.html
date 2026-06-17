@@ -2503,7 +2503,7 @@
 		#piecewise-parabola .piecewise-parabola-wrap {
 			width: min(1060px, 100%);
 			margin: 0 auto;
-			padding: 16px 20px 18px 20px;
+			padding: 12px 20px 14px 20px;
 			border-radius: 16px;
 			background: linear-gradient(180deg, rgba(255,255,255,0.98), rgba(223,228,242,0.35));
 			border: 2px solid rgba(0,76,147,0.16);
@@ -2512,9 +2512,9 @@
 
 		#piecewise-parabola-plot {
 			width: 900px;
-			height: 500px;
+			height: 370px;
 			max-width: 100%;
-			margin: 0 auto 14px auto;
+			margin: 0 auto 10px auto;
 		}
 
 		#piecewise-parabola .piecewise-toggle-row {
@@ -2522,7 +2522,10 @@
 			align-items: center;
 			justify-content: center;
 			gap: 14px;
-			margin-top: 8px;
+		}
+
+		#piecewise-parabola .piecewise-toggle-spacer {
+			width: 40px;
 		}
 
 		#piecewise-parabola .piecewise-toggle-label {
@@ -2577,6 +2580,26 @@
 			transition: transform 0.25s ease, background 0.25s ease;
 		}
 
+		#piecewise-parabola .piecewise-formula-card {
+			width: fit-content;
+			max-width: 100%;
+			margin: 0 auto 12px auto;
+			padding: 10px 18px;
+			border-radius: 12px;
+			background: rgba(255, 255, 255, 0.96);
+			border: 1px solid rgba(0, 76, 147, 0.18);
+			box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06);
+			color: var(--ude-blue);
+			font-size: 0.48em;
+		}
+
+		#piecewise-parabola .pp-junction {
+			stroke: var(--ude-accent-3);
+			stroke-width: 2;
+			stroke-dasharray: 4 4;
+			opacity: 0.5;
+		}
+
 		.pp-axis text {
 			font-family: "Montserrat", Arial, sans-serif;
 			font-size: 17px;
@@ -2616,6 +2639,196 @@
 			stroke: rgba(0, 76, 147, 0.35);
 			stroke-width: 2;
 			stroke-dasharray: 6 4;
+		}
+
+		/* ===== Running-window regression ===== */
+
+		#running-window-regression {
+			color: var(--ude-black);
+		}
+
+		#running-window-regression h4 {
+			margin-bottom: 6px;
+		}
+
+		#running-window-regression .running-window-lead {
+			font-family: "Montserrat", Arial, sans-serif;
+			font-size: 0.42em;
+			line-height: 1.35;
+			color: #4b5d73;
+			text-align: center;
+			margin-bottom: 10px;
+		}
+
+		#running-window-regression .running-window-wrap {
+			width: min(1120px, 100%);
+			margin: 0 auto;
+			padding: 16px 20px 18px 20px;
+			border-radius: 16px;
+			background: linear-gradient(180deg, rgba(255,255,255,0.98), rgba(223,228,242,0.35));
+			border: 2px solid rgba(0,76,147,0.16);
+			box-shadow: 0 10px 24px rgba(0,0,0,0.08);
+		}
+
+		#running-window-regression-plot {
+			width: 1040px;
+			height: 430px;
+			max-width: 100%;
+			margin: 0 auto;
+		}
+
+		#running-window-regression .running-window-info-row {
+			display: grid;
+			grid-template-columns: repeat(3, 1fr);
+			gap: 12px;
+			margin-top: 10px;
+		}
+
+		#running-window-regression .running-window-info-card {
+			padding: 8px 12px;
+			border-radius: 12px;
+			background: rgba(255,255,255,0.88);
+			border: 1px solid rgba(0,76,147,0.16);
+			text-align: center;
+			font-family: "Montserrat", Arial, sans-serif;
+		}
+
+		#running-window-regression .running-window-info-label {
+			display: block;
+			font-size: 0.32em;
+			font-weight: 700;
+			color: #4b5d73;
+			margin-bottom: 2px;
+		}
+
+		#running-window-regression .running-window-info-value {
+			display: block;
+			font-size: 0.40em;
+			font-weight: 900;
+			color: var(--ude-blue);
+		}
+
+		#running-window-regression .rw-annotation {
+			font-family: "Montserrat", Arial, sans-serif;
+			font-size: 15px;
+			font-weight: 700;
+			fill: #4b5d73;
+		}
+
+		/* ===== Running-window fit cascade ===== */
+
+		#running-window-fit-cascade {
+			color: var(--ude-black);
+		}
+
+		#running-window-fit-cascade h4 {
+			margin-bottom: 6px;
+		}
+
+		#running-window-fit-cascade .fit-cascade-lead {
+			font-family: "Montserrat", Arial, sans-serif;
+			font-size: 0.40em;
+			line-height: 1.35;
+			color: #4b5d73;
+			text-align: center;
+			max-width: 1000px;
+			margin: 0 auto 10px auto;
+		}
+
+		#running-window-fit-cascade .fit-cascade-wrap {
+			width: min(1120px, 100%);
+			margin: 0 auto;
+			padding: 14px 18px 16px 18px;
+			border-radius: 16px;
+			background: linear-gradient(180deg, rgba(255,255,255,0.98), rgba(223,228,242,0.35));
+			border: 2px solid rgba(0,76,147,0.16);
+			box-shadow: 0 10px 24px rgba(0,0,0,0.08);
+		}
+
+		#running-window-fit-cascade .fit-cascade-filter-row {
+			display: grid;
+			grid-template-columns: repeat(3, 1fr);
+			gap: 8px;
+			margin-bottom: 10px;
+		}
+
+		#running-window-fit-cascade .fit-cascade-filter-pill {
+			display: flex;
+			align-items: center;
+			gap: 8px;
+			padding: 7px 10px;
+			border-radius: 999px;
+			border: 1px solid rgba(0,76,147,0.18);
+			background: rgba(255,255,255,0.86);
+			color: #4b5d73;
+			font-family: "Montserrat", Arial, sans-serif;
+			font-size: 0.30em;
+			font-weight: 800;
+			opacity: 0.55;
+			transition: opacity 0.25s ease, background 0.25s ease, border-color 0.25s ease, color 0.25s ease;
+		}
+
+		#running-window-fit-cascade .fit-cascade-filter-pill.active {
+			opacity: 1;
+			color: var(--ude-blue);
+			background: rgba(223,228,242,0.82);
+			border-color: rgba(0,76,147,0.42);
+		}
+
+		#running-window-fit-cascade .fit-cascade-filter-pill.heatmap-active {
+			color: var(--ude-accent-3);
+			background: rgba(184,16,59,0.08);
+			border-color: rgba(184,16,59,0.35);
+		}
+
+		#running-window-fit-cascade .fit-cascade-step {
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			width: 22px;
+			height: 22px;
+			border-radius: 50%;
+			background: var(--ude-blue);
+			color: #fff;
+			font-size: 0.85em;
+			flex: 0 0 auto;
+		}
+
+		#running-window-fit-cascade-plot {
+			width: 1040px;
+			height: 420px;
+			max-width: 100%;
+			margin: 0 auto;
+		}
+
+		#running-window-fit-cascade .fit-cascade-status-row {
+			display: grid;
+			grid-template-columns: repeat(3, 1fr);
+			gap: 10px;
+			margin-top: 10px;
+		}
+
+		#running-window-fit-cascade .fit-cascade-status-card {
+			padding: 7px 10px;
+			border-radius: 12px;
+			background: rgba(255,255,255,0.88);
+			border: 1px solid rgba(0,76,147,0.16);
+			text-align: center;
+			font-family: "Montserrat", Arial, sans-serif;
+		}
+
+		#running-window-fit-cascade .fit-cascade-status-label {
+			display: block;
+			font-size: 0.28em;
+			font-weight: 700;
+			color: #4b5d73;
+		}
+
+		#running-window-fit-cascade .fit-cascade-status-value {
+			display: block;
+			font-size: 0.38em;
+			font-weight: 900;
+			color: var(--ude-blue);
 		}
 
 		/* ===== qPeaks article preview slide ===== */
@@ -2886,6 +3099,253 @@
 			font-size: 14px;
 			font-weight: 700;
 		}
+
+		/* ===== qPeaks microplastics summary ===== */
+
+		#qpeaks-microplastics-summary {
+			color: var(--ude-black);
+		}
+
+		#qpeaks-microplastics-summary h4 {
+			margin-bottom: 6px;
+		}
+
+		#qpeaks-microplastics-summary .qpeaks-summary-lead {
+			font-family: "Montserrat", Arial, sans-serif;
+			font-size: 0.52em;
+			line-height: 1.35;
+			color: #4b5d73;
+			text-align: center;
+			max-width: 1040px;
+			margin: 0 auto 18px auto;
+		}
+
+		#qpeaks-microplastics-summary .qpeaks-summary-grid {
+			width: min(1120px, 100%);
+			margin: 0 auto;
+			display: grid;
+			grid-template-columns: repeat(3, 1fr);
+			gap: 14px;
+		}
+
+		#qpeaks-microplastics-summary .qpeaks-summary-card {
+			min-height: 142px;
+			padding: 18px 18px 16px 18px;
+			border-radius: 16px;
+			background: linear-gradient(180deg, rgba(255,255,255,0.98), rgba(223,228,242,0.42));
+			border: 2px solid rgba(0,76,147,0.16);
+			box-shadow: 0 8px 20px rgba(0,0,0,0.07);
+			text-align: left;
+			font-family: "Montserrat", Arial, sans-serif;
+		}
+
+		#qpeaks-microplastics-summary .qpeaks-summary-card.highlight {
+			background: linear-gradient(180deg, rgba(0,76,147,0.95), rgba(0,58,114,0.92));
+			color: #ffffff;
+			border-color: rgba(0,76,147,0.45);
+		}
+
+		#qpeaks-microplastics-summary .qpeaks-summary-icon {
+			width: 42px;
+			height: 42px;
+			border-radius: 12px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			background: rgba(0,76,147,0.10);
+			color: var(--ude-blue);
+			font-size: 0.68em;
+			margin-bottom: 10px;
+		}
+
+		#qpeaks-microplastics-summary .qpeaks-summary-card.highlight .qpeaks-summary-icon {
+			background: rgba(255,255,255,0.16);
+			color: #ffffff;
+		}
+
+		#qpeaks-microplastics-summary .qpeaks-summary-card h5 {
+			margin: 0 0 8px 0;
+			font-size: 0.64em;
+			line-height: 1.12;
+			color: var(--ude-blue);
+		}
+
+		#qpeaks-microplastics-summary .qpeaks-summary-card.highlight h5 {
+			color: #ffffff;
+		}
+
+		#qpeaks-microplastics-summary .qpeaks-summary-card p {
+			margin: 0;
+			font-size: 0.42em;
+			line-height: 1.38;
+			color: #32475b;
+		}
+
+		#qpeaks-microplastics-summary .qpeaks-summary-card.highlight p {
+			color: rgba(255,255,255,0.88);
+		}
+
+		#qpeaks-microplastics-summary .qpeaks-summary-card strong {
+			font-weight: 900;
+		}
+
+		#qpeaks-microplastics-summary .qpeaks-summary-footer {
+			width: min(1120px, 100%);
+			margin: 16px auto 0 auto;
+			padding: 12px 18px;
+			border-radius: 14px;
+			background: rgba(255,255,255,0.92);
+			border: 1px solid rgba(0,76,147,0.18);
+			box-shadow: 0 6px 16px rgba(0,0,0,0.05);
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			gap: 20px;
+			font-family: "Montserrat", Arial, sans-serif;
+			font-size: 0.48em;
+			color: #32475b;
+		}
+
+		#qpeaks-microplastics-summary .qpeaks-summary-footer strong {
+			color: var(--ude-blue);
+			margin-right: 6px;
+		}
+
+		#qpeaks-microplastics-summary .qpeaks-summary-footer a {
+			color: var(--ude-blue);
+			font-weight: 700;
+			text-decoration: none;
+		}
+
+		#qpeaks-microplastics-summary .qpeaks-summary-footer a:hover {
+			text-decoration: underline;
+		}
+
+		/* ===== qAlgorithms TED-GC-MS outlook ===== */
+
+		#qalgorithms-ted-gcms-outlook {
+			color: var(--ude-black);
+		}
+
+		#qalgorithms-ted-gcms-outlook h4 {
+			margin-bottom: 6px;
+		}
+
+		#qalgorithms-ted-gcms-outlook .qalgorithms-outlook-lead {
+			font-family: "Montserrat", Arial, sans-serif;
+			font-size: 0.58em;
+			line-height: 1.35;
+			color: #4b5d73;
+			text-align: center;
+			max-width: 1040px;
+			margin: 0 auto 14px auto;
+		}
+
+		#qalgorithms-ted-gcms-outlook .qalgorithms-outlook-flow {
+			width: min(1120px, 100%);
+			margin: 0 auto;
+		}
+
+		#qalgorithms-ted-gcms-outlook .qalgorithms-outlook-source {
+			width: 520px;
+			margin: 0 auto;
+			padding: 18px 22px;
+			border-radius: 18px;
+			background: linear-gradient(180deg, rgba(0,76,147,0.96), rgba(0,58,114,0.92));
+			color: #ffffff;
+			border: 2px solid rgba(0,76,147,0.42);
+			box-shadow: 0 10px 24px rgba(0,0,0,0.12);
+			text-align: center;
+			font-family: "Montserrat", Arial, sans-serif;
+		}
+
+		#qalgorithms-ted-gcms-outlook .qalgorithms-outlook-source h5,
+		#qalgorithms-ted-gcms-outlook .qalgorithms-outlook-card h5 {
+			margin: 0 0 6px 0;
+			font-size: 0.74em;
+			line-height: 1.12;
+		}
+
+		#qalgorithms-ted-gcms-outlook .qalgorithms-outlook-source p {
+			margin: 0;
+			font-size: 0.50em;
+			line-height: 1.38;
+			color: rgba(255,255,255,0.88);
+		}
+
+		#qalgorithms-ted-gcms-outlook .qalgorithms-outlook-icon {
+			width: 44px;
+			height: 44px;
+			border-radius: 14px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			margin: 0 auto 4px auto;
+			background: rgba(255,255,255,0.16);
+			color: inherit;
+			font-size: 0.70em;
+		}
+
+		#qalgorithms-ted-gcms-outlook .qalgorithms-outlook-arrow-row {
+			width: 760px;
+			margin: 14px auto 8px auto;
+			display: grid;
+			grid-template-columns: 1fr 1fr;
+			gap: 120px;
+			justify-items: center;
+		}
+
+		#qalgorithms-ted-gcms-outlook .qalgorithms-outlook-arrow {
+			width: 70px;
+			height: 34px;
+			background: var(--ude-blue);
+			opacity: 0.85;
+			clip-path: polygon(42% 0, 58% 0, 58% 55%, 78% 55%, 50% 100%, 22% 55%, 42% 55%);
+		}
+
+		#qalgorithms-ted-gcms-outlook .qalgorithms-outlook-branches {
+			display: grid;
+			grid-template-columns: 1fr 1fr;
+			gap: 18px;
+		}
+
+		#qalgorithms-ted-gcms-outlook .qalgorithms-outlook-card {
+			min-height: 250px;
+			padding: 20px 24px 18px 24px;
+			border-radius: 18px;
+			background: linear-gradient(180deg, rgba(255,255,255,0.98), rgba(223,228,242,0.42));
+			border: 2px solid rgba(0,76,147,0.16);
+			box-shadow: 0 8px 20px rgba(0,0,0,0.07);
+			font-family: "Montserrat", Arial, sans-serif;
+			text-align: left;
+		}
+
+		#qalgorithms-ted-gcms-outlook .qalgorithms-outlook-card .qalgorithms-outlook-icon {
+			margin: 0 0 4px 0;
+			background: rgba(0,76,147,0.10);
+			color: var(--ude-blue);
+		}
+
+		#qalgorithms-ted-gcms-outlook .qalgorithms-outlook-card h5 {
+			color: var(--ude-blue);
+		}
+
+		#qalgorithms-ted-gcms-outlook .qalgorithms-outlook-card ul {
+			margin: 6px 0 0 0;
+			padding-left: 22px;
+			color: #32475b;
+			font-size: 0.48em;
+			line-height: 1.42;
+		}
+
+		#qalgorithms-ted-gcms-outlook .qalgorithms-outlook-card li {
+			margin-bottom: 6px;
+		}
+
+		#qalgorithms-ted-gcms-outlook .qalgorithms-outlook-card li::marker {
+			color: var(--ude-accent-1);
+		}
+
 </style>
 </head>
 
@@ -3110,6 +3570,16 @@
 
 			<section id="piecewise-parabola">
 				<h4>Piecewise parabola peak model</h4>
+				<div class="piecewise-formula-card">
+					\(
+					\log I(x)=
+					\begin{cases}
+					\beta_0+\beta_1x+\beta_2x^2, &amp; x \lt 0\\
+					\beta_0+\beta_1x+\beta_3x^2, &amp; x \ge 0
+					\end{cases}
+					\qquad I(x)=\exp(\log I(x))
+					\)
+				</div>
 				<div class="piecewise-parabola-wrap">
 					<div id="piecewise-parabola-plot"></div>
 					<div class="piecewise-toggle-row">
@@ -3120,8 +3590,7 @@
 							<span id="piecewise-parabola-scale-toggle-knob" class="piecewise-toggle-knob"></span>
 						</label>
 						<span id="piecewise-parabola-label-log" class="piecewise-toggle-label inactive">Log y-axis</span>
-					</div>
-					<div class="piecewise-toggle-row">
+						<span class="piecewise-toggle-spacer"></span>
 						<span id="piecewise-parabola-label-merged" class="piecewise-toggle-label active">Merged peak</span>
 						<label for="piecewise-parabola-mode-toggle" class="piecewise-toggle">
 							<input id="piecewise-parabola-mode-toggle" type="checkbox">
@@ -3129,6 +3598,189 @@
 							<span id="piecewise-parabola-mode-toggle-knob" class="piecewise-toggle-knob"></span>
 						</label>
 						<span id="piecewise-parabola-label-separate" class="piecewise-toggle-label inactive">Separate parabolas</span>
+					</div>
+				</div>
+			</section>
+
+			<section id="running-window-regression">
+				<h4>Running-window regression</h4>
+				<div class="running-window-lead">
+					A local piecewise log-parabola fit scans across the chromatographic signal.
+				</div>
+				<div class="running-window-wrap">
+					<div id="running-window-regression-plot"></div>
+					<div class="running-window-info-row">
+						<div class="running-window-info-card">
+							<span class="running-window-info-label">Current window</span>
+							<span id="running-window-current-a" class="running-window-info-value">a = &mdash;</span>
+						</div>
+						<div class="running-window-info-card">
+							<span class="running-window-info-label">Model</span>
+							<span class="running-window-info-value">log-space piecewise parabola</span>
+						</div>
+						<div class="running-window-info-card">
+							<span class="running-window-info-label">Output</span>
+							<span class="running-window-info-value">local peak candidates</span>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<section id="running-window-fit-cascade">
+				<h4>Validating peak fits using a filter cascade</h4>
+				<div class="fit-cascade-lead">
+					Running-window regression creates many local candidate fits. Filters progressively remove candidates that are unlikely to represent valid peaks.
+				</div>
+
+				<div class="fit-cascade-wrap">
+					<div class="fit-cascade-filter-row">
+						<div class="fit-cascade-filter-pill" data-filter="nonPeak">
+							<span class="fit-cascade-step">1</span>
+							<span>Invalid peak form</span>
+						</div>
+						<div class="fit-cascade-filter-pill" data-filter="edgeApex">
+							<span class="fit-cascade-step">2</span>
+							<span>Invalid apex position</span>
+						</div>
+						<div class="fit-cascade-filter-pill" data-filter="area">
+							<span class="fit-cascade-step">3</span>
+							<span>Insignificant peak area</span>
+						</div>
+						<div class="fit-cascade-filter-pill" data-filter="nestedF">
+							<span class="fit-cascade-step">4</span>
+							<span>Nested F-test vs linear</span>
+						</div>
+						<div class="fit-cascade-filter-pill" data-filter="apexHighest">
+							<span class="fit-cascade-step">5</span>
+							<span>Apex is highest point</span>
+						</div>
+						<div class="fit-cascade-filter-pill" data-filter="mseHeatmap">
+							<span class="fit-cascade-step">6</span>
+							<span>Local log-MSE heatmap</span>
+						</div>
+					</div>
+
+					<div id="running-window-fit-cascade-plot"></div>
+
+					<div class="fit-cascade-status-row">
+						<div class="fit-cascade-status-card">
+							<span class="fit-cascade-status-label">Active filters</span>
+							<span id="fit-cascade-active-count" class="fit-cascade-status-value">0 / 5</span>
+						</div>
+						<div class="fit-cascade-status-card">
+							<span class="fit-cascade-status-label">Remaining candidates</span>
+							<span id="fit-cascade-remaining-count" class="fit-cascade-status-value">—</span>
+						</div>
+						<div class="fit-cascade-status-card">
+							<span class="fit-cascade-status-label">Current view</span>
+							<span id="fit-cascade-current-view" class="fit-cascade-status-value">all candidate fits</span>
+						</div>
+					</div>
+				</div>
+
+				<span class="fragment fit-cascade-fragment" data-filter-step="1"></span>
+				<span class="fragment fit-cascade-fragment" data-filter-step="2"></span>
+				<span class="fragment fit-cascade-fragment" data-filter-step="3"></span>
+				<span class="fragment fit-cascade-fragment" data-filter-step="4"></span>
+				<span class="fragment fit-cascade-fragment" data-filter-step="5"></span>
+				<span class="fragment fit-cascade-fragment" data-filter-step="6"></span>
+			</section>
+
+			<section id="qpeaks-microplastics-summary">
+				<h4>qPeaks for microplastics via TED-GC-MS</h4>
+				<div class="qpeaks-summary-lead">
+					Automated, parameter-free peak detection and peak fitting for fast and traceable TED-GC-MS data evaluation.
+				</div>
+
+				<div class="qpeaks-summary-grid">
+					<div class="qpeaks-summary-card highlight">
+						<div class="qpeaks-summary-icon"><i class="fa-solid fa-bolt"></i></div>
+						<h5>Extremely fast</h5>
+						<p><strong>&gt; 90 million regressions s<sup>&minus;1</sup></strong><br>one measurement evaluated in less than one second</p>
+					</div>
+
+					<div class="qpeaks-summary-card">
+						<div class="qpeaks-summary-icon"><i class="fa-solid fa-wave-square"></i></div>
+						<h5>Detection + fitting</h5>
+						<p>Automatic peak detection and asymmetric peak fitting in a single workflow.</p>
+					</div>
+
+					<div class="qpeaks-summary-card">
+						<div class="qpeaks-summary-icon"><i class="fa-solid fa-sliders"></i></div>
+						<h5>Parameter-free</h5>
+						<p>No manual input parameters are required for routine data evaluation.</p>
+					</div>
+
+					<div class="qpeaks-summary-card">
+						<div class="qpeaks-summary-icon"><i class="fa-solid fa-chart-line"></i></div>
+						<h5>Peak properties</h5>
+						<p>Peak area, peak position, retention time and peak height are extracted automatically.</p>
+					</div>
+
+					<div class="qpeaks-summary-card">
+						<div class="qpeaks-summary-icon"><i class="fa-solid fa-circle-nodes"></i></div>
+						<h5>Uncertainty-aware</h5>
+						<p>Uncertainties of computed quantities are estimated together with the peak descriptors.</p>
+					</div>
+
+					<div class="qpeaks-summary-card">
+						<div class="qpeaks-summary-icon"><i class="fa-solid fa-code-branch"></i></div>
+						<h5>qAlgorithms</h5>
+						<p>Part of the open qAlgorithms ecosystem for analytical data processing.</p>
+					</div>
+				</div>
+
+				<div class="qpeaks-summary-footer">
+					<div>
+						<b>Freely available:</b>
+						<a href="https://qalgorithms.odea-project.org" target="_blank" rel="noopener">qalgorithms.odea-project.org</a>
+					</div>
+					<div>
+						<b>Contact:</b>
+						<a href="mailto:daniel.hoehn@uni-due.de">Daniel Höhn &middot; daniel.hoehn@uni-due.de</a>
+					</div>
+				</div>
+			</section>
+
+			<section id="qalgorithms-ted-gcms-outlook">
+				<h4>Outlook: qAlgorithms for TED-GC-MS</h4>
+				<div class="qalgorithms-outlook-lead">
+					qPeaks first generates a quantitative feature list. The next step is to turn this list into chemical and statistical information.
+				</div>
+
+				<div class="qalgorithms-outlook-flow">
+					<div class="qalgorithms-outlook-source">
+						<div class="qalgorithms-outlook-icon"><i class="fa-solid fa-table-list"></i></div>
+						<h5 style="color: white;">qPeaks output</h5>
+						<p>Peak / feature list with peak area, position, height and uncertainty estimates.</p>
+					</div>
+
+					<div class="qalgorithms-outlook-arrow-row">
+						<div class="qalgorithms-outlook-arrow"></div>
+						<div class="qalgorithms-outlook-arrow"></div>
+					</div>
+
+					<div class="qalgorithms-outlook-branches">
+						<div class="qalgorithms-outlook-card">
+							<div class="qalgorithms-outlook-icon"><i class="fa-solid fa-magnifying-glass-chart"></i></div>
+							<h5>Brute-force marker discovery</h5>
+							<ul>
+								<li>Scan all detected features instead of only predefined target ions</li>
+								<li>Compare feature patterns across polymers, matrices and mixtures</li>
+								<li>Prioritize candidates by selectivity and replicate stability</li>
+							</ul>
+						</div>
+
+						<div class="qalgorithms-outlook-card">
+							<div class="qalgorithms-outlook-icon"><i class="fa-solid fa-chart-network"></i></div>
+							<h5>Multivariate sample comparison</h5>
+							<ul>
+								<li>Feature matrix for PCA, clustering or classification</li>
+								<li>Qualitative comparison of TED-GC-MS samples</li>
+								<li>Homogeneity checks for replicates</li>
+								<li>Description of analytical workflow variability</li>
+							</ul>
+						</div>
 					</div>
 				</div>
 			</section>
@@ -6033,7 +6685,7 @@
 		/* ==== Piecewise parabola ==== */
 		const ppXMin = -7, ppXMax = 7, ppStep = 0.04;
 		const ppMargin = { top: 50, right: 40, bottom: 70, left: 85 };
-		const ppW = 900, ppH = 500;
+		const ppW = 900, ppH = 370;
 		const ppInnerW = ppW - ppMargin.left - ppMargin.right;
 		const ppInnerH = ppH - ppMargin.top - ppMargin.bottom;
 		const ppPointXs = [-5, -3, -1.5, 0, 1.5, 3, 5];
@@ -6046,13 +6698,18 @@
 			xScale: null, yScale: null,
 			yAxisGroup: null, mainPath: null,
 			comp2Path: null, comp3Path: null,
-			pointsGroup: null, title: null, yLabel: null
+			pointsGroup: null, title: null, yLabel: null,
+			animStart: null
 		};
 
 		function ppModel(x, p) {
 			return x < 0
 				? p.beta0 + p.beta1 * x + p.beta2 * x * x
 				: p.beta0 + p.beta1 * x + p.beta3 * x * x;
+		}
+
+		function currentY(d) {
+			return ppState.isLogView ? d.logValue : d.intensityNorm;
 		}
 
 		function ppUpdatePaths(t) {
@@ -6066,34 +6723,32 @@
 				const ly = ppModel(x, p);
 				const ly2 = p.beta0 + p.beta1 * x + p.beta2 * x * x;
 				const ly3 = p.beta0 + p.beta1 * x + p.beta3 * x * x;
-				merged.push({ x, logY: ly });
-				c2.push({ x, logY: ly2 });
-				c3.push({ x, logY: ly3 });
+				merged.push({ x, logValue: ly });
+				c2.push({ x, logValue: ly2 });
+				c3.push({ x, logValue: ly3 });
 			}
 
-			const expM = merged.map(d => Math.exp(d.logY));
+			const expM = merged.map(d => Math.exp(d.logValue));
 			const maxM = d3.max(expM) || 1;
-			const exp2 = c2.map(d => Math.exp(d.logY));
+			const exp2 = c2.map(d => Math.exp(d.logValue));
 			const max2 = d3.max(exp2) || 1;
-			const exp3 = c3.map(d => Math.exp(d.logY));
+			const exp3 = c3.map(d => Math.exp(d.logValue));
 			const max3 = d3.max(exp3) || 1;
 
-			const peakM = merged.map((d, i) => ({ x: d.x, y: expM[i] / maxM }));
-			const peak2 = c2.map((d, i) => ({ x: d.x, y: exp2[i] / max2 }));
-			const peak3 = c3.map((d, i) => ({ x: d.x, y: exp3[i] / max3 }));
+			merged.forEach((d, i) => { d.intensityNorm = expM[i] / maxM; });
+			c2.forEach((d, i) => { d.intensityNorm = exp2[i] / max2; });
+			c3.forEach((d, i) => { d.intensityNorm = exp3[i] / max3; });
 
 			const xs = ppState.xScale, ys = ppState.yScale;
-			const lineGen = d3.line().x(d => xs(d.x)).y(d => ys(d.y)).curve(d3.curveLinear);
+			const lineGen = d3.line()
+				.defined(d => Number.isFinite(currentY(d)))
+				.x(d => xs(d.x))
+				.y(d => ys(currentY(d)))
+				.curve(d3.curveMonotoneX);
 
-			if (ppState.isLogView) {
-				ppState.mainPath.attr('d', lineGen(merged));
-				ppState.comp2Path.attr('d', lineGen(c2));
-				ppState.comp3Path.attr('d', lineGen(c3));
-			} else {
-				ppState.mainPath.attr('d', lineGen(peakM));
-				ppState.comp2Path.attr('d', lineGen(peak2));
-				ppState.comp3Path.attr('d', lineGen(peak3));
-			}
+			ppState.mainPath.attr('d', lineGen(merged));
+			ppState.comp2Path.attr('d', lineGen(c2));
+			ppState.comp3Path.attr('d', lineGen(c3));
 
 			const mainVis = ppState.isSeparateMode ? 0 : 1;
 			const compVis = ppState.isSeparateMode ? 1 : 0;
@@ -6137,7 +6792,7 @@
 				.attr('transform', `translate(${ppMargin.left},${ppMargin.top})`);
 
 			ppState.xScale = d3.scaleLinear().domain([-7, 7]).range([0, ppInnerW]);
-			ppState.yScale = d3.scaleLinear().domain([0, 1.15]).range([ppInnerH, 0]);
+			ppState.yScale = d3.scaleLinear().domain([0, 1.2]).range([ppInnerH, 0]);
 
 			const xs = ppState.xScale, ys = ppState.yScale;
 
@@ -6193,16 +6848,16 @@
 
 			ppState.mainPath = chart.append('path')
 				.attr('fill', 'none').attr('stroke', 'var(--ude-blue)')
-				.attr('stroke-width', 3.5).attr('stroke-linejoin', 'round');
+				.attr('stroke-width', 4).attr('stroke-linejoin', 'round');
 
 			ppState.comp2Path = chart.append('path')
 				.attr('fill', 'none').attr('stroke', 'var(--ude-blue)')
-				.attr('stroke-width', 2.5).attr('stroke-dasharray', '6 4')
+				.attr('stroke-width', 3.5).attr('stroke-dasharray', '6 4')
 				.attr('opacity', 0);
 
 			ppState.comp3Path = chart.append('path')
 				.attr('fill', 'none').attr('stroke', 'var(--ude-accent-3)')
-				.attr('stroke-width', 2.5).attr('stroke-dasharray', '6 4')
+				.attr('stroke-width', 3.5).attr('stroke-dasharray', '6 4')
 				.attr('opacity', 0);
 
 			ppState.pointsGroup = chart.append('g');
@@ -6214,7 +6869,7 @@
 
 			document.getElementById('piecewise-parabola-scale-toggle').addEventListener('change', function () {
 				ppState.isLogView = this.checked;
-				const yDom = ppState.isLogView ? [-7, 0.5] : [0, 1.15];
+				const yDom = ppState.isLogView ? [-7.5, 0.8] : [0, 1.2];
 				ppState.yScale.domain(yDom);
 				ppState.yAxisGroup.call(d3.axisLeft(ppState.yScale).ticks(6));
 				ppState.yLabel.text(ppState.isLogView ? 'log intensity' : 'normalized intensity');
@@ -6224,6 +6879,11 @@
 					'piecewise-toggle-label' + (ppState.isLogView ? ' active' : ' inactive');
 				document.getElementById('piecewise-parabola-scale-toggle-knob').style.transform =
 					ppState.isLogView ? 'translateX(28px)' : 'translateX(0)';
+				if (ppState.animStart) {
+					ppUpdatePaths((performance.now() - ppState.animStart) / 1000);
+				} else {
+					ppUpdatePaths(0);
+				}
 			});
 
 			document.getElementById('piecewise-parabola-mode-toggle').addEventListener('change', function () {
@@ -6234,15 +6894,19 @@
 					'piecewise-toggle-label' + (ppState.isSeparateMode ? ' active' : ' inactive');
 				document.getElementById('piecewise-parabola-mode-toggle-knob').style.transform =
 					ppState.isSeparateMode ? 'translateX(28px)' : 'translateX(0)';
+				if (ppState.animStart) {
+					ppUpdatePaths((performance.now() - ppState.animStart) / 1000);
+				} else {
+					ppUpdatePaths(0);
+				}
 			});
 		}
 
 		function startPiecewiseParabolaAnimation() {
 			if (ppState.timer) return;
-			let start = null;
 			function frame(t) {
-				if (!start) start = t;
-				const elapsed = (t - start) / 1000;
+				if (!ppState.animStart) ppState.animStart = t;
+				const elapsed = (t - ppState.animStart) / 1000;
 				ppUpdatePaths(elapsed);
 				ppState.timer = requestAnimationFrame(frame);
 			}
@@ -6253,6 +6917,7 @@
 			if (ppState.timer) {
 				cancelAnimationFrame(ppState.timer);
 				ppState.timer = null;
+				ppState.animStart = null;
 			}
 		}
 
@@ -6271,6 +6936,883 @@
 			}
 		}
 
+		/* ==== Running-window regression ==== */
+
+		const rwAValues = [2, 3, 4, 5];
+		const rwStepMs = 60;
+
+		const rwState = {
+			drawn: false,
+			timer: null,
+			lastStepTime: 0,
+			centerIndex: 2,
+			aIndex: 0,
+			history: [],
+			data: null,
+			svg: null,
+			chart: null,
+			xScale: null,
+			yScale: null,
+			windowBand: null,
+			historyGroup: null,
+			currentFitGlow: null,
+			currentFitPath: null,
+			activePointLayer: null,
+			fullChromPath: null,
+			pointLayer: null,
+			yLabel: null,
+			infoLabel: null
+		};
+
+		function buildRunningWindowChromatogram() {
+			return d3.range(50).map(function (x) {
+				const baseline = 0.20 + 0.015 * Math.sin(x / 5.2) + 0.012 * Math.cos(x / 8.4);
+				const peak = 1.35 * Math.exp(-0.5 * Math.pow((x - 25) / 1.55, 2));
+				const shoulder = 0.08 * Math.exp(-0.5 * Math.pow((x - 30) / 3.8, 2));
+				const noise = 0.012 * Math.sin(x * 1.73) + 0.007 * Math.cos(x * 0.93 + 0.4);
+				return {
+					x: x,
+					y: Math.max(0.04, baseline + peak + shoulder + noise)
+				};
+			});
+		}
+
+		function solveRunningWindowLinearSystem(matrix, vector) {
+			var n = vector.length;
+			var augmented = matrix.map(function (row, index) {
+				return row.concat(vector[index]);
+			});
+			for (var pivot = 0; pivot < n; pivot += 1) {
+				var maxRow = pivot;
+				for (var row = pivot + 1; row < n; row += 1) {
+					if (Math.abs(augmented[row][pivot]) > Math.abs(augmented[maxRow][pivot])) {
+						maxRow = row;
+					}
+				}
+				if (Math.abs(augmented[maxRow][pivot]) < 1e-10) {
+					return new Array(n).fill(0);
+				}
+				if (maxRow !== pivot) {
+					var tmp = augmented[pivot];
+					augmented[pivot] = augmented[maxRow];
+					augmented[maxRow] = tmp;
+				}
+				var pivotValue = augmented[pivot][pivot];
+				for (var column = pivot; column <= n; column += 1) {
+					augmented[pivot][column] /= pivotValue;
+				}
+				for (var row = 0; row < n; row += 1) {
+					if (row === pivot) continue;
+					var factor = augmented[row][pivot];
+					for (var column = pivot; column <= n; column += 1) {
+						augmented[row][column] -= factor * augmented[pivot][column];
+					}
+				}
+			}
+			return augmented.map(function (row) { return row[n]; });
+		}
+
+		function runningWindowPiecewiseBasis(localX) {
+			var squared = localX * localX;
+			return [1, localX, localX < 0 ? squared : 0, localX >= 0 ? squared : 0];
+		}
+
+		function fitRunningWindowPiecewiseLogModel(points, centerIndex) {
+			var matrix = [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]];
+			var vector = [0, 0, 0, 0];
+			points.forEach(function (point) {
+				var localX = point.x - centerIndex;
+				var row = runningWindowPiecewiseBasis(localX);
+				var logY = Math.log(Math.max(point.y, 1e-8));
+				for (var i = 0; i < 4; i += 1) {
+					vector[i] += row[i] * logY;
+					for (var j = 0; j < 4; j += 1) {
+						matrix[i][j] += row[i] * row[j];
+					}
+				}
+			});
+			var betas = solveRunningWindowLinearSystem(matrix, vector);
+			return { beta0: betas[0], beta1: betas[1], beta2: betas[2], beta3: betas[3] };
+		}
+
+		function evaluateRunningWindowPiecewiseLogFit(localX, fit) {
+			var quadratic = localX < 0 ? fit.beta2 * localX * localX : fit.beta3 * localX * localX;
+			return fit.beta0 + fit.beta1 * localX + quadratic;
+		}
+
+		function buildRunningWindowFitSegment(start, end, centerIndex, fit) {
+			var seg = [];
+			for (var gx = start; gx <= end + 0.001; gx += 0.08) {
+				var localX = gx - centerIndex;
+				var logFit = evaluateRunningWindowPiecewiseLogFit(localX, fit);
+				seg.push({ x: gx, y: Math.exp(logFit) });
+			}
+			return seg;
+		}
+
+		function renderRunningWindowRegressionSlide() {
+			if (rwState.drawn) return;
+			rwState.drawn = true;
+
+			var container = document.getElementById('running-window-regression-plot');
+			if (!container || !window.d3) return;
+			container.innerHTML = '';
+
+			var width = 1040, height = 430;
+			var margin = { top: 35, right: 36, bottom: 58, left: 72 };
+			var innerW = width - margin.left - margin.right;
+			var innerH = height - margin.top - margin.bottom;
+
+			var data = buildRunningWindowChromatogram();
+			rwState.data = data;
+			var yMax = d3.max(data, function (d) { return d.y; }) * 1.18;
+
+			var svg = d3.select(container)
+				.append('svg')
+				.attr('viewBox', '0 0 ' + width + ' ' + height)
+				.attr('preserveAspectRatio', 'xMidYMid meet');
+
+			var chart = svg.append('g')
+				.attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
+
+			var xs = d3.scaleLinear().domain([0, 49]).range([0, innerW]);
+			var ys = d3.scaleLinear().domain([0, yMax]).range([innerH, 0]);
+			rwState.xScale = xs;
+			rwState.yScale = ys;
+
+			chart.append('g').attr('class', 'pp-grid')
+				.attr('transform', 'translate(0,' + innerH + ')')
+				.call(d3.axisBottom(xs).ticks(10).tickSize(-innerH).tickFormat(''));
+			chart.append('g').attr('class', 'pp-grid')
+				.call(d3.axisLeft(ys).ticks(7).tickSize(-innerW).tickFormat(''));
+
+			chart.append('g').attr('class', 'pp-axis')
+				.attr('transform', 'translate(0,' + innerH + ')')
+				.call(d3.axisBottom(xs).ticks(10));
+
+			chart.append('g').attr('class', 'pp-axis')
+				.call(d3.axisLeft(ys).ticks(7));
+
+			svg.append('text').attr('class', 'pp-axis-label')
+				.attr('x', margin.left + innerW / 2)
+				.attr('y', margin.top + innerH + 46)
+				.attr('text-anchor', 'middle')
+				.text('scan index');
+
+			rwState.yLabel = svg.append('text').attr('class', 'pp-axis-label')
+				.attr('transform', 'rotate(-90)')
+				.attr('x', -(margin.top + innerH / 2))
+				.attr('y', 20)
+				.attr('text-anchor', 'middle')
+				.text('signal intensity');
+
+			var lineGen = d3.line()
+				.x(function (d) { return xs(d.x); })
+				.y(function (d) { return ys(d.y); })
+				.curve(d3.curveMonotoneX);
+
+			rwState.fullChromPath = chart.append('path')
+				.attr('fill', 'none')
+				.attr('stroke', 'var(--ude-blue)')
+				.attr('stroke-width', 2.5)
+				.attr('stroke-linejoin', 'round')
+				.attr('d', lineGen(data));
+
+			rwState.pointLayer = chart.append('g');
+			rwState.pointLayer.selectAll('circle').data(data).enter()
+				.append('circle')
+				.attr('cx', function (d) { return xs(d.x); })
+				.attr('cy', function (d) { return ys(d.y); })
+				.attr('r', 3.2)
+				.attr('fill', 'var(--ude-blue)')
+				.attr('stroke', '#ffffff')
+				.attr('stroke-width', 1.2);
+
+			rwState.windowBand = chart.append('rect')
+				.attr('y', 0)
+				.attr('height', innerH)
+				.attr('fill', 'rgba(236,114,6,0.08)')
+				.attr('stroke', 'var(--ude-accent-1)')
+				.attr('stroke-width', 2)
+				.attr('rx', 8);
+
+			rwState.historyGroup = chart.append('g');
+
+			rwState.currentFitGlow = chart.append('path')
+				.attr('fill', 'none')
+				.attr('stroke', 'rgba(184,16,59,0.15)')
+				.attr('stroke-width', 12)
+				.attr('stroke-linecap', 'round');
+
+			rwState.currentFitPath = chart.append('path')
+				.attr('fill', 'none')
+				.attr('stroke', 'var(--ude-accent-3)')
+				.attr('stroke-width', 4.5)
+				.attr('stroke-linecap', 'round');
+
+			rwState.activePointLayer = chart.append('g');
+
+			rwState.infoLabel = chart.append('text')
+				.attr('class', 'rw-annotation')
+				.attr('x', xs(35))
+				.attr('y', 20)
+				.attr('text-anchor', 'middle')
+				.text('');
+
+			chart.append('text').attr('class', 'rw-annotation')
+				.attr('x', xs(1.5))
+				.attr('y', 20)
+				.text('running window');
+
+			chart.append('text').attr('class', 'rw-annotation')
+				.attr('x', xs(40))
+				.attr('y', innerH - 10)
+				.text('current local fit');
+
+			rwState.svg = svg;
+			rwState.chart = chart;
+
+			rwState.centerIndex = rwAValues[0];
+			rwState.aIndex = 0;
+			rwState.history = [];
+			rwState.lastStepTime = 0;
+		}
+
+		function advanceRunningWindowRegression() {
+			var a = rwAValues[rwState.aIndex];
+			var start = rwState.centerIndex - a;
+			var end = rwState.centerIndex + a;
+			var windowPoints = rwState.data.slice(start, end + 1);
+			var fit = fitRunningWindowPiecewiseLogModel(windowPoints, rwState.centerIndex);
+			var segment = buildRunningWindowFitSegment(start, end, rwState.centerIndex, fit);
+
+			rwState.history.push({
+				id: 'fit-' + Date.now() + '-' + rwState.centerIndex + '-' + a,
+				segment: segment
+			});
+			if (rwState.history.length > 20) rwState.history.shift();
+
+			var xs = rwState.xScale, ys = rwState.yScale;
+			var lineGen = d3.line()
+				.x(function (d) { return xs(d.x); })
+				.y(function (d) { return ys(d.y); })
+				.curve(d3.curveMonotoneX);
+
+			var leftEdge = xs(start - 0.5);
+			var rightEdge = xs(end + 0.5);
+			rwState.windowBand
+				.attr('x', leftEdge)
+				.attr('width', rightEdge - leftEdge);
+
+			rwState.currentFitGlow.attr('d', lineGen(segment));
+			rwState.currentFitPath.attr('d', lineGen(segment));
+
+			var activeSelection = rwState.activePointLayer.selectAll('circle').data(windowPoints, function (d) { return d.x; });
+			activeSelection.enter()
+				.append('circle')
+				.merge(activeSelection)
+				.attr('cx', function (d) { return xs(d.x); })
+				.attr('cy', function (d) { return ys(d.y); })
+				.attr('r', 6)
+				.attr('fill', 'var(--ude-accent-1)')
+				.attr('stroke', '#ffffff')
+				.attr('stroke-width', 1.6);
+			activeSelection.exit().remove();
+
+			/* render fading history */
+			var histSel = rwState.historyGroup.selectAll('path').data(rwState.history, function (d) { return d.id; });
+			histSel.enter()
+				.append('path')
+				.merge(histSel)
+				.attr('fill', 'none')
+				.attr('stroke-linecap', 'round')
+				.attr('stroke', 'var(--ude-blue)')
+				.attr('stroke-width', function (d, i) {
+					return 1.4 + (i / Math.max(1, rwState.history.length)) * 1.8;
+				})
+				.attr('opacity', function (d, i) {
+					return 0.10 + (i / Math.max(1, rwState.history.length)) * 0.35;
+				})
+				.attr('d', function (d) { return lineGen(d.segment); });
+			histSel.exit().remove();
+
+			document.getElementById('running-window-current-a').textContent =
+				'a = ' + a + ' | center = ' + rwState.centerIndex;
+
+			rwState.centerIndex += 1;
+			if (rwState.centerIndex > rwState.data.length - a - 1) {
+				rwState.aIndex = (rwState.aIndex + 1) % rwAValues.length;
+				rwState.centerIndex = rwAValues[rwState.aIndex];
+				rwState.history = [];
+			}
+		}
+
+		function startRunningWindowRegressionAnimation() {
+			if (rwState.timer) return;
+			rwState.lastStepTime = 0;
+			function frame(t) {
+				if (!rwState.lastStepTime) rwState.lastStepTime = t;
+				var elapsed = t - rwState.lastStepTime;
+				if (elapsed >= rwStepMs) {
+					rwState.lastStepTime = t;
+					advanceRunningWindowRegression();
+				}
+				rwState.timer = requestAnimationFrame(frame);
+			}
+			rwState.timer = requestAnimationFrame(frame);
+		}
+
+		function stopRunningWindowRegressionAnimation() {
+			if (rwState.timer) {
+				cancelAnimationFrame(rwState.timer);
+				rwState.timer = null;
+				rwState.lastStepTime = 0;
+			}
+		}
+
+		function refreshRunningWindowRegression(event) {
+			if (!window.Reveal) return;
+			var cur = event && event.currentSlide ? event.currentSlide : Reveal.getCurrentSlide();
+			if (cur && cur.id === 'running-window-regression') {
+				renderRunningWindowRegressionSlide();
+				startRunningWindowRegressionAnimation();
+			}
+		}
+
+		function stopRunningWindowRegressionOnLeave(event) {
+			if (event.previousSlide && event.previousSlide.id === 'running-window-regression') {
+				stopRunningWindowRegressionAnimation();
+			}
+		}
+
+		/* ==== Running-window fit cascade ==== */
+
+		var fcCols = 20;
+		var fcRows = 8;
+		var fcTileCount = fcCols * fcRows;
+		var fcOuterPad = 10;
+		var fcGap = 5;
+		var fcTileW = (1040 - fcOuterPad * 2 - fcGap * (fcCols - 1)) / fcCols;
+		var fcTileH = (420 - fcOuterPad * 2 - fcGap * (fcRows - 1)) / fcRows;
+		var fcInnerPadX = fcTileW * 0.08;
+		var fcInnerPadY = fcTileH * 0.1;
+
+		var fcState = {
+			drawn: false,
+			data: null,
+			fits: null,
+			svg: null,
+			tileSelection: null,
+			globalYMax: null
+		};
+
+		function fcBuildChromatogram() {
+			return d3.range(50).map(function (x) {
+				var baseline = 0.20 + 0.015 * Math.sin(x / 5.2) + 0.012 * Math.cos(x / 8.4);
+				var peak = 1.35 * Math.exp(-0.5 * Math.pow((x - 25) / 1.55, 2));
+				var shoulder = 0.08 * Math.exp(-0.5 * Math.pow((x - 30) / 3.8, 2));
+				var noise = 0.012 * Math.sin(x * 1.73) + 0.007 * Math.cos(x * 0.93 + 0.4);
+				return { x: x, y: Math.max(0.04, baseline + peak + shoulder + noise) };
+			});
+		}
+
+		function fcSolveLinearSystem(matrix, vector) {
+			var n = vector.length;
+			var augmented = matrix.map(function (row, index) { return row.concat(vector[index]); });
+			for (var pivot = 0; pivot < n; pivot += 1) {
+				var maxRow = pivot;
+				for (var row = pivot + 1; row < n; row += 1) {
+					if (Math.abs(augmented[row][pivot]) > Math.abs(augmented[maxRow][pivot])) maxRow = row;
+				}
+				if (Math.abs(augmented[maxRow][pivot]) < 1e-10) return new Array(n).fill(0);
+				if (maxRow !== pivot) { var tmp = augmented[pivot]; augmented[pivot] = augmented[maxRow]; augmented[maxRow] = tmp; }
+				var pivotValue = augmented[pivot][pivot];
+				for (var column = pivot; column <= n; column += 1) augmented[pivot][column] /= pivotValue;
+				for (var row = 0; row < n; row += 1) {
+					if (row === pivot) continue;
+					var factor = augmented[row][pivot];
+					for (var column = pivot; column <= n; column += 1) augmented[row][column] -= factor * augmented[pivot][column];
+				}
+			}
+			return augmented.map(function (row) { return row[n]; });
+		}
+
+		function fcInvertMatrix(matrix) {
+			var size = matrix.length;
+			return matrix.map(function (_, colIdx) {
+				var unit = new Array(size).fill(0);
+				unit[colIdx] = 1;
+				return fcSolveLinearSystem(matrix, unit);
+			}).reduce(function (inv, col, colIdx) {
+				col.forEach(function (v, rowIdx) { inv[rowIdx][colIdx] = v; });
+				return inv;
+			}, Array.from({ length: size }, function () { return new Array(size).fill(0); }));
+		}
+
+		function fcMultiplyMatrixVector(matrix, vector) {
+			return matrix.map(function (row) { return row.reduce(function (s, v, i) { return s + v * vector[i]; }, 0); });
+		}
+
+		function fcDotProduct(left, right) {
+			return left.reduce(function (s, v, i) { return s + v * right[i]; }, 0);
+		}
+
+		function fcPiecewiseBasis(localX) {
+			var sq = localX * localX;
+			return [1, localX, localX < 0 ? sq : 0, localX >= 0 ? sq : 0];
+		}
+
+		function fcTrapezoidArea(segment) {
+			var area = 0;
+			for (var i = 1; i < segment.length; i += 1) {
+				var dx = segment[i].x - segment[i - 1].x;
+				area += dx * (segment[i].y + segment[i - 1].y) / 2;
+			}
+			return area;
+		}
+
+		function fcPeakAreaUncertainty(entry) {
+			var fit = entry.fit, cov = entry.covariance, area = entry.area;
+			var dx = 1, eps = 1e-10;
+			if (!cov || Math.abs(fit.beta2) < eps || Math.abs(fit.beta3) < eps) return Number.POSITIVE_INFINITY;
+			var jacobi = [area / dx, 0, 0, 0];
+			jacobi[1] = (Math.exp(fit.beta0) / 2 - jacobi[0] * fit.beta1 / 2) * (1 / fit.beta2 + 1 / fit.beta3);
+			jacobi[2] = -(jacobi[0] + jacobi[1] * fit.beta1) / (2 * fit.beta2);
+			jacobi[3] = -(jacobi[0] + jacobi[1] * fit.beta1) / (2 * fit.beta3);
+			var covJ = fcMultiplyMatrixVector(cov, jacobi);
+			var varArea = fcDotProduct(jacobi, covJ);
+			if (!Number.isFinite(varArea) || varArea <= 0) return Number.POSITIVE_INFINITY;
+			return Math.sqrt(varArea);
+		}
+
+		function fcFitPiecewiseLogModel(points, centerIndex) {
+			var matrix = [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]];
+			var vector = [0, 0, 0, 0];
+			points.forEach(function (point) {
+				var localX = point.x - centerIndex;
+				var basis = fcPiecewiseBasis(localX);
+				var logY = Math.log(Math.max(point.y, 1e-8));
+				for (var i = 0; i < 4; i += 1) {
+					vector[i] += basis[i] * logY;
+					for (var j = 0; j < 4; j += 1) matrix[i][j] += basis[i] * basis[j];
+				}
+			});
+			var betas = fcSolveLinearSystem(matrix, vector);
+			var residuals = points.map(function (point) {
+				var localX = point.x - centerIndex;
+				var fitted = betas[0] + betas[1] * localX + (localX < 0 ? betas[2] * localX * localX : betas[3] * localX * localX);
+				return Math.log(Math.max(point.y, 1e-8)) - fitted;
+			});
+			var rss = d3.sum(residuals, function (v) { return v * v; });
+			var dof = Math.max(1, points.length - 4);
+			var sigmaSq = rss / dof;
+			var xtxInv = fcInvertMatrix(matrix);
+			var covariance = xtxInv.map(function (row) { return row.map(function (v) { return v * sigmaSq; }); });
+			return { beta0: betas[0], beta1: betas[1], beta2: betas[2], beta3: betas[3], covariance: covariance };
+		}
+
+		function fcFitLinearLogModel(points, centerIndex) {
+			var s1 = 0, sx = 0, sxx = 0, sy = 0, sxy = 0;
+			points.forEach(function (point) {
+				var localX = point.x - centerIndex;
+				var logY = Math.log(Math.max(point.y, 1e-8));
+				s1 += 1; sx += localX; sxx += localX * localX; sy += logY; sxy += localX * logY;
+			});
+			var denom = s1 * sxx - sx * sx;
+			var beta1 = Math.abs(denom) < 1e-10 ? 0 : (s1 * sxy - sx * sy) / denom;
+			var beta0 = (sy - beta1 * sx) / Math.max(1, s1);
+			return { beta0: beta0, beta1: beta1 };
+		}
+
+		function fcEvalPiecewiseLogFit(localX, fit) {
+			var quad = localX < 0 ? fit.beta2 * localX * localX : fit.beta3 * localX * localX;
+			return fit.beta0 + fit.beta1 * localX + quad;
+		}
+
+		function fcIsNonPeakFit(fit) {
+			if (fit.beta2 > 0 && fit.beta3 > 0) return true;
+			if (fit.beta1 < 0 && fit.beta2 > 0) return true;
+			if (fit.beta1 > 0 && fit.beta3 > 0) return true;
+			return false;
+		}
+
+		function fcIsEdgeApexFit(fit, a) {
+			var eps = 1e-10, apex = 0;
+			if (fit.beta1 < 0) {
+				if (Math.abs(fit.beta2) < eps) return true;
+				apex = -fit.beta1 / (2 * fit.beta2);
+			} else if (fit.beta1 > 0) {
+				if (Math.abs(fit.beta3) < eps) return true;
+				apex = -fit.beta1 / (2 * fit.beta3);
+			}
+			if (!Number.isFinite(apex)) return true;
+			return a - Math.abs(apex) < 1;
+		}
+
+		function fcIsApexHighestFit(entry) {
+			var fit = entry.fit, a = entry.a, segment = entry.segment;
+			var eps = 1e-10, apexLocalX = 0;
+			if (fit.beta1 < 0) {
+				if (Math.abs(fit.beta2) < eps) return false;
+				apexLocalX = -fit.beta1 / (2 * fit.beta2);
+			} else if (fit.beta1 > 0) {
+				if (Math.abs(fit.beta3) < eps) return false;
+				apexLocalX = -fit.beta1 / (2 * fit.beta3);
+			}
+			if (!Number.isFinite(apexLocalX) || Math.abs(apexLocalX) > a) return false;
+			var apexY = Math.exp(fcEvalPiecewiseLogFit(apexLocalX, fit));
+			var maxSegY = d3.max(segment, function (p) { return p.y; }) || 0;
+			var tol = Math.max(1e-8, maxSegY * 1e-4);
+			return apexY >= maxSegY - tol;
+		}
+
+		function fcIsApexNotHighestFit(entry) { return !fcIsApexHighestFit(entry); }
+
+		function fcIsInsignificantAreaFit(entry) {
+			var sigmaA = entry.areaUncertainty;
+			if (!Number.isFinite(sigmaA) || sigmaA <= 0) return true;
+			return entry.area / sigmaA < 3;
+		}
+
+		function fcNestedFCritical95(df2) {
+			var lookup = { 1: 199.5, 2: 19.0, 3: 9.55, 4: 6.94, 5: 5.79, 6: 5.14, 7: 4.74 };
+			return lookup[df2] || 4.46;
+		}
+
+		function fcNestedFStatistic(mseReduced, mseFull, df1, df2) {
+			var num = (mseReduced - mseFull) / df1;
+			var den = mseFull / df2;
+			if (!Number.isFinite(num) || !Number.isFinite(den) || den <= 0) return Number.POSITIVE_INFINITY;
+			return num / den;
+		}
+
+		function fcIsNestedFInsignificant(entry) {
+			var crit = fcNestedFCritical95(entry.nestedFdf2);
+			if (!Number.isFinite(entry.nestedFExp) || !Number.isFinite(entry.nestedFLog)) return true;
+			return entry.nestedFExp <= crit || entry.nestedFLog <= crit;
+		}
+
+		function fcLocalLogMSE(entry) {
+			var eps = 1e-8;
+			var errors = entry.windowPoints.map(function (point) {
+				var localX = point.x - entry.centerIndex;
+				var observedLog = Math.log(Math.max(point.y, eps));
+				var predictedLog = fcEvalPiecewiseLogFit(localX, entry.fit);
+				if (!Number.isFinite(predictedLog)) return null;
+				var residual = observedLog - predictedLog;
+				return residual * residual;
+			}).filter(function (value) {
+				return Number.isFinite(value);
+			});
+			return errors.length ? d3.mean(errors) : Number.POSITIVE_INFINITY;
+		}
+
+		function fcQuantileExtent(values, lo, hi) {
+			var clean = values.filter(Number.isFinite).sort(d3.ascending);
+			if (!clean.length) return [0, 1];
+			var minVal = d3.quantile(clean, lo);
+			var maxVal = d3.quantile(clean, hi);
+			if (!Number.isFinite(minVal)) minVal = clean[0];
+			if (!Number.isFinite(maxVal)) maxVal = clean[clean.length - 1];
+			if (minVal === maxVal) maxVal = minVal + 1e-8;
+			return [minVal, maxVal];
+		}
+
+		function fcCollectFits(data, tileCount) {
+			var aValues = [2, 3, 4, 5];
+			var fits = [];
+			while (fits.length < tileCount) {
+				for (var ai = 0; ai < aValues.length; ai += 1) {
+					var a = aValues[ai];
+					for (var ci = a; ci <= data.length - a - 1; ci += 1) {
+						var start = ci - a;
+						var end = ci + a;
+						var windowPoints = data.slice(start, end + 1);
+						var fit = fcFitPiecewiseLogModel(windowPoints, ci);
+						var linearFit = fcFitLinearLogModel(windowPoints, ci);
+						var segment = [];
+						for (var gx = start; gx <= end + 0.001; gx += 0.08) {
+							var ly = fcEvalPiecewiseLogFit(gx - ci, fit);
+							segment.push({ x: gx, y: Math.exp(ly) });
+						}
+
+						var n = windowPoints.length;
+						var pRed = 2, pFull = 4;
+						var df1 = pFull - pRed;
+						var df2 = Math.max(1, n - pFull);
+						var sumFullExp = 0, sumRedExp = 0, sumFullLog = 0, sumRedLog = 0;
+						windowPoints.forEach(function (point) {
+							var localX = point.x - ci;
+							var obsLog = Math.log(Math.max(point.y, 1e-8));
+							var fullLogPred = fcEvalPiecewiseLogFit(localX, fit);
+							var redLogPred = linearFit.beta0 + linearFit.beta1 * localX;
+							var fullPred = Math.exp(fullLogPred);
+							var redPred = Math.exp(redLogPred);
+							sumFullExp += (point.y - fullPred) * (point.y - fullPred);
+							sumRedExp += (point.y - redPred) * (point.y - redPred);
+							sumFullLog += (obsLog - fullLogPred) * (obsLog - fullLogPred);
+							sumRedLog += (obsLog - redLogPred) * (obsLog - redLogPred);
+						});
+						var mseFullExp = sumFullExp / n;
+						var mseRedExp = sumRedExp / n;
+						var mseFullLog = sumFullLog / n;
+						var mseRedLog = sumRedLog / n;
+						var nestedFExp = fcNestedFStatistic(mseRedExp, mseFullExp, df1, df2);
+						var nestedFLog = fcNestedFStatistic(mseRedLog, mseFullLog, df1, df2);
+
+						var area = fcTrapezoidArea(segment);
+						var entry = {
+							a: a, start: start, end: end, centerIndex: ci,
+							fit: fit, linearFit: linearFit,
+							windowPoints: windowPoints, segment: segment,
+							covariance: fit.covariance,
+							area: area, areaUncertainty: Number.POSITIVE_INFINITY,
+							nestedFExp: nestedFExp, nestedFLog: nestedFLog, nestedFdf2: df2
+						};
+						entry.areaUncertainty = fcPeakAreaUncertainty(entry);
+
+						fits.push(entry);
+						if (fits.length >= tileCount) return fits;
+					}
+				}
+			}
+			return fits;
+		}
+
+		function renderFitCascadeSlide() {
+			if (fcState.drawn) return;
+			fcState.drawn = true;
+
+			var container = document.getElementById('running-window-fit-cascade-plot');
+			if (!container || !window.d3) return;
+			container.innerHTML = '';
+
+			var data = fcBuildChromatogram();
+			fcState.data = data;
+			var fits = fcCollectFits(data, fcTileCount);
+			fcState.fits = fits;
+			var globalYMax = d3.max(fits, function (entry) { return d3.max(entry.segment, function (p) { return p.y; }); });
+			fcState.globalYMax = globalYMax;
+
+			var svg = d3.select(container)
+				.append('svg')
+				.attr('viewBox', '0 0 1040 420')
+				.attr('preserveAspectRatio', 'xMidYMid meet');
+
+			var tileSelection = svg.append('g').selectAll('g').data(fits).enter().append('g');
+
+			tileSelection.each(function (entry, i) {
+				var col = i % fcCols;
+				var row = Math.floor(i / fcCols);
+				var x = fcOuterPad + col * (fcTileW + fcGap);
+				var y = fcOuterPad + row * (fcTileH + fcGap);
+				var tile = d3.select(this).attr('transform', 'translate(' + x + ',' + y + ')');
+
+				var xMin = entry.segment[0].x;
+				var xMax = entry.segment[entry.segment.length - 1].x;
+				var xs = d3.scaleLinear().domain([xMin, xMax]).range([fcInnerPadX, fcTileW - fcInnerPadX]);
+				var ys = d3.scaleLinear().domain([0, globalYMax]).range([fcTileH - fcInnerPadY, fcInnerPadY]);
+				var line = d3.line()
+					.x(function (d) { return xs(d.x); })
+					.y(function (d) { return ys(d.y); })
+					.curve(d3.curveMonotoneX);
+
+				tile.append('rect').attr('class', 'fc-bg')
+					.attr('width', fcTileW).attr('height', fcTileH).attr('rx', 4)
+					.attr('fill', 'rgba(255,255,255,0.92)')
+					.attr('stroke', 'rgba(0,76,147,0.14)')
+					.attr('stroke-width', 1);
+
+				tile.append('path').attr('class', 'fc-fit')
+					.attr('fill', 'none').attr('stroke', 'var(--ude-blue)')
+					.attr('stroke-width', 1.5).attr('stroke-linecap', 'round')
+					.attr('d', line(entry.segment));
+
+				tile.append('g').attr('class', 'fc-points');
+				var pts = tile.select('.fc-points').selectAll('circle').data(entry.windowPoints, function (d) { return d.x; });
+				pts.enter().append('circle')
+					.attr('cx', function (d) { return xs(d.x); })
+					.attr('cy', function (d) { return ys(d.y); })
+					.attr('r', 1.6)
+					.attr('fill', '#4b5d73')
+					.attr('opacity', 0.7);
+
+				tile.append('rect').attr('class', 'fc-reject')
+					.attr('width', fcTileW).attr('height', fcTileH).attr('rx', 4)
+					.attr('fill', 'rgba(184,16,59,0.08)')
+					.attr('stroke', 'rgba(184,16,59,0.35)')
+					.attr('stroke-width', 1.5)
+					.style('opacity', 0)
+					.style('pointer-events', 'none');
+
+				tile.append('line').attr('class', 'fc-cross')
+					.attr('x1', fcTileW * 0.15).attr('y1', fcTileH * 0.15)
+					.attr('x2', fcTileW * 0.85).attr('y2', fcTileH * 0.85)
+					.attr('stroke', 'rgba(184,16,59,0.25)')
+					.attr('stroke-width', 2)
+					.style('opacity', 0)
+					.style('pointer-events', 'none');
+
+				tile.append('text').attr('class', 'fc-mse-label')
+					.attr('x', fcTileW / 2)
+					.attr('y', fcTileH / 2 + 3)
+					.attr('text-anchor', 'middle')
+					.attr('font-size', Math.max(7, Math.min(10, fcTileW * 0.18)) + 'px')
+					.attr('font-family', 'monospace')
+					.attr('fill', 'rgba(0,0,0,0.55)')
+					.style('opacity', 0)
+					.style('pointer-events', 'none');
+			});
+
+			fcState.svg = svg;
+			fcState.tileSelection = tileSelection;
+		}
+
+		function getFitCascadeStep(slide) {
+			var visible = slide.querySelectorAll('.fit-cascade-fragment.visible');
+			var step = 0;
+			visible.forEach(function (frag) {
+				var val = Number(frag.dataset.filterStep || 0);
+				if (Number.isFinite(val)) step = Math.max(step, val);
+			});
+			return step;
+		}
+
+		function updateFitCascadeState(step) {
+			var pills = document.querySelectorAll('#running-window-fit-cascade .fit-cascade-filter-pill');
+			pills.forEach(function (pill, idx) {
+				var pillStep = idx + 1;
+				if (step >= 6 && pill.dataset.filter === 'mseHeatmap') {
+					pill.classList.add('active', 'heatmap-active');
+				} else if (step >= pillStep) {
+					pill.classList.add('active');
+					pill.classList.remove('heatmap-active');
+				} else {
+					pill.classList.remove('active', 'heatmap-active');
+				}
+			});
+
+			var fits = fcState.fits;
+			if (!fits) return;
+
+			var rejected = new Array(fits.length).fill(false);
+
+			if (step >= 1) {
+				fits.forEach(function (entry, i) { if (fcIsNonPeakFit(entry.fit)) rejected[i] = true; });
+			}
+			if (step >= 2) {
+				fits.forEach(function (entry, i) { if (fcIsEdgeApexFit(entry.fit, entry.a)) rejected[i] = true; });
+			}
+			if (step >= 3) {
+				fits.forEach(function (entry, i) { if (fcIsInsignificantAreaFit(entry)) rejected[i] = true; });
+			}
+			if (step >= 4) {
+				fits.forEach(function (entry, i) { if (fcIsNestedFInsignificant(entry)) rejected[i] = true; });
+			}
+			if (step >= 5) {
+				fits.forEach(function (entry, i) { if (fcIsApexNotHighestFit(entry)) rejected[i] = true; });
+			}
+
+			var remainingCount = 0;
+			fits.forEach(function (entry, i) {
+				if (!rejected[i]) remainingCount += 1;
+			});
+
+			var heatmapMode = step >= 6;
+			var mseScale = null;
+			var bestIdx = -1;
+			if (heatmapMode) {
+				var mseVals = [];
+				fits.forEach(function (entry, i) {
+					if (!rejected[i]) {
+						entry._mse = fcLocalLogMSE(entry);
+						mseVals.push(entry._mse);
+					} else {
+						entry._mse = Number.POSITIVE_INFINITY;
+					}
+				});
+				if (mseVals.length) {
+					var mseExt = fcQuantileExtent(mseVals, 0.05, 0.95);
+					mseScale = d3.scaleSequential()
+						.domain(mseExt)
+						.clamp(true)
+						.interpolator(function (t) { return d3.interpolateRgb('rgba(0,76,147,0.50)', 'rgba(184,16,59,0.50)')(t); });
+					var minMSE = d3.min(mseVals);
+					fits.forEach(function (entry, i) {
+						if (!rejected[i] && entry._mse === minMSE) bestIdx = i;
+					});
+				}
+			}
+
+			fcState.tileSelection.each(function (entry, i) {
+				var tile = d3.select(this);
+				var isRejected = rejected[i];
+				var isBest = heatmapMode && i === bestIdx;
+
+				if (heatmapMode && mseScale && !isRejected) {
+					var mseColor = mseScale(entry._mse);
+					tile.select('.fc-bg')
+						.attr('fill', mseColor)
+						.attr('stroke', isBest ? 'var(--ude-accent-1)' : 'rgba(0,76,147,0.20)')
+						.attr('stroke-width', isBest ? 3 : 1);
+					tile.select('.fc-fit')
+						.attr('stroke', '#1f2d3d')
+						.style('opacity', 0.85);
+					tile.select('.fc-points').selectAll('circle').style('opacity', 0.5);
+					tile.select('.fc-reject').style('opacity', 0);
+					tile.select('.fc-cross').style('opacity', 0);
+					tile.select('.fc-mse-label')
+						.text(Number.isFinite(entry._mse) ? entry._mse.toFixed(3) : '\u2014')
+						.style('opacity', 0.7);
+				} else {
+					tile.select('.fc-bg')
+						.attr('fill', isRejected ? 'rgba(184,16,59,0.08)' : 'rgba(255,255,255,0.92)')
+						.attr('stroke', isRejected ? 'rgba(184,16,59,0.35)' : 'rgba(0,76,147,0.14)')
+						.attr('stroke-width', 1);
+					tile.select('.fc-fit')
+						.attr('stroke', isRejected ? 'rgba(75,93,115,0.35)' : 'var(--ude-blue)')
+						.style('opacity', isRejected ? 0.45 : 1);
+					tile.select('.fc-points').selectAll('circle').style('opacity', isRejected ? 0.15 : 0.7);
+					tile.select('.fc-reject').style('opacity', isRejected ? 1 : 0);
+					tile.select('.fc-cross').style('opacity', isRejected ? 1 : 0);
+					tile.select('.fc-mse-label').style('opacity', 0);
+				}
+			});
+
+			var activeCount = Math.min(step, 5);
+			document.getElementById('fit-cascade-active-count').textContent =
+				step >= 6 ? '5 / 5 + heatmap' : activeCount + ' / 5';
+			document.getElementById('fit-cascade-remaining-count').textContent = remainingCount + ' / ' + fits.length;
+
+			var viewLabels = [
+				'all candidate fits',
+				'invalid peak forms removed',
+				'edge-apex fits removed',
+				'low-area fits removed',
+				'linear alternatives removed',
+				'valid peak candidates',
+				'local log-MSE heatmap'
+			];
+			document.getElementById('fit-cascade-current-view').textContent =
+				viewLabels[Math.min(step, 6)] || 'all candidate fits';
+		}
+
+		function refreshFitCascadeSlide(event) {
+			if (!window.Reveal) return;
+			var cur = event && event.currentSlide ? event.currentSlide : Reveal.getCurrentSlide();
+			if (cur && cur.id === 'running-window-fit-cascade') {
+				renderFitCascadeSlide();
+				updateFitCascadeState(getFitCascadeStep(cur));
+			}
+		}
+
+		function onFitCascadeFragment(event) {
+			var slide = event.fragment.closest('section');
+			if (slide && slide.id === 'running-window-fit-cascade') {
+				updateFitCascadeState(getFitCascadeStep(slide));
+			}
+		}
+
 		window.addEventListener('load', () => {
 			window.setTimeout(refreshHeatingRateOptimumChart, 200);
 
@@ -6286,6 +7828,15 @@
 			Reveal.on('ready', refreshPiecewiseParabola);
 			Reveal.on('slidechanged', refreshPiecewiseParabola);
 			Reveal.on('slidechanged', stopPiecewiseParabolaOnLeave);
+
+			Reveal.on('ready', refreshRunningWindowRegression);
+			Reveal.on('slidechanged', refreshRunningWindowRegression);
+			Reveal.on('slidechanged', stopRunningWindowRegressionOnLeave);
+
+			Reveal.on('ready', refreshFitCascadeSlide);
+			Reveal.on('slidechanged', refreshFitCascadeSlide);
+			Reveal.on('fragmentshown', onFitCascadeFragment);
+			Reveal.on('fragmenthidden', onFitCascadeFragment);
 		});
 	})();
 	</script>
