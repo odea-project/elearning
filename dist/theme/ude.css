@@ -523,3 +523,16 @@
   height: auto;
   z-index: 1000;
 }
+
+/*---------------------------------------------------
+  MULTI-COLUMN LAYOUT (optional)
+---------------------------------------------------*/
+.multi-column {
+  display: flex;
+  gap: 2rem;
+  align-items: center;
+}
+
+.multi-column .column {
+  flex: 1;
+}
