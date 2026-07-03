@@ -222,6 +222,135 @@
 				</span>
 			</div>
 			</section>
+
+	
+			<section data-auto-animate>
+			<style>
+				.concept-orbit-dot {
+				position: absolute;
+				left: 50%;
+				top: 50%;
+				width: 34px;
+				height: 34px;
+				border-radius: 50%;
+				background-color: #004c93;
+				opacity: 0;
+				transform:
+					translate(-50%, -50%)
+					translate(var(--x), var(--y))
+					scale(0);
+				}
+
+				section.present .concept-orbit-dot {
+				animation:
+					conceptPop 0.28s cubic-bezier(0.2, 1.4, 0.4, 1) var(--delay) forwards,
+					conceptWiggle 2.8s ease-in-out calc(var(--delay) + 0.5s) infinite;
+				}
+
+				@keyframes conceptPop {
+				from {
+					opacity: 0;
+					transform:
+					translate(-50%, -50%)
+					translate(var(--x), var(--y))
+					scale(0);
+				}
+				to {
+					opacity: 1;
+					transform:
+					translate(-50%, -50%)
+					translate(var(--x), var(--y))
+					scale(1);
+				}
+				}
+
+				@keyframes conceptWiggle {
+				0%, 100% {
+					margin-left: 0;
+					margin-top: 0;
+				}
+				25% {
+					margin-left: 2px;
+					margin-top: -3px;
+				}
+				50% {
+					margin-left: -3px;
+					margin-top: 2px;
+				}
+				75% {
+					margin-left: 3px;
+					margin-top: 3px;
+				}
+				}
+			</style>
+
+			<div style="position: relative; width: 620px; height: 620px; margin: 0 auto;">
+
+				<div
+				style="
+					position: absolute;
+					inset: 0;
+					display: flex;
+					align-items: center;
+					justify-content: center;
+				"
+				>
+				<div
+					data-id="ontology-box"
+					style="
+					width: 260px;
+					height: 86px;
+					border-radius: 18px;
+					border: 4px solid #004c93;
+					background-color: #004c93;
+					"
+				></div>
+				</div>
+
+				<div
+				style="
+					position: absolute;
+					inset: 0;
+					display: flex;
+					align-items: center;
+					justify-content: center;
+					color: white;
+					font-size: 1.35em;
+					font-weight: 600;
+					pointer-events: none;
+				"
+				>
+				Ontology
+				</div>
+
+				<div
+				style="
+					position: absolute;
+					inset: 0;
+					display: flex;
+					align-items: center;
+					justify-content: center;
+					font-size: 0.75em;
+					pointer-events: none;
+					margin-top: -130px;
+				"
+				>
+				core
+				</div>
+
+				<div class="concept-orbit-dot" style="--x: 230px; --y: 0px; --delay: 0.35s; background-color: #9E0142;"></div>
+				<div class="concept-orbit-dot" style="--x: 186px; --y: 135px; --delay: 0.47s; background-color: #D53E4F;"></div>
+				<div class="concept-orbit-dot" style="--x: 71px; --y: 219px; --delay: 0.59s; background-color: #F46D43;"></div>
+				<div class="concept-orbit-dot" style="--x: -71px; --y: 219px; --delay: 0.71s; background-color: #FDAE61;"></div>
+				<div class="concept-orbit-dot" style="--x: -186px; --y: 135px; --delay: 0.83s; background-color: #FEE08B;"></div>
+				<div class="concept-orbit-dot" style="--x: -230px; --y: 0px; --delay: 0.95s; background-color: #E6F598;"></div>
+				<div class="concept-orbit-dot" style="--x: -186px; --y: -135px; --delay: 1.07s; background-color: #ABDDA4;"></div>
+				<div class="concept-orbit-dot" style="--x: -71px; --y: -219px; --delay: 1.19s; background-color: #66C2A5;"></div>
+				<div class="concept-orbit-dot" style="--x: 71px; --y: -219px; --delay: 1.31s; background-color: #3288BD;"></div>
+				<div class="concept-orbit-dot" style="--x: 186px; --y: -135px; --delay: 1.43s; background-color: #5E4FA2;"><div style="margin-left: 40px; margin-top: -20px; font-size: 0.75em; pointer-events: none;">concept layer</div></div>
+
+			</div>
+			</section>
 			
 		</div>
 	</div>
