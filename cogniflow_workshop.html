@@ -172,6 +172,7 @@
   <div class="fragment" style="display: none;"></div>
   <div class="fragment" style="display: none;"></div>
   <div class="fragment" style="display: none;"></div>
+  <div class="fragment" style="display: none;"></div>
 
   <script>
     window.initCfLayerDiagram = () => {
@@ -221,6 +222,16 @@
         .attr("stroke-dasharray", 1000)
         .attr("stroke-dashoffset", 1000);
 
+      const ontologyServiceLink = links.append("path")
+        .attr("opacity", 0)
+        .attr("stroke-dasharray", 1000)
+        .attr("stroke-dashoffset", 1000);
+
+      const serviceTemplateLink = links.append("path")
+        .attr("opacity", 0)
+        .attr("stroke-dasharray", 1000)
+        .attr("stroke-dashoffset", 1000);
+
       const ontology = root.append("g")
         .attr("class", "ontology-node");
 
@@ -246,13 +257,14 @@
       const ontologyBullets = root.append("g")
         .attr("class", "ontology-bullets");
 
-      function appendBulletText(group, x, y, text, fontSize) {
+      function appendBulletText(group, x, y, text, fontSize, className = "") {
         const lines = text.split(/\\n|\n/);
         const bullet = group.append("text")
           .attr("x", x)
           .attr("y", y)
           .attr("fill", "#222")
           .attr("font-size", fontSize)
+          .attr("class", className)
           .attr("opacity", 0);
 
         lines.forEach((line, lineIndex) => {
@@ -299,6 +311,8 @@
         const lineCount = appendBulletText(packageTemplateBullets, cx - 470, packageTemplateBulletY, txt, 17);
         packageTemplateBulletY += 28 + (lineCount - 1) * 20;
       });
+
+      appendBulletText(packageTemplateBullets, cx - 470, packageTemplateBulletY, "provides validation service", 17, "service-template-bullet");
 
       function circlePoint(index, total, radius, startAngleDeg = 0) {
         const a = (startAngleDeg + index * 360 / total) * Math.PI / 180;
@@ -359,7 +373,7 @@
             .attr("fill", "white")
             .attr("font-weight", 600)
             .attr("opacity", 0)
-            .text(d.index === 1 ? "Package" : "");
+            .text(d.index === 1 ? "Package" : d.index === 4 ? "Service" : "");
           if (d.index === 9) {
             g.append("text")
               .attr("class", "layer-label")
@@ -427,6 +441,7 @@
 
         const packageRadius = stage >= 3 ? 180 : 230;
         const packagePoint = circlePoint(1, 10, packageRadius, 0);
+        const servicePoint = circlePoint(4, 10, packageRadius, 0);
         const templatePoint = circlePoint(11, 32, 300, 0);
 
         ontologyPackageLink.transition()
@@ -444,6 +459,22 @@
           .attr("d", curvedPath(packagePoint, templatePoint, -70))
           .attr("opacity", stage >= 3 ? 0.78 : 0)
           .attr("stroke-dashoffset", stage >= 3 ? 0 : 1000);
+
+        ontologyServiceLink.transition()
+          .delay(stage >= 4 ? 1050 : 0)
+          .duration(stage >= 4 ? 750 : 200)
+          .ease(d3.easeCubicInOut)
+          .attr("d", curvedPath({ x: cx, y: cy }, servicePoint, -55))
+          .attr("opacity", stage >= 4 ? 0.78 : 0)
+          .attr("stroke-dashoffset", stage >= 4 ? 0 : 1000);
+
+        serviceTemplateLink.transition()
+          .delay(stage >= 4 ? 1250 : 0)
+          .duration(stage >= 4 ? 850 : 200)
+          .ease(d3.easeCubicInOut)
+          .attr("d", curvedPath(servicePoint, templatePoint, 80))
+          .attr("opacity", stage >= 4 ? 0.78 : 0)
+          .attr("stroke-dashoffset", stage >= 4 ? 0 : 1000);
 
         ontologyBox.transition(t)
           .attr("x", cx - ontologyState.w / 2)
@@ -474,21 +505,29 @@
           .duration(260)
           .attr("opacity", stage === 2 ? 1 : 0);
 
-        packageTemplateBullets.selectAll("text").transition()
+        packageTemplateBullets.selectAll("text:not(.service-template-bullet)").transition()
           .delay((d, i) => stage >= 3 ? 2200 + i * 180 : 0)
           .duration(260)
           .attr("opacity", stage >= 3 ? 1 : 0);
 
+        packageTemplateBullets.selectAll(".service-template-bullet").transition()
+          .delay(stage >= 4 ? 2200 : 0)
+          .duration(260)
+          .attr("opacity", stage >= 4 ? 1 : 0);
+
         conceptNodes.each(function(d) {
           const isPackage = d.index === 1;
+          const isService = d.index === 4;
           const radius = packageRadius;
           const p = circlePoint(d.index, 10, radius, 0);
 
           const visible = stage >= 2;
           const dotSize = stage >= 3 ? 24 : 34;
-          const w = isPackage && stage >= 2 ? (stage >= 3 ? 150 : 190) : dotSize;
-          const h = isPackage && stage >= 2 ? (stage >= 3 ? 50 : 64) : dotSize;
-          const rx = isPackage && stage >= 2 ? (stage >= 3 ? 14 : 16) : dotSize / 2;
+          const isExpandedPackage = isPackage && stage >= 2;
+          const isExpandedService = isService && stage >= 4;
+          const w = isExpandedPackage ? (stage >= 3 ? 150 : 190) : isExpandedService ? 150 : dotSize;
+          const h = isExpandedPackage ? (stage >= 3 ? 50 : 64) : isExpandedService ? 50 : dotSize;
+          const rx = isExpandedPackage ? (stage >= 3 ? 14 : 16) : isExpandedService ? 14 : dotSize / 2;
 
           const node = d3.select(this);
 
@@ -499,8 +538,8 @@
             .attr("transform", `translate(${p.x},${p.y}) scale(${visible ? 1 : 0})`);
 
           node.select(".node-bg").transition()
-            .delay(isPackage && stage === 2 ? 1800 : 0)
-            .duration(isPackage && stage === 2 ? 520 : 650)
+            .delay(isPackage && stage === 2 ? 1800 : isService && stage === 4 ? 500 : 0)
+            .duration((isPackage && stage === 2) || (isService && stage === 4) ? 520 : 650)
             .ease(d3.easeCubicInOut)
             .attr("x", -w / 2)
             .attr("y", -h / 2)
@@ -510,10 +549,10 @@
             .attr("ry", rx);
 
           node.select(".node-label").transition()
-            .delay(isPackage && stage === 2 ? 2020 : 0)
+            .delay(isPackage && stage === 2 ? 2020 : isService && stage === 4 ? 720 : 0)
             .duration(250)
             .attr("font-size", stage >= 3 ? 18 : 23)
-            .attr("opacity", isPackage && stage >= 2 ? 1 : 0);
+            .attr("opacity", isExpandedPackage || isExpandedService ? 1 : 0);
 
           node.select(".layer-label").transition(t)
             .attr("font-size", stage >= 3 ? 15 : 18)
