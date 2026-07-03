@@ -514,3 +514,12 @@
   height: auto;
   z-index: 1000;
 }
+
+#logo-iuta {
+  position: fixed;
+  top: 120px;
+  right: 20px;
+  width: 180px;
+  height: auto;
+  z-index: 1000;
+}
