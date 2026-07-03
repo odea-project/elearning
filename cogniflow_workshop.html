@@ -159,385 +159,397 @@
 			##########################################################################
 			-->
 
-			<section data-auto-animate>
-			<div
-				data-id="ontology-box"
-				style="
-				width: 180px;
-				height: 180px;
-				border-radius: 50%;
-				border: 4px solid #004c93;
-				margin: 0 auto;
-				background-color: #004c93;
-				"
-			></div>
-			</section>
-
-			<section data-auto-animate>
-			<style>
-				.ontology-label {
-				opacity: 0;
-				}
-
-				section.present .ontology-label {
-				animation: ontologyTextFadeIn 0.25s ease 0.65s forwards;
-				}
-
-				@keyframes ontologyTextFadeIn {
-				from { opacity: 0; }
-				to { opacity: 1; }
-				}
-
-				.ontology-bullets {
-				position: absolute;
-				display: flex;
-				left: calc(100% + 28px);
-				top: -7px;
-				width: 430px;
-				color: #222;
-				font-size: 0.75em;
-				line-height: 1.35;
-				pointer-events: none;
-				}
-
-				.ontology-bullets ul {
-				margin: 0;
-				padding-left: 1.2em;
-				}
-
-				.ontology-bullets li {
-				opacity: 0;
-				transform: translateY(10px) scale(0.98);
-				}
-
-				section.present .ontology-bullets li {
-				animation: ontologyBulletPop 0.28s ease-out forwards;
-				}
-
-				section.present .ontology-bullets li:nth-child(1) { animation-delay: 0.95s; }
-				section.present .ontology-bullets li:nth-child(2) { animation-delay: 1.15s; }
-				section.present .ontology-bullets li:nth-child(3) { animation-delay: 1.35s; }
-
-				@keyframes ontologyBulletPop {
-				from {
-					opacity: 0;
-					transform: translateY(10px) scale(0.98);
-				}
-				to {
-					opacity: 1;
-					transform: translateY(0) scale(1);
-				}
-				}
-
-				.ontology-package-box {
-				position: absolute;
-				left: 50%;
-				top: calc(100% + 28px);
-				transform: translateX(-50%) translateY(10px) scale(0.96);
-				width: 430px;
-				padding: 12px 18px;
-				margin-top: -30px;
-				margin-left: -90px;
-				border-radius: 14px;
-				border: 0px solid #004c93;
-				color: #004c93;
-				font-size: 0.55em;
-				line-height: 1.25;
-				text-align: center;
-				opacity: 0;
-				pointer-events: none;
-				box-sizing: border-box;
-				}
-
-				section.present .ontology-package-box {
-				animation: ontologyPackagePop 0.32s ease-out 1.55s forwards;
-				}
-
-				@keyframes ontologyPackagePop {
-				from {
-					opacity: 0;
-					transform: translateX(-50%) translateY(10px) scale(0.96);
-				}
-				to {
-					opacity: 1;
-					transform: translateX(-50%) translateY(0) scale(1);
-				}
-				}
-
-				.ontology-package-name {
-				font-family: monospace;
-				font-weight: 700;
-				background: rgba(0, 76, 147, 0.08);
-				padding: 2px 6px;
-				border-radius: 6px;
-				}
-			</style>
-
-			<div style="position: relative; width: 360px; height: 120px; margin: 0 auto;">
-				<div
-				data-id="ontology-box"
-				style="
-					width: 360px;
-					height: 120px;
-					border-radius: 24px;
-					border: 4px solid #004c93;
-					background-color: #004c93;
-				"
-				></div>
-
-				<span
-				class="ontology-label"
-				style="
-					position: absolute;
-					inset: 0;
-					display: flex;
-					align-items: center;
-					justify-content: center;
-					color: white;
-					font-size: 1.8em;
-					font-weight: 600;
-				"
-				>
-				Ontology
-				</span>
-
-				<div class="ontology-bullets">
-				<ul>
-					<li>Semantic core of Cogniflow</li>
-					<li>Defines the shared language for concept domains</li>
-					<li>Minimal by design: no domain-specific logic</li>
-				</ul>
-				</div>
-
-				<div class="ontology-package-box">
-				<div
-					style="
-					display: grid;
-					grid-template-columns: auto 1fr;
-					align-items: center;
-					gap: 14px;
-					text-align: left;
-					"
-				>
-					<img
-					src="https://upload.wikimedia.org/wikipedia/commons/6/64/PyPI_logo.svg"
-					alt="PyPI"
-					style="height: 4em; width: auto;"
-					>
-
-					<div>
-					Distributed as the Python package
-					<span class="ontology-package-name">cf_ontology</span>
-					via PyPI
-					</div>
-				</div>
-				</div>
-			</div>
-			</section>
-
-	
-			<section data-auto-animate>
-			<style>
-				.concept-orbit-dot {
-				position: absolute;
-				left: 50%;
-				top: 50%;
-				width: 34px;
-				height: 34px;
-				border-radius: 50%;
-				background-color: #004c93;
-				opacity: 0;
-				transform:
-					translate(-50%, -50%)
-					translate(var(--x), var(--y))
-					scale(0);
-				}
-
-				section.present .concept-orbit-dot {
-				animation:
-					conceptPop 0.28s cubic-bezier(0.2, 1.4, 0.4, 1) var(--delay) forwards,
-					conceptWiggle 2.8s ease-in-out calc(var(--delay) + 0.5s) infinite;
-				}
-
-				@keyframes conceptPop {
-				from {
-					opacity: 0;
-					transform:
-					translate(-50%, -50%)
-					translate(var(--x), var(--y))
-					scale(0);
-				}
-				to {
-					opacity: 1;
-					transform:
-					translate(-50%, -50%)
-					translate(var(--x), var(--y))
-					scale(1);
-				}
-				}
-
-				@keyframes conceptWiggle {
-				0%, 100% {
-					margin-left: 0;
-					margin-top: 0;
-				}
-				25% {
-					margin-left: 2px;
-					margin-top: -3px;
-				}
-				50% {
-					margin-left: -3px;
-					margin-top: 2px;
-				}
-				75% {
-					margin-left: 3px;
-					margin-top: 3px;
-				}
-				}
-			</style>
-
-			<style>
-			.concept-orbit-dot.concept-package-dot {
-				overflow: hidden;
-				display: flex;
-				align-items: center;
-				justify-content: center;
-				color: white;
-				font-size: 0.95em;
-				font-weight: 600;
-				white-space: nowrap;
-			}
-
-			.concept-package-label {
-				opacity: 0;
-				transform: scale(0.9);
-				pointer-events: none;
-			}
-
-			section.present .concept-orbit-dot.concept-package-dot {
-				animation:
-				conceptPop 0.28s cubic-bezier(0.2, 1.4, 0.4, 1) var(--delay) forwards,
-				conceptDotToBox 0.55s cubic-bezier(0.2, 1.15, 0.3, 1) 1.8s forwards,
-				conceptWiggle 2.8s ease-in-out calc(var(--delay) + 0.5s) infinite;
-			}
-
-			section.present .concept-package-label {
-				animation: conceptPackageLabelIn infinite;
-			}
-
-			section.present .concept-package-label {
-				animation: conceptPackageLabelIn 0.22s ease-out 1.85s forwards;
-			}
-
-			@keyframes conceptDotToBox {
-				from {
-				width: 34px;
-				height: 34px;
-				border-radius: 50%;
-				}
-				to {
-				width: 190px;
-				height: 64px;
-				border-radius: 16px;
-				}
-			}
-
-			@keyframes conceptPackageLabelIn {
-				from {
-				opacity: 0;
-				transform: scale(0.9);
-				}
-				to {
-				opacity: 1;
-				transform: scale(1);
-				}
-			}
-			</style>
-
-			<div style="position: relative; width: 620px; height: 620px; margin: 0 auto;">
-
-				<div
-				style="
-					position: absolute;
-					inset: 0;
-					display: flex;
-					align-items: center;
-					justify-content: center;
-				"
-				>
-				<div
-					data-id="ontology-box"
-					style="
-					width: 260px;
-					height: 86px;
-					border-radius: 18px;
-					border: 4px solid #004c93;
-					background-color: #004c93;
-					"
-				></div>
-				</div>
-
-				<div
-				style="
-					position: absolute;
-					inset: 0;
-					display: flex;
-					align-items: center;
-					justify-content: center;
-					color: white;
-					font-size: 1.35em;
-					font-weight: 600;
-					pointer-events: none;
-				"
-				>
-				Ontology
-				</div>
-
-				<div
-				style="
-					position: absolute;
-					inset: 0;
-					display: flex;
-					align-items: center;
-					justify-content: center;
-					font-size: 0.75em;
-					pointer-events: none;
-					margin-top: -130px;
-				"
-				>
-				core
-				</div>
-
-				<div class="concept-orbit-dot" style="--x: 230px; --y: 0px; --delay: 0.35s; background-color: #9E0142;"></div>
-				<div
-				class="concept-orbit-dot concept-package-dot"
-				style="--x: 186px; --y: 135px; --delay: 0.47s; background-color: #D53E4F;"
-				>
-				<span class="concept-package-label">Package</span>
-				</div>
-				<div class="concept-orbit-dot" style="--x: 71px; --y: 219px; --delay: 0.59s; background-color: #F46D43;"></div>
-				<div class="concept-orbit-dot" style="--x: -71px; --y: 219px; --delay: 0.71s; background-color: #FDAE61;"></div>
-				<div class="concept-orbit-dot" style="--x: -186px; --y: 135px; --delay: 0.83s; background-color: #FEE08B;"></div>
-				<div class="concept-orbit-dot" style="--x: -230px; --y: 0px; --delay: 0.95s; background-color: #E6F598;"></div>
-				<div class="concept-orbit-dot" style="--x: -186px; --y: -135px; --delay: 1.07s; background-color: #ABDDA4;"></div>
-				<div class="concept-orbit-dot" style="--x: -71px; --y: -219px; --delay: 1.19s; background-color: #66C2A5;"></div>
-				<div class="concept-orbit-dot" style="--x: 71px; --y: -219px; --delay: 1.31s; background-color: #3288BD;"></div>
-				<div class="concept-orbit-dot" style="--x: 186px; --y: -135px; --delay: 1.43s; background-color: #5E4FA2;"><div style="margin-left: 40px; margin-top: -20px; font-size: 0.75em; pointer-events: none;">concept layer</div></div>
-
-			</div>
-			</section>
-
 			
+
+<section id="cf-layer-diagram" data-background-color="white">
+  <svg
+    id="cf-layer-svg"
+    viewBox="0 0 1000 650"
+    style="width: 100%; height: 650px;"
+  ></svg>
+
+  <!-- Invisible Reveal fragments: each click advances the D3 state -->
+  <div class="fragment" style="display: none;"></div>
+  <div class="fragment" style="display: none;"></div>
+  <div class="fragment" style="display: none;"></div>
+
+  <script>
+    window.initCfLayerDiagram = () => {
+      const section = document.getElementById("cf-layer-diagram");
+      if (!section || section.dataset.cfLayerInitialized === "true") return;
+      const d3 = window.d3;
+      const reveal = window.Reveal;
+      if (!d3 || !reveal) return;
+      section.dataset.cfLayerInitialized = "true";
+
+      const svg = d3.select("#cf-layer-svg");
+      const W = 1000;
+      const H = 650;
+      const cx = W / 2;
+      const cy = H / 2;
+
+      const blue = "#004c93";
+      const spectral = [
+        "#9E0142", "#D53E4F", "#F46D43", "#FDAE61", "#FEE08B",
+        "#E6F598", "#ABDDA4", "#66C2A5", "#3288BD", "#5E4FA2"
+      ];
+
+      const root = svg.append("g");
+
+      const bg = root.append("rect")
+        .attr("x", 0)
+        .attr("y", 0)
+        .attr("width", W)
+        .attr("height", H)
+        .attr("fill", "white");
+
+      const ontology = root.append("g")
+        .attr("class", "ontology-node");
+
+      const ontologyBox = ontology.append("rect")
+        .attr("fill", blue)
+        .attr("stroke", blue)
+        .attr("stroke-width", 4);
+
+      const ontologyLabel = ontology.append("text")
+        .attr("text-anchor", "middle")
+        .attr("dominant-baseline", "middle")
+        .attr("fill", "white")
+        .attr("font-weight", 600)
+        .text("Ontology");
+
+      const coreLabel = root.append("text")
+        .attr("text-anchor", "middle")
+        .attr("fill", "#222")
+        .attr("font-size", 18)
+        .attr("opacity", 0)
+        .text("core");
+
+      const ontologyBullets = root.append("g")
+        .attr("class", "ontology-bullets");
+
+      function appendBulletText(group, x, y, text, fontSize) {
+        const lines = text.split(/\\n|\n/);
+        const bullet = group.append("text")
+          .attr("x", x)
+          .attr("y", y)
+          .attr("fill", "#222")
+          .attr("font-size", fontSize)
+          .attr("opacity", 0);
+
+        lines.forEach((line, lineIndex) => {
+          bullet.append("tspan")
+            .attr("x", x + (lineIndex === 0 ? 0 : fontSize * 0.95))
+            .attr("dy", lineIndex === 0 ? 0 : fontSize * 1.2)
+            .text((lineIndex === 0 ? "• " : "") + line);
+        });
+
+        return lines.length;
+      }
+
+      let ontologyBulletY = cy - 35;
+      [
+        "Semantic core",
+        "Defines concept \n domains",
+        "Minimal by design: \n no specific logic"
+      ].forEach((txt) => {
+        const lineCount = appendBulletText(ontologyBullets, cx + 230, ontologyBulletY, txt, 21);
+        ontologyBulletY += 32 + (lineCount - 1) * 25;
+      });
+
+      const packageBullets = root.append("g")
+        .attr("class", "package-bullets");
+
+      const packageTemplateBullets = root.append("g")
+        .attr("class", "package-template-bullets");
+
+      let packageBulletY = cy + 115;
+      [
+        "Defines a \n Cogniflow package",
+        "Describes \n manifests, templates \n and contributions",
+        "Provides package \n vocabulary"
+      ].forEach((txt) => {
+        const lineCount = appendBulletText(packageBullets, cx + 300, packageBulletY, txt, 17);
+        packageBulletY += 28 + (lineCount - 1) * 20;
+      });
+
+      let packageTemplateBulletY = cy + 240;
+      [
+        "implementations",
+        "specifies template"
+      ].forEach((txt) => {
+        const lineCount = appendBulletText(packageTemplateBullets, cx - 470, packageTemplateBulletY, txt, 17);
+        packageTemplateBulletY += 28 + (lineCount - 1) * 20;
+      });
+
+      function circlePoint(index, total, radius, startAngleDeg = 0) {
+        const a = (startAngleDeg + index * 360 / total) * Math.PI / 180;
+        return {
+          x: cx + Math.cos(a) * radius,
+          y: cy + Math.sin(a) * radius,
+          angle: a
+        };
+      }
+
+      const conceptData = d3.range(10).map(i => ({
+        id: "concept-" + i,
+        index: i,
+        color: spectral[i % spectral.length],
+        phase: i * 0.83
+      }));
+
+      const specData = d3.range(32).map(i => ({
+        id: "spec-" + i,
+        index: i,
+        color: spectral[i % spectral.length],
+        phase: i * 0.47
+      }));
+
+      const conceptLayer = root.append("g").attr("class", "concept-layer");
+      const specLayer = root.append("g").attr("class", "specification-layer");
+
+      const conceptNodes = conceptLayer.selectAll("g.concept-node")
+        .data(conceptData, d => d.id)
+        .join("g")
+        .attr("class", "concept-node")
+        .attr("opacity", 0);
+
+      conceptNodes.append("g")
+        .attr("class", "wiggle")
+        .each(function(d) {
+          const g = d3.select(this);
+          g.append("rect")
+            .attr("class", "node-bg")
+            .attr("fill", d.color);
+          g.append("text")
+            .attr("class", "node-label")
+            .attr("text-anchor", "middle")
+            .attr("dominant-baseline", "middle")
+            .attr("fill", "white")
+            .attr("font-weight", 600)
+            .attr("opacity", 0)
+            .text(d.index === 1 ? "Package" : "");
+          if (d.index === 9) {
+            g.append("text")
+              .attr("class", "layer-label")
+              .attr("text-anchor", "middle")
+              .attr("fill", "#222")
+              .attr("font-size", 18)
+              .attr("y", -32)
+              .attr("opacity", 0)
+              .text("concept layer");
+          }
+        });
+
+      const specNodes = specLayer.selectAll("g.spec-node")
+        .data(specData, d => d.id)
+        .join("g")
+        .attr("class", "spec-node")
+        .attr("opacity", 0);
+
+      specNodes.append("g")
+        .attr("class", "wiggle")
+        .each(function(d) {
+          const g = d3.select(this);
+          g.append("rect")
+            .attr("class", "node-bg")
+            .attr("fill", d.color);
+          g.append("text")
+            .attr("class", "node-label")
+            .attr("text-anchor", "middle")
+            .attr("dominant-baseline", "middle")
+            .attr("fill", "white")
+            .attr("font-weight", 600)
+            .attr("opacity", 0)
+            .text(d.index === 11 ? "Package template" : "");
+          if (d.index === 31) {
+            g.append("text")
+              .attr("class", "layer-label")
+              .attr("text-anchor", "middle")
+              .attr("fill", "#222")
+              .attr("font-size", 18)
+              .attr("y", -30)
+              .attr("opacity", 0)
+              .text("specification layer");
+          }
+        });
+
+      function currentStage() {
+        return section.querySelectorAll(".fragment.visible").length;
+      }
+
+      function render(stage) {
+        const t = svg.transition().duration(650).ease(d3.easeCubicInOut);
+
+        const ontologyState = (() => {
+          if (stage === 0) {
+            return { w: 180, h: 180, r: 90, font: 0, labelOpacity: 0 };
+          }
+          if (stage === 1) {
+            return { w: 360, h: 120, r: 24, font: 44, labelOpacity: 1 };
+          }
+          if (stage === 2) {
+            return { w: 260, h: 86, r: 18, font: 34, labelOpacity: 1 };
+          }
+          return { w: 210, h: 70, r: 16, font: 28, labelOpacity: 1 };
+        })();
+
+        ontologyBox.transition(t)
+          .attr("x", cx - ontologyState.w / 2)
+          .attr("y", cy - ontologyState.h / 2)
+          .attr("width", ontologyState.w)
+          .attr("height", ontologyState.h)
+          .attr("rx", ontologyState.r)
+          .attr("ry", ontologyState.r);
+
+        ontologyLabel.transition(t)
+          .attr("x", cx)
+          .attr("y", cy + 2)
+          .attr("font-size", ontologyState.font)
+          .attr("opacity", ontologyState.labelOpacity);
+
+        coreLabel.transition(t)
+          .attr("x", cx)
+          .attr("y", cy - ontologyState.h / 2 - 28)
+          .attr("opacity", stage >= 2 ? 1 : 0);
+
+        ontologyBullets.selectAll("text").transition()
+          .delay((d, i) => stage === 1 ? 700 + i * 180 : 0)
+          .duration(260)
+          .attr("opacity", stage === 1 ? 1 : 0);
+
+        packageBullets.selectAll("text").transition()
+          .delay((d, i) => stage === 2 ? 2300 + i * 180 : 0)
+          .duration(260)
+          .attr("opacity", stage === 2 ? 1 : 0);
+
+        packageTemplateBullets.selectAll("text").transition()
+          .delay((d, i) => stage >= 3 ? 2200 + i * 180 : 0)
+          .duration(260)
+          .attr("opacity", stage >= 3 ? 1 : 0);
+
+        conceptNodes.each(function(d) {
+          const isPackage = d.index === 1;
+          const radius = stage >= 3 ? 180 : 230;
+          const p = circlePoint(d.index, 10, radius, 0);
+
+          const visible = stage >= 2;
+          const dotSize = stage >= 3 ? 24 : 34;
+          const w = isPackage && stage >= 2 ? (stage >= 3 ? 150 : 190) : dotSize;
+          const h = isPackage && stage >= 2 ? (stage >= 3 ? 50 : 64) : dotSize;
+          const rx = isPackage && stage >= 2 ? (stage >= 3 ? 14 : 16) : dotSize / 2;
+
+          const node = d3.select(this);
+
+          node.transition()
+            .delay(stage >= 2 ? d.index * 120 : 0)
+            .duration(stage >= 2 ? 320 : 200)
+            .attr("opacity", visible ? 1 : 0)
+            .attr("transform", `translate(${p.x},${p.y}) scale(${visible ? 1 : 0})`);
+
+          node.select(".node-bg").transition()
+            .delay(isPackage && stage === 2 ? 1800 : 0)
+            .duration(isPackage && stage === 2 ? 520 : 650)
+            .ease(d3.easeCubicInOut)
+            .attr("x", -w / 2)
+            .attr("y", -h / 2)
+            .attr("width", w)
+            .attr("height", h)
+            .attr("rx", rx)
+            .attr("ry", rx);
+
+          node.select(".node-label").transition()
+            .delay(isPackage && stage === 2 ? 2020 : 0)
+            .duration(250)
+            .attr("font-size", stage >= 3 ? 18 : 23)
+            .attr("opacity", isPackage && stage >= 2 ? 1 : 0);
+
+          node.select(".layer-label").transition(t)
+            .attr("font-size", stage >= 3 ? 15 : 18)
+            .attr("y", stage >= 3 ? -28 : -34)
+            .attr("opacity", stage >= 2 ? 1 : 0);
+        });
+
+        specNodes.each(function(d) {
+          const isTemplate = d.index === 11;
+          const p = circlePoint(d.index, 32, 300, 0);
+
+          const visible = stage >= 3;
+          const w = isTemplate && stage >= 3 ? 170 : 22;
+          const h = isTemplate && stage >= 3 ? 54 : 22;
+          const rx = isTemplate && stage >= 3 ? 15 : 11;
+
+          const node = d3.select(this);
+
+          node.transition()
+            .delay(stage >= 3 ? 250 + d.index * 35 : 0)
+            .duration(stage >= 3 ? 230 : 150)
+            .attr("opacity", visible ? 1 : 0)
+            .attr("transform", `translate(${p.x},${p.y}) scale(${visible ? 1 : 0})`);
+
+          node.select(".node-bg").transition()
+            .delay(isTemplate && stage >= 3 ? 1750 : 0)
+            .duration(isTemplate && stage >= 3 ? 480 : 230)
+            .attr("x", -w / 2)
+            .attr("y", -h / 2)
+            .attr("width", w)
+            .attr("height", h)
+            .attr("rx", rx)
+            .attr("ry", rx);
+
+          node.select(".node-label").transition()
+            .delay(isTemplate && stage >= 3 ? 1950 : 0)
+            .duration(240)
+            .attr("font-size", 15)
+            .attr("opacity", isTemplate && stage >= 3 ? 1 : 0);
+
+          node.select(".layer-label").transition(t)
+            .attr("opacity", stage >= 3 ? 1 : 0);
+        });
+      }
+
+      d3.timer((elapsed) => {
+        const stage = currentStage();
+        const ampConcept = stage >= 2 ? 3 : 0;
+        const ampSpec = stage >= 3 ? 2 : 0;
+
+        conceptNodes.select(".wiggle")
+          .attr("transform", d => {
+            const x = Math.sin(elapsed / 430 + d.phase) * ampConcept;
+            const y = Math.cos(elapsed / 510 + d.phase) * ampConcept;
+            return `translate(${x},${y})`;
+          });
+
+        specNodes.select(".wiggle")
+          .attr("transform", d => {
+            const x = Math.sin(elapsed / 380 + d.phase) * ampSpec;
+            const y = Math.cos(elapsed / 470 + d.phase) * ampSpec;
+            return `translate(${x},${y})`;
+          });
+      });
+
+      function updateForSlide() {
+        if (reveal.getCurrentSlide() === section) {
+          render(currentStage());
+        }
+      }
+
+      reveal.on("slidechanged", updateForSlide);
+      reveal.on("fragmentshown", updateForSlide);
+      reveal.on("fragmenthidden", updateForSlide);
+
+      render(0);
+    };
+  </script>
+</section>
 			
 		</div>
 	</div>
-
+	<script src="https://d3js.org/d3.v7.min.js"></script>
 	<!-- Clock -->
 	<div id="clock">--:--</div>
 	<img id="logo-claim" src="resources/figures/logo_claim_4c.svg" alt="Logo claim">
 	<img id="logo-iuta" src="resources/figures/iutalogo.png" alt="Logo IUTA">
-
-
 	<script src="dist/reveal.js"></script>
 	<script src="plugin/markdown/markdown.js"></script>
 	<script src="plugin/highlight/highlight.js"></script>
@@ -556,6 +568,7 @@
 			center: true,
 			transition: 'slide'
 		});
+		if (window.initCfLayerDiagram) window.initCfLayerDiagram();
 	</script>
 
 
