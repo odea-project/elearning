@@ -203,6 +203,24 @@
         .attr("height", H)
         .attr("fill", "white");
 
+      const links = root.append("g")
+        .attr("class", "layer-links")
+        .attr("fill", "none")
+        .attr("stroke", "#004c93")
+        .attr("stroke-width", 3)
+        .attr("stroke-linecap", "round")
+        .attr("stroke-linejoin", "round");
+
+      const ontologyPackageLink = links.append("path")
+        .attr("opacity", 0)
+        .attr("stroke-dasharray", 1000)
+        .attr("stroke-dashoffset", 1000);
+
+      const packageTemplateLink = links.append("path")
+        .attr("opacity", 0)
+        .attr("stroke-dasharray", 1000)
+        .attr("stroke-dashoffset", 1000);
+
       const ontology = root.append("g")
         .attr("class", "ontology-node");
 
@@ -289,6 +307,19 @@
           y: cy + Math.sin(a) * radius,
           angle: a
         };
+      }
+
+      function curvedPath(start, end, bend) {
+        const mx = (start.x + end.x) / 2;
+        const my = (start.y + end.y) / 2;
+        const dx = end.x - start.x;
+        const dy = end.y - start.y;
+        const len = Math.hypot(dx, dy) || 1;
+        const control = {
+          x: mx - dy / len * bend,
+          y: my + dx / len * bend
+        };
+        return `M ${start.x} ${start.y} Q ${control.x} ${control.y} ${end.x} ${end.y}`;
       }
 
       const conceptData = d3.range(10).map(i => ({
@@ -394,6 +425,26 @@
           return { w: 210, h: 70, r: 16, font: 28, labelOpacity: 1 };
         })();
 
+        const packageRadius = stage >= 3 ? 180 : 230;
+        const packagePoint = circlePoint(1, 10, packageRadius, 0);
+        const templatePoint = circlePoint(11, 32, 300, 0);
+
+        ontologyPackageLink.transition()
+          .delay(stage === 2 ? 1450 : 0)
+          .duration(stage >= 2 ? 700 : 200)
+          .ease(d3.easeCubicInOut)
+          .attr("d", curvedPath({ x: cx, y: cy }, packagePoint, 55))
+          .attr("opacity", stage >= 2 ? 0.78 : 0)
+          .attr("stroke-dashoffset", stage >= 2 ? 0 : 1000);
+
+        packageTemplateLink.transition()
+          .delay(stage >= 3 ? 1550 : 0)
+          .duration(stage >= 3 ? 850 : 200)
+          .ease(d3.easeCubicInOut)
+          .attr("d", curvedPath(packagePoint, templatePoint, -70))
+          .attr("opacity", stage >= 3 ? 0.78 : 0)
+          .attr("stroke-dashoffset", stage >= 3 ? 0 : 1000);
+
         ontologyBox.transition(t)
           .attr("x", cx - ontologyState.w / 2)
           .attr("y", cy - ontologyState.h / 2)
@@ -430,7 +481,7 @@
 
         conceptNodes.each(function(d) {
           const isPackage = d.index === 1;
-          const radius = stage >= 3 ? 180 : 230;
+          const radius = packageRadius;
           const p = circlePoint(d.index, 10, radius, 0);
 
           const visible = stage >= 2;
