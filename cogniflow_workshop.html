@@ -396,6 +396,64 @@
 				}
 			</style>
 
+			<style>
+			.concept-orbit-dot.concept-package-dot {
+				overflow: hidden;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				color: white;
+				font-size: 0.95em;
+				font-weight: 600;
+				white-space: nowrap;
+			}
+
+			.concept-package-label {
+				opacity: 0;
+				transform: scale(0.9);
+				pointer-events: none;
+			}
+
+			section.present .concept-orbit-dot.concept-package-dot {
+				animation:
+				conceptPop 0.28s cubic-bezier(0.2, 1.4, 0.4, 1) var(--delay) forwards,
+				conceptDotToBox 0.55s cubic-bezier(0.2, 1.15, 0.3, 1) 1.8s forwards,
+				conceptWiggle 2.8s ease-in-out calc(var(--delay) + 0.5s) infinite;
+			}
+
+			section.present .concept-package-label {
+				animation: conceptPackageLabelIn infinite;
+			}
+
+			section.present .concept-package-label {
+				animation: conceptPackageLabelIn 0.22s ease-out 1.85s forwards;
+			}
+
+			@keyframes conceptDotToBox {
+				from {
+				width: 34px;
+				height: 34px;
+				border-radius: 50%;
+				}
+				to {
+				width: 190px;
+				height: 64px;
+				border-radius: 16px;
+				}
+			}
+
+			@keyframes conceptPackageLabelIn {
+				from {
+				opacity: 0;
+				transform: scale(0.9);
+				}
+				to {
+				opacity: 1;
+				transform: scale(1);
+				}
+			}
+			</style>
+
 			<div style="position: relative; width: 620px; height: 620px; margin: 0 auto;">
 
 				<div
@@ -451,7 +509,12 @@
 				</div>
 
 				<div class="concept-orbit-dot" style="--x: 230px; --y: 0px; --delay: 0.35s; background-color: #9E0142;"></div>
-				<div class="concept-orbit-dot" style="--x: 186px; --y: 135px; --delay: 0.47s; background-color: #D53E4F;"></div>
+				<div
+				class="concept-orbit-dot concept-package-dot"
+				style="--x: 186px; --y: 135px; --delay: 0.47s; background-color: #D53E4F;"
+				>
+				<span class="concept-package-label">Package</span>
+				</div>
 				<div class="concept-orbit-dot" style="--x: 71px; --y: 219px; --delay: 0.59s; background-color: #F46D43;"></div>
 				<div class="concept-orbit-dot" style="--x: -71px; --y: 219px; --delay: 0.71s; background-color: #FDAE61;"></div>
 				<div class="concept-orbit-dot" style="--x: -186px; --y: 135px; --delay: 0.83s; background-color: #FEE08B;"></div>
@@ -463,6 +526,8 @@
 
 			</div>
 			</section>
+
+			
 			
 		</div>
 	</div>
