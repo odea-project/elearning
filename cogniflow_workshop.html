@@ -173,6 +173,7 @@
   <div class="fragment" style="display: none;"></div>
   <div class="fragment" style="display: none;"></div>
   <div class="fragment" style="display: none;"></div>
+  <div class="fragment" style="display: none;"></div>
 
   <script>
     window.initCfLayerDiagram = () => {
@@ -228,6 +229,18 @@
         .attr("stroke-dashoffset", 1000);
 
       const serviceTemplateLink = links.append("path")
+        .attr("opacity", 0)
+        .attr("stroke-dasharray", 1000)
+        .attr("stroke-dashoffset", 1000);
+
+      const packageRuntimeLink = links.append("path")
+        .attr("stroke", "#8a1538")
+        .attr("opacity", 0)
+        .attr("stroke-dasharray", 1000)
+        .attr("stroke-dashoffset", 1000);
+
+      const serviceRuntimeLink = links.append("path")
+        .attr("stroke", "#8a1538")
         .attr("opacity", 0)
         .attr("stroke-dasharray", 1000)
         .attr("stroke-dashoffset", 1000);
@@ -293,6 +306,9 @@
       const packageTemplateBullets = root.append("g")
         .attr("class", "package-template-bullets");
 
+      const semanticsRuntimeBullets = root.append("g")
+        .attr("class", "semantics-runtime-bullets");
+
       let packageBulletY = cy + 115;
       [
         "Defines a \n Cogniflow package",
@@ -313,6 +329,16 @@
       });
 
       appendBulletText(packageTemplateBullets, cx - 470, packageTemplateBulletY, "provides validation service", 17, "service-template-bullet");
+
+      let semanticsRuntimeBulletY = cy - 185;
+      [
+        "api to \n semantics \n database",
+        "resolves \n service requests",
+        "mcp server"
+      ].forEach((txt) => {
+        const lineCount = appendBulletText(semanticsRuntimeBullets, cx - 465, semanticsRuntimeBulletY, txt, 17);
+        semanticsRuntimeBulletY += 28 + (lineCount - 1) * 20;
+      });
 
       function circlePoint(index, total, radius, startAngleDeg = 0) {
         const a = (startAngleDeg + index * 360 / total) * Math.PI / 180;
@@ -406,7 +432,7 @@
             .attr("fill", "white")
             .attr("font-weight", 600)
             .attr("opacity", 0)
-            .text(d.index === 11 ? "Package template" : "");
+            .text(d.index === 11 ? "Package template" : d.index === 19 ? "Semantics runtime" : "");
           if (d.index === 31) {
             g.append("text")
               .attr("class", "layer-label")
@@ -443,6 +469,7 @@
         const packagePoint = circlePoint(1, 10, packageRadius, 0);
         const servicePoint = circlePoint(4, 10, packageRadius, 0);
         const templatePoint = circlePoint(11, 32, 300, 0);
+        const runtimePoint = circlePoint(19, 32, 300, 0);
 
         ontologyPackageLink.transition()
           .delay(stage === 2 ? 1450 : 0)
@@ -475,6 +502,22 @@
           .attr("d", curvedPath(servicePoint, templatePoint, 80))
           .attr("opacity", stage >= 4 ? 0.78 : 0)
           .attr("stroke-dashoffset", stage >= 4 ? 0 : 1000);
+
+        packageRuntimeLink.transition()
+          .delay(stage >= 5 ? 1250 : 0)
+          .duration(stage >= 5 ? 850 : 200)
+          .ease(d3.easeCubicInOut)
+          .attr("d", curvedPath(packagePoint, runtimePoint, 210))
+          .attr("opacity", stage >= 5 ? 0.82 : 0)
+          .attr("stroke-dashoffset", stage >= 5 ? 0 : 1000);
+
+        serviceRuntimeLink.transition()
+          .delay(stage >= 5 ? 1450 : 0)
+          .duration(stage >= 5 ? 850 : 200)
+          .ease(d3.easeCubicInOut)
+          .attr("d", curvedPath(servicePoint, runtimePoint, -75))
+          .attr("opacity", stage >= 5 ? 0.82 : 0)
+          .attr("stroke-dashoffset", stage >= 5 ? 0 : 1000);
 
         ontologyBox.transition(t)
           .attr("x", cx - ontologyState.w / 2)
@@ -514,6 +557,11 @@
           .delay(stage >= 4 ? 2200 : 0)
           .duration(260)
           .attr("opacity", stage >= 4 ? 1 : 0);
+
+        semanticsRuntimeBullets.selectAll("text").transition()
+          .delay((d, i) => stage >= 5 ? 2200 + i * 180 : 0)
+          .duration(260)
+          .attr("opacity", stage >= 5 ? 1 : 0);
 
         conceptNodes.each(function(d) {
           const isPackage = d.index === 1;
@@ -562,12 +610,15 @@
 
         specNodes.each(function(d) {
           const isTemplate = d.index === 11;
+          const isRuntime = d.index === 19;
           const p = circlePoint(d.index, 32, 300, 0);
 
           const visible = stage >= 3;
-          const w = isTemplate && stage >= 3 ? 170 : 22;
-          const h = isTemplate && stage >= 3 ? 54 : 22;
-          const rx = isTemplate && stage >= 3 ? 15 : 11;
+          const isExpandedTemplate = isTemplate && stage >= 3;
+          const isExpandedRuntime = isRuntime && stage >= 5;
+          const w = isExpandedTemplate ? 170 : isExpandedRuntime ? 190 : 22;
+          const h = isExpandedTemplate ? 54 : isExpandedRuntime ? 54 : 22;
+          const rx = isExpandedTemplate || isExpandedRuntime ? 15 : 11;
 
           const node = d3.select(this);
 
@@ -578,8 +629,8 @@
             .attr("transform", `translate(${p.x},${p.y}) scale(${visible ? 1 : 0})`);
 
           node.select(".node-bg").transition()
-            .delay(isTemplate && stage >= 3 ? 1750 : 0)
-            .duration(isTemplate && stage >= 3 ? 480 : 230)
+            .delay(isTemplate && stage >= 3 ? 1750 : isRuntime && stage === 5 ? 500 : 0)
+            .duration(isExpandedTemplate || (isRuntime && stage === 5) ? 480 : 230)
             .attr("x", -w / 2)
             .attr("y", -h / 2)
             .attr("width", w)
@@ -588,10 +639,10 @@
             .attr("ry", rx);
 
           node.select(".node-label").transition()
-            .delay(isTemplate && stage >= 3 ? 1950 : 0)
+            .delay(isTemplate && stage >= 3 ? 1950 : isRuntime && stage === 5 ? 700 : 0)
             .duration(240)
-            .attr("font-size", 15)
-            .attr("opacity", isTemplate && stage >= 3 ? 1 : 0);
+            .attr("font-size", isRuntime ? 14 : 15)
+            .attr("opacity", isExpandedTemplate || isExpandedRuntime ? 1 : 0);
 
           node.select(".layer-label").transition(t)
             .attr("opacity", stage >= 3 ? 1 : 0);
