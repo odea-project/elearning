@@ -184,12 +184,92 @@
 				}
 
 				@keyframes ontologyTextFadeIn {
+				from { opacity: 0; }
+				to { opacity: 1; }
+				}
+
+				.ontology-bullets {
+				position: absolute;
+				display: flex;
+				left: calc(100% + 28px);
+				top: -7px;
+				width: 430px;
+				color: #222;
+				font-size: 0.75em;
+				line-height: 1.35;
+				pointer-events: none;
+				}
+
+				.ontology-bullets ul {
+				margin: 0;
+				padding-left: 1.2em;
+				}
+
+				.ontology-bullets li {
+				opacity: 0;
+				transform: translateY(10px) scale(0.98);
+				}
+
+				section.present .ontology-bullets li {
+				animation: ontologyBulletPop 0.28s ease-out forwards;
+				}
+
+				section.present .ontology-bullets li:nth-child(1) { animation-delay: 0.95s; }
+				section.present .ontology-bullets li:nth-child(2) { animation-delay: 1.15s; }
+				section.present .ontology-bullets li:nth-child(3) { animation-delay: 1.35s; }
+
+				@keyframes ontologyBulletPop {
 				from {
 					opacity: 0;
+					transform: translateY(10px) scale(0.98);
 				}
 				to {
 					opacity: 1;
+					transform: translateY(0) scale(1);
 				}
+				}
+
+				.ontology-package-box {
+				position: absolute;
+				left: 50%;
+				top: calc(100% + 28px);
+				transform: translateX(-50%) translateY(10px) scale(0.96);
+				width: 430px;
+				padding: 12px 18px;
+				margin-top: -30px;
+				margin-left: -90px;
+				border-radius: 14px;
+				border: 0px solid #004c93;
+				color: #004c93;
+				font-size: 0.55em;
+				line-height: 1.25;
+				text-align: center;
+				opacity: 0;
+				pointer-events: none;
+				box-sizing: border-box;
+				}
+
+				section.present .ontology-package-box {
+				animation: ontologyPackagePop 0.32s ease-out 1.55s forwards;
+				}
+
+				@keyframes ontologyPackagePop {
+				from {
+					opacity: 0;
+					transform: translateX(-50%) translateY(10px) scale(0.96);
+				}
+				to {
+					opacity: 1;
+					transform: translateX(-50%) translateY(0) scale(1);
+				}
+				}
+
+				.ontology-package-name {
+				font-family: monospace;
+				font-weight: 700;
+				background: rgba(0, 76, 147, 0.08);
+				padding: 2px 6px;
+				border-radius: 6px;
 				}
 			</style>
 
@@ -220,6 +300,38 @@
 				>
 				Ontology
 				</span>
+
+				<div class="ontology-bullets">
+				<ul>
+					<li>Semantic core of Cogniflow</li>
+					<li>Defines the shared language for concept domains</li>
+					<li>Minimal by design: no domain-specific logic</li>
+				</ul>
+				</div>
+
+				<div class="ontology-package-box">
+				<div
+					style="
+					display: grid;
+					grid-template-columns: auto 1fr;
+					align-items: center;
+					gap: 14px;
+					text-align: left;
+					"
+				>
+					<img
+					src="https://upload.wikimedia.org/wikipedia/commons/6/64/PyPI_logo.svg"
+					alt="PyPI"
+					style="height: 4em; width: auto;"
+					>
+
+					<div>
+					Distributed as the Python package
+					<span class="ontology-package-name">cf_ontology</span>
+					via PyPI
+					</div>
+				</div>
+				</div>
 			</div>
 			</section>
 
