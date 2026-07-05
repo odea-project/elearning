@@ -328,7 +328,19 @@
         packageTemplateBulletY += 28 + (lineCount - 1) * 20;
       });
 
-      appendBulletText(packageTemplateBullets, cx - 470, packageTemplateBulletY, "provides validation service", 17, "service-template-bullet");
+      const serviceTemplateBulletX = cx - 470;
+      packageTemplateBullets.append("rect")
+        .attr("class", "service-template-bullet")
+        .attr("x", serviceTemplateBulletX - 9)
+        .attr("y", packageTemplateBulletY - 21)
+        .attr("width", 252)
+        .attr("height", 29)
+        .attr("rx", 7)
+        .attr("ry", 7)
+        .attr("fill", "#fff59d")
+        .attr("opacity", 0);
+
+      appendBulletText(packageTemplateBullets, serviceTemplateBulletX, packageTemplateBulletY, "provides validation service", 17, "service-template-bullet");
 
       let semanticsRuntimeBulletY = cy - 185;
       const semanticsDatabaseIcon = root.append("g")
@@ -731,6 +743,8 @@
   <div class="fragment" style="display: none;"></div>
   <div class="fragment" style="display: none;"></div>
   <div class="fragment" style="display: none;"></div>
+  <div class="fragment" style="display: none;"></div>
+  <div class="fragment" style="display: none;"></div>
 
   <script>
     window.initCfServiceProcessDiagram = () => {
@@ -747,6 +761,7 @@
         const H = 650;
         const blue = "#004c93";
         const red = "#8a1538";
+        const green = "#2f8f5b";
         const dark = "#333333";
         const external = "#5f6670";
 
@@ -784,12 +799,12 @@
           .attr("height", H)
           .attr("fill", "white");
 
-        function drawIcon(group, type) {
+        function drawIcon(group, type, color = blue) {
           if (type === "provider") {
             group.append("path")
               .attr("d", "M 0 -19 L 18 -9 L 18 12 L 0 22 L -18 12 L -18 -9 Z M 0 -19 L 0 1 M -18 -9 L 0 1 L 18 -9")
               .attr("fill", "none")
-              .attr("stroke", blue)
+              .attr("stroke", color)
               .attr("stroke-width", 3)
               .attr("stroke-linejoin", "round")
               .attr("stroke-linecap", "round");
@@ -797,7 +812,7 @@
             group.append("path")
               .attr("d", "M -18 -10 C -18 -20 18 -20 18 -10 L 18 14 C 18 24 -18 24 -18 14 Z")
               .attr("fill", "none")
-              .attr("stroke", blue)
+              .attr("stroke", color)
               .attr("stroke-width", 3)
               .attr("stroke-linejoin", "round");
             group.append("ellipse")
@@ -806,12 +821,12 @@
               .attr("rx", 18)
               .attr("ry", 8)
               .attr("fill", "white")
-              .attr("stroke", blue)
+              .attr("stroke", color)
               .attr("stroke-width", 3);
             group.append("path")
               .attr("d", "M -18 2 C -18 10 18 10 18 2")
               .attr("fill", "none")
-              .attr("stroke", blue)
+              .attr("stroke", color)
               .attr("stroke-width", 3);
           } else if (type === "runtime") {
             group.append("rect")
@@ -821,29 +836,89 @@
               .attr("height", 32)
               .attr("rx", 5)
               .attr("fill", "none")
-              .attr("stroke", blue)
+              .attr("stroke", color)
               .attr("stroke-width", 3);
             group.append("circle")
               .attr("r", 6)
-              .attr("fill", blue);
+              .attr("fill", color);
             [-24, 24].forEach((x) => {
-              group.append("line").attr("x1", x).attr("y1", -8).attr("x2", x / 1.5).attr("y2", -8).attr("stroke", blue).attr("stroke-width", 3).attr("stroke-linecap", "round");
-              group.append("line").attr("x1", x).attr("y1", 8).attr("x2", x / 1.5).attr("y2", 8).attr("stroke", blue).attr("stroke-width", 3).attr("stroke-linecap", "round");
+              group.append("line").attr("x1", x).attr("y1", -8).attr("x2", x / 1.5).attr("y2", -8).attr("stroke", color).attr("stroke-width", 3).attr("stroke-linecap", "round");
+              group.append("line").attr("x1", x).attr("y1", 8).attr("x2", x / 1.5).attr("y2", 8).attr("stroke", color).attr("stroke-width", 3).attr("stroke-linecap", "round");
             });
           } else {
             group.append("circle")
               .attr("cy", -10)
               .attr("r", 9)
               .attr("fill", "none")
-              .attr("stroke", blue)
+              .attr("stroke", color)
               .attr("stroke-width", 3);
             group.append("path")
               .attr("d", "M -18 20 C -14 3 14 3 18 20")
               .attr("fill", "none")
-              .attr("stroke", blue)
+              .attr("stroke", color)
               .attr("stroke-width", 3)
               .attr("stroke-linecap", "round");
           }
+        }
+
+        function drawReplacementColumn({ x, label, context, icon, direction, width = 190, height = 70, color = blue, contextColor = blue }) {
+          const startOffset = direction === "down" ? -720 : 720;
+          const column = root.append("g")
+            .attr("class", "replacement-column")
+            .attr("opacity", 0);
+
+          const lifeline = column.append("line")
+            .attr("class", "replacement-lifeline")
+            .attr("x1", x)
+            .attr("y1", 205 + startOffset)
+            .attr("x2", x)
+            .attr("y2", 205 + startOffset)
+            .attr("stroke", color)
+            .attr("stroke-width", 3)
+            .attr("stroke-linecap", "round")
+            .attr("stroke-dasharray", "7 8");
+
+          const tile = column.append("g")
+            .attr("class", "replacement-tile")
+            .attr("transform", `translate(${x},${80 + startOffset})`);
+
+          tile.append("rect")
+            .attr("x", -width / 2)
+            .attr("y", -height / 2)
+            .attr("width", width)
+            .attr("height", height)
+            .attr("rx", 18)
+            .attr("fill", color);
+
+          const labelText = tile.append("text")
+            .attr("text-anchor", "middle")
+            .attr("dominant-baseline", "middle")
+            .attr("fill", "white")
+            .attr("font-size", 24)
+            .attr("font-weight", 650);
+
+          label.split("\n").forEach((line, i, lines) => {
+            labelText.append("tspan")
+              .attr("x", 0)
+              .attr("dy", lines.length === 1 ? 0 : i === 0 ? "-0.35em" : "1.2em")
+              .text(line);
+          });
+
+          tile.append("text")
+            .attr("x", 0)
+            .attr("y", -height / 2 - 17)
+            .attr("text-anchor", "middle")
+            .attr("fill", contextColor)
+            .attr("font-size", 15)
+            .attr("font-weight", 700)
+            .text(context);
+
+          const iconGroup = column.append("g")
+            .attr("class", "replacement-icon")
+            .attr("transform", `translate(${x},${175 + startOffset}) scale(1)`);
+          drawIcon(iconGroup, icon, color);
+
+          return { column, tile, iconGroup, lifeline };
         }
 
         const tiles = gTiles.selectAll("g.role-tile")
@@ -962,6 +1037,110 @@
           .attr("font-weight", 700)
           .text(">_");
 
+        const packageTemplateService = gService.append("g")
+          .attr("transform", "translate(185,-420) scale(0.85)")
+          .attr("opacity", 0);
+
+        packageTemplateService.append("path")
+          .attr("d", "M -118 -38 H 52 A 38 38 0 0 0 52 38 H -118 Z")
+          .attr("fill", green)
+          .attr("stroke", green)
+          .attr("stroke-width", 3)
+          .attr("stroke-linejoin", "round");
+
+        packageTemplateService.append("text")
+          .attr("x", -54)
+          .attr("y", -6)
+          .attr("text-anchor", "middle")
+          .attr("fill", "white")
+          .attr("font-size", 18)
+          .attr("font-weight", 650)
+          .text("Service");
+
+        packageTemplateService.append("text")
+          .attr("x", -54)
+          .attr("y", 17)
+          .attr("text-anchor", "middle")
+          .attr("fill", "white")
+          .attr("font-size", 18)
+          .attr("font-weight", 650)
+          .text("semantics");
+
+        packageTemplateService.append("circle")
+          .attr("cx", 52)
+          .attr("cy", 0)
+          .attr("r", 38)
+          .attr("fill", dark)
+          .attr("stroke", "white")
+          .attr("stroke-width", 4);
+
+        packageTemplateService.append("text")
+          .attr("x", 52)
+          .attr("y", -6)
+          .attr("text-anchor", "middle")
+          .attr("fill", "white")
+          .attr("font-size", 16)
+          .attr("font-weight", 650)
+          .text("Code");
+
+        packageTemplateService.append("text")
+          .attr("x", 52)
+          .attr("y", 18)
+          .attr("text-anchor", "middle")
+          .attr("fill", "white")
+          .attr("font-family", "monospace")
+          .attr("font-size", 17)
+          .attr("font-weight", 700)
+          .text(">_");
+
+        const packageCreatorService = packageTemplateService.clone(true)
+          .attr("transform", "translate(185,-420) scale(0.85)")
+          .attr("opacity", 0);
+
+        const packageTemplateColumn = drawReplacementColumn({
+          x: 185,
+          label: "Package\nTemplate",
+          context: "cf-package",
+          icon: "provider",
+          direction: "down",
+          width: 220,
+          height: 88
+        });
+
+        const webUiColumn = drawReplacementColumn({
+          x: 920,
+          label: "Web UI",
+          context: "cf-package",
+          icon: "consumer",
+          direction: "up"
+        });
+
+        const packageCreatorColumn = drawReplacementColumn({
+          x: 185,
+          label: "Package\nCreator",
+          context: "cf-package",
+          icon: "provider",
+          direction: "down",
+          width: 220,
+          height: 88
+        });
+
+        const opencodeColumn = drawReplacementColumn({
+          x: 920,
+          label: "AI Agent",
+          context: "external tool",
+          icon: "consumer",
+          direction: "up",
+          color: external,
+          contextColor: external
+        });
+
+        packageTemplateColumn.column.lower();
+        webUiColumn.column.lower();
+        packageCreatorColumn.column.lower();
+        opencodeColumn.column.lower();
+        gBackground.lower();
+
         function drawActionBox(x, y, text, color, width = 116, height = 48) {
           const group = gActions.append("g")
             .attr("transform", `translate(${x},${y}) scale(0.85)`)
@@ -990,19 +1169,47 @@
           return group;
         }
 
-        const discoverBox = drawActionBox(675, 275, "discover", red);
-        const pushBox = drawActionBox(675, 340, "push", blue);
-        const storeBox = drawActionBox(430, 340, "store", blue);
+        const discoverPushBox = drawActionBox(675, 292, "discover / \npush", red, 116, 66);
+        const storeBox = drawActionBox(430, 325, "store", blue);
+
+        const storeBullet = gActions.append("g")
+          .attr("transform", "translate(360,377) scale(0.85)")
+          .attr("opacity", 0);
+
+        storeBullet.append("text")
+          .attr("x", -74)
+          .attr("y", 0)
+          .attr("fill", dark)
+          .attr("font-size", 15)
+          .attr("font-weight", 650)
+          .text("•");
+
+        const storeBulletText = storeBullet.append("text")
+          .attr("x", -57)
+          .attr("y", 0)
+          .attr("fill", dark)
+          .attr("font-size", 15)
+          .attr("font-weight", 650);
+
+        storeBulletText.append("tspan")
+          .attr("x", -57)
+          .attr("dy", 0)
+          .text("semantics");
+
+        storeBulletText.append("tspan")
+          .attr("x", -57)
+          .attr("dy", 19)
+          .text("incl. binding");
 
         const affordanceForm = gActions.append("g")
-          .attr("transform", "translate(675,445) scale(0.85)")
+          .attr("transform", "translate(675,425) scale(0.85)")
           .attr("opacity", 0);
 
         affordanceForm.append("rect")
           .attr("x", -96)
-          .attr("y", -56)
+          .attr("y", -73)
           .attr("width", 192)
-          .attr("height", 112)
+          .attr("height", 146)
           .attr("rx", 16)
           .attr("fill", "#fff6cf")
           .attr("stroke", blue)
@@ -1010,7 +1217,7 @@
 
         affordanceForm.append("text")
           .attr("x", 0)
-          .attr("y", -31)
+          .attr("y", -49)
           .attr("text-anchor", "middle")
           .attr("fill", blue)
           .attr("font-size", 15)
@@ -1018,8 +1225,9 @@
           .text("standard affordance");
 
         [
-          { label: "service", y: -4 },
-          { label: "input args", y: 29 }
+          { label: "service", y: -20 },
+          { label: "input args", y: 18 },
+          { label: "output", y: 56 }
         ].forEach((row) => {
           affordanceForm.append("text")
             .attr("x", -76)
@@ -1040,7 +1248,7 @@
         });
 
         const consumerRequest = gActions.append("g")
-          .attr("transform", "translate(920,540) scale(0.85)")
+          .attr("transform", "translate(920,425) scale(0.85)")
           .attr("opacity", 0);
 
         consumerRequest.append("rect")
@@ -1079,10 +1287,10 @@
             .attr("opacity", 0);
         }
 
-        const discoverArrow = drawArrow("M 617 275 C 500 255 330 275 275 300", red);
-        const pushArrow = drawArrow("M 617 340 H 488", blue);
-        const requestArrow = drawArrow("M 842 520 C 808 505 804 462 776 445", blue);
-        const checkArrow = drawArrow("M 579 424 C 530 456 468 428 450 364", red);
+        const discoverArrow = drawArrow("M 617 259 C 500 240 330 275 275 300", red);
+        const pushArrow = drawArrow("M 617 325 H 488", blue);
+        const requestArrow = drawArrow("M 842 425 H 776", blue);
+        const checkArrow = drawArrow("M 579 405 C 530 440 468 428 450 364", red);
         const callUpArrow = drawArrow("M 675 537 V 505", red);
         const callCodeArrow = drawArrow("M 617 570 C 455 585 290 470 237 338", red);
 
@@ -1121,17 +1329,24 @@
         }
 
         function render(stage) {
-          stage = Math.max(0, Math.min(5, stage));
+          stage = Math.max(0, Math.min(7, stage));
           const expanded = stage >= 1;
           const showService = stage >= 2;
           const showAffordance = stage >= 3;
           const showRequest = stage >= 4;
           const showCall = stage >= 5;
+          const swapColumns = stage >= 6;
+          const swapColumnsAgain = stage >= 7;
 
           tiles.transition()
             .duration(820)
             .ease(d3.easeCubicInOut)
-            .attr("transform", d => expanded ? `translate(${d.x},80)` : "translate(550,325)");
+            .attr("transform", d => {
+              if (!expanded) return "translate(550,325)";
+              if (swapColumns && d.id === "provider") return `translate(${d.x},800)`;
+              if (swapColumns && d.id === "consumer") return `translate(${d.x},-640)`;
+              return `translate(${d.x},80)`;
+            });
 
           tiles.select("rect").transition()
             .duration(820)
@@ -1158,32 +1373,142 @@
             .attr("transform", expanded ? "scale(1)" : "scale(0.85)");
 
           icons.transition()
-            .delay(expanded ? 980 : 0)
-            .duration(expanded ? 280 : 120)
-            .ease(d3.easeBackOut.overshoot(1.25))
+            .delay(swapColumns ? 0 : expanded ? 980 : 0)
+            .duration(swapColumns ? 820 : expanded ? 280 : 120)
+            .ease(swapColumns ? d3.easeCubicInOut : d3.easeBackOut.overshoot(1.25))
             .attr("opacity", expanded ? 1 : 0)
-            .attr("transform", d => `translate(${d.x},175) scale(${expanded ? 1 : 0.85})`);
+            .attr("transform", d => {
+              const y = swapColumns && d.id === "provider" ? 895 : swapColumns && d.id === "consumer" ? -545 : 175;
+              return `translate(${d.x},${y}) scale(${expanded ? 1 : 0.85})`;
+            });
 
           lifelines.transition()
-            .delay((d, i) => expanded ? 1180 + i * 150 : 0)
-            .duration(expanded ? 330 : 150)
-            .ease(d3.easeCubicOut)
+            .delay((d, i) => swapColumns ? 0 : expanded ? 1180 + i * 150 : 0)
+            .duration(swapColumns ? 820 : expanded ? 330 : 150)
+            .ease(swapColumns ? d3.easeCubicInOut : d3.easeCubicOut)
             .attr("opacity", expanded ? 1 : 0)
-            .attr("y2", expanded ? 585 : 205);
+            .attr("y1", d => {
+              if (!expanded) return 205;
+              if (swapColumns && d.id === "provider") return 925;
+              if (swapColumns && d.id === "consumer") return -515;
+              return 205;
+            })
+            .attr("y2", d => {
+              if (!expanded) return 205;
+              if (swapColumns && d.id === "provider") return 1305;
+              if (swapColumns && d.id === "consumer") return -135;
+              return 585;
+            });
 
           serviceElement.transition()
-            .delay(showService ? 140 : 0)
-            .duration(showService ? 320 : 150)
-            .ease(d3.easeBackOut.overshoot(1.2))
+            .delay(swapColumns ? 0 : showService ? 140 : 0)
+            .duration(swapColumns ? 820 : showService ? 320 : 150)
+            .ease(swapColumns ? d3.easeCubicInOut : d3.easeBackOut.overshoot(1.2))
             .attr("opacity", showService ? 1 : 0)
-            .attr("transform", `translate(185,300) scale(${showService ? 1 : 0.85})`);
+            .attr("transform", `translate(185,${swapColumns ? 1020 : 300}) scale(${showService ? 1 : 0.85})`);
 
-          discoverBox.transition()
+          packageTemplateService.transition()
+            .duration(swapColumns ? 820 : 180)
+            .ease(d3.easeCubicInOut)
+            .attr("opacity", swapColumns ? 1 : 0)
+            .attr("transform", `translate(185,${swapColumnsAgain ? 1020 : swapColumns ? 300 : -420}) scale(${swapColumns ? 1 : 0.85})`);
+
+          packageCreatorService.transition()
+            .duration(swapColumnsAgain ? 820 : 180)
+            .ease(d3.easeCubicInOut)
+            .attr("opacity", swapColumnsAgain ? 1 : 0)
+            .attr("transform", `translate(185,${swapColumnsAgain ? 300 : -420}) scale(${swapColumnsAgain ? 1 : 0.85})`);
+
+          packageTemplateColumn.column.transition()
+            .duration(swapColumns ? 820 : 180)
+            .ease(d3.easeCubicInOut)
+            .attr("opacity", swapColumns ? 1 : 0);
+
+          packageTemplateColumn.tile.transition()
+            .duration(swapColumns ? 820 : 180)
+            .ease(d3.easeCubicInOut)
+            .attr("transform", `translate(185,${swapColumnsAgain ? 800 : swapColumns ? 80 : -640})`);
+
+          packageTemplateColumn.iconGroup.transition()
+            .duration(swapColumns ? 820 : 180)
+            .ease(d3.easeCubicInOut)
+            .attr("transform", `translate(185,${swapColumnsAgain ? 895 : swapColumns ? 175 : -545}) scale(${swapColumns ? 1 : 0.85})`);
+
+          packageTemplateColumn.lifeline.transition()
+            .duration(swapColumns ? 820 : 180)
+            .ease(d3.easeCubicInOut)
+            .attr("y1", swapColumnsAgain ? 925 : swapColumns ? 205 : -515)
+            .attr("y2", swapColumnsAgain ? 925 : swapColumns ? 585 : -515);
+
+          packageCreatorColumn.column.transition()
+            .duration(swapColumnsAgain ? 820 : 180)
+            .ease(d3.easeCubicInOut)
+            .attr("opacity", swapColumnsAgain ? 1 : 0);
+
+          packageCreatorColumn.tile.transition()
+            .duration(swapColumnsAgain ? 820 : 180)
+            .ease(d3.easeCubicInOut)
+            .attr("transform", `translate(185,${swapColumnsAgain ? 80 : -640})`);
+
+          packageCreatorColumn.iconGroup.transition()
+            .duration(swapColumnsAgain ? 820 : 180)
+            .ease(d3.easeCubicInOut)
+            .attr("transform", `translate(185,${swapColumnsAgain ? 175 : -545}) scale(${swapColumnsAgain ? 1 : 0.85})`);
+
+          packageCreatorColumn.lifeline.transition()
+            .duration(swapColumnsAgain ? 820 : 180)
+            .ease(d3.easeCubicInOut)
+            .attr("y1", swapColumnsAgain ? 205 : -515)
+            .attr("y2", swapColumnsAgain ? 585 : -515);
+
+          webUiColumn.column.transition()
+            .duration(swapColumns ? 820 : 180)
+            .ease(d3.easeCubicInOut)
+            .attr("opacity", swapColumns ? 1 : 0);
+
+          webUiColumn.tile.transition()
+            .duration(swapColumns ? 820 : 180)
+            .ease(d3.easeCubicInOut)
+            .attr("transform", `translate(920,${swapColumnsAgain ? -640 : swapColumns ? 80 : 800})`);
+
+          webUiColumn.iconGroup.transition()
+            .duration(swapColumns ? 820 : 180)
+            .ease(d3.easeCubicInOut)
+            .attr("transform", `translate(920,${swapColumnsAgain ? -545 : swapColumns ? 175 : 895}) scale(${swapColumns ? 1 : 0.85})`);
+
+          webUiColumn.lifeline.transition()
+            .duration(swapColumns ? 820 : 180)
+            .ease(d3.easeCubicInOut)
+            .attr("y1", swapColumnsAgain ? -515 : swapColumns ? 205 : 925)
+            .attr("y2", swapColumnsAgain ? -515 : swapColumns ? 585 : 925);
+
+          opencodeColumn.column.transition()
+            .duration(swapColumnsAgain ? 820 : 180)
+            .ease(d3.easeCubicInOut)
+            .attr("opacity", swapColumnsAgain ? 1 : 0);
+
+          opencodeColumn.tile.transition()
+            .duration(swapColumnsAgain ? 820 : 180)
+            .ease(d3.easeCubicInOut)
+            .attr("transform", `translate(920,${swapColumnsAgain ? 80 : 800})`);
+
+          opencodeColumn.iconGroup.transition()
+            .duration(swapColumnsAgain ? 820 : 180)
+            .ease(d3.easeCubicInOut)
+            .attr("transform", `translate(920,${swapColumnsAgain ? 175 : 895}) scale(${swapColumnsAgain ? 1 : 0.85})`);
+
+          opencodeColumn.lifeline.transition()
+            .duration(swapColumnsAgain ? 820 : 180)
+            .ease(d3.easeCubicInOut)
+            .attr("y1", swapColumnsAgain ? 205 : 925)
+            .attr("y2", swapColumnsAgain ? 585 : 925);
+
+          discoverPushBox.transition()
             .delay(showService ? 520 : 0)
             .duration(showService ? 260 : 120)
             .ease(d3.easeBackOut.overshoot(1.15))
             .attr("opacity", showService ? 1 : 0)
-            .attr("transform", `translate(675,275) scale(${showService ? 1 : 0.85})`);
+            .attr("transform", `translate(675,292) scale(${showService ? 1 : 0.85})`);
 
           discoverArrow.transition()
             .delay(showService ? 760 : 0)
@@ -1192,19 +1517,19 @@
             .attr("opacity", showService ? 1 : 0)
             .attr("stroke-dashoffset", showService ? 0 : 800);
 
-          pushBox.transition()
-            .delay(showService ? 880 : 0)
-            .duration(showService ? 260 : 120)
-            .ease(d3.easeBackOut.overshoot(1.15))
-            .attr("opacity", showService ? 1 : 0)
-            .attr("transform", `translate(675,340) scale(${showService ? 1 : 0.85})`);
-
           storeBox.transition()
             .delay(showService ? 1040 : 0)
             .duration(showService ? 260 : 120)
             .ease(d3.easeBackOut.overshoot(1.15))
             .attr("opacity", showService ? 1 : 0)
-            .attr("transform", `translate(430,340) scale(${showService ? 1 : 0.85})`);
+            .attr("transform", `translate(430,325) scale(${showService ? 1 : 0.85})`);
+
+          storeBullet.transition()
+            .delay(showService ? 1040 : 0)
+            .duration(showService ? 260 : 120)
+            .ease(d3.easeBackOut.overshoot(1.15))
+            .attr("opacity", showService ? 1 : 0)
+            .attr("transform", `translate(360,377) scale(${showService ? 1 : 0.85})`);
 
           pushArrow.transition()
             .delay(showService ? 1160 : 0)
@@ -1218,14 +1543,14 @@
             .duration(showAffordance ? 320 : 140)
             .ease(d3.easeBackOut.overshoot(1.15))
             .attr("opacity", showAffordance ? 1 : 0)
-            .attr("transform", `translate(675,445) scale(${showAffordance ? 1 : 0.85})`);
+            .attr("transform", `translate(675,425) scale(${showAffordance ? 1 : 0.85})`);
 
           consumerRequest.transition()
             .delay(showRequest ? 120 : 0)
             .duration(showRequest ? 300 : 140)
             .ease(d3.easeBackOut.overshoot(1.15))
             .attr("opacity", showRequest ? 1 : 0)
-            .attr("transform", `translate(920,540) scale(${showRequest ? 1 : 0.85})`);
+            .attr("transform", `translate(920,425) scale(${showRequest ? 1 : 0.85})`);
 
           requestArrow.transition()
             .delay(showRequest ? 420 : 0)
