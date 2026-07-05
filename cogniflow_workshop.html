@@ -957,6 +957,16 @@
           .attr("opacity", 0)
           .text(d => d.context);
 
+        const affordancesStartLabel = gTiles.append("text")
+          .attr("x", 550)
+          .attr("y", 325)
+          .attr("text-anchor", "middle")
+          .attr("dominant-baseline", "middle")
+          .attr("fill", "white")
+          .attr("font-size", 28)
+          .attr("font-weight", 700)
+          .text("affordances");
+
         const icons = gIcons.selectAll("g.role-icon")
           .data(lanes)
           .join("g")
@@ -1371,6 +1381,10 @@
             .ease(d3.easeBackOut.overshoot(1.2))
             .attr("opacity", expanded ? 1 : 0)
             .attr("transform", expanded ? "scale(1)" : "scale(0.85)");
+
+          affordancesStartLabel.transition()
+            .duration(expanded ? 180 : 260)
+            .attr("opacity", expanded ? 0 : 1);
 
           icons.transition()
             .delay(swapColumns ? 0 : expanded ? 980 : 0)
