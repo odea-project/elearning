@@ -717,6 +717,221 @@
     };
   </script>
 </section>
+
+<section id="cf-service-process-diagram" data-background-color="white">
+  <svg
+    id="cf-service-process-svg"
+    viewBox="0 0 1100 650"
+    style="width: 100%; height: 650px;"
+  ></svg>
+
+  <!-- Invisible Reveal fragments: each click advances the D3 state -->
+  <div class="fragment" style="display: none;"></div>
+
+  <script>
+    window.initCfServiceProcessDiagram = () => {
+      const section = document.getElementById("cf-service-process-diagram");
+      if (!section || section.dataset.cfServiceProcessInitialized === "true") return;
+      const d3 = window.d3;
+      const reveal = window.Reveal;
+      if (!d3 || !reveal) return;
+      section.dataset.cfServiceProcessInitialized = "true";
+
+      {
+        const svg = d3.select("#cf-service-process-svg");
+        const W = 1100;
+        const H = 650;
+        const blue = "#004c93";
+
+        const lanes = [
+          { id: "provider", label: "Provider", x: 185, icon: "provider" },
+          { id: "database", label: "Database", x: 430, icon: "database" },
+          { id: "runtime", label: "Runtime", x: 675, icon: "runtime" },
+          { id: "consumer", label: "Consumer", x: 920, icon: "consumer" }
+        ];
+
+        const root = svg.append("g");
+        const gBackground = root.append("g").attr("class", "service-background");
+        const gLifelines = root.append("g").attr("class", "service-lifelines");
+        const gTiles = root.append("g").attr("class", "service-tiles");
+        const gIcons = root.append("g").attr("class", "service-icons");
+
+        gBackground.append("rect")
+          .attr("width", W)
+          .attr("height", H)
+          .attr("fill", "white");
+
+        function drawIcon(group, type) {
+          if (type === "provider") {
+            group.append("path")
+              .attr("d", "M 0 -19 L 18 -9 L 18 12 L 0 22 L -18 12 L -18 -9 Z M 0 -19 L 0 1 M -18 -9 L 0 1 L 18 -9")
+              .attr("fill", "none")
+              .attr("stroke", blue)
+              .attr("stroke-width", 3)
+              .attr("stroke-linejoin", "round")
+              .attr("stroke-linecap", "round");
+          } else if (type === "database") {
+            group.append("path")
+              .attr("d", "M -18 -10 C -18 -20 18 -20 18 -10 L 18 14 C 18 24 -18 24 -18 14 Z")
+              .attr("fill", "none")
+              .attr("stroke", blue)
+              .attr("stroke-width", 3)
+              .attr("stroke-linejoin", "round");
+            group.append("ellipse")
+              .attr("cx", 0)
+              .attr("cy", -10)
+              .attr("rx", 18)
+              .attr("ry", 8)
+              .attr("fill", "white")
+              .attr("stroke", blue)
+              .attr("stroke-width", 3);
+            group.append("path")
+              .attr("d", "M -18 2 C -18 10 18 10 18 2")
+              .attr("fill", "none")
+              .attr("stroke", blue)
+              .attr("stroke-width", 3);
+          } else if (type === "runtime") {
+            group.append("rect")
+              .attr("x", -16)
+              .attr("y", -16)
+              .attr("width", 32)
+              .attr("height", 32)
+              .attr("rx", 5)
+              .attr("fill", "none")
+              .attr("stroke", blue)
+              .attr("stroke-width", 3);
+            group.append("circle")
+              .attr("r", 6)
+              .attr("fill", blue);
+            [-24, 24].forEach((x) => {
+              group.append("line").attr("x1", x).attr("y1", -8).attr("x2", x / 1.5).attr("y2", -8).attr("stroke", blue).attr("stroke-width", 3).attr("stroke-linecap", "round");
+              group.append("line").attr("x1", x).attr("y1", 8).attr("x2", x / 1.5).attr("y2", 8).attr("stroke", blue).attr("stroke-width", 3).attr("stroke-linecap", "round");
+            });
+          } else {
+            group.append("circle")
+              .attr("cy", -10)
+              .attr("r", 9)
+              .attr("fill", "none")
+              .attr("stroke", blue)
+              .attr("stroke-width", 3);
+            group.append("path")
+              .attr("d", "M -18 20 C -14 3 14 3 18 20")
+              .attr("fill", "none")
+              .attr("stroke", blue)
+              .attr("stroke-width", 3)
+              .attr("stroke-linecap", "round");
+          }
+        }
+
+        const tiles = gTiles.selectAll("g.role-tile")
+          .data(lanes)
+          .join("g")
+          .attr("class", d => `role-tile role-${d.id}`)
+          .attr("transform", "translate(550,325)");
+
+        tiles.append("rect")
+          .attr("x", -150)
+          .attr("y", -55)
+          .attr("width", 300)
+          .attr("height", 110)
+          .attr("rx", 24)
+          .attr("fill", blue);
+
+        tiles.append("text")
+          .attr("class", "role-label")
+          .attr("text-anchor", "middle")
+          .attr("dominant-baseline", "middle")
+          .attr("fill", "white")
+          .attr("font-size", 26)
+          .attr("font-weight", 650)
+          .attr("opacity", 0)
+          .text(d => d.label);
+
+        const icons = gIcons.selectAll("g.role-icon")
+          .data(lanes)
+          .join("g")
+          .attr("class", d => `role-icon role-${d.id}`)
+          .attr("transform", d => `translate(${d.x},175) scale(0.85)`)
+          .attr("opacity", 0)
+          .each(function(d) {
+            drawIcon(d3.select(this), d.icon);
+          });
+
+        const lifelines = gLifelines.selectAll("line.role-lifeline")
+          .data(lanes)
+          .join("line")
+          .attr("class", d => `role-lifeline role-${d.id}`)
+          .attr("x1", d => d.x)
+          .attr("y1", 205)
+          .attr("x2", d => d.x)
+          .attr("y2", 205)
+          .attr("stroke", blue)
+          .attr("stroke-width", 3)
+          .attr("stroke-linecap", "round")
+          .attr("stroke-dasharray", "7 8")
+          .attr("opacity", 0);
+
+        function currentStage() {
+          return section.querySelectorAll(".fragment.visible").length;
+        }
+
+        function render(stage) {
+          stage = Math.max(0, Math.min(1, stage));
+          const expanded = stage === 1;
+
+          tiles.transition()
+            .duration(820)
+            .ease(d3.easeCubicInOut)
+            .attr("transform", d => expanded ? `translate(${d.x},80)` : "translate(550,325)");
+
+          tiles.select("rect").transition()
+            .duration(820)
+            .ease(d3.easeCubicInOut)
+            .attr("x", expanded ? -95 : -150)
+            .attr("y", expanded ? -35 : -55)
+            .attr("width", expanded ? 190 : 300)
+            .attr("height", expanded ? 70 : 110)
+            .attr("rx", expanded ? 18 : 24);
+
+          tiles.select(".role-label").transition()
+            .delay(expanded ? 820 : 0)
+            .duration(expanded ? 260 : 120)
+            .ease(d3.easeBackOut.overshoot(1.3))
+            .attr("opacity", expanded ? 1 : 0)
+            .attr("transform", expanded ? "scale(1)" : "scale(0.85)");
+
+          icons.transition()
+            .delay(expanded ? 980 : 0)
+            .duration(expanded ? 280 : 120)
+            .ease(d3.easeBackOut.overshoot(1.25))
+            .attr("opacity", expanded ? 1 : 0)
+            .attr("transform", d => `translate(${d.x},175) scale(${expanded ? 1 : 0.85})`);
+
+          lifelines.transition()
+            .delay((d, i) => expanded ? 1180 + i * 150 : 0)
+            .duration(expanded ? 330 : 150)
+            .ease(d3.easeCubicOut)
+            .attr("opacity", expanded ? 1 : 0)
+            .attr("y2", expanded ? 585 : 205);
+        }
+
+        function updateForSlide() {
+          if (reveal.getCurrentSlide() === section) {
+            render(currentStage());
+          }
+        }
+
+        reveal.on("slidechanged", updateForSlide);
+        reveal.on("fragmentshown", updateForSlide);
+        reveal.on("fragmenthidden", updateForSlide);
+
+        render(0);
+        return;
+      }
+
+    };
+  </script>
+</section>
 			
 		</div>
 	</div>
@@ -744,6 +959,7 @@
 			transition: 'slide'
 		});
 		if (window.initCfLayerDiagram) window.initCfLayerDiagram();
+		if (window.initCfServiceProcessDiagram) window.initCfServiceProcessDiagram();
 	</script>
 
 
