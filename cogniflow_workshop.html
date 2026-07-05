@@ -729,6 +729,8 @@
   <div class="fragment" style="display: none;"></div>
   <div class="fragment" style="display: none;"></div>
   <div class="fragment" style="display: none;"></div>
+  <div class="fragment" style="display: none;"></div>
+  <div class="fragment" style="display: none;"></div>
 
   <script>
     window.initCfServiceProcessDiagram = () => {
@@ -746,12 +748,13 @@
         const blue = "#004c93";
         const red = "#8a1538";
         const dark = "#333333";
+        const external = "#5f6670";
 
         const lanes = [
-          { id: "provider", label: "Provider", x: 185, icon: "provider" },
-          { id: "database", label: "Database", x: 430, icon: "database" },
-          { id: "runtime", label: "Runtime", x: 675, icon: "runtime" },
-          { id: "consumer", label: "Consumer", x: 920, icon: "consumer" }
+          { id: "provider", label: "Provider", context: "cf-package", x: 185, icon: "provider" },
+          { id: "database", label: "Database", context: "external tool", x: 430, icon: "database" },
+          { id: "runtime", label: "Runtime", context: "cf-package", x: 675, icon: "runtime" },
+          { id: "consumer", label: "Consumer", context: "cf-package", x: 920, icon: "consumer" }
         ];
 
         const root = svg.append("g");
@@ -850,6 +853,7 @@
           .attr("transform", "translate(550,325)");
 
         tiles.append("rect")
+          .attr("class", "role-tile-bg")
           .attr("x", -150)
           .attr("y", -55)
           .attr("width", 300)
@@ -866,6 +870,17 @@
           .attr("font-weight", 650)
           .attr("opacity", 0)
           .text(d => d.label);
+
+        tiles.append("text")
+          .attr("class", "role-context")
+          .attr("x", 0)
+          .attr("y", -52)
+          .attr("text-anchor", "middle")
+          .attr("fill", d => d.id === "database" ? external : blue)
+          .attr("font-size", 15)
+          .attr("font-weight", 700)
+          .attr("opacity", 0)
+          .text(d => d.context);
 
         const icons = gIcons.selectAll("g.role-icon")
           .data(lanes)
@@ -947,26 +962,31 @@
           .attr("font-weight", 700)
           .text(">_");
 
-        function drawActionBox(x, y, text, color) {
+        function drawActionBox(x, y, text, color, width = 116, height = 48) {
           const group = gActions.append("g")
             .attr("transform", `translate(${x},${y}) scale(0.85)`)
             .attr("opacity", 0);
           group.append("rect")
-            .attr("x", -58)
-            .attr("y", -24)
-            .attr("width", 116)
-            .attr("height", 48)
+            .attr("x", -width / 2)
+            .attr("y", -height / 2)
+            .attr("width", width)
+            .attr("height", height)
             .attr("rx", 14)
             .attr("fill", "white")
             .attr("stroke", color)
             .attr("stroke-width", 3);
-          group.append("text")
+          const label = group.append("text")
             .attr("text-anchor", "middle")
             .attr("dominant-baseline", "middle")
             .attr("fill", color)
             .attr("font-size", 18)
-            .attr("font-weight", 700)
-            .text(text);
+            .attr("font-weight", 700);
+          text.split("\n").forEach((line, i, lines) => {
+            label.append("tspan")
+              .attr("x", 0)
+              .attr("dy", lines.length === 1 ? 0 : i === 0 ? "-0.35em" : "1.2em")
+              .text(line);
+          });
           return group;
         }
 
@@ -1019,6 +1039,33 @@
             .attr("stroke-width", 1.4);
         });
 
+        const consumerRequest = gActions.append("g")
+          .attr("transform", "translate(920,540) scale(0.85)")
+          .attr("opacity", 0);
+
+        consumerRequest.append("rect")
+          .attr("x", -78)
+          .attr("y", -42)
+          .attr("width", 156)
+          .attr("height", 84)
+          .attr("rx", 16)
+          .attr("fill", "white")
+          .attr("stroke", blue)
+          .attr("stroke-width", 3);
+
+        ["uses", "for", "request"].forEach((line, i) => {
+          consumerRequest.append("text")
+            .attr("x", 0)
+            .attr("y", -18 + i * 22)
+            .attr("text-anchor", "middle")
+            .attr("fill", blue)
+            .attr("font-size", 18)
+            .attr("font-weight", 700)
+            .text(line);
+        });
+
+        const callBox = drawActionBox(675, 570, "call / \nprovide", red, 116, 66);
+
         function drawArrow(pathD, color) {
           return gArrows.append("path")
             .attr("d", pathD)
@@ -1034,16 +1081,52 @@
 
         const discoverArrow = drawArrow("M 617 275 C 500 255 330 275 275 300", red);
         const pushArrow = drawArrow("M 617 340 H 488", blue);
+        const requestArrow = drawArrow("M 842 520 C 808 505 804 462 776 445", blue);
+        const checkArrow = drawArrow("M 579 424 C 530 456 468 428 450 364", red);
+        const callUpArrow = drawArrow("M 675 537 V 505", red);
+        const callCodeArrow = drawArrow("M 617 570 C 455 585 290 470 237 338", red);
+
+        const checkLabel = gArrows.append("text")
+          .attr("x", 520)
+          .attr("y", 418)
+          .attr("text-anchor", "middle")
+          .attr("fill", red)
+          .attr("font-size", 15)
+          .attr("font-weight", 700)
+          .attr("opacity", 0)
+          .text("check");
+
+        const bindingLabel = gArrows.append("text")
+          .attr("x", 558)
+          .attr("y", 472)
+          .attr("text-anchor", "middle")
+          .attr("fill", blue)
+          .attr("font-size", 15)
+          .attr("font-weight", 700)
+          .attr("opacity", 0);
+
+        bindingLabel.append("tspan")
+          .attr("x", 518)
+          .attr("dy", -10)
+          .text("recieve");
+        bindingLabel.append("tspan")
+          .attr("x", 518)
+          .attr("dy", 18)
+          .text("binding");
+
+        gArrows.raise();
 
         function currentStage() {
           return section.querySelectorAll(".fragment.visible").length;
         }
 
         function render(stage) {
-          stage = Math.max(0, Math.min(3, stage));
+          stage = Math.max(0, Math.min(5, stage));
           const expanded = stage >= 1;
           const showService = stage >= 2;
           const showAffordance = stage >= 3;
+          const showRequest = stage >= 4;
+          const showCall = stage >= 5;
 
           tiles.transition()
             .duration(820)
@@ -1053,6 +1136,7 @@
           tiles.select("rect").transition()
             .duration(820)
             .ease(d3.easeCubicInOut)
+            .attr("fill", d => expanded && d.id === "database" ? external : blue)
             .attr("x", expanded ? -95 : -150)
             .attr("y", expanded ? -35 : -55)
             .attr("width", expanded ? 190 : 300)
@@ -1063,6 +1147,13 @@
             .delay(expanded ? 820 : 0)
             .duration(expanded ? 260 : 120)
             .ease(d3.easeBackOut.overshoot(1.3))
+            .attr("opacity", expanded ? 1 : 0)
+            .attr("transform", expanded ? "scale(1)" : "scale(0.85)");
+
+          tiles.select(".role-context").transition()
+            .delay(expanded ? 980 : 0)
+            .duration(expanded ? 240 : 120)
+            .ease(d3.easeBackOut.overshoot(1.2))
             .attr("opacity", expanded ? 1 : 0)
             .attr("transform", expanded ? "scale(1)" : "scale(0.85)");
 
@@ -1128,6 +1219,58 @@
             .ease(d3.easeBackOut.overshoot(1.15))
             .attr("opacity", showAffordance ? 1 : 0)
             .attr("transform", `translate(675,445) scale(${showAffordance ? 1 : 0.85})`);
+
+          consumerRequest.transition()
+            .delay(showRequest ? 120 : 0)
+            .duration(showRequest ? 300 : 140)
+            .ease(d3.easeBackOut.overshoot(1.15))
+            .attr("opacity", showRequest ? 1 : 0)
+            .attr("transform", `translate(920,540) scale(${showRequest ? 1 : 0.85})`);
+
+          requestArrow.transition()
+            .delay(showRequest ? 420 : 0)
+            .duration(showRequest ? 430 : 120)
+            .ease(d3.easeCubicInOut)
+            .attr("opacity", showRequest ? 1 : 0)
+            .attr("stroke-dashoffset", showRequest ? 0 : 800);
+
+          checkArrow.transition()
+            .delay(showRequest ? 860 : 0)
+            .duration(showRequest ? 420 : 120)
+            .ease(d3.easeCubicInOut)
+            .attr("opacity", showRequest ? 1 : 0)
+            .attr("stroke-dashoffset", showRequest ? 0 : 800);
+
+          checkLabel.transition()
+            .delay(showRequest ? 1060 : 0)
+            .duration(showRequest ? 180 : 100)
+            .attr("opacity", showRequest ? 1 : 0);
+
+          bindingLabel.transition()
+            .delay(showRequest ? 1180 : 0)
+            .duration(showRequest ? 180 : 100)
+            .attr("opacity", showRequest ? 1 : 0);
+
+          callBox.transition()
+            .delay(showCall ? 120 : 0)
+            .duration(showCall ? 280 : 120)
+            .ease(d3.easeBackOut.overshoot(1.15))
+            .attr("opacity", showCall ? 1 : 0)
+            .attr("transform", `translate(675,570) scale(${showCall ? 1 : 0.85})`);
+
+          callUpArrow.transition()
+            .delay(showCall ? 380 : 0)
+            .duration(showCall ? 280 : 120)
+            .ease(d3.easeCubicInOut)
+            .attr("opacity", showCall ? 1 : 0)
+            .attr("stroke-dashoffset", showCall ? 0 : 800);
+
+          callCodeArrow.transition()
+            .delay(showCall ? 620 : 0)
+            .duration(showCall ? 560 : 120)
+            .ease(d3.easeCubicInOut)
+            .attr("opacity", showCall ? 1 : 0)
+            .attr("stroke-dashoffset", showCall ? 0 : 800);
         }
 
         function updateForSlide() {
