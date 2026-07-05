@@ -727,6 +727,7 @@
 
   <!-- Invisible Reveal fragments: each click advances the D3 state -->
   <div class="fragment" style="display: none;"></div>
+  <div class="fragment" style="display: none;"></div>
 
   <script>
     window.initCfServiceProcessDiagram = () => {
@@ -742,6 +743,8 @@
         const W = 1100;
         const H = 650;
         const blue = "#004c93";
+        const red = "#8a1538";
+        const dark = "#333333";
 
         const lanes = [
           { id: "provider", label: "Provider", x: 185, icon: "provider" },
@@ -753,8 +756,24 @@
         const root = svg.append("g");
         const gBackground = root.append("g").attr("class", "service-background");
         const gLifelines = root.append("g").attr("class", "service-lifelines");
+        const gArrows = root.append("g").attr("class", "service-arrows");
+        const gService = root.append("g").attr("class", "service-element");
+        const gActions = root.append("g").attr("class", "service-actions");
         const gTiles = root.append("g").attr("class", "service-tiles");
         const gIcons = root.append("g").attr("class", "service-icons");
+
+        const defs = svg.append("defs");
+        defs.append("marker")
+          .attr("id", "cf-service-arrowhead")
+          .attr("viewBox", "0 0 10 10")
+          .attr("refX", 9)
+          .attr("refY", 5)
+          .attr("markerWidth", 7)
+          .attr("markerHeight", 7)
+          .attr("orient", "auto")
+          .append("path")
+          .attr("d", "M 0 0 L 10 5 L 0 10 z")
+          .attr("fill", "context-stroke");
 
         gBackground.append("rect")
           .attr("width", W)
@@ -871,13 +890,113 @@
           .attr("stroke-dasharray", "7 8")
           .attr("opacity", 0);
 
+        const serviceElement = gService.append("g")
+          .attr("transform", "translate(185,300) scale(0.85)")
+          .attr("opacity", 0);
+
+        serviceElement.append("path")
+          .attr("d", "M -118 -38 H 52 A 38 38 0 0 0 52 38 H -118 Z")
+          .attr("fill", blue)
+          .attr("stroke", blue)
+          .attr("stroke-width", 3)
+          .attr("stroke-linejoin", "round");
+
+        serviceElement.append("text")
+          .attr("x", -54)
+          .attr("y", -6)
+          .attr("text-anchor", "middle")
+          .attr("fill", "white")
+          .attr("font-size", 18)
+          .attr("font-weight", 650)
+          .text("Service");
+
+        serviceElement.append("text")
+          .attr("x", -54)
+          .attr("y", 17)
+          .attr("text-anchor", "middle")
+          .attr("fill", "white")
+          .attr("font-size", 18)
+          .attr("font-weight", 650)
+          .text("semantics");
+
+        serviceElement.append("circle")
+          .attr("cx", 52)
+          .attr("cy", 0)
+          .attr("r", 38)
+          .attr("fill", dark)
+          .attr("stroke", "white")
+          .attr("stroke-width", 4);
+
+        serviceElement.append("text")
+          .attr("x", 52)
+          .attr("y", -6)
+          .attr("text-anchor", "middle")
+          .attr("fill", "white")
+          .attr("font-size", 16)
+          .attr("font-weight", 650)
+          .text("Code");
+
+        serviceElement.append("text")
+          .attr("x", 52)
+          .attr("y", 18)
+          .attr("text-anchor", "middle")
+          .attr("fill", "white")
+          .attr("font-family", "monospace")
+          .attr("font-size", 17)
+          .attr("font-weight", 700)
+          .text(">_");
+
+        function drawActionBox(x, y, text, color) {
+          const group = gActions.append("g")
+            .attr("transform", `translate(${x},${y}) scale(0.85)`)
+            .attr("opacity", 0);
+          group.append("rect")
+            .attr("x", -58)
+            .attr("y", -24)
+            .attr("width", 116)
+            .attr("height", 48)
+            .attr("rx", 14)
+            .attr("fill", "white")
+            .attr("stroke", color)
+            .attr("stroke-width", 3);
+          group.append("text")
+            .attr("text-anchor", "middle")
+            .attr("dominant-baseline", "middle")
+            .attr("fill", color)
+            .attr("font-size", 18)
+            .attr("font-weight", 700)
+            .text(text);
+          return group;
+        }
+
+        const discoverBox = drawActionBox(675, 275, "discover", red);
+        const pushBox = drawActionBox(675, 340, "push", blue);
+        const storeBox = drawActionBox(430, 340, "store", blue);
+
+        function drawArrow(pathD, color) {
+          return gArrows.append("path")
+            .attr("d", pathD)
+            .attr("fill", "none")
+            .attr("stroke", color)
+            .attr("stroke-width", 3)
+            .attr("stroke-linecap", "round")
+            .attr("stroke-dasharray", 800)
+            .attr("stroke-dashoffset", 800)
+            .attr("marker-end", "url(#cf-service-arrowhead)")
+            .attr("opacity", 0);
+        }
+
+        const discoverArrow = drawArrow("M 617 275 C 500 255 330 275 275 300", red);
+        const pushArrow = drawArrow("M 617 340 H 488", blue);
+
         function currentStage() {
           return section.querySelectorAll(".fragment.visible").length;
         }
 
         function render(stage) {
-          stage = Math.max(0, Math.min(1, stage));
-          const expanded = stage === 1;
+          stage = Math.max(0, Math.min(2, stage));
+          const expanded = stage >= 1;
+          const showService = stage >= 2;
 
           tiles.transition()
             .duration(820)
@@ -913,6 +1032,48 @@
             .ease(d3.easeCubicOut)
             .attr("opacity", expanded ? 1 : 0)
             .attr("y2", expanded ? 585 : 205);
+
+          serviceElement.transition()
+            .delay(showService ? 140 : 0)
+            .duration(showService ? 320 : 150)
+            .ease(d3.easeBackOut.overshoot(1.2))
+            .attr("opacity", showService ? 1 : 0)
+            .attr("transform", `translate(185,300) scale(${showService ? 1 : 0.85})`);
+
+          discoverBox.transition()
+            .delay(showService ? 520 : 0)
+            .duration(showService ? 260 : 120)
+            .ease(d3.easeBackOut.overshoot(1.15))
+            .attr("opacity", showService ? 1 : 0)
+            .attr("transform", `translate(675,275) scale(${showService ? 1 : 0.85})`);
+
+          discoverArrow.transition()
+            .delay(showService ? 760 : 0)
+            .duration(showService ? 430 : 120)
+            .ease(d3.easeCubicInOut)
+            .attr("opacity", showService ? 1 : 0)
+            .attr("stroke-dashoffset", showService ? 0 : 800);
+
+          pushBox.transition()
+            .delay(showService ? 880 : 0)
+            .duration(showService ? 260 : 120)
+            .ease(d3.easeBackOut.overshoot(1.15))
+            .attr("opacity", showService ? 1 : 0)
+            .attr("transform", `translate(675,340) scale(${showService ? 1 : 0.85})`);
+
+          storeBox.transition()
+            .delay(showService ? 1040 : 0)
+            .duration(showService ? 260 : 120)
+            .ease(d3.easeBackOut.overshoot(1.15))
+            .attr("opacity", showService ? 1 : 0)
+            .attr("transform", `translate(430,340) scale(${showService ? 1 : 0.85})`);
+
+          pushArrow.transition()
+            .delay(showService ? 1160 : 0)
+            .duration(showService ? 360 : 120)
+            .ease(d3.easeCubicInOut)
+            .attr("opacity", showService ? 1 : 0)
+            .attr("stroke-dashoffset", showService ? 0 : 800);
         }
 
         function updateForSlide() {
