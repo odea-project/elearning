@@ -728,6 +728,7 @@
   <!-- Invisible Reveal fragments: each click advances the D3 state -->
   <div class="fragment" style="display: none;"></div>
   <div class="fragment" style="display: none;"></div>
+  <div class="fragment" style="display: none;"></div>
 
   <script>
     window.initCfServiceProcessDiagram = () => {
@@ -973,6 +974,51 @@
         const pushBox = drawActionBox(675, 340, "push", blue);
         const storeBox = drawActionBox(430, 340, "store", blue);
 
+        const affordanceForm = gActions.append("g")
+          .attr("transform", "translate(675,445) scale(0.85)")
+          .attr("opacity", 0);
+
+        affordanceForm.append("rect")
+          .attr("x", -96)
+          .attr("y", -56)
+          .attr("width", 192)
+          .attr("height", 112)
+          .attr("rx", 16)
+          .attr("fill", "#fff6cf")
+          .attr("stroke", blue)
+          .attr("stroke-width", 3);
+
+        affordanceForm.append("text")
+          .attr("x", 0)
+          .attr("y", -31)
+          .attr("text-anchor", "middle")
+          .attr("fill", blue)
+          .attr("font-size", 15)
+          .attr("font-weight", 700)
+          .text("standard affordance");
+
+        [
+          { label: "service", y: -4 },
+          { label: "input args", y: 29 }
+        ].forEach((row) => {
+          affordanceForm.append("text")
+            .attr("x", -76)
+            .attr("y", row.y + 5)
+            .attr("fill", dark)
+            .attr("font-size", 11)
+            .attr("font-weight", 650)
+            .text(row.label);
+          affordanceForm.append("rect")
+            .attr("x", -4)
+            .attr("y", row.y - 13)
+            .attr("width", 78)
+            .attr("height", 22)
+            .attr("rx", 6)
+            .attr("fill", "#f4f8fc")
+            .attr("stroke", "#b8cadb")
+            .attr("stroke-width", 1.4);
+        });
+
         function drawArrow(pathD, color) {
           return gArrows.append("path")
             .attr("d", pathD)
@@ -994,9 +1040,10 @@
         }
 
         function render(stage) {
-          stage = Math.max(0, Math.min(2, stage));
+          stage = Math.max(0, Math.min(3, stage));
           const expanded = stage >= 1;
           const showService = stage >= 2;
+          const showAffordance = stage >= 3;
 
           tiles.transition()
             .duration(820)
@@ -1074,6 +1121,13 @@
             .ease(d3.easeCubicInOut)
             .attr("opacity", showService ? 1 : 0)
             .attr("stroke-dashoffset", showService ? 0 : 800);
+
+          affordanceForm.transition()
+            .delay(showAffordance ? 120 : 0)
+            .duration(showAffordance ? 320 : 140)
+            .ease(d3.easeBackOut.overshoot(1.15))
+            .attr("opacity", showAffordance ? 1 : 0)
+            .attr("transform", `translate(675,445) scale(${showAffordance ? 1 : 0.85})`);
         }
 
         function updateForSlide() {
