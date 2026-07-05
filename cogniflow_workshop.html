@@ -331,6 +331,34 @@
       appendBulletText(packageTemplateBullets, cx - 470, packageTemplateBulletY, "provides validation service", 17, "service-template-bullet");
 
       let semanticsRuntimeBulletY = cy - 185;
+      const semanticsDatabaseIcon = root.append("g")
+        .attr("class", "semantics-database-icon")
+        .attr("opacity", 0)
+        .attr("transform", `translate(${cx - 500},${semanticsRuntimeBulletY - 9}) scale(0.78)`);
+
+      semanticsDatabaseIcon.append("path")
+        .attr("d", "M 2 6 C 2 2 28 2 28 6 L 28 28 C 28 32 2 32 2 28 Z")
+        .attr("fill", "#eaf2fb")
+        .attr("stroke", blue)
+        .attr("stroke-width", 2)
+        .attr("stroke-linejoin", "round");
+
+      semanticsDatabaseIcon.append("ellipse")
+        .attr("cx", 15)
+        .attr("cy", 6)
+        .attr("rx", 13)
+        .attr("ry", 5)
+        .attr("fill", "white")
+        .attr("stroke", blue)
+        .attr("stroke-width", 2);
+
+      semanticsDatabaseIcon.append("path")
+        .attr("d", "M 2 17 C 2 21 28 21 28 17 M 2 27 C 2 31 28 31 28 27")
+        .attr("fill", "none")
+        .attr("stroke", blue)
+        .attr("stroke-width", 2)
+        .attr("stroke-linecap", "round");
+
       [
         "api to \n semantics \n database",
         "resolves \n service requests",
@@ -562,6 +590,12 @@
           .delay((d, i) => stage >= 5 ? 2200 + i * 180 : 0)
           .duration(260)
           .attr("opacity", stage >= 5 ? 1 : 0);
+
+        semanticsDatabaseIcon.transition()
+          .delay(stage >= 5 ? 2200 : 0)
+          .duration(260)
+          .attr("opacity", stage >= 5 ? 1 : 0)
+          .attr("transform", `translate(${cx - 500},${cy - 174}) scale(${stage >= 5 ? 1 : 0.78})`);
 
         conceptNodes.each(function(d) {
           const isPackage = d.index === 1;
