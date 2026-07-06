@@ -2601,6 +2601,436 @@
   </script>
 </section>
 
+<section id="cf-concept-domain-diagram" data-background-color="white">
+  <svg
+    id="cf-concept-domain-svg"
+    viewBox="0 0 1280 720"
+    style="width: 104%; height: auto; max-height: 900px; aspect-ratio: 16 / 9; margin-left: -2%;"
+  ></svg>
+
+  <!-- Invisible Reveal fragments: each click advances the D3 state -->
+  <div class="fragment" style="display: none;"></div>
+  <div class="fragment" style="display: none;"></div>
+  <div class="fragment" style="display: none;"></div>
+  <div class="fragment" style="display: none;"></div>
+
+  <script>
+    window.initCfConceptDomainDiagram = () => {
+      const section = document.getElementById("cf-concept-domain-diagram");
+      if (!section || section.dataset.cfConceptDomainInitialized === "true") return;
+      const d3 = window.d3;
+      const reveal = window.Reveal;
+      if (!d3 || !reveal) return;
+      section.dataset.cfConceptDomainInitialized = "true";
+
+      const svg = d3.select("#cf-concept-domain-svg");
+      const W = 1280;
+      const H = 720;
+      const blue = "#004c93";
+      const teal = "#197c83";
+      const gold = "#f4b942";
+      const root = svg.append("g");
+      const gColumns = root.append("g").attr("class", "concept-domain-columns");
+      const gArrows = root.append("g").attr("class", "concept-domain-arrows");
+      const gNodes = root.append("g").attr("class", "concept-domain-nodes");
+
+      const defs = svg.append("defs");
+      const shadow = defs.append("filter")
+        .attr("id", "cf-concept-domain-shadow")
+        .attr("x", "-20%")
+        .attr("y", "-30%")
+        .attr("width", "140%")
+        .attr("height", "170%");
+      shadow.append("feDropShadow")
+        .attr("dx", 0)
+        .attr("dy", 16)
+        .attr("stdDeviation", 13)
+        .attr("flood-color", "#0f172a")
+        .attr("flood-opacity", 0.18);
+
+      defs.append("marker")
+        .attr("id", "cf-concept-domain-arrowhead")
+        .attr("viewBox", "0 0 10 10")
+        .attr("refX", 8.5)
+        .attr("refY", 5)
+        .attr("markerWidth", 7)
+        .attr("markerHeight", 7)
+        .attr("orient", "auto")
+        .append("path")
+        .attr("d", "M 0 0 L 10 5 L 0 10 z")
+        .attr("fill", blue);
+
+      root.append("rect")
+        .attr("width", W)
+        .attr("height", H)
+        .attr("fill", "white")
+        .lower();
+
+      const columns = [
+        { id: "left", x: 18, label: "Concept domain", color: blue, bg: "rgba(0, 76, 147, 0.055)", stroke: "rgba(0, 76, 147, 0.24)" },
+        { id: "middle", x: 432, label: "Processing concepts", color: teal, bg: "rgba(25, 124, 131, 0.055)", stroke: "rgba(25, 124, 131, 0.24)" },
+        { id: "right", x: 846, label: "Affordance model", color: gold, bg: "rgba(244, 185, 66, 0.09)", stroke: "rgba(244, 185, 66, 0.28)" }
+      ];
+
+      const columnGroups = gColumns.selectAll("g.concept-domain-column")
+        .data(columns)
+        .join("g")
+        .attr("class", d => `concept-domain-column concept-domain-column-${d.id}`)
+        .attr("transform", d => `translate(${d.x},92)`)
+        .attr("opacity", 0);
+
+      columnGroups.append("rect")
+        .attr("width", 416)
+        .attr("height", 690)
+        .attr("rx", 8)
+        .attr("fill", d => d.bg)
+        .attr("stroke", d => d.stroke)
+        .attr("stroke-width", 2);
+
+      function drawSplitNode(x, y) {
+        const node = gNodes.append("g")
+          .attr("class", "concept-domain-split-node")
+          .attr("transform", `translate(${x},${y}) scale(0.82)`)
+          .attr("opacity", 0);
+
+        node.append("rect")
+          .attr("x", -170)
+          .attr("y", -36)
+          .attr("width", 340)
+          .attr("height", 72)
+          .attr("rx", 7)
+          .attr("fill", "white")
+          .attr("stroke", blue)
+          .attr("stroke-width", 3.2)
+          .attr("filter", "url(#cf-concept-domain-shadow)");
+
+        node.append("path")
+          .attr("d", "M -170 -29 Q -170 -36 -163 -36 H 163 Q 170 -36 170 -29 V -2 H -170 Z")
+          .attr("fill", blue);
+
+        node.append("path")
+          .attr("d", "M -170 -2 H 170 V 29 Q 170 36 163 36 H -163 Q -170 36 -170 29 Z")
+          .attr("fill", "#eef8f8");
+
+        node.append("line")
+          .attr("x1", -170)
+          .attr("y1", -2)
+          .attr("x2", 170)
+          .attr("y2", -2)
+          .attr("stroke", "white")
+          .attr("stroke-width", 3)
+          .attr("opacity", 0.9);
+
+        node.append("text")
+          .attr("x", 0)
+          .attr("y", -13)
+          .attr("text-anchor", "middle")
+          .attr("fill", "white")
+          .attr("font-family", "monospace")
+          .attr("font-size", 14.5)
+          .attr("font-weight", 750)
+          .text("cfproc:DataProcessingConceptDomain");
+
+        node.append("text")
+          .attr("x", 0)
+          .attr("y", 18)
+          .attr("text-anchor", "middle")
+          .attr("fill", teal)
+          .attr("font-family", "monospace")
+          .attr("font-size", 13.5)
+          .attr("font-weight", 750)
+          .text("a cf:conceptDomain .");
+
+        return node;
+      }
+
+      function drawTripleNode(x, y, rows, width = 218) {
+        const height = 92;
+        const node = gNodes.append("g")
+          .attr("class", "concept-domain-triple-node")
+          .attr("transform", `translate(${x},${y}) scale(0.9)`)
+          .attr("opacity", 0);
+
+        node.append("rect")
+          .attr("x", 0)
+          .attr("y", 0)
+          .attr("width", width)
+          .attr("height", height)
+          .attr("rx", 7)
+          .attr("fill", "white")
+          .attr("stroke", teal)
+          .attr("stroke-width", 2.8)
+          .attr("filter", "url(#cf-concept-domain-shadow)");
+
+        node.append("rect")
+          .attr("x", 0)
+          .attr("y", 0)
+          .attr("width", width)
+          .attr("height", 31)
+          .attr("rx", 7)
+          .attr("fill", teal);
+
+        node.append("rect")
+          .attr("x", 0)
+          .attr("y", 24)
+          .attr("width", width)
+          .attr("height", 7)
+          .attr("fill", teal);
+
+        node.append("rect")
+          .attr("x", 0)
+          .attr("y", 31)
+          .attr("width", width)
+          .attr("height", 31)
+          .attr("fill", "#eef8f8");
+
+        node.append("rect")
+          .attr("x", 0)
+          .attr("y", 62)
+          .attr("width", width)
+          .attr("height", 30)
+          .attr("rx", 7)
+          .attr("fill", "#f8fbff");
+
+        node.append("rect")
+          .attr("x", 0)
+          .attr("y", 62)
+          .attr("width", width)
+          .attr("height", 8)
+          .attr("fill", "#f8fbff");
+
+        [31, 62].forEach((lineY) => {
+          node.append("line")
+            .attr("x1", 0)
+            .attr("y1", lineY)
+            .attr("x2", width)
+            .attr("y2", lineY)
+            .attr("stroke", "white")
+            .attr("stroke-width", 2.4)
+            .attr("opacity", 0.95);
+        });
+
+        rows.forEach((row) => {
+          node.append("text")
+            .attr("x", 14)
+            .attr("y", row.y)
+            .attr("fill", row.fill)
+            .attr("font-family", "monospace")
+            .attr("font-size", row.size)
+            .attr("font-weight", 750)
+            .text(row.text);
+        });
+
+        return node;
+      }
+
+      function drawCompactDoubleNode(x, y, rows, width = 150) {
+        const height = 62;
+        const node = gNodes.append("g")
+          .attr("class", "concept-domain-compact-double-node")
+          .attr("transform", `translate(${x},${y}) scale(0.9)`)
+          .attr("opacity", 0);
+
+        node.append("rect")
+          .attr("x", 0)
+          .attr("y", 0)
+          .attr("width", width)
+          .attr("height", height)
+          .attr("rx", 7)
+          .attr("fill", "white")
+          .attr("stroke", teal)
+          .attr("stroke-width", 2.8)
+          .attr("filter", "url(#cf-concept-domain-shadow)");
+
+        node.append("rect")
+          .attr("x", 0)
+          .attr("y", 0)
+          .attr("width", width)
+          .attr("height", 31)
+          .attr("rx", 7)
+          .attr("fill", teal);
+
+        node.append("rect")
+          .attr("x", 0)
+          .attr("y", 24)
+          .attr("width", width)
+          .attr("height", 7)
+          .attr("fill", teal);
+
+        node.append("rect")
+          .attr("x", 0)
+          .attr("y", 31)
+          .attr("width", width)
+          .attr("height", 31)
+          .attr("rx", 7)
+          .attr("fill", "#eef8f8");
+
+        node.append("rect")
+          .attr("x", 0)
+          .attr("y", 31)
+          .attr("width", width)
+          .attr("height", 7)
+          .attr("fill", "#eef8f8");
+
+        node.append("line")
+          .attr("x1", 0)
+          .attr("y1", 31)
+          .attr("x2", width)
+          .attr("y2", 31)
+          .attr("stroke", "white")
+          .attr("stroke-width", 2.4)
+          .attr("opacity", 0.95);
+
+        rows.forEach((row) => {
+          node.append("text")
+            .attr("x", 14)
+            .attr("y", row.y)
+            .attr("fill", row.fill)
+            .attr("font-family", "monospace")
+            .attr("font-size", row.size)
+            .attr("font-weight", 750)
+            .text(row.text);
+        });
+
+        return node;
+      }
+
+      const conceptArrow = gArrows.append("path")
+        .attr("d", "M 147 109 V 151")
+        .attr("fill", "none")
+        .attr("stroke", blue)
+        .attr("stroke-width", 3)
+        .attr("stroke-linecap", "round")
+        .attr("marker-end", "url(#cf-concept-domain-arrowhead)")
+        .attr("stroke-dasharray", 70)
+        .attr("stroke-dashoffset", 70)
+        .attr("opacity", 0);
+
+      const portArrow = gArrows.append("path")
+        .attr("d", "M 248 188 H 266")
+        .attr("fill", "none")
+        .attr("stroke", blue)
+        .attr("stroke-width", 3)
+        .attr("stroke-linecap", "round")
+        .attr("marker-end", "url(#cf-concept-domain-arrowhead)")
+        .attr("stroke-dasharray", 40)
+        .attr("stroke-dashoffset", 40)
+        .attr("opacity", 0);
+
+      const portConceptArrow = gArrows.append("path")
+        .attr("d", "M 347 225 V 251")
+        .attr("fill", "none")
+        .attr("stroke", blue)
+        .attr("stroke-width", 3)
+        .attr("stroke-linecap", "round")
+        .attr("marker-end", "url(#cf-concept-domain-arrowhead)")
+        .attr("stroke-dasharray", 40)
+        .attr("stroke-dashoffset", 40)
+        .attr("opacity", 0);
+
+      const firstNode = drawSplitNode(200, 73);
+      const conceptNode = drawTripleNode(30, 157, [
+        { text: "cf:definesConcept", y: 20, fill: "white", size: 15.5 },
+        { text: "cfproc:ProcessingUnit", y: 51, fill: teal, size: 15.5 },
+        { text: "a cf:concept", y: 80, fill: blue, size: 14.5 }
+      ]);
+      const portPropertyNode = drawCompactDoubleNode(272, 157, [
+        { text: "cfproc:hasPort", y: 20, fill: "white", size: 13.5 },
+        { text: "a rdf:Property", y: 51, fill: teal, size: 13.2 }
+      ], 150);
+      const portConceptNode = drawCompactDoubleNode(272, 257, [
+        { text: "cfproc:Port", y: 20, fill: "white", size: 13.5 },
+        { text: "a cf:concept", y: 51, fill: teal, size: 13.2 }
+      ], 150);
+
+      function currentStage() {
+        return section.querySelectorAll(".fragment.visible").length;
+      }
+
+      function render(stage) {
+        stage = Math.max(0, Math.min(4, stage));
+        const instant = stage === 0;
+
+        const columnUpdate = instant ? columnGroups : columnGroups.transition()
+          .duration(520)
+          .ease(d3.easeCubicOut);
+
+        columnUpdate
+          .attr("opacity", d => {
+            if (d.id === "left") return 1;
+            if (d.id === "middle") return stage >= 3 ? 1 : 0;
+            return stage >= 4 ? 1 : 0;
+          })
+          .attr("transform", d => {
+            const visible = d.id === "left" || (d.id === "middle" && stage >= 3) || (d.id === "right" && stage >= 4);
+            return `translate(${d.x},${visible ? 16 : 48})`;
+          });
+
+        const nodeUpdate = instant ? firstNode : firstNode.transition()
+          .duration(280)
+          .ease(d3.easeCubicOut);
+
+        nodeUpdate
+          .attr("opacity", 1)
+          .attr("transform", "translate(200,73) scale(1)");
+
+        conceptArrow.transition()
+          .duration(stage >= 1 ? 420 : 120)
+          .ease(d3.easeCubicOut)
+          .attr("opacity", stage >= 1 ? 1 : 0)
+          .attr("stroke-dashoffset", stage >= 1 ? 0 : 70);
+
+        conceptNode.transition()
+          .delay(stage >= 1 ? 220 : 0)
+          .duration(stage >= 1 ? 360 : 120)
+          .ease(stage >= 1 ? d3.easeBackOut.overshoot(1.18) : d3.easeCubicIn)
+          .attr("opacity", stage >= 1 ? 1 : 0)
+          .attr("transform", `translate(30,157) scale(${stage >= 1 ? 1 : 0.9})`);
+
+        portArrow.transition()
+          .delay(stage >= 2 ? 80 : 0)
+          .duration(stage >= 2 ? 320 : 120)
+          .ease(d3.easeCubicOut)
+          .attr("opacity", stage >= 2 ? 1 : 0)
+          .attr("stroke-dashoffset", stage >= 2 ? 0 : 40);
+
+        portPropertyNode.transition()
+          .delay(stage >= 2 ? 260 : 0)
+          .duration(stage >= 2 ? 330 : 120)
+          .ease(stage >= 2 ? d3.easeBackOut.overshoot(1.14) : d3.easeCubicIn)
+          .attr("opacity", stage >= 2 ? 1 : 0)
+          .attr("transform", `translate(272,157) scale(${stage >= 2 ? 1 : 0.9})`);
+
+        portConceptArrow.transition()
+          .delay(stage >= 2 ? 520 : 0)
+          .duration(stage >= 2 ? 300 : 120)
+          .ease(d3.easeCubicOut)
+          .attr("opacity", stage >= 2 ? 1 : 0)
+          .attr("stroke-dashoffset", stage >= 2 ? 0 : 40);
+
+        portConceptNode.transition()
+          .delay(stage >= 2 ? 700 : 0)
+          .duration(stage >= 2 ? 330 : 120)
+          .ease(stage >= 2 ? d3.easeBackOut.overshoot(1.14) : d3.easeCubicIn)
+          .attr("opacity", stage >= 2 ? 1 : 0)
+          .attr("transform", `translate(272,257) scale(${stage >= 2 ? 1 : 0.9})`);
+      }
+
+      function updateForSlide() {
+        if (reveal.getCurrentSlide() === section) {
+          render(currentStage());
+        }
+      }
+
+      reveal.on("slidechanged", updateForSlide);
+      reveal.on("fragmentshown", updateForSlide);
+      reveal.on("fragmenthidden", updateForSlide);
+
+      render(0);
+    };
+  </script>
+</section>
+
 			<!--
 			##########################################################################
 			##
@@ -2689,6 +3119,7 @@
 		});
 		if (window.initCfLayerDiagram) window.initCfLayerDiagram();
 		if (window.initCfServiceProcessDiagram) window.initCfServiceProcessDiagram();
+		if (window.initCfConceptDomainDiagram) window.initCfConceptDomainDiagram();
 	</script>
 
 
