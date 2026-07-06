@@ -130,7 +130,7 @@
 			##
 			##########################################################################
 			-->
-			<section id="cogniflow-logo" data-transition="none">
+			<section id="cogniflow-logo" data-transition="zoom-in none-out">
 				<img src="resources/cogniflow/cogniflow_logo_loop.webp" alt="CogniFlow logo animation" style="width: 100%; max-width: 1200px; height: auto; margin-top: 20px;">
 			</section>
 
@@ -186,9 +186,10 @@
 					}
 
 					.software-card {
-						background: rgba(0, 76, 147, 0.05);
-						border: 1px solid rgba(0, 76, 147, 0.12);
+						background: #ffffff;
+						border: 1px solid #ffffff;
 						border-radius: 18px;
+						box-shadow: 0 12px 26px rgba(15, 23, 42, 0.08);
 						padding: 16px 18px 14px;
 						min-height: 200px;
 						display: flex;
@@ -348,40 +349,285 @@
 			<!--
 			##########################################################################
 			##
-			## 	Placeholder basic
+			## 	MARK: Python dependency growth
 			##
 			##########################################################################
 			-->
-			<section id="placeholder-intro">
-				<h2> Slide title </h2>
-				<ul>
-					<li> Bullet point 1 </li>
-					<li> Bullet point 2 </li>
-					<li> Bullet point 3 </li>
-				</ul>
-				<br>
-				<img src="resources/misc/rocketlunch.jpg" alt="Placeholder image" style="width: 400px; height: auto; margin-top: 20px;">
+			<section id="python-dependency-growth-1" data-background-color="white" data-auto-animate>
+				<style>
+					.dep-growth-wrap { max-width: 1500px; margin: 0 auto; }
+					.dep-growth-center { display: flex; justify-content: center; margin-top: 36px; }
+					.dep-growth-card {
+						position: relative;
+						padding: 24px 28px;
+						background: #ffffff;
+						border: 2px solid  #ffffff;
+						border-radius: 26px;
+						box-shadow: 0 12px 26px rgba(15, 23, 42, 0.08);
+					}
+					.dep-growth-card.compact { padding: 16px 18px; border-radius: 18px; }
+					.dep-growth-header { display: flex; align-items: center; gap: 14px; margin-bottom: 14px; }
+					.dep-growth-logo { width: 38px; height: 38px; flex: 0 0 auto; }
+					.dep-growth-title { margin: 0; color: #004c93; font-size: 0.78em; font-weight: 700; letter-spacing: 0.08em; }
+					.dep-growth-title.error { color: #c81e1e; }
+					.dep-growth-tree {
+						margin: 0;
+						font-family: Consolas, "Cascadia Mono", "Courier New", monospace;
+						font-size: 0.25em;
+						line-height: 1.5 !important;
+						white-space: pre;
+						color: #111;
+					}
+					.dep-growth-tree-b {
+						margin: 0;
+						font-family: Consolas, "Cascadia Mono", "Courier New", monospace;
+						font-size: 0.63em !important;
+						line-height: 1.5 !important;
+						white-space: pre;
+						color: #111;
+					}
+					.dep-growth-tree.compact { font-size: 0.22em; line-height: 1.45 !important; }
+					.dep-growth-caption { margin-top: 22px; text-align: center; font-size: 0.7em; color: #475569; }
+					.dep-growth-stage {
+						position: relative;
+						min-height: 360px;
+						margin-top: 20px;
+					}
+					.dep-growth-stage-2 .dep-growth-card { position: absolute; z-index: 2; min-height: 226px; }
+					.dep-growth-stage-2 .dep-growth-card.a { left: 4%; width: 380px; }
+					.dep-growth-stage-2 .dep-growth-card.b { right: 2%; width: 500px; }
+					.dep-growth-stage-3 {
+						display: grid;
+						grid-template-columns: repeat(4, minmax(0, 1fr));
+						grid-template-rows: repeat(4, minmax(0, 1fr));
+						gap: 10px;
+						align-items: stretch;
+						margin-top: 12px;
+						min-height: 520px;
+					}
+					.dep-growth-stage-3 .dep-growth-card {
+						position: relative;
+						width: auto;
+						min-height: 0;
+						z-index: 2;
+						padding: 10px 12px;
+						background: #ffffff;
+						border-color: #ffffff;
+						border-radius: 14px;
+					}
+					.dep-growth-stage-3 .dep-growth-header { gap: 8px; margin-bottom: 6px; padding-right: 52px; }
+					.dep-growth-stage-3 .dep-growth-logo { width: 24px; height: 24px; }
+					.dep-growth-stage-3 .dep-growth-title { font-size: clamp(0.22em, 1.1vw, 0.34em); letter-spacing: 0.04em; }
+					.dep-growth-stage-3 .dep-growth-tree.compact { font-size: clamp(0.12em, 0.72vw, 0.18em); line-height: 1.35 !important; }
+					.package-a .dep-growth-title, .dep-growth-import-a { color: #004c93; }
+					.package-b .dep-growth-title, .dep-growth-import-b { color: #004c93; }
+					.package-c .dep-growth-title, .dep-growth-import-c { color: #0e7490; }
+					.package-d .dep-growth-title, .dep-growth-import-d { color: #228b22; }
+					.package-e .dep-growth-title, .dep-growth-import-e { color: #92400e; }
+					.package-f .dep-growth-title, .dep-growth-import-f { color: #6d28d9; }
+					.package-g .dep-growth-title, .dep-growth-import-g { color: #0f766e; }
+					.package-h .dep-growth-title, .dep-growth-import-h { color: #a16207; }
+					.package-i .dep-growth-title, .dep-growth-import-i { color: #be123c; }
+					.package-j .dep-growth-title, .dep-growth-import-j { color: #0369a1; }
+					.package-k .dep-growth-title, .dep-growth-import-k { color: #4d7c0f; }
+					.package-l .dep-growth-title, .dep-growth-import-l { color: #7c2d12; }
+					.package-m .dep-growth-title, .dep-growth-import-m { color: #4338ca; }
+					.package-n .dep-growth-title, .dep-growth-import-n { color: #047857; }
+					.package-o .dep-growth-title, .dep-growth-import-o { color: #b45309; }
+					.package-p .dep-growth-title, .dep-growth-import-p { color: #831843; }
+					[class*="dep-growth-import-"] { font-weight: 700; }
+					.dep-import-stack {
+						position: absolute;
+						top: 10px;
+						right: 10px;
+						display: flex;
+						gap: 4px;
+						flex-wrap: wrap;
+						justify-content: flex-end;
+						max-width: 70px;
+					}
+					.dep-import-chip {
+						display: inline-flex;
+						align-items: center;
+						justify-content: center;
+						min-width: 22px;
+						height: 22px;
+						padding: 0 5px;
+						border-radius: 999px;
+						background: #ffffff;
+						border: 1px solid currentColor;
+						font-size: clamp(0.14em, 0.72vw, 0.2em);
+						font-weight: 800;
+						line-height: 1;
+					}
+				</style>
+				<h2> Python implementation challenge </h2>
+				<div class="dep-growth-wrap dep-growth-center">
+					<div class="dep-growth-card" style="width: 300px;" data-id="dep-card-a">
+						<div class="dep-growth-header">
+							<img class="dep-growth-logo" src="resources/cogniflow/software_logos/python.webp" alt="Python">
+							<p class="dep-growth-title">PACKAGE-A</p>
+						</div>
+						<pre class="dep-growth-tree">package_A/
+ | pyproject.toml
+ | package_A/
+    | __init__.py
+    | module.py</pre>
+					</div>
+				</div>
 			</section>
 
-			<!--
-			##########################################################################
-			##
-			## 	Placeholder MultiColumn
-			##
-			##########################################################################
-			-->
-			<section id="placeholder-intro-two-column-template">
-				<h2> Slide title </h2>
-				<div class="multi-column">
-					<div class="column">
-						<ul>
-							<li> Bullet point 1 </li>
-							<li> Bullet point 2 </li>
-							<li> Bullet point 3 </li>
-						</ul>
+			<section id="python-dependency-growth-2" data-background-color="white" data-auto-animate>
+				<h2> Python implementation challenge </h2>
+				<div class="dep-growth-wrap">
+					<div class="dep-growth-stage dep-growth-stage-2">
+						<div class="dep-growth-card" style="width: 300px;" data-id="dep-card-a">
+						<div class="dep-growth-header">
+							<img class="dep-growth-logo" src="resources/cogniflow/software_logos/python.webp" alt="Python">
+							<p class="dep-growth-title">PACKAGE-A</p>
+						</div>
+						<pre class="dep-growth-tree">package_A/
+ | pyproject.toml
+ | package_A/
+    | __init__.py
+    | module.py</pre>
 					</div>
-					<div class="column">
-						<img src="resources/misc/rocketlunch.jpg" alt="Placeholder image" style="width: 100%; height: auto;">
+						<div class="dep-growth-stage dep-growth-stage-2">
+							<div class="dep-growth-card b error" data-node="b" data-id="dep-card-b">
+							<div class="dep-growth-header">
+								<img class="dep-growth-logo" src="resources/cogniflow/software_logos/python.webp" alt="Python">
+								<p class="dep-growth-title">PACKAGE-B</p>
+							</div>
+							<pre class="dep-growth-tree-b">package_B/
+ | pyproject.toml
+ | package_B/
+    | __init__.py
+    | module.py
+          <span style="color: #c31f1fed;">from package_A import module</span></pre>
+						</div>
+					</div>
+
+				</div>
+			</section>
+
+			<section id="python-dependency-growth-3" data-background-color="white" data-auto-animate>
+				<h2> Python implementation challenge </h2>
+				<div class="dep-growth-wrap">
+					<div class="dep-growth-stage dep-growth-stage-3">
+						<div class="dep-growth-card compact package-a a" data-node="a" data-id="dep-card-a">
+							<div class="dep-growth-header"><p class="dep-growth-title">PACKAGE A</p></div>
+							<pre class="dep-growth-tree compact">package_A/
+ | pyproject.toml
+ | package_A/
+    | __init__.py
+    | module.py</pre>
+						</div>
+						<div class="dep-growth-card compact package-b b" data-node="b" data-id="dep-card-b">
+							<div class="dep-import-stack"><span class="dep-import-chip dep-growth-import-a">A</span></div>
+							<div class="dep-growth-header"><p class="dep-growth-title">PACKAGE B</p></div>
+							<pre class="dep-growth-tree compact">package_B/
+ | pyproject.toml
+ | package_B/
+    | __init__.py
+    | module.py
+          <span class="dep-growth-import-a">from package_A import module</span></pre>
+						</div>
+						<div class="dep-growth-card compact package-c c" data-node="c">
+							<div class="dep-import-stack"><span class="dep-import-chip dep-growth-import-a">A</span></div>
+							<div class="dep-growth-header"><p class="dep-growth-title">PACKAGE C</p></div>
+							<pre class="dep-growth-tree compact">package_C/
+ `-- <span class="dep-growth-import-a">from package_A import x</span></pre>
+						</div>
+						<div class="dep-growth-card compact package-d d" data-node="d">
+							<div class="dep-import-stack"><span class="dep-import-chip dep-growth-import-b">B</span></div>
+							<div class="dep-growth-header"><p class="dep-growth-title">PACKAGE D</p></div>
+							<pre class="dep-growth-tree compact">package_D/
+ `-- <span class="dep-growth-import-b">from package_B import x</span></pre>
+						</div>
+						<div class="dep-growth-card compact package-e e" data-node="e">
+							<div class="dep-import-stack"><span class="dep-import-chip dep-growth-import-b">B</span><span class="dep-import-chip dep-growth-import-c">C</span></div>
+							<div class="dep-growth-header"><p class="dep-growth-title">PACKAGE E</p></div>
+							<pre class="dep-growth-tree compact">package_E/
+ |-- <span class="dep-growth-import-b">from package_B import x</span>
+ `-- <span class="dep-growth-import-c">from package_C import x</span></pre>
+						</div>
+						<div class="dep-growth-card compact package-f">
+							<div class="dep-import-stack"><span class="dep-import-chip dep-growth-import-a">A</span><span class="dep-import-chip dep-growth-import-d">D</span></div>
+							<div class="dep-growth-header"><p class="dep-growth-title">PACKAGE F</p></div>
+							<pre class="dep-growth-tree compact">package_F/
+ |-- <span class="dep-growth-import-a">from package_A import x</span>
+ `-- <span class="dep-growth-import-d">from package_D import x</span></pre>
+						</div>
+						<div class="dep-growth-card compact package-g">
+							<div class="dep-import-stack"><span class="dep-import-chip dep-growth-import-e">E</span></div>
+							<div class="dep-growth-header"><p class="dep-growth-title">PACKAGE G</p></div>
+							<pre class="dep-growth-tree compact">package_G/
+ `-- <span class="dep-growth-import-e">from package_E import x</span></pre>
+						</div>
+						<div class="dep-growth-card compact package-h">
+							<div class="dep-import-stack"><span class="dep-import-chip dep-growth-import-b">B</span><span class="dep-import-chip dep-growth-import-f">F</span></div>
+							<div class="dep-growth-header"><p class="dep-growth-title">PACKAGE H</p></div>
+							<pre class="dep-growth-tree compact">package_H/
+ |-- <span class="dep-growth-import-b">from package_B import x</span>
+ `-- <span class="dep-growth-import-f">from package_F import x</span></pre>
+						</div>
+						<div class="dep-growth-card compact package-i">
+							<div class="dep-import-stack"><span class="dep-import-chip dep-growth-import-c">C</span><span class="dep-import-chip dep-growth-import-g">G</span></div>
+							<div class="dep-growth-header"><p class="dep-growth-title">PACKAGE I</p></div>
+							<pre class="dep-growth-tree compact">package_I/
+ |-- <span class="dep-growth-import-c">from package_C import x</span>
+ `-- <span class="dep-growth-import-g">from package_G import x</span></pre>
+						</div>
+						<div class="dep-growth-card compact package-j">
+							<div class="dep-import-stack"><span class="dep-import-chip dep-growth-import-e">E</span><span class="dep-import-chip dep-growth-import-h">H</span></div>
+							<div class="dep-growth-header"><p class="dep-growth-title">PACKAGE J</p></div>
+							<pre class="dep-growth-tree compact">package_J/
+ |-- <span class="dep-growth-import-e">from package_E import x</span>
+ `-- <span class="dep-growth-import-h">from package_H import x</span></pre>
+						</div>
+						<div class="dep-growth-card compact package-k">
+							<div class="dep-import-stack"><span class="dep-import-chip dep-growth-import-d">D</span><span class="dep-import-chip dep-growth-import-i">I</span></div>
+							<div class="dep-growth-header"><p class="dep-growth-title">PACKAGE K</p></div>
+							<pre class="dep-growth-tree compact">package_K/
+ |-- <span class="dep-growth-import-d">from package_D import x</span>
+ `-- <span class="dep-growth-import-i">from package_I import x</span></pre>
+						</div>
+						<div class="dep-growth-card compact package-l">
+							<div class="dep-import-stack"><span class="dep-import-chip dep-growth-import-j">J</span></div>
+							<div class="dep-growth-header"><p class="dep-growth-title">PACKAGE L</p></div>
+							<pre class="dep-growth-tree compact">package_L/
+ `-- <span class="dep-growth-import-j">from package_J import x</span></pre>
+						</div>
+						<div class="dep-growth-card compact package-m">
+							<div class="dep-import-stack"><span class="dep-import-chip dep-growth-import-a">A</span><span class="dep-import-chip dep-growth-import-h">H</span><span class="dep-import-chip dep-growth-import-k">K</span></div>
+							<div class="dep-growth-header"><p class="dep-growth-title">PACKAGE M</p></div>
+							<pre class="dep-growth-tree compact">package_M/
+ |-- <span class="dep-growth-import-a">from package_A import x</span>
+ |-- <span class="dep-growth-import-h">from package_H import x</span>
+ `-- <span class="dep-growth-import-k">from package_K import x</span></pre>
+						</div>
+						<div class="dep-growth-card compact package-n">
+							<div class="dep-import-stack"><span class="dep-import-chip dep-growth-import-f">F</span><span class="dep-import-chip dep-growth-import-l">L</span></div>
+							<div class="dep-growth-header"><p class="dep-growth-title">PACKAGE N</p></div>
+							<pre class="dep-growth-tree compact">package_N/
+ |-- <span class="dep-growth-import-f">from package_F import x</span>
+ `-- <span class="dep-growth-import-l">from package_L import x</span></pre>
+						</div>
+						<div class="dep-growth-card compact package-o">
+							<div class="dep-import-stack"><span class="dep-import-chip dep-growth-import-g">G</span><span class="dep-import-chip dep-growth-import-m">M</span></div>
+							<div class="dep-growth-header"><p class="dep-growth-title">PACKAGE O</p></div>
+							<pre class="dep-growth-tree compact">package_O/
+ |-- <span class="dep-growth-import-g">from package_G import x</span>
+ `-- <span class="dep-growth-import-m">from package_M import x</span></pre>
+						</div>
+						<div class="dep-growth-card compact package-p">
+							<div class="dep-import-stack"><span class="dep-import-chip dep-growth-import-b">B</span><span class="dep-import-chip dep-growth-import-n">N</span><span class="dep-import-chip dep-growth-import-o">O</span></div>
+							<div class="dep-growth-header"><p class="dep-growth-title">PACKAGE P</p></div>
+							<pre class="dep-growth-tree compact">package_P/
+ |-- <span class="dep-growth-import-b">from package_B import x</span>
+ |-- <span class="dep-growth-import-n">from package_N import x</span>
+ `-- <span class="dep-growth-import-o">from package_O import x</span></pre>
+						</div>
 					</div>
 				</div>
 			</section>
@@ -389,13 +635,53 @@
 			<!--
 			##########################################################################
 			##
-			## 	Project Architecture
+			##  MARK: Challenge Summary
 			##
 			##########################################################################
 			-->
+			<section id="challenge-summary">
+				<div style="max-width: 1100px; margin: 30px auto 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px;">
+					<div style="background: #ffffff; border: 1px solid #ffffff; border-radius: 18px; box-shadow: 0 12px 26px rgba(15, 23, 42, 0.08); padding: 22px 26px;">
+						<h3 style="margin-top: 0; color: #004c93;">Missing standards</h3>
+						<p style="font-size: 0.55em; text-align: left;">
+							Data formats, metadata, and processing steps are often project-specific, making exchange and reuse difficult.
+						</p>
+					</div>
 
+					<div style="background: #ffffff; border: 1px solid #ffffff; border-radius: 18px; box-shadow: 0 12px 26px rgba(15, 23, 42, 0.08); padding: 22px 26px;">
+						<h3 style="margin-top: 0; color: #004c93;">Difficult digitalization</h3>
+						<p style="font-size: 0.55em; text-align: left;">
+							Laboratory workflows are heterogeneous and hard to connect across instruments, software tools, and automation systems.
+						</p>
+					</div>
 
+					<div style="background: #ffffff; border: 1px solid #ffffff; border-radius: 18px; box-shadow: 0 12px 26px rgba(15, 23, 42, 0.08); padding: 22px 26px;">
+						<h3 style="margin-top: 0; color: #004c93;">Limited reproducibility</h3>
+						<p style="font-size: 0.55em; text-align: left;">
+							Processing decisions, parameter choices, and intermediate results are not always captured in a traceable way.
+						</p>
+					</div>
 
+					<div style="background: #ffffff; border: 1px solid #ffffff; border-radius: 18px; box-shadow: 0 12px 26px rgba(15, 23, 42, 0.08); padding: 22px 26px;">
+						<h3 style="margin-top: 0; color: #004c93;">Need for extensibility</h3>
+						<p style="font-size: 0.55em; text-align: left;">
+							Frameworks must remain flexible enough to integrate new functionalities, algorithms, and domain-specific processing tools.
+						</p>
+					</div>
+				</div>
+
+				<p style="margin-top: 34px; font-size: 0.9em; color: #004c93; font-weight: 700;">
+					How can we solve this?
+				</p>
+			</section>
+
+			<!--
+			##########################################################################
+			##
+			## 	MARK: Project Architecture
+			##
+			##########################################################################
+			-->
 <section id="cf-layer-diagram" data-background-color="white">
   <svg
     id="cf-layer-svg"
@@ -1864,6 +2150,29 @@
     };
   </script>
 </section>
+
+			<!--
+			##########################################################################
+			##
+			## 	Placeholder MultiColumn
+			##
+			##########################################################################
+			-->
+			<section id="placeholder-intro-two-column-template">
+				<h2> Slide title </h2>
+				<div class="multi-column">
+					<div class="column">
+						<ul>
+							<li> Bullet point 1 </li>
+							<li> Bullet point 2 </li>
+							<li> Bullet point 3 </li>
+						</ul>
+					</div>
+					<div class="column">
+						<img src="resources/misc/rocketlunch.jpg" alt="Placeholder image" style="width: 100%; height: auto;">
+					</div>
+				</div>
+			</section>
 
 		</div>
 	</div>
