@@ -409,6 +409,8 @@
   <div class="fragment" style="display: none;"></div>
   <div class="fragment" style="display: none;"></div>
   <div class="fragment" style="display: none;"></div>
+  <div class="fragment" style="display: none;"></div>
+  <div class="fragment" style="display: none;"></div>
 
   <script>
     window.initCfLayerDiagram = () => {
@@ -505,6 +507,47 @@
       const ontologyBullets = root.append("g")
         .attr("class", "ontology-bullets");
 
+      const ontologyAnnotation = root.append("g")
+        .attr("class", "ontology-annotation")
+        .attr("opacity", 0);
+
+      ontologyAnnotation.append("rect")
+        .attr("x", cx - 260)
+        .attr("y", cy + 92)
+        .attr("width", 520)
+        .attr("height", 56)
+        .attr("rx", 10)
+        .attr("ry", 12)
+        .attr("fill", "#fff176")
+        .attr("opacity", 0.46)
+        .attr("transform", `rotate(-1.2 ${cx} ${cy + 120})`);
+
+      ontologyAnnotation.append("path")
+        .attr("d", `M ${cx - 254} ${cy + 103} C ${cx - 148} ${cy + 96}, ${cx + 36} ${cy + 100}, ${cx + 254} ${cy + 95} L ${cx + 260} ${cy + 129} C ${cx + 104} ${cy + 135}, ${cx - 87} ${cy + 128}, ${cx - 258} ${cy + 137} Z`)
+        .attr("fill", "#ffd54f")
+        .attr("opacity", 0.32)
+        .attr("transform", `rotate(1.1 ${cx} ${cy + 120})`);
+
+      ontologyAnnotation.append("text")
+        .attr("x", cx)
+        .attr("y", cy + 115)
+        .attr("text-anchor", "middle")
+        .attr("dominant-baseline", "middle")
+        .attr("fill", "#1f3347")
+        .attr("font-size", 17)
+        .attr("font-weight", 600)
+        .text("defines the cogniflow and how it can be extended,");
+
+      ontologyAnnotation.append("text")
+        .attr("x", cx)
+        .attr("y", cy + 136)
+        .attr("text-anchor", "middle")
+        .attr("dominant-baseline", "middle")
+        .attr("fill", "#1f3347")
+        .attr("font-size", 17)
+        .attr("font-weight", 600)
+        .text("interpreted, validated, discovered, and connected");
+
       function appendBulletText(group, x, y, text, fontSize, className = "") {
         const lines = text.split(/\\n|\n/);
         const bullet = group.append("text")
@@ -534,6 +577,111 @@
         const lineCount = appendBulletText(ontologyBullets, cx + 230, ontologyBulletY, txt, 21);
         ontologyBulletY += 32 + (lineCount - 1) * 25;
       });
+
+      const ontologyExamples = root.append("g")
+        .attr("class", "ontology-examples")
+        .attr("opacity", 0);
+
+      const codeNodeColors = ["#9E0142", "#D53E4F", "#F46D43", "#66C2A5", "#3288BD", "#5E4FA2", "#8a1538"];
+
+      function keywordColor(token) {
+        let hash = 0;
+        for (let i = 0; i < token.length; i += 1) hash = (hash * 31 + token.charCodeAt(i)) >>> 0;
+        return codeNodeColors[hash % codeNodeColors.length];
+      }
+
+      function appendCodeLine(group, x, y, line, fontSize = 18) {
+        const tokenPattern = /(cf(?:proc|ui)?:[A-Za-z]+|owl:Class|rdfs:subClassOf|skos:[A-Za-z]+|cf:Concept)/g;
+        const indent = (line.match(/^\s*/) || [""])[0].length * fontSize * 0.56;
+        const content = line.trimStart();
+        let cursor = x + indent;
+        let lastIndex = 0;
+        let match;
+
+        while ((match = tokenPattern.exec(content)) !== null) {
+          const before = content.slice(lastIndex, match.index);
+          if (before) {
+            group.append("text")
+              .attr("x", cursor)
+              .attr("y", y)
+              .attr("fill", "#293847")
+              .attr("font-size", fontSize)
+              .attr("font-family", "monospace")
+              .text(before);
+            cursor += before.length * fontSize * 0.56;
+          }
+
+          const token = match[0];
+          const pillWidth = token.length * fontSize * 0.56 + 10;
+          group.append("rect")
+            .attr("x", cursor)
+            .attr("y", y - fontSize + 1)
+            .attr("width", pillWidth)
+            .attr("height", fontSize + 5)
+            .attr("rx", (fontSize + 5) / 2)
+            .attr("ry", (fontSize + 5) / 2)
+            .attr("fill", keywordColor(token))
+            .attr("opacity", 0.92);
+          group.append("text")
+            .attr("x", cursor + 5)
+            .attr("y", y)
+            .attr("fill", "white")
+            .attr("font-size", fontSize)
+            .attr("font-family", "monospace")
+            .attr("font-weight", 700)
+            .text(token);
+          cursor += pillWidth + 2;
+          lastIndex = match.index + token.length;
+        }
+
+        const after = content.slice(lastIndex);
+        if (after) {
+          group.append("text")
+            .attr("x", cursor)
+            .attr("y", y)
+            .attr("fill", "#293847")
+            .attr("font-size", fontSize)
+            .attr("font-family", "monospace")
+            .text(after);
+        }
+      }
+
+      function appendCodeCard(group, x, y, title, lines) {
+        const card = group.append("g");
+        card.append("text")
+          .attr("x", x + 16)
+          .attr("y", y + 20)
+          .attr("fill", blue)
+          .attr("font-size", 23)
+          .attr("font-weight", 700)
+          .text(title);
+        lines.forEach((line, index) => appendCodeLine(card, x + 16, y + 58 + index * 34, line));
+      }
+
+      const ontologyExampleOne = ontologyExamples.append("g")
+        .attr("class", "ontology-example-one");
+      const ontologyExampleTwo = ontologyExamples.append("g")
+        .attr("class", "ontology-example-two");
+
+      appendCodeCard(ontologyExampleOne, 72, 340, "Processing Step", [
+        "cfproc:Average",
+        "    a owl:Class, cf:Concept ;",
+        "    rdfs:subClassOf cfproc:ProcessingStep ;",
+        "    skos:prefLabel \"average\" ;",
+        "    skos:definition \"A processing step that computes [...]\" ;",
+        "    skos:scopeNote \"Use this concept for processing [...]\" ;",
+        "    skos:example \"A workflow step that computes [...]\" ."
+      ]);
+
+      appendCodeCard(ontologyExampleTwo, 72, 340, "Interface Element", [
+        "cfui:AffordanceCard",
+        "    a owl:Class, cf:Concept ;",
+        "    rdfs:subClassOf cfui:UserInterfaceElement ;",
+        "    skos:prefLabel \"affordance card\" ;",
+        "    skos:definition \"A user interface element that [...]\" ;",
+        "    skos:scopeNote \"Use this concept for UI [...]\" ;",
+        "    skos:example \"A web UI card offering [...]\" ."
+      ]);
 
       const packageBullets = root.append("g")
         .attr("class", "package-bullets");
@@ -726,77 +874,80 @@
 
       function render(stage) {
         const t = svg.transition().duration(650).ease(d3.easeCubicInOut);
+        const flowStage = stage <= 3 ? Math.min(stage, 1) : stage - 2;
+        const ontologyYOffset = stage >= 1 && stage <= 3 ? -160 : 0;
 
         const ontologyState = (() => {
           if (stage === 0) {
             return { w: 180, h: 180, r: 90, font: 0, labelOpacity: 0 };
           }
-          if (stage === 1) {
+          if (stage >= 1 && stage <= 3) {
             return { w: 360, h: 120, r: 24, font: 44, labelOpacity: 1 };
           }
-          if (stage === 2) {
+          if (flowStage === 2) {
             return { w: 260, h: 86, r: 18, font: 34, labelOpacity: 1 };
           }
           return { w: 210, h: 70, r: 16, font: 28, labelOpacity: 1 };
         })();
 
-        const packageRadius = stage >= 3 ? 180 : 230;
+        const packageRadius = flowStage >= 3 ? 180 : 230;
         const packagePoint = circlePoint(1, 10, packageRadius, 0);
         const servicePoint = circlePoint(4, 10, packageRadius, 0);
         const templatePoint = circlePoint(11, 32, 300, 0);
         const runtimePoint = circlePoint(19, 32, 300, 0);
+        const ontologyPoint = { x: cx, y: cy + ontologyYOffset };
 
         ontologyPackageLink.transition()
-          .delay(stage === 2 ? 1450 : 0)
-          .duration(stage >= 2 ? 700 : 200)
+          .delay(flowStage === 2 ? 1450 : 0)
+          .duration(flowStage >= 2 ? 700 : 200)
           .ease(d3.easeCubicInOut)
-          .attr("d", curvedPath({ x: cx, y: cy }, packagePoint, 55))
-          .attr("opacity", stage >= 2 ? 0.78 : 0)
-          .attr("stroke-dashoffset", stage >= 2 ? 0 : 1000);
+          .attr("d", curvedPath(ontologyPoint, packagePoint, 55))
+          .attr("opacity", flowStage >= 2 ? 0.78 : 0)
+          .attr("stroke-dashoffset", flowStage >= 2 ? 0 : 1000);
 
         packageTemplateLink.transition()
-          .delay(stage >= 3 ? 1550 : 0)
-          .duration(stage >= 3 ? 850 : 200)
+          .delay(flowStage >= 3 ? 1550 : 0)
+          .duration(flowStage >= 3 ? 850 : 200)
           .ease(d3.easeCubicInOut)
           .attr("d", curvedPath(packagePoint, templatePoint, -70))
-          .attr("opacity", stage >= 3 ? 0.78 : 0)
-          .attr("stroke-dashoffset", stage >= 3 ? 0 : 1000);
+          .attr("opacity", flowStage >= 3 ? 0.78 : 0)
+          .attr("stroke-dashoffset", flowStage >= 3 ? 0 : 1000);
 
         ontologyServiceLink.transition()
-          .delay(stage >= 4 ? 1050 : 0)
-          .duration(stage >= 4 ? 750 : 200)
+          .delay(flowStage >= 4 ? 1050 : 0)
+          .duration(flowStage >= 4 ? 750 : 200)
           .ease(d3.easeCubicInOut)
-          .attr("d", curvedPath({ x: cx, y: cy }, servicePoint, -55))
-          .attr("opacity", stage >= 4 ? 0.78 : 0)
-          .attr("stroke-dashoffset", stage >= 4 ? 0 : 1000);
+          .attr("d", curvedPath(ontologyPoint, servicePoint, -55))
+          .attr("opacity", flowStage >= 4 ? 0.78 : 0)
+          .attr("stroke-dashoffset", flowStage >= 4 ? 0 : 1000);
 
         serviceTemplateLink.transition()
-          .delay(stage >= 4 ? 1250 : 0)
-          .duration(stage >= 4 ? 850 : 200)
+          .delay(flowStage >= 4 ? 1250 : 0)
+          .duration(flowStage >= 4 ? 850 : 200)
           .ease(d3.easeCubicInOut)
           .attr("d", curvedPath(servicePoint, templatePoint, 80))
-          .attr("opacity", stage >= 4 ? 0.78 : 0)
-          .attr("stroke-dashoffset", stage >= 4 ? 0 : 1000);
+          .attr("opacity", flowStage >= 4 ? 0.78 : 0)
+          .attr("stroke-dashoffset", flowStage >= 4 ? 0 : 1000);
 
         packageRuntimeLink.transition()
-          .delay(stage >= 5 ? 1250 : 0)
-          .duration(stage >= 5 ? 850 : 200)
+          .delay(flowStage >= 5 ? 1250 : 0)
+          .duration(flowStage >= 5 ? 850 : 200)
           .ease(d3.easeCubicInOut)
           .attr("d", curvedPath(packagePoint, runtimePoint, 210))
-          .attr("opacity", stage >= 5 ? 0.82 : 0)
-          .attr("stroke-dashoffset", stage >= 5 ? 0 : 1000);
+          .attr("opacity", flowStage >= 5 ? 0.82 : 0)
+          .attr("stroke-dashoffset", flowStage >= 5 ? 0 : 1000);
 
         serviceRuntimeLink.transition()
-          .delay(stage >= 5 ? 1450 : 0)
-          .duration(stage >= 5 ? 850 : 200)
+          .delay(flowStage >= 5 ? 1450 : 0)
+          .duration(flowStage >= 5 ? 850 : 200)
           .ease(d3.easeCubicInOut)
           .attr("d", curvedPath(servicePoint, runtimePoint, -75))
-          .attr("opacity", stage >= 5 ? 0.82 : 0)
-          .attr("stroke-dashoffset", stage >= 5 ? 0 : 1000);
+          .attr("opacity", flowStage >= 5 ? 0.82 : 0)
+          .attr("stroke-dashoffset", flowStage >= 5 ? 0 : 1000);
 
         ontologyBox.transition(t)
           .attr("x", cx - ontologyState.w / 2)
-          .attr("y", cy - ontologyState.h / 2)
+          .attr("y", cy + ontologyYOffset - ontologyState.h / 2)
           .attr("width", ontologyState.w)
           .attr("height", ontologyState.h)
           .attr("rx", ontologyState.r)
@@ -804,45 +955,73 @@
 
         ontologyLabel.transition(t)
           .attr("x", cx)
-          .attr("y", cy + 2)
+          .attr("y", cy + ontologyYOffset + 2)
           .attr("font-size", ontologyState.font)
           .attr("opacity", ontologyState.labelOpacity);
 
         coreLabel.transition(t)
           .attr("x", cx)
-          .attr("y", cy - ontologyState.h / 2 - 28)
-          .attr("opacity", stage >= 2 ? 1 : 0);
+          .attr("y", cy + ontologyYOffset - ontologyState.h / 2 - 28)
+          .attr("opacity", flowStage >= 2 ? 1 : 0);
 
         ontologyBullets.selectAll("text").transition()
           .delay((d, i) => stage === 1 ? 700 + i * 180 : 0)
           .duration(260)
-          .attr("opacity", stage === 1 ? 1 : 0);
+          .attr("opacity", stage >= 1 && stage <= 3 ? 1 : 0);
+
+        ontologyBullets.transition(t)
+          .attr("transform", `translate(0,${ontologyYOffset})`);
+
+        ontologyAnnotation.transition(t)
+          .attr("opacity", stage >= 1 && stage <= 3 ? 1 : 0)
+          .attr("transform", `translate(0,${ontologyYOffset})`);
+
+        ontologyExamples.transition()
+          .delay(stage === 2 || stage === 3 ? 250 : 0)
+          .duration(stage === 2 || stage === 3 ? 520 : 180)
+          .ease(d3.easeCubicInOut)
+          .attr("opacity", stage === 2 || stage === 3 ? 1 : 0)
+          .attr("transform", `translate(0,${stage === 2 || stage === 3 ? -14 : 10})`);
+
+        ontologyExampleOne.transition()
+          .delay(stage === 3 ? 40 : 0)
+          .duration(stage === 3 ? 620 : 260)
+          .ease(d3.easeCubicInOut)
+          .attr("transform", `translate(${stage === 3 ? 1080 : 0},0)`)
+          .attr("opacity", stage === 2 ? 1 : stage === 3 ? 0.12 : 1);
+
+        ontologyExampleTwo.transition()
+          .delay(stage === 3 ? 40 : 0)
+          .duration(stage === 3 ? 620 : 260)
+          .ease(d3.easeCubicInOut)
+          .attr("transform", `translate(${stage === 3 ? 0 : -1080},0)`)
+          .attr("opacity", stage === 3 ? 1 : 0);
 
         packageBullets.selectAll("text").transition()
-          .delay((d, i) => stage === 2 ? 2300 + i * 180 : 0)
+          .delay((d, i) => flowStage === 2 ? 2300 + i * 180 : 0)
           .duration(260)
-          .attr("opacity", stage === 2 ? 1 : 0);
+          .attr("opacity", flowStage === 2 ? 1 : 0);
 
         packageTemplateBullets.selectAll("text:not(.service-template-bullet)").transition()
-          .delay((d, i) => stage >= 3 ? 2200 + i * 180 : 0)
+          .delay((d, i) => flowStage >= 3 ? 2200 + i * 180 : 0)
           .duration(260)
-          .attr("opacity", stage >= 3 ? 1 : 0);
+          .attr("opacity", flowStage >= 3 ? 1 : 0);
 
         packageTemplateBullets.selectAll(".service-template-bullet").transition()
-          .delay(stage >= 4 ? 2200 : 0)
+          .delay(flowStage >= 4 ? 2200 : 0)
           .duration(260)
-          .attr("opacity", stage >= 4 ? 1 : 0);
+          .attr("opacity", flowStage >= 4 ? 1 : 0);
 
         semanticsRuntimeBullets.selectAll("text").transition()
-          .delay((d, i) => stage >= 5 ? 2200 + i * 180 : 0)
+          .delay((d, i) => flowStage >= 5 ? 2200 + i * 180 : 0)
           .duration(260)
-          .attr("opacity", stage >= 5 ? 1 : 0);
+          .attr("opacity", flowStage >= 5 ? 1 : 0);
 
         semanticsDatabaseIcon.transition()
-          .delay(stage >= 5 ? 2200 : 0)
+          .delay(flowStage >= 5 ? 2200 : 0)
           .duration(260)
-          .attr("opacity", stage >= 5 ? 1 : 0)
-          .attr("transform", `translate(${cx - 500},${cy - 174}) scale(${stage >= 5 ? 1 : 0.78})`);
+          .attr("opacity", flowStage >= 5 ? 1 : 0)
+          .attr("transform", `translate(${cx - 500},${cy - 174}) scale(${flowStage >= 5 ? 1 : 0.78})`);
 
         conceptNodes.each(function(d) {
           const isPackage = d.index === 1;
@@ -850,25 +1029,25 @@
           const radius = packageRadius;
           const p = circlePoint(d.index, 10, radius, 0);
 
-          const visible = stage >= 2;
-          const dotSize = stage >= 3 ? 24 : 34;
-          const isExpandedPackage = isPackage && stage >= 2;
-          const isExpandedService = isService && stage >= 4;
-          const w = isExpandedPackage ? (stage >= 3 ? 150 : 190) : isExpandedService ? 150 : dotSize;
-          const h = isExpandedPackage ? (stage >= 3 ? 50 : 64) : isExpandedService ? 50 : dotSize;
-          const rx = isExpandedPackage ? (stage >= 3 ? 14 : 16) : isExpandedService ? 14 : dotSize / 2;
+          const visible = flowStage >= 2;
+          const dotSize = flowStage >= 3 ? 24 : 34;
+          const isExpandedPackage = isPackage && flowStage >= 2;
+          const isExpandedService = isService && flowStage >= 4;
+          const w = isExpandedPackage ? (flowStage >= 3 ? 150 : 190) : isExpandedService ? 150 : dotSize;
+          const h = isExpandedPackage ? (flowStage >= 3 ? 50 : 64) : isExpandedService ? 50 : dotSize;
+          const rx = isExpandedPackage ? (flowStage >= 3 ? 14 : 16) : isExpandedService ? 14 : dotSize / 2;
 
           const node = d3.select(this);
 
           node.transition()
-            .delay(stage >= 2 ? d.index * 120 : 0)
-            .duration(stage >= 2 ? 320 : 200)
+            .delay(flowStage >= 2 ? d.index * 120 : 0)
+            .duration(flowStage >= 2 ? 320 : 200)
             .attr("opacity", visible ? 1 : 0)
             .attr("transform", `translate(${p.x},${p.y}) scale(${visible ? 1 : 0})`);
 
           node.select(".node-bg").transition()
-            .delay(isPackage && stage === 2 ? 1800 : isService && stage === 4 ? 500 : 0)
-            .duration((isPackage && stage === 2) || (isService && stage === 4) ? 520 : 650)
+            .delay(isPackage && flowStage === 2 ? 1800 : isService && flowStage === 4 ? 500 : 0)
+            .duration((isPackage && flowStage === 2) || (isService && flowStage === 4) ? 520 : 650)
             .ease(d3.easeCubicInOut)
             .attr("x", -w / 2)
             .attr("y", -h / 2)
@@ -878,15 +1057,15 @@
             .attr("ry", rx);
 
           node.select(".node-label").transition()
-            .delay(isPackage && stage === 2 ? 2020 : isService && stage === 4 ? 720 : 0)
+            .delay(isPackage && flowStage === 2 ? 2020 : isService && flowStage === 4 ? 720 : 0)
             .duration(250)
-            .attr("font-size", stage >= 3 ? 18 : 23)
+            .attr("font-size", flowStage >= 3 ? 18 : 23)
             .attr("opacity", isExpandedPackage || isExpandedService ? 1 : 0);
 
           node.select(".layer-label").transition(t)
-            .attr("font-size", stage >= 3 ? 15 : 18)
-            .attr("y", stage >= 3 ? -28 : -34)
-            .attr("opacity", stage >= 2 ? 1 : 0);
+            .attr("font-size", flowStage >= 3 ? 15 : 18)
+            .attr("y", flowStage >= 3 ? -28 : -34)
+            .attr("opacity", flowStage >= 2 ? 1 : 0);
         });
 
         specNodes.each(function(d) {
@@ -894,9 +1073,9 @@
           const isRuntime = d.index === 19;
           const p = circlePoint(d.index, 32, 300, 0);
 
-          const visible = stage >= 3;
-          const isExpandedTemplate = isTemplate && stage >= 3;
-          const isExpandedRuntime = isRuntime && stage >= 5;
+          const visible = flowStage >= 3;
+          const isExpandedTemplate = isTemplate && flowStage >= 3;
+          const isExpandedRuntime = isRuntime && flowStage >= 5;
           const w = isExpandedTemplate ? 170 : isExpandedRuntime ? 190 : 22;
           const h = isExpandedTemplate ? 54 : isExpandedRuntime ? 54 : 22;
           const rx = isExpandedTemplate || isExpandedRuntime ? 15 : 11;
@@ -904,14 +1083,14 @@
           const node = d3.select(this);
 
           node.transition()
-            .delay(stage >= 3 ? 250 + d.index * 35 : 0)
-            .duration(stage >= 3 ? 230 : 150)
+            .delay(flowStage >= 3 ? 250 + d.index * 35 : 0)
+            .duration(flowStage >= 3 ? 230 : 150)
             .attr("opacity", visible ? 1 : 0)
             .attr("transform", `translate(${p.x},${p.y}) scale(${visible ? 1 : 0})`);
 
           node.select(".node-bg").transition()
-            .delay(isTemplate && stage >= 3 ? 1750 : isRuntime && stage === 5 ? 500 : 0)
-            .duration(isExpandedTemplate || (isRuntime && stage === 5) ? 480 : 230)
+            .delay(isTemplate && flowStage >= 3 ? 1750 : isRuntime && flowStage === 5 ? 500 : 0)
+            .duration(isExpandedTemplate || (isRuntime && flowStage === 5) ? 480 : 230)
             .attr("x", -w / 2)
             .attr("y", -h / 2)
             .attr("width", w)
@@ -920,20 +1099,21 @@
             .attr("ry", rx);
 
           node.select(".node-label").transition()
-            .delay(isTemplate && stage >= 3 ? 1950 : isRuntime && stage === 5 ? 700 : 0)
+            .delay(isTemplate && flowStage >= 3 ? 1950 : isRuntime && flowStage === 5 ? 700 : 0)
             .duration(240)
             .attr("font-size", isRuntime ? 14 : 15)
             .attr("opacity", isExpandedTemplate || isExpandedRuntime ? 1 : 0);
 
           node.select(".layer-label").transition(t)
-            .attr("opacity", stage >= 3 ? 1 : 0);
+            .attr("opacity", flowStage >= 3 ? 1 : 0);
         });
       }
 
       d3.timer((elapsed) => {
         const stage = currentStage();
-        const ampConcept = stage >= 2 ? 3 : 0;
-        const ampSpec = stage >= 3 ? 2 : 0;
+        const flowStage = stage <= 3 ? Math.min(stage, 1) : stage - 2;
+        const ampConcept = flowStage >= 2 ? 3 : 0;
+        const ampSpec = flowStage >= 3 ? 2 : 0;
 
         conceptNodes.select(".wiggle")
           .attr("transform", d => {
