@@ -394,320 +394,1484 @@
 			##########################################################################
 			-->
 
-			<section data-auto-animate>
-			<div
-				data-id="ontology-box"
-				style="
-				width: 180px;
-				height: 180px;
-				border-radius: 50%;
-				border: 4px solid #004c93;
-				margin: 0 auto;
-				background-color: #004c93;
-				"
-			></div>
-			</section>
-
-			<section data-auto-animate>
-			<style>
-				.ontology-label {
-				opacity: 0;
-				}
-
-				section.present .ontology-label {
-				animation: ontologyTextFadeIn 0.25s ease 0.65s forwards;
-				}
-
-				@keyframes ontologyTextFadeIn {
-				from { opacity: 0; }
-				to { opacity: 1; }
-				}
-
-				.ontology-bullets {
-				position: absolute;
-				display: flex;
-				left: calc(100% + 28px);
-				top: -7px;
-				width: 430px;
-				color: #222;
-				font-size: 0.75em;
-				line-height: 1.35;
-				pointer-events: none;
-				}
-
-				.ontology-bullets ul {
-				margin: 0;
-				padding-left: 1.2em;
-				}
-
-				.ontology-bullets li {
-				opacity: 0;
-				transform: translateY(10px) scale(0.98);
-				}
-
-				section.present .ontology-bullets li {
-				animation: ontologyBulletPop 0.28s ease-out forwards;
-				}
-
-				section.present .ontology-bullets li:nth-child(1) { animation-delay: 0.95s; }
-				section.present .ontology-bullets li:nth-child(2) { animation-delay: 1.15s; }
-				section.present .ontology-bullets li:nth-child(3) { animation-delay: 1.35s; }
-
-				@keyframes ontologyBulletPop {
-				from {
-					opacity: 0;
-					transform: translateY(10px) scale(0.98);
-				}
-				to {
-					opacity: 1;
-					transform: translateY(0) scale(1);
-				}
-				}
-
-				.ontology-package-box {
-				position: absolute;
-				left: 50%;
-				top: calc(100% + 28px);
-				transform: translateX(-50%) translateY(10px) scale(0.96);
-				width: 430px;
-				padding: 12px 18px;
-				margin-top: -30px;
-				margin-left: -90px;
-				border-radius: 14px;
-				border: 0px solid #004c93;
-				color: #004c93;
-				font-size: 0.55em;
-				line-height: 1.25;
-				text-align: center;
-				opacity: 0;
-				pointer-events: none;
-				box-sizing: border-box;
-				}
-
-				section.present .ontology-package-box {
-				animation: ontologyPackagePop 0.32s ease-out 1.55s forwards;
-				}
-
-				@keyframes ontologyPackagePop {
-				from {
-					opacity: 0;
-					transform: translateX(-50%) translateY(10px) scale(0.96);
-				}
-				to {
-					opacity: 1;
-					transform: translateX(-50%) translateY(0) scale(1);
-				}
-				}
-
-				.ontology-package-name {
-				font-family: monospace;
-				font-weight: 700;
-				background: rgba(0, 76, 147, 0.08);
-				padding: 2px 6px;
-				border-radius: 6px;
-				}
-			</style>
-
-			<div style="position: relative; width: 360px; height: 120px; margin: 0 auto;">
-				<div
-				data-id="ontology-box"
-				style="
-					width: 360px;
-					height: 120px;
-					border-radius: 24px;
-					border: 4px solid #004c93;
-					background-color: #004c93;
-				"
-				></div>
-
-				<span
-				class="ontology-label"
-				style="
-					position: absolute;
-					inset: 0;
-					display: flex;
-					align-items: center;
-					justify-content: center;
-					color: white;
-					font-size: 1.8em;
-					font-weight: 600;
-				"
-				>
-				Ontology
-				</span>
-
-				<div class="ontology-bullets">
-				<ul>
-					<li>Semantic core of Cogniflow</li>
-					<li>Defines the shared language for concept domains</li>
-					<li>Minimal by design: no domain-specific logic</li>
-				</ul>
-				</div>
-
-				<div class="ontology-package-box">
-				<div
-					style="
-					display: grid;
-					grid-template-columns: auto 1fr;
-					align-items: center;
-					gap: 14px;
-					text-align: left;
-					"
-				>
-					<img
-					src="https://upload.wikimedia.org/wikipedia/commons/6/64/PyPI_logo.svg"
-					alt="PyPI"
-					style="height: 4em; width: auto;"
-					>
-
-					<div>
-					Distributed as the Python package
-					<span class="ontology-package-name">cf_ontology</span>
-					via PyPI
-					</div>
-				</div>
-				</div>
-			</div>
-			</section>
 
 
-			<section data-auto-animate>
-			<style>
-				.concept-orbit-dot {
-				position: absolute;
-				left: 50%;
-				top: 50%;
-				width: 34px;
-				height: 34px;
-				border-radius: 50%;
-				background-color: #004c93;
-				opacity: 0;
-				transform:
-					translate(-50%, -50%)
-					translate(var(--x), var(--y))
-					scale(0);
-				}
+<section id="cf-layer-diagram" data-background-color="white">
+  <svg
+    id="cf-layer-svg"
+    viewBox="0 0 1000 650"
+    style="width: 100%; height: 650px;"
+  ></svg>
 
-				section.present .concept-orbit-dot {
-				animation:
-					conceptPop 0.28s cubic-bezier(0.2, 1.4, 0.4, 1) var(--delay) forwards,
-					conceptWiggle 2.8s ease-in-out calc(var(--delay) + 0.5s) infinite;
-				}
+  <!-- Invisible Reveal fragments: each click advances the D3 state -->
+  <div class="fragment" style="display: none;"></div>
+  <div class="fragment" style="display: none;"></div>
+  <div class="fragment" style="display: none;"></div>
+  <div class="fragment" style="display: none;"></div>
+  <div class="fragment" style="display: none;"></div>
 
-				@keyframes conceptPop {
-				from {
-					opacity: 0;
-					transform:
-					translate(-50%, -50%)
-					translate(var(--x), var(--y))
-					scale(0);
-				}
-				to {
-					opacity: 1;
-					transform:
-					translate(-50%, -50%)
-					translate(var(--x), var(--y))
-					scale(1);
-				}
-				}
+  <script>
+    window.initCfLayerDiagram = () => {
+      const section = document.getElementById("cf-layer-diagram");
+      if (!section || section.dataset.cfLayerInitialized === "true") return;
+      const d3 = window.d3;
+      const reveal = window.Reveal;
+      if (!d3 || !reveal) return;
+      section.dataset.cfLayerInitialized = "true";
 
-				@keyframes conceptWiggle {
-				0%, 100% {
-					margin-left: 0;
-					margin-top: 0;
-				}
-				25% {
-					margin-left: 2px;
-					margin-top: -3px;
-				}
-				50% {
-					margin-left: -3px;
-					margin-top: 2px;
-				}
-				75% {
-					margin-left: 3px;
-					margin-top: 3px;
-				}
-				}
-			</style>
+      const svg = d3.select("#cf-layer-svg");
+      const W = 1000;
+      const H = 650;
+      const cx = W / 2;
+      const cy = H / 2;
 
-			<div style="position: relative; width: 620px; height: 620px; margin: 0 auto;">
+      const blue = "#004c93";
+      const spectral = [
+        "#9E0142", "#D53E4F", "#F46D43", "#FDAE61", "#FEE08B",
+        "#E6F598", "#ABDDA4", "#66C2A5", "#3288BD", "#5E4FA2"
+      ];
 
-				<div
-				style="
-					position: absolute;
-					inset: 0;
-					display: flex;
-					align-items: center;
-					justify-content: center;
-				"
-				>
-				<div
-					data-id="ontology-box"
-					style="
-					width: 260px;
-					height: 86px;
-					border-radius: 18px;
-					border: 4px solid #004c93;
-					background-color: #004c93;
-					"
-				></div>
-				</div>
+      const root = svg.append("g");
 
-				<div
-				style="
-					position: absolute;
-					inset: 0;
-					display: flex;
-					align-items: center;
-					justify-content: center;
-					color: white;
-					font-size: 1.35em;
-					font-weight: 600;
-					pointer-events: none;
-				"
-				>
-				Ontology
-				</div>
+      const bg = root.append("rect")
+        .attr("x", 0)
+        .attr("y", 0)
+        .attr("width", W)
+        .attr("height", H)
+        .attr("fill", "white");
 
-				<div
-				style="
-					position: absolute;
-					inset: 0;
-					display: flex;
-					align-items: center;
-					justify-content: center;
-					font-size: 0.75em;
-					pointer-events: none;
-					margin-top: -130px;
-				"
-				>
-				core
-				</div>
+      const links = root.append("g")
+        .attr("class", "layer-links")
+        .attr("fill", "none")
+        .attr("stroke", "#004c93")
+        .attr("stroke-width", 3)
+        .attr("stroke-linecap", "round")
+        .attr("stroke-linejoin", "round");
 
-				<div class="concept-orbit-dot" style="--x: 230px; --y: 0px; --delay: 0.35s; background-color: #9E0142;"></div>
-				<div class="concept-orbit-dot" style="--x: 186px; --y: 135px; --delay: 0.47s; background-color: #D53E4F;"></div>
-				<div class="concept-orbit-dot" style="--x: 71px; --y: 219px; --delay: 0.59s; background-color: #F46D43;"></div>
-				<div class="concept-orbit-dot" style="--x: -71px; --y: 219px; --delay: 0.71s; background-color: #FDAE61;"></div>
-				<div class="concept-orbit-dot" style="--x: -186px; --y: 135px; --delay: 0.83s; background-color: #FEE08B;"></div>
-				<div class="concept-orbit-dot" style="--x: -230px; --y: 0px; --delay: 0.95s; background-color: #E6F598;"></div>
-				<div class="concept-orbit-dot" style="--x: -186px; --y: -135px; --delay: 1.07s; background-color: #ABDDA4;"></div>
-				<div class="concept-orbit-dot" style="--x: -71px; --y: -219px; --delay: 1.19s; background-color: #66C2A5;"></div>
-				<div class="concept-orbit-dot" style="--x: 71px; --y: -219px; --delay: 1.31s; background-color: #3288BD;"></div>
-				<div class="concept-orbit-dot" style="--x: 186px; --y: -135px; --delay: 1.43s; background-color: #5E4FA2;"><div style="margin-left: 40px; margin-top: -20px; font-size: 0.75em; pointer-events: none;">concept layer</div></div>
+      const ontologyPackageLink = links.append("path")
+        .attr("opacity", 0)
+        .attr("stroke-dasharray", 1000)
+        .attr("stroke-dashoffset", 1000);
 
-			</div>
-			</section>
+      const packageTemplateLink = links.append("path")
+        .attr("opacity", 0)
+        .attr("stroke-dasharray", 1000)
+        .attr("stroke-dashoffset", 1000);
+
+      const ontologyServiceLink = links.append("path")
+        .attr("opacity", 0)
+        .attr("stroke-dasharray", 1000)
+        .attr("stroke-dashoffset", 1000);
+
+      const serviceTemplateLink = links.append("path")
+        .attr("opacity", 0)
+        .attr("stroke-dasharray", 1000)
+        .attr("stroke-dashoffset", 1000);
+
+      const packageRuntimeLink = links.append("path")
+        .attr("stroke", "#8a1538")
+        .attr("opacity", 0)
+        .attr("stroke-dasharray", 1000)
+        .attr("stroke-dashoffset", 1000);
+
+      const serviceRuntimeLink = links.append("path")
+        .attr("stroke", "#8a1538")
+        .attr("opacity", 0)
+        .attr("stroke-dasharray", 1000)
+        .attr("stroke-dashoffset", 1000);
+
+      const ontology = root.append("g")
+        .attr("class", "ontology-node");
+
+      const ontologyBox = ontology.append("rect")
+        .attr("fill", blue)
+        .attr("stroke", blue)
+        .attr("stroke-width", 4);
+
+      const ontologyLabel = ontology.append("text")
+        .attr("text-anchor", "middle")
+        .attr("dominant-baseline", "middle")
+        .attr("fill", "white")
+        .attr("font-weight", 600)
+        .text("Ontology");
+
+      const coreLabel = root.append("text")
+        .attr("text-anchor", "middle")
+        .attr("fill", "#222")
+        .attr("font-size", 18)
+        .attr("opacity", 0)
+        .text("core");
+
+      const ontologyBullets = root.append("g")
+        .attr("class", "ontology-bullets");
+
+      function appendBulletText(group, x, y, text, fontSize, className = "") {
+        const lines = text.split(/\\n|\n/);
+        const bullet = group.append("text")
+          .attr("x", x)
+          .attr("y", y)
+          .attr("fill", "#222")
+          .attr("font-size", fontSize)
+          .attr("class", className)
+          .attr("opacity", 0);
+
+        lines.forEach((line, lineIndex) => {
+          bullet.append("tspan")
+            .attr("x", x + (lineIndex === 0 ? 0 : fontSize * 0.95))
+            .attr("dy", lineIndex === 0 ? 0 : fontSize * 1.2)
+            .text((lineIndex === 0 ? "• " : "") + line);
+        });
+
+        return lines.length;
+      }
+
+      let ontologyBulletY = cy - 35;
+      [
+        "Semantic core",
+        "Defines concept \n domains",
+        "Minimal by design: \n no specific logic"
+      ].forEach((txt) => {
+        const lineCount = appendBulletText(ontologyBullets, cx + 230, ontologyBulletY, txt, 21);
+        ontologyBulletY += 32 + (lineCount - 1) * 25;
+      });
+
+      const packageBullets = root.append("g")
+        .attr("class", "package-bullets");
+
+      const packageTemplateBullets = root.append("g")
+        .attr("class", "package-template-bullets");
+
+      const semanticsRuntimeBullets = root.append("g")
+        .attr("class", "semantics-runtime-bullets");
+
+      let packageBulletY = cy + 115;
+      [
+        "Defines a \n Cogniflow package",
+        "Describes \n manifests, templates \n and contributions",
+        "Provides package \n vocabulary"
+      ].forEach((txt) => {
+        const lineCount = appendBulletText(packageBullets, cx + 300, packageBulletY, txt, 17);
+        packageBulletY += 28 + (lineCount - 1) * 20;
+      });
+
+      let packageTemplateBulletY = cy + 240;
+      [
+        "implementations",
+        "specifies template"
+      ].forEach((txt) => {
+        const lineCount = appendBulletText(packageTemplateBullets, cx - 470, packageTemplateBulletY, txt, 17);
+        packageTemplateBulletY += 28 + (lineCount - 1) * 20;
+      });
+
+      const serviceTemplateBulletX = cx - 470;
+      packageTemplateBullets.append("rect")
+        .attr("class", "service-template-bullet")
+        .attr("x", serviceTemplateBulletX - 9)
+        .attr("y", packageTemplateBulletY - 21)
+        .attr("width", 252)
+        .attr("height", 29)
+        .attr("rx", 7)
+        .attr("ry", 7)
+        .attr("fill", "#fff59d")
+        .attr("opacity", 0);
+
+      appendBulletText(packageTemplateBullets, serviceTemplateBulletX, packageTemplateBulletY, "provides validation service", 17, "service-template-bullet");
+
+      let semanticsRuntimeBulletY = cy - 185;
+      const semanticsDatabaseIcon = root.append("g")
+        .attr("class", "semantics-database-icon")
+        .attr("opacity", 0)
+        .attr("transform", `translate(${cx - 500},${semanticsRuntimeBulletY - 9}) scale(0.78)`);
+
+      semanticsDatabaseIcon.append("path")
+        .attr("d", "M 2 6 C 2 2 28 2 28 6 L 28 28 C 28 32 2 32 2 28 Z")
+        .attr("fill", "#eaf2fb")
+        .attr("stroke", blue)
+        .attr("stroke-width", 2)
+        .attr("stroke-linejoin", "round");
+
+      semanticsDatabaseIcon.append("ellipse")
+        .attr("cx", 15)
+        .attr("cy", 6)
+        .attr("rx", 13)
+        .attr("ry", 5)
+        .attr("fill", "white")
+        .attr("stroke", blue)
+        .attr("stroke-width", 2);
+
+      semanticsDatabaseIcon.append("path")
+        .attr("d", "M 2 17 C 2 21 28 21 28 17 M 2 27 C 2 31 28 31 28 27")
+        .attr("fill", "none")
+        .attr("stroke", blue)
+        .attr("stroke-width", 2)
+        .attr("stroke-linecap", "round");
+
+      [
+        "api to \n semantics \n database",
+        "resolves \n service requests",
+        "mcp server"
+      ].forEach((txt) => {
+        const lineCount = appendBulletText(semanticsRuntimeBullets, cx - 465, semanticsRuntimeBulletY, txt, 17);
+        semanticsRuntimeBulletY += 28 + (lineCount - 1) * 20;
+      });
+
+      function circlePoint(index, total, radius, startAngleDeg = 0) {
+        const a = (startAngleDeg + index * 360 / total) * Math.PI / 180;
+        return {
+          x: cx + Math.cos(a) * radius,
+          y: cy + Math.sin(a) * radius,
+          angle: a
+        };
+      }
+
+      function curvedPath(start, end, bend) {
+        const mx = (start.x + end.x) / 2;
+        const my = (start.y + end.y) / 2;
+        const dx = end.x - start.x;
+        const dy = end.y - start.y;
+        const len = Math.hypot(dx, dy) || 1;
+        const control = {
+          x: mx - dy / len * bend,
+          y: my + dx / len * bend
+        };
+        return `M ${start.x} ${start.y} Q ${control.x} ${control.y} ${end.x} ${end.y}`;
+      }
+
+      const conceptData = d3.range(10).map(i => ({
+        id: "concept-" + i,
+        index: i,
+        color: spectral[i % spectral.length],
+        phase: i * 0.83
+      }));
+
+      const specData = d3.range(32).map(i => ({
+        id: "spec-" + i,
+        index: i,
+        color: spectral[i % spectral.length],
+        phase: i * 0.47
+      }));
+
+      const conceptLayer = root.append("g").attr("class", "concept-layer");
+      const specLayer = root.append("g").attr("class", "specification-layer");
+
+      const conceptNodes = conceptLayer.selectAll("g.concept-node")
+        .data(conceptData, d => d.id)
+        .join("g")
+        .attr("class", "concept-node")
+        .attr("opacity", 0);
+
+      conceptNodes.append("g")
+        .attr("class", "wiggle")
+        .each(function(d) {
+          const g = d3.select(this);
+          g.append("rect")
+            .attr("class", "node-bg")
+            .attr("fill", d.color);
+          g.append("text")
+            .attr("class", "node-label")
+            .attr("text-anchor", "middle")
+            .attr("dominant-baseline", "middle")
+            .attr("fill", "white")
+            .attr("font-weight", 600)
+            .attr("opacity", 0)
+            .text(d.index === 1 ? "Package" : d.index === 4 ? "Service" : "");
+          if (d.index === 9) {
+            g.append("text")
+              .attr("class", "layer-label")
+              .attr("text-anchor", "middle")
+              .attr("fill", "#222")
+              .attr("font-size", 18)
+              .attr("y", -32)
+              .attr("opacity", 0)
+              .text("concept layer");
+          }
+        });
+
+      const specNodes = specLayer.selectAll("g.spec-node")
+        .data(specData, d => d.id)
+        .join("g")
+        .attr("class", "spec-node")
+        .attr("opacity", 0);
+
+      specNodes.append("g")
+        .attr("class", "wiggle")
+        .each(function(d) {
+          const g = d3.select(this);
+          g.append("rect")
+            .attr("class", "node-bg")
+            .attr("fill", d.color);
+          g.append("text")
+            .attr("class", "node-label")
+            .attr("text-anchor", "middle")
+            .attr("dominant-baseline", "middle")
+            .attr("fill", "white")
+            .attr("font-weight", 600)
+            .attr("opacity", 0)
+            .text(d.index === 11 ? "Package template" : d.index === 19 ? "Semantics runtime" : "");
+          if (d.index === 31) {
+            g.append("text")
+              .attr("class", "layer-label")
+              .attr("text-anchor", "middle")
+              .attr("fill", "#222")
+              .attr("font-size", 18)
+              .attr("y", -30)
+              .attr("opacity", 0)
+              .text("specification layer");
+          }
+        });
+
+      function currentStage() {
+        return section.querySelectorAll(".fragment.visible").length;
+      }
+
+      function render(stage) {
+        const t = svg.transition().duration(650).ease(d3.easeCubicInOut);
+
+        const ontologyState = (() => {
+          if (stage === 0) {
+            return { w: 180, h: 180, r: 90, font: 0, labelOpacity: 0 };
+          }
+          if (stage === 1) {
+            return { w: 360, h: 120, r: 24, font: 44, labelOpacity: 1 };
+          }
+          if (stage === 2) {
+            return { w: 260, h: 86, r: 18, font: 34, labelOpacity: 1 };
+          }
+          return { w: 210, h: 70, r: 16, font: 28, labelOpacity: 1 };
+        })();
+
+        const packageRadius = stage >= 3 ? 180 : 230;
+        const packagePoint = circlePoint(1, 10, packageRadius, 0);
+        const servicePoint = circlePoint(4, 10, packageRadius, 0);
+        const templatePoint = circlePoint(11, 32, 300, 0);
+        const runtimePoint = circlePoint(19, 32, 300, 0);
+
+        ontologyPackageLink.transition()
+          .delay(stage === 2 ? 1450 : 0)
+          .duration(stage >= 2 ? 700 : 200)
+          .ease(d3.easeCubicInOut)
+          .attr("d", curvedPath({ x: cx, y: cy }, packagePoint, 55))
+          .attr("opacity", stage >= 2 ? 0.78 : 0)
+          .attr("stroke-dashoffset", stage >= 2 ? 0 : 1000);
+
+        packageTemplateLink.transition()
+          .delay(stage >= 3 ? 1550 : 0)
+          .duration(stage >= 3 ? 850 : 200)
+          .ease(d3.easeCubicInOut)
+          .attr("d", curvedPath(packagePoint, templatePoint, -70))
+          .attr("opacity", stage >= 3 ? 0.78 : 0)
+          .attr("stroke-dashoffset", stage >= 3 ? 0 : 1000);
+
+        ontologyServiceLink.transition()
+          .delay(stage >= 4 ? 1050 : 0)
+          .duration(stage >= 4 ? 750 : 200)
+          .ease(d3.easeCubicInOut)
+          .attr("d", curvedPath({ x: cx, y: cy }, servicePoint, -55))
+          .attr("opacity", stage >= 4 ? 0.78 : 0)
+          .attr("stroke-dashoffset", stage >= 4 ? 0 : 1000);
+
+        serviceTemplateLink.transition()
+          .delay(stage >= 4 ? 1250 : 0)
+          .duration(stage >= 4 ? 850 : 200)
+          .ease(d3.easeCubicInOut)
+          .attr("d", curvedPath(servicePoint, templatePoint, 80))
+          .attr("opacity", stage >= 4 ? 0.78 : 0)
+          .attr("stroke-dashoffset", stage >= 4 ? 0 : 1000);
+
+        packageRuntimeLink.transition()
+          .delay(stage >= 5 ? 1250 : 0)
+          .duration(stage >= 5 ? 850 : 200)
+          .ease(d3.easeCubicInOut)
+          .attr("d", curvedPath(packagePoint, runtimePoint, 210))
+          .attr("opacity", stage >= 5 ? 0.82 : 0)
+          .attr("stroke-dashoffset", stage >= 5 ? 0 : 1000);
+
+        serviceRuntimeLink.transition()
+          .delay(stage >= 5 ? 1450 : 0)
+          .duration(stage >= 5 ? 850 : 200)
+          .ease(d3.easeCubicInOut)
+          .attr("d", curvedPath(servicePoint, runtimePoint, -75))
+          .attr("opacity", stage >= 5 ? 0.82 : 0)
+          .attr("stroke-dashoffset", stage >= 5 ? 0 : 1000);
+
+        ontologyBox.transition(t)
+          .attr("x", cx - ontologyState.w / 2)
+          .attr("y", cy - ontologyState.h / 2)
+          .attr("width", ontologyState.w)
+          .attr("height", ontologyState.h)
+          .attr("rx", ontologyState.r)
+          .attr("ry", ontologyState.r);
+
+        ontologyLabel.transition(t)
+          .attr("x", cx)
+          .attr("y", cy + 2)
+          .attr("font-size", ontologyState.font)
+          .attr("opacity", ontologyState.labelOpacity);
+
+        coreLabel.transition(t)
+          .attr("x", cx)
+          .attr("y", cy - ontologyState.h / 2 - 28)
+          .attr("opacity", stage >= 2 ? 1 : 0);
+
+        ontologyBullets.selectAll("text").transition()
+          .delay((d, i) => stage === 1 ? 700 + i * 180 : 0)
+          .duration(260)
+          .attr("opacity", stage === 1 ? 1 : 0);
+
+        packageBullets.selectAll("text").transition()
+          .delay((d, i) => stage === 2 ? 2300 + i * 180 : 0)
+          .duration(260)
+          .attr("opacity", stage === 2 ? 1 : 0);
+
+        packageTemplateBullets.selectAll("text:not(.service-template-bullet)").transition()
+          .delay((d, i) => stage >= 3 ? 2200 + i * 180 : 0)
+          .duration(260)
+          .attr("opacity", stage >= 3 ? 1 : 0);
+
+        packageTemplateBullets.selectAll(".service-template-bullet").transition()
+          .delay(stage >= 4 ? 2200 : 0)
+          .duration(260)
+          .attr("opacity", stage >= 4 ? 1 : 0);
+
+        semanticsRuntimeBullets.selectAll("text").transition()
+          .delay((d, i) => stage >= 5 ? 2200 + i * 180 : 0)
+          .duration(260)
+          .attr("opacity", stage >= 5 ? 1 : 0);
+
+        semanticsDatabaseIcon.transition()
+          .delay(stage >= 5 ? 2200 : 0)
+          .duration(260)
+          .attr("opacity", stage >= 5 ? 1 : 0)
+          .attr("transform", `translate(${cx - 500},${cy - 174}) scale(${stage >= 5 ? 1 : 0.78})`);
+
+        conceptNodes.each(function(d) {
+          const isPackage = d.index === 1;
+          const isService = d.index === 4;
+          const radius = packageRadius;
+          const p = circlePoint(d.index, 10, radius, 0);
+
+          const visible = stage >= 2;
+          const dotSize = stage >= 3 ? 24 : 34;
+          const isExpandedPackage = isPackage && stage >= 2;
+          const isExpandedService = isService && stage >= 4;
+          const w = isExpandedPackage ? (stage >= 3 ? 150 : 190) : isExpandedService ? 150 : dotSize;
+          const h = isExpandedPackage ? (stage >= 3 ? 50 : 64) : isExpandedService ? 50 : dotSize;
+          const rx = isExpandedPackage ? (stage >= 3 ? 14 : 16) : isExpandedService ? 14 : dotSize / 2;
+
+          const node = d3.select(this);
+
+          node.transition()
+            .delay(stage >= 2 ? d.index * 120 : 0)
+            .duration(stage >= 2 ? 320 : 200)
+            .attr("opacity", visible ? 1 : 0)
+            .attr("transform", `translate(${p.x},${p.y}) scale(${visible ? 1 : 0})`);
+
+          node.select(".node-bg").transition()
+            .delay(isPackage && stage === 2 ? 1800 : isService && stage === 4 ? 500 : 0)
+            .duration((isPackage && stage === 2) || (isService && stage === 4) ? 520 : 650)
+            .ease(d3.easeCubicInOut)
+            .attr("x", -w / 2)
+            .attr("y", -h / 2)
+            .attr("width", w)
+            .attr("height", h)
+            .attr("rx", rx)
+            .attr("ry", rx);
+
+          node.select(".node-label").transition()
+            .delay(isPackage && stage === 2 ? 2020 : isService && stage === 4 ? 720 : 0)
+            .duration(250)
+            .attr("font-size", stage >= 3 ? 18 : 23)
+            .attr("opacity", isExpandedPackage || isExpandedService ? 1 : 0);
+
+          node.select(".layer-label").transition(t)
+            .attr("font-size", stage >= 3 ? 15 : 18)
+            .attr("y", stage >= 3 ? -28 : -34)
+            .attr("opacity", stage >= 2 ? 1 : 0);
+        });
+
+        specNodes.each(function(d) {
+          const isTemplate = d.index === 11;
+          const isRuntime = d.index === 19;
+          const p = circlePoint(d.index, 32, 300, 0);
+
+          const visible = stage >= 3;
+          const isExpandedTemplate = isTemplate && stage >= 3;
+          const isExpandedRuntime = isRuntime && stage >= 5;
+          const w = isExpandedTemplate ? 170 : isExpandedRuntime ? 190 : 22;
+          const h = isExpandedTemplate ? 54 : isExpandedRuntime ? 54 : 22;
+          const rx = isExpandedTemplate || isExpandedRuntime ? 15 : 11;
+
+          const node = d3.select(this);
+
+          node.transition()
+            .delay(stage >= 3 ? 250 + d.index * 35 : 0)
+            .duration(stage >= 3 ? 230 : 150)
+            .attr("opacity", visible ? 1 : 0)
+            .attr("transform", `translate(${p.x},${p.y}) scale(${visible ? 1 : 0})`);
+
+          node.select(".node-bg").transition()
+            .delay(isTemplate && stage >= 3 ? 1750 : isRuntime && stage === 5 ? 500 : 0)
+            .duration(isExpandedTemplate || (isRuntime && stage === 5) ? 480 : 230)
+            .attr("x", -w / 2)
+            .attr("y", -h / 2)
+            .attr("width", w)
+            .attr("height", h)
+            .attr("rx", rx)
+            .attr("ry", rx);
+
+          node.select(".node-label").transition()
+            .delay(isTemplate && stage >= 3 ? 1950 : isRuntime && stage === 5 ? 700 : 0)
+            .duration(240)
+            .attr("font-size", isRuntime ? 14 : 15)
+            .attr("opacity", isExpandedTemplate || isExpandedRuntime ? 1 : 0);
+
+          node.select(".layer-label").transition(t)
+            .attr("opacity", stage >= 3 ? 1 : 0);
+        });
+      }
+
+      d3.timer((elapsed) => {
+        const stage = currentStage();
+        const ampConcept = stage >= 2 ? 3 : 0;
+        const ampSpec = stage >= 3 ? 2 : 0;
+
+        conceptNodes.select(".wiggle")
+          .attr("transform", d => {
+            const x = Math.sin(elapsed / 430 + d.phase) * ampConcept;
+            const y = Math.cos(elapsed / 510 + d.phase) * ampConcept;
+            return `translate(${x},${y})`;
+          });
+
+        specNodes.select(".wiggle")
+          .attr("transform", d => {
+            const x = Math.sin(elapsed / 380 + d.phase) * ampSpec;
+            const y = Math.cos(elapsed / 470 + d.phase) * ampSpec;
+            return `translate(${x},${y})`;
+          });
+      });
+
+      function updateForSlide() {
+        if (reveal.getCurrentSlide() === section) {
+          render(currentStage());
+        }
+      }
+
+      reveal.on("slidechanged", updateForSlide);
+      reveal.on("fragmentshown", updateForSlide);
+      reveal.on("fragmenthidden", updateForSlide);
+
+      render(0);
+    };
+  </script>
+</section>
+
+<section id="cf-service-process-diagram" data-background-color="white">
+  <svg
+    id="cf-service-process-svg"
+    viewBox="0 0 1100 650"
+    style="width: 100%; height: 650px;"
+  ></svg>
+
+  <!-- Invisible Reveal fragments: each click advances the D3 state -->
+  <div class="fragment" style="display: none;"></div>
+  <div class="fragment" style="display: none;"></div>
+  <div class="fragment" style="display: none;"></div>
+  <div class="fragment" style="display: none;"></div>
+  <div class="fragment" style="display: none;"></div>
+  <div class="fragment" style="display: none;"></div>
+  <div class="fragment" style="display: none;"></div>
+
+  <script>
+    window.initCfServiceProcessDiagram = () => {
+      const section = document.getElementById("cf-service-process-diagram");
+      if (!section || section.dataset.cfServiceProcessInitialized === "true") return;
+      const d3 = window.d3;
+      const reveal = window.Reveal;
+      if (!d3 || !reveal) return;
+      section.dataset.cfServiceProcessInitialized = "true";
+
+      {
+        const svg = d3.select("#cf-service-process-svg");
+        const W = 1100;
+        const H = 650;
+        const blue = "#004c93";
+        const red = "#8a1538";
+        const green = "#2f8f5b";
+        const dark = "#333333";
+        const external = "#5f6670";
+
+        const lanes = [
+          { id: "provider", label: "Provider", context: "cf-package", x: 185, icon: "provider" },
+          { id: "database", label: "Database", context: "external tool", x: 430, icon: "database" },
+          { id: "runtime", label: "Runtime", context: "cf-package", x: 675, icon: "runtime" },
+          { id: "consumer", label: "Consumer", context: "cf-package", x: 920, icon: "consumer" }
+        ];
+
+        const root = svg.append("g");
+        const gBackground = root.append("g").attr("class", "service-background");
+        const gLifelines = root.append("g").attr("class", "service-lifelines");
+        const gArrows = root.append("g").attr("class", "service-arrows");
+        const gService = root.append("g").attr("class", "service-element");
+        const gActions = root.append("g").attr("class", "service-actions");
+        const gTiles = root.append("g").attr("class", "service-tiles");
+        const gIcons = root.append("g").attr("class", "service-icons");
+
+        const defs = svg.append("defs");
+        defs.append("marker")
+          .attr("id", "cf-service-arrowhead")
+          .attr("viewBox", "0 0 10 10")
+          .attr("refX", 9)
+          .attr("refY", 5)
+          .attr("markerWidth", 7)
+          .attr("markerHeight", 7)
+          .attr("orient", "auto")
+          .append("path")
+          .attr("d", "M 0 0 L 10 5 L 0 10 z")
+          .attr("fill", "context-stroke");
+
+        gBackground.append("rect")
+          .attr("width", W)
+          .attr("height", H)
+          .attr("fill", "white");
+
+        function drawIcon(group, type, color = blue) {
+          if (type === "provider") {
+            group.append("path")
+              .attr("d", "M 0 -19 L 18 -9 L 18 12 L 0 22 L -18 12 L -18 -9 Z M 0 -19 L 0 1 M -18 -9 L 0 1 L 18 -9")
+              .attr("fill", "none")
+              .attr("stroke", color)
+              .attr("stroke-width", 3)
+              .attr("stroke-linejoin", "round")
+              .attr("stroke-linecap", "round");
+          } else if (type === "database") {
+            group.append("path")
+              .attr("d", "M -18 -10 C -18 -20 18 -20 18 -10 L 18 14 C 18 24 -18 24 -18 14 Z")
+              .attr("fill", "none")
+              .attr("stroke", color)
+              .attr("stroke-width", 3)
+              .attr("stroke-linejoin", "round");
+            group.append("ellipse")
+              .attr("cx", 0)
+              .attr("cy", -10)
+              .attr("rx", 18)
+              .attr("ry", 8)
+              .attr("fill", "white")
+              .attr("stroke", color)
+              .attr("stroke-width", 3);
+            group.append("path")
+              .attr("d", "M -18 2 C -18 10 18 10 18 2")
+              .attr("fill", "none")
+              .attr("stroke", color)
+              .attr("stroke-width", 3);
+          } else if (type === "runtime") {
+            group.append("rect")
+              .attr("x", -16)
+              .attr("y", -16)
+              .attr("width", 32)
+              .attr("height", 32)
+              .attr("rx", 5)
+              .attr("fill", "none")
+              .attr("stroke", color)
+              .attr("stroke-width", 3);
+            group.append("circle")
+              .attr("r", 6)
+              .attr("fill", color);
+            [-24, 24].forEach((x) => {
+              group.append("line").attr("x1", x).attr("y1", -8).attr("x2", x / 1.5).attr("y2", -8).attr("stroke", color).attr("stroke-width", 3).attr("stroke-linecap", "round");
+              group.append("line").attr("x1", x).attr("y1", 8).attr("x2", x / 1.5).attr("y2", 8).attr("stroke", color).attr("stroke-width", 3).attr("stroke-linecap", "round");
+            });
+          } else {
+            group.append("circle")
+              .attr("cy", -10)
+              .attr("r", 9)
+              .attr("fill", "none")
+              .attr("stroke", color)
+              .attr("stroke-width", 3);
+            group.append("path")
+              .attr("d", "M -18 20 C -14 3 14 3 18 20")
+              .attr("fill", "none")
+              .attr("stroke", color)
+              .attr("stroke-width", 3)
+              .attr("stroke-linecap", "round");
+          }
+        }
+
+        function drawReplacementColumn({ x, label, context, icon, direction, width = 190, height = 70, color = blue, contextColor = blue }) {
+          const startOffset = direction === "down" ? -720 : 720;
+          const column = root.append("g")
+            .attr("class", "replacement-column")
+            .attr("opacity", 0);
+
+          const lifeline = column.append("line")
+            .attr("class", "replacement-lifeline")
+            .attr("x1", x)
+            .attr("y1", 205 + startOffset)
+            .attr("x2", x)
+            .attr("y2", 205 + startOffset)
+            .attr("stroke", color)
+            .attr("stroke-width", 3)
+            .attr("stroke-linecap", "round")
+            .attr("stroke-dasharray", "7 8");
+
+          const tile = column.append("g")
+            .attr("class", "replacement-tile")
+            .attr("transform", `translate(${x},${80 + startOffset})`);
+
+          tile.append("rect")
+            .attr("x", -width / 2)
+            .attr("y", -height / 2)
+            .attr("width", width)
+            .attr("height", height)
+            .attr("rx", 18)
+            .attr("fill", color);
+
+          const labelText = tile.append("text")
+            .attr("text-anchor", "middle")
+            .attr("dominant-baseline", "middle")
+            .attr("fill", "white")
+            .attr("font-size", 24)
+            .attr("font-weight", 650);
+
+          label.split("\n").forEach((line, i, lines) => {
+            labelText.append("tspan")
+              .attr("x", 0)
+              .attr("dy", lines.length === 1 ? 0 : i === 0 ? "-0.35em" : "1.2em")
+              .text(line);
+          });
+
+          tile.append("text")
+            .attr("x", 0)
+            .attr("y", -height / 2 - 17)
+            .attr("text-anchor", "middle")
+            .attr("fill", contextColor)
+            .attr("font-size", 15)
+            .attr("font-weight", 700)
+            .text(context);
+
+          const iconGroup = column.append("g")
+            .attr("class", "replacement-icon")
+            .attr("transform", `translate(${x},${175 + startOffset}) scale(1)`);
+          drawIcon(iconGroup, icon, color);
+
+          return { column, tile, iconGroup, lifeline };
+        }
+
+        const tiles = gTiles.selectAll("g.role-tile")
+          .data(lanes)
+          .join("g")
+          .attr("class", d => `role-tile role-${d.id}`)
+          .attr("transform", "translate(550,325)");
+
+        tiles.append("rect")
+          .attr("class", "role-tile-bg")
+          .attr("x", -150)
+          .attr("y", -55)
+          .attr("width", 300)
+          .attr("height", 110)
+          .attr("rx", 24)
+          .attr("fill", blue);
+
+        tiles.append("text")
+          .attr("class", "role-label")
+          .attr("text-anchor", "middle")
+          .attr("dominant-baseline", "middle")
+          .attr("fill", "white")
+          .attr("font-size", 26)
+          .attr("font-weight", 650)
+          .attr("opacity", 0)
+          .text(d => d.label);
+
+        tiles.append("text")
+          .attr("class", "role-context")
+          .attr("x", 0)
+          .attr("y", -52)
+          .attr("text-anchor", "middle")
+          .attr("fill", d => d.id === "database" ? external : blue)
+          .attr("font-size", 15)
+          .attr("font-weight", 700)
+          .attr("opacity", 0)
+          .text(d => d.context);
+
+        const affordancesStartLabel = gTiles.append("text")
+          .attr("x", 550)
+          .attr("y", 325)
+          .attr("text-anchor", "middle")
+          .attr("dominant-baseline", "middle")
+          .attr("fill", "white")
+          .attr("font-size", 28)
+          .attr("font-weight", 700)
+          .text("affordances");
+
+        const icons = gIcons.selectAll("g.role-icon")
+          .data(lanes)
+          .join("g")
+          .attr("class", d => `role-icon role-${d.id}`)
+          .attr("transform", d => `translate(${d.x},175) scale(0.85)`)
+          .attr("opacity", 0)
+          .each(function(d) {
+            drawIcon(d3.select(this), d.icon);
+          });
+
+        const lifelines = gLifelines.selectAll("line.role-lifeline")
+          .data(lanes)
+          .join("line")
+          .attr("class", d => `role-lifeline role-${d.id}`)
+          .attr("x1", d => d.x)
+          .attr("y1", 205)
+          .attr("x2", d => d.x)
+          .attr("y2", 205)
+          .attr("stroke", blue)
+          .attr("stroke-width", 3)
+          .attr("stroke-linecap", "round")
+          .attr("stroke-dasharray", "7 8")
+          .attr("opacity", 0);
+
+        const serviceElement = gService.append("g")
+          .attr("transform", "translate(185,300) scale(0.85)")
+          .attr("opacity", 0);
+
+        serviceElement.append("path")
+          .attr("d", "M -118 -38 H 52 A 38 38 0 0 0 52 38 H -118 Z")
+          .attr("fill", blue)
+          .attr("stroke", blue)
+          .attr("stroke-width", 3)
+          .attr("stroke-linejoin", "round");
+
+        serviceElement.append("text")
+          .attr("x", -54)
+          .attr("y", -6)
+          .attr("text-anchor", "middle")
+          .attr("fill", "white")
+          .attr("font-size", 18)
+          .attr("font-weight", 650)
+          .text("Service");
+
+        serviceElement.append("text")
+          .attr("x", -54)
+          .attr("y", 17)
+          .attr("text-anchor", "middle")
+          .attr("fill", "white")
+          .attr("font-size", 18)
+          .attr("font-weight", 650)
+          .text("semantics");
+
+        serviceElement.append("circle")
+          .attr("cx", 52)
+          .attr("cy", 0)
+          .attr("r", 38)
+          .attr("fill", dark)
+          .attr("stroke", "white")
+          .attr("stroke-width", 4);
+
+        serviceElement.append("text")
+          .attr("x", 52)
+          .attr("y", -6)
+          .attr("text-anchor", "middle")
+          .attr("fill", "white")
+          .attr("font-size", 16)
+          .attr("font-weight", 650)
+          .text("Code");
+
+        serviceElement.append("text")
+          .attr("x", 52)
+          .attr("y", 18)
+          .attr("text-anchor", "middle")
+          .attr("fill", "white")
+          .attr("font-family", "monospace")
+          .attr("font-size", 17)
+          .attr("font-weight", 700)
+          .text(">_");
+
+        const packageTemplateService = gService.append("g")
+          .attr("transform", "translate(185,-420) scale(0.85)")
+          .attr("opacity", 0);
+
+        packageTemplateService.append("path")
+          .attr("d", "M -118 -38 H 52 A 38 38 0 0 0 52 38 H -118 Z")
+          .attr("fill", green)
+          .attr("stroke", green)
+          .attr("stroke-width", 3)
+          .attr("stroke-linejoin", "round");
+
+        packageTemplateService.append("text")
+          .attr("x", -54)
+          .attr("y", -6)
+          .attr("text-anchor", "middle")
+          .attr("fill", "white")
+          .attr("font-size", 18)
+          .attr("font-weight", 650)
+          .text("Service");
+
+        packageTemplateService.append("text")
+          .attr("x", -54)
+          .attr("y", 17)
+          .attr("text-anchor", "middle")
+          .attr("fill", "white")
+          .attr("font-size", 18)
+          .attr("font-weight", 650)
+          .text("semantics");
+
+        packageTemplateService.append("circle")
+          .attr("cx", 52)
+          .attr("cy", 0)
+          .attr("r", 38)
+          .attr("fill", dark)
+          .attr("stroke", "white")
+          .attr("stroke-width", 4);
+
+        packageTemplateService.append("text")
+          .attr("x", 52)
+          .attr("y", -6)
+          .attr("text-anchor", "middle")
+          .attr("fill", "white")
+          .attr("font-size", 16)
+          .attr("font-weight", 650)
+          .text("Code");
+
+        packageTemplateService.append("text")
+          .attr("x", 52)
+          .attr("y", 18)
+          .attr("text-anchor", "middle")
+          .attr("fill", "white")
+          .attr("font-family", "monospace")
+          .attr("font-size", 17)
+          .attr("font-weight", 700)
+          .text(">_");
+
+        const packageCreatorService = packageTemplateService.clone(true)
+          .attr("transform", "translate(185,-420) scale(0.85)")
+          .attr("opacity", 0);
+
+        const packageTemplateColumn = drawReplacementColumn({
+          x: 185,
+          label: "Package\nTemplate",
+          context: "cf-package",
+          icon: "provider",
+          direction: "down",
+          width: 220,
+          height: 88
+        });
+
+        const webUiColumn = drawReplacementColumn({
+          x: 920,
+          label: "Web UI",
+          context: "cf-package",
+          icon: "consumer",
+          direction: "up"
+        });
+
+        const packageCreatorColumn = drawReplacementColumn({
+          x: 185,
+          label: "Package\nCreator",
+          context: "cf-package",
+          icon: "provider",
+          direction: "down",
+          width: 220,
+          height: 88
+        });
+
+        const opencodeColumn = drawReplacementColumn({
+          x: 920,
+          label: "AI Agent",
+          context: "external tool",
+          icon: "consumer",
+          direction: "up",
+          color: external,
+          contextColor: external
+        });
+
+        packageTemplateColumn.column.lower();
+        webUiColumn.column.lower();
+        packageCreatorColumn.column.lower();
+        opencodeColumn.column.lower();
+        gBackground.lower();
+
+        function drawActionBox(x, y, text, color, width = 116, height = 48) {
+          const group = gActions.append("g")
+            .attr("transform", `translate(${x},${y}) scale(0.85)`)
+            .attr("opacity", 0);
+          group.append("rect")
+            .attr("x", -width / 2)
+            .attr("y", -height / 2)
+            .attr("width", width)
+            .attr("height", height)
+            .attr("rx", 14)
+            .attr("fill", "white")
+            .attr("stroke", color)
+            .attr("stroke-width", 3);
+          const label = group.append("text")
+            .attr("text-anchor", "middle")
+            .attr("dominant-baseline", "middle")
+            .attr("fill", color)
+            .attr("font-size", 18)
+            .attr("font-weight", 700);
+          text.split("\n").forEach((line, i, lines) => {
+            label.append("tspan")
+              .attr("x", 0)
+              .attr("dy", lines.length === 1 ? 0 : i === 0 ? "-0.35em" : "1.2em")
+              .text(line);
+          });
+          return group;
+        }
+
+        const discoverPushBox = drawActionBox(675, 292, "discover / \npush", red, 116, 66);
+        const storeBox = drawActionBox(430, 325, "store", blue);
+
+        const storeBullet = gActions.append("g")
+          .attr("transform", "translate(360,377) scale(0.85)")
+          .attr("opacity", 0);
+
+        storeBullet.append("text")
+          .attr("x", -74)
+          .attr("y", 0)
+          .attr("fill", dark)
+          .attr("font-size", 15)
+          .attr("font-weight", 650)
+          .text("•");
+
+        const storeBulletText = storeBullet.append("text")
+          .attr("x", -57)
+          .attr("y", 0)
+          .attr("fill", dark)
+          .attr("font-size", 15)
+          .attr("font-weight", 650);
+
+        storeBulletText.append("tspan")
+          .attr("x", -57)
+          .attr("dy", 0)
+          .text("semantics");
+
+        storeBulletText.append("tspan")
+          .attr("x", -57)
+          .attr("dy", 19)
+          .text("incl. binding");
+
+        const affordanceForm = gActions.append("g")
+          .attr("transform", "translate(675,425) scale(0.85)")
+          .attr("opacity", 0);
+
+        affordanceForm.append("rect")
+          .attr("x", -96)
+          .attr("y", -73)
+          .attr("width", 192)
+          .attr("height", 146)
+          .attr("rx", 16)
+          .attr("fill", "#fff6cf")
+          .attr("stroke", blue)
+          .attr("stroke-width", 3);
+
+        affordanceForm.append("text")
+          .attr("x", 0)
+          .attr("y", -49)
+          .attr("text-anchor", "middle")
+          .attr("fill", blue)
+          .attr("font-size", 15)
+          .attr("font-weight", 700)
+          .text("standard affordance");
+
+        [
+          { label: "service", y: -20 },
+          { label: "input args", y: 18 },
+          { label: "output", y: 56 }
+        ].forEach((row) => {
+          affordanceForm.append("text")
+            .attr("x", -76)
+            .attr("y", row.y + 5)
+            .attr("fill", dark)
+            .attr("font-size", 11)
+            .attr("font-weight", 650)
+            .text(row.label);
+          affordanceForm.append("rect")
+            .attr("x", -4)
+            .attr("y", row.y - 13)
+            .attr("width", 78)
+            .attr("height", 22)
+            .attr("rx", 6)
+            .attr("fill", "#f4f8fc")
+            .attr("stroke", "#b8cadb")
+            .attr("stroke-width", 1.4);
+        });
+
+        const consumerRequest = gActions.append("g")
+          .attr("transform", "translate(920,425) scale(0.85)")
+          .attr("opacity", 0);
+
+        consumerRequest.append("rect")
+          .attr("x", -78)
+          .attr("y", -42)
+          .attr("width", 156)
+          .attr("height", 84)
+          .attr("rx", 16)
+          .attr("fill", "white")
+          .attr("stroke", blue)
+          .attr("stroke-width", 3);
+
+        ["uses", "for", "request"].forEach((line, i) => {
+          consumerRequest.append("text")
+            .attr("x", 0)
+            .attr("y", -18 + i * 22)
+            .attr("text-anchor", "middle")
+            .attr("fill", blue)
+            .attr("font-size", 18)
+            .attr("font-weight", 700)
+            .text(line);
+        });
+
+        const callBox = drawActionBox(675, 570, "call / \nprovide", red, 116, 66);
+
+        function drawArrow(pathD, color) {
+          return gArrows.append("path")
+            .attr("d", pathD)
+            .attr("fill", "none")
+            .attr("stroke", color)
+            .attr("stroke-width", 3)
+            .attr("stroke-linecap", "round")
+            .attr("stroke-dasharray", 800)
+            .attr("stroke-dashoffset", 800)
+            .attr("marker-end", "url(#cf-service-arrowhead)")
+            .attr("opacity", 0);
+        }
+
+        const discoverArrow = drawArrow("M 617 259 C 500 240 330 275 275 300", red);
+        const pushArrow = drawArrow("M 617 325 H 488", blue);
+        const requestArrow = drawArrow("M 842 425 H 776", blue);
+        const checkArrow = drawArrow("M 579 405 C 530 440 468 428 450 364", red);
+        const callUpArrow = drawArrow("M 675 537 V 505", red);
+        const callCodeArrow = drawArrow("M 617 570 C 455 585 290 470 237 338", red);
+
+        const checkLabel = gArrows.append("text")
+          .attr("x", 520)
+          .attr("y", 418)
+          .attr("text-anchor", "middle")
+          .attr("fill", red)
+          .attr("font-size", 15)
+          .attr("font-weight", 700)
+          .attr("opacity", 0)
+          .text("check");
+
+        const bindingLabel = gArrows.append("text")
+          .attr("x", 558)
+          .attr("y", 472)
+          .attr("text-anchor", "middle")
+          .attr("fill", blue)
+          .attr("font-size", 15)
+          .attr("font-weight", 700)
+          .attr("opacity", 0);
+
+        bindingLabel.append("tspan")
+          .attr("x", 518)
+          .attr("dy", -10)
+          .text("recieve");
+        bindingLabel.append("tspan")
+          .attr("x", 518)
+          .attr("dy", 18)
+          .text("binding");
+
+        gArrows.raise();
+
+        function currentStage() {
+          return section.querySelectorAll(".fragment.visible").length;
+        }
+
+        function render(stage) {
+          stage = Math.max(0, Math.min(7, stage));
+          const expanded = stage >= 1;
+          const showService = stage >= 2;
+          const showAffordance = stage >= 3;
+          const showRequest = stage >= 4;
+          const showCall = stage >= 5;
+          const swapColumns = stage >= 6;
+          const swapColumnsAgain = stage >= 7;
+
+          tiles.transition()
+            .duration(820)
+            .ease(d3.easeCubicInOut)
+            .attr("transform", d => {
+              if (!expanded) return "translate(550,325)";
+              if (swapColumns && d.id === "provider") return `translate(${d.x},800)`;
+              if (swapColumns && d.id === "consumer") return `translate(${d.x},-640)`;
+              return `translate(${d.x},80)`;
+            });
+
+          tiles.select("rect").transition()
+            .duration(820)
+            .ease(d3.easeCubicInOut)
+            .attr("fill", d => expanded && d.id === "database" ? external : blue)
+            .attr("x", expanded ? -95 : -150)
+            .attr("y", expanded ? -35 : -55)
+            .attr("width", expanded ? 190 : 300)
+            .attr("height", expanded ? 70 : 110)
+            .attr("rx", expanded ? 18 : 24);
+
+          tiles.select(".role-label").transition()
+            .delay(expanded ? 820 : 0)
+            .duration(expanded ? 260 : 120)
+            .ease(d3.easeBackOut.overshoot(1.3))
+            .attr("opacity", expanded ? 1 : 0)
+            .attr("transform", expanded ? "scale(1)" : "scale(0.85)");
+
+          tiles.select(".role-context").transition()
+            .delay(expanded ? 980 : 0)
+            .duration(expanded ? 240 : 120)
+            .ease(d3.easeBackOut.overshoot(1.2))
+            .attr("opacity", expanded ? 1 : 0)
+            .attr("transform", expanded ? "scale(1)" : "scale(0.85)");
+
+          affordancesStartLabel.transition()
+            .duration(expanded ? 180 : 260)
+            .attr("opacity", expanded ? 0 : 1);
+
+          icons.transition()
+            .delay(swapColumns ? 0 : expanded ? 980 : 0)
+            .duration(swapColumns ? 820 : expanded ? 280 : 120)
+            .ease(swapColumns ? d3.easeCubicInOut : d3.easeBackOut.overshoot(1.25))
+            .attr("opacity", expanded ? 1 : 0)
+            .attr("transform", d => {
+              const y = swapColumns && d.id === "provider" ? 895 : swapColumns && d.id === "consumer" ? -545 : 175;
+              return `translate(${d.x},${y}) scale(${expanded ? 1 : 0.85})`;
+            });
+
+          lifelines.transition()
+            .delay((d, i) => swapColumns ? 0 : expanded ? 1180 + i * 150 : 0)
+            .duration(swapColumns ? 820 : expanded ? 330 : 150)
+            .ease(swapColumns ? d3.easeCubicInOut : d3.easeCubicOut)
+            .attr("opacity", expanded ? 1 : 0)
+            .attr("y1", d => {
+              if (!expanded) return 205;
+              if (swapColumns && d.id === "provider") return 925;
+              if (swapColumns && d.id === "consumer") return -515;
+              return 205;
+            })
+            .attr("y2", d => {
+              if (!expanded) return 205;
+              if (swapColumns && d.id === "provider") return 1305;
+              if (swapColumns && d.id === "consumer") return -135;
+              return 585;
+            });
+
+          serviceElement.transition()
+            .delay(swapColumns ? 0 : showService ? 140 : 0)
+            .duration(swapColumns ? 820 : showService ? 320 : 150)
+            .ease(swapColumns ? d3.easeCubicInOut : d3.easeBackOut.overshoot(1.2))
+            .attr("opacity", showService ? 1 : 0)
+            .attr("transform", `translate(185,${swapColumns ? 1020 : 300}) scale(${showService ? 1 : 0.85})`);
+
+          packageTemplateService.transition()
+            .duration(swapColumns ? 820 : 180)
+            .ease(d3.easeCubicInOut)
+            .attr("opacity", swapColumns ? 1 : 0)
+            .attr("transform", `translate(185,${swapColumnsAgain ? 1020 : swapColumns ? 300 : -420}) scale(${swapColumns ? 1 : 0.85})`);
+
+          packageCreatorService.transition()
+            .duration(swapColumnsAgain ? 820 : 180)
+            .ease(d3.easeCubicInOut)
+            .attr("opacity", swapColumnsAgain ? 1 : 0)
+            .attr("transform", `translate(185,${swapColumnsAgain ? 300 : -420}) scale(${swapColumnsAgain ? 1 : 0.85})`);
+
+          packageTemplateColumn.column.transition()
+            .duration(swapColumns ? 820 : 180)
+            .ease(d3.easeCubicInOut)
+            .attr("opacity", swapColumns ? 1 : 0);
+
+          packageTemplateColumn.tile.transition()
+            .duration(swapColumns ? 820 : 180)
+            .ease(d3.easeCubicInOut)
+            .attr("transform", `translate(185,${swapColumnsAgain ? 800 : swapColumns ? 80 : -640})`);
+
+          packageTemplateColumn.iconGroup.transition()
+            .duration(swapColumns ? 820 : 180)
+            .ease(d3.easeCubicInOut)
+            .attr("transform", `translate(185,${swapColumnsAgain ? 895 : swapColumns ? 175 : -545}) scale(${swapColumns ? 1 : 0.85})`);
+
+          packageTemplateColumn.lifeline.transition()
+            .duration(swapColumns ? 820 : 180)
+            .ease(d3.easeCubicInOut)
+            .attr("y1", swapColumnsAgain ? 925 : swapColumns ? 205 : -515)
+            .attr("y2", swapColumnsAgain ? 925 : swapColumns ? 585 : -515);
+
+          packageCreatorColumn.column.transition()
+            .duration(swapColumnsAgain ? 820 : 180)
+            .ease(d3.easeCubicInOut)
+            .attr("opacity", swapColumnsAgain ? 1 : 0);
+
+          packageCreatorColumn.tile.transition()
+            .duration(swapColumnsAgain ? 820 : 180)
+            .ease(d3.easeCubicInOut)
+            .attr("transform", `translate(185,${swapColumnsAgain ? 80 : -640})`);
+
+          packageCreatorColumn.iconGroup.transition()
+            .duration(swapColumnsAgain ? 820 : 180)
+            .ease(d3.easeCubicInOut)
+            .attr("transform", `translate(185,${swapColumnsAgain ? 175 : -545}) scale(${swapColumnsAgain ? 1 : 0.85})`);
+
+          packageCreatorColumn.lifeline.transition()
+            .duration(swapColumnsAgain ? 820 : 180)
+            .ease(d3.easeCubicInOut)
+            .attr("y1", swapColumnsAgain ? 205 : -515)
+            .attr("y2", swapColumnsAgain ? 585 : -515);
+
+          webUiColumn.column.transition()
+            .duration(swapColumns ? 820 : 180)
+            .ease(d3.easeCubicInOut)
+            .attr("opacity", swapColumns ? 1 : 0);
+
+          webUiColumn.tile.transition()
+            .duration(swapColumns ? 820 : 180)
+            .ease(d3.easeCubicInOut)
+            .attr("transform", `translate(920,${swapColumnsAgain ? -640 : swapColumns ? 80 : 800})`);
+
+          webUiColumn.iconGroup.transition()
+            .duration(swapColumns ? 820 : 180)
+            .ease(d3.easeCubicInOut)
+            .attr("transform", `translate(920,${swapColumnsAgain ? -545 : swapColumns ? 175 : 895}) scale(${swapColumns ? 1 : 0.85})`);
+
+          webUiColumn.lifeline.transition()
+            .duration(swapColumns ? 820 : 180)
+            .ease(d3.easeCubicInOut)
+            .attr("y1", swapColumnsAgain ? -515 : swapColumns ? 205 : 925)
+            .attr("y2", swapColumnsAgain ? -515 : swapColumns ? 585 : 925);
+
+          opencodeColumn.column.transition()
+            .duration(swapColumnsAgain ? 820 : 180)
+            .ease(d3.easeCubicInOut)
+            .attr("opacity", swapColumnsAgain ? 1 : 0);
+
+          opencodeColumn.tile.transition()
+            .duration(swapColumnsAgain ? 820 : 180)
+            .ease(d3.easeCubicInOut)
+            .attr("transform", `translate(920,${swapColumnsAgain ? 80 : 800})`);
+
+          opencodeColumn.iconGroup.transition()
+            .duration(swapColumnsAgain ? 820 : 180)
+            .ease(d3.easeCubicInOut)
+            .attr("transform", `translate(920,${swapColumnsAgain ? 175 : 895}) scale(${swapColumnsAgain ? 1 : 0.85})`);
+
+          opencodeColumn.lifeline.transition()
+            .duration(swapColumnsAgain ? 820 : 180)
+            .ease(d3.easeCubicInOut)
+            .attr("y1", swapColumnsAgain ? 205 : 925)
+            .attr("y2", swapColumnsAgain ? 585 : 925);
+
+          discoverPushBox.transition()
+            .delay(showService ? 520 : 0)
+            .duration(showService ? 260 : 120)
+            .ease(d3.easeBackOut.overshoot(1.15))
+            .attr("opacity", showService ? 1 : 0)
+            .attr("transform", `translate(675,292) scale(${showService ? 1 : 0.85})`);
+
+          discoverArrow.transition()
+            .delay(showService ? 760 : 0)
+            .duration(showService ? 430 : 120)
+            .ease(d3.easeCubicInOut)
+            .attr("opacity", showService ? 1 : 0)
+            .attr("stroke-dashoffset", showService ? 0 : 800);
+
+          storeBox.transition()
+            .delay(showService ? 1040 : 0)
+            .duration(showService ? 260 : 120)
+            .ease(d3.easeBackOut.overshoot(1.15))
+            .attr("opacity", showService ? 1 : 0)
+            .attr("transform", `translate(430,325) scale(${showService ? 1 : 0.85})`);
+
+          storeBullet.transition()
+            .delay(showService ? 1040 : 0)
+            .duration(showService ? 260 : 120)
+            .ease(d3.easeBackOut.overshoot(1.15))
+            .attr("opacity", showService ? 1 : 0)
+            .attr("transform", `translate(360,377) scale(${showService ? 1 : 0.85})`);
+
+          pushArrow.transition()
+            .delay(showService ? 1160 : 0)
+            .duration(showService ? 360 : 120)
+            .ease(d3.easeCubicInOut)
+            .attr("opacity", showService ? 1 : 0)
+            .attr("stroke-dashoffset", showService ? 0 : 800);
+
+          affordanceForm.transition()
+            .delay(showAffordance ? 120 : 0)
+            .duration(showAffordance ? 320 : 140)
+            .ease(d3.easeBackOut.overshoot(1.15))
+            .attr("opacity", showAffordance ? 1 : 0)
+            .attr("transform", `translate(675,425) scale(${showAffordance ? 1 : 0.85})`);
+
+          consumerRequest.transition()
+            .delay(showRequest ? 120 : 0)
+            .duration(showRequest ? 300 : 140)
+            .ease(d3.easeBackOut.overshoot(1.15))
+            .attr("opacity", showRequest ? 1 : 0)
+            .attr("transform", `translate(920,425) scale(${showRequest ? 1 : 0.85})`);
+
+          requestArrow.transition()
+            .delay(showRequest ? 420 : 0)
+            .duration(showRequest ? 430 : 120)
+            .ease(d3.easeCubicInOut)
+            .attr("opacity", showRequest ? 1 : 0)
+            .attr("stroke-dashoffset", showRequest ? 0 : 800);
+
+          checkArrow.transition()
+            .delay(showRequest ? 860 : 0)
+            .duration(showRequest ? 420 : 120)
+            .ease(d3.easeCubicInOut)
+            .attr("opacity", showRequest ? 1 : 0)
+            .attr("stroke-dashoffset", showRequest ? 0 : 800);
+
+          checkLabel.transition()
+            .delay(showRequest ? 1060 : 0)
+            .duration(showRequest ? 180 : 100)
+            .attr("opacity", showRequest ? 1 : 0);
+
+          bindingLabel.transition()
+            .delay(showRequest ? 1180 : 0)
+            .duration(showRequest ? 180 : 100)
+            .attr("opacity", showRequest ? 1 : 0);
+
+          callBox.transition()
+            .delay(showCall ? 120 : 0)
+            .duration(showCall ? 280 : 120)
+            .ease(d3.easeBackOut.overshoot(1.15))
+            .attr("opacity", showCall ? 1 : 0)
+            .attr("transform", `translate(675,570) scale(${showCall ? 1 : 0.85})`);
+
+          callUpArrow.transition()
+            .delay(showCall ? 380 : 0)
+            .duration(showCall ? 280 : 120)
+            .ease(d3.easeCubicInOut)
+            .attr("opacity", showCall ? 1 : 0)
+            .attr("stroke-dashoffset", showCall ? 0 : 800);
+
+          callCodeArrow.transition()
+            .delay(showCall ? 620 : 0)
+            .duration(showCall ? 560 : 120)
+            .ease(d3.easeCubicInOut)
+            .attr("opacity", showCall ? 1 : 0)
+            .attr("stroke-dashoffset", showCall ? 0 : 800);
+        }
+
+        function updateForSlide() {
+          if (reveal.getCurrentSlide() === section) {
+            render(currentStage());
+          }
+        }
+
+        reveal.on("slidechanged", updateForSlide);
+        reveal.on("fragmentshown", updateForSlide);
+        reveal.on("fragmenthidden", updateForSlide);
+
+        render(0);
+        return;
+      }
+
+    };
+  </script>
+</section>
 
 		</div>
 	</div>
-
+	<script src="https://d3js.org/d3.v7.min.js"></script>
 	<!-- Clock -->
 	<div id="clock">--:--</div>
 	<img id="logo-claim" src="resources/figures/logo_claim_4c.svg" alt="Logo claim">
 	<img id="logo-iuta" src="resources/figures/iutalogo.png" alt="Logo IUTA">
-
-
 	<script src="dist/reveal.js"></script>
 	<script src="plugin/markdown/markdown.js"></script>
 	<script src="plugin/highlight/highlight.js"></script>
@@ -764,6 +1928,8 @@
 				scheduleAutoAdvance(event.currentSlide.id);
 			}
 		});
+		if (window.initCfLayerDiagram) window.initCfLayerDiagram();
+		if (window.initCfServiceProcessDiagram) window.initCfServiceProcessDiagram();
 	</script>
 
 
