@@ -1442,6 +1442,7 @@
         const blue = "#004c93";
         const red = "#8a1538";
         const green = "#2f8f5b";
+        const magenta = "#c2185b";
         const dark = "#333333";
         const external = "#5f6670";
 
@@ -1787,6 +1788,10 @@
           .attr("transform", "translate(185,-420) scale(0.85)")
           .attr("opacity", 0);
 
+        packageCreatorService.select("path")
+          .attr("fill", magenta)
+          .attr("stroke", magenta);
+
         const packageTemplateColumn = drawReplacementColumn({
           x: 185,
           label: "Package\nTemplate",
@@ -1986,7 +1991,7 @@
 
         const checkLabel = gArrows.append("text")
           .attr("x", 520)
-          .attr("y", 418)
+          .attr("y", 408)
           .attr("text-anchor", "middle")
           .attr("fill", red)
           .attr("font-size", 15)
@@ -1996,7 +2001,7 @@
 
         const bindingLabel = gArrows.append("text")
           .attr("x", 558)
-          .attr("y", 472)
+          .attr("y", 462)
           .attr("text-anchor", "middle")
           .attr("fill", blue)
           .attr("font-size", 15)
