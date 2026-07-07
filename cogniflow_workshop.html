@@ -1856,6 +1856,7 @@
       reveal.on("fragmenthidden", updateForSlide);
 
       render(0);
+      updateForSlide();
     };
   </script>
 </section>
@@ -2985,166 +2986,280 @@
       const columns = [
         { id: "left", x: 18, label: "Concept domain", color: "#0057b8", grayColor: "#7b8794", paintBoost: 1, bg: "rgba(0, 76, 147, 0.055)", stroke: "rgba(0, 76, 147, 0.24)" },
         { id: "middle", x: 432, label: "Processing concepts", color: "#006f78", grayColor: "#89929e", paintBoost: 1.45, bg: "rgba(25, 124, 131, 0.055)", stroke: "rgba(25, 124, 131, 0.24)" },
-        { id: "right", x: 846, label: "Affordance model", color: "#d97706", grayColor: "#9aa0a6", paintBoost: 1.55, bg: "rgba(244, 185, 66, 0.09)", stroke: "rgba(244, 185, 66, 0.28)" }
+        { id: "right", x: 846, label: "Affordance model", color: "#f4b942", grayColor: "#9aa0a6", paintBoost: 1.55, bg: "rgba(244, 185, 66, 0.09)", stroke: "rgba(244, 185, 66, 0.28)" }
       ];
+
+      columns.forEach((d) => {
+        d.clipId = `cf-concept-domain-clip-${d.id}`;
+        const clip = defs.append("clipPath")
+          .attr("id", d.clipId);
+        clip.append("rect")
+          .attr("class", "concept-domain-column-clip")
+          .attr("width", 416)
+          .attr("height", 0);
+      });
 
       const columnGroups = gColumns.selectAll("g.concept-domain-column")
         .data(columns)
         .join("g")
         .attr("class", d => `concept-domain-column concept-domain-column-${d.id}`)
         .attr("transform", d => `translate(${d.x},92)`)
+        .attr("clip-path", d => `url(#${d.clipId})`)
         .attr("opacity", 0);
 
       function brushSeed(id) {
         return id.split("").reduce((sum, char) => sum + char.charCodeAt(0), 0);
       }
 
-      function brushNoise(seed, index) {
-        const value = Math.sin(seed * 12.9898 + index * 78.233) * 43758.5453;
-        return value - Math.floor(value);
+      function mulberry32(seed) {
+        return function() {
+          seed |= 0;
+          seed = seed + 0x6D2B79F5 | 0;
+          let t = Math.imul(seed ^ seed >>> 15, 1 | seed);
+          t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
+          return ((t ^ t >>> 14) >>> 0) / 4294967296;
+        };
+      }
+
+      function clamp(v) {
+        return Math.max(0, Math.min(255, Math.round(v)));
+      }
+
+      function hexToRgb(hex) {
+        const value = hex.replace("#", "");
+        return [0, 2, 4].map(index => parseInt(value.slice(index, index + 2), 16));
+      }
+
+      function drawDryBrushStroke(ctx, rng, x0, y0, x1, y1, width, rgb, alpha) {
+        const dx = x1 - x0;
+        const dy = y1 - y0;
+        const len = Math.hypot(dx, dy) || 1;
+        const nx = -dy / len;
+        const ny = dx / len;
+        const bristles = Math.floor(width * 0.58);
+        const curve = (rng() - 0.5) * 90;
+
+        for (let i = 0; i < bristles; i++) {
+          const offset = (rng() - 0.5) * width;
+          const localAlpha = alpha * (0.5 + rng() * 2.2);
+          const lineWidth = 1.2 + rng() * 5.4;
+          let t = rng() * 0.08;
+
+          ctx.strokeStyle = `rgba(${rgb[0]}, ${rgb[1]}, ${rgb[2]}, ${localAlpha})`;
+          ctx.lineWidth = lineWidth;
+
+          while (t < 1) {
+            if (rng() < 0.34) {
+              t += 0.025 + rng() * 0.12;
+              continue;
+            }
+
+            const t2 = Math.min(1, t + 0.035 + rng() * 0.18);
+            const p1 = brushPoint(x0, y0, x1, y1, nx, ny, offset, curve, t, rng);
+            const p2 = brushPoint(x0, y0, x1, y1, nx, ny, offset, curve, t2, rng);
+
+            ctx.beginPath();
+            ctx.moveTo(p1.x, p1.y);
+            ctx.lineTo(p2.x, p2.y);
+            ctx.stroke();
+            t = t2 + rng() * 0.06;
+          }
+        }
+      }
+
+      function brushPoint(x0, y0, x1, y1, nx, ny, offset, curve, t, rng) {
+        const mx = (x0 + x1) * 0.5 + nx * curve;
+        const my = (y0 + y1) * 0.5 + ny * curve;
+        const a = (1 - t) * (1 - t);
+        const b = 2 * (1 - t) * t;
+        const c = t * t;
+        const jitter = (rng() - 0.5) * 4;
+
+        return {
+          x: a * x0 + b * mx + c * x1 + nx * (offset + jitter),
+          y: a * y0 + b * my + c * y1 + ny * (offset + jitter)
+        };
+      }
+
+      function drawSpeckles(ctx, rng, width, height, count, rgb, boost) {
+        for (let i = 0; i < count; i++) {
+          const x = rng() * width;
+          const y = rng() * height;
+          const r = rng() < 0.84 ? rng() * 1.2 : 1.2 + rng() * 3.6;
+          const bright = rng() < 0.55;
+          const a = bright ? 0.035 + rng() * 0.13 : 0.028 + rng() * 0.10;
+
+          ctx.fillStyle = bright ? `rgba(255,255,245,${a})` : `rgba(75,68,58,${a})`;
+          ctx.beginPath();
+          ctx.arc(x, y, r, 0, Math.PI * 2);
+          ctx.fill();
+        }
+
+        for (let i = 0; i < count * 0.18; i++) {
+          const x = rng() * width;
+          const y = rng() * height;
+          const r = rng() * 1.4;
+          ctx.fillStyle = `rgba(${clamp(rgb[0] - 18)}, ${clamp(rgb[1] - 16)}, ${clamp(rgb[2] - 14)}, ${(0.035 + rng() * 0.085) * boost})`;
+          ctx.beginPath();
+          ctx.arc(x, y, r, 0, Math.PI * 2);
+          ctx.fill();
+        }
+
+        for (let i = 0; i < count * 0.035; i++) {
+          const x = rng() * width;
+          const y = rng() * height;
+          const r = 2 + rng() * 7;
+          const points = 5 + Math.floor(rng() * 5);
+          ctx.fillStyle = `rgba(${clamp(rgb[0] - 8)}, ${clamp(rgb[1] - 7)}, ${clamp(rgb[2] - 6)}, ${(0.035 + rng() * 0.08) * boost})`;
+          ctx.beginPath();
+          for (let j = 0; j < points; j++) {
+            const a = (Math.PI * 2 * j) / points;
+            const rr = r * (0.35 + rng() * 0.75);
+            const px = x + Math.cos(a) * rr;
+            const py = y + Math.sin(a) * rr;
+            if (j === 0) ctx.moveTo(px, py);
+            else ctx.lineTo(px, py);
+          }
+          ctx.closePath();
+          ctx.fill();
+        }
+      }
+
+      function createPaintedColumnTexture(width, height, d) {
+        const scale = 2;
+        const canvas = document.createElement("canvas");
+        canvas.width = width * scale;
+        canvas.height = height * scale;
+        const ctx = canvas.getContext("2d");
+        const seed = brushSeed(d.id) + 42;
+        const rng = mulberry32(seed);
+        const rgb = hexToRgb(d.color);
+        const boost = d.paintBoost || 1;
+        const img = ctx.createImageData(canvas.width, canvas.height);
+        const data = img.data;
+
+        for (let y = 0; y < canvas.height; y++) {
+          for (let x = 0; x < canvas.width; x++) {
+            const i = (y * canvas.width + x) * 4;
+            const fine = (rng() - 0.5) * 18;
+            const wave1 = Math.sin(x * 0.025 + y * 0.006) * 5;
+            const wave2 = Math.sin((x + y) * 0.011) * 4;
+            const wave3 = Math.sin(x * 0.004 - y * 0.018) * 7;
+            const n = fine + wave1 + wave2 + wave3;
+
+            data[i] = clamp(rgb[0] + n + 24);
+            data[i + 1] = clamp(rgb[1] + n + 24);
+            data[i + 2] = clamp(rgb[2] + n + 24);
+            data[i + 3] = clamp((10 + rng() * 18) * boost);
+          }
+        }
+
+        ctx.putImageData(img, 0, 0);
+        ctx.save();
+        ctx.scale(scale, scale);
+
+        const paintLayer = document.createElement("canvas");
+        paintLayer.width = canvas.width;
+        paintLayer.height = canvas.height;
+        const pctx = paintLayer.getContext("2d");
+        pctx.scale(scale, scale);
+        pctx.lineCap = "round";
+        pctx.lineJoin = "round";
+
+        for (let i = 0; i < 58; i++) {
+          const directionBucket = rng();
+          const angle = directionBucket < 0.58
+            ? -0.05 + (rng() - 0.5) * 0.46
+            : directionBucket < 0.82
+              ? -0.58 + rng() * 1.16
+              : Math.PI / 2 + (rng() - 0.5) * 0.72;
+          const len = width * (0.22 + Math.pow(rng(), 0.72) * 1.34);
+          const strokeWidth = 34 + Math.pow(rng(), 1.5) * 230;
+          const cx = width * 0.5 + (rng() - 0.5) * width * 0.78;
+          const cy = rng() * height;
+          const sx = cx - Math.cos(angle) * len * 0.5;
+          const sy = cy - Math.sin(angle) * len * 0.5;
+          const ex = cx + Math.cos(angle) * len * 0.5;
+          const ey = cy + Math.sin(angle) * len * 0.5;
+
+          drawDryBrushStroke(pctx, rng, sx, sy, ex, ey, strokeWidth, rgb, (0.034 + rng() * 0.09) * boost);
+        }
+
+        for (let i = 0; i < 18; i++) {
+          const angle = -0.15 + (rng() - 0.5) * 0.34;
+          const len = width * (0.9 + rng() * 0.65);
+          const cx = width * 0.5 + (rng() - 0.5) * width * 0.22;
+          const cy = rng() * height;
+
+          drawDryBrushStroke(
+            pctx,
+            rng,
+            cx - Math.cos(angle) * len * 0.5,
+            cy - Math.sin(angle) * len * 0.5,
+            cx + Math.cos(angle) * len * 0.5,
+            cy + Math.sin(angle) * len * 0.5,
+            150 + rng() * 240,
+            rgb,
+            (0.018 + rng() * 0.045) * boost
+          );
+        }
+
+        ctx.filter = "blur(0.45px)";
+        ctx.drawImage(paintLayer, 0, 0, width, height);
+        ctx.filter = "none";
+        drawSpeckles(ctx, rng, width, height, 3600, rgb, boost);
+
+        const grad = ctx.createRadialGradient(width * 0.5, height * 0.45, width * 0.1, width * 0.5, height * 0.5, Math.max(width, height) * 0.75);
+        grad.addColorStop(0, "rgba(255,255,255,0.03)");
+        grad.addColorStop(1, "rgba(70,62,52,0.055)");
+        ctx.fillStyle = grad;
+        ctx.fillRect(0, 0, width, height);
+        ctx.restore();
+
+        return canvas.toDataURL("image/png");
       }
 
       function appendBrushColumn(group, d) {
-        const seed = brushSeed(d.id);
         const width = 416;
         const height = 690;
-        const boost = d.paintBoost || 1;
-        const paint = group.append("g")
+        group.append("image")
           .attr("class", "concept-domain-column-paint")
+          .attr("width", width)
+          .attr("height", height)
+          .attr("href", createPaintedColumnTexture(width, height, d))
+          .attr("preserveAspectRatio", "none")
           .attr("filter", "url(#cf-concept-domain-brush-roughen)");
 
-        d3.range(10).forEach((bandIndex) => {
-          const baseX = -6 + bandIndex * 42 + (brushNoise(seed, bandIndex + 40) - 0.5) * 24;
-          const bandWidth = 54 + brushNoise(seed, bandIndex + 50) * 38;
-          const topY = -10 + brushNoise(seed, bandIndex + 60) * 30;
-          const bottomY = height * (0.72 + brushNoise(seed, bandIndex + 70) * 0.18);
-          const steps = 10;
-          const left = d3.range(steps + 1).map((step) => {
-            const t = step / steps;
-            return {
-              x: baseX + (brushNoise(seed, bandIndex * 100 + step) - 0.5) * 22,
-              y: topY + (bottomY - topY) * t + (brushNoise(seed, bandIndex * 110 + step) - 0.5) * 12
-            };
-          });
-          const right = d3.range(steps + 1).map((step) => {
-            const t = step / steps;
-            return {
-              x: baseX + bandWidth + (brushNoise(seed, bandIndex * 120 + step) - 0.5) * 28,
-              y: topY + (bottomY - topY) * t + (brushNoise(seed, bandIndex * 130 + step) - 0.5) * 14
-            };
-          });
-          const points = left.concat(right.reverse());
+        const roll = group.append("g")
+          .attr("class", "concept-domain-column-roll")
+          .attr("opacity", 0)
+          .attr("transform", "translate(0,0)");
 
-          paint.append("path")
-            .attr("d", points.map((point, index) => `${index === 0 ? "M" : "L"} ${point.x} ${point.y}`).join(" ") + " Z")
-            .attr("fill", d.color)
-            .attr("opacity", Math.min(0.98, (0.5 + brushNoise(seed, bandIndex + 80) * 0.32) * boost));
-        });
+        roll.append("rect")
+          .attr("x", -3)
+          .attr("y", -10)
+          .attr("width", width + 6)
+          .attr("height", 20)
+          .attr("rx", 10)
+          .attr("fill", "white")
+          .attr("opacity", 0.72);
 
-        d3.range(31).forEach((index) => {
-          const noiseA = brushNoise(seed, index);
-          const noiseB = brushNoise(seed, index + 100);
-          const noiseC = brushNoise(seed, index + 200);
-          const x = 4 + Math.pow(noiseA, 0.86) * (width - 8) + (noiseB - 0.5) * 34;
-          const topY = -14 + noiseB * 48;
-          const bottomY = height * (0.64 + noiseC * 0.25);
-          const strokeWidth = 28 + Math.pow(noiseB, 0.55) * 54;
-          const midX = x + (noiseA - 0.5) * 52;
-          const endX = x + (noiseC - 0.5) * 42;
-          const segmentCount = 2 + Math.floor(brushNoise(seed, index + 250) * 4);
-          let cursorY = topY + brushNoise(seed, index + 260) * 44;
+        roll.append("rect")
+          .attr("x", 0)
+          .attr("y", -6)
+          .attr("width", width)
+          .attr("height", 12)
+          .attr("rx", 6)
+          .attr("fill", d.color)
+          .attr("opacity", 0.42);
 
-          const segments = d3.range(segmentCount).map((segmentIndex) => {
-            const length = height * (0.08 + brushNoise(seed, index + segmentIndex * 710) * 0.2);
-            const gap = height * (0.025 + brushNoise(seed, index + segmentIndex * 720) * 0.095);
-            const start = cursorY;
-            const end = Math.min(bottomY, start + length);
-            cursorY = end + gap;
-            return { start, end };
-          }).filter(segment => segment.end - segment.start > 18);
-
-          segments.forEach((segment, segmentIndex) => {
-            const segmentNoise = brushNoise(seed, index + segmentIndex * 700);
-            const sx = x + (segmentNoise - 0.5) * 16;
-            const ex = endX + (brushNoise(seed, index + segmentIndex * 800) - 0.5) * 16;
-            const c1x = midX + (segmentNoise - 0.5) * 22;
-            const c2x = midX + (brushNoise(seed, index + segmentIndex * 900) - 0.5) * 22;
-
-            paint.append("path")
-              .attr("d", `M ${sx} ${segment.start} C ${c1x} ${(segment.start + segment.end) * 0.42}, ${c2x} ${(segment.start + segment.end) * 0.58}, ${ex} ${segment.end}`)
-              .attr("fill", "none")
-              .attr("stroke", d.color)
-              .attr("stroke-width", strokeWidth * (0.82 + segmentNoise * 0.22))
-              .attr("stroke-linecap", "butt")
-              .attr("stroke-linejoin", "miter")
-              .attr("opacity", Math.min(1, (0.82 + noiseA * 0.14) * boost));
-          });
-
-          d3.range(1 + Math.floor(noiseC * 5)).forEach((segmentIndex) => {
-            const segmentNoise = brushNoise(seed, index + segmentIndex * 1000);
-            const y1 = height * (0.08 + segmentIndex * 0.23 + segmentNoise * 0.08);
-            const y2 = Math.min(bottomY - 6, y1 + height * (0.11 + brushNoise(seed, index + segmentIndex * 1100) * 0.12));
-
-            paint.append("path")
-              .attr("d", `M ${x + (noiseB - 0.5) * 14} ${y1} C ${midX + 8} ${(y1 + y2) * 0.45}, ${midX - 8} ${(y1 + y2) * 0.6}, ${endX + (noiseA - 0.5) * 10} ${y2}`)
-              .attr("fill", "none")
-              .attr("stroke", d.color)
-              .attr("stroke-width", Math.max(3, strokeWidth * (0.14 + noiseC * 0.13)))
-              .attr("stroke-linecap", "butt")
-              .attr("stroke-linejoin", "miter")
-              .attr("opacity", Math.min(0.98, (0.58 + noiseC * 0.22) * boost));
-          });
-        });
-
-        d3.range(140).forEach((index) => {
-          const noiseA = brushNoise(seed, index + 1200);
-          const noiseB = brushNoise(seed, index + 1300);
-          const noiseC = brushNoise(seed, index + 1400);
-          const x = 4 + noiseA * (width - 8);
-          const y = 4 + noiseB * height * (0.82 + noiseC * 0.08);
-
-          paint.append("rect")
-            .attr("x", x)
-            .attr("y", y)
-            .attr("width", 1.4 + noiseC * 7)
-            .attr("height", 1.2 + noiseA * 8)
-            .attr("fill", d.color)
-            .attr("opacity", Math.min(0.95, (0.48 + noiseB * 0.32) * boost));
-        });
-
-        d3.range(80).forEach((index) => {
-          const noiseA = brushNoise(seed, index + 1500);
-          const noiseB = brushNoise(seed, index + 1600);
-          const x = 6 + noiseA * (width - 12);
-          const y = 10 + noiseB * height * 0.78;
-
-          paint.append("line")
-            .attr("x1", x)
-            .attr("y1", y)
-            .attr("x2", x + (brushNoise(seed, index + 1700) - 0.5) * 24)
-            .attr("y2", y + 2 + brushNoise(seed, index + 1800) * 22)
-            .attr("stroke", "white")
-            .attr("stroke-width", 1 + noiseA * 4)
-            .attr("stroke-linecap", "butt")
-            .attr("opacity", 0.035 + noiseB * 0.06);
-        });
-
-        d3.range(76).forEach((index) => {
-          const noiseA = brushNoise(seed, index + 300);
-          const noiseB = brushNoise(seed, index + 400);
-          const x = 2 + noiseA * (width - 4);
-          const y = height * (0.63 + noiseB * 0.28);
-
-          paint.append("line")
-            .attr("x1", x)
-            .attr("y1", y)
-            .attr("x2", x + (brushNoise(seed, index + 500) - 0.5) * 14)
-            .attr("y2", y + 10 + brushNoise(seed, index + 600) * 42)
-            .attr("stroke", d.color)
-            .attr("stroke-width", 4 + noiseA * 11)
-            .attr("stroke-linecap", "butt")
-            .attr("opacity", Math.min(0.95, (0.56 + noiseB * 0.28) * boost));
-        });
+        roll.append("line")
+          .attr("x1", 0)
+          .attr("x2", width)
+          .attr("y1", 8)
+          .attr("y2", 8)
+          .attr("stroke", "rgba(15, 23, 42, 0.24)")
+          .attr("stroke-width", 2);
       }
 
       columnGroups.each(function(d) {
@@ -3847,14 +3962,15 @@
       const leftColumnNodes = [firstNode, conceptNode, portPropertyNode, portConceptNode, portAttributeNode, portTypeNode];
       const middleColumnNodes = [processingStepNode, processingPipelineNode, pipelineAttributeNode, pipelineNodeNode, runTargetAttributeNode, runTargetNode, runsPropertyNode];
       const rightColumnNodes = [averageNode, averageHasPortNode, averagePortsNode, averageHasBindingNode, averageBindingNode];
+      let initialColumnRollPlayed = false;
 
       function currentStage() {
         return section.querySelectorAll(".fragment.visible").length;
       }
 
-      function render(stage) {
+      function render(stage, animateInitialColumn = false) {
         stage = Math.max(0, Math.min(5, stage));
-        const instant = stage === 0;
+        const instant = stage === 0 && !animateInitialColumn;
 
         const columnUpdate = instant ? columnGroups : columnGroups.transition()
           .duration(520)
@@ -3870,6 +3986,52 @@
             const visible = d.id === "left" || (d.id === "middle" && stage >= 3) || (d.id === "right" && stage >= 5);
             return `translate(${d.x},${visible ? 16 : 48})`;
           });
+
+        columns.forEach((d) => {
+          const visible = d.id === "left" || (d.id === "middle" && stage >= 3) || (d.id === "right" && stage >= 5);
+          const clipRect = d3.select(`#${d.clipId}`).select("rect");
+          if (animateInitialColumn && d.id === "left") {
+            clipRect.interrupt().attr("height", 0);
+          }
+          const clipUpdate = instant ? clipRect : clipRect.transition()
+            .duration(visible ? 820 : 260)
+            .ease(visible ? d3.easeCubicOut : d3.easeCubicIn);
+
+          clipUpdate.attr("height", visible ? 690 : 0);
+        });
+
+        const rollSelection = columnGroups.select(".concept-domain-column-roll");
+        if (instant) {
+          rollSelection
+            .attr("opacity", 0)
+            .attr("transform", d => {
+              const visible = d.id === "left" || (d.id === "middle" && stage >= 3) || (d.id === "right" && stage >= 5);
+              return `translate(0,${visible ? 690 : 0})`;
+            });
+        } else {
+          if (animateInitialColumn) {
+            rollSelection.filter(d => d.id === "left")
+              .interrupt("roll")
+              .attr("transform", "translate(0,0)");
+          }
+
+          rollSelection
+            .interrupt("roll")
+            .attr("opacity", d => {
+              const visible = d.id === "left" || (d.id === "middle" && stage >= 3) || (d.id === "right" && stage >= 5);
+              return visible ? 0.86 : 0;
+            })
+            .transition("roll")
+            .duration(820)
+            .ease(d3.easeCubicOut)
+            .attr("transform", d => {
+              const visible = d.id === "left" || (d.id === "middle" && stage >= 3) || (d.id === "right" && stage >= 5);
+              return `translate(0,${visible ? 690 : 0})`;
+            })
+            .transition("roll")
+            .duration(220)
+            .attr("opacity", 0);
+        }
 
         columnGroups.select(".concept-domain-column-paint")
           .attr("filter", d => {
@@ -4136,7 +4298,10 @@
 
       function updateForSlide() {
         if (reveal.getCurrentSlide() === section) {
-          render(currentStage());
+          const stage = currentStage();
+          const animateInitialColumn = stage === 0 && !initialColumnRollPlayed;
+          initialColumnRollPlayed = true;
+          render(stage, animateInitialColumn);
         }
       }
 
