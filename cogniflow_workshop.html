@@ -1040,8 +1040,8 @@
         "cfpkg:PackageConceptDomain",
         "      a cf:ConceptDomain ;",
         "      cf:definesConcept cfpkg:CfPackage ;",
-        "      cf:definesConcept cfpkg:distributionName ;",
-        "      cf:definesConcept cfpkg:packageVersion ;",
+        "      cf:definesAttribute cfpkg:distributionName ;",
+        "      cf:definesAttribute cfpkg:packageVersion ;",
         "      skos:prefLabel \"package concept domain\"@en ;",
         "      skos:definition [...] ;",
         "      skos:scopeNote [...] ;",
@@ -1055,7 +1055,6 @@
       const packageConceptLines = [
         "cfpkg:CfPackage",
         "      a owl:Class, cf:Concept ;",
-        "      rdfs:subClassOf cf:SemanticSource ;",
         "      cf:hasInstanceShape cfpkg:CfPackageInstanceShape ;",
         "      skos:prefLabel \"Cogniflow package\"@en ;",
         "      skos:definition [...] ;",
