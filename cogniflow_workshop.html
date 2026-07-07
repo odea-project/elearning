@@ -700,6 +700,7 @@
   <div class="fragment" style="display: none;"></div>
   <div class="fragment" style="display: none;"></div>
   <div class="fragment" style="display: none;"></div>
+  <div class="fragment" style="display: none;"></div>
 
   <script>
     window.initCfLayerDiagram = () => {
@@ -1174,7 +1175,7 @@
 
         node.append("path")
           .attr("d", `M 0 28 H ${width} V 48 Q ${width} 56 ${width - 8} 56 H 8 Q 0 56 0 48 Z`)
-          .attr("fill", bottomFill);
+          .attr("fill", "#eef8f8");
 
         node.append("text")
           .attr("x", 14)
@@ -1229,8 +1230,9 @@
       }
 
       const ontologyOverviewRelations = [
-        appendOntologyDoubleNode(342, 486, "cf:defines", "a cf:Property .", 118, "#7c3aed", "#c4b5fd", 342, 486, true),
-        appendOntologyDoubleNode(530, 486, "cf:has", "a cf:Property .", 104, "#0e7490", "#67e8f9", 530, 486, true)
+        appendOntologyDoubleNode(300, 486, "cf:defines", "a cf:Property .", 118, "#7c3aed", "#c4b5fd", 300, 486, true),
+        appendOntologyDoubleNode(470, 486, "cf:has", "a cf:Property .", 118, "#0e7490", "#67e8f9", 470, 486, true),
+        appendOntologyDoubleNode(640, 486, "cf:ControlledValue", "a owl:Class .", 164, "#b45309", "#fde68a", 640, 486, true)
       ];
       ontologyOverviewRelations.forEach((node) => { node.overviewOnly = true; });
 
@@ -1463,7 +1465,7 @@
       function effectiveFlowStage(stage) {
         if (stage <= 5) return Math.min(stage, 1);
         if (stage <= 8) return 2;
-        return stage - 6;
+        return Math.min(stage - 6, 4);
       }
 
       function render(stage) {
@@ -1524,20 +1526,20 @@
           .attr("stroke-dashoffset", flowStage >= 4 ? 0 : 1000);
 
         packageRuntimeLink.transition()
-          .delay(flowStage >= 5 ? 1250 : 0)
-          .duration(flowStage >= 5 ? 850 : 200)
+          .delay(flowStage >= 4 ? 1250 : 0)
+          .duration(flowStage >= 4 ? 850 : 200)
           .ease(d3.easeCubicInOut)
           .attr("d", curvedPath(packagePoint, runtimePoint, 210))
-          .attr("opacity", flowStage >= 5 ? 0.82 : 0)
-          .attr("stroke-dashoffset", flowStage >= 5 ? 0 : 1000);
+          .attr("opacity", flowStage >= 4 ? 0.82 : 0)
+          .attr("stroke-dashoffset", flowStage >= 4 ? 0 : 1000);
 
         serviceRuntimeLink.transition()
-          .delay(flowStage >= 5 ? 1450 : 0)
-          .duration(flowStage >= 5 ? 850 : 200)
+          .delay(flowStage >= 4 ? 1450 : 0)
+          .duration(flowStage >= 4 ? 850 : 200)
           .ease(d3.easeCubicInOut)
           .attr("d", curvedPath(servicePoint, runtimePoint, -75))
-          .attr("opacity", flowStage >= 5 ? 0.82 : 0)
-          .attr("stroke-dashoffset", flowStage >= 5 ? 0 : 1000);
+          .attr("opacity", flowStage >= 4 ? 0.82 : 0)
+          .attr("stroke-dashoffset", flowStage >= 4 ? 0 : 1000);
 
         ontologyBox.transition(t)
           .attr("x", cx - ontologyState.w / 2)
@@ -1695,15 +1697,15 @@
           .attr("opacity", flowStage >= 4 ? 1 : 0);
 
         semanticsRuntimeBullets.selectAll("text").transition()
-          .delay((d, i) => flowStage >= 5 ? 2200 + i * 180 : 0)
+          .delay((d, i) => flowStage >= 4 ? 2200 + i * 180 : 0)
           .duration(260)
-          .attr("opacity", flowStage >= 5 ? 1 : 0);
+          .attr("opacity", flowStage >= 4 ? 1 : 0);
 
         semanticsDatabaseIcon.transition()
-          .delay(flowStage >= 5 ? 2200 : 0)
+          .delay(flowStage >= 4 ? 2200 : 0)
           .duration(260)
-          .attr("opacity", flowStage >= 5 ? 1 : 0)
-          .attr("transform", `translate(${cx - 500},${cy - 174}) scale(${flowStage >= 5 ? 1 : 0.78})`);
+          .attr("opacity", flowStage >= 4 ? 1 : 0)
+          .attr("transform", `translate(${cx - 500},${cy - 174}) scale(${flowStage >= 4 ? 1 : 0.78})`);
 
         conceptNodes.each(function(d) {
           const isPackage = d.index === 1;
@@ -1757,7 +1759,7 @@
 
           const visible = flowStage >= 3;
           const isExpandedTemplate = isTemplate && flowStage >= 3;
-          const isExpandedRuntime = isRuntime && flowStage >= 5;
+          const isExpandedRuntime = isRuntime && flowStage >= 4;
           const w = isExpandedTemplate ? 170 : isExpandedRuntime ? 190 : 22;
           const h = isExpandedTemplate ? 54 : isExpandedRuntime ? 54 : 22;
           const rx = isExpandedTemplate || isExpandedRuntime ? 15 : 11;
@@ -1771,8 +1773,8 @@
             .attr("transform", `translate(${p.x},${p.y}) scale(${visible ? 1 : 0})`);
 
           node.select(".node-bg").transition()
-            .delay(isTemplate && flowStage >= 3 ? 1750 : isRuntime && flowStage === 5 ? 500 : 0)
-            .duration(isExpandedTemplate || (isRuntime && flowStage === 5) ? 480 : 230)
+            .delay(isTemplate && flowStage >= 3 ? 1750 : isRuntime && flowStage === 4 ? 500 : 0)
+            .duration(isExpandedTemplate || (isRuntime && flowStage === 4) ? 480 : 230)
             .attr("x", -w / 2)
             .attr("y", -h / 2)
             .attr("width", w)
@@ -1781,7 +1783,7 @@
             .attr("ry", rx);
 
           node.select(".node-label").transition()
-            .delay(isTemplate && flowStage >= 3 ? 1950 : isRuntime && flowStage === 5 ? 700 : 0)
+            .delay(isTemplate && flowStage >= 3 ? 1950 : isRuntime && flowStage === 4 ? 700 : 0)
             .duration(240)
             .attr("font-size", isRuntime ? 14 : 15)
             .attr("opacity", isExpandedTemplate || isExpandedRuntime ? 1 : 0);
@@ -1835,6 +1837,7 @@
   ></svg>
 
   <!-- Invisible Reveal fragments: each click advances the D3 state -->
+  <div class="fragment" style="display: none;"></div>
   <div class="fragment" style="display: none;"></div>
   <div class="fragment" style="display: none;"></div>
   <div class="fragment" style="display: none;"></div>
@@ -2209,6 +2212,14 @@
           .attr("fill", magenta)
           .attr("stroke", magenta);
 
+        const stepBasicService = packageTemplateService.clone(true)
+          .attr("transform", "translate(185,-420) scale(0.85)")
+          .attr("opacity", 0);
+
+        stepBasicService.select("path")
+          .attr("fill", blue)
+          .attr("stroke", blue);
+
         const packageTemplateColumn = drawReplacementColumn({
           x: 185,
           label: "Package\nTemplate",
@@ -2247,10 +2258,35 @@
           contextColor: external
         });
 
+        const stepBasicColumn = drawReplacementColumn({
+          x: 185,
+          label: "Step\nBasic",
+          context: "cf-package",
+          icon: "provider",
+          direction: "down",
+          width: 190,
+          height: 88,
+          color: blue
+        });
+
+        const pipelineEngineColumn = drawReplacementColumn({
+          x: 920,
+          label: "Pipeline\nEngine",
+          context: "cf-package",
+          icon: "consumer",
+          direction: "up",
+          width: 220,
+          height: 88,
+          color: green,
+          contextColor: green
+        });
+
         packageTemplateColumn.column.lower();
         webUiColumn.column.lower();
         packageCreatorColumn.column.lower();
         opencodeColumn.column.lower();
+        stepBasicColumn.column.lower();
+        pipelineEngineColumn.column.lower();
         gBackground.lower();
 
         function drawActionBox(x, y, text, color, width = 116, height = 48) {
@@ -2441,7 +2477,7 @@
         }
 
         function render(stage) {
-          stage = Math.max(0, Math.min(7, stage));
+          stage = Math.max(0, Math.min(8, stage));
           const expanded = stage >= 1;
           const showService = stage >= 2;
           const showAffordance = stage >= 3;
@@ -2449,6 +2485,7 @@
           const showCall = stage >= 5;
           const swapColumns = stage >= 6;
           const swapColumnsAgain = stage >= 7;
+          const swapColumnsThird = stage >= 8;
 
           tiles.transition()
             .duration(820)
@@ -2533,7 +2570,13 @@
             .duration(swapColumnsAgain ? 820 : 180)
             .ease(d3.easeCubicInOut)
             .attr("opacity", swapColumnsAgain ? 1 : 0)
-            .attr("transform", `translate(185,${swapColumnsAgain ? 300 : -420}) scale(${swapColumnsAgain ? 1 : 0.85})`);
+            .attr("transform", `translate(185,${swapColumnsThird ? 1020 : swapColumnsAgain ? 300 : -420}) scale(${swapColumnsAgain ? 1 : 0.85})`);
+
+          stepBasicService.transition()
+            .duration(swapColumnsThird ? 820 : 180)
+            .ease(d3.easeCubicInOut)
+            .attr("opacity", swapColumnsThird ? 1 : 0)
+            .attr("transform", `translate(185,${swapColumnsThird ? 300 : -420}) scale(${swapColumnsThird ? 1 : 0.85})`);
 
           packageTemplateColumn.column.transition()
             .duration(swapColumns ? 820 : 180)
@@ -2564,18 +2607,39 @@
           packageCreatorColumn.tile.transition()
             .duration(swapColumnsAgain ? 820 : 180)
             .ease(d3.easeCubicInOut)
-            .attr("transform", `translate(185,${swapColumnsAgain ? 80 : -640})`);
+            .attr("transform", `translate(185,${swapColumnsThird ? 800 : swapColumnsAgain ? 80 : -640})`);
 
           packageCreatorColumn.iconGroup.transition()
             .duration(swapColumnsAgain ? 820 : 180)
             .ease(d3.easeCubicInOut)
-            .attr("transform", `translate(185,${swapColumnsAgain ? 175 : -545}) scale(${swapColumnsAgain ? 1 : 0.85})`);
+            .attr("transform", `translate(185,${swapColumnsThird ? 895 : swapColumnsAgain ? 175 : -545}) scale(${swapColumnsAgain ? 1 : 0.85})`);
 
           packageCreatorColumn.lifeline.transition()
             .duration(swapColumnsAgain ? 820 : 180)
             .ease(d3.easeCubicInOut)
-            .attr("y1", swapColumnsAgain ? 205 : -515)
-            .attr("y2", swapColumnsAgain ? 585 : -515);
+            .attr("y1", swapColumnsThird ? 925 : swapColumnsAgain ? 205 : -515)
+            .attr("y2", swapColumnsThird ? 925 : swapColumnsAgain ? 585 : -515);
+
+          stepBasicColumn.column.transition()
+            .duration(swapColumnsThird ? 820 : 180)
+            .ease(d3.easeCubicInOut)
+            .attr("opacity", swapColumnsThird ? 1 : 0);
+
+          stepBasicColumn.tile.transition()
+            .duration(swapColumnsThird ? 820 : 180)
+            .ease(d3.easeCubicInOut)
+            .attr("transform", `translate(185,${swapColumnsThird ? 80 : -640})`);
+
+          stepBasicColumn.iconGroup.transition()
+            .duration(swapColumnsThird ? 820 : 180)
+            .ease(d3.easeCubicInOut)
+            .attr("transform", `translate(185,${swapColumnsThird ? 175 : -545}) scale(${swapColumnsThird ? 1 : 0.85})`);
+
+          stepBasicColumn.lifeline.transition()
+            .duration(swapColumnsThird ? 820 : 180)
+            .ease(d3.easeCubicInOut)
+            .attr("y1", swapColumnsThird ? 205 : -515)
+            .attr("y2", swapColumnsThird ? 585 : -515);
 
           webUiColumn.column.transition()
             .duration(swapColumns ? 820 : 180)
@@ -2606,18 +2670,39 @@
           opencodeColumn.tile.transition()
             .duration(swapColumnsAgain ? 820 : 180)
             .ease(d3.easeCubicInOut)
-            .attr("transform", `translate(920,${swapColumnsAgain ? 80 : 800})`);
+            .attr("transform", `translate(920,${swapColumnsThird ? -640 : swapColumnsAgain ? 80 : 800})`);
 
           opencodeColumn.iconGroup.transition()
             .duration(swapColumnsAgain ? 820 : 180)
             .ease(d3.easeCubicInOut)
-            .attr("transform", `translate(920,${swapColumnsAgain ? 175 : 895}) scale(${swapColumnsAgain ? 1 : 0.85})`);
+            .attr("transform", `translate(920,${swapColumnsThird ? -545 : swapColumnsAgain ? 175 : 895}) scale(${swapColumnsAgain ? 1 : 0.85})`);
 
           opencodeColumn.lifeline.transition()
             .duration(swapColumnsAgain ? 820 : 180)
             .ease(d3.easeCubicInOut)
-            .attr("y1", swapColumnsAgain ? 205 : 925)
-            .attr("y2", swapColumnsAgain ? 585 : 925);
+            .attr("y1", swapColumnsThird ? -515 : swapColumnsAgain ? 205 : 925)
+            .attr("y2", swapColumnsThird ? -515 : swapColumnsAgain ? 585 : 925);
+
+          pipelineEngineColumn.column.transition()
+            .duration(swapColumnsThird ? 820 : 180)
+            .ease(d3.easeCubicInOut)
+            .attr("opacity", swapColumnsThird ? 1 : 0);
+
+          pipelineEngineColumn.tile.transition()
+            .duration(swapColumnsThird ? 820 : 180)
+            .ease(d3.easeCubicInOut)
+            .attr("transform", `translate(920,${swapColumnsThird ? 80 : 800})`);
+
+          pipelineEngineColumn.iconGroup.transition()
+            .duration(swapColumnsThird ? 820 : 180)
+            .ease(d3.easeCubicInOut)
+            .attr("transform", `translate(920,${swapColumnsThird ? 175 : 895}) scale(${swapColumnsThird ? 1 : 0.85})`);
+
+          pipelineEngineColumn.lifeline.transition()
+            .duration(swapColumnsThird ? 820 : 180)
+            .ease(d3.easeCubicInOut)
+            .attr("y1", swapColumnsThird ? 205 : 925)
+            .attr("y2", swapColumnsThird ? 585 : 925);
 
           discoverPushBox.transition()
             .delay(showService ? 520 : 0)
@@ -2736,10 +2821,11 @@
   <svg
     id="cf-concept-domain-svg"
     viewBox="0 0 1280 720"
-    style="width: 104%; height: auto; max-height: 900px; aspect-ratio: 16 / 9; margin-left: -2%;"
+    style="width: 132%; height: auto; max-height: 1140px; aspect-ratio: 16 / 9; margin-left: -16%;"
   ></svg>
 
   <!-- Invisible Reveal fragments: each click advances the D3 state -->
+  <div class="fragment" style="display: none;"></div>
   <div class="fragment" style="display: none;"></div>
   <div class="fragment" style="display: none;"></div>
   <div class="fragment" style="display: none;"></div>
@@ -2760,6 +2846,19 @@
       const blue = "#004c93";
       const teal = "#197c83";
       const gold = "#f4b942";
+      const blueNodeA = "#004c93";
+      const blueNodeB = "#0369a1";
+      const blueNodeC = "#0e7490";
+      const blueNodeD = "#1d4ed8";
+      const blueNodeLight = "#e0f2fe";
+      const blueNodePale = "#f0f9ff";
+      const orangeNodeA = "#c2410c";
+      const orangeNodeB = "#ea580c";
+      const orangeNodeLight = "#ffedd5";
+      const orangeNodePale = "#fff7ed";
+      const magentaNodeA = "#a21caf";
+      const magentaNodeB = "#c026d3";
+      const magentaNodeLight = "#fae8ff";
       const root = svg.append("g");
       const gColumns = root.append("g").attr("class", "concept-domain-columns");
       const gArrows = root.append("g").attr("class", "concept-domain-arrows");
@@ -2875,7 +2974,7 @@
         return node;
       }
 
-      function drawTripleNode(x, y, rows, width = 218) {
+      function drawTripleNode(x, y, rows, width = 218, topFill = teal, middleFill = "#eef8f8", bottomFill = "#f8fbff", strokeFill = teal) {
         const height = 92;
         const node = gNodes.append("g")
           .attr("class", "concept-domain-triple-node")
@@ -2889,7 +2988,7 @@
           .attr("height", height)
           .attr("rx", 7)
           .attr("fill", "white")
-          .attr("stroke", teal)
+          .attr("stroke", strokeFill)
           .attr("stroke-width", 2.8)
           .attr("filter", "url(#cf-concept-domain-shadow)");
 
@@ -2899,21 +2998,21 @@
           .attr("width", width)
           .attr("height", 31)
           .attr("rx", 7)
-          .attr("fill", teal);
+          .attr("fill", topFill);
 
         node.append("rect")
           .attr("x", 0)
           .attr("y", 24)
           .attr("width", width)
           .attr("height", 7)
-          .attr("fill", teal);
+          .attr("fill", topFill);
 
         node.append("rect")
           .attr("x", 0)
           .attr("y", 31)
           .attr("width", width)
           .attr("height", 31)
-          .attr("fill", "#eef8f8");
+          .attr("fill", middleFill);
 
         node.append("rect")
           .attr("x", 0)
@@ -2921,14 +3020,14 @@
           .attr("width", width)
           .attr("height", 30)
           .attr("rx", 7)
-          .attr("fill", "#f8fbff");
+          .attr("fill", bottomFill);
 
         node.append("rect")
           .attr("x", 0)
           .attr("y", 62)
           .attr("width", width)
           .attr("height", 8)
-          .attr("fill", "#f8fbff");
+          .attr("fill", bottomFill);
 
         [31, 62].forEach((lineY) => {
           node.append("line")
@@ -2955,7 +3054,7 @@
         return node;
       }
 
-      function drawCompactDoubleNode(x, y, rows, width = 150) {
+      function drawCompactDoubleNode(x, y, rows, width = 150, topFill = teal, bottomFill = "#eef8f8", strokeFill = teal) {
         const height = 62;
         const node = gNodes.append("g")
           .attr("class", "concept-domain-compact-double-node")
@@ -2969,7 +3068,7 @@
           .attr("height", height)
           .attr("rx", 7)
           .attr("fill", "white")
-          .attr("stroke", teal)
+          .attr("stroke", strokeFill)
           .attr("stroke-width", 2.8)
           .attr("filter", "url(#cf-concept-domain-shadow)");
 
@@ -2979,14 +3078,14 @@
           .attr("width", width)
           .attr("height", 31)
           .attr("rx", 7)
-          .attr("fill", teal);
+          .attr("fill", topFill);
 
         node.append("rect")
           .attr("x", 0)
           .attr("y", 24)
           .attr("width", width)
           .attr("height", 7)
-          .attr("fill", teal);
+          .attr("fill", topFill);
 
         node.append("rect")
           .attr("x", 0)
@@ -2994,14 +3093,14 @@
           .attr("width", width)
           .attr("height", 31)
           .attr("rx", 7)
-          .attr("fill", "#eef8f8");
+          .attr("fill", bottomFill);
 
         node.append("rect")
           .attr("x", 0)
           .attr("y", 31)
           .attr("width", width)
           .attr("height", 7)
-          .attr("fill", "#eef8f8");
+          .attr("fill", bottomFill);
 
         node.append("line")
           .attr("x1", 0)
@@ -3026,6 +3125,206 @@
         return node;
       }
 
+      function drawFiveNode(x, y, rows, width = 194, topFill = teal, bottomFill = "#eef8f8", strokeFill = teal) {
+        const height = 154;
+        const node = gNodes.append("g")
+          .attr("class", "concept-domain-five-node")
+          .attr("transform", `translate(${x},${y}) scale(0.9)`)
+          .attr("opacity", 0);
+
+        node.append("rect")
+          .attr("x", 0)
+          .attr("y", 0)
+          .attr("width", width)
+          .attr("height", height)
+          .attr("rx", 7)
+          .attr("fill", "white")
+          .attr("stroke", strokeFill)
+          .attr("stroke-width", 2.8)
+          .attr("filter", "url(#cf-concept-domain-shadow)");
+
+        node.append("rect")
+          .attr("x", 0)
+          .attr("y", 0)
+          .attr("width", width)
+          .attr("height", 31)
+          .attr("rx", 7)
+          .attr("fill", topFill);
+
+        node.append("rect")
+          .attr("x", 0)
+          .attr("y", 24)
+          .attr("width", width)
+          .attr("height", 7)
+          .attr("fill", topFill);
+
+        node.append("rect")
+          .attr("x", 0)
+          .attr("y", 31)
+          .attr("width", width)
+          .attr("height", height - 31)
+          .attr("rx", 7)
+          .attr("fill", bottomFill);
+
+        node.append("rect")
+          .attr("x", 0)
+          .attr("y", 31)
+          .attr("width", width)
+          .attr("height", 7)
+          .attr("fill", bottomFill);
+
+        [31, 62, 93, 124].forEach((lineY) => {
+          node.append("line")
+            .attr("x1", 0)
+            .attr("y1", lineY)
+            .attr("x2", width)
+            .attr("y2", lineY)
+            .attr("stroke", "white")
+            .attr("stroke-width", 2.4)
+            .attr("opacity", 0.95);
+        });
+
+        rows.forEach((row) => {
+          node.append("text")
+            .attr("x", 14)
+            .attr("y", row.y)
+            .attr("fill", row.fill)
+            .attr("font-family", "monospace")
+            .attr("font-size", row.size)
+            .attr("font-weight", 750)
+            .text(row.text);
+        });
+
+        return node;
+      }
+
+      function drawFourNode(x, y, rows, width = 194, topFill = teal, bottomFill = "#eef8f8", strokeFill = teal) {
+        const height = 123;
+        const node = gNodes.append("g")
+          .attr("class", "concept-domain-four-node")
+          .attr("transform", `translate(${x},${y}) scale(0.9)`)
+          .attr("opacity", 0);
+
+        node.append("rect")
+          .attr("x", 0)
+          .attr("y", 0)
+          .attr("width", width)
+          .attr("height", height)
+          .attr("rx", 7)
+          .attr("fill", "white")
+          .attr("stroke", strokeFill)
+          .attr("stroke-width", 2.8)
+          .attr("filter", "url(#cf-concept-domain-shadow)");
+
+        node.append("rect")
+          .attr("x", 0)
+          .attr("y", 0)
+          .attr("width", width)
+          .attr("height", 31)
+          .attr("rx", 7)
+          .attr("fill", topFill);
+
+        node.append("rect")
+          .attr("x", 0)
+          .attr("y", 24)
+          .attr("width", width)
+          .attr("height", 7)
+          .attr("fill", topFill);
+
+        node.append("rect")
+          .attr("x", 0)
+          .attr("y", 31)
+          .attr("width", width)
+          .attr("height", height - 31)
+          .attr("rx", 7)
+          .attr("fill", bottomFill);
+
+        node.append("rect")
+          .attr("x", 0)
+          .attr("y", 31)
+          .attr("width", width)
+          .attr("height", 7)
+          .attr("fill", bottomFill);
+
+        [31, 62, 93].forEach((lineY) => {
+          node.append("line")
+            .attr("x1", 0)
+            .attr("y1", lineY)
+            .attr("x2", width)
+            .attr("y2", lineY)
+            .attr("stroke", "white")
+            .attr("stroke-width", 2.4)
+            .attr("opacity", 0.95);
+        });
+
+        rows.forEach((row) => {
+          node.append("text")
+            .attr("x", 14)
+            .attr("y", row.y)
+            .attr("fill", row.fill)
+            .attr("font-family", "monospace")
+            .attr("font-size", row.size)
+            .attr("font-weight", 750)
+            .text(row.text);
+        });
+
+        return node;
+      }
+
+      function drawAverageCodeNode(x, y) {
+        const width = 292;
+        const lines = [
+          "qalg:Average",
+          "a cfproc:ProcessingStep ;",
+          "a cfsvc:ServiceOperation ;",
+          "skos:prefLabel \"average\" ;",
+          "skos:definition [...] ;",
+          "cfproc:hasPort qalg:Average_values ;",
+          "cfproc:hasPort qalg:Average_mean ;",
+          "cfsvc:hasBinding qalg:Average_binding ."
+        ];
+        const lineHeight = 27;
+        const height = 20 + lines.length * lineHeight;
+        const node = gNodes.append("g")
+          .attr("class", "concept-domain-average-code-node")
+          .attr("transform", `translate(${x},${y}) scale(0.9)`)
+          .attr("opacity", 0);
+
+        node.append("rect")
+          .attr("width", width)
+          .attr("height", height)
+          .attr("rx", 9)
+          .attr("fill", magentaNodeLight)
+          .attr("stroke", magentaNodeA)
+          .attr("stroke-width", 2.8)
+          .attr("filter", "url(#cf-concept-domain-shadow)");
+
+        node.append("rect")
+          .attr("width", width)
+          .attr("height", 34)
+          .attr("rx", 9)
+          .attr("fill", magentaNodeA);
+
+        node.append("rect")
+          .attr("y", 25)
+          .attr("width", width)
+          .attr("height", 9)
+          .attr("fill", magentaNodeA);
+
+        lines.forEach((line, index) => {
+          node.append("text")
+            .attr("x", 14)
+            .attr("y", 24 + index * lineHeight)
+            .attr("fill", index === 0 ? "white" : magentaNodeB)
+            .attr("font-family", "monospace")
+            .attr("font-size", index === 0 ? 18 : 12.6)
+            .attr("font-weight", index === 0 ? 800 : 720)
+            .text(line);
+        });
+
+        return node;
+      }
+
       const conceptArrow = gArrows.append("path")
         .attr("d", "M 147 109 V 151")
         .attr("fill", "none")
@@ -3038,7 +3337,7 @@
         .attr("opacity", 0);
 
       const portArrow = gArrows.append("path")
-        .attr("d", "M 248 188 H 266")
+        .attr("d", "M 139 249 V 276")
         .attr("fill", "none")
         .attr("stroke", blue)
         .attr("stroke-width", 3)
@@ -3049,7 +3348,7 @@
         .attr("opacity", 0);
 
       const portConceptArrow = gArrows.append("path")
-        .attr("d", "M 347 225 V 251")
+        .attr("d", "M 139 338 V 368")
         .attr("fill", "none")
         .attr("stroke", blue)
         .attr("stroke-width", 3)
@@ -3059,27 +3358,258 @@
         .attr("stroke-dashoffset", 40)
         .attr("opacity", 0);
 
+      const portAttributeArrow = gArrows.append("path")
+        .attr("d", "M 139 430 V 460")
+        .attr("fill", "none")
+        .attr("stroke", blue)
+        .attr("stroke-width", 3)
+        .attr("stroke-linecap", "round")
+        .attr("marker-end", "url(#cf-concept-domain-arrowhead)")
+        .attr("stroke-dasharray", 50)
+        .attr("stroke-dashoffset", 50)
+        .attr("opacity", 0);
+
+      const portTypeArrow = gArrows.append("path")
+        .attr("d", "M 139 522 V 552")
+        .attr("fill", "none")
+        .attr("stroke", blue)
+        .attr("stroke-width", 3)
+        .attr("stroke-linecap", "round")
+        .attr("marker-end", "url(#cf-concept-domain-arrowhead)")
+        .attr("stroke-dasharray", 50)
+        .attr("stroke-dashoffset", 50)
+        .attr("opacity", 0);
+
+      const processingStepArrow = gArrows.append("path")
+        .attr("d", "M 248 180 C 342 130, 360 118, 454 118")
+        .attr("fill", "none")
+        .attr("stroke", blue)
+        .attr("stroke-width", 3)
+        .attr("stroke-linecap", "round")
+        .attr("marker-end", "url(#cf-concept-domain-arrowhead)")
+        .attr("stroke-dasharray", 260)
+        .attr("stroke-dashoffset", 260)
+        .attr("opacity", 0);
+
+      const processingPipelineArrow = gArrows.append("path")
+        .attr("d", "M 248 218 C 342 238, 370 248, 454 248")
+        .attr("fill", "none")
+        .attr("stroke", blue)
+        .attr("stroke-width", 3)
+        .attr("stroke-linecap", "round")
+        .attr("marker-end", "url(#cf-concept-domain-arrowhead)")
+        .attr("stroke-dasharray", 300)
+        .attr("stroke-dashoffset", 300)
+        .attr("opacity", 0);
+
+      const pipelineAttributeArrow = gArrows.append("path")
+        .attr("d", "M 728 294 V 310")
+        .attr("fill", "none")
+        .attr("stroke", blue)
+        .attr("stroke-width", 3)
+        .attr("stroke-linecap", "round")
+        .attr("marker-end", "url(#cf-concept-domain-arrowhead)")
+        .attr("stroke-dasharray", 30)
+        .attr("stroke-dashoffset", 30)
+        .attr("opacity", 0);
+
+      const pipelineNodeArrow = gArrows.append("path")
+        .attr("d", "M 728 372 V 392")
+        .attr("fill", "none")
+        .attr("stroke", blue)
+        .attr("stroke-width", 3)
+        .attr("stroke-linecap", "round")
+        .attr("marker-end", "url(#cf-concept-domain-arrowhead)")
+        .attr("stroke-dasharray", 36)
+        .attr("stroke-dashoffset", 36)
+        .attr("opacity", 0);
+
+      const runTargetAttributeArrow = gArrows.append("path")
+        .attr("d", "M 728 454 V 474")
+        .attr("fill", "none")
+        .attr("stroke", blue)
+        .attr("stroke-width", 3)
+        .attr("stroke-linecap", "round")
+        .attr("marker-end", "url(#cf-concept-domain-arrowhead)")
+        .attr("stroke-dasharray", 36)
+        .attr("stroke-dashoffset", 36)
+        .attr("opacity", 0);
+
+      const runTargetArrow = gArrows.append("path")
+        .attr("d", "M 728 536 V 552")
+        .attr("fill", "none")
+        .attr("stroke", blue)
+        .attr("stroke-width", 3)
+        .attr("stroke-linecap", "round")
+        .attr("marker-end", "url(#cf-concept-domain-arrowhead)")
+        .attr("stroke-dasharray", 30)
+        .attr("stroke-dashoffset", 30)
+        .attr("opacity", 0);
+
+      const runsPropertyArrow = gArrows.append("path")
+        .attr("d", "M 505 552 C 515 420, 365 285, 248 249")
+        .attr("fill", "none")
+        .attr("stroke", blue)
+        .attr("stroke-width", 3)
+        .attr("stroke-linecap", "round")
+        .attr("marker-end", "url(#cf-concept-domain-arrowhead)")
+        .attr("stroke-dasharray", 520)
+        .attr("stroke-dashoffset", 520)
+        .attr("opacity", 0);
+
+      const runTargetRunsArrow = gArrows.append("path")
+        .attr("d", "M 650 598 H 620")
+        .attr("fill", "none")
+        .attr("stroke", blue)
+        .attr("stroke-width", 3)
+        .attr("stroke-linecap", "round")
+        .attr("marker-end", "url(#cf-concept-domain-arrowhead)")
+        .attr("stroke-dasharray", 60)
+        .attr("stroke-dashoffset", 60)
+        .attr("opacity", 0);
+
+      const averageArrow = gArrows.append("path")
+        .attr("d", "M 734 118 C 790 118, 800 112, 858 112")
+        .attr("fill", "none")
+        .attr("stroke", magentaNodeA)
+        .attr("stroke-width", 3)
+        .attr("stroke-linecap", "round")
+        .attr("marker-end", "url(#cf-concept-domain-arrowhead)")
+        .attr("stroke-dasharray", 150)
+        .attr("stroke-dashoffset", 150)
+        .attr("opacity", 0);
+
+      const averageHasPortArrow = gArrows.append("path")
+        .attr("d", "M 998 172 V 198")
+        .attr("fill", "none")
+        .attr("stroke", magentaNodeA)
+        .attr("stroke-width", 3)
+        .attr("stroke-linecap", "round")
+        .attr("marker-end", "url(#cf-concept-domain-arrowhead)")
+        .attr("stroke-dasharray", 46)
+        .attr("stroke-dashoffset", 46)
+        .attr("opacity", 0);
+
+      const averagePortsArrow = gArrows.append("path")
+        .attr("d", "M 998 260 V 286")
+        .attr("fill", "none")
+        .attr("stroke", magentaNodeA)
+        .attr("stroke-width", 3)
+        .attr("stroke-linecap", "round")
+        .attr("marker-end", "url(#cf-concept-domain-arrowhead)")
+        .attr("stroke-dasharray", 46)
+        .attr("stroke-dashoffset", 46)
+        .attr("opacity", 0);
+
+      const averageHasBindingArrow = gArrows.append("path")
+        .attr("d", "M 1092 172 C 1170 276, 1160 390, 1076 458")
+        .attr("fill", "none")
+        .attr("stroke", magentaNodeA)
+        .attr("stroke-width", 3)
+        .attr("stroke-linecap", "round")
+        .attr("marker-end", "url(#cf-concept-domain-arrowhead)")
+        .attr("stroke-dasharray", 310)
+        .attr("stroke-dashoffset", 310)
+        .attr("opacity", 0);
+
+      const averageBindingArrow = gArrows.append("path")
+        .attr("d", "M 998 520 V 546")
+        .attr("fill", "none")
+        .attr("stroke", magentaNodeA)
+        .attr("stroke-width", 3)
+        .attr("stroke-linecap", "round")
+        .attr("marker-end", "url(#cf-concept-domain-arrowhead)")
+        .attr("stroke-dasharray", 46)
+        .attr("stroke-dashoffset", 46)
+        .attr("opacity", 0);
+
       const firstNode = drawSplitNode(200, 73);
       const conceptNode = drawTripleNode(30, 157, [
         { text: "cf:definesConcept", y: 20, fill: "white", size: 15.5 },
-        { text: "cfproc:ProcessingUnit", y: 51, fill: teal, size: 15.5 },
-        { text: "a cf:concept", y: 80, fill: blue, size: 14.5 }
-      ]);
-      const portPropertyNode = drawCompactDoubleNode(272, 157, [
-        { text: "cfproc:hasPort", y: 20, fill: "white", size: 13.5 },
-        { text: "a rdf:Property", y: 51, fill: teal, size: 13.2 }
-      ], 150);
-      const portConceptNode = drawCompactDoubleNode(272, 257, [
+        { text: "cfproc:ProcessingUnit", y: 51, fill: blueNodeB, size: 15.5 },
+        { text: "a cf:concept", y: 80, fill: blueNodeA, size: 14.5 }
+      ], 218, blueNodeA, blueNodeLight, blueNodePale, blueNodeA);
+      const portPropertyNode = drawCompactDoubleNode(61, 276, [
+        { text: "cf:hasAttribute", y: 20, fill: "white", size: 13.5 },
+        { text: "a cf:Property", y: 51, fill: blueNodeB, size: 13.2 }
+      ], 156, blueNodeB, blueNodeLight, blueNodeB);
+      const portConceptNode = drawCompactDoubleNode(64, 368, [
         { text: "cfproc:Port", y: 20, fill: "white", size: 13.5 },
-        { text: "a cf:concept", y: 51, fill: teal, size: 13.2 }
-      ], 150);
+        { text: "a cf:Attribute", y: 51, fill: blueNodeC, size: 13.2 }
+      ], 150, blueNodeC, blueNodeLight, blueNodeC);
+      const portAttributeNode = drawCompactDoubleNode(61, 460, [
+        { text: "cf:hasAttribute", y: 20, fill: "white", size: 12.8 },
+        { text: "a cf:Property", y: 51, fill: blueNodeD, size: 12.8 }
+      ], 156, blueNodeD, blueNodeLight, blueNodeD);
+      const portTypeNode = drawFiveNode(42, 552, [
+        { text: "cfproc:PortRole", y: 20, fill: "white", size: 12.8 },
+        { text: "a cf:Attribute", y: 51, fill: "#1e40af", size: 12.8 },
+        { text: "cf:allowedValue Input", y: 82, fill: "#1e40af", size: 12.4 },
+        { text: "cf:allowedValue Output", y: 113, fill: "#1e40af", size: 12.4 },
+        { text: "cf:allowedValue Parameter", y: 144, fill: "#1e40af", size: 12.4 }
+      ], 194, "#1e40af", blueNodeLight, "#1e40af");
+      const processingStepNode = drawTripleNode(454, 72, [
+        { text: "cfproc:ProcessingStep", y: 20, fill: "white", size: 15.5 },
+        { text: "a cf:Concept", y: 51, fill: orangeNodeA, size: 15.5 },
+        { text: "rdfs:subClassOf cfproc:ProcessingUnit", y: 80, fill: "#9a3412", size: 11.4 }
+      ], 280, orangeNodeA, orangeNodeLight, orangeNodePale, orangeNodeA);
+      const processingPipelineNode = drawTripleNode(454, 202, [
+        { text: "cfproc:ProcessingPipeline", y: 20, fill: "white", size: 15.5 },
+        { text: "a cf:Concept", y: 51, fill: orangeNodeB, size: 15.5 },
+        { text: "rdfs:subClassOf cfproc:ProcessingUnit", y: 80, fill: "#9a3412", size: 11.4 }
+      ], 280, orangeNodeB, orangeNodeLight, orangeNodePale, orangeNodeB);
+      const pipelineAttributeNode = drawCompactDoubleNode(650, 310, [
+        { text: "cf:hasAttribute", y: 20, fill: "white", size: 13.5 },
+        { text: "a cf:Property", y: 51, fill: orangeNodeA, size: 13.2 }
+      ], 156, "#f97316", orangeNodeLight, "#f97316");
+      const pipelineNodeNode = drawCompactDoubleNode(650, 392, [
+        { text: "cfproc:PipelineNode", y: 20, fill: "white", size: 12.4 },
+        { text: "a cf:Attribute", y: 51, fill: orangeNodeB, size: 13.2 }
+      ], 156, "#ea580c", orangeNodeLight, "#ea580c");
+      const runTargetAttributeNode = drawCompactDoubleNode(650, 474, [
+        { text: "cf:hasAttribute", y: 20, fill: "white", size: 13.5 },
+        { text: "a cf:Property", y: 51, fill: orangeNodeA, size: 13.2 }
+      ], 156, "#c2410c", orangeNodeLight, "#c2410c");
+      const runTargetNode = drawTripleNode(650, 552, [
+        { text: "cfproc:RunTarget", y: 20, fill: "white", size: 13.2 },
+        { text: "a cf:Attribute", y: 51, fill: orangeNodeA, size: 11.8 },
+        { text: "cf:attributePath cfproc:runs", y: 82, fill: orangeNodeA, size: 10.4 }
+      ], 190, "#9a3412", orangeNodeLight, orangeNodePale, "#9a3412");
+      const runsPropertyNode = drawFourNode(390, 552, [
+        { text: "cfproc:runs", y: 20, fill: "white", size: 13.2 },
+        { text: "a cf:Property", y: 51, fill: orangeNodeA, size: 11.2 },
+        { text: "rdfs:domain cfproc:PipelineNode", y: 82, fill: orangeNodeA, size: 11 },
+        { text: "rdfs:range cfproc:ProcessingUnit", y: 113, fill: orangeNodeA, size: 11 }
+      ], 230, "#7c2d12", orangeNodeLight, "#7c2d12");
+      const averageNode = drawTripleNode(858, 80, [
+        { text: "qalg:Average", y: 20, fill: "white", size: 15.5 },
+        { text: "a cfproc:ProcessingStep", y: 51, fill: magentaNodeB, size: 12.2 },
+        { text: "a cfsvc:ServiceOperation", y: 80, fill: magentaNodeB, size: 12.2 }
+      ], 280, magentaNodeA, magentaNodeLight, "#fdf4ff", magentaNodeA);
+      const averageHasPortNode = drawCompactDoubleNode(920, 198, [
+        { text: "cfproc:hasPort", y: 20, fill: "white", size: 13.5 },
+        { text: "a cf:Property", y: 51, fill: magentaNodeB, size: 13.2 }
+      ], 156, magentaNodeB, magentaNodeLight, magentaNodeB);
+      const averagePortsNode = drawTripleNode(892, 286, [
+        { text: "qalg:Average_values,", y: 20, fill: "white", size: 12.2 },
+        { text: "qalg:Average_mean", y: 51, fill: magentaNodeB, size: 12.2 },
+        { text: "a cfproc:Port .", y: 80, fill: magentaNodeB, size: 12.2 }
+      ], 212, magentaNodeA, magentaNodeLight, "#fdf4ff", magentaNodeA);
+      const averageHasBindingNode = drawCompactDoubleNode(920, 458, [
+        { text: "cfsvc:hasBinding", y: 20, fill: "white", size: 13.5 },
+        { text: "a cf:Property", y: 51, fill: magentaNodeB, size: 13.2 }
+      ], 156, "#86198f", magentaNodeLight, "#86198f");
+      const averageBindingNode = drawCompactDoubleNode(898, 546, [
+        { text: "qalg:Average_binding", y: 20, fill: "white", size: 12.2 },
+        { text: "a cfsvc:Binding", y: 51, fill: magentaNodeB, size: 13.2 }
+      ], 200, "#701a75", magentaNodeLight, "#701a75");
 
       function currentStage() {
         return section.querySelectorAll(".fragment.visible").length;
       }
 
       function render(stage) {
-        stage = Math.max(0, Math.min(4, stage));
+        stage = Math.max(0, Math.min(5, stage));
         const instant = stage === 0;
 
         const columnUpdate = instant ? columnGroups : columnGroups.transition()
@@ -3090,10 +3620,10 @@
           .attr("opacity", d => {
             if (d.id === "left") return 1;
             if (d.id === "middle") return stage >= 3 ? 1 : 0;
-            return stage >= 4 ? 1 : 0;
+            return stage >= 5 ? 1 : 0;
           })
           .attr("transform", d => {
-            const visible = d.id === "left" || (d.id === "middle" && stage >= 3) || (d.id === "right" && stage >= 4);
+            const visible = d.id === "left" || (d.id === "middle" && stage >= 3) || (d.id === "right" && stage >= 5);
             return `translate(${d.x},${visible ? 16 : 48})`;
           });
 
@@ -3130,7 +3660,7 @@
           .duration(stage >= 2 ? 330 : 120)
           .ease(stage >= 2 ? d3.easeBackOut.overshoot(1.14) : d3.easeCubicIn)
           .attr("opacity", stage >= 2 ? 1 : 0)
-          .attr("transform", `translate(272,157) scale(${stage >= 2 ? 1 : 0.9})`);
+          .attr("transform", `translate(61,276) scale(${stage >= 2 ? 1 : 0.9})`);
 
         portConceptArrow.transition()
           .delay(stage >= 2 ? 520 : 0)
@@ -3144,7 +3674,210 @@
           .duration(stage >= 2 ? 330 : 120)
           .ease(stage >= 2 ? d3.easeBackOut.overshoot(1.14) : d3.easeCubicIn)
           .attr("opacity", stage >= 2 ? 1 : 0)
-          .attr("transform", `translate(272,257) scale(${stage >= 2 ? 1 : 0.9})`);
+          .attr("transform", `translate(64,368) scale(${stage >= 2 ? 1 : 0.9})`);
+
+        portAttributeArrow.transition()
+          .delay(stage >= 2 ? 960 : 0)
+          .duration(stage >= 2 ? 300 : 120)
+          .ease(d3.easeCubicOut)
+          .attr("opacity", stage >= 2 ? 1 : 0)
+          .attr("stroke-dashoffset", stage >= 2 ? 0 : 50);
+
+        portAttributeNode.transition()
+          .delay(stage >= 2 ? 1120 : 0)
+          .duration(stage >= 2 ? 330 : 120)
+          .ease(stage >= 2 ? d3.easeBackOut.overshoot(1.14) : d3.easeCubicIn)
+          .attr("opacity", stage >= 2 ? 1 : 0)
+          .attr("transform", `translate(61,460) scale(${stage >= 2 ? 1 : 0.9})`);
+
+        portTypeArrow.transition()
+          .delay(stage >= 2 ? 1340 : 0)
+          .duration(stage >= 2 ? 300 : 120)
+          .ease(d3.easeCubicOut)
+          .attr("opacity", stage >= 2 ? 1 : 0)
+          .attr("stroke-dashoffset", stage >= 2 ? 0 : 50);
+
+        portTypeNode.transition()
+          .delay(stage >= 2 ? 1500 : 0)
+          .duration(stage >= 2 ? 330 : 120)
+          .ease(stage >= 2 ? d3.easeBackOut.overshoot(1.14) : d3.easeCubicIn)
+          .attr("opacity", stage >= 2 ? 1 : 0)
+          .attr("transform", `translate(42,552) scale(${stage >= 2 ? 1 : 0.9})`);
+
+        processingStepArrow.transition()
+          .delay(stage >= 3 ? 100 : 0)
+          .duration(stage >= 3 ? 520 : 120)
+          .ease(d3.easeCubicOut)
+          .attr("opacity", stage >= 3 ? 1 : 0)
+          .attr("stroke-dashoffset", stage >= 3 ? 0 : 260);
+
+        processingPipelineArrow.transition()
+          .delay(stage >= 3 ? 220 : 0)
+          .duration(stage >= 3 ? 560 : 120)
+          .ease(d3.easeCubicOut)
+          .attr("opacity", stage >= 3 ? 1 : 0)
+          .attr("stroke-dashoffset", stage >= 3 ? 0 : 300);
+
+        processingStepNode.transition()
+          .delay(stage >= 3 ? 560 : 0)
+          .duration(stage >= 3 ? 330 : 120)
+          .ease(stage >= 3 ? d3.easeBackOut.overshoot(1.14) : d3.easeCubicIn)
+          .attr("opacity", stage >= 3 ? 1 : 0)
+          .attr("transform", `translate(454,72) scale(${stage >= 3 ? 1 : 0.9})`);
+
+        processingPipelineNode.transition()
+          .delay(stage >= 3 ? 680 : 0)
+          .duration(stage >= 3 ? 330 : 120)
+          .ease(stage >= 3 ? d3.easeBackOut.overshoot(1.14) : d3.easeCubicIn)
+          .attr("opacity", stage >= 3 ? 1 : 0)
+          .attr("transform", `translate(454,202) scale(${stage >= 3 ? 1 : 0.9})`);
+
+        pipelineAttributeArrow.transition()
+          .delay(stage >= 4 ? 100 : 0)
+          .duration(stage >= 4 ? 260 : 120)
+          .ease(d3.easeCubicOut)
+          .attr("opacity", stage >= 4 ? 1 : 0)
+          .attr("stroke-dashoffset", stage >= 4 ? 0 : 30);
+
+        pipelineAttributeNode.transition()
+          .delay(stage >= 4 ? 260 : 0)
+          .duration(stage >= 4 ? 300 : 120)
+          .ease(stage >= 4 ? d3.easeBackOut.overshoot(1.14) : d3.easeCubicIn)
+          .attr("opacity", stage >= 4 ? 1 : 0)
+          .attr("transform", `translate(650,310) scale(${stage >= 4 ? 1 : 0.9})`);
+
+        pipelineNodeArrow.transition()
+          .delay(stage >= 4 ? 480 : 0)
+          .duration(stage >= 4 ? 260 : 120)
+          .ease(d3.easeCubicOut)
+          .attr("opacity", stage >= 4 ? 1 : 0)
+          .attr("stroke-dashoffset", stage >= 4 ? 0 : 36);
+
+        pipelineNodeNode.transition()
+          .delay(stage >= 4 ? 640 : 0)
+          .duration(stage >= 4 ? 300 : 120)
+          .ease(stage >= 4 ? d3.easeBackOut.overshoot(1.14) : d3.easeCubicIn)
+          .attr("opacity", stage >= 4 ? 1 : 0)
+          .attr("transform", `translate(650,392) scale(${stage >= 4 ? 1 : 0.9})`);
+
+        runTargetAttributeArrow.transition()
+          .delay(stage >= 4 ? 860 : 0)
+          .duration(stage >= 4 ? 260 : 120)
+          .ease(d3.easeCubicOut)
+          .attr("opacity", stage >= 4 ? 1 : 0)
+          .attr("stroke-dashoffset", stage >= 4 ? 0 : 36);
+
+        runTargetAttributeNode.transition()
+          .delay(stage >= 4 ? 1020 : 0)
+          .duration(stage >= 4 ? 300 : 120)
+          .ease(stage >= 4 ? d3.easeBackOut.overshoot(1.14) : d3.easeCubicIn)
+          .attr("opacity", stage >= 4 ? 1 : 0)
+          .attr("transform", `translate(650,474) scale(${stage >= 4 ? 1 : 0.9})`);
+
+        runTargetArrow.transition()
+          .delay(stage >= 4 ? 1240 : 0)
+          .duration(stage >= 4 ? 260 : 120)
+          .ease(d3.easeCubicOut)
+          .attr("opacity", stage >= 4 ? 1 : 0)
+          .attr("stroke-dashoffset", stage >= 4 ? 0 : 30);
+
+        runTargetNode.transition()
+          .delay(stage >= 4 ? 1400 : 0)
+          .duration(stage >= 4 ? 330 : 120)
+          .ease(stage >= 4 ? d3.easeBackOut.overshoot(1.14) : d3.easeCubicIn)
+          .attr("opacity", stage >= 4 ? 1 : 0)
+          .attr("transform", `translate(650,552) scale(${stage >= 4 ? 1 : 0.9})`);
+
+        runTargetRunsArrow.transition()
+          .delay(stage >= 4 ? 1560 : 0)
+          .duration(stage >= 4 ? 260 : 120)
+          .ease(d3.easeCubicOut)
+          .attr("opacity", stage >= 4 ? 1 : 0)
+          .attr("stroke-dashoffset", stage >= 4 ? 0 : 60);
+
+        runsPropertyArrow.transition()
+          .delay(stage >= 4 ? 1620 : 0)
+          .duration(stage >= 4 ? 260 : 120)
+          .ease(d3.easeCubicOut)
+          .attr("opacity", stage >= 4 ? 1 : 0)
+          .attr("stroke-dashoffset", stage >= 4 ? 0 : 520);
+
+        runsPropertyNode.transition()
+          .delay(stage >= 4 ? 1780 : 0)
+          .duration(stage >= 4 ? 330 : 120)
+          .ease(stage >= 4 ? d3.easeBackOut.overshoot(1.14) : d3.easeCubicIn)
+          .attr("opacity", stage >= 4 ? 1 : 0)
+          .attr("transform", `translate(390,552) scale(${stage >= 4 ? 1 : 0.9})`);
+
+        averageArrow.transition()
+          .delay(stage >= 5 ? 120 : 0)
+          .duration(stage >= 5 ? 520 : 120)
+          .ease(d3.easeCubicOut)
+          .attr("opacity", stage >= 5 ? 1 : 0)
+          .attr("stroke-dashoffset", stage >= 5 ? 0 : 150);
+
+        averageNode.transition()
+          .delay(stage >= 5 ? 520 : 0)
+          .duration(stage >= 5 ? 360 : 120)
+          .ease(stage >= 5 ? d3.easeBackOut.overshoot(1.12) : d3.easeCubicIn)
+          .attr("opacity", stage >= 5 ? 1 : 0)
+          .attr("transform", `translate(858,80) scale(${stage >= 5 ? 1 : 0.9})`);
+
+        averageHasPortArrow.transition()
+          .delay(stage >= 5 ? 820 : 0)
+          .duration(stage >= 5 ? 260 : 120)
+          .ease(d3.easeCubicOut)
+          .attr("opacity", stage >= 5 ? 1 : 0)
+          .attr("stroke-dashoffset", stage >= 5 ? 0 : 46);
+
+        averageHasPortNode.transition()
+          .delay(stage >= 5 ? 980 : 0)
+          .duration(stage >= 5 ? 320 : 120)
+          .ease(stage >= 5 ? d3.easeBackOut.overshoot(1.12) : d3.easeCubicIn)
+          .attr("opacity", stage >= 5 ? 1 : 0)
+          .attr("transform", `translate(920,198) scale(${stage >= 5 ? 1 : 0.9})`);
+
+        averagePortsArrow.transition()
+          .delay(stage >= 5 ? 1200 : 0)
+          .duration(stage >= 5 ? 260 : 120)
+          .ease(d3.easeCubicOut)
+          .attr("opacity", stage >= 5 ? 1 : 0)
+          .attr("stroke-dashoffset", stage >= 5 ? 0 : 46);
+
+        averagePortsNode.transition()
+          .delay(stage >= 5 ? 1360 : 0)
+          .duration(stage >= 5 ? 320 : 120)
+          .ease(stage >= 5 ? d3.easeBackOut.overshoot(1.12) : d3.easeCubicIn)
+          .attr("opacity", stage >= 5 ? 1 : 0)
+          .attr("transform", `translate(892,286) scale(${stage >= 5 ? 1 : 0.9})`);
+
+        averageHasBindingArrow.transition()
+          .delay(stage >= 5 ? 1020 : 0)
+          .duration(stage >= 5 ? 360 : 120)
+          .ease(d3.easeCubicOut)
+          .attr("opacity", stage >= 5 ? 1 : 0)
+          .attr("stroke-dashoffset", stage >= 5 ? 0 : 310);
+
+        averageHasBindingNode.transition()
+          .delay(stage >= 5 ? 1320 : 0)
+          .duration(stage >= 5 ? 320 : 120)
+          .ease(stage >= 5 ? d3.easeBackOut.overshoot(1.12) : d3.easeCubicIn)
+          .attr("opacity", stage >= 5 ? 1 : 0)
+          .attr("transform", `translate(920,458) scale(${stage >= 5 ? 1 : 0.9})`);
+
+        averageBindingArrow.transition()
+          .delay(stage >= 5 ? 1540 : 0)
+          .duration(stage >= 5 ? 260 : 120)
+          .ease(d3.easeCubicOut)
+          .attr("opacity", stage >= 5 ? 1 : 0)
+          .attr("stroke-dashoffset", stage >= 5 ? 0 : 46);
+
+        averageBindingNode.transition()
+          .delay(stage >= 5 ? 1700 : 0)
+          .duration(stage >= 5 ? 320 : 120)
+          .ease(stage >= 5 ? d3.easeBackOut.overshoot(1.12) : d3.easeCubicIn)
+          .attr("opacity", stage >= 5 ? 1 : 0)
+          .attr("transform", `translate(898,546) scale(${stage >= 5 ? 1 : 0.9})`);
       }
 
       function updateForSlide() {
