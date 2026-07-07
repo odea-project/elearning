@@ -904,7 +904,7 @@
       }
 
       function appendCodeLine(group, x, y, line, fontSize = 18) {
-        const tokenPattern = /(cf(?:proc|ui|pkg)?:[A-Za-z]+|cf:[A-Za-z]+|owl:Class|rdfs:subClassOf|skos:[A-Za-z]+)/g;
+        const tokenPattern = /(cf(?:proc|ui|pkg)?:[A-Za-z]+|qalg:[A-Za-z_]+|cf:[A-Za-z]+|owl:Class|rdfs:subClassOf|skos:[A-Za-z]+)/g;
         const indent = (line.match(/^\s*/) || [""])[0].length * fontSize * 0.56;
         const content = line.trimStart();
         let cursor = x + indent;
@@ -977,19 +977,19 @@
         .attr("class", "ontology-example-two");
 
       appendCodeCard(ontologyExampleOne, 72, 340, "Processing Step", [
-        "cfproc:Average",
-        "    a owl:Class, cf:Concept ;",
-        "    rdfs:subClassOf cfproc:ProcessingStep ;",
+        "qalg:average",
+        "    a cfproc:ProcessingStep ;",
         "    skos:prefLabel \"average\" ;",
         "    skos:definition \"A processing step that computes [...]\" ;",
         "    skos:scopeNote \"Use this concept for processing [...]\" ;",
-        "    skos:example \"A workflow step that computes [...]\" ."
+        "    skos:example \"A workflow step that computes [...]\" .",
+        "    cfproc:hasPort qalg:average_values ;",
+        "    cfproc:hasPort qalg:average_mean ;"
       ]);
 
       appendCodeCard(ontologyExampleTwo, 72, 340, "Interface Element", [
-        "cfui:AffordanceCard",
-        "    a owl:Class, cf:Concept ;",
-        "    rdfs:subClassOf cfui:UserInterfaceElement ;",
+        "cfui:affordanceCard",
+        "    a cf:Attribute ;",
         "    skos:prefLabel \"affordance card\" ;",
         "    skos:definition \"A user interface element that [...]\" ;",
         "    skos:scopeNote \"Use this concept for UI [...]\" ;",
@@ -1079,32 +1079,8 @@
         .attr("class", "ontology-info-box")
         .attr("opacity", 0);
 
-      ontologyInfoBox.append("rect")
-        .attr("x", 86)
-        .attr("y", 304)
-        .attr("width", 828)
-        .attr("height", 314)
-        .attr("rx", 18)
-        .attr("ry", 18)
-        .attr("fill", "rgba(255,255,255,0.82)")
-        .attr("stroke", "#b8c9dc")
-        .attr("stroke-width", 2.2);
-
-      ontologyInfoBox.append("rect")
-        .attr("x", 86)
-        .attr("y", 304)
-        .attr("width", 828)
-        .attr("height", 50)
-        .attr("rx", 18)
-        .attr("ry", 18)
-        .attr("fill", "#8a1538");
-
-      ontologyInfoBox.append("rect")
-        .attr("x", 86)
-        .attr("y", 336)
-        .attr("width", 828)
-        .attr("height", 18)
-        .attr("fill", "#8a1538");
+      const ontologyGraphNodes = [];
+      const ontologyGraphArrows = [];
 
       function appendInfoText(x, y, text, size = 18, weight = 600, color = "#25384a") {
         ontologyInfoBox.append("text")
@@ -1139,28 +1115,160 @@
         }
       }
 
-      appendInfoText(118, 337, "cf_ontology / semantic kernel: how meaning enters Cogniflow", 21, 800, "#fff3f7");
-      appendInfoText(148, 383, "SemanticSource", 18, 700);
-      appendInfoArrow(236, 392, 236, 430, "contributes");
-      appendInfoText(148, 461, "SemanticContribution", 18, 700);
-      appendInfoArrow(236, 470, 236, 510, "defines / uses");
-      appendInfoText(148, 543, "ConceptDomain", 18, 700);
-      appendInfoArrow(322, 537, 466, 537, "defines");
-      appendInfoText(504, 543, "Concept", 18, 700);
-      appendInfoArrow(540, 553, 540, 579);
-      ontologyInfoBox.append("rect")
-        .attr("x", 381)
-        .attr("y", 588)
-        .attr("width", 318)
-        .attr("height", 34)
-        .attr("rx", 17)
-        .attr("ry", 17)
-        .attr("fill", "#3288BD")
-        .attr("opacity", 0.94);
-      appendInfoText(405, 611, "standardized concept schema", 17, 800, "white");
-      appendInfoText(630, 383, "A valid Concept provides:", 18, 700, "#8a1538");
-      ["identity", "type", "definition", "scope", "example", "shape"].forEach((txt, index) => {
-        appendInfoText(700, 416 + index * 27, txt, 17, 600);
+      const conceptDomainNode = ontologyInfoBox.append("g")
+        .attr("class", "concept-domain-node")
+        .attr("transform", "translate(92,386)");
+
+      ontologyGraphNodes.push({
+        group: conceptDomainNode,
+        finalX: 92,
+        finalY: 386,
+        initialX: 72,
+        initialY: 372,
+        overview: true
+      });
+
+      conceptDomainNode.append("rect")
+        .attr("width", 196)
+        .attr("height", 86)
+        .attr("rx", 8)
+        .attr("ry", 8)
+        .attr("fill", "#047857")
+        .attr("stroke", "white")
+        .attr("stroke-width", 2.4);
+
+      conceptDomainNode.append("path")
+        .attr("d", "M 0 43 H 196 V 78 Q 196 86 188 86 H 8 Q 0 86 0 78 Z")
+        .attr("fill", "#66C2A5");
+
+      conceptDomainNode.append("text")
+        .attr("x", 18)
+        .attr("y", 29)
+        .attr("fill", "white")
+        .attr("font-family", "monospace")
+        .attr("font-size", 17)
+        .attr("font-weight", 800)
+        .text("cf:ConceptDomain");
+
+      conceptDomainNode.append("text")
+        .attr("x", 18)
+        .attr("y", 65)
+        .attr("fill", "#15313a")
+        .attr("font-family", "monospace")
+        .attr("font-size", 16)
+        .attr("font-weight", 800)
+        .text("a owl:class .");
+
+      function appendOntologyDoubleNode(x, y, label, typeText, width = 172, topFill = "#047857", bottomFill = "#66C2A5", initialX = x, initialY = y, overview = false) {
+        const node = ontologyInfoBox.append("g")
+          .attr("transform", `translate(${x},${y})`);
+
+        node.append("rect")
+          .attr("width", width)
+          .attr("height", 56)
+          .attr("rx", 8)
+          .attr("ry", 8)
+          .attr("fill", topFill)
+          .attr("stroke", "white")
+          .attr("stroke-width", 2.2);
+
+        node.append("path")
+          .attr("d", `M 0 28 H ${width} V 48 Q ${width} 56 ${width - 8} 56 H 8 Q 0 56 0 48 Z`)
+          .attr("fill", bottomFill);
+
+        node.append("text")
+          .attr("x", 14)
+          .attr("y", 20)
+          .attr("fill", "white")
+          .attr("font-family", "monospace")
+          .attr("font-size", 12.8)
+          .attr("font-weight", 800)
+          .text(label);
+
+        node.append("text")
+          .attr("x", 14)
+          .attr("y", 46)
+          .attr("fill", "#15313a")
+          .attr("font-family", "monospace")
+          .attr("font-size", 12.4)
+          .attr("font-weight", 800)
+          .text(typeText);
+
+        const graphNode = { group: node, x, y, width, height: 56, finalX: x, finalY: y, initialX, initialY, overview };
+        ontologyGraphNodes.push(graphNode);
+        return graphNode;
+      }
+
+      function appendCurvedOntologyArrow(x1, y1, x2, y2) {
+        const midX = x1 + (x2 - x1) * 0.55;
+        const path = ontologyInfoBox.insert("path", ".concept-domain-node")
+          .attr("d", `M ${x1} ${y1} C ${midX} ${y1}, ${midX} ${y2}, ${x2} ${y2}`)
+          .attr("fill", "none")
+          .attr("stroke", "#6a7f95")
+          .attr("stroke-width", 2.8)
+          .attr("stroke-linecap", "round")
+          .attr("marker-end", "url(#cf-layer-arrowhead)")
+          .attr("stroke-dasharray", 1000)
+          .attr("stroke-dashoffset", 1000)
+          .attr("opacity", 0);
+        ontologyGraphArrows.push(path);
+      }
+
+      function appendStraightOntologyArrow(x1, y1, x2, y2) {
+        const path = ontologyInfoBox.insert("path", ".concept-domain-node")
+          .attr("d", `M ${x1} ${y1} H ${x2}`)
+          .attr("fill", "none")
+          .attr("stroke", "#6a7f95")
+          .attr("stroke-width", 2.6)
+          .attr("stroke-linecap", "round")
+          .attr("marker-end", "url(#cf-layer-arrowhead)")
+          .attr("stroke-dasharray", 1000)
+          .attr("stroke-dashoffset", 1000)
+          .attr("opacity", 0);
+        ontologyGraphArrows.push(path);
+      }
+
+      const ontologyOverviewRelations = [
+        appendOntologyDoubleNode(342, 486, "cf:defines", "a cf:Property .", 118, "#7c3aed", "#c4b5fd", 342, 486, true),
+        appendOntologyDoubleNode(530, 486, "cf:has", "a cf:Property .", 104, "#0e7490", "#67e8f9", 530, 486, true)
+      ];
+      ontologyOverviewRelations.forEach((node) => { node.overviewOnly = true; });
+
+      const conceptDomainOutX = 92 + 196;
+      const conceptDomainOutY = 386 + 43;
+      [
+        {
+          relation: appendOntologyDoubleNode(330, 372, "cf:definesConcept", "a cf:Property .", 156, "#7c3aed", "#c4b5fd", 342, 486),
+          target: appendOntologyDoubleNode(538, 372, "cf:Concept", "a owl:Class .", 120, "#0369a1", "#7dd3fc", 292, 372, true),
+          key: "concept"
+        },
+        {
+          relation: appendOntologyDoubleNode(330, 432, "cf:definesAttribute", "a cf:Property .", 168, "#be123c", "#fda4af", 342, 486),
+          target: appendOntologyDoubleNode(538, 432, "cf:Attribute", "a owl:Class .", 132, "#c2410c", "#fdba74", 432, 372, true)
+        },
+        {
+          relation: appendOntologyDoubleNode(330, 492, "cf:definesProperty", "a cf:Property .", 164, "#0f766e", "#5eead4", 342, 486),
+          target: appendOntologyDoubleNode(538, 492, "cf:Property", "a owl:Class .", 128, "#4d7c0f", "#bef264", 584, 372, true)
+        },
+        {
+          relation: appendOntologyDoubleNode(330, 552, "cf:definesShape", "a cf:Property .", 150, "#a16207", "#fde68a", 342, 486),
+          target: appendOntologyDoubleNode(538, 552, "cf:Shape", "a owl:Class .", 112, "#6d28d9", "#ddd6fe", 732, 372, true)
+        }
+      ].forEach((row) => {
+        appendCurvedOntologyArrow(conceptDomainOutX, conceptDomainOutY, row.relation.x, row.relation.y + row.relation.height / 2);
+        appendStraightOntologyArrow(row.relation.x + row.relation.width, row.relation.y + row.relation.height / 2, row.target.x, row.target.y + row.target.height / 2);
+
+        if (row.key === "concept") {
+          const hasAttributeNode = appendOntologyDoubleNode(694, 372, "cf:hasAttribute", "a cf:Property .", 132, "#0e7490", "#67e8f9", 530, 486);
+          const attributeNode = appendOntologyDoubleNode(850, 372, "cf:Attribute", "a owl:Class .", 118, "#c2410c", "#fdba74", 432, 372);
+          const hasShapeNode = appendOntologyDoubleNode(694, 432, "cf:hasShape", "a cf:Property .", 126, "#4338ca", "#c7d2fe", 530, 486);
+          const shapeNode = appendOntologyDoubleNode(858, 432, "cf:Shape", "a owl:Class .", 104, "#6d28d9", "#ddd6fe", 732, 372);
+
+          appendStraightOntologyArrow(row.target.x + row.target.width, row.target.y + row.target.height / 2, hasAttributeNode.x, hasAttributeNode.y + hasAttributeNode.height / 2);
+          appendStraightOntologyArrow(hasAttributeNode.x + hasAttributeNode.width, hasAttributeNode.y + hasAttributeNode.height / 2, attributeNode.x, attributeNode.y + attributeNode.height / 2);
+          appendCurvedOntologyArrow(row.target.x + row.target.width, row.target.y + row.target.height / 2, hasShapeNode.x, hasShapeNode.y + hasShapeNode.height / 2);
+          appendStraightOntologyArrow(hasShapeNode.x + hasShapeNode.width, hasShapeNode.y + hasShapeNode.height / 2, shapeNode.x, shapeNode.y + shapeNode.height / 2);
+        }
       });
 
       const packageBullets = root.append("g")
@@ -1353,21 +1461,21 @@
       }
 
       function effectiveFlowStage(stage) {
-        if (stage <= 4) return Math.min(stage, 1);
-        if (stage <= 7) return 2;
-        return stage - 5;
+        if (stage <= 5) return Math.min(stage, 1);
+        if (stage <= 8) return 2;
+        return stage - 6;
       }
 
       function render(stage) {
         const t = svg.transition().duration(650).ease(d3.easeCubicInOut);
         const flowStage = effectiveFlowStage(stage);
-        const ontologyYOffset = stage >= 1 && stage <= 4 ? -160 : 0;
+        const ontologyYOffset = stage >= 1 && stage <= 5 ? -160 : 0;
 
         const ontologyState = (() => {
           if (stage === 0) {
             return { w: 180, h: 180, r: 90, font: 0, labelOpacity: 0 };
           }
-          if (stage >= 1 && stage <= 4) {
+          if (stage >= 1 && stage <= 5) {
             return { w: 360, h: 120, r: 24, font: 44, labelOpacity: 1 };
           }
           if (flowStage === 2) {
@@ -1452,13 +1560,13 @@
         ontologyBullets.selectAll("text").transition()
           .delay((d, i) => stage === 1 ? 700 + i * 180 : 0)
           .duration(260)
-          .attr("opacity", stage >= 1 && stage <= 4 ? 1 : 0);
+          .attr("opacity", stage >= 1 && stage <= 5 ? 1 : 0);
 
         ontologyBullets.transition(t)
           .attr("transform", `translate(0,${ontologyYOffset})`);
 
         ontologyAnnotation.transition(t)
-          .attr("opacity", stage >= 1 && stage <= 4 ? 1 : 0)
+          .attr("opacity", stage >= 1 && stage <= 5 ? 1 : 0)
           .attr("transform", `translate(0,${ontologyYOffset})`);
 
         ontologyExamples.transition()
@@ -1483,14 +1591,37 @@
           .attr("opacity", stage === 3 ? 1 : stage === 4 ? 0.12 : 0);
 
         ontologyInfoBox.transition()
-          .delay(stage === 4 ? 40 : 0)
-          .duration(stage === 4 ? 620 : 220)
+          .delay(stage === 4 || stage === 5 ? 40 : 0)
+          .duration(stage === 4 || stage === 5 ? 620 : 220)
           .ease(d3.easeCubicInOut)
-          .attr("transform", `translate(${stage === 4 ? 0 : -1080},32)`)
-          .attr("opacity", stage === 4 ? 1 : 0);
+          .attr("transform", `translate(${stage === 4 || stage === 5 ? 0 : -1080},32)`)
+          .attr("opacity", stage === 4 || stage === 5 ? 1 : 0);
 
-        const depthActive = stage === 6 || stage === 7;
-        const depthReturning = stage === 8;
+        ontologyGraphNodes.forEach((node, index) => {
+          const finalStage = stage >= 5;
+          const visible = stage === 4
+            ? node.overview || node.overviewOnly
+            : stage === 5 && !node.overviewOnly;
+
+          node.group.transition()
+            .delay(finalStage ? 60 + index * 18 : 0)
+            .duration(finalStage ? 620 : 320)
+            .ease(finalStage ? d3.easeCubicInOut : d3.easeCubicOut)
+            .attr("transform", `translate(${finalStage ? node.finalX : node.initialX},${finalStage ? node.finalY : node.initialY})`)
+            .attr("opacity", visible ? 1 : 0);
+        });
+
+        ontologyGraphArrows.forEach((arrow, index) => {
+          arrow.transition()
+            .delay(stage === 5 ? 560 + index * 80 : 0)
+            .duration(stage === 5 ? 520 : 160)
+            .ease(d3.easeCubicOut)
+            .attr("opacity", stage === 5 ? 1 : 0)
+            .attr("stroke-dashoffset", stage === 5 ? 0 : 1000);
+        });
+
+        const depthActive = stage === 7 || stage === 8;
+        const depthReturning = stage === 9;
         const depthFilter = depthActive ? "url(#cf-layer-depth-blur)" : null;
         const depthTransform = depthActive
           ? `translate(${cx},${cy}) scale(1.56) translate(${-cx},${-cy}) translate(150,112)`
@@ -1517,35 +1648,35 @@
           .attr("transform", depthTransform);
 
         packageDomainExample.transition()
-          .duration(stage === 6 || stage === 7 ? 180 : depthReturning ? 700 : 160)
-          .attr("opacity", stage === 6 || stage === 7 ? 1 : 0);
+          .duration(stage === 7 || stage === 8 ? 180 : depthReturning ? 700 : 160)
+          .attr("opacity", stage === 7 || stage === 8 ? 1 : 0);
 
         packageDomainContent.transition()
           .delay(0)
-          .duration(stage === 6 ? 860 : stage === 7 ? 420 : 180)
+          .duration(stage === 7 ? 860 : stage === 8 ? 420 : 180)
           .ease(d3.easeCubicInOut)
-          .attr("opacity", stage === 6 ? 1 : 0)
-          .attr("transform", stage === 6 ? "translate(250,20) scale(1.46)" : stage === 7 ? "translate(880,20) scale(1.46)" : "translate(0,0) scale(1)");
+          .attr("opacity", stage === 7 ? 1 : 0)
+          .attr("transform", stage === 7 ? "translate(250,20) scale(1.46)" : stage === 8 ? "translate(880,20) scale(1.46)" : "translate(0,0) scale(1)");
 
         packageConceptContent.transition()
           .delay(0)
-          .duration(stage === 7 ? 560 : depthReturning ? 700 : 180)
+          .duration(stage === 8 ? 560 : depthReturning ? 700 : 180)
           .ease(d3.easeCubicInOut)
-          .attr("opacity", stage === 7 ? 1 : 0)
-          .attr("transform", stage === 7 ? "translate(250,20) scale(1.46)" : depthReturning ? "translate(250,20) scale(1.72)" : "translate(-420,0) scale(1)");
+          .attr("opacity", stage === 8 ? 1 : 0)
+          .attr("transform", stage === 8 ? "translate(250,20) scale(1.46)" : depthReturning ? "translate(250,20) scale(1.72)" : "translate(-420,0) scale(1)");
 
         packageDomainLineNodes.transition()
           .delay(0)
-          .duration(stage === 6 ? 180 : 130)
+          .duration(stage === 7 ? 180 : 130)
           .ease(d3.easeCubicInOut)
-          .attr("opacity", stage === 6 ? 1 : 0)
+          .attr("opacity", stage === 7 ? 1 : 0)
           .attr("transform", (d, i) => `translate(10,${100 + i * 34}) scale(1)`);
 
         packageConceptLineNodes.transition()
           .delay(0)
-          .duration(stage === 7 ? 180 : depthReturning ? 650 : 130)
+          .duration(stage === 8 ? 180 : depthReturning ? 650 : 130)
           .ease(d3.easeCubicInOut)
-          .attr("opacity", stage === 7 ? 1 : 0)
+          .attr("opacity", stage === 8 ? 1 : 0)
           .attr("transform", (d, i) => `translate(10,${100 + i * 34}) scale(1)`);
 
         packageBullets.selectAll("text").transition()
