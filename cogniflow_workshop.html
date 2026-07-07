@@ -2853,7 +2853,7 @@
   <svg
     id="cf-concept-domain-svg"
     viewBox="0 0 1280 720"
-    style="width: 132%; height: auto; max-height: 1140px; aspect-ratio: 16 / 9; margin-left: -16%;"
+    style="width: 160%; height: auto; max-height: none; aspect-ratio: 16 / 9; margin-left: -30%; margin-top: -7%;"
   ></svg>
 
   <!-- Invisible Reveal fragments: each click advances the D3 state -->
@@ -2884,6 +2884,12 @@
       const blueNodeD = "#1d4ed8";
       const blueNodeLight = "#e0f2fe";
       const blueNodePale = "#f0f9ff";
+      const ochreNodeA = "#b58a00";
+      const ochreNodeB = "#c49a00";
+      const ochreNodeC = "#a98300";
+      const ochreNodeD = "#8f7600";
+      const ochreNodeLight = "#fef3c7";
+      const ochreNodePale = "#fffbeb";
       const orangeNodeA = "#c2410c";
       const orangeNodeB = "#ea580c";
       const orangeNodeLight = "#ffedd5";
@@ -2910,6 +2916,55 @@
         .attr("flood-color", "#0f172a")
         .attr("flood-opacity", 0.18);
 
+      const brushRoughen = defs.append("filter")
+        .attr("id", "cf-concept-domain-brush-roughen")
+        .attr("x", "-8%")
+        .attr("y", "-8%")
+        .attr("width", "116%")
+        .attr("height", "116%");
+      brushRoughen.append("feTurbulence")
+        .attr("type", "fractalNoise")
+        .attr("baseFrequency", "0.028 0.18")
+        .attr("numOctaves", 3)
+        .attr("seed", 7)
+        .attr("result", "brushNoise");
+      brushRoughen.append("feDisplacementMap")
+        .attr("in", "SourceGraphic")
+        .attr("in2", "brushNoise")
+        .attr("scale", 8)
+        .attr("xChannelSelector", "R")
+        .attr("yChannelSelector", "G");
+
+      const grayscale = defs.append("filter")
+        .attr("id", "cf-concept-domain-grayscale");
+      grayscale.append("feColorMatrix")
+        .attr("type", "saturate")
+        .attr("values", 0);
+
+      const brushGrayscale = defs.append("filter")
+        .attr("id", "cf-concept-domain-brush-gray")
+        .attr("x", "-8%")
+        .attr("y", "-8%")
+        .attr("width", "116%")
+        .attr("height", "116%");
+      brushGrayscale.append("feTurbulence")
+        .attr("type", "fractalNoise")
+        .attr("baseFrequency", "0.028 0.18")
+        .attr("numOctaves", 3)
+        .attr("seed", 7)
+        .attr("result", "brushNoise");
+      brushGrayscale.append("feDisplacementMap")
+        .attr("in", "SourceGraphic")
+        .attr("in2", "brushNoise")
+        .attr("scale", 8)
+        .attr("xChannelSelector", "R")
+        .attr("yChannelSelector", "G")
+        .attr("result", "roughBrush");
+      brushGrayscale.append("feColorMatrix")
+        .attr("in", "roughBrush")
+        .attr("type", "saturate")
+        .attr("values", 0);
+
       defs.append("marker")
         .attr("id", "cf-concept-domain-arrowhead")
         .attr("viewBox", "0 0 10 10")
@@ -2920,7 +2975,7 @@
         .attr("orient", "auto")
         .append("path")
         .attr("d", "M 0 0 L 10 5 L 0 10 z")
-        .attr("fill", blue);
+        .attr("fill", "white");
 
       root.append("rect")
         .attr("width", W)
@@ -2929,9 +2984,9 @@
         .lower();
 
       const columns = [
-        { id: "left", x: 18, label: "Concept domain", color: blue, bg: "rgba(0, 76, 147, 0.055)", stroke: "rgba(0, 76, 147, 0.24)" },
-        { id: "middle", x: 432, label: "Processing concepts", color: teal, bg: "rgba(25, 124, 131, 0.055)", stroke: "rgba(25, 124, 131, 0.24)" },
-        { id: "right", x: 846, label: "Affordance model", color: gold, bg: "rgba(244, 185, 66, 0.09)", stroke: "rgba(244, 185, 66, 0.28)" }
+        { id: "left", x: 18, label: "Concept domain", color: "#0057b8", grayColor: "#7b8794", paintBoost: 1, bg: "rgba(0, 76, 147, 0.055)", stroke: "rgba(0, 76, 147, 0.24)" },
+        { id: "middle", x: 432, label: "Processing concepts", color: "#006f78", grayColor: "#89929e", paintBoost: 1.45, bg: "rgba(25, 124, 131, 0.055)", stroke: "rgba(25, 124, 131, 0.24)" },
+        { id: "right", x: 846, label: "Affordance model", color: "#d97706", grayColor: "#9aa0a6", paintBoost: 1.55, bg: "rgba(244, 185, 66, 0.09)", stroke: "rgba(244, 185, 66, 0.28)" }
       ];
 
       const columnGroups = gColumns.selectAll("g.concept-domain-column")
@@ -2941,15 +2996,166 @@
         .attr("transform", d => `translate(${d.x},92)`)
         .attr("opacity", 0);
 
-      columnGroups.append("rect")
-        .attr("width", 416)
-        .attr("height", 690)
-        .attr("rx", 8)
-        .attr("fill", d => d.bg)
-        .attr("stroke", d => d.stroke)
-        .attr("stroke-width", 2);
+      function brushSeed(id) {
+        return id.split("").reduce((sum, char) => sum + char.charCodeAt(0), 0);
+      }
 
-      function drawSplitNode(x, y) {
+      function brushNoise(seed, index) {
+        const value = Math.sin(seed * 12.9898 + index * 78.233) * 43758.5453;
+        return value - Math.floor(value);
+      }
+
+      function appendBrushColumn(group, d) {
+        const seed = brushSeed(d.id);
+        const width = 416;
+        const height = 690;
+        const boost = d.paintBoost || 1;
+        const paint = group.append("g")
+          .attr("class", "concept-domain-column-paint")
+          .attr("filter", "url(#cf-concept-domain-brush-roughen)");
+
+        d3.range(10).forEach((bandIndex) => {
+          const baseX = -6 + bandIndex * 42 + (brushNoise(seed, bandIndex + 40) - 0.5) * 24;
+          const bandWidth = 54 + brushNoise(seed, bandIndex + 50) * 38;
+          const topY = -10 + brushNoise(seed, bandIndex + 60) * 30;
+          const bottomY = height * (0.72 + brushNoise(seed, bandIndex + 70) * 0.18);
+          const steps = 10;
+          const left = d3.range(steps + 1).map((step) => {
+            const t = step / steps;
+            return {
+              x: baseX + (brushNoise(seed, bandIndex * 100 + step) - 0.5) * 22,
+              y: topY + (bottomY - topY) * t + (brushNoise(seed, bandIndex * 110 + step) - 0.5) * 12
+            };
+          });
+          const right = d3.range(steps + 1).map((step) => {
+            const t = step / steps;
+            return {
+              x: baseX + bandWidth + (brushNoise(seed, bandIndex * 120 + step) - 0.5) * 28,
+              y: topY + (bottomY - topY) * t + (brushNoise(seed, bandIndex * 130 + step) - 0.5) * 14
+            };
+          });
+          const points = left.concat(right.reverse());
+
+          paint.append("path")
+            .attr("d", points.map((point, index) => `${index === 0 ? "M" : "L"} ${point.x} ${point.y}`).join(" ") + " Z")
+            .attr("fill", d.color)
+            .attr("opacity", Math.min(0.98, (0.5 + brushNoise(seed, bandIndex + 80) * 0.32) * boost));
+        });
+
+        d3.range(31).forEach((index) => {
+          const noiseA = brushNoise(seed, index);
+          const noiseB = brushNoise(seed, index + 100);
+          const noiseC = brushNoise(seed, index + 200);
+          const x = 4 + Math.pow(noiseA, 0.86) * (width - 8) + (noiseB - 0.5) * 34;
+          const topY = -14 + noiseB * 48;
+          const bottomY = height * (0.64 + noiseC * 0.25);
+          const strokeWidth = 28 + Math.pow(noiseB, 0.55) * 54;
+          const midX = x + (noiseA - 0.5) * 52;
+          const endX = x + (noiseC - 0.5) * 42;
+          const segmentCount = 2 + Math.floor(brushNoise(seed, index + 250) * 4);
+          let cursorY = topY + brushNoise(seed, index + 260) * 44;
+
+          const segments = d3.range(segmentCount).map((segmentIndex) => {
+            const length = height * (0.08 + brushNoise(seed, index + segmentIndex * 710) * 0.2);
+            const gap = height * (0.025 + brushNoise(seed, index + segmentIndex * 720) * 0.095);
+            const start = cursorY;
+            const end = Math.min(bottomY, start + length);
+            cursorY = end + gap;
+            return { start, end };
+          }).filter(segment => segment.end - segment.start > 18);
+
+          segments.forEach((segment, segmentIndex) => {
+            const segmentNoise = brushNoise(seed, index + segmentIndex * 700);
+            const sx = x + (segmentNoise - 0.5) * 16;
+            const ex = endX + (brushNoise(seed, index + segmentIndex * 800) - 0.5) * 16;
+            const c1x = midX + (segmentNoise - 0.5) * 22;
+            const c2x = midX + (brushNoise(seed, index + segmentIndex * 900) - 0.5) * 22;
+
+            paint.append("path")
+              .attr("d", `M ${sx} ${segment.start} C ${c1x} ${(segment.start + segment.end) * 0.42}, ${c2x} ${(segment.start + segment.end) * 0.58}, ${ex} ${segment.end}`)
+              .attr("fill", "none")
+              .attr("stroke", d.color)
+              .attr("stroke-width", strokeWidth * (0.82 + segmentNoise * 0.22))
+              .attr("stroke-linecap", "butt")
+              .attr("stroke-linejoin", "miter")
+              .attr("opacity", Math.min(1, (0.82 + noiseA * 0.14) * boost));
+          });
+
+          d3.range(1 + Math.floor(noiseC * 5)).forEach((segmentIndex) => {
+            const segmentNoise = brushNoise(seed, index + segmentIndex * 1000);
+            const y1 = height * (0.08 + segmentIndex * 0.23 + segmentNoise * 0.08);
+            const y2 = Math.min(bottomY - 6, y1 + height * (0.11 + brushNoise(seed, index + segmentIndex * 1100) * 0.12));
+
+            paint.append("path")
+              .attr("d", `M ${x + (noiseB - 0.5) * 14} ${y1} C ${midX + 8} ${(y1 + y2) * 0.45}, ${midX - 8} ${(y1 + y2) * 0.6}, ${endX + (noiseA - 0.5) * 10} ${y2}`)
+              .attr("fill", "none")
+              .attr("stroke", d.color)
+              .attr("stroke-width", Math.max(3, strokeWidth * (0.14 + noiseC * 0.13)))
+              .attr("stroke-linecap", "butt")
+              .attr("stroke-linejoin", "miter")
+              .attr("opacity", Math.min(0.98, (0.58 + noiseC * 0.22) * boost));
+          });
+        });
+
+        d3.range(140).forEach((index) => {
+          const noiseA = brushNoise(seed, index + 1200);
+          const noiseB = brushNoise(seed, index + 1300);
+          const noiseC = brushNoise(seed, index + 1400);
+          const x = 4 + noiseA * (width - 8);
+          const y = 4 + noiseB * height * (0.82 + noiseC * 0.08);
+
+          paint.append("rect")
+            .attr("x", x)
+            .attr("y", y)
+            .attr("width", 1.4 + noiseC * 7)
+            .attr("height", 1.2 + noiseA * 8)
+            .attr("fill", d.color)
+            .attr("opacity", Math.min(0.95, (0.48 + noiseB * 0.32) * boost));
+        });
+
+        d3.range(80).forEach((index) => {
+          const noiseA = brushNoise(seed, index + 1500);
+          const noiseB = brushNoise(seed, index + 1600);
+          const x = 6 + noiseA * (width - 12);
+          const y = 10 + noiseB * height * 0.78;
+
+          paint.append("line")
+            .attr("x1", x)
+            .attr("y1", y)
+            .attr("x2", x + (brushNoise(seed, index + 1700) - 0.5) * 24)
+            .attr("y2", y + 2 + brushNoise(seed, index + 1800) * 22)
+            .attr("stroke", "white")
+            .attr("stroke-width", 1 + noiseA * 4)
+            .attr("stroke-linecap", "butt")
+            .attr("opacity", 0.035 + noiseB * 0.06);
+        });
+
+        d3.range(76).forEach((index) => {
+          const noiseA = brushNoise(seed, index + 300);
+          const noiseB = brushNoise(seed, index + 400);
+          const x = 2 + noiseA * (width - 4);
+          const y = height * (0.63 + noiseB * 0.28);
+
+          paint.append("line")
+            .attr("x1", x)
+            .attr("y1", y)
+            .attr("x2", x + (brushNoise(seed, index + 500) - 0.5) * 14)
+            .attr("y2", y + 10 + brushNoise(seed, index + 600) * 42)
+            .attr("stroke", d.color)
+            .attr("stroke-width", 4 + noiseA * 11)
+            .attr("stroke-linecap", "butt")
+            .attr("opacity", Math.min(0.95, (0.56 + noiseB * 0.28) * boost));
+        });
+      }
+
+      columnGroups.each(function(d) {
+        appendBrushColumn(d3.select(this), d);
+      });
+
+      columnGroups.select(".concept-domain-column-paint")
+        .attr("filter", "url(#cf-concept-domain-brush-roughen)");
+
+      function drawSplitNode(x, y, topFill = blue, bottomFill = "#eef8f8", strokeFill = blue, bodyTextFill = teal) {
         const node = gNodes.append("g")
           .attr("class", "concept-domain-split-node")
           .attr("transform", `translate(${x},${y}) scale(0.82)`)
@@ -2962,17 +3168,17 @@
           .attr("height", 72)
           .attr("rx", 7)
           .attr("fill", "white")
-          .attr("stroke", blue)
+          .attr("stroke", strokeFill)
           .attr("stroke-width", 3.2)
           .attr("filter", "url(#cf-concept-domain-shadow)");
 
         node.append("path")
           .attr("d", "M -170 -29 Q -170 -36 -163 -36 H 163 Q 170 -36 170 -29 V -2 H -170 Z")
-          .attr("fill", blue);
+          .attr("fill", topFill);
 
         node.append("path")
           .attr("d", "M -170 -2 H 170 V 29 Q 170 36 163 36 H -163 Q -170 36 -170 29 Z")
-          .attr("fill", "#eef8f8");
+          .attr("fill", bottomFill);
 
         node.append("line")
           .attr("x1", -170)
@@ -2997,7 +3203,7 @@
           .attr("x", 0)
           .attr("y", 18)
           .attr("text-anchor", "middle")
-          .attr("fill", teal)
+          .attr("fill", bodyTextFill)
           .attr("font-family", "monospace")
           .attr("font-size", 13.5)
           .attr("font-weight", 750)
@@ -3358,7 +3564,7 @@
       }
 
       const conceptArrow = gArrows.append("path")
-        .attr("d", "M 147 109 V 151")
+        .attr("d", "M 260 127 V 151")
         .attr("fill", "none")
         .attr("stroke", blue)
         .attr("stroke-width", 3)
@@ -3369,7 +3575,7 @@
         .attr("opacity", 0);
 
       const portArrow = gArrows.append("path")
-        .attr("d", "M 139 249 V 276")
+        .attr("d", "M 195 249 V 276")
         .attr("fill", "none")
         .attr("stroke", blue)
         .attr("stroke-width", 3)
@@ -3380,7 +3586,7 @@
         .attr("opacity", 0);
 
       const portConceptArrow = gArrows.append("path")
-        .attr("d", "M 139 338 V 368")
+        .attr("d", "M 273 307 H 306")
         .attr("fill", "none")
         .attr("stroke", blue)
         .attr("stroke-width", 3)
@@ -3391,7 +3597,7 @@
         .attr("opacity", 0);
 
       const portAttributeArrow = gArrows.append("path")
-        .attr("d", "M 139 430 V 460")
+        .attr("d", "M 381 338 V 390")
         .attr("fill", "none")
         .attr("stroke", blue)
         .attr("stroke-width", 3)
@@ -3402,7 +3608,7 @@
         .attr("opacity", 0);
 
       const portTypeArrow = gArrows.append("path")
-        .attr("d", "M 139 522 V 552")
+        .attr("d", "M 306 421 H 292")
         .attr("fill", "none")
         .attr("stroke", blue)
         .attr("stroke-width", 3)
@@ -3413,7 +3619,7 @@
         .attr("opacity", 0);
 
       const processingStepArrow = gArrows.append("path")
-        .attr("d", "M 248 180 C 342 130, 360 118, 454 118")
+        .attr("d", "M 369 180 C 455 128, 500 118, 534 118")
         .attr("fill", "none")
         .attr("stroke", blue)
         .attr("stroke-width", 3)
@@ -3424,7 +3630,7 @@
         .attr("opacity", 0);
 
       const processingPipelineArrow = gArrows.append("path")
-        .attr("d", "M 248 218 C 342 238, 370 248, 454 248")
+        .attr("d", "M 369 218 C 465 238, 500 248, 534 248")
         .attr("fill", "none")
         .attr("stroke", blue)
         .attr("stroke-width", 3)
@@ -3479,7 +3685,7 @@
         .attr("opacity", 0);
 
       const runsPropertyArrow = gArrows.append("path")
-        .attr("d", "M 505 552 C 515 420, 365 285, 248 249")
+        .attr("d", "M 505 500 C 515 390, 430 285, 369 249")
         .attr("fill", "none")
         .attr("stroke", blue)
         .attr("stroke-width", 3)
@@ -3555,37 +3761,40 @@
         .attr("stroke-dashoffset", 46)
         .attr("opacity", 0);
 
-      const firstNode = drawSplitNode(200, 73);
-      const conceptNode = drawTripleNode(30, 157, [
+      gArrows.selectAll("path")
+        .attr("stroke", "white");
+
+      const firstNode = drawSplitNode(260, 91, ochreNodeA, ochreNodeLight, ochreNodeA, ochreNodeB);
+      const conceptNode = drawTripleNode(151, 157, [
         { text: "cf:definesConcept", y: 20, fill: "white", size: 15.5 },
-        { text: "cfproc:ProcessingUnit", y: 51, fill: blueNodeB, size: 15.5 },
-        { text: "a cf:concept", y: 80, fill: blueNodeA, size: 14.5 }
-      ], 218, blueNodeA, blueNodeLight, blueNodePale, blueNodeA);
-      const portPropertyNode = drawCompactDoubleNode(61, 276, [
+        { text: "cfproc:ProcessingUnit", y: 51, fill: ochreNodeB, size: 15.5 },
+        { text: "a cf:concept", y: 80, fill: ochreNodeA, size: 14.5 }
+      ], 218, ochreNodeA, ochreNodeLight, ochreNodePale, ochreNodeA);
+      const portPropertyNode = drawCompactDoubleNode(117, 276, [
         { text: "cf:hasAttribute", y: 20, fill: "white", size: 13.5 },
-        { text: "a cf:Property", y: 51, fill: blueNodeB, size: 13.2 }
-      ], 156, blueNodeB, blueNodeLight, blueNodeB);
-      const portConceptNode = drawCompactDoubleNode(64, 368, [
+        { text: "a cf:Property", y: 51, fill: ochreNodeB, size: 13.2 }
+      ], 156, ochreNodeB, ochreNodeLight, ochreNodeB);
+      const portConceptNode = drawCompactDoubleNode(306, 276, [
         { text: "cfproc:Port", y: 20, fill: "white", size: 13.5 },
-        { text: "a cf:Attribute", y: 51, fill: blueNodeC, size: 13.2 }
-      ], 150, blueNodeC, blueNodeLight, blueNodeC);
-      const portAttributeNode = drawCompactDoubleNode(61, 460, [
+        { text: "a cf:Attribute", y: 51, fill: ochreNodeC, size: 13.2 }
+      ], 150, ochreNodeC, ochreNodeLight, ochreNodeC);
+      const portAttributeNode = drawCompactDoubleNode(303, 390, [
         { text: "cf:hasAttribute", y: 20, fill: "white", size: 12.8 },
-        { text: "a cf:Property", y: 51, fill: blueNodeD, size: 12.8 }
-      ], 156, blueNodeD, blueNodeLight, blueNodeD);
-      const portTypeNode = drawFiveNode(42, 552, [
+        { text: "a cf:Property", y: 51, fill: ochreNodeD, size: 12.8 }
+      ], 156, ochreNodeD, ochreNodeLight, ochreNodeD);
+      const portTypeNode = drawFiveNode(98, 390, [
         { text: "cfproc:PortRole", y: 20, fill: "white", size: 12.8 },
-        { text: "a cf:Attribute", y: 51, fill: "#1e40af", size: 12.8 },
-        { text: "cf:allowedValue Input", y: 82, fill: "#1e40af", size: 12.4 },
-        { text: "cf:allowedValue Output", y: 113, fill: "#1e40af", size: 12.4 },
-        { text: "cf:allowedValue Parameter", y: 144, fill: "#1e40af", size: 12.4 }
-      ], 194, "#1e40af", blueNodeLight, "#1e40af");
-      const processingStepNode = drawTripleNode(454, 72, [
+        { text: "a cf:Attribute", y: 51, fill: ochreNodeD, size: 12.8 },
+        { text: "cf:allowedValue Input", y: 82, fill: ochreNodeD, size: 12.4 },
+        { text: "cf:allowedValue Output", y: 113, fill: ochreNodeD, size: 12.4 },
+        { text: "cf:allowedValue Parameter", y: 144, fill: ochreNodeD, size: 12.4 }
+      ], 194, ochreNodeD, ochreNodeLight, ochreNodeD);
+      const processingStepNode = drawTripleNode(534, 72, [
         { text: "cfproc:ProcessingStep", y: 20, fill: "white", size: 15.5 },
         { text: "a cf:Concept", y: 51, fill: orangeNodeA, size: 15.5 },
         { text: "rdfs:subClassOf cfproc:ProcessingUnit", y: 80, fill: "#9a3412", size: 11.4 }
       ], 280, orangeNodeA, orangeNodeLight, orangeNodePale, orangeNodeA);
-      const processingPipelineNode = drawTripleNode(454, 202, [
+      const processingPipelineNode = drawTripleNode(534, 202, [
         { text: "cfproc:ProcessingPipeline", y: 20, fill: "white", size: 15.5 },
         { text: "a cf:Concept", y: 51, fill: orangeNodeB, size: 15.5 },
         { text: "rdfs:subClassOf cfproc:ProcessingUnit", y: 80, fill: "#9a3412", size: 11.4 }
@@ -3607,7 +3816,7 @@
         { text: "a cf:Attribute", y: 51, fill: orangeNodeA, size: 11.8 },
         { text: "cf:attributePath cfproc:runs", y: 82, fill: orangeNodeA, size: 10.4 }
       ], 190, "#9a3412", orangeNodeLight, orangeNodePale, "#9a3412");
-      const runsPropertyNode = drawFourNode(390, 552, [
+      const runsPropertyNode = drawFourNode(390, 500, [
         { text: "cfproc:runs", y: 20, fill: "white", size: 13.2 },
         { text: "a cf:Property", y: 51, fill: orangeNodeA, size: 11.2 },
         { text: "rdfs:domain cfproc:PipelineNode", y: 82, fill: orangeNodeA, size: 11 },
@@ -3636,6 +3845,10 @@
         { text: "a cfsvc:Binding", y: 51, fill: magentaNodeB, size: 13.2 }
       ], 200, "#701a75", magentaNodeLight, "#701a75");
 
+      const leftColumnNodes = [firstNode, conceptNode, portPropertyNode, portConceptNode, portAttributeNode, portTypeNode];
+      const middleColumnNodes = [processingStepNode, processingPipelineNode, pipelineAttributeNode, pipelineNodeNode, runTargetAttributeNode, runTargetNode, runsPropertyNode];
+      const rightColumnNodes = [averageNode, averageHasPortNode, averagePortsNode, averageHasBindingNode, averageBindingNode];
+
       function currentStage() {
         return section.querySelectorAll(".fragment.visible").length;
       }
@@ -3659,13 +3872,23 @@
             return `translate(${d.x},${visible ? 16 : 48})`;
           });
 
+        columnGroups.select(".concept-domain-column-paint")
+          .attr("filter", d => {
+            const isPast = (d.id === "left" && stage >= 3) || (d.id === "middle" && stage >= 5);
+            return isPast ? "url(#cf-concept-domain-brush-gray)" : "url(#cf-concept-domain-brush-roughen)";
+          });
+
+        leftColumnNodes.forEach(node => node.attr("filter", stage >= 3 ? "url(#cf-concept-domain-grayscale)" : null));
+        middleColumnNodes.forEach(node => node.attr("filter", stage >= 5 ? "url(#cf-concept-domain-grayscale)" : null));
+        rightColumnNodes.forEach(node => node.attr("filter", null));
+
         const nodeUpdate = instant ? firstNode : firstNode.transition()
           .duration(280)
           .ease(d3.easeCubicOut);
 
         nodeUpdate
           .attr("opacity", 1)
-          .attr("transform", "translate(200,73) scale(1)");
+          .attr("transform", "translate(260,91) scale(1)");
 
         conceptArrow.transition()
           .duration(stage >= 1 ? 420 : 120)
@@ -3678,7 +3901,7 @@
           .duration(stage >= 1 ? 360 : 120)
           .ease(stage >= 1 ? d3.easeBackOut.overshoot(1.18) : d3.easeCubicIn)
           .attr("opacity", stage >= 1 ? 1 : 0)
-          .attr("transform", `translate(30,157) scale(${stage >= 1 ? 1 : 0.9})`);
+          .attr("transform", `translate(151,157) scale(${stage >= 1 ? 1 : 0.9})`);
 
         portArrow.transition()
           .delay(stage >= 2 ? 80 : 0)
@@ -3692,7 +3915,7 @@
           .duration(stage >= 2 ? 330 : 120)
           .ease(stage >= 2 ? d3.easeBackOut.overshoot(1.14) : d3.easeCubicIn)
           .attr("opacity", stage >= 2 ? 1 : 0)
-          .attr("transform", `translate(61,276) scale(${stage >= 2 ? 1 : 0.9})`);
+          .attr("transform", `translate(117,276) scale(${stage >= 2 ? 1 : 0.9})`);
 
         portConceptArrow.transition()
           .delay(stage >= 2 ? 520 : 0)
@@ -3706,7 +3929,7 @@
           .duration(stage >= 2 ? 330 : 120)
           .ease(stage >= 2 ? d3.easeBackOut.overshoot(1.14) : d3.easeCubicIn)
           .attr("opacity", stage >= 2 ? 1 : 0)
-          .attr("transform", `translate(64,368) scale(${stage >= 2 ? 1 : 0.9})`);
+          .attr("transform", `translate(306,276) scale(${stage >= 2 ? 1 : 0.9})`);
 
         portAttributeArrow.transition()
           .delay(stage >= 2 ? 960 : 0)
@@ -3720,7 +3943,7 @@
           .duration(stage >= 2 ? 330 : 120)
           .ease(stage >= 2 ? d3.easeBackOut.overshoot(1.14) : d3.easeCubicIn)
           .attr("opacity", stage >= 2 ? 1 : 0)
-          .attr("transform", `translate(61,460) scale(${stage >= 2 ? 1 : 0.9})`);
+          .attr("transform", `translate(303,390) scale(${stage >= 2 ? 1 : 0.9})`);
 
         portTypeArrow.transition()
           .delay(stage >= 2 ? 1340 : 0)
@@ -3734,7 +3957,7 @@
           .duration(stage >= 2 ? 330 : 120)
           .ease(stage >= 2 ? d3.easeBackOut.overshoot(1.14) : d3.easeCubicIn)
           .attr("opacity", stage >= 2 ? 1 : 0)
-          .attr("transform", `translate(42,552) scale(${stage >= 2 ? 1 : 0.9})`);
+          .attr("transform", `translate(98,390) scale(${stage >= 2 ? 1 : 0.9})`);
 
         processingStepArrow.transition()
           .delay(stage >= 3 ? 100 : 0)
@@ -3755,14 +3978,14 @@
           .duration(stage >= 3 ? 330 : 120)
           .ease(stage >= 3 ? d3.easeBackOut.overshoot(1.14) : d3.easeCubicIn)
           .attr("opacity", stage >= 3 ? 1 : 0)
-          .attr("transform", `translate(454,72) scale(${stage >= 3 ? 1 : 0.9})`);
+          .attr("transform", `translate(534,72) scale(${stage >= 3 ? 1 : 0.9})`);
 
         processingPipelineNode.transition()
           .delay(stage >= 3 ? 680 : 0)
           .duration(stage >= 3 ? 330 : 120)
           .ease(stage >= 3 ? d3.easeBackOut.overshoot(1.14) : d3.easeCubicIn)
           .attr("opacity", stage >= 3 ? 1 : 0)
-          .attr("transform", `translate(454,202) scale(${stage >= 3 ? 1 : 0.9})`);
+          .attr("transform", `translate(534,202) scale(${stage >= 3 ? 1 : 0.9})`);
 
         pipelineAttributeArrow.transition()
           .delay(stage >= 4 ? 100 : 0)
@@ -3839,7 +4062,7 @@
           .duration(stage >= 4 ? 330 : 120)
           .ease(stage >= 4 ? d3.easeBackOut.overshoot(1.14) : d3.easeCubicIn)
           .attr("opacity", stage >= 4 ? 1 : 0)
-          .attr("transform", `translate(390,552) scale(${stage >= 4 ? 1 : 0.9})`);
+          .attr("transform", `translate(390,500) scale(${stage >= 4 ? 1 : 0.9})`);
 
         averageArrow.transition()
           .delay(stage >= 5 ? 120 : 0)
