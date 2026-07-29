@@ -3559,7 +3559,7 @@
 			</section>
 
 			<section id="running-regression">
-				<h4>Running Regression</h4>
+				<h4>Balanced Running Regression</h4>
 				<div class="vertical-spacer" style="height: 80px;"></div>
 				<div class="running-regression-layout">
 					<div class="running-regression-panel">
@@ -3578,13 +3578,13 @@
 				<div class="vertical-spacer" style="height: 40px;"></div>
 				<h4>Sample Result Stability Across Neighboring Calibration Sessions</h4>
 				<div class="sample-robustness-lead">
-					Pre-treatment and post-treatment samples are each evaluated once with the local session calibration and once with the mean result from 11 neighboring calibration windows to assess robustness across nearby measurement sessions.
+					Influent and effluent samples are each evaluated once with the local session calibration and once with the mean result from 11 neighboring calibration windows to assess robustness across nearby measurement sessions.
 				</div>
 				<div id="sample-robustness-chart"></div>
 				<div class="sample-robustness-overlay-box">
 					<span class="source-title">about Standard Errors</span>
 					<span class="small">
-						Both the <b>pre-treatment</b> and <b>post-treatment</b> results remain comparable when the calibration is averaged across <b>+/- 5 measurement sessions</b>.
+						Both the <b>influent</b> and <b>effluent</b> results remain comparable when the calibration is averaged across <b>+/- 5 measurement sessions</b>.
 					</span>
 					<span class="small">
 						The standard errors of the <b>11-session means</b> likely provide a more realistic & robust estimate of the uncertainty for a practical sample measurement.
@@ -5824,6 +5824,23 @@
 				}
 			}
 
+			function balanceCalibrationOrder(rows) {
+				const byMass = rows.slice().sort((a, b) => a.mass - b.mass || a.index - b.index);
+				const bucketCount = Math.min(5, byMass.length);
+				const buckets = Array.from({ length: bucketCount }, () => []);
+
+				// Split the full mass range into equally populated strata, then cycle
+				// through them so every FIFO window starts with low-to-high coverage.
+				byMass.forEach((row, index) => {
+					const bucket = Math.min(bucketCount - 1, Math.floor(index * bucketCount / byMass.length));
+					buckets[bucket].push(row);
+				});
+
+				return d3.range(Math.max(...buckets.map(bucket => bucket.length))).flatMap(index =>
+					buckets.flatMap(bucket => bucket[index] ? [bucket[index]] : [])
+				);
+			}
+
 			function loadRunningRegressionData() {
 				if (!runningRegressionDataPromise) {
 					runningRegressionDataPromise = d3.csv('resources/data/sbr_mz104_peak_table.csv').then(rows => {
@@ -5838,12 +5855,13 @@
 							rawIntensity: parseNumericArray(row['51_raw_int']),
 							fitIntensity: parseNumericArray(row['51_fit_int'])
 						})).sort((a, b) => a.dateValue - b.dateValue || a.index - b.index);
+						const ordered = balanceCalibrationOrder(parsed);
 
 						const colorScale = d3.scaleSequential()
-							.domain([0, Math.max(1, parsed.length - 1)])
+							.domain([0, Math.max(1, ordered.length - 1)])
 							.interpolator(t => d3.interpolateRgbBasis(['#004c93', '#5f3dc4', '#b8103b', '#ec7206'])(t));
 
-						const colored = parsed.map((row, idx) => ({
+						const colored = ordered.map((row, idx) => ({
 							...row,
 							color: colorScale(idx)
 						}));
@@ -5978,7 +5996,7 @@
 				chart.append('g').attr('class', 'rr-axis').attr('transform', `translate(0,${innerHeight})`).call(d3.axisBottom(x).tickValues([0, 50, 100, 150, 200, 250, 300]));
 				chart.append('g').attr('class', 'rr-axis').call(d3.axisLeft(y).ticks(4).tickFormat(d3.format('~s')));
 
-				svg.append('text').attr('class', 'rr-title').attr('x', margin.left).attr('y', 18).text('Chronological calibration window');
+				svg.append('text').attr('class', 'rr-title').attr('x', margin.left).attr('y', 18).text('Balanced calibration window');
 				svg.append('text').attr('class', 'rr-small').attr('x', margin.left + innerWidth / 2).attr('y', height - 8).attr('text-anchor', 'middle').text('mass / ug');
 				svg.append('text').attr('class', 'rr-small').attr('transform', 'rotate(-90)').attr('x', -(margin.top + innerHeight / 2)).attr('y', 16).attr('text-anchor', 'middle').text('peak area');
 
@@ -6090,22 +6108,22 @@
 
 			const sampleRobustnessSamples = [
 				{
-					key: 'pre',
-					label: 'before',
-					centerShift: 0,
-					sampleDate: '20251125',
-					peaks: [9422, 10165, 10119],
-					massesUg: [3978.2, 4014.1, 4084.1],
-					colors: { single: '#b8103b', mean: '#004c93' }
-				},
-				{
-					key: 'post',
-					label: 'after',
+					key: 'influent',
+					label: 'influent',
 					centerShift: 1,
 					sampleDate: '20251128',
 					peaks: [11827, 10695, 13545],
 					massesUg: [4074.2, 4087.6, 3992.7],
 					colors: { single: '#ec7206', mean: '#3f8f69' }
+				},
+				{
+					key: 'effluent',
+					label: 'effluent',
+					centerShift: 0,
+					sampleDate: '20251125',
+					peaks: [9422, 10165, 10119],
+					massesUg: [3978.2, 4014.1, 4084.1],
+					colors: { single: '#b8103b', mean: '#004c93' }
 				}
 			];
 
@@ -6179,8 +6197,6 @@
 						sample,
 						series: buildSampleRobustnessSeries(data, sample.centerShift, sample)
 					}));
-					const preDate = sampleSeries[0].series[5].date;
-					const postDate = sampleSeries[1].series[5].date;
 					const summary = sampleSeries.flatMap(({ sample, series }) => buildSampleRobustnessSummary(series, sample));
 					const width = 600;
 					const height = 500;
@@ -6188,7 +6204,9 @@
 					const innerWidth = width - margin.left - margin.right;
 					const innerHeight = height - margin.top - margin.bottom;
 					const x = d3.scalePoint().domain(summary.map(d => d.key)).range([0, innerWidth]).padding(0.5);
-					const y = d3.scaleLinear().domain([10, 17]).range([innerHeight, 0]);
+					const yMin = Math.max(0, (d3.min(summary, d => d.mean - d.se) || 0) - 0.5);
+					const yMax = (d3.max(summary, d => d.mean + d.se) || 1) + 0.5;
+					const y = d3.scaleLinear().domain([yMin, yMax]).range([innerHeight, 0]);
 					const overallMean = d3.mean(summary, d => d.mean) || 0;
 
 					const svg = d3.select(container)
@@ -6242,7 +6260,7 @@
 						.attr('stroke', '#ffffff')
 						.attr('stroke-width', 2);
 
-					svg.append('text').attr('class', 'sr-title').attr('x', margin.left + 60).attr('y', 30).text('Pre- and post-treatment sample');
+					svg.append('text').attr('class', 'sr-title').attr('x', margin.left + 60).attr('y', 30).text('Influent and effluent samples');
 					svg.append('text').attr('class', 'sr-small').attr('transform', 'rotate(-90)').attr('x', -(margin.top + innerHeight / 2)).attr('y', 18).attr('text-anchor', 'middle').text('SBR result / ug mg^-1 sample');
 					groups.append('text')
 						.attr('class', 'sr-value')
